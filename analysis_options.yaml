@@ -1,0 +1,71 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/generated/**"
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_empty_else
+    - avoid_print
+    - avoid_relative_lib_imports
+    - avoid_returning_null_for_future
+    - avoid_slow_async_io
+    - avoid_type_to_string
+    - avoid_types_as_parameter_names
+    - avoid_web_libraries_in_flutter
+    - cancel_subscriptions
+    - close_sinks
+    - collection_methods_unrelated_type
+    - comment_references
+    - dangling_library_doc_comments
+    - depend_on_referenced_packages
+    - empty_statements
+    - eol_at_end_of_file
+    - hash_and_equals
+    - implicit_reopen
+    - invalid_case_patterns
+    - library_annotations
+    - literal_only_boolean_expressions
+    - no_adjacent_strings_in_list
+    - no_duplicate_case_values
+    - no_leading_underscores_for_library_prefixes
+    - no_leading_underscores_for_local_identifiers
+    - no_logic_in_create_state
+    - no_self_assignments
+    - no_wildcard_variable_uses
+    - prefer_const_constructors
+    - prefer_const_declarations
+    - prefer_final_fields
+    - prefer_final_locals
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_single_quotes
+    - prefer_typing_uninitialized_variables
+    - require_trailing_commas
+    - sort_child_properties_last
+    - test_types_in_equals
+    - throw_in_finally
+    - type_init_formals
+    - unawaited_futures
+    - unnecessary_brace_in_string_interps
+    - unnecessary_const
+    - unnecessary_late
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_checks
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - unrelated_type_equality_checks
+    - use_build_context_synchronously
+    - use_full_hex_values_for_flutter_colors
+    - use_function_type_syntax_for_parameters
+    - use_key_in_widget_constructors
+    - use_super_parameters
+    - valid_regexps

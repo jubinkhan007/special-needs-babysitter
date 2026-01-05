@@ -1,0 +1,6 @@
+name: special_needs_sitters_workspace
+description: Monorepo workspace for Special Needs Sitters apps.
+publish_to: none
+
+environment:
+  sdk: ^3.3.0

@@ -1,0 +1,121 @@
+{
+  "Untitled/Parent Side (Updated by Fiona)/source": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.2666666805744171,
+          "g": 0.2666666805744171,
+          "b": 0.2666666805744171
+        },
+        "boundVariables": {}
+      }
+    ]
+  },
+  "Untitled/Parent Side (Updated by Fiona)/60": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.10588235408067703,
+          "g": 0.10588235408067703,
+          "b": 0.10588235408067703
+        },
+        "boundVariables": {}
+      }
+    ]
+  },
+  "Untitled/Parent Side (Updated by Fiona)/50": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.24313725531101227,
+          "g": 0.24313725531101227,
+          "b": 0.24313725531101227
+        },
+        "boundVariables": {}
+      }
+    ]
+  },
+  "Untitled/Parent Side (Updated by Fiona)/40": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.38823530077934265,
+          "g": 0.38823530077934265,
+          "b": 0.38823530077934265
+        },
+        "boundVariables": {}
+      }
+    ]
+  },
+  "Untitled/Parent Side (Updated by Fiona)/30": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.545098066329956,
+          "g": 0.545098066329956,
+          "b": 0.545098066329956
+        },
+        "boundVariables": {}
+      }
+    ]
+  },
+  "Untitled/Parent Side (Updated by Fiona)/20": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.7137255072593689,
+          "g": 0.7137255072593689,
+          "b": 0.7137255072593689
+        },
+        "boundVariables": {}
+      }
+    ]
+  },
+  "Untitled/Parent Side (Updated by Fiona)/10": {
+    "type": "color",
+    "value": [
+      {
+        "type": "SOLID",
+        "visible": true,
+        "opacity": 1,
+        "blendMode": "NORMAL",
+        "color": {
+          "r": 0.886274516582489,
+          "g": 0.886274516582489,
+          "b": 0.886274516582489
+        },
+        "boundVariables": {}
+      }
+    ]
+  }
+}

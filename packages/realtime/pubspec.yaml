@@ -1,0 +1,22 @@
+name: realtime
+description: Realtime package with Agora RTC (calls) and RTM (messaging) wrappers.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.3.0
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  agora_rtc_engine: ^6.3.2
+  agora_rtm: ^2.2.1
+  core:
+    path: ../core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1

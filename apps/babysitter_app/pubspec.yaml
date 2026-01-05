@@ -1,0 +1,64 @@
+name: babysitter_app
+description: Babysitter marketplace app for parents and sitters.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.3.0
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+
+  # Routing
+  go_router: ^14.0.1
+
+  # Networking
+  dio: ^5.4.0
+
+  # Firebase
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+
+  # Local packages
+  core:
+    path: ../../packages/core
+  networking:
+    path: ../../packages/networking
+  domain:
+    path: ../../packages/domain
+  data:
+    path: ../../packages/data
+  ui_kit:
+    path: ../../packages/ui_kit
+  auth:
+    path: ../../packages/auth
+  notifications:
+    path: ../../packages/notifications
+  realtime:
+    path: ../../packages/realtime
+
+  # Utilities
+  flutter_dotenv: ^5.1.0
+  intl: ^0.19.0
+  cached_network_image: ^3.3.1
+  flutter_svg: ^2.0.10+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.8
+  riverpod_generator: ^2.4.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/

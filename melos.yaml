@@ -1,0 +1,53 @@
+name: special_needs_sitters
+repository: https://github.com/your-org/special-needs-sitters
+
+packages:
+  - apps/*
+  - packages/*
+
+command:
+  bootstrap:
+    usePubspecOverrides: true
+
+scripts:
+  analyze:
+    description: Run static analysis on all packages
+    run: dart analyze --fatal-infos
+    exec:
+      concurrency: 6
+
+  test:
+    description: Run tests in all packages
+    run: flutter test
+    exec:
+      concurrency: 6
+      failFast: true
+    packageFilters:
+      dirExists: test
+
+  format:
+    description: Format all Dart files
+    run: dart format .
+    exec:
+      concurrency: 6
+
+  build:
+    description: Run build_runner in packages that need code generation
+    run: dart run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+      failFast: true
+    packageFilters:
+      dependsOn: build_runner
+
+  clean:
+    description: Clean all packages
+    run: flutter clean
+    exec:
+      concurrency: 6
+
+  get:
+    description: Get dependencies for all packages
+    run: flutter pub get
+    exec:
+      concurrency: 6
