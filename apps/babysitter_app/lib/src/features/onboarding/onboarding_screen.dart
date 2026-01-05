@@ -16,131 +16,507 @@
 // - Hook callbacks to your routing/auth logic.
 
 import 'package:flutter/material.dart';
-import 'package:core/core.dart'; // AppColors, AppSpacing, AppRadii (adjust if different)
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({
-    super.key,
-    required this.onFamilySelected,
-    required this.onBabysitterSelected,
-    required this.onGetStarted,
-    required this.onLogIn,
-    required this.onLookingForJobs,
+import '../../routing/routes.dart';
+
+/// Onboarding slide data
+class OnboardingSlide {
+  final String imagePath;
+  final String title;
+  final String description;
+
+  const OnboardingSlide({
+    required this.imagePath,
+    required this.title,
+    required this.description,
   });
+}
 
-  final VoidCallback onFamilySelected;
-  final VoidCallback onBabysitterSelected;
-  final VoidCallback onGetStarted;
-  final VoidCallback onLogIn;
-  final VoidCallback onLookingForJobs;
+/// Onboarding screen with carousel
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  final _controller = PageController();
-  int _index = 0;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
-  static const _pages = <_OnboardPage>[
-    _OnboardPage(
-      imageAsset: 'assets/onboarding_1.jpg',
-      headline: 'Welcome to Special\nNeeds Sitters',
-      subhead:
-          "We’re here to support children with unique\nneeds — and the families who love them.",
-      mode: _OnboardMode.roleSelect,
+  static const List<OnboardingSlide> _slides = [
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_1.jpg',
+      title: 'Welcome to Special\nNeeds Sitters',
+      description:
+          "We're here to support children with unique\nneeds — and the families who love them.",
     ),
-    _OnboardPage(
-      imageAsset: 'assets/onboarding_2.jpg',
-      headline: 'Specialized Care',
-      subhead:
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_2.jpg',
+      title: 'Specialized Care',
+      description:
           'All caregivers are trained and experienced in\nworking with special needs children.',
-      mode: _OnboardMode.cta,
     ),
-    _OnboardPage(
-      imageAsset: 'assets/onboarding_3.jpg',
-      headline: 'Verified & Trusted',
-      subhead:
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_3.jpg',
+      title: 'Verified & Trusted',
+      description:
           'Rigorous background checks and caregiver\nreviews ensure your peace of mind.',
-      mode: _OnboardMode.cta,
     ),
-    _OnboardPage(
-      imageAsset: 'assets/onboarding_4.jpg',
-      headline: 'No Subscriptions.\nJust Sitters.',
-      subhead:
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_4.jpg',
+      title: 'No Subscriptions.\nJust Sitters.',
+      description:
           'Book sitters when you need them — with no\ncommitments or monthly fees.',
-      mode: _OnboardMode.cta,
+    ),
+    OnboardingSlide(
+// This matches the 5th screen in Figma (duplicate of 1st image conceptual flow?) or simply the last step
+// Looking at the Figma request image, the last screen is "Welcome to Special Needs Sitters" again but with bottom sheet style?
+// Wait, the user provided image shows:
+// 1. Welcome ... Select Your Role (Family | Babysitter) - Image 1
+// 2. Specialized Care ... - Image 2
+// 3. Verified & Trusted ... - Image 3
+// 4. No Subscriptions ... - Image 4
+// 5. Welcome to Special Needs Sitters ... (Get Started | Log In) - Image 1 again?
+// Actually, the 5th screen in the provided image sequence looks like the first screen's content but with the standard "Get Started" buttons instead of Role Selection.
+// Let's assume the user wants the standard 4 slides, but the first one has role selection.
+// The 5th image in the strip seems to be a variation or just the final state?
+// The provided image shows 5 screens.
+// Screen 1: Welcome... Select Your Role.
+// Screen 2: Specialized Care.
+// Screen 3: Verified & Trusted.
+// Screen 4: No Subscriptions.
+// Screen 5: Welcome... Get Started/Log In. This looks like the "final destination" or perhaps just an alternative first screen?
+// Based on typical flows, Screen 1 is likely the START. Screens 2-4 are the carousel. Screen 5 might be what validation showed? or maybe the carousel loops?
+// Let's implement the 4 unique content slides.
+// AND the bottom sheet logic.
+// Wait, the UI for Screen 2, 3, 4 has white bottom sheet with "Get Started" buttons.
+// Screen 1 has "Select Your Role".
+// Let's stick to the 4 slides defined in the previous code, but update content/layout.
+      imagePath:
+          'assets/onboarding_1.jpg', // Reusing first image for final slide if needed, but let's stick to 4 for now and see.
+      title: 'Welcome to Special\nNeeds Sitters',
+      description:
+          "We're here to support children with unique\nneeds — and the families who love them.",
     ),
   ];
 
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness
+            .dark, // Dark icons for white background/light image parts?
+// Actually, for full bleed images (Status bar over image), we usually want light icons if image is dark.
+// Screen 1: Image top.
+// Screen 2-5: Image full bleed.
+// Let's stick to simple defaults for now.
+      ),
+    );
+  }
+
+  @override
   void dispose() {
-    _controller.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
-  bool get _isRoleSelect => _pages[_index].mode == _OnboardMode.roleSelect;
+  void _onPageChanged(int page) {
+    setState(() {
+      _currentPage = page;
+    });
+  }
+
+  void _goToSignUp() {
+    context.go(Routes.signUp);
+  }
+
+  void _goToSignIn() {
+    context.go(Routes.signIn);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Match “screenshot from figma” feel: no app bar, full-bleed imagery.
+// The design shows two VERY different layouts.
+// Slide 1: "Welcome" with Role Selection.
+// Slides 2-4: "Features" with Bottom Sheet style buttons.
+// Slide 5: "Welcome" with Bottom Sheet style buttons.
+
+// Note: The provided image shows 5 screens.
+// 1. Welcome (Role Select)
+// 2. Specialized Care
+// 3. Verified & Trusted
+// 4. No Subscriptions
+// 5. Welcome (Get Started) -> matches Screen 1 content but with standard buttons.
+
+// I will implement the 4 main slides. If index is 0, use Welcome Role layout.
+// If index > 0, use Feature layout.
+
+// Actually, looking closely at the design:
+// Screen 1 is distinct.
+// Screens 2, 3, 4, 5 ALL have the White Bottom Sheet with "Get Started" / "Log In".
+// Screen 5 content is identical to Screen 1.
+// Let's assume the carousel is:
+// 0: Welcome (Role)
+// 1: Specialized Care
+// 2: Verified & Trusted
+// 3: No Subscriptions
+// 4: Welcome (Get Started) - Optional? Or maybe the user scrolls back?
+// Let's just implement the 4 unique feature slides + the Welcome capability.
+
     return Scaffold(
       body: Stack(
         children: [
-          // Carousel images
+// Background Image (Full Screen for Slides > 0, Partial for Slide 0?)
+// Actually, for smooth transitions, it's better to have the PageView handle the images.
           PageView.builder(
-            controller: _controller,
-            itemCount: _pages.length,
-            onPageChanged: (i) => setState(() => _index = i),
-            itemBuilder: (context, i) {
-              final p = _pages[i];
-              return _ImagePage(
-                imageAsset: p.imageAsset,
-                showDarkOverlay: p.mode == _OnboardMode.cta,
-              );
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            itemCount: _slides
+                .length, // Let's use 5 items to match the screenshot flow if desired, but 4 is logical.
+// Screenshot shows 5 dots on the last screen.
+// Let's add the 5th slide which is a copy of the 1st but with standard buttons.
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _WelcomePage(
+                  slide: _slides[index],
+                  onRoleSelected: () {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                );
+              } else {
+                return _FeaturePage(slide: _slides[index]);
+              }
             },
           ),
 
-          // Text overlay (pages 2..4)
-          if (!_isRoleSelect)
+// Bottom Sheet / Controls Overlay
+// Only show this 'Standard' bottom sheet for slides > 0
+          // Dots Indicator (On Image, above Bottom Sheet)
+          if (_currentPage > 0)
             Positioned(
+              bottom: 260, // Above the white card (~230px height)
               left: 0,
               right: 0,
-              bottom: 250, // tuned to sit above bottom card like screenshot
-              child: SafeArea(
-                minimum: const EdgeInsets.symmetric(horizontal: 24),
-                child: _OverlayCopy(
-                  title: _pages[_index].headline,
-                  subtitle: _pages[_index].subhead,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _slides.length,
+                  (index) => _PageIndicator(isActive: _currentPage == index),
                 ),
               ),
             ),
 
-          // Dots indicator (just above bottom card like screenshot)
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: _isRoleSelect ? 330 : 310,
-            child: Center(
-              child: _DotsIndicator(
-                count: _pages.length,
-                index: _index,
+          if (_currentPage > 0)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: _BottomControlBar(
+                onGetStarted: _goToSignUp,
+                onLogin: _goToSignIn,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Page 1: Welcome with Role Selection
+class _WelcomePage extends StatelessWidget {
+  final OnboardingSlide slide;
+  final VoidCallback onRoleSelected;
+
+  const _WelcomePage({
+    required this.slide,
+    required this.onRoleSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+// Top Image Area
+// Use Positioned to fill roughly top 65% of screen
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: MediaQuery.of(context).size.height * 0.65,
+          child: Image.asset(
+            slide.imagePath,
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
+          ),
+        ),
+
+// Bottom Content Area (White Card effect)
+// ALign to bottom, occupying roughly 40% height.
+// This naturally extends UP over the 65% image bottom boundary due to overlap logic if we just set height.
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.40,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(32),
+                topRight: Radius.circular(32),
+              ),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    slide.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A3A4A), // Dark Text
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    slide.description,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF6B7280), // Gray Text
+                      height: 1.5,
+                    ),
+                  ),
+                  const Spacer(),
+                  const Text(
+                    'Select Your Role',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _RoleButton(
+                          label: 'Family',
+                          isSelected: true, // Default active for visual match
+                          onTap: onRoleSelected,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: _RoleButton(
+                          label: 'Babysitter',
+                          isSelected: false,
+                          onTap: onRoleSelected,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+// Small indicator line at very bottom?
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
 
-          // Bottom rounded card
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _BottomCard(
-              mode: _pages[_index].mode,
-              welcomeTitle: _pages[0].headline,
-              welcomeSubtitle: _pages[0].subhead,
-              onFamilySelected: widget.onFamilySelected,
-              onBabysitterSelected: widget.onBabysitterSelected,
-              onGetStarted: widget.onGetStarted,
-              onLogIn: widget.onLogIn,
-              onLookingForJobs: widget.onLookingForJobs,
+/// Pages 2-5: Feature Showcase
+class _FeaturePage extends StatelessWidget {
+  final OnboardingSlide slide;
+
+  const _FeaturePage({required this.slide});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+// Full background image
+        Image.asset(
+          slide.imagePath,
+          fit: BoxFit.cover,
+        ),
+// Gradient Overlay (Bottom Up)
+// Design shows text sitting on the image, then a WHITE bottom sheet starts.
+// Wait, the design for 2-5 shows:
+// Image Top (~60%), White Card Bottom (~40%). It looks idential structurally to Screen 1!
+// EXCEPT:
+// - Screen 2,3,4: Title is on the IMAGE (White text), Description is on the IMAGE (White text).
+// - Bottom White Card contains: "Get Started", "Log In", "Looking for jobs..."
+// - Dots are on the IMAGE/Dark part?
+// Let's re-examine image.
+// Screen 2 (Specialized Care):
+// White text "Specialized Care" + Description is overlaid on the dark bottom part of the IMAGE.
+// THEN there is a White Card at the bottom with buttons.
+// Indicators (dots) are between the text and the white card.
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.transparent,
+                  const Color(0xFF0D1B2A).withOpacity(0.0),
+                  const Color(0xFF0D1B2A)
+                      .withOpacity(0.8), // Darken bottom of image for text
+                  const Color(
+                      0xFF0D1B2A), // Solid dark at very bottom before white card?
+                ],
+                stops: const [0.0, 0.4, 0.7, 1.0],
+              ),
+            ),
+          ),
+        ),
+// Content on Image
+        Positioned(
+          left: 24,
+          right: 24,
+          bottom: 290, // Push up above the white bottom sheet height
+          child: Column(
+            children: [
+              Text(
+                slide.title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  height: 1.2,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                slide.description,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 20),
+// Dots placeholder handled by bottom bar or separate?
+// The design shows dots ON the dark background, above the white card.
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BottomControlBar extends StatelessWidget {
+  final VoidCallback onGetStarted;
+  final VoidCallback onLogin;
+
+  const _BottomControlBar({
+    required this.onGetStarted,
+    required this.onLogin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32),
+          topRight: Radius.circular(32),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: onGetStarted,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF88C6E0),
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8), // Slightly squarer than 12?
+                ),
+              ),
+              child: const Text(
+                'Get Started',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: OutlinedButton(
+              onPressed: onLogin,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: const Color(0xFF88C6E0), // Blue text
+                side: const BorderSide(
+                    color: Color(0xFFE5E7EB)), // Light gray border
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text('Log In'),
+            ),
+          ),
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: onGetStarted, // Or sitter flow
+            child: const Text(
+              'Looking for Jobs as a Sitter',
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                fontSize: 12,
+                color: Color(0xFF374151), // Dark gray
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(2),
             ),
           ),
         ],
@@ -149,403 +525,70 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-class _ImagePage extends StatelessWidget {
-  const _ImagePage({
-    required this.imageAsset,
-    required this.showDarkOverlay,
-  });
-
-  final String imageAsset;
-  final bool showDarkOverlay;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: Image.asset(
-            imageAsset,
-            fit: BoxFit.cover,
-          ),
-        ),
-
-        // Bottom gradient to match Figma screenshot readability
-        if (showDarkOverlay)
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.55),
-                  ],
-                  stops: const [0.45, 1.0],
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _OverlayCopy extends StatelessWidget {
-  const _OverlayCopy({
-    required this.title,
-    required this.subtitle,
-  });
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 28,
-            fontWeight: FontWeight.w800,
-            height: 1.12,
-            letterSpacing: -0.2,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.92),
-            fontSize: 13.5,
-            fontWeight: FontWeight.w500,
-            height: 1.35,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _BottomCard extends StatelessWidget {
-  const _BottomCard({
-    required this.mode,
-    required this.welcomeTitle,
-    required this.welcomeSubtitle,
-    required this.onFamilySelected,
-    required this.onBabysitterSelected,
-    required this.onGetStarted,
-    required this.onLogIn,
-    required this.onLookingForJobs,
-  });
-
-  final _OnboardMode mode;
-  final String welcomeTitle;
-  final String welcomeSubtitle;
-
-  final VoidCallback onFamilySelected;
-  final VoidCallback onBabysitterSelected;
-  final VoidCallback onGetStarted;
-  final VoidCallback onLogIn;
-  final VoidCallback onLookingForJobs;
-
-  @override
-  Widget build(BuildContext context) {
-    final isRole = mode == _OnboardMode.roleSelect;
-
-    return SafeArea(
-      top: false,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(22),
-            topRight: Radius.circular(22),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 16,
-              offset: const Offset(0, -6),
-            ),
-          ],
-        ),
-        child: isRole
-            ? _RoleSelectContent(
-                title: welcomeTitle,
-                subtitle: welcomeSubtitle,
-                onFamilySelected: onFamilySelected,
-                onBabysitterSelected: onBabysitterSelected,
-              )
-            : _CtaContent(
-                onGetStarted: onGetStarted,
-                onLogIn: onLogIn,
-                onLookingForJobs: onLookingForJobs,
-              ),
-      ),
-    );
-  }
-}
-
-class _RoleSelectContent extends StatelessWidget {
-  const _RoleSelectContent({
-    required this.title,
-    required this.subtitle,
-    required this.onFamilySelected,
-    required this.onBabysitterSelected,
-  });
-
-  final String title;
-  final String subtitle;
-
-  final VoidCallback onFamilySelected;
-  final VoidCallback onBabysitterSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            height: 1.15,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          subtitle,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12.8,
-            color: AppColors.textMuted,
-            height: 1.35,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 18),
-        Text(
-          'Select Your Role',
-          style: TextStyle(
-            fontSize: 12.5,
-            color: AppColors.textMuted,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 14),
-        Row(
-          children: [
-            Expanded(
-              child: _RoleButton(
-                label: 'Family',
-                onTap: onFamilySelected,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _RoleButton(
-                label: 'Babysitter',
-                onTap: onBabysitterSelected,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 class _RoleButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
   const _RoleButton({
     required this.label,
+    required this.isSelected,
     required this.onTap,
   });
 
-  final String label;
-  final VoidCallback onTap;
-
   @override
   Widget build(BuildContext context) {
-    // Matches the small, soft-blue rounded rectangles in the screenshot
-    return SizedBox(
-      height: 46,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          backgroundColor: AppColors.primarySoft,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 13.5,
-            fontWeight: FontWeight.w700,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 52,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color(0xFF88C6E0)
+              : const Color(0xFF88C6E0), // Design shows both blue?
+// Wait, design Screen 1:
+// Left button "Family" is Blue background, White text.
+// Right button "Babysitter" is Blue background?
+// Actually, in the first screenshot, "Family" is highlighted blue, "Babysitter" is same blue?
+// Or maybe one is selected and other is unselected.
+// Usually unselected is gray or outlined.
+// Let's assume standard toggle behavior.
+// But looking at the screenshot, "Family" is Solid Blue. "Babysitter" is Solid Blue.
+// Both look identical. Maybe it's just two choices.
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
-        child: Text(label),
       ),
     );
   }
 }
 
-class _CtaContent extends StatelessWidget {
-  const _CtaContent({
-    required this.onGetStarted,
-    required this.onLogIn,
-    required this.onLookingForJobs,
-  });
+// Helper for Dots
+class _PageIndicator extends StatelessWidget {
+  final bool isActive;
 
-  final VoidCallback onGetStarted;
-  final VoidCallback onLogIn;
-  final VoidCallback onLookingForJobs;
+  const _PageIndicator({required this.isActive});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _PrimaryWideButton(
-          label: 'Get Started',
-          onTap: onGetStarted,
-        ),
-        const SizedBox(height: 12),
-        _OutlineWideButton(
-          label: 'Log In',
-          onTap: onLogIn,
-        ),
-        const SizedBox(height: 12),
-        GestureDetector(
-          onTap: onLookingForJobs,
-          behavior: HitTestBehavior.opaque,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Text(
-              'Looking for Jobs as a Sitter',
-              style: TextStyle(
-                color: AppColors.textMuted,
-                fontSize: 12.2,
-                fontWeight: FontWeight.w700,
-                decoration: TextDecoration.underline,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _PrimaryWideButton extends StatelessWidget {
-  const _PrimaryWideButton({required this.label, required this.onTap});
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primarySoft,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        child: Text(label),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      width: isActive ? 24 : 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color:
+            isActive ? const Color(0xFF88C6E0) : Colors.white24, // Cyan vs dim
+        borderRadius: BorderRadius.circular(4),
       ),
     );
   }
-}
-
-class _OutlineWideButton extends StatelessWidget {
-  const _OutlineWideButton({required this.label, required this.onTap});
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      width: double.infinity,
-      child: OutlinedButton(
-        onPressed: onTap,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary, width: 1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        child: Text(label),
-      ),
-    );
-  }
-}
-
-class _DotsIndicator extends StatelessWidget {
-  const _DotsIndicator({
-    required this.count,
-    required this.index,
-  });
-
-  final int count;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(count, (i) {
-        final isActive = i == index;
-        return AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          height: 6,
-          width: isActive ? 18 : 6,
-          decoration: BoxDecoration(
-            color: isActive ? AppColors.primary : Colors.white.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(99),
-          ),
-        );
-      }),
-    );
-  }
-}
-
-enum _OnboardMode { roleSelect, cta }
-
-class _OnboardPage {
-  const _OnboardPage({
-    required this.imageAsset,
-    required this.headline,
-    required this.subhead,
-    required this.mode,
-  });
-
-  final String imageAsset;
-  final String headline;
-  final String subhead;
-  final _OnboardMode mode;
 }
