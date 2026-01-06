@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../theme/auth_theme.dart';
 
-/// Primary action button for auth screens
+/// Pixel-perfect primary action button matching Figma design
+/// - Rounded rectangle (8px radius, not pill)
+/// - Specific height and padding
+/// - Slightly desaturated blue
 class PrimaryActionButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -21,26 +24,27 @@ class PrimaryActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 52,
+      height: 54, // Slightly taller to prevent clipping
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? AuthTheme.coralAccent,
+          backgroundColor: backgroundColor ?? AuthTheme.primaryBlue,
           foregroundColor: Colors.white,
           elevation: 0,
+          padding: const EdgeInsets.symmetric(vertical: 14), // Explicit padding
           disabledBackgroundColor:
-              (backgroundColor ?? AuthTheme.coralAccent).withOpacity(0.6),
+              (backgroundColor ?? AuthTheme.primaryBlue).withOpacity(0.6),
           disabledForegroundColor: Colors.white.withOpacity(0.8),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         child: isLoading
             ? const SizedBox(
-                width: 24,
-                height: 24,
+                width: 22,
+                height: 22,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
+                  strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
@@ -73,7 +77,7 @@ class SecondaryActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 52,
+      height: 50,
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
@@ -81,15 +85,15 @@ class SecondaryActionButton extends StatelessWidget {
           backgroundColor: Colors.white,
           side: BorderSide.none,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
         child: isLoading
             ? SizedBox(
-                width: 24,
-                height: 24,
+                width: 22,
+                height: 22,
                 child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
+                  strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
                     AuthTheme.textDark.withOpacity(0.6),
                   ),

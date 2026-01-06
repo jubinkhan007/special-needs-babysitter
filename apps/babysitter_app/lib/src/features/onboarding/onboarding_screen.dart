@@ -45,6 +45,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  String? _selectedRole; // 'family' or 'babysitter'
 
   static const List<OnboardingSlide> _slides = [
     OnboardingSlide(
@@ -184,7 +185,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               if (index == 0) {
                 return _WelcomePage(
                   slide: _slides[index],
-                  onRoleSelected: () {
+                  onFamilySelected: () {
+                    setState(() => _selectedRole = 'family');
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  onBabysitterSelected: () {
+                    setState(() => _selectedRole = 'babysitter');
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
@@ -222,6 +231,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: _BottomControlBar(
                 onGetStarted: _goToSignUp,
                 onLogin: _goToSignIn,
+                bottomLinkText: _selectedRole == 'babysitter'
+                    ? "I'm looking for a sitter"
+                    : 'Looking for Jobs as a Sitter',
               ),
             ),
         ],
@@ -230,14 +242,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-/// Page 1: Welcome with Role Selection
 class _WelcomePage extends StatelessWidget {
   final OnboardingSlide slide;
-  final VoidCallback onRoleSelected;
+  final VoidCallback onFamilySelected;
+  final VoidCallback onBabysitterSelected;
 
   const _WelcomePage({
     required this.slide,
-    required this.onRoleSelected,
+    required this.onFamilySelected,
+    required this.onBabysitterSelected,
   });
 
   @override
@@ -314,8 +327,8 @@ class _WelcomePage extends StatelessWidget {
                       Expanded(
                         child: _RoleButton(
                           label: 'Family',
-                          isSelected: true, // Default active for visual match
-                          onTap: onRoleSelected,
+                          isSelected: true,
+                          onTap: onFamilySelected,
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -323,7 +336,7 @@ class _WelcomePage extends StatelessWidget {
                         child: _RoleButton(
                           label: 'Babysitter',
                           isSelected: false,
-                          onTap: onRoleSelected,
+                          onTap: onBabysitterSelected,
                         ),
                       ),
                     ],
@@ -370,7 +383,7 @@ class _FeaturePage extends StatelessWidget {
 // Image Top (~60%), White Card Bottom (~40%). It looks idential structurally to Screen 1!
 // EXCEPT:
 // - Screen 2,3,4: Title is on the IMAGE (White text), Description is on the IMAGE (White text).
-// - Bottom White Card contains: "Get Started", "Log In", "Looking for jobs..."
+// - Bottom White Card contains: "Get Started", "Log In", "Lookingfor jobs..."
 // - Dots are on the IMAGE/Dark part?
 // Let's re-examine image.
 // Screen 2 (Specialized Care):
@@ -437,10 +450,12 @@ class _FeaturePage extends StatelessWidget {
 class _BottomControlBar extends StatelessWidget {
   final VoidCallback onGetStarted;
   final VoidCallback onLogin;
+  final String bottomLinkText;
 
   const _BottomControlBar({
     required this.onGetStarted,
     required this.onLogin,
+    required this.bottomLinkText,
   });
 
   @override
@@ -500,9 +515,9 @@ class _BottomControlBar extends StatelessWidget {
           const SizedBox(height: 16),
           GestureDetector(
             onTap: onGetStarted, // Or sitter flow
-            child: const Text(
-              'Looking for Jobs as a Sitter',
-              style: TextStyle(
+            child: Text(
+              bottomLinkText,
+              style: const TextStyle(
                 decoration: TextDecoration.underline,
                 fontSize: 12,
                 color: Color(0xFF374151), // Dark gray

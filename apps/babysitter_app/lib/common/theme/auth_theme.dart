@@ -6,7 +6,8 @@ class AuthTheme {
 
   // Colors
   static const Color backgroundColor = Color(0xFFD6EDF6); // Light blue
-  static const Color primaryBlue = Color(0xFF4A9CC7); // Primary action blue
+  static const Color primaryBlue =
+      Color(0xFF88C6E0); // Primary button blue (updated)
   static const Color textDark = Color(0xFF1A3A4A); // Dark navy text
   static const Color coralAccent = Color(0xFFE8896B); // Coral/salmon accent
   static const Color errorRed = Color(0xFFE74C3C);

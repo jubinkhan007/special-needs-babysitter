@@ -10,7 +10,10 @@ import 'routes.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
-import '../features/auth/sign_up_screen.dart';
+import '../features/auth/forgot_password_screen.dart';
+import '../features/auth/update_password_screen.dart';
+import '../features/auth/password_updated_screen.dart';
+import '../features/auth/sign_up/sign_up_flow.dart';
 import '../features/parent/parent_shell.dart';
 import '../features/parent/home/parent_home_screen.dart';
 import '../features/parent/messages/parent_messages_screen.dart';
@@ -31,7 +34,8 @@ final sitterShellNavigatorKey = GlobalKey<NavigatorState>();
 
 /// Provider for GoRouter
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final refreshNotifier = RouterRefreshNotifier(ref);
+  print('>>> BUILD appRouterProvider');
+  final refreshNotifier = ref.watch(routerRefreshNotifierProvider);
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -39,15 +43,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     debugLogDiagnostics: true,
     refreshListenable: refreshNotifier,
     redirect: (context, state) {
+      // IMPORTANT: Only read authNotifierProvider here, not currentUserProvider
+      // Reading currentUserProvider would cause circular dependency because it
+      // watches authNotifierProvider, creating a rebuild loop during auth changes
       final authState = ref.read(authNotifierProvider);
-      final userAsync = ref.read(currentUserProvider);
       final location = state.matchedLocation;
 
-      // Check authentication
-      final isAuthenticated = authState.valueOrNull != null;
+      // Check authentication from session
+      final session = authState.valueOrNull;
+      final isAuthenticated = session != null;
       final isAuthRoute = Routes.isAuthRoute(location);
       final isSplash = location == Routes.splash;
       final isOnboarding = location == Routes.onboarding;
+
+      // Still loading auth state - stay on splash
+      if (authState.isLoading) {
+        if (!isSplash) return Routes.splash;
+        return null;
+      }
 
       // Not authenticated
       if (!isAuthenticated) {
@@ -59,21 +72,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         return Routes.onboarding;
       }
 
-      // Authenticated - check user profile
-      if (userAsync.isLoading) {
-        // Still loading profile, stay on splash
-        if (!isSplash) {
-          return Routes.splash;
-        }
-        return null;
-      }
-
-      if (userAsync.hasError || userAsync.valueOrNull == null) {
-        // Error loading profile, redirect to sign in
-        return Routes.signIn;
-      }
-
-      final user = userAsync.valueOrNull!;
+      // Authenticated - get user from session (avoids currentUserProvider cycle)
+      final user = session.user;
 
       // Authenticated but on auth/onboarding route, redirect to appropriate home
       if (isAuthRoute || isSplash || isOnboarding) {
@@ -103,25 +103,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Onboarding route
       GoRoute(
         path: Routes.onboarding,
-        builder: (context, state) => OnboardingScreen(
-          onFamilySelected: () {
-            // For Option B (role chosen at signup): go to signup with role preselected
-            context.go('${Routes.signUp}?role=parent');
-          },
-          onBabysitterSelected: () {
-            context.go('${Routes.signUp}?role=sitter');
-          },
-          onGetStarted: () {
-            context.go(Routes.signUp);
-          },
-          onLogIn: () {
-            context.go(Routes.signIn);
-          },
-          onLookingForJobs: () {
-            // Usually sitter path:
-            context.go('${Routes.signUp}?role=sitter');
-          },
-        ),
+        builder: (context, state) => OnboardingScreen(),
       ),
 
       // Auth routes
@@ -131,7 +113,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.signUp,
-        builder: (context, state) => const SignUpScreen(),
+        builder: (context, state) => const SignUpFlow(),
+      ),
+      GoRoute(
+        path: Routes.forgotPassword,
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: Routes.updatePassword,
+        builder: (context, state) => const UpdatePasswordScreen(),
+      ),
+      GoRoute(
+        path: Routes.passwordUpdated,
+        builder: (context, state) => const PasswordUpdatedScreen(),
       ),
 
       // Parent shell
@@ -213,29 +207,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Notifier that triggers router refresh on auth/user changes
+/// Provider for RouterRefreshNotifier (dedicated provider for proper lifecycle)
+final routerRefreshNotifierProvider = Provider<RouterRefreshNotifier>((ref) {
+  print('>>> BUILD routerRefreshNotifierProvider');
+  final notifier = RouterRefreshNotifier(ref);
+  ref.onDispose(notifier.dispose);
+  return notifier;
+});
+
+/// Notifier that triggers router refresh on auth state changes
+/// Uses Future.microtask to break sync re-entrancy and avoid CircularDependencyError
 class RouterRefreshNotifier extends ChangeNotifier {
-  late final StreamSubscription<dynamic> _authSubscription;
-  late final ProviderSubscription<AsyncValue<User?>> _userSubscription;
-
-  RouterRefreshNotifier(Ref ref) {
-    // Listen to auth state changes
-    _authSubscription = ref
-        .read(authRepositoryProvider)
-        .authStateChanges
-        .listen((_) => notifyListeners());
-
-    // Listen to user provider changes
-    _userSubscription = ref.listen<AsyncValue<User?>>(
-      currentUserProvider,
-      (previous, next) => notifyListeners(),
+  RouterRefreshNotifier(this.ref) {
+    print('>>> RouterRefreshNotifier constructor');
+    _sub = ref.listen<AsyncValue<AuthSession?>>(
+      authNotifierProvider,
+      (_, __) => Future.microtask(notifyListeners), // async break
+      fireImmediately: false,
     );
   }
 
+  final Ref ref;
+  late final ProviderSubscription<AsyncValue<AuthSession?>> _sub;
+
   @override
   void dispose() {
-    _authSubscription.cancel();
-    _userSubscription.close();
+    _sub.close();
     super.dispose();
   }
 }

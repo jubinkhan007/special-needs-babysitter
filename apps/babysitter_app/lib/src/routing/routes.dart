@@ -9,6 +9,9 @@ class Routes {
   // Auth
   static const String signIn = '/auth/sign-in';
   static const String signUp = '/auth/sign-up';
+  static const String forgotPassword = '/auth/forgot-password';
+  static const String updatePassword = '/auth/update-password';
+  static const String passwordUpdated = '/auth/password-updated';
 
   // Parent shell routes
   static const String parentHome = '/parent/home';
