@@ -3,6 +3,7 @@ import 'package:domain/domain.dart';
 import 'package:core/core.dart';
 
 import '../datasources/registration_remote_datasource.dart';
+import '../../mappers/auth_mappers.dart';
 
 /// Implementation of RegistrationRepository
 class RegistrationRepositoryImpl implements RegistrationRepository {
@@ -30,6 +31,18 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
       throw _mapDioException(e);
     } catch (e) {
       throw ServerFailure(message: 'OTP failed: $e');
+    }
+  }
+
+  @override
+  Future<AuthSession> verifyOtp(OtpVerifyPayload payload) async {
+    try {
+      final dto = await _dataSource.verifyOtp(payload);
+      return AuthMappers.authSessionFromDto(dto);
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    } catch (e) {
+      throw ServerFailure(message: 'OTP verification failed: $e');
     }
   }
 

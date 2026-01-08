@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
+import '../../providers/parent_profile_providers.dart';
 import 'add_item_dialog.dart';
 
 /// Step 1: Family Basics
@@ -76,17 +77,62 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     }
   }
 
-  void _onNext() {
+  Future<void> _onNext() async {
     if (_formKey.currentState!.validate()) {
-      widget.onNext();
+      // Gather Data
+      final data = {
+        'familyName': _familyNameController.text,
+        'numberOfFamilyMembers': int.tryParse(_familyMembersCount ?? '0') ?? 0,
+        'familyBio': _bioController.text,
+        'hasPets': _hasPets,
+        'numberOfPets': _hasPets ? int.tryParse(_numPetsController.text) : 0,
+        'petTypes':
+            _petTypes.entries.where((e) => e.value).map((e) => e.key).toList(),
+        'speaksOtherLanguages': _hasSecondLanguage,
+        'numberOfLanguages':
+            _hasSecondLanguage ? int.tryParse(_numLanguagesController.text) : 0,
+        'languages':
+            _languages.entries.where((e) => e.value).map((e) => e.key).toList(),
+      };
+
+      // Call API
+      print('DEBUG: Calling updateProfile with data: $data');
+      final success = await ref
+          .read(parentProfileControllerProvider.notifier)
+          .updateProfile(step: 1, data: data, profilePhoto: _image);
+      print('DEBUG: updateProfile result: $success');
+
+      if (success && mounted) {
+        widget.onNext();
+      } else {
+        print(
+            'DEBUG: Not proceeding because success=$success or mounted=$mounted');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Watch controller state for loading/error
+    final state = ref.watch(parentProfileControllerProvider);
+    final isLoading = state.isLoading;
+
+    // Listen for errors
+    ref.listen(parentProfileControllerProvider, (previous, next) {
+      if (next.hasError && !next.isLoading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${next.error}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       backgroundColor: _bgBlue,
       appBar: AppBar(
+        // ... (Keep existing AppBar code, maybe extract to method if too long but here we just keep structure)
         backgroundColor: _bgBlue,
         elevation: 0,
         leading: IconButton(
@@ -94,7 +140,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
           onPressed: widget.onBack,
         ),
         title: const Text(
-          'Step 1 of 4', // Matching screenshot text
+          'Step 1 of 4',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -114,7 +160,6 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             child: Row(
               children: [
-                // Active dot (Step 1)
                 _buildDot(active: true, large: true),
                 _buildConnectingLine(),
                 _buildDot(active: false),
@@ -134,7 +179,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header
+              // ... (Keep existing header code)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -213,7 +258,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
               _buildInputContainer(
                 child: TextFormField(
                   controller: _familyNameController,
-                  style: const TextStyle(color: _textDark), // Fix visibility
+                  style: const TextStyle(color: _textDark),
                   decoration: InputDecoration(
                     label: RichText(
                       text: TextSpan(
@@ -226,8 +271,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                         ],
                       ),
                     ),
-                    floatingLabelBehavior:
-                        FloatingLabelBehavior.never, // Keep inside
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     filled: true,
                     fillColor: Colors.white,
                     border: InputBorder.none,
@@ -246,12 +290,11 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
               _buildInputContainer(
                 child: DropdownButtonHideUnderline(
                   child: DropdownButtonFormField<String>(
-                    dropdownColor: Colors.white, // Fix dropdown BG
+                    dropdownColor: Colors.white,
                     value: _familyMembersCount,
                     icon: const Icon(Icons.keyboard_arrow_down,
                         color: Color(0xFF667085)),
-                    style: const TextStyle(
-                        fontSize: 16, color: _textDark), // Fix visibility
+                    style: const TextStyle(fontSize: 16, color: _textDark),
                     decoration: InputDecoration(
                       label: RichText(
                         text: TextSpan(
@@ -322,11 +365,10 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: TextFormField(
                     controller: _numPetsController,
                     keyboardType: TextInputType.number,
-                    style: const TextStyle(color: _textDark), // Fix visibility
+                    style: const TextStyle(color: _textDark),
                     decoration: InputDecoration(
                       hintText: 'Number of Pets',
-                      hintStyle: const TextStyle(
-                          color: Color(0xFF667085)), // Fix visibility
+                      hintStyle: const TextStyle(color: Color(0xFF667085)),
                       filled: true,
                       fillColor: Colors.white,
                       border: InputBorder.none,
@@ -347,8 +389,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                        color: Colors.transparent), // White bg from design
+                    border: Border.all(color: Colors.transparent),
                     boxShadow: [
                       BoxShadow(
                           color: Colors.black.withAlpha(5),
@@ -454,11 +495,10 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: TextFormField(
                     controller: _numLanguagesController,
                     keyboardType: TextInputType.number,
-                    style: const TextStyle(color: _textDark), // Fix visibility
+                    style: const TextStyle(color: _textDark),
                     decoration: InputDecoration(
                       hintText: 'Number of Languages',
-                      hintStyle: const TextStyle(
-                          color: Color(0xFF667085)), // Fix visibility
+                      hintStyle: const TextStyle(color: Color(0xFF667085)),
                       filled: true,
                       fillColor: Colors.white,
                       border: InputBorder.none,
@@ -584,7 +624,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
 
               // Family Bio
               Container(
-                height: 120, // Taller for bio
+                height: 120,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
@@ -600,7 +640,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                 child: TextFormField(
                   controller: _bioController,
                   maxLines: null,
-                  style: const TextStyle(color: _textDark), // Fix visibility
+                  style: const TextStyle(color: _textDark),
                   decoration: InputDecoration(
                     label: RichText(
                       text: TextSpan(
@@ -629,10 +669,12 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
               const SizedBox(height: 32),
 
               // Next Button
-              PrimaryActionButton(
-                label: 'Next',
-                onPressed: _onNext,
-              ),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : PrimaryActionButton(
+                      label: 'Next',
+                      onPressed: _onNext,
+                    ),
               const SizedBox(height: 24),
             ],
           ),

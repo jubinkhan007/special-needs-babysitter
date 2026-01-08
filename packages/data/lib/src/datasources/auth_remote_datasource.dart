@@ -18,25 +18,46 @@ class AuthRemoteDataSource {
       data: {'email': email, 'password': password},
     );
 
-    // API returns { success: true, data: { user: {...}, ... } }
-    // Token handling needs to be robust.
-    // Check if token is in data['accessToken'] or headers or elsewhere.
     final data = response.data['data'] as Map<String, dynamic>;
     final userMap = data['user'] as Map<String, dynamic>;
 
-    // Construct session DTO manually from nested data
-    // Assuming accessToken might be in data['accessToken'] based on typical API patterns
-    // If not present, we will fallback or error out.
-    // NOTE: Based on screenshot, token wasn't visible. We'll check multiple keys.
-    final accessToken = data['accessToken'] ?? data['token'] ?? '';
+    // Try to extract session_id from Set-Cookie header
+    String accessToken = '';
+    final cookies = response.headers['set-cookie'];
+    print('DEBUG: Response Headers: ${response.headers}');
+    print('DEBUG: Set-Cookie Header: $cookies');
+
+    if (cookies != null && cookies.isNotEmpty) {
+      for (final cookie in cookies) {
+        if (cookie.contains('session_id=')) {
+          // Extract value between session_id= and ;
+          final parts = cookie.split(';');
+          for (final part in parts) {
+            if (part.trim().startsWith('session_id=')) {
+              accessToken = part.trim().split('=')[1];
+              print('DEBUG: Found cookie session_id: $accessToken');
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // Fallback to body token if no cookie found
+    if (accessToken.isEmpty) {
+      print('DEBUG: No cookie found, falling back to body token');
+      accessToken = data['accessToken'] ?? data['token'] ?? '';
+    }
+
+    print('DEBUG: Final Access Token: $accessToken');
+
     final refreshToken = data['refreshToken'] ?? data['refresh_token'];
 
     return AuthSessionDto(
       user: UserDto.fromJson(userMap),
-      accessToken:
-          accessToken, // Might need adjustment if token comes from Cookies
+      accessToken: accessToken, // Storing session_id here
       refreshToken: refreshToken,
-      expiresAt: DateTime.now().add(const Duration(days: 30)), // Default
+      expiresAt: DateTime.now().add(const Duration(days: 30)),
     );
   }
 
@@ -55,11 +76,60 @@ class AuthRemoteDataSource {
         'last_name': lastName,
       },
     );
-    return AuthSessionDto.fromJson(response.data as Map<String, dynamic>);
+
+    // Similar extraction for SignUp if it logs in automatically
+    final data = response.data['data'] as Map<String, dynamic>;
+    String accessToken = '';
+    final cookies = response.headers['set-cookie'];
+    print('DEBUG: SignUp Response Headers: ${response.headers}');
+    print('DEBUG: SignUp Set-Cookie Header: $cookies');
+
+    if (cookies != null && cookies.isNotEmpty) {
+      for (final cookie in cookies) {
+        if (cookie.contains('session_id=')) {
+          final parts = cookie.split(';');
+          for (final part in parts) {
+            if (part.trim().startsWith('session_id=')) {
+              accessToken = part.trim().split('=')[1];
+              print('DEBUG: SignUp Found cookie session_id: $accessToken');
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // Fallback if no cookie
+    if (accessToken.isEmpty) {
+      print('DEBUG: SignUp No cookie found, falling back to body token');
+      // check body
+      accessToken = data['accessToken'] ?? data['token'] ?? '';
+    }
+
+    print('DEBUG: SignUp Final Access Token: $accessToken');
+
+    // We need to return AuthSessionDto, but standard fromJson might miss the cookie token
+    // So we manually construct it if we found a cookie
+    if (accessToken.isNotEmpty) {
+      final userMap = data['user'] as Map<String, dynamic>;
+      return AuthSessionDto(
+        user: UserDto.fromJson(userMap),
+        accessToken: accessToken,
+        refreshToken: data['refreshToken'],
+        expiresAt: DateTime.now().add(const Duration(days: 30)),
+      );
+    }
+
+    return AuthSessionDto.fromJson(data);
   }
 
   Future<void> signOut() async {
-    await _dio.post('/auth/sign-out');
+    try {
+      await _dio.post('/auth/logout');
+    } catch (e) {
+      // Ignore 404 or other errors on logout, just clear local session
+      print('DEBUG: SignOut API failed: $e');
+    }
   }
 
   Future<AuthSessionDto> refreshToken(String refreshToken) async {

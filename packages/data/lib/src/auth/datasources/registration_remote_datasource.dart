@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import '../../dtos/auth_session_dto.dart';
+import '../../dtos/user_dto.dart';
 
 /// Remote data source for registration API calls
 class RegistrationRemoteDataSource {
@@ -20,14 +22,29 @@ class RegistrationRemoteDataSource {
       throw FormatException('Invalid response format: $data');
     }
 
-    // API returns minimal data on success - we construct user from payload + userId
-    final userId = data['userId'];
-    if (userId is! String) {
-      // Fallback: Check if 'id' or 'uid' exists, or print data to debug
-      print('Registration successful but userId missing/invalid. Data: $data');
-      if (data['id'] is String) {
-        return _createUser(payload, data['id'] as String);
+    // API returns nested data: { success: true, data: { user: { id: "..." } } }
+    String? userId;
+
+    // Try getting from root (old assumption)
+    if (data['userId'] is String) {
+      userId = data['userId'];
+    }
+    // Try getting from nested data.user.id (actual API)
+    else if (data['data'] is Map<String, dynamic>) {
+      final innerData = data['data'] as Map<String, dynamic>;
+      if (innerData['user'] is Map<String, dynamic>) {
+        userId = innerData['user']['id'];
+      } else if (innerData['id'] is String) {
+        userId = innerData['id'];
       }
+    }
+    // Try getting from root id (fallback)
+    else if (data['id'] is String) {
+      userId = data['id'];
+    }
+
+    if (userId == null) {
+      print('Registration successful but userId missing/invalid. Data: $data');
       throw FormatException('Missing userId in response: $data');
     }
 
@@ -55,6 +72,58 @@ class RegistrationRemoteDataSource {
       '/auth/otp/send',
       data: payload.toJson(),
     );
+  }
+
+  /// POST /auth/otp/verify
+  Future<AuthSessionDto> verifyOtp(OtpVerifyPayload payload) async {
+    final response = await _dio.post(
+      '/auth/otp/verify',
+      data: payload.toJson(),
+    );
+
+    final data = response.data['data'] as Map<String, dynamic>;
+
+    // Cookie Extraction Logic
+    String accessToken = '';
+    final cookies = response.headers['set-cookie'];
+    print('DEBUG: VerifyOTP Response Headers: ${response.headers}');
+    print('DEBUG: VerifyOTP Set-Cookie Header: $cookies');
+
+    if (cookies != null && cookies.isNotEmpty) {
+      for (final cookie in cookies) {
+        if (cookie.contains('session_id=')) {
+          final parts = cookie.split(';');
+          for (final part in parts) {
+            if (part.trim().startsWith('session_id=')) {
+              accessToken = part.trim().split('=')[1];
+              print('DEBUG: VerifyOTP Found cookie session_id: $accessToken');
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    // Fallback if no cookie
+    if (accessToken.isEmpty) {
+      print('DEBUG: VerifyOTP No cookie found, falling back to body token');
+      accessToken = data['accessToken'] ?? data['token'] ?? '';
+    }
+
+    if (accessToken.isNotEmpty) {
+      final userMap = data['user'] as Map<String, dynamic>;
+      // Handle the case where the user object might be nested differently
+      final userDto = UserDto.fromJson(userMap);
+
+      return AuthSessionDto(
+        user: userDto,
+        accessToken: accessToken,
+        refreshToken: data['refreshToken'],
+        expiresAt: DateTime.now().add(const Duration(days: 30)),
+      );
+    }
+
+    return AuthSessionDto.fromJson(data);
   }
 
   /// GET /auth/security-questions

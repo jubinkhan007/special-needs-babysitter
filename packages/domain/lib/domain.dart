@@ -20,8 +20,13 @@ export 'src/usecases/sign_out_usecase.dart';
 export 'src/auth/entities/registration_payload.dart';
 export 'src/auth/entities/registered_user.dart';
 export 'src/auth/entities/otp_send_payload.dart';
+export 'src/auth/entities/otp_verify_payload.dart';
 export 'src/auth/repositories/registration_repository.dart';
 export 'src/auth/usecases/register_user_usecase.dart';
 export 'src/auth/usecases/send_otp_usecase.dart';
 export 'src/auth/usecases/get_security_questions_usecase.dart';
 export 'src/auth/usecases/register_and_send_otp_usecase.dart';
+export 'src/auth/usecases/verify_otp_usecase.dart';
+
+// Parent Profile
+export 'src/parent_profile/repositories/parent_profile_repository.dart';

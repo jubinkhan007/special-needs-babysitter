@@ -41,13 +41,17 @@ class _AddChildDialogState extends State<AddChildDialog> {
     _firstNameController = TextEditingController(text: c['firstName']);
     _lastNameController = TextEditingController(text: c['lastName']);
     _ageController = TextEditingController(text: c['age']?.toString());
-    _diagnosisController = TextEditingController(text: c['diagnosis']);
-    _personalityController = TextEditingController(text: c['personality']);
-    _medsController = TextEditingController(text: c['meds']);
+    _diagnosisController =
+        TextEditingController(text: c['specialNeedsDiagnosis']);
+    _personalityController =
+        TextEditingController(text: c['personalityDescription']);
+    _medsController = TextEditingController(text: c['medicationDietaryNeeds']);
     _routineController = TextEditingController(text: c['routine']);
-    _allergyTypeController = TextEditingController(text: c['allergyType']);
-    _triggersTypeController = TextEditingController(text: c['triggerType']);
-    _calmingController = TextEditingController(text: c['calming']);
+    _allergyTypeController = TextEditingController(
+        text: (c['allergyTypes'] as List<dynamic>?)?.join(', '));
+    _triggersTypeController = TextEditingController(
+        text: (c['triggerTypes'] as List<dynamic>?)?.join(', '));
+    _calmingController = TextEditingController(text: c['calmingMethods']);
 
     _hasAllergies = c['hasAllergies'] ?? false;
     _hasTriggers = c['hasTriggers'] ?? false;
@@ -73,16 +77,20 @@ class _AddChildDialogState extends State<AddChildDialog> {
       widget.onSave({
         'firstName': _firstNameController.text,
         'lastName': _lastNameController.text,
-        'age': _ageController.text,
-        'diagnosis': _diagnosisController.text,
-        'personality': _personalityController.text,
-        'meds': _medsController.text,
+        'age': int.tryParse(_ageController.text) ?? 0,
+        'specialNeedsDiagnosis': _diagnosisController.text,
+        'personalityDescription': _personalityController.text,
+        'medicationDietaryNeeds': _medsController.text,
         'routine': _routineController.text,
         'hasAllergies': _hasAllergies,
-        'allergyType': _hasAllergies ? _allergyTypeController.text : null,
+        'allergyTypes': _hasAllergies && _allergyTypeController.text.isNotEmpty
+            ? [_allergyTypeController.text]
+            : [],
         'hasTriggers': _hasTriggers,
-        'triggerType': _hasTriggers ? _triggersTypeController.text : null,
-        'calming': _calmingController.text,
+        'triggerTypes': _hasTriggers && _triggersTypeController.text.isNotEmpty
+            ? [_triggersTypeController.text]
+            : [],
+        'calmingMethods': _calmingController.text,
       });
       Navigator.of(context).pop();
     }

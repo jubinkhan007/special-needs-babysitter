@@ -5,12 +5,16 @@ import '../../widgets/otp_input.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../widgets/step_indicator.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Add import
+import 'package:auth/auth.dart'; // Add auth import
+
 /// OTP Verification Screen
-class OtpVerificationScreen extends StatefulWidget {
+class OtpVerificationScreen extends ConsumerStatefulWidget {
   final VoidCallback onVerified;
   final VoidCallback onBack;
   final String verificationType; // 'phone' or 'email'
   final String destination; // Phone number or email address
+  final String? userId; // Added userId
 
   const OtpVerificationScreen({
     super.key,
@@ -18,13 +22,15 @@ class OtpVerificationScreen extends StatefulWidget {
     required this.onBack,
     required this.verificationType,
     required this.destination,
+    this.userId,
   });
 
   @override
-  State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
+  ConsumerState<OtpVerificationScreen> createState() =>
+      _OtpVerificationScreenState();
 }
 
-class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
   String _otp = '';
   bool _isLoading = false;
 
@@ -41,14 +47,46 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
     setState(() => _isLoading = true);
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 1));
+    // Call AuthNotifier to verify OTP
+    // Assuming verificationType 'phone' means we are verifying the phone number
+    // passed in widget.destination.
+    // Note: The UI says "Verify Your Account", so this is likely account/phone verification.
+
+    final notifier = ref.read(authNotifierProvider.notifier);
+
+    // We need to know if we are verifying email or phone.
+    // The screen has `verificationType` ('phone' or 'email') and `destination`.
+    String? phone;
+    String? email;
+
+    if (widget.verificationType == 'phone') {
+      phone = widget.destination;
+    } else {
+      email = widget.destination;
+    }
+
+    await notifier.verifyOtp(
+      code: _otp,
+      phone: phone,
+      email: email,
+      userId: widget.userId,
+    );
 
     if (!mounted) return;
     setState(() => _isLoading = false);
 
-    // TODO: Actually verify the code
-    widget.onVerified();
+    // Check if successful
+    final state = ref.read(authNotifierProvider);
+    if (state.hasValue && state.value != null) {
+      widget.onVerified();
+    } else if (state.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Verification failed: ${state.error}'),
+          backgroundColor: AuthTheme.errorRed,
+        ),
+      );
+    }
   }
 
   void _resendCode() {

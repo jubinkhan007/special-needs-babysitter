@@ -4,10 +4,31 @@ import 'package:data/data.dart';
 
 import '../session_store.dart';
 
+import 'package:dio/dio.dart'; // Added dio import
+
 /// Provider for SessionStore
 final sessionStoreProvider = Provider<SessionStore>((ref) {
   print('>>> BUILD sessionStoreProvider');
   return SessionStore();
+});
+
+/// Provider for Auth Dio
+final authDioProvider = Provider<Dio>((ref) {
+  // Use the same base URL as the rest of the app
+  return Dio(BaseOptions(
+    baseUrl: 'https://sns-apis.tausifk.com/api',
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  ));
+});
+
+/// Provider for AuthRemoteDataSource
+final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
+  return AuthRemoteDataSource(ref.watch(authDioProvider));
 });
 
 /// Provider for FakeProfileRepository (shared instance)
@@ -20,23 +41,30 @@ final fakeProfileRepositoryProvider =
 /// Provider for ProfileRepository
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   print('>>> BUILD profileRepositoryProvider');
+  // Ideally this should also be real, but let's stick to fixing Auth first
   return ref.watch(fakeProfileRepositoryProvider);
 });
 
-/// Provider for AuthRepository (fake implementation for now)
+/// Provider for AuthRepository (REAL implementation)
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  print('>>> BUILD authRepositoryProvider');
+  print('>>> BUILD authRepositoryProvider (REAL)');
   final sessionStore = ref.watch(sessionStoreProvider);
   final profileRepo = ref.watch(fakeProfileRepositoryProvider);
+  final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
 
-  return FakeAuthRepositoryImpl(
-    onSessionChanged: (session, {User? user}) async {
+  return AuthRepositoryImpl(
+    remoteDataSource: remoteDataSource,
+    onSessionChanged: (session) async {
+      // Changed callback signature to match AuthRepositoryImpl (User? user is not passed in Real impl)
+      // Real impl calculates user from session.
+      // But wait: AuthRepositoryImpl._onSessionChanged signature is (AuthSession?)
+      // FakeAuthRepositoryImpl was (AuthSession?, {User? user})
+      // So we need to adapt.
+
       if (session != null) {
         await sessionStore.saveSession(session);
-        // Also update profile cache
-        if (user != null) {
-          profileRepo.setCachedUser(user);
-        }
+        // Helper to update profile cache from session user
+        profileRepo.setCachedUser(session.user);
       } else {
         await sessionStore.clearSession();
       }
@@ -64,20 +92,28 @@ final signOutUseCaseProvider = Provider<SignOutUseCase>((ref) {
 class AuthNotifier extends AsyncNotifier<AuthSession?> {
   @override
   Future<AuthSession?> build() async {
-    print('>>> BUILD authNotifierProvider');
-    return ref.read(authRepositoryProvider).getCurrentSession();
+    print('DEBUG: AuthNotifier.build called');
+    final session = await ref.read(authRepositoryProvider).getCurrentSession();
+    print('DEBUG: AuthNotifier.build session loaded: ${session != null}');
+    return session;
   }
 
   Future<void> signIn({
     required String email,
     required String password,
   }) async {
+    print('DEBUG: AuthNotifier.signIn called');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      return ref.read(signInUseCaseProvider).call(
+      final res = await ref.read(signInUseCaseProvider).call(
             SignInParams(email: email, password: password),
           );
+      print('DEBUG: AuthNotifier.signIn success. Res: $res');
+      return res;
     });
+    if (state.hasError) {
+      print('DEBUG: AuthNotifier.signIn ERROR: ${state.error}');
+    }
   }
 
   Future<void> signUp({
@@ -87,9 +123,10 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     required String lastName,
     required UserRole role,
   }) async {
+    print('DEBUG: AuthNotifier.signUp called');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      return ref.read(signUpUseCaseProvider).call(
+      final res = await ref.read(signUpUseCaseProvider).call(
             SignUpParams(
               email: email,
               password: password,
@@ -98,7 +135,12 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
               role: role,
             ),
           );
+      print('DEBUG: AuthNotifier.signUp success. Res: $res');
+      return res;
     });
+    if (state.hasError) {
+      print('DEBUG: AuthNotifier.signUp ERROR: ${state.error}');
+    }
   }
 
   Future<void> signOut() async {
@@ -106,7 +148,56 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     await ref.read(signOutUseCaseProvider).call(const NoParams());
     state = const AsyncValue.data(null);
   }
+
+  Future<void> verifyOtp({
+    required String code,
+    String? email,
+    String? phone,
+    String? userId,
+  }) async {
+    print('DEBUG: AuthNotifier.verifyOtp called');
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final session = await ref.read(verifyOtpUseCaseProvider).call(
+            OtpVerifyPayload(
+              code: code,
+              email: email,
+              phone: phone,
+              userId: userId,
+            ),
+          );
+
+      print(
+          'DEBUG: AuthNotifier.verifyOtp success. Session: ${session.accessToken}');
+
+      // CRITICAL: Manually save session as RegistrationRepository doesn't do it
+      await ref.read(sessionStoreProvider).saveSession(session);
+
+      return session;
+    });
+
+    if (state.hasError) {
+      print('DEBUG: AuthNotifier.verifyOtp ERROR: ${state.error}');
+    }
+  }
 }
+
+/// Provider for RegistrationRemoteDataSource
+final registrationRemoteDataSourceProvider =
+    Provider<RegistrationRemoteDataSource>((ref) {
+  return RegistrationRemoteDataSource(ref.watch(authDioProvider));
+});
+
+/// Provider for RegistrationRepository
+final registrationRepositoryProvider = Provider<RegistrationRepository>((ref) {
+  return RegistrationRepositoryImpl(
+      ref.watch(registrationRemoteDataSourceProvider));
+});
+
+/// Provider for VerifyOtpUseCase
+final verifyOtpUseCaseProvider = Provider<VerifyOtpUseCase>((ref) {
+  return VerifyOtpUseCase(ref.watch(registrationRepositoryProvider));
+});
 
 /// Provider for AuthNotifier
 final authNotifierProvider =

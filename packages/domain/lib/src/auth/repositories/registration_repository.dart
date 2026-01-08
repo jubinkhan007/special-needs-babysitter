@@ -1,6 +1,8 @@
 import '../entities/registered_user.dart';
 import '../entities/registration_payload.dart';
 import '../entities/otp_send_payload.dart';
+import '../entities/otp_verify_payload.dart';
+import '../../entities/auth_session.dart';
 
 /// Contract for registration-related auth operations
 /// Separate from main AuthRepository to follow Single Responsibility
@@ -13,4 +15,7 @@ abstract interface class RegistrationRepository {
 
   /// Get list of security questions
   Future<List<String>> getSecurityQuestions();
+
+  /// Verify OTP and get session
+  Future<AuthSession> verifyOtp(OtpVerifyPayload payload);
 }

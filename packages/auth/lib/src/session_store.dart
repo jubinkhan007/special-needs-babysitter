@@ -18,20 +18,28 @@ class SessionStore {
 
   /// Save authentication session
   Future<void> saveSession(AuthSession session) async {
-    await _storage.write(
-      key: Constants.accessTokenKey,
-      value: session.accessToken,
-    );
-    if (session.refreshToken != null) {
+    print(
+        'DEBUG: SessionStore.saveSession called with token: ${session.accessToken}');
+    try {
       await _storage.write(
-        key: Constants.refreshTokenKey,
-        value: session.refreshToken,
+        key: Constants.accessTokenKey,
+        value: session.accessToken,
       );
+      if (session.refreshToken != null) {
+        await _storage.write(
+          key: Constants.refreshTokenKey,
+          value: session.refreshToken,
+        );
+      }
+      await _storage.write(
+        key: Constants.userDataKey,
+        value: jsonEncode(_userToJson(session.user)),
+      );
+      print('DEBUG: SessionStore.saveSession completed success');
+    } catch (e) {
+      print('DEBUG: SessionStore.saveSession FAILED: $e');
+      rethrow;
     }
-    await _storage.write(
-      key: Constants.userDataKey,
-      value: jsonEncode(_userToJson(session.user)),
-    );
   }
 
   /// Save user profile separately (for caching after getMe)
@@ -44,23 +52,29 @@ class SessionStore {
 
   /// Load stored session
   Future<AuthSession?> loadSession() async {
+    print('DEBUG: SessionStore.loadSession called');
     final accessToken = await _storage.read(key: Constants.accessTokenKey);
+    print('DEBUG: SessionStore.loadSession accessToken: $accessToken');
     if (accessToken == null) return null;
 
     final refreshToken = await _storage.read(key: Constants.refreshTokenKey);
     final userData = await _storage.read(key: Constants.userDataKey);
+
+    // print('DEBUG: SessionStore.loadSession userData: $userData');
 
     if (userData == null) return null;
 
     try {
       final userJson = jsonDecode(userData) as Map<String, dynamic>;
       final user = _userFromJson(userJson);
+      print('DEBUG: SessionStore.loadSession success for user: ${user.email}');
       return AuthSession(
         user: user,
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
     } catch (e) {
+      print('DEBUG: SessionStore.loadSession FAILED: $e');
       // Corrupted data, clear storage
       await clearSession();
       return null;

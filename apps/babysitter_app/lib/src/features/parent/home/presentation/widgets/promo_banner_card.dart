@@ -50,6 +50,7 @@ class PromoBannerCard extends StatelessWidget {
                     fontFamily: AppTypography.fontFamily,
                   ),
                 ),
+
                 const SizedBox(height: 8),
                 Text(
                   'All babysitters are background-checked and approved.',
@@ -61,6 +62,7 @@ class PromoBannerCard extends StatelessWidget {
                   ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
+
                 ),
                 const SizedBox(height: 16), // Space before button
                 ElevatedButton(

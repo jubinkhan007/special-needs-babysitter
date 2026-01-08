@@ -19,3 +19,7 @@ export 'src/repositories/profile_repository_impl.dart';
 // Auth feature (registration)
 export 'src/auth/datasources/registration_remote_datasource.dart';
 export 'src/auth/repositories/registration_repository_impl.dart';
+
+// Parent Profile feature
+export 'src/parent_profile/datasources/parent_profile_remote_datasource.dart';
+export 'src/parent_profile/repositories/parent_profile_repository_impl.dart';

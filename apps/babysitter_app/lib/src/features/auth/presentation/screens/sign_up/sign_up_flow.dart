@@ -22,6 +22,7 @@ class SignUpFlow extends ConsumerStatefulWidget {
 class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   int _currentStep = 1;
   final Map<String, String> _formData = {'role': 'parent'};
+  String? _userId; // Added variable to store userId
 
   void _goToStep(int step) {
     setState(() => _currentStep = step);
@@ -36,6 +37,7 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   }
 
   void _onRegistrationSuccess(RegisteredUser user) {
+    setState(() => _userId = user.id); // Capture userId
     _goToStep(3); // Go to OTP verification
   }
 
@@ -69,6 +71,7 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
         return OtpVerificationScreen(
           verificationType: 'phone',
           destination: _formData['phone'] ?? '',
+          userId: _userId, // Pass userId
           onBack: () => _goToStep(2),
           onVerified: _onOtpVerified,
         );

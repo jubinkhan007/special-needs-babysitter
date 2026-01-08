@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
+import '../../providers/parent_profile_providers.dart';
 import '../../widgets/add_child_dialog.dart';
 
 /// Step 2: Add a Child
@@ -34,27 +35,63 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
         widget.profileData['kids'] as List? ?? []);
   }
 
-  void _showAddChildDialog([Map<String, dynamic>? existingChild, int? index]) {
-    showDialog(
+  Future<void> _showAddChildDialog(
+      [Map<String, dynamic>? existingChild, int? index]) async {
+    await showDialog(
       context: context,
       builder: (context) => AddChildDialog(
         existingChild: existingChild,
-        onSave: (childData) {
-          setState(() {
-            if (index != null) {
-              _kids[index] = childData;
-            } else {
-              _kids.add(childData);
-            }
-            widget.profileData['kids'] = _kids;
-          });
+        onSave: (childData) async {
+          // 1. Call API
+          final success = await ref
+              .read(parentProfileControllerProvider.notifier)
+              .addUpdateChild(childData);
+
+          // 2. Update Local State
+          if (success) {
+            setState(() {
+              if (index != null) {
+                _kids[index] = childData;
+              } else {
+                _kids.add(childData);
+              }
+              widget.profileData['kids'] = _kids;
+            });
+          }
         },
       ),
     );
   }
 
+  Future<void> _onNext() async {
+    // Call API to update step to 2 (Complete)
+    final success = await ref
+        .read(parentProfileControllerProvider.notifier)
+        .updateProfile(step: 2, data: {});
+
+    if (success && mounted) {
+      widget.onNext();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Watch controller state
+    final state = ref.watch(parentProfileControllerProvider);
+    final isLoading = state.isLoading;
+
+    // Error Listener
+    ref.listen(parentProfileControllerProvider, (previous, next) {
+      if (next.hasError && !next.isLoading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${next.error}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       backgroundColor: _bgBlue,
       appBar: AppBar(
@@ -233,7 +270,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
             child: Row(
               children: [
                 TextButton(
-                  onPressed: widget.onNext, // Skip logic?
+                  onPressed: _onNext, // Treat Skip as Next (Update step)
                   child: const Text(
                     'Skip for Now',
                     style: TextStyle(
@@ -246,10 +283,12 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                 const Spacer(),
                 SizedBox(
                   width: 140,
-                  child: PrimaryActionButton(
-                    label: 'Next',
-                    onPressed: widget.onNext,
-                  ),
+                  child: isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : PrimaryActionButton(
+                          label: 'Next',
+                          onPressed: _onNext,
+                        ),
                 ),
               ],
             ),
