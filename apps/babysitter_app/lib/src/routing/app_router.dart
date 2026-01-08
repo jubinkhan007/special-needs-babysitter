@@ -13,13 +13,16 @@ import '../features/auth/sign_in_screen.dart';
 import '../features/auth/forgot_password_screen.dart';
 import '../features/auth/update_password_screen.dart';
 import '../features/auth/password_updated_screen.dart';
-import '../features/auth/sign_up/sign_up_flow.dart';
+import '../features/auth/presentation/screens/sign_up/sign_up_flow.dart';
+import '../features/parent_profile_setup/presentation/screens/profile_setup_flow.dart';
 import '../features/parent/parent_shell.dart';
 import '../features/parent/home/parent_home_screen.dart';
 import '../features/parent/messages/parent_messages_screen.dart';
 import '../features/parent/bookings/parent_bookings_screen.dart';
 import '../features/parent/jobs/parent_jobs_screen.dart';
 import '../features/parent/account/parent_account_screen.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/screens/sitter_profile_view.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
 import '../features/sitter/sitter_shell.dart';
 import '../features/sitter/home/sitter_home_screen.dart';
 import '../features/sitter/jobs/sitter_jobs_screen.dart';
@@ -126,6 +129,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.passwordUpdated,
         builder: (context, state) => const PasswordUpdatedScreen(),
+      ),
+      GoRoute(
+        path: Routes.profileSetup,
+        builder: (context, state) => const ProfileSetupFlow(),
+      ),
+      // Home alias route - redirects based on role
+      GoRoute(
+        path: Routes.home,
+        redirect: (context, state) {
+          // This will be caught by the main redirect and sent to appropriate home
+          return Routes.parentHome;
+        },
       ),
 
       // Parent shell

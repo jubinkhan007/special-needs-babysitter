@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../common/theme/auth_theme.dart';
 import '../../../../common/widgets/primary_action_button.dart';
-import '../../../../common/widgets/step_indicator.dart';
+import '../presentation/widgets/step_indicator.dart';
 
 /// Step 4: Verification Method - Pixel-perfect matching Figma
 class Step4VerificationMethod extends StatefulWidget {

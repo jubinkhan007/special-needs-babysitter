@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../theme/auth_theme.dart';
+import '../../../../../../common/theme/auth_theme.dart';
 
 /// 6-digit OTP input widget
 class OtpInput extends StatefulWidget {

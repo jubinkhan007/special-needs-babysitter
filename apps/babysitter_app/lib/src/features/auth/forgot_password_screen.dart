@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../routing/routes.dart';
-import '../../../common/widgets/auth_input_field.dart';
+import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
 import '../../../common/theme/auth_theme.dart';
 

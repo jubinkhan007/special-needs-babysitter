@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
 
-import '../../../routing/routes.dart';
-import 'step1_account_info.dart';
-import 'step3_password.dart';
-import 'otp_verification_screen.dart';
+import '../../../../../routing/routes.dart';
+import 'steps/step1_account_info.dart';
+import 'steps/step2_password_security.dart';
+import '../otp_verification/otp_verification_screen.dart';
 
-/// Multi-step sign up flow controller (3 steps now)
+/// Multi-step sign up flow controller (3 steps per Figma)
 /// Step 1: Account Info
-/// Step 2: Password & Security
+/// Step 2: Password + Security Question (combined)
 /// Step 3: Phone OTP Verification
 class SignUpFlow extends ConsumerStatefulWidget {
   const SignUpFlow({super.key});
@@ -22,7 +21,7 @@ class SignUpFlow extends ConsumerStatefulWidget {
 
 class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   int _currentStep = 1;
-  final Map<String, String> _formData = {};
+  final Map<String, String> _formData = {'role': 'parent'};
 
   void _goToStep(int step) {
     setState(() => _currentStep = step);
@@ -36,28 +35,19 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
     }
   }
 
-  Future<void> _completeSignUp() async {
-    // Create account using auth provider
-    await ref.read(authNotifierProvider.notifier).signUp(
-          email: _formData['email'] ?? '',
-          password: _formData['password'] ?? '',
-          firstName: _formData['firstName'] ?? '',
-          lastName: _formData['lastName'] ?? '',
-          role: UserRole.parent, // Default to parent, can be changed
-        );
+  void _onRegistrationSuccess(RegisteredUser user) {
+    _goToStep(3); // Go to OTP verification
+  }
 
-    if (!mounted) return;
-
-    final authState = ref.read(authNotifierProvider);
-    if (authState.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(authState.error.toString()),
-          backgroundColor: Colors.red,
-        ),
-      );
+  void _onOtpVerified() {
+    // After OTP verification, go to profile setup for parents
+    final role = _formData['role'];
+    if (role == 'parent') {
+      context.go(Routes.profileSetup);
+    } else {
+      // Sitters go to their home (or sitter profile setup later)
+      context.go(Routes.sitterHome);
     }
-    // Navigation handled by router redirect on successful auth
   }
 
   @override
@@ -70,18 +60,17 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
           onNext: () => _goToStep(2),
         );
       case 2:
-        return Step3Password(
+        return Step2PasswordSecurity(
           formData: _formData,
           onBack: () => _goToStep(1),
-          onNext: () => _goToStep(3), // Go directly to OTP
+          onSuccess: _onRegistrationSuccess,
         );
       case 3:
-        // Phone OTP verification only (no email option)
         return OtpVerificationScreen(
           verificationType: 'phone',
           destination: _formData['phone'] ?? '',
           onBack: () => _goToStep(2),
-          onVerified: _completeSignUp,
+          onVerified: _onOtpVerified,
         );
       default:
         return Step1AccountInfo(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../common/theme/auth_theme.dart';
-import '../../../../common/widgets/otp_input.dart';
-import '../../../../common/widgets/primary_action_button.dart';
-import '../../../../common/widgets/step_indicator.dart';
+import '../../../../../../../common/theme/auth_theme.dart';
+import '../../widgets/otp_input.dart';
+import '../../../../../../../common/widgets/primary_action_button.dart';
+import '../../widgets/step_indicator.dart';
 
 /// OTP Verification Screen
 class OtpVerificationScreen extends StatefulWidget {

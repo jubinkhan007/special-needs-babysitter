@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:domain/domain.dart';
 
-import '../../../../common/theme/auth_theme.dart';
-import '../../../../common/widgets/auth_input_field.dart';
-import '../../../../common/widgets/primary_action_button.dart';
-import '../../../../common/widgets/step_indicator.dart';
+import '../../../../../../../common/theme/auth_theme.dart';
+import '../../../widgets/auth_input_field.dart';
+import '../../../../../../../common/widgets/primary_action_button.dart';
+import '../../../widgets/step_indicator.dart';
+import '../../../controllers/sign_up_controller.dart';
 
-/// Step 3: Set Password - Pixel-perfect matching Figma
-class Step3Password extends StatefulWidget {
-  final VoidCallback onNext;
+/// Step 2: Password + Security Question (combined per Figma design)
+/// Loads security questions from API, triggers register + sendOtp on Next
+class Step2PasswordSecurity extends ConsumerStatefulWidget {
+  final void Function(RegisteredUser user) onSuccess;
   final VoidCallback onBack;
   final Map<String, String> formData;
 
-  const Step3Password({
+  const Step2PasswordSecurity({
     super.key,
-    required this.onNext,
+    required this.onSuccess,
     required this.onBack,
     required this.formData,
   });
 
   @override
-  State<Step3Password> createState() => _Step3PasswordState();
+  ConsumerState<Step2PasswordSecurity> createState() =>
+      _Step2PasswordSecurityState();
 }
 
-class _Step3PasswordState extends State<Step3Password> {
+class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
@@ -30,9 +35,10 @@ class _Step3PasswordState extends State<Step3Password> {
 
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
-  String? _selectedSecurityQuestion;
+  String? _selectedQuestion;
 
-  static const _securityQuestions = [
+  // Hardcoded fallback questions if API fails
+  static const _fallbackQuestions = [
     'What is your mother\'s maiden name?',
     'What was the name of your first pet?',
     'What city were you born in?',
@@ -48,7 +54,12 @@ class _Step3PasswordState extends State<Step3Password> {
     _confirmPasswordController = TextEditingController();
     _securityAnswerController =
         TextEditingController(text: widget.formData['securityAnswer']);
-    _selectedSecurityQuestion = widget.formData['securityQuestion'];
+    _selectedQuestion = widget.formData['securityQuestion'];
+
+    // Load security questions on init
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(signUpControllerProvider.notifier).loadSecurityQuestions();
+    });
   }
 
   @override
@@ -59,9 +70,17 @@ class _Step3PasswordState extends State<Step3Password> {
     super.dispose();
   }
 
-  void _saveAndNext() {
+  List<String> _getQuestions(SignUpState state) {
+    if (state is SignUpQuestionsLoaded) {
+      return state.questions;
+    }
+    return _fallbackQuestions;
+  }
+
+  Future<void> _submitRegistration() async {
     if (!_formKey.currentState!.validate()) return;
-    if (_selectedSecurityQuestion == null) {
+
+    if (_selectedQuestion == null || _selectedQuestion!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please select a security question'),
@@ -71,15 +90,39 @@ class _Step3PasswordState extends State<Step3Password> {
       return;
     }
 
+    // Save to form data
     widget.formData['password'] = _passwordController.text;
-    widget.formData['securityQuestion'] = _selectedSecurityQuestion!;
+    widget.formData['securityQuestion'] = _selectedQuestion!;
     widget.formData['securityAnswer'] = _securityAnswerController.text.trim();
 
-    widget.onNext();
+    // Call controller to register and send OTP
+    final controller = ref.read(signUpControllerProvider.notifier);
+    final user = await controller.submitRegistration(widget.formData);
+
+    if (!mounted) return;
+
+    if (user != null) {
+      widget.onSuccess(user);
+    } else {
+      final state = ref.read(signUpControllerProvider);
+      if (state is SignUpError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(state.message),
+            backgroundColor: AuthTheme.errorRed,
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(signUpControllerProvider);
+    final isSubmitting = state is SignUpSubmitting;
+    final isLoadingQuestions = state is SignUpLoadingQuestions;
+    final questions = _getQuestions(state);
+
     return Scaffold(
       backgroundColor: AuthTheme.backgroundColor,
       body: SafeArea(
@@ -95,21 +138,20 @@ class _Step3PasswordState extends State<Step3Password> {
                     children: [
                       const SizedBox(height: 12),
 
-                      // Step indicator (shows back on step 2)
                       StepIndicator(
                         currentStep: 2,
                         totalSteps: 3,
-                        onBack: widget.onBack,
+                        onBack: isSubmitting ? null : widget.onBack,
                         onHelp: () {},
                       ),
                       const SizedBox(height: 24),
 
-                      // Icon box - bigger, more rounded
+                      // Icon
                       Container(
                         width: 72,
                         height: 72,
                         decoration: BoxDecoration(
-                          color: AuthTheme.primaryBlue.withOpacity(0.12),
+                          color: AuthTheme.primaryBlue.withAlpha(30),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Icon(
@@ -120,7 +162,6 @@ class _Step3PasswordState extends State<Step3Password> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Title - pure dark
                       const Text(
                         'Set Your Password',
                         style: TextStyle(
@@ -192,49 +233,56 @@ class _Step3PasswordState extends State<Step3Password> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
-                            color: const Color(0xFFE5E7EB).withOpacity(0.5),
+                            color: const Color(0xFFE5E7EB).withAlpha(128),
                           ),
                         ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: _selectedSecurityQuestion,
-                            hint: Text(
-                              'Select Security Question*',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: AuthTheme.textDark.withOpacity(0.35),
-                              ),
-                            ),
-                            isExpanded: true,
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Color(0xFF9CA3AF),
-                            ),
-                            dropdownColor:
-                                Colors.white, // White popup background
-                            borderRadius:
-                                BorderRadius.circular(8), // Rounded popup
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Color(0xFF1A1A1A),
-                            ),
-                            items: _securityQuestions.map((q) {
-                              return DropdownMenuItem(
-                                value: q,
-                                child: Text(
-                                  q,
+                        child: isLoadingQuestions
+                            ? const Center(
+                                child: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              )
+                            : DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: _selectedQuestion,
+                                  hint: Text(
+                                    'Select Security Question*',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: AuthTheme.textDark.withAlpha(89),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  icon: const Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Color(0xFF9CA3AF),
+                                  ),
+                                  dropdownColor: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
                                   style: const TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 15,
                                     color: Color(0xFF1A1A1A),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
+                                  items: questions.map((q) {
+                                    return DropdownMenuItem(
+                                      value: q,
+                                      child: Text(
+                                        q,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (v) =>
+                                      setState(() => _selectedQuestion = v),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: (v) =>
-                                setState(() => _selectedSecurityQuestion = v),
-                          ),
-                        ),
+                              ),
                       ),
                       const SizedBox(height: 12),
 
@@ -253,12 +301,13 @@ class _Step3PasswordState extends State<Step3Password> {
               ),
             ),
 
-            // Next button pinned to bottom
+            // Next button
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               child: PrimaryActionButton(
                 label: 'Next',
-                onPressed: _saveAndNext,
+                onPressed: isSubmitting ? null : _submitRegistration,
+                isLoading: isSubmitting,
               ),
             ),
           ],

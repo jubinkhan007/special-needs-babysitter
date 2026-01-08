@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/auth_theme.dart';
+import '../../../../../../common/theme/auth_theme.dart';
 
 /// Pixel-perfect input field matching Figma design
 /// - Placeholder only (no external label)

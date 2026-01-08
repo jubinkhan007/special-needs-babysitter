@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/theme/auth_theme.dart';
-import '../../../../common/widgets/auth_input_field.dart';
-import '../../../../common/widgets/primary_action_button.dart';
-import '../../../../common/widgets/step_indicator.dart';
-import '../../../../common/widgets/social_login_row.dart';
-import '../../../routing/routes.dart';
+import '../../../../../../../common/theme/auth_theme.dart';
+import '../../../widgets/auth_input_field.dart';
+import '../../../../../../../common/widgets/primary_action_button.dart';
+import '../../../widgets/step_indicator.dart';
+import '../../../widgets/social_login_row.dart';
+import '../../../../../../routing/routes.dart';
 
 /// Step 1: Account Info - Pixel-perfect matching Figma
 class Step1AccountInfo extends StatefulWidget {

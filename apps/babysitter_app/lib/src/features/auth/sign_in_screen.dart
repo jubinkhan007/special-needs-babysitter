@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:auth/auth.dart';
 
 import '../../routing/routes.dart';
-import '../../../common/widgets/auth_input_field.dart';
+import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
-import '../../../common/widgets/social_login_row.dart';
+import 'presentation/widgets/social_login_row.dart';
 import '../../../common/theme/auth_theme.dart';
 
 /// Sign in screen - Pixel-perfect matching Figma design

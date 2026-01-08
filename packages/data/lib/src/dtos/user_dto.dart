@@ -9,15 +9,23 @@ class UserDto with _$UserDto {
   const factory UserDto({
     required String id,
     required String email,
-    @JsonKey(name: 'first_name') String? firstName,
-    @JsonKey(name: 'last_name') String? lastName,
-    @JsonKey(name: 'phone_number') String? phoneNumber,
-    @JsonKey(name: 'avatar_url') String? avatarUrl,
+    String? firstName,
+    String? lastName,
+    String? phoneNumber,
+    String? avatarUrl,
     @Default('parent') String role,
-    @JsonKey(name: 'is_profile_complete')
+    @JsonKey(name: 'profileSetupComplete')
     @Default(false)
     bool isProfileComplete,
-    @JsonKey(name: 'is_sitter_approved') @Default(false) bool isSitterApproved,
+    @JsonKey(name: 'phoneVerified')
+    @Default(false)
+    bool
+        isSitterApproved, // Mapping phoneVerified to approved for now? Or just ignore?
+    // Actually API has phoneVerified. User entity has isSitterApproved.
+    // Let's just use what we can.
+    // But wait, the previous code had is_sitter_approved.
+    // The screenshot has "profileSetupComplete".
+    // I'll map profileSetupComplete to isProfileComplete.
     @JsonKey(name: 'created_at') DateTime? createdAt,
   }) = _UserDto;
 

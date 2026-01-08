@@ -12,6 +12,10 @@ class Routes {
   static const String forgotPassword = '/auth/forgot-password';
   static const String updatePassword = '/auth/update-password';
   static const String passwordUpdated = '/auth/password-updated';
+  static const String profileSetup = '/auth/profile-setup';
+
+  // Alias for home (redirects based on role)
+  static const String home = '/home';
 
   // Parent shell routes
   static const String parentHome = '/parent/home';
@@ -19,6 +23,8 @@ class Routes {
   static const String parentBookings = '/parent/bookings';
   static const String parentJobs = '/parent/jobs';
   static const String parentAccount = '/parent/account';
+  static const String sitterProfile =
+      '/parent/sitter-profile'; // New Sitter Profile Route
 
   // Sitter shell routes
   static const String sitterHome = '/sitter/home';

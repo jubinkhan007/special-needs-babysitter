@@ -66,4 +66,25 @@ class AppColors {
   static const Color darkInputFill = neutral50;
   static const Color darkInputBorder = neutral40;
   static const Color darkDivider = neutral50;
+
+  // ---------------------------------------------------------------------------
+  // Specialized Colors (Parent Home Screen)
+  // ---------------------------------------------------------------------------
+  static const Color verifiedBlue = Color(0xFF4090B8); // Checked badge
+  static const Color textPrice = Color(0xFF1B4D68); // Dark price text
+  static const Color starYellow = Color(0xFFFBBC05); // Rating star
+
+  // Gradients
+  static const LinearGradient promoGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [
+      Color(0xFF4090B8), // Darker blue left
+      Color(0xFF88CBE6), // Lighter blue right
+    ],
+  );
+
+  static const Color buttonDark = Color(0xFF1D2939); // "Post a Job" dark button
+  static const Color activePillBg = Color(0xFFE0F2FE); // "Active" pill bg
+  static const Color activePillText = Color(0xFF026AA2); // "Active" pill text
 }

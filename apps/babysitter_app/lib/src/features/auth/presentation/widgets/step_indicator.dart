@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/auth_theme.dart';
+import '../../../../../../common/theme/auth_theme.dart';
 
 /// Pixel-perfect step indicator matching Figma design
 /// - No back arrow on step 1

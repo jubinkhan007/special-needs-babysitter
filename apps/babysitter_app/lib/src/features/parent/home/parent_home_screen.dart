@@ -1,63 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:auth/auth.dart';
-import 'package:core/core.dart';
+import 'package:go_router/go_router.dart';
+import 'presentation/models/home_mock_models.dart';
+import 'presentation/theme/home_design_tokens.dart';
+import 'presentation/widgets/active_booking_card.dart';
+import 'presentation/widgets/complete_profile_card.dart';
+import 'presentation/widgets/home_header.dart';
+import 'presentation/widgets/home_search_bar.dart';
+import 'presentation/widgets/promo_banner_card.dart';
+import 'presentation/widgets/saved_sitter_card.dart';
+import 'presentation/widgets/sitter_near_you_card.dart';
 
-/// Parent home screen
-class ParentHomeScreen extends ConsumerWidget {
+class ParentHomeScreen extends StatelessWidget {
   const ParentHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userAsync = ref.watch(currentUserProvider);
-    final user = userAsync.valueOrNull;
-
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
+      backgroundColor: const Color(0xFFFAFAFA), // Light grey bg
       body: SafeArea(
-        child: Padding(
-          padding: AppSpacing.screenPadding,
+        bottom: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 100), // Space for bottom nav
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Welcome, ${user?.firstName ?? 'Parent'}!',
-                style: Theme.of(context).textTheme.headlineSmall,
+              HomeHeader(
+                onNotificationTap: () {},
               ),
-              AppSpacing.verticalMd,
-              Text(
-                'Find trusted sitters for your special needs child.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-              AppSpacing.verticalXl,
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.family_restroom,
-                        size: 80,
-                        color: AppColors.primary.withOpacity(0.3),
-                      ),
-                      AppSpacing.verticalMd,
-                      Text(
-                        'Parent Home',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                      ),
-                    ],
-                  ),
+              const SizedBox(height: HomeDesignTokens.headerBottomSpacing),
+              const HomeSearchBar(),
+              const SizedBox(height: HomeDesignTokens.sectionSpacing),
+              const PromoBannerCard(),
+              const SizedBox(height: HomeDesignTokens.sectionSpacing),
+              ActiveBookingCard(booking: HomeMockData.activeBooking),
+              const SizedBox(height: HomeDesignTokens.sectionSpacing),
+              _buildSectionHeader('Sitters Near You', onSeeAll: () {}),
+              const SizedBox(height: HomeDesignTokens.itemSpacing),
+              SizedBox(
+                height: HomeDesignTokens
+                    .sitterNearYouHeight, // Fixed height for cards
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none, // Allow shadow overflow
+                  itemCount: HomeMockData.sittersNearYou.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 16),
+                  itemBuilder: (context, index) {
+                    final sitter = HomeMockData.sittersNearYou[index];
+                    return SitterNearYouCard(sitter: sitter);
+                  },
                 ),
               ),
+              const SizedBox(height: HomeDesignTokens.sectionSpacing),
+              _buildSectionHeader('Saved Sitters', onSeeAll: () {}),
+              const SizedBox(height: HomeDesignTokens.itemSpacing),
+              SizedBox(
+                height: HomeDesignTokens.savedSitterHeight,
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  itemCount: HomeMockData.savedSitters.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 16),
+                  itemBuilder: (context, index) {
+                    final sitter = HomeMockData.savedSitters[index];
+                    return SavedSitterCard(sitter: sitter);
+                  },
+                ),
+              ),
+              const CompleteProfileCard(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, {VoidCallback? onSeeAll}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: HomeDesignTokens.sectionHeader,
+          ),
+          if (onSeeAll != null)
+            GestureDetector(
+              onTap: onSeeAll,
+              child: Text(
+                'See All',
+                style: HomeDesignTokens.seeAllText,
+              ),
+            ),
+        ],
       ),
     );
   }
