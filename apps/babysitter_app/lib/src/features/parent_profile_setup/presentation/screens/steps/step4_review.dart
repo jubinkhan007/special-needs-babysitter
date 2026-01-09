@@ -99,16 +99,6 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
     final petsCount = '1'; // data['numPets']
     final languages = 'English, French and Spanish'; // data['languages']
 
-    // Care
-    final careData = widget.profileData['careTransport'] as Map? ?? {};
-    final careApproach = careData['careApproach'] as String? ??
-        'My child has sensory sensitivities...';
-    final transportNeeds =
-        (careData['needsPickup'] == true) ? 'Pickup' : 'None';
-    final pickupReq = careData['pickupRequirements'] ?? 'Pickup from school...';
-    final specialAccom =
-        careData['accomodations'] ?? 'My child has a peanut allergy...';
-
     // Emergency
     final contacts = widget.profileData['emergencyContacts'] as List? ?? [];
     final emergencyContact = contacts.isNotEmpty
@@ -131,7 +121,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
           onPressed: widget.onBack,
         ),
         title: const Text(
-          'Step 4 of 4',
+          '4 of 4',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
@@ -263,25 +253,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             const Divider(height: 32, color: Color(0xFFE4E7EC)),
 
             // CARE APPROACH
-            _buildSectionHeader('Care Approach & Transport', () {
-              /* Edit Step 3 */
-            }),
-            _buildDetailRow('Care Approach:', careApproach, isLong: true),
-            _buildDetailRow('Transportation Needs:', transportNeeds),
-            // Mock Q&A for now as string display
-            _buildDetailRow(
-                'Does your child need to be picked up from school, an activity, or therapy?',
-                careData['needsPickup'] == true ? 'Yes' : 'No',
-                isQuestion: true),
-            _buildDetailRow(
-                'Does your child need to be dropped off at therapy, school, or an activity?',
-                careData['needsDropoff'] == true ? 'Yes' : 'No',
-                isQuestion: true),
-            _buildDetailRow('Pickup/Drop-Off Requirements:', pickupReq,
-                isLong: true),
-            _buildDetailRow('Special Accommodations Description:', specialAccom,
-                isLong: true),
-            const Divider(height: 32, color: Color(0xFFE4E7EC)),
+            // Care Approach Removed
 
             // EMERGENCY CONTACT
             _buildSectionHeader('Emergency Contact', _editEmergencyContact),
@@ -298,9 +270,32 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
 
             // INSURANCE PLAN
             _buildSectionHeader('Insurance Plan', _editInsurance),
-            const Text('Lorem Ipsum',
-                style: TextStyle(
-                    fontWeight: FontWeight.w600, color: _sectionTitleColor)),
+            if ((widget.profileData['insurancePlans'] as List?)?.isNotEmpty ==
+                true)
+              ...(widget.profileData['insurancePlans'] as List).map((plan) {
+                // Handle either Map or Entity if inconsistent, but we stored Entities/Maps
+                // Step 3 stored entities in local list but passed Maps to profileData?
+                // Let's check Step 3. Step 3: widget.profileData['insurancePlans'] = _insurancePlans; (List<InsurancePlan>)
+                // So here it is InsurancePlan object.
+                // We need to handle dynamic type or cast.
+                // Let's assume it is dynamic and try to access properties or cast.
+                // Safest is to treat as dynamic for now or cast if we import domain.
+                // We don't have domain import here? We check imports.
+                // Imports: package:flutter_riverpod, common/theme/auth_theme...
+                // We likely need to import domain if we want to use types.
+                // Or just use .planName if dynamic.
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    // Assuming plan is InsurancePlan object
+                    (plan as dynamic).planName.toString(),
+                    style: const TextStyle(color: Color(0xFF667085)),
+                  ),
+                );
+              })
+            else
+              const Text('No insurance plan added.',
+                  style: TextStyle(color: Colors.grey)),
 
             const SizedBox(height: 48),
 

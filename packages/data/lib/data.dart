@@ -21,5 +21,14 @@ export 'src/auth/datasources/registration_remote_datasource.dart';
 export 'src/auth/repositories/registration_repository_impl.dart';
 
 // Parent Profile feature
+// Parent Profile
 export 'src/parent_profile/datasources/parent_profile_remote_datasource.dart';
 export 'src/parent_profile/repositories/parent_profile_repository_impl.dart';
+
+// Account
+export 'src/account/datasources/account_remote_datasource.dart';
+export 'src/account/repositories/account_repository_impl.dart';
+
+// Profile Details Feature
+export 'src/profile_details/datasources/profile_details_remote_datasource.dart';
+export 'src/profile_details/repositories/profile_details_repository_impl.dart';

@@ -21,6 +21,7 @@ import '../features/parent/messages/parent_messages_screen.dart';
 import '../features/parent/bookings/parent_bookings_screen.dart';
 import '../features/parent/jobs/parent_jobs_screen.dart';
 import '../features/parent/account/parent_account_screen.dart';
+import '../features/parent/account/profile_details/presentation/profile_details_screen.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/screens/sitter_profile_view.dart';
 import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
 import '../features/sitter/sitter_shell.dart';
@@ -34,6 +35,21 @@ import '../features/sitter/account/sitter_account_screen.dart';
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final parentShellNavigatorKey = GlobalKey<NavigatorState>();
 final sitterShellNavigatorKey = GlobalKey<NavigatorState>();
+
+/// Flag to indicate sign-up is in progress (set before OTP verification)
+/// When true, router will redirect to profileSetup instead of home
+/// Using a simple global variable to avoid any provider scope issues
+bool _signUpInProgress = false;
+
+/// Getter/Setter for sign-up progress flag
+bool get isSignUpInProgress => _signUpInProgress;
+set isSignUpInProgress(bool value) {
+  print('DEBUG: Setting signUpInProgress = $value');
+  _signUpInProgress = value;
+}
+
+/// Provider version for backwards compatibility (deprecated, use global)
+final signUpInProgressProvider = StateProvider<bool>((ref) => false);
 
 /// Provider for GoRouter
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -52,6 +68,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final authState = ref.read(authNotifierProvider);
       final location = state.matchedLocation;
 
+      // DEBUG: Log every redirect call
+      print(
+          'DEBUG ROUTER REDIRECT: location=$location, isLoading=${authState.isLoading}, hasValue=${authState.hasValue}, isSignUpInProgress=$isSignUpInProgress');
+
       // Check authentication from session
       final session = authState.valueOrNull;
       final isAuthenticated = session != null;
@@ -61,7 +81,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // Still loading auth state - stay on splash
       if (authState.isLoading) {
-        if (!isSplash) return Routes.splash;
+        if (!isSplash) {
+          print('DEBUG ROUTER: isLoading, returning /splash');
+          return Routes.splash;
+        }
+        print('DEBUG ROUTER: isLoading and on splash, returning null');
         return null;
       }
 
@@ -69,20 +93,55 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (!isAuthenticated) {
         // Allow splash, onboarding, and auth routes
         if (isSplash || isOnboarding || isAuthRoute) {
+          print(
+              'DEBUG ROUTER: Not authenticated, on allowed route, returning null');
           return null;
         }
         // Redirect to onboarding
+        print('DEBUG ROUTER: Not authenticated, returning /onboarding');
         return Routes.onboarding;
       }
 
       // Authenticated - get user from session (avoids currentUserProvider cycle)
       final user = session.user;
+      print(
+          'DEBUG ROUTER: Authenticated, user.isProfileComplete=${user.isProfileComplete}, user.role=${user.role}');
 
       // Authenticated but on auth/onboarding route, redirect to appropriate home
       if (isAuthRoute || isSplash || isOnboarding) {
-        return user.role == UserRole.parent
+        // ALLOW profile setup to proceed if we are already there
+        if (location == Routes.profileSetup) {
+          print('DEBUG ROUTER: Already on profileSetup, returning null');
+          return null;
+        }
+
+        // Check if sign-up is in progress - always go to profile setup
+        if (isSignUpInProgress && user.role == UserRole.parent) {
+          print(
+              'DEBUG ROUTER: signUpInProgress=true, returning /auth/profile-setup');
+          isSignUpInProgress = false;
+          return Routes.profileSetup;
+        }
+
+        // If coming from sign-up, always go to profile setup (new user flow)
+        if (location == Routes.signUp && user.role == UserRole.parent) {
+          print(
+              'DEBUG ROUTER: On sign-up route, returning /auth/profile-setup');
+          return Routes.profileSetup;
+        }
+
+        // For other auth routes (sign-in, etc.), check profile completion
+        if (!user.isProfileComplete && user.role == UserRole.parent) {
+          print(
+              'DEBUG ROUTER: Profile incomplete, returning /auth/profile-setup');
+          return Routes.profileSetup;
+        }
+
+        final home = user.role == UserRole.parent
             ? Routes.parentHome
             : Routes.sitterHome;
+        print('DEBUG ROUTER: Redirecting to home=$home');
+        return home;
       }
 
       // Check role-based access
@@ -177,6 +236,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => const NoTransitionPage(
               child: ParentAccountScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'profile', // /account/profile
+                builder: (context, state) => const ProfileDetailsScreen(),
+              ),
+            ],
           ),
         ],
       ),

@@ -5,8 +5,9 @@ import '../../widgets/otp_input.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../widgets/step_indicator.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart'; // Add import
-import 'package:auth/auth.dart'; // Add auth import
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auth/auth.dart';
+import '../../../../../routing/app_router.dart'; // For signUpInProgressProvider
 
 /// OTP Verification Screen
 class OtpVerificationScreen extends ConsumerStatefulWidget {
@@ -65,6 +66,14 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
       email = widget.destination;
     }
 
+    // IMPORTANT: Set sign-up flag BEFORE verifyOtp to tell router to redirect to profileSetup
+    // This beats the race condition where router refresh happens before our navigation
+    // Using global variable instead of StateProvider for reliability
+    isSignUpInProgress = true;
+
+    // Store callback reference
+    final shouldNavigate = widget.onVerified;
+
     await notifier.verifyOtp(
       code: _otp,
       phone: phone,
@@ -78,7 +87,12 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
     // Check if successful
     final state = ref.read(authNotifierProvider);
     if (state.hasValue && state.value != null) {
-      widget.onVerified();
+      // Use WidgetsBinding to navigate in the same frame before router refresh
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          shouldNavigate();
+        }
+      });
     } else if (state.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

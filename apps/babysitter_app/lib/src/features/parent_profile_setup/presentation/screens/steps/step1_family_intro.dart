@@ -85,12 +85,14 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
         'numberOfFamilyMembers': int.tryParse(_familyMembersCount ?? '0') ?? 0,
         'familyBio': _bioController.text,
         'hasPets': _hasPets,
-        'numberOfPets': _hasPets ? int.tryParse(_numPetsController.text) : 0,
+        'numberOfPets':
+            _hasPets ? (int.tryParse(_numPetsController.text) ?? 0) : 0,
         'petTypes':
             _petTypes.entries.where((e) => e.value).map((e) => e.key).toList(),
         'speaksOtherLanguages': _hasSecondLanguage,
-        'numberOfLanguages':
-            _hasSecondLanguage ? int.tryParse(_numLanguagesController.text) : 0,
+        'numberOfLanguages': _hasSecondLanguage
+            ? (int.tryParse(_numLanguagesController.text) ?? 0)
+            : 0,
         'languages':
             _languages.entries.where((e) => e.value).map((e) => e.key).toList(),
       };
@@ -140,7 +142,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
           onPressed: widget.onBack,
         ),
         title: const Text(
-          'Step 1 of 4',
+          '1 of 4',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,

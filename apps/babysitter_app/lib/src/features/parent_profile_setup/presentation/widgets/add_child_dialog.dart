@@ -29,10 +29,35 @@ class _AddChildDialogState extends State<AddChildDialog> {
   late final TextEditingController _routineController;
   late final TextEditingController _allergyTypeController;
   late final TextEditingController _triggersTypeController;
+  late final TextEditingController _triggersController; // Description
   late final TextEditingController _calmingController;
+  late final TextEditingController _pickupLocController;
+  late final TextEditingController _dropoffLocController;
+  late final TextEditingController _transportInstrController;
+  late final TextEditingController _otherEquipmentController;
 
+  // New State variables for Checkboxes
+  List<String> _selectedTransportModes = [];
+  List<String> _selectedEquipment = [];
   bool _hasAllergies = false;
   bool _hasTriggers = false;
+  bool _needsDropoff = false;
+  bool _otherEquipmentSelected = false;
+
+  static const _transportOptions = [
+    'No transportation (care at home only)',
+    'Walking only (short distance)',
+    'Family vehicle with car seat provided',
+    "Sitter's vehicle allowed (with parent consent)",
+    'Ride-share allowed (with parent consent)',
+    'Public transport allowed (with parent consent)',
+  ];
+
+  static const _equipmentOptions = [
+    'Car seat required',
+    'Booster seat required',
+    'Wheelchair accessible',
+  ];
 
   @override
   void initState() {
@@ -51,10 +76,38 @@ class _AddChildDialogState extends State<AddChildDialog> {
         text: (c['allergyTypes'] as List<dynamic>?)?.join(', '));
     _triggersTypeController = TextEditingController(
         text: (c['triggerTypes'] as List<dynamic>?)?.join(', '));
+    _triggersController = TextEditingController(text: c['triggers']);
     _calmingController = TextEditingController(text: c['calmingMethods']);
+
+    _pickupLocController = TextEditingController(text: c['pickupLocation']);
+    _dropoffLocController = TextEditingController(text: c['dropoffLocation']);
+    _transportInstrController =
+        TextEditingController(text: c['transportSpecialInstructions']);
+
+    _selectedTransportModes =
+        (c['transportationModes'] as List<dynamic>?)?.cast<String>() ?? [];
+
+    final equip =
+        (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ?? [];
+    _selectedEquipment = equip
+        .where((e) => _equipmentOptions.contains(e) || e == 'Other')
+        .toList();
+
+    // Check if there's an 'Other: ...' or just check list
+    // Filter out known options to find "Other" items
+    final otherItems =
+        equip.where((e) => !_equipmentOptions.contains(e)).toList();
+    if (otherItems.isNotEmpty) {
+      _otherEquipmentController =
+          TextEditingController(text: otherItems.join(', '));
+      _otherEquipmentSelected = true;
+    } else {
+      _otherEquipmentController = TextEditingController();
+    }
 
     _hasAllergies = c['hasAllergies'] ?? false;
     _hasTriggers = c['hasTriggers'] ?? false;
+    _needsDropoff = c['needsDropoff'] ?? false;
   }
 
   @override
@@ -68,7 +121,12 @@ class _AddChildDialogState extends State<AddChildDialog> {
     _routineController.dispose();
     _allergyTypeController.dispose();
     _triggersTypeController.dispose();
+    _triggersController.dispose();
     _calmingController.dispose();
+    _pickupLocController.dispose();
+    _dropoffLocController.dispose();
+    _transportInstrController.dispose();
+    _otherEquipmentController.dispose();
     super.dispose();
   }
 
@@ -84,13 +142,34 @@ class _AddChildDialogState extends State<AddChildDialog> {
         'routine': _routineController.text,
         'hasAllergies': _hasAllergies,
         'allergyTypes': _hasAllergies && _allergyTypeController.text.isNotEmpty
-            ? [_allergyTypeController.text]
+            ? _allergyTypeController.text
+                .split(',')
+                .map((e) => e.trim())
+                .toList()
             : [],
         'hasTriggers': _hasTriggers,
         'triggerTypes': _hasTriggers && _triggersTypeController.text.isNotEmpty
-            ? [_triggersTypeController.text]
+            ? _triggersTypeController.text
+                .split(',')
+                .map((e) => e.trim())
+                .toList()
             : [],
+        'triggers': _hasTriggers ? _triggersController.text : '',
         'calmingMethods': _calmingController.text,
+        'transportationModes': _selectedTransportModes,
+        'equipmentSafety': [
+          ..._selectedEquipment,
+          if (_otherEquipmentSelected &&
+              _otherEquipmentController.text.isNotEmpty)
+            ..._otherEquipmentController.text
+                .split(',')
+                .map((e) => e.trim())
+                .where((e) => e.isNotEmpty),
+        ].cast<String>(),
+        'needsDropoff': _needsDropoff,
+        'pickupLocation': _pickupLocController.text,
+        'dropoffLocation': _dropoffLocController.text,
+        'transportSpecialInstructions': _transportInstrController.text,
       });
       Navigator.of(context).pop();
     }
@@ -165,7 +244,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     const SizedBox(height: 16),
 
                     // Allergies Checkbox
-                    _buildCheckbox('Allergies', _hasAllergies,
+                    _buildSquareCheckbox('Allergies', _hasAllergies,
                         (v) => setState(() => _hasAllergies = v!)),
                     if (_hasAllergies) ...[
                       const SizedBox(height: 8),
@@ -174,7 +253,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     const SizedBox(height: 16),
 
                     // Triggers Checkbox
-                    _buildCheckbox('Type of Triggers', _hasTriggers,
+                    _buildSquareCheckbox('Type of Triggers', _hasTriggers,
                         (v) => setState(() => _hasTriggers = v!)),
                     if (_hasTriggers) ...[
                       const SizedBox(height: 8),
@@ -182,7 +261,112 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     ],
                     const SizedBox(height: 12),
 
-                    _buildField(_calmingController, 'Calming Method'),
+                    _buildField(_calmingController, 'Calming Method',
+                        maxLines: 2),
+
+                    const SizedBox(height: 24),
+
+                    // --- Transportation Section ---
+                    const Text(
+                      'Transportation Preferences (Optional)',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Used to help sitters understand your child\'s transportation routine, special sitter needs does not provide or assume responsibility for transportation.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF475467),
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    const Text(
+                      'Transportation Mode',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF344054)),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._transportOptions.map((mode) => _buildSquareCheckbox(
+                          mode,
+                          _selectedTransportModes.contains(mode),
+                          (val) {
+                            setState(() {
+                              if (val == true) {
+                                _selectedTransportModes.add(mode);
+                              } else {
+                                _selectedTransportModes.remove(mode);
+                              }
+                            });
+                          },
+                        )),
+                    const SizedBox(height: 12),
+
+                    _buildSquareCheckbox(
+                      'Does your child need to be dropped off at therapy, school, or an activity?',
+                      _needsDropoff,
+                      (v) => setState(() => _needsDropoff = v!),
+                    ),
+                    const SizedBox(height: 16),
+
+                    const Text(
+                      'Equipment & Safety',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF344054)),
+                    ),
+                    const SizedBox(height: 8),
+                    ..._equipmentOptions.map((eq) => _buildSquareCheckbox(
+                          eq,
+                          _selectedEquipment.contains(eq),
+                          (val) {
+                            setState(() {
+                              if (val == true) {
+                                _selectedEquipment.add(eq);
+                              } else {
+                                _selectedEquipment.remove(eq);
+                              }
+                            });
+                          },
+                        )),
+                    // Other's Checkbox
+                    _buildSquareCheckbox(
+                      "Other\'s",
+                      _otherEquipmentSelected,
+                      (v) => setState(() => _otherEquipmentSelected = v!),
+                    ),
+                    if (_otherEquipmentSelected) ...[
+                      const SizedBox(height: 8),
+                      _buildField(_otherEquipmentController, 'Other Equipment'),
+                    ],
+
+                    const SizedBox(height: 16),
+
+                    const Text(
+                      'Pickup / Drop-off Details',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF344054)),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildField(_pickupLocController,
+                        'Pickup Location (e.g., School gate)'),
+                    const SizedBox(height: 8),
+                    _buildField(_dropoffLocController,
+                        'Drop-off Location (e.g. 123 Main ST)'),
+                    const SizedBox(height: 8),
+                    _buildField(_transportInstrController,
+                        'Special Instructions (e.g. Avoid highways)',
+                        maxLines: 3),
                   ],
                 ),
               ),
@@ -275,9 +459,18 @@ class _AddChildDialogState extends State<AddChildDialog> {
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               isDense: true,
             ),
-            validator: (v) {
-              if (hint.endsWith('*') && (v == null || v.isEmpty)) {
-                return 'Required';
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                if (hint.endsWith('*'))
+                  return 'Required'; // Simple required check
+                return null;
+              }
+              if (isNum) {
+                final n = int.tryParse(value);
+                if (n == null) return 'Must be a number';
+                if (hint.contains('Age')) {
+                  if (n < 0 || n > 18) return 'Age must be between 0 and 18';
+                }
               }
               return null;
             },
@@ -289,34 +482,41 @@ class _AddChildDialogState extends State<AddChildDialog> {
     );
   }
 
-  Widget _buildCheckbox(String label, bool value, Function(bool?) onChanged) {
+  Widget _buildSquareCheckbox(
+      String label, bool value, Function(bool?) onChanged) {
     return InkWell(
       onTap: () => onChanged(!value),
-      child: Row(
-        mainAxisSize: MainAxisSize.min, // Hug content
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: Checkbox(
-              value: value,
-              activeColor: AuthTheme.primaryBlue,
-              side: const BorderSide(color: Color(0xFFD0D5DD), width: 1.5),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4)), // Slightly rounded
-              onChanged: onChanged,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: Checkbox(
+                value: value,
+                activeColor: AuthTheme.primaryBlue,
+                side: const BorderSide(color: Color(0xFFD0D5DD), width: 1.5),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)), // Slightly rounded
+                onChanged: onChanged,
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14, // Slightly smaller match design
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF344054), // Dark grey
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14, // Slightly smaller match design
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF344054), // Dark grey
+                  height: 1.4,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

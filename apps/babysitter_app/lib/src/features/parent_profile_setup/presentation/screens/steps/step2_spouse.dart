@@ -102,7 +102,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
           onPressed: widget.onBack,
         ),
         title: const Text(
-          'Step 2 of 4',
+          '2 of 4',
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,

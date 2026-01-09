@@ -62,7 +62,6 @@ class PromoBannerCard extends StatelessWidget {
                   ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-
                 ),
                 const SizedBox(height: 16), // Space before button
                 ElevatedButton(

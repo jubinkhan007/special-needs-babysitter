@@ -6,7 +6,7 @@ import '../../../../routing/routes.dart';
 import 'steps/step0_intro.dart';
 import 'steps/step1_family_intro.dart';
 import 'steps/step2_spouse.dart';
-import 'steps/step3_care_transport.dart';
+import 'steps/step3_emergency_insurance.dart';
 import 'steps/step4_review.dart';
 
 import 'steps/step7_complete.dart';
@@ -38,7 +38,7 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
   }
 
   void _onComplete() {
-    // TODO: Save profile data to API
+    // TODO: Final save confirm? Or just animation step
     _goToStep(7);
   }
 
@@ -66,7 +66,7 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
           onBack: _goBack,
         );
       case 3:
-        return Step3CareTransport(
+        return Step3EmergencyAndInsurance(
           profileData: _profileData,
           onNext: () => _goToStep(4),
           onBack: _goBack,
@@ -75,7 +75,7 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
         return Step4Review(
           profileData: _profileData,
           onFinish: _onComplete,
-          onBack: _goBack,
+          onBack: () => _goToStep(3),
         );
       case 7:
         return Step7Complete(

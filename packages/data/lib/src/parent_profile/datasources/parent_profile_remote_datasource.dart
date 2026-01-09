@@ -52,6 +52,8 @@ class ParentProfileRemoteDataSource {
     final response = await _dio.post(
       '/uploads/presign',
       data: {
+        'uploadType':
+            'profile-photo', // Required by backend per working implementation
         'fileName': fileName,
         'contentType': contentType,
       },

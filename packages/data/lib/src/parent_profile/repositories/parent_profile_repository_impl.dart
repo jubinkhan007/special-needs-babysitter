@@ -20,6 +20,7 @@ class ParentProfileRepositoryImpl implements ParentProfileRepository {
     try {
       // 1. Upload Photo if Step 1 and photo exists
       if (step == 1 && profilePhoto != null) {
+        print('DEBUG REPO: Step 1 with photo, starting upload...');
         final extension = path.extension(profilePhoto.path).replaceAll('.', '');
         final contentType =
             lookupMimeType(profilePhoto.path) ?? 'image/$extension';
@@ -27,25 +28,36 @@ class ParentProfileRepositoryImpl implements ParentProfileRepository {
             'parent_profile_${DateTime.now().millisecondsSinceEpoch}.$extension';
 
         // Get Presigned URL
+        print(
+            'DEBUG REPO: Getting presigned URL for $fileName, contentType=$contentType');
         final presignRes = await _remoteDataSource.getPresignedUrl(
           fileName: fileName,
           contentType: contentType,
         );
+        print(
+            'DEBUG REPO: Got presigned URL: ${presignRes.uploadUrl}, publicUrl: ${presignRes.publicUrl}');
 
         // Upload File
+        print('DEBUG REPO: Uploading file...');
         await _remoteDataSource.uploadFileToUrl(
           presignRes.uploadUrl,
           profilePhoto,
           contentType,
         );
+        print('DEBUG REPO: File uploaded successfully');
 
         // Add public URL to data
         data['photoUrl'] = presignRes.publicUrl;
       }
 
       // 2. Call API to update profile step
+      print(
+          'DEBUG REPO: Calling updateParentProfile with step=$step, data=$data');
       await _remoteDataSource.updateParentProfile(step: step, data: data);
-    } catch (e) {
+      print('DEBUG REPO: updateParentProfile succeeded');
+    } catch (e, st) {
+      print('DEBUG REPO: Error in updateProfile: $e');
+      print('DEBUG REPO: Stack trace: $st');
       rethrow;
     }
   }
