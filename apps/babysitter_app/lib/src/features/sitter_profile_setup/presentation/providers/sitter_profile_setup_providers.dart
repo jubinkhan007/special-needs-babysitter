@@ -1,5 +1,11 @@
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:domain/domain.dart';
+import 'package:data/data.dart';
+import 'package:auth/auth.dart';
+import 'package:intl/intl.dart';
 
 enum AvailabilityMode { singleDay, multipleDays }
 
@@ -320,17 +326,194 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
     state = state.copyWith(isRateNegotiable: value);
   }
 
-  /// Submits the sitter profile to the backend.
+  /// Saves the current step to the backend.
   /// Returns true on success, false on failure.
-  Future<bool> submitSitterProfile() async {
-    // TODO: Replace with actual API call
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
-    // Simulate success (return false to test error handling)
-    return true;
+  Future<bool> saveStep(int step, SitterProfileRepository repository) async {
+    try {
+      final data = _buildPayloadForStep(step);
+
+      // Get files for upload if applicable
+      File? profilePhoto;
+      File? resume;
+      List<CertificationFile>? certFiles;
+
+      if (step == 1 && state.profilePhotoPath != null) {
+        profilePhoto = File(state.profilePhotoPath!);
+      }
+      if (step == 5 && state.resumePath != null) {
+        resume = File(state.resumePath!);
+      }
+      if (step == 6 && state.certAttachments.isNotEmpty) {
+        certFiles = state.certAttachments.entries.map((e) {
+          return CertificationFile(type: e.key, file: File(e.value));
+        }).toList();
+      }
+
+      await repository.updateProfile(
+        step: step,
+        data: data,
+        profilePhoto: profilePhoto,
+        resume: resume,
+        certificationFiles: certFiles,
+      );
+
+      return true;
+    } catch (e) {
+      print('DEBUG: saveStep($step) failed: $e');
+      return false;
+    }
+  }
+
+  /// Submits the final profile (Step 9).
+  Future<bool> submitSitterProfile(SitterProfileRepository repository) async {
+    return saveStep(9, repository);
+  }
+
+  /// Builds the API payload for a specific step.
+  Map<String, dynamic> _buildPayloadForStep(int step) {
+    switch (step) {
+      case 1:
+        // Photo URL is added by repository after upload
+        return {};
+      case 2:
+        return {
+          'bio': state.bio,
+          'dateOfBirth': state.dob != null
+              ? DateFormat('yyyy-MM-dd').format(state.dob!)
+              : null,
+          'yearsOfExperience': state.yearsExperience,
+          'hasTransportation': state.hasReliableTransportation,
+          'transportationDetails': state.transportationDetails ?? '',
+          'willingToTravel': state.willingToTravel,
+          'overnight': state.overnightStay,
+          'ageRanges': state.ageGroups,
+          'languages': state.languages,
+        };
+      case 3:
+        return {
+          'address': state.address,
+          'latitude': state.latitude,
+          'longitude': state.longitude,
+        };
+      case 4:
+        return {
+          'skills': state.skills,
+          'certifications': state.certifications,
+        };
+      case 5:
+        // Resume URL is added by repository after upload
+        return {
+          'experiences': state.experiences
+              .map((e) => {
+                    'role': e.title,
+                    'startMonth': e.month,
+                    'startYear': e.year,
+                    'endMonth': 'Present',
+                    'endYear': '',
+                    'description': e.description,
+                  })
+              .toList(),
+        };
+      case 6:
+        // Certification documents are added by repository after upload
+        return {};
+      case 7:
+        // Build availability array
+        final List<Map<String, dynamic>> availability = [];
+
+        String formatTime(TimeOfDay? time) {
+          if (time == null) return '09:00';
+          return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+        }
+
+        if (state.availabilityMode == AvailabilityMode.singleDay &&
+            state.singleDate != null) {
+          availability.add({
+            'date': DateFormat('yyyy-MM-dd').format(state.singleDate!),
+            'startTime': formatTime(state.startTime),
+            'endTime': formatTime(state.endTime),
+            'noBookings': state.noBookings,
+          });
+        } else if (state.dateRangeStart != null && state.dateRangeEnd != null) {
+          // Add each date in range
+          var current = state.dateRangeStart!;
+          while (!current.isAfter(state.dateRangeEnd!)) {
+            availability.add({
+              'date': DateFormat('yyyy-MM-dd').format(current),
+              'startTime': formatTime(state.startTime),
+              'endTime': formatTime(state.endTime),
+              'noBookings': state.noBookings,
+            });
+            current = current.add(const Duration(days: 1));
+          }
+        }
+
+        return {'availability': availability};
+      case 8:
+        return {
+          'hourlyRate': state.hourlyRate.toInt(),
+          'openToNegotiating': state.isRateNegotiable,
+        };
+      case 9:
+        return {}; // Empty payload for final submission
+      default:
+        return {};
+    }
   }
 }
 
+// ============ PROVIDERS ============
+
+/// Dio provider with auth interceptor for sitter profile API calls.
+final sitterProfileDioProvider = Provider<Dio>((ref) {
+  final dio = Dio(BaseOptions(
+    baseUrl: 'https://sns-apis.tausifk.com/api',
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  ));
+
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) async {
+      final authState = ref.read(authNotifierProvider);
+      var session = authState.valueOrNull;
+
+      if (session == null) {
+        final storedToken =
+            await ref.read(sessionStoreProvider).getAccessToken();
+        if (storedToken != null && storedToken.isNotEmpty) {
+          options.headers['Cookie'] = 'session_id=$storedToken';
+        }
+      } else {
+        options.headers['Cookie'] = 'session_id=${session.accessToken}';
+      }
+
+      print('DEBUG SITTER: ${options.method} ${options.uri}');
+      return handler.next(options);
+    },
+  ));
+
+  return dio;
+});
+
+/// Remote data source provider.
+final sitterProfileRemoteDataSourceProvider =
+    Provider<SitterProfileRemoteDataSource>((ref) {
+  final dio = ref.watch(sitterProfileDioProvider);
+  return SitterProfileRemoteDataSource(dio);
+});
+
+/// Repository provider.
+final sitterProfileRepositoryProvider =
+    Provider<SitterProfileRepository>((ref) {
+  final dataSource = ref.watch(sitterProfileRemoteDataSourceProvider);
+  return SitterProfileRepositoryImpl(dataSource);
+});
+
+/// Main controller provider.
 final sitterProfileSetupControllerProvider =
     StateNotifierProvider<SitterProfileSetupController, SitterProfileState>(
         (ref) {

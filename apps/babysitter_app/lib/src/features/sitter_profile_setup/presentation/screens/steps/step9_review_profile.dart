@@ -39,7 +39,8 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
     try {
       final controller =
           ref.read(sitterProfileSetupControllerProvider.notifier);
-      final success = await controller.submitSitterProfile();
+      final repository = ref.read(sitterProfileRepositoryProvider);
+      final success = await controller.submitSitterProfile(repository);
 
       if (!mounted) return;
 

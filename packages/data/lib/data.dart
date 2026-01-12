@@ -38,3 +38,7 @@ export 'src/jobs/dtos/job_dto.dart';
 export 'src/jobs/datasources/job_remote_datasource.dart';
 export 'src/jobs/datasources/job_local_datasource.dart';
 export 'src/jobs/repositories/job_repository_impl.dart';
+
+// Sitter Profile
+export 'src/sitter_profile/datasources/sitter_profile_remote_datasource.dart';
+export 'src/sitter_profile/repositories/sitter_profile_repository_impl.dart';
