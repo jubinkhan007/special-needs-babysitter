@@ -133,67 +133,48 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _goToSignUp() {
-    context.go(Routes.signUp);
+    final role = _selectedRole ?? 'parent'; // Default to parent if null
+    print(
+        'DEBUG OnboardingScreen: Navigating to SignUp with role=$role from selectedRole=$_selectedRole');
+    context.go(
+        Uri(path: Routes.signUp, queryParameters: {'role': role}).toString());
   }
 
   void _goToSignIn() {
     context.go(Routes.signIn);
   }
 
+  void _onBottomLinkTapped() {
+    // If currently sitter, switch to parent. If parent, switch to sitter.
+    final currentRole = _selectedRole ?? 'parent';
+    final targetRole = currentRole == 'sitter' ? 'parent' : 'sitter';
+    context.go(Uri(path: Routes.signUp, queryParameters: {'role': targetRole})
+        .toString());
+  }
+
   @override
   Widget build(BuildContext context) {
-// The design shows two VERY different layouts.
-// Slide 1: "Welcome" with Role Selection.
-// Slides 2-4: "Features" with Bottom Sheet style buttons.
-// Slide 5: "Welcome" with Bottom Sheet style buttons.
-
-// Note: The provided image shows 5 screens.
-// 1. Welcome (Role Select)
-// 2. Specialized Care
-// 3. Verified & Trusted
-// 4. No Subscriptions
-// 5. Welcome (Get Started) -> matches Screen 1 content but with standard buttons.
-
-// I will implement the 4 main slides. If index is 0, use Welcome Role layout.
-// If index > 0, use Feature layout.
-
-// Actually, looking closely at the design:
-// Screen 1 is distinct.
-// Screens 2, 3, 4, 5 ALL have the White Bottom Sheet with "Get Started" / "Log In".
-// Screen 5 content is identical to Screen 1.
-// Let's assume the carousel is:
-// 0: Welcome (Role)
-// 1: Specialized Care
-// 2: Verified & Trusted
-// 3: No Subscriptions
-// 4: Welcome (Get Started) - Optional? Or maybe the user scrolls back?
-// Let's just implement the 4 unique feature slides + the Welcome capability.
-
     return Scaffold(
       body: Stack(
         children: [
-// Background Image (Full Screen for Slides > 0, Partial for Slide 0?)
-// Actually, for smooth transitions, it's better to have the PageView handle the images.
           PageView.builder(
             controller: _pageController,
             onPageChanged: _onPageChanged,
-            itemCount: _slides
-                .length, // Let's use 5 items to match the screenshot flow if desired, but 4 is logical.
-// Screenshot shows 5 dots on the last screen.
-// Let's add the 5th slide which is a copy of the 1st but with standard buttons.
+            itemCount: _slides.length,
             itemBuilder: (context, index) {
               if (index == 0) {
                 return _WelcomePage(
                   slide: _slides[index],
+                  selectedRole: _selectedRole,
                   onFamilySelected: () {
-                    setState(() => _selectedRole = 'family');
+                    setState(() => _selectedRole = 'parent');
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                     );
                   },
                   onBabysitterSelected: () {
-                    setState(() => _selectedRole = 'babysitter');
+                    setState(() => _selectedRole = 'sitter');
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
@@ -206,12 +187,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
           ),
 
-// Bottom Sheet / Controls Overlay
-// Only show this 'Standard' bottom sheet for slides > 0
-          // Dots Indicator (On Image, above Bottom Sheet)
+          // Bottom Sheet / Controls Overlay
           if (_currentPage > 0)
             Positioned(
-              bottom: 260, // Above the white card (~230px height)
+              bottom: 260,
               left: 0,
               right: 0,
               child: Row(
@@ -231,7 +210,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: _BottomControlBar(
                 onGetStarted: _goToSignUp,
                 onLogin: _goToSignIn,
-                bottomLinkText: _selectedRole == 'babysitter'
+                onBottomLinkTapped: _onBottomLinkTapped, // Pass new callback
+                bottomLinkText: _selectedRole == 'sitter'
                     ? "I'm looking for a sitter"
                     : 'Looking for Jobs as a Sitter',
               ),
@@ -244,11 +224,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
 class _WelcomePage extends StatelessWidget {
   final OnboardingSlide slide;
+  final String? selectedRole;
   final VoidCallback onFamilySelected;
   final VoidCallback onBabysitterSelected;
 
   const _WelcomePage({
     required this.slide,
+    required this.selectedRole,
     required this.onFamilySelected,
     required this.onBabysitterSelected,
   });
@@ -327,7 +309,7 @@ class _WelcomePage extends StatelessWidget {
                       Expanded(
                         child: _RoleButton(
                           label: 'Family',
-                          isSelected: true,
+                          isSelected: selectedRole != 'sitter',
                           onTap: onFamilySelected,
                         ),
                       ),
@@ -335,7 +317,7 @@ class _WelcomePage extends StatelessWidget {
                       Expanded(
                         child: _RoleButton(
                           label: 'Babysitter',
-                          isSelected: false,
+                          isSelected: selectedRole == 'sitter',
                           onTap: onBabysitterSelected,
                         ),
                       ),
@@ -450,11 +432,13 @@ class _FeaturePage extends StatelessWidget {
 class _BottomControlBar extends StatelessWidget {
   final VoidCallback onGetStarted;
   final VoidCallback onLogin;
+  final VoidCallback onBottomLinkTapped;
   final String bottomLinkText;
 
   const _BottomControlBar({
     required this.onGetStarted,
     required this.onLogin,
+    required this.onBottomLinkTapped,
     required this.bottomLinkText,
   });
 
@@ -514,7 +498,7 @@ class _BottomControlBar extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           GestureDetector(
-            onTap: onGetStarted, // Or sitter flow
+            onTap: onBottomLinkTapped,
             child: Text(
               bottomLinkText,
               style: const TextStyle(

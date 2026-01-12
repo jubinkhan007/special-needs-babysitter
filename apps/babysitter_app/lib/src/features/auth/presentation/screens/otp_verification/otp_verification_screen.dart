@@ -7,6 +7,7 @@ import '../../widgets/step_indicator.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
+import 'package:domain/domain.dart';
 import '../../../../../routing/app_router.dart'; // For signUpInProgressProvider
 
 /// OTP Verification Screen
@@ -24,7 +25,10 @@ class OtpVerificationScreen extends ConsumerStatefulWidget {
     required this.verificationType,
     required this.destination,
     this.userId,
+    this.role, // Added role
   });
+
+  final String? role;
 
   @override
   ConsumerState<OtpVerificationScreen> createState() =>
@@ -74,11 +78,22 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
     // Store callback reference
     final shouldNavigate = widget.onVerified;
 
+    // Convert role string to UserRole enum if present
+    UserRole? userRole;
+    if (widget.role != null) {
+      if (widget.role!.toLowerCase() == 'sitter') {
+        userRole = UserRole.sitter;
+      } else {
+        userRole = UserRole.parent;
+      }
+    }
+
     await notifier.verifyOtp(
       code: _otp,
       phone: phone,
       email: email,
       userId: widget.userId,
+      role: userRole,
     );
 
     if (!mounted) return;

@@ -89,25 +89,29 @@ class ActiveBookingCard extends StatelessWidget {
                   ),
 
                   // Rating & Menu
-                  Column(
+                  const Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      // Rating + Menu (same row, menu is vertical and on the right of the star)
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.star,
                               size: 16, color: AppColors.starYellow),
                           const SizedBox(width: 4),
                           Text(
-                            booking.sitter.rating.toString(),
+                            '4.5',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 13),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                              color: AppColors.textPrimary,
+                            ),
                           ),
+                          const SizedBox(width: 10),
+                          const Icon(Icons.more_vert,
+                              color: AppColors.neutral30, size: 20),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      // 3-dot menu
-                      const Icon(Icons.more_horiz,
-                          color: AppColors.neutral30, size: 20),
                     ],
                   ),
                 ],

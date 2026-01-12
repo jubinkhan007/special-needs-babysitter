@@ -23,6 +23,7 @@ class Routes {
   static const String parentBookings = '/parent/bookings';
   static const String parentJobs = '/parent/jobs';
   static const String parentAccount = '/parent/account';
+  static const String postJob = '/parent/post-job'; // Job posting flow
   static const String sitterProfile =
       '/parent/sitter-profile'; // New Sitter Profile Route
 

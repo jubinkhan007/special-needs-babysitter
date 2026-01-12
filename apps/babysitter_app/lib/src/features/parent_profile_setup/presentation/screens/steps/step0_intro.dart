@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:auth/auth.dart';
+import 'package:domain/domain.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 
 /// Step 0: Intro Screen (Hero Image + Bottom Sheet)
@@ -13,6 +13,9 @@ class Step0Intro extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authNotifierProvider).value?.user;
+    final isSitter = user?.role == UserRole.sitter;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -39,10 +42,12 @@ class Step0Intro extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Create Your Family Profile',
+                  Text(
+                    isSitter
+                        ? 'Create Your Profile'
+                        : 'Create Your Family Profile',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF1A1A1A),
@@ -50,10 +55,12 @@ class Step0Intro extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Fill out your profile and tell us about your child’s unique needs so you can find the right sitter.',
+                  Text(
+                    isSitter
+                        ? 'Let families get to know you — start building your sitter profile today.'
+                        : 'Fill out your profile and tell us about your child’s unique needs so you can find the right sitter.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Color(0xFF667085),
                       height: 1.5,
@@ -65,7 +72,7 @@ class Step0Intro extends ConsumerWidget {
                   SizedBox(
                     width: 160, // Fixed width from screenshot approx
                     child: PrimaryActionButton(
-                      label: 'Next',
+                      label: 'Let\'s Start',
                       onPressed: onNext,
                     ),
                   ),

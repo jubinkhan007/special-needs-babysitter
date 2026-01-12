@@ -1,0 +1,114 @@
+import 'package:flutter/material.dart';
+import 'package:core/src/theme/app_typography.dart';
+
+class BioTextAreaCard extends StatelessWidget {
+  final String text;
+  final ValueChanged<String> onChanged;
+  final int maxWords;
+
+  const BioTextAreaCard({
+    super.key,
+    required this.text,
+    required this.onChanged,
+    this.maxWords = 200,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header Row: Icon + Title
+        Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE0F2F9), // Light blue bg
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.description_outlined, // Looks like list/doc icon
+                color: Color(0xFF88CBE6),
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              'Bio',
+              style: AppTypography.textTheme.headlineSmall?.copyWith(
+                color: const Color(0xFF1A1A1A),
+                fontWeight: FontWeight.w700,
+                fontSize: 20, // Adjust to match visual
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // Text Area
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+                color: Colors.transparent), // No border in design? Or subtle?
+            // Assuming no border, just shadow or flat white on blue bg.
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              TextFormField(
+                initialValue: text,
+                onChanged: onChanged,
+                maxLines: 6,
+                style: AppTypography.textTheme.bodyLarge?.copyWith(
+                  color: const Color(0xFF1A1A1A),
+                ),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.transparent,
+                  hintText: 'Tell us about yourself.',
+                  hintStyle: AppTypography.textTheme.bodyLarge?.copyWith(
+                    color: Colors.grey.shade400,
+                  ),
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(20),
+                ),
+              ),
+              // Word Count
+              Padding(
+                padding: const EdgeInsets.only(right: 16, bottom: 12),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Word Count: ${_getWordCount(text)} / $maxWords',
+                    style: const TextStyle(
+                      color: Color(0xFF98A2B3),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  int _getWordCount(String text) {
+    if (text.trim().isEmpty) return 0;
+    return text.trim().split(RegExp(r'\s+')).length;
+  }
+}

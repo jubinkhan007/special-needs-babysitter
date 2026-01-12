@@ -45,3 +45,11 @@ export 'src/profile_details/entities/insurance_plan.dart';
 export 'src/profile_details/entities/user_profile_details.dart';
 export 'src/profile_details/repositories/profile_details_repository.dart';
 export 'src/profile_details/usecases/get_profile_details_usecase.dart';
+
+// Jobs Feature
+export 'src/jobs/entities/job.dart';
+export 'src/jobs/repositories/job_repository.dart';
+export 'src/jobs/usecases/create_job_usecase.dart';
+export 'src/jobs/usecases/save_local_draft_usecase.dart';
+export 'src/jobs/usecases/get_local_draft_usecase.dart';
+export 'src/jobs/usecases/clear_local_draft_usecase.dart';

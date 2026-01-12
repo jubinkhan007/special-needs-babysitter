@@ -17,7 +17,8 @@ class ParentShell extends StatelessWidget {
     if (location == Routes.parentMessages) return 1;
     if (location == Routes.parentBookings) return 2;
     if (location == Routes.parentJobs) return 3;
-    if (location == Routes.parentAccount) return 4;
+    // Account has sub-routes like /parent/account/profile, so use startsWith
+    if (location.startsWith(Routes.parentAccount)) return 4;
     return 0;
   }
 

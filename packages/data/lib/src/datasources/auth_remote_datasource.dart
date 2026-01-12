@@ -19,7 +19,21 @@ class AuthRemoteDataSource {
     );
 
     final data = response.data['data'] as Map<String, dynamic>;
-    final userMap = data['user'] as Map<String, dynamic>;
+    final userMap =
+        Map<String, dynamic>.from(data['user'] as Map<String, dynamic>);
+
+    // Check profileCompletion.percentage and override profileSetupComplete if 100%
+    final profileCompletion =
+        data['profileCompletion'] as Map<String, dynamic>?;
+    if (profileCompletion != null) {
+      final percentage = profileCompletion['percentage'] as num? ?? 0;
+      if (percentage >= 100) {
+        // Override profileSetupComplete to true since profile is 100% complete
+        userMap['profileSetupComplete'] = true;
+        print(
+            'DEBUG: profileCompletion.percentage=$percentage, setting profileSetupComplete=true');
+      }
+    }
 
     // Try to extract session_id from Set-Cookie header
     String accessToken = '';

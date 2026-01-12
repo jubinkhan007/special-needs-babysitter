@@ -13,7 +13,12 @@ import '../otp_verification/otp_verification_screen.dart';
 /// Step 2: Password + Security Question (combined)
 /// Step 3: Phone OTP Verification
 class SignUpFlow extends ConsumerStatefulWidget {
-  const SignUpFlow({super.key});
+  final String initialRole;
+
+  const SignUpFlow({
+    super.key,
+    this.initialRole = 'parent',
+  });
 
   @override
   ConsumerState<SignUpFlow> createState() => _SignUpFlowState();
@@ -21,8 +26,27 @@ class SignUpFlow extends ConsumerStatefulWidget {
 
 class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   int _currentStep = 1;
-  final Map<String, String> _formData = {'role': 'parent'};
+  late final Map<String, String> _formData;
   String? _userId; // Added variable to store userId
+
+  @override
+  void initState() {
+    super.initState();
+    print(
+        'DEBUG SignUpFlow: Initialized with initialRole=${widget.initialRole}');
+    _formData = {'role': widget.initialRole};
+  }
+
+  @override
+  void didUpdateWidget(SignUpFlow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialRole != widget.initialRole) {
+      print('DEBUG SignUpFlow: didUpdateWidget newRole=${widget.initialRole}');
+      setState(() {
+        _formData['role'] = widget.initialRole;
+      });
+    }
+  }
 
   void _goToStep(int step) {
     setState(() => _currentStep = step);
@@ -43,13 +67,8 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
 
   void _onOtpVerified() {
     // After OTP verification, go to profile setup for parents
-    final role = _formData['role'];
-    if (role == 'parent') {
-      context.go(Routes.profileSetup);
-    } else {
-      // Sitters go to their home (or sitter profile setup later)
-      context.go(Routes.sitterHome);
-    }
+    // After OTP verification, go to profile setup for both parents and sitters
+    context.go(Routes.profileSetup);
   }
 
   @override
@@ -72,6 +91,7 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
           verificationType: 'phone',
           destination: _formData['phone'] ?? '',
           userId: _userId, // Pass userId
+          role: _formData['role'], // Pass role
           onBack: () => _goToStep(2),
           onVerified: _onOtpVerified,
         );

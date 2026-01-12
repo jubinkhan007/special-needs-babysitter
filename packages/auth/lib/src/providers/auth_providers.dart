@@ -31,40 +31,30 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
   return AuthRemoteDataSource(ref.watch(authDioProvider));
 });
 
-/// Provider for FakeProfileRepository (shared instance)
-final fakeProfileRepositoryProvider =
-    Provider<FakeProfileRepositoryImpl>((ref) {
-  print('>>> BUILD fakeProfileRepositoryProvider');
-  return FakeProfileRepositoryImpl();
+/// Provider for ProfileRemoteDataSource
+final profileRemoteDataSourceProvider =
+    Provider<ProfileRemoteDataSource>((ref) {
+  return ProfileRemoteDataSource(ref.watch(authDioProvider));
 });
 
-/// Provider for ProfileRepository
+/// Provider for ProfileRepository (REAL implementation)
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
-  print('>>> BUILD profileRepositoryProvider');
-  // Ideally this should also be real, but let's stick to fixing Auth first
-  return ref.watch(fakeProfileRepositoryProvider);
+  print('>>> BUILD profileRepositoryProvider (REAL)');
+  return ProfileRepositoryImpl(
+      remoteDataSource: ref.watch(profileRemoteDataSourceProvider));
 });
 
 /// Provider for AuthRepository (REAL implementation)
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   print('>>> BUILD authRepositoryProvider (REAL)');
   final sessionStore = ref.watch(sessionStoreProvider);
-  final profileRepo = ref.watch(fakeProfileRepositoryProvider);
   final remoteDataSource = ref.watch(authRemoteDataSourceProvider);
 
   return AuthRepositoryImpl(
     remoteDataSource: remoteDataSource,
     onSessionChanged: (session) async {
-      // Changed callback signature to match AuthRepositoryImpl (User? user is not passed in Real impl)
-      // Real impl calculates user from session.
-      // But wait: AuthRepositoryImpl._onSessionChanged signature is (AuthSession?)
-      // FakeAuthRepositoryImpl was (AuthSession?, {User? user})
-      // So we need to adapt.
-
       if (session != null) {
         await sessionStore.saveSession(session);
-        // Helper to update profile cache from session user
-        profileRepo.setCachedUser(session.user);
       } else {
         await sessionStore.clearSession();
       }
@@ -154,8 +144,9 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     String? email,
     String? phone,
     String? userId,
+    UserRole? role, // Added optional role
   }) async {
-    print('DEBUG: AuthNotifier.verifyOtp called');
+    print('DEBUG: AuthNotifier.verifyOtp called with role=$role');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
       final session = await ref.read(verifyOtpUseCaseProvider).call(
@@ -170,10 +161,38 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       print(
           'DEBUG: AuthNotifier.verifyOtp success. Session: ${session.accessToken}');
 
-      // CRITICAL: Manually save session as RegistrationRepository doesn't do it
+      // PRE-SAVE SESSION: Save initial session so token is available for API calls
+      // This fixes the 401 error when fetching using authDio which relies on sessionStore/headers
       await ref.read(sessionStoreProvider).saveSession(session);
 
-      return session;
+      // Force fetch full profile to ensure role is correct
+      // This fixes the issue where verifyOtp response might contain partial user data (role: parent default)
+      User user = session.user;
+      try {
+        final profileRepo = ref.read(profileRepositoryProvider);
+        // Only fetch if we have a token (which we should)
+        user = await profileRepo.getMe();
+        print(
+            'DEBUG: AuthNotifier.verifyOtp Fetched Profile: Role=${user.role}');
+      } catch (e) {
+        print('DEBUG: Failed to fetch profile after OTP: $e');
+        // Fallback to session user
+      }
+
+      // FALLBACK: If fetched user is parent but we KNOW it should be sitter (passed in param),
+      // force update the user object. This handles backend returning default/wrong role.
+      if (role != null && user.role != role) {
+        print(
+            'DEBUG: AuthNotifier FORCE PATCHING role from ${user.role} to $role');
+        user = user.copyWith(role: role);
+      }
+
+      final updatedSession = session.copyWith(user: user);
+
+      // Save session with FULL user profile
+      await ref.read(sessionStoreProvider).saveSession(updatedSession);
+
+      return updatedSession;
     });
 
     if (state.hasError) {

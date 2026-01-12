@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:core/core.dart';
+import '../../../../../routing/routes.dart';
 import '../theme/home_design_tokens.dart';
 
 class PromoBannerCard extends StatelessWidget {
@@ -65,7 +67,7 @@ class PromoBannerCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 16), // Space before button
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => context.push(Routes.postJob),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.buttonDark,
                     foregroundColor: Colors.white,

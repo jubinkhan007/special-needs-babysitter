@@ -189,11 +189,14 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             // Profile Photo with edit
             Stack(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 40,
-                  backgroundImage: AssetImage(
-                      'assets/images/user_avatar_placeholder.png'), // Need asset or mock
-                  backgroundColor: Colors.white,
+                  backgroundColor: const Color(0xFFD6F0FA),
+                  child: Icon(
+                    Icons.person,
+                    size: 40,
+                    color: AuthTheme.primaryBlue,
+                  ),
                 ),
                 Positioned(
                   right: 0,

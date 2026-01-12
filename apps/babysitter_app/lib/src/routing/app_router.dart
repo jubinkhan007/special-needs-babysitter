@@ -22,14 +22,15 @@ import '../features/parent/bookings/parent_bookings_screen.dart';
 import '../features/parent/jobs/parent_jobs_screen.dart';
 import '../features/parent/account/parent_account_screen.dart';
 import '../features/parent/account/profile_details/presentation/profile_details_screen.dart';
-import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/screens/sitter_profile_view.dart';
-import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
+
 import '../features/sitter/sitter_shell.dart';
 import '../features/sitter/home/sitter_home_screen.dart';
 import '../features/sitter/jobs/sitter_jobs_screen.dart';
 import '../features/sitter/bookings/sitter_bookings_screen.dart';
 import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
+import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
+import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -116,7 +117,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         }
 
         // Check if sign-up is in progress - always go to profile setup
-        if (isSignUpInProgress && user.role == UserRole.parent) {
+        if (isSignUpInProgress) {
           print(
               'DEBUG ROUTER: signUpInProgress=true, returning /auth/profile-setup');
           isSignUpInProgress = false;
@@ -124,14 +125,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         }
 
         // If coming from sign-up, always go to profile setup (new user flow)
-        if (location == Routes.signUp && user.role == UserRole.parent) {
+        if (location == Routes.signUp) {
           print(
               'DEBUG ROUTER: On sign-up route, returning /auth/profile-setup');
           return Routes.profileSetup;
         }
 
         // For other auth routes (sign-in, etc.), check profile completion
-        if (!user.isProfileComplete && user.role == UserRole.parent) {
+        if (!user.isProfileComplete) {
           print(
               'DEBUG ROUTER: Profile incomplete, returning /auth/profile-setup');
           return Routes.profileSetup;
@@ -175,7 +176,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.signUp,
-        builder: (context, state) => const SignUpFlow(),
+        builder: (context, state) {
+          final role = state.uri.queryParameters['role'] ?? 'parent';
+          return SignUpFlow(initialRole: role);
+        },
       ),
       GoRoute(
         path: Routes.forgotPassword,
@@ -191,7 +195,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.profileSetup,
-        builder: (context, state) => const ProfileSetupFlow(),
+        builder: (context, state) {
+          final user = ref.read(authNotifierProvider).value?.user;
+          if (user?.role == UserRole.sitter) {
+            return const SitterProfileSetupFlow();
+          }
+          return const ProfileSetupFlow();
+        },
       ),
       // Home alias route - redirects based on role
       GoRoute(
@@ -244,6 +254,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
         ],
+      ),
+
+      // Post Job Flow (outside shell for full-screen experience)
+      GoRoute(
+        path: Routes.postJob,
+        builder: (context, state) => const JobPostingFlow(),
       ),
 
       // Sitter shell
