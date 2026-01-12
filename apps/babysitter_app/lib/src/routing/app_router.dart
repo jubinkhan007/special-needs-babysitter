@@ -31,6 +31,7 @@ import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
+import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -260,6 +261,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.postJob,
         builder: (context, state) => const JobPostingFlow(),
+      ),
+
+      // Sitter Profile View (outside shell for full-screen experience)
+      GoRoute(
+        path: '${Routes.sitterProfile}/:sitterId',
+        builder: (context, state) {
+          final sitterId = state.pathParameters['sitterId'] ?? '';
+          return SitterProfilePage(sitterId: sitterId);
+        },
       ),
 
       // Sitter shell
