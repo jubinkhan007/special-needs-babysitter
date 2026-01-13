@@ -1,4 +1,7 @@
+// bookings_app_bar.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../routing/routes.dart';
 import '../../../../theme/app_tokens.dart';
 
 class BookingsAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -6,50 +9,34 @@ class BookingsAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTokens.appBarBg,
-      child: SafeArea(
-        bottom: false,
+    return AppBar(
+      backgroundColor: AppTokens.bg,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
+      toolbarHeight: AppTokens.appBarHeight,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: AppTokens.iconGrey, size: 24),
+        onPressed: () => context.go(Routes.parentHome),
+      ),
+      title: Text('Bookings', style: AppTokens.appBarTitle),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications_none,
+              color: AppTokens.iconGrey, size: 26),
+          onPressed: () {},
+        ),
+      ],
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
         child: Container(
-          height: kToolbarHeight,
-          decoration: const BoxDecoration(
-            color: AppTokens.appBarBg,
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.03),
-                offset: Offset(0, 1),
-                blurRadius: 3,
-              ),
-            ],
-          ),
-          padding: EdgeInsets.symmetric(
-              horizontal: AppTokens.screenHorizontalPadding),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back, color: AppTokens.iconGrey),
-                onPressed: () {
-                  Navigator.of(context).maybePop();
-                },
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-              Text('Bookings', style: AppTokens.appBarTitle),
-              IconButton(
-                icon: const Icon(Icons.notifications_none,
-                    color: AppTokens.iconGrey),
-                onPressed: () {},
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
-            ],
-          ),
+          height: 1,
+          color: const Color.fromRGBO(0, 0, 0, 0.03), // very subtle line
         ),
       ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(AppTokens.appBarHeight);
+  Size get preferredSize => const Size.fromHeight(AppTokens.appBarHeight + 1);
 }

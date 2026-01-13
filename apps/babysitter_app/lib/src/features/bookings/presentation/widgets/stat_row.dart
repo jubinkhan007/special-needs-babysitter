@@ -1,3 +1,4 @@
+// stat_row.dart
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 
@@ -20,8 +21,8 @@ class StatRow extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(icon, size: 20, color: AppTokens.iconGrey),
-            const SizedBox(width: 8),
+            Icon(icon, size: AppTokens.statIconSize, color: AppTokens.iconGrey),
+            const SizedBox(width: 10),
             Text(label, style: AppTokens.statLabel),
           ],
         ),

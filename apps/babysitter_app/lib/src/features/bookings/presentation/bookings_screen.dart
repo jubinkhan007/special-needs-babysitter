@@ -42,8 +42,9 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
   Widget build(BuildContext context) {
     final controller = ref.watch(bookingsControllerProvider);
 
+    // bookings_screen.dart (only adjust paddings)
     return Scaffold(
-      backgroundColor: AppTokens.bg,
+      backgroundColor: Colors.white,
       appBar: const BookingsAppBar(),
       body: Column(
         children: [
@@ -56,14 +57,19 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
 
                 if (bookings.isEmpty) {
                   return Center(
-                      child: Text('No ${status.name} bookings',
-                          style: AppTokens.cardMeta));
+                    child: Text(
+                      'No ${status.name} bookings',
+                      style: AppTokens.cardMeta,
+                    ),
+                  );
                 }
 
                 return ListView.builder(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppTokens.screenHorizontalPadding,
-                    vertical: 20,
+                  padding: const EdgeInsets.only(
+                    left: AppTokens.screenHorizontalPadding,
+                    right: AppTokens.screenHorizontalPadding,
+                    top: 18,
+                    bottom: 24,
                   ),
                   itemCount: bookings.length,
                   itemBuilder: (context, index) {

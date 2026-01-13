@@ -1,3 +1,5 @@
+// booking_card.dart
+import 'package:babysitter_app/src/features/bookings/presentation/widgets/booking_more_options_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../theme/app_tokens.dart';
@@ -25,133 +27,125 @@ class BookingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: AppTokens.cardBg,
         borderRadius: BorderRadius.circular(AppTokens.cardRadius),
-        border: Border.all(color: AppTokens.cardBorder, width: 1.0),
-        boxShadow: const [
-          BoxShadow(
-            color: AppTokens.shadow,
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: AppTokens.cardBorder, width: 1),
+        boxShadow: AppTokens.cardShadow,
       ),
-      padding: EdgeInsets.all(AppTokens.cardInternalPadding),
+      padding: const EdgeInsets.all(AppTokens.cardInternalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row 1: Header
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Avatar
-              SizedBox(
-                width: AppTokens.avatarSize,
-                height: AppTokens.avatarSize,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: AppTokens.avatarSize,
-                      height: AppTokens.avatarSize,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFFE0E0E0),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: _buildAvatar(booking.avatarAssetOrUrl),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-
-              // Name & Distance
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                            child: Text(booking.sitterName,
-                                style: AppTokens.cardName)),
-                        if (booking.isVerified) ...[
-                          const SizedBox(width: 8),
-                          const Icon(Icons.verified,
-                              size: 20, color: AppTokens.primaryBlue),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on,
-                            size: 16, color: AppTokens.primaryBlue),
-                        const SizedBox(width: 4),
-                        Text(booking.distanceText, style: AppTokens.cardMeta),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              // Menu
-              GestureDetector(
-                onTap: onMenuTap,
-                child: const Icon(Icons.more_vert, color: AppTokens.iconGrey),
-              ),
-            ],
+          _Header(
+            booking: booking,
+            onMenuTap: onMenuTap,
           ),
-
-          SizedBox(height: AppTokens.cardVerticalGap),
-
-          // Rating
+          const SizedBox(height: 12),
           RatingRow(rating: booking.rating),
-
-          SizedBox(height: AppTokens.cardVerticalGap),
-
-          // Stats
+          const SizedBox(height: 12),
           StatRow(
-              icon: Icons.access_time,
-              label: 'Response Rate',
-              value: '${booking.responseRate}%'),
-          SizedBox(height: AppTokens.cardVerticalGap),
-          StatRow(
-              icon: Icons.thumb_up_alt_outlined,
-              label: 'Reliability Rate',
-              value: '${booking.reliabilityRate}%'),
-          SizedBox(height: AppTokens.cardVerticalGap),
-          StatRow(
-              icon: Icons.stars_outlined,
-              label: 'Experience',
-              value: booking.experienceText),
-
-          SizedBox(height: 16),
-          Divider(height: 1, thickness: 1, color: AppTokens.cardBorder),
-          SizedBox(height: 16),
-
-          // Scheduled
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Scheduled: ${DateFormat('dd May,yyyy').format(booking.scheduledDate)}', // Mapped format to Figma example "20 May,2025"
-                style: AppTokens.scheduledText,
-              ),
-              BookingStatusChip(status: booking.status),
-            ],
+            icon: Icons.schedule_outlined,
+            label: 'Response Rate',
+            value: '${booking.responseRate}%',
           ),
-
-          SizedBox(height: 20),
-
-          // Buttons
+          const SizedBox(height: 12),
+          StatRow(
+            icon: Icons.thumb_up_off_alt_outlined,
+            label: 'Reliability Rate:',
+            value: '${booking.reliabilityRate}%',
+          ),
+          const SizedBox(height: 12),
+          StatRow(
+            icon: Icons.settings_outlined,
+            label: 'Experience',
+            value: booking.experienceText,
+          ),
+          const SizedBox(height: 12),
+          const Divider(height: 1, thickness: 1, color: AppTokens.dividerSoft),
+          const SizedBox(height: 12),
+          _ScheduledRow(booking: booking),
+          const SizedBox(height: 14),
           PrimaryButton(label: 'Message', onPressed: onMessage),
-          SizedBox(height: AppTokens.buttonSpacing),
+          const SizedBox(height: AppTokens.buttonSpacing),
           SecondaryButton(label: 'View Details', onPressed: onViewDetails),
         ],
       ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  final Booking booking;
+  final VoidCallback onMenuTap;
+
+  const _Header({required this.booking, required this.onMenuTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Avatar
+        SizedBox(
+          width: AppTokens.avatarSize,
+          height: AppTokens.avatarSize,
+          child: ClipOval(
+            child: _buildAvatar(booking.avatarAssetOrUrl),
+          ),
+        ),
+        const SizedBox(width: 14),
+
+        // Name + distance
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      booking.sitterName,
+                      style: AppTokens.cardName,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (booking.isVerified) ...[
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.verified,
+                      size: 20,
+                      color: AppTokens.primaryBlue,
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  const Icon(Icons.location_on,
+                      size: 18, color: AppTokens.primaryBlue),
+                  const SizedBox(width: 6),
+                  Text(booking.distanceText, style: AppTokens.cardMeta),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        // Menu
+        GestureDetector(
+          onTap: () => showBookingMoreOptionsSheet(
+            context,
+            scheduledDate: booking.scheduledDate,
+            onUpdate: () {},
+            onCancel: () {},
+            onShare: () {},
+          ),
+          child: const Icon(Icons.more_vert, color: AppTokens.iconGrey),
+        ),
+      ],
     );
   }
 
@@ -159,9 +153,37 @@ class BookingCard extends StatelessWidget {
     if (assetOrUrl.startsWith('http')) {
       return Image.network(assetOrUrl, fit: BoxFit.cover);
     }
-    return Image.asset(assetOrUrl,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) =>
-            const Icon(Icons.person, color: Colors.grey));
+    return Image.asset(
+      assetOrUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) =>
+          const Center(child: Icon(Icons.person, color: Colors.grey)),
+    );
+  }
+}
+
+class _ScheduledRow extends StatelessWidget {
+  final Booking booking;
+  const _ScheduledRow({required this.booking});
+
+  @override
+  Widget build(BuildContext context) {
+    // EXACT Figma-like: "20 May,2025" (no space after comma)
+    final dateText = DateFormat('dd MMM,yyyy').format(booking.scheduledDate);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            'Scheduled: $dateText',
+            style: AppTokens.scheduledText,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const SizedBox(width: 12),
+        BookingStatusChip(status: booking.status),
+      ],
+    );
   }
 }

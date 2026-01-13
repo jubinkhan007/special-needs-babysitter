@@ -1,3 +1,4 @@
+// bookings_tabs.dart
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/booking_status.dart';
@@ -12,44 +13,60 @@ class BookingsTabs extends StatelessWidget {
     required this.tabs,
   });
 
+  String _label(BookingStatus status) {
+    final n = status.name;
+    return n[0].toUpperCase() + n.substring(1);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppTokens.bg,
-        border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB), width: 1)),
-      ),
-      padding: EdgeInsets.symmetric(vertical: AppTokens.tabsVerticalPadding),
-      child: TabBar(
-        controller: controller,
-        isScrollable: true,
-        padding:
-            EdgeInsets.symmetric(horizontal: AppTokens.screenHorizontalPadding),
-        labelPadding: const EdgeInsets.symmetric(horizontal: 4),
-        indicatorSize: TabBarIndicatorSize.label,
-        indicator: BoxDecoration(
-          color: AppTokens.primaryBlue,
-          borderRadius: BorderRadius.circular(20),
+    return Material(
+      color: AppTokens.surfaceWhite,
+      child: Container(
+        height: AppTokens.tabsHeight,
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.only(
+          left:
+              AppTokens.screenHorizontalPadding, // EXACT left start like Figma
         ),
-        labelColor: Colors.white,
-        unselectedLabelColor: AppTokens.textSecondary,
-        labelStyle: AppTokens.tabSelected,
-        unselectedLabelStyle: AppTokens.tabUnselected,
-        splashFactory: NoSplash.splashFactory,
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
-        dividerColor: Colors.transparent,
-        tabs: tabs.map((status) {
-          final label = status.name[0].toUpperCase() + status.name.substring(1);
-          return Tab(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+        child: TabBar(
+          controller: controller,
+          isScrollable: true,
+
+          // ✅ Make tabs start from the very left (Flutter 3.7+)
+          tabAlignment: TabAlignment.start,
+
+          // ✅ Remove TabBar's own padding so it doesn't center/offset
+          padding: EdgeInsets.zero,
+
+          splashFactory: NoSplash.splashFactory,
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          dividerColor: Colors.transparent,
+
+          indicatorSize: TabBarIndicatorSize.label,
+          indicator: BoxDecoration(
+            color: AppTokens.primaryBlue,
+            borderRadius: BorderRadius.circular(AppTokens.tabPillRadius),
+          ),
+
+          // ✅ spacing between pills (use labelPadding, not container padding)
+          labelPadding: const EdgeInsets.only(right: 14),
+
+          labelColor: Colors.white,
+          unselectedLabelColor: AppTokens.textPrimary,
+          labelStyle: AppTokens.tabSelected,
+          unselectedLabelStyle: AppTokens.tabUnselected,
+
+          tabs: tabs.map((status) {
+            return Tab(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: Text(_label(status)),
               ),
-              child: Text(label),
-            ),
-          );
-        }).toList(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

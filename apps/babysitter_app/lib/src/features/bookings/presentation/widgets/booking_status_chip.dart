@@ -1,17 +1,17 @@
+// booking_status_chip.dart
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/booking_status.dart';
 
 class BookingStatusChip extends StatelessWidget {
   final BookingStatus status;
-
   const BookingStatusChip({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {
-    Color bg;
-    Color dot;
-    String text;
+    late final Color bg;
+    late final Color dot;
+    late final String text;
 
     switch (status) {
       case BookingStatus.active:
@@ -43,23 +43,19 @@ class BookingStatusChip extends StatelessWidget {
 
     return Container(
       height: 32,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            // "dot = 8x8 circle with left padding"
             margin: const EdgeInsets.only(right: 8),
             width: 8,
             height: 8,
-            decoration: BoxDecoration(
-              color: dot,
-              shape: BoxShape.circle,
-            ),
+            decoration: BoxDecoration(color: dot, shape: BoxShape.circle),
           ),
           Text(text, style: AppTokens.chipText),
         ],
