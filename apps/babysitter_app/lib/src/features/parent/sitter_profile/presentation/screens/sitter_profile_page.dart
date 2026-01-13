@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../routing/routes.dart';
 import '../providers/sitter_profile_providers.dart';
 import 'sitter_profile_view.dart';
 
@@ -68,6 +69,7 @@ class SitterProfilePage extends ConsumerWidget {
       data: (sitter) => SitterProfileView(
         key: const Key('sitterProfilePage'),
         sitter: sitter,
+        onBookPressed: () => context.push(Routes.parentBookingStep1),
       ),
     );
   }

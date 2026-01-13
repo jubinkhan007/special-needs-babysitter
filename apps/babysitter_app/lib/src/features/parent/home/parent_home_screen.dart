@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../routing/routes.dart';
 import 'presentation/models/home_mock_models.dart';
 import 'presentation/theme/home_design_tokens.dart';
 import 'presentation/widgets/active_booking_card.dart';
@@ -28,7 +29,9 @@ class ParentHomeScreen extends StatelessWidget {
                 onNotificationTap: () {},
               ),
               const SizedBox(height: HomeDesignTokens.headerBottomSpacing),
-              const HomeSearchBar(),
+              HomeSearchBar(
+                onTap: () => context.push(Routes.sitterSearch),
+              ),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
               const PromoBannerCard(),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),

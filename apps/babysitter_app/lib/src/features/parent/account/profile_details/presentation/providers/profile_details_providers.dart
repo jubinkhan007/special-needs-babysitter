@@ -6,52 +6,14 @@ import 'package:auth/auth.dart';
 import '../controllers/profile_details_controller.dart';
 import '../state/profile_details_state.dart';
 
-import 'package:dio/dio.dart';
-
 // Authenticated Dio Provider
-final profileDetailsDioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(
-    baseUrl: 'https://sns-apis.tausifk.com/api',
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ));
-
-  // Add Auth Interceptor
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-      final authState = ref.read(authNotifierProvider);
-      var session = authState.valueOrNull;
-
-      if (session == null) {
-        final storedToken =
-            await ref.read(sessionStoreProvider).getAccessToken();
-        if (storedToken != null && storedToken.isNotEmpty) {
-          options.headers['Cookie'] = 'session_id=$storedToken';
-        }
-      } else {
-        options.headers['Cookie'] = 'session_id=${session.accessToken}';
-      }
-      return handler.next(options);
-    },
-    onError: (DioException e, handler) {
-      // Log error details for debugging
-      print(
-          'DEBUG: ProfileDetails API Error: ${e.message} ${e.response?.statusCode}');
-      return handler.next(e);
-    },
-  ));
-
-  return dio;
-});
+// Authenticated Dio Provider - Removed in favor of authDioProvider
+// final profileDetailsDioProvider = Provider<Dio>((ref) { ... });
 
 // Data Source
 final profileDetailsRemoteDataSourceProvider =
     Provider<ProfileDetailsRemoteDataSource>((ref) {
-  return ProfileDetailsRemoteDataSource(ref.watch(profileDetailsDioProvider));
+  return ProfileDetailsRemoteDataSource(ref.watch(authDioProvider));
 });
 
 // Repository

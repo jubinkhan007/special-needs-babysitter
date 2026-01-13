@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:core/core.dart';
-import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
+import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
 class ProfileHeaderBar extends StatelessWidget {
   const ProfileHeaderBar({super.key});
@@ -9,37 +8,51 @@ class ProfileHeaderBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF0F9FF), // Light blue tint
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      child: SafeArea(
-        bottom: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top,
+        left: 8, // iOS standardish, but Figma shows good spacing.
+        right: 16,
+      ),
+      height:
+          MediaQuery.of(context).padding.top + 44, // Standard nav bar height
+      // No color, transparent
+      child: NavigationToolbar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: AppUiTokens.textPrimary, size: 24),
+          onPressed: () => context.pop(),
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(), // minimize padding
+        ),
+        middle: const Text(
+          'Krystina Profile',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: AppUiTokens.textPrimary,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            // Back Button
-            GestureDetector(
-              onTap: () => context.pop(),
-              child: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+            IconButton(
+              icon: const Icon(Icons.bookmark_border,
+                  color: AppUiTokens.textPrimary, size: 24),
+              onPressed: () {},
+              constraints: const BoxConstraints(),
+              padding: EdgeInsets.zero,
             ),
-            // Title
-            const Text(
-              'Krystina Profile',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            // Actions
-            Row(
-              children: const [
-                Icon(Icons.bookmark_border, color: AppColors.textPrimary),
-                SizedBox(width: 16),
-                Icon(Icons.share_outlined, color: AppColors.textPrimary),
-              ],
+            const SizedBox(width: 20), // Spacing between icons
+            IconButton(
+              icon: const Icon(Icons.share_outlined,
+                  color: AppUiTokens.textPrimary, size: 24),
+              onPressed: () {},
+              constraints: const BoxConstraints(),
+              padding: EdgeInsets.zero,
             ),
           ],
         ),
+        centerMiddle: true,
       ),
     );
   }

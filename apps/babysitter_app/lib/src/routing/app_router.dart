@@ -18,7 +18,7 @@ import '../features/parent_profile_setup/presentation/screens/profile_setup_flow
 import '../features/parent/parent_shell.dart';
 import '../features/parent/home/parent_home_screen.dart';
 import '../features/parent/messages/parent_messages_screen.dart';
-import '../features/parent/bookings/parent_bookings_screen.dart';
+import '../features/bookings/presentation/bookings_screen.dart';
 import '../features/parent/jobs/parent_jobs_screen.dart';
 import '../features/parent/account/parent_account_screen.dart';
 import '../features/parent/account/profile_details/presentation/profile_details_screen.dart';
@@ -32,6 +32,8 @@ import '../features/sitter/account/sitter_account_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
+import '../features/parent/search/presentation/screens/sitter_search_results_screen.dart';
+import '../features/parent/booking_flow/presentation/screens/parent_booking_step1_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -233,7 +235,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: Routes.parentBookings,
             pageBuilder: (context, state) => const NoTransitionPage(
-              child: ParentBookingsScreen(),
+              child: BookingsScreen(),
             ),
           ),
           GoRoute(
@@ -255,6 +257,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
         ],
+      ),
+
+      // Booking Flow Step 1
+      GoRoute(
+        path: Routes.parentBookingStep1,
+        builder: (context, state) => const ParentBookingStep1Screen(),
+      ),
+
+      // Sitter Search Route
+      GoRoute(
+        path: Routes.sitterSearch,
+        builder: (context, state) => const SitterSearchResultsScreen(),
       ),
 
       // Post Job Flow (outside shell for full-screen experience)

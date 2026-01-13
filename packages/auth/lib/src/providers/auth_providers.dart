@@ -15,7 +15,7 @@ final sessionStoreProvider = Provider<SessionStore>((ref) {
 /// Provider for Auth Dio
 final authDioProvider = Provider<Dio>((ref) {
   // Use the same base URL as the rest of the app
-  return Dio(BaseOptions(
+  final dio = Dio(BaseOptions(
     baseUrl: 'https://sns-apis.tausifk.com/api',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
@@ -24,6 +24,34 @@ final authDioProvider = Provider<Dio>((ref) {
       'Accept': 'application/json',
     },
   ));
+
+  // Add Auth Interceptor to inject Session ID
+  dio.interceptors.add(InterceptorsWrapper(
+    onRequest: (options, handler) async {
+      // Avoid circular dependency by reading session store directly if needed,
+      // or handling async reading carefully.
+      // BUT: authNotifierProvider depends on authRepositoryProvider -> authRemoteDataSourceProvider -> authDioProvider.
+      // CIRCULAR DEPENDENCY ALERT!
+
+      // We cannot read authNotifierProvider here because it depends on this provider.
+      // We must read backing storage (SessionStore).
+
+      final sessionStore = ref.read(sessionStoreProvider);
+      final storedToken = await sessionStore.getAccessToken();
+
+      if (storedToken != null && storedToken.isNotEmpty) {
+        options.headers['Cookie'] = 'session_id=$storedToken';
+      }
+
+      return handler.next(options);
+    },
+    onError: (DioException e, handler) {
+      print('DEBUG: AuthDio API Error: ${e.message} ${e.response?.statusCode}');
+      return handler.next(e);
+    },
+  ));
+
+  return dio;
 });
 
 /// Provider for AuthRemoteDataSource

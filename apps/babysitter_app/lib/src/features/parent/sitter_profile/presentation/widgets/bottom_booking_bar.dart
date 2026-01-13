@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:core/core.dart';
-import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
+import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
 class BottomBookingBar extends StatelessWidget {
   final double price;
+  final VoidCallback onBookPressed;
 
-  const BottomBookingBar({super.key, required this.price});
+  const BottomBookingBar({
+    super.key,
+    required this.price,
+    required this.onBookPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,6 @@ class BottomBookingBar extends StatelessWidget {
         ],
       ),
       child: SafeArea(
-        // Handle bottom notch
         child: Row(
           children: [
             Column(
@@ -35,9 +38,9 @@ class BottomBookingBar extends StatelessWidget {
                       TextSpan(
                         text: '\$${price.toInt()}',
                         style: const TextStyle(
-                          fontSize: 24,
+                          fontSize: 24, // Matches Figma emphasis
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: AppUiTokens.textPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -45,8 +48,8 @@ class BottomBookingBar extends StatelessWidget {
                         text: '/hr',
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.textSecondary,
+                          fontWeight: FontWeight.w400,
+                          color: AppUiTokens.textSecondary,
                         ),
                       ),
                     ],
@@ -57,15 +60,16 @@ class BottomBookingBar extends StatelessWidget {
             const SizedBox(width: 24),
             Expanded(
               child: SizedBox(
-                height: 50,
+                height: 52, // Taller button per Figma
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: onBookPressed,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF7CD4FD), // Light Blue
+                    backgroundColor: AppUiTokens.primaryBlue,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius:
+                          BorderRadius.circular(16), // Rounder per Figma
                     ),
                     textStyle: const TextStyle(
                       fontSize: 16,

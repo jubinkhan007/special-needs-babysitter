@@ -23,12 +23,15 @@ class Routes {
   static const String parentBookings = '/parent/bookings';
   static const String parentJobs = '/parent/jobs';
   static const String parentAccount = '/parent/account';
+  static const String parentBookingStep1 = '/parent/booking/step1';
   static const String postJob = '/parent/post-job'; // Job posting flow
   static const String sitterProfile = '/parent/sitter-profile'; // Base path
 
   /// Generate sitter profile path with ID
   static String sitterProfilePath(String sitterId) =>
       '/parent/sitter-profile/$sitterId';
+
+  static const String sitterSearch = '/parent/search';
 
   // Sitter shell routes
   static const String sitterHome = '/sitter/home';

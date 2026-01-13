@@ -3,7 +3,12 @@ import 'package:core/core.dart';
 import '../theme/home_design_tokens.dart';
 
 class HomeSearchBar extends StatelessWidget {
-  const HomeSearchBar({super.key});
+  final VoidCallback? onTap;
+
+  const HomeSearchBar({
+    super.key,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class HomeSearchBar extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {}, // TODO: Open search
+          onTap: onTap,
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

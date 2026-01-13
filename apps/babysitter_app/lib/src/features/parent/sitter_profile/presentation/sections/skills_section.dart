@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:core/core.dart';
-import '../widgets/chip_pill.dart';
+import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
+import '../widgets/certification_chip.dart';
+import '../widgets/skill_chip.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
@@ -8,7 +9,7 @@ class SkillsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -16,9 +17,11 @@ class SkillsSection extends StatelessWidget {
           const Text(
             "Languages",
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary),
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppUiTokens.textPrimary,
+              letterSpacing: -0.5,
+            ),
           ),
           const SizedBox(height: 12),
           Row(
@@ -32,69 +35,56 @@ class SkillsSection extends StatelessWidget {
               _buildLanguageItem("Mandarin"),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
           // Certifications
           const Text(
             "Certifications",
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary),
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppUiTokens.textPrimary,
+              letterSpacing: -0.5,
+            ),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: const [
-              ChipPill(
-                  label: "CPR & First Aid",
-                  icon: Icons.verified_user,
-                  backgroundColor: Color(0xFF1B2A3B),
-                  textColor: Colors.white),
-              ChipPill(
-                  label: "Special Needs Childcare",
-                  icon: Icons.verified_user,
-                  backgroundColor: Color(0xFF1B2A3B),
-                  textColor: Colors.white),
-              ChipPill(
-                  label: "Infant Care",
-                  icon: Icons.verified_user,
-                  backgroundColor: Color(0xFF1B2A3B),
-                  textColor: Colors.white),
-              ChipPill(
-                  label: "Child Behavior & Safety",
-                  icon: Icons.verified_user,
-                  backgroundColor: Color(0xFF1B2A3B),
-                  textColor: Colors.white),
+              CertificationChip(label: "CPR & First Aid"),
+              CertificationChip(label: "Special Needs Childcare"),
+              CertificationChip(label: "Infant Care"),
+              CertificationChip(label: "Child Behavior & Safety"),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
 
           // Skills
           const Text(
             "Skills",
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary),
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppUiTokens.textPrimary,
+              letterSpacing: -0.5,
+            ),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: const [
-              ChipPill(label: "Special Needs Support"),
-              ChipPill(label: "Meal Prep"),
-              ChipPill(label: "Safe Sleep Practices"),
-              ChipPill(label: "Meal Preparation"), // Duplicate in design list?
-              ChipPill(label: "Potty Training"),
-              ChipPill(label: "Sensory Play"),
-              ChipPill(label: "Medication Management"),
-              ChipPill(label: "Light Housekeeping"),
+              SkillChip(label: "Special Needs Support"),
+              SkillChip(label: "Meal Prep"),
+              SkillChip(label: "Safe Sleep Practices"),
+              SkillChip(label: "Meal Preparation"),
+              SkillChip(label: "Potty Training"),
+              SkillChip(label: "Sensory Play"),
+              SkillChip(label: "Medication Management"),
+              SkillChip(label: "Light Housekeeping"),
             ],
           ),
-          const SizedBox(height: 24),
         ],
       ),
     );
@@ -102,18 +92,24 @@ class SkillsSection extends StatelessWidget {
 
   Widget _buildLanguageItem(String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Text(label,
-          style: const TextStyle(
-              fontSize: 14, color: AppColors.textSecondary)), // Approx
+      padding: const EdgeInsets.symmetric(
+          horizontal: 12), // Figma shows wide spacing
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 15,
+          color: AppUiTokens.textSecondary,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
     );
   }
 
   Widget _buildDivider() {
     return Container(
-      height: 12,
+      height: 14,
       width: 1,
-      color: AppColors.neutral30, // Grey divider
+      color: const Color(0xFFD0D5DD), // Lighter grey divider
     );
   }
 }
