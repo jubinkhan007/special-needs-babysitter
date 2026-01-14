@@ -103,13 +103,13 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                     // Navigate to bookings
                   },
                   onTapSaved: () {
-                    // Navigate to saved sitters
+                    context.push(Routes.parentSavedSitters);
                   },
                 ),
                 const SizedBox(height: 20),
                 AccountMenuList(
-                  onTapPayment: () {},
-                  onTapSettings: () {},
+                  onTapPayment: () => context.push(Routes.parentPayment),
+                  onTapSettings: () => context.push(Routes.parentSettings),
                   onTapAbout: () {},
                   onTapTerms: () {},
                   onTapHelp: () {},

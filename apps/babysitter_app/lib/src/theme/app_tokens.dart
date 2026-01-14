@@ -830,4 +830,316 @@ class AppTokens {
         fontWeight: FontWeight.w600,
         color: rejectSubmitTextColor,
       );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ACCOUNT SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Background + Surfaces
+  static const Color accountBg = Color(0xFFF3FAFD); // Same pale blue
+  static const Color accountCardBg = Color(0xFFFFFFFF);
+  static const Color accountCardBorder = Color(0xFFE8F4FA); // Very light border
+  static const double accountCardRadius = 16.0;
+  static List<BoxShadow> get accountCardShadow => [
+        BoxShadow(
+          color: const Color(0xFF000000).withOpacity(0.04),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
+
+  // Typography
+  static TextStyle get accountNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get accountEmailStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static TextStyle get accountLinkStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF89CFF0),
+      );
+  static TextStyle get accountStatNumberStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get accountStatLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static TextStyle get accountMenuTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF1F2937),
+      );
+
+  // Spacing
+  static const double accountScreenHPad = 20.0;
+  static const double accountSectionGap = 16.0;
+  static const double accountCardInternalPad = 16.0;
+  static const double accountMenuTileHeight = 56.0;
+  static const double accountMenuTileRadius = 12.0;
+
+  // Colors
+  static const Color accountLinkBlue = Color(0xFF89CFF0);
+  static const Color accountIconGrey = Color(0xFF6B7280);
+  static const Color accountMenuBorder = Color(0xFFE5E7EB);
+
+  // Progress Ring
+  static const Color progressRingTrack = Color(0xFFE5E7EB);
+  static const Color progressRingValue = Color(0xFF89CFF0);
+  static const Color progressBadgeBg = Color(0xFF89CFF0);
+  static const Color progressBadgeText = Color(0xFFFFFFFF);
+  static const double progressAvatarSize = 64.0;
+  static const double progressRingStroke = 3.0;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SETTINGS SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Screen layout
+  static const Color settingsBg = Color(0xFFF3FAFD);
+  static const double settingsHPad = 20.0;
+  static const double settingsTopPad = 16.0;
+  static const double settingsTileGap = 12.0;
+
+  // Tile styling (reuse account tile style)
+  static const Color settingsTileBg = Color(0xFFFFFFFF);
+  static const Color settingsTileBorder = Color(0xFFE5E7EB);
+  static const double settingsTileRadius = 12.0;
+  static const double settingsTileHeight = 56.0;
+  static const double settingsTileInternalHPad = 16.0;
+  static const double settingsIconSize = 24.0;
+  static const Color settingsIconColor = Color(0xFF6B7280);
+
+  // Typography
+  static TextStyle get settingsTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF1F2937),
+      );
+
+  // Switch styling
+  static const Color settingsSwitchActiveTrack = Color(0xFF89CFF0);
+  static const Color settingsSwitchActiveThumb = Color(0xFFFFFFFF);
+  static const Color settingsSwitchInactiveTrack = Color(0xFFE5E7EB);
+  static const Color settingsSwitchInactiveThumb = Color(0xFFFFFFFF);
+  static const double settingsSwitchScale = 0.85;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PAYMENT SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Screen layout
+  static const Color paymentBg = Color(0xFFFFFFFF);
+  static const Color paymentHeaderBg = Color(0xFFF3FAFD);
+  static const double paymentHPad = 24.0;
+  static const double paymentSectionGapTop = 24.0;
+  static const double paymentSectionGapBottom = 12.0;
+
+  // Section titles
+  static TextStyle get paymentSectionTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+
+  // Balance card
+  static const Color balanceCardBg = Color(0xFFFFFFFF);
+  static const double balanceCardRadius = 16.0;
+  static List<BoxShadow> get balanceCardShadow => [
+        BoxShadow(
+          color: const Color(0xFF000000).withOpacity(0.06),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
+        ),
+      ];
+  static const EdgeInsets balanceCardPadding = EdgeInsets.all(20);
+  static TextStyle get balanceLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static TextStyle get balanceAmountStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 32,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get topUpTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF6B7280),
+      );
+  static const Color topUpIconColor = Color(0xFF6B7280);
+  static const double topUpIconSize = 20.0;
+
+  // Payment method rows
+  static const double methodRowHeight = 56.0;
+  static const double methodIconCircleSize = 40.0;
+  static const Color methodIconCircleBorder = Color(0xFFE5E7EB);
+  static TextStyle get methodTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF1F2937),
+      );
+  static const Color methodPlusColor = Color(0xFF9CA3AF);
+  static const double methodPlusSize = 20.0;
+  static const double methodRowGap = 8.0;
+
+  // Recent activity rows
+  static const double activityRowHeight = 64.0;
+  static TextStyle get activityTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get activityDateStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static TextStyle get activityAmountStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+  static const double activityLeadingIconSize = 24.0;
+  static const Color activityLeadingIconColor = Color(0xFF6B7280);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SAVED SITTERS SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Screen layout
+  static const Color savedSittersHeaderBg = Color(0xFFF3FAFD);
+  static const Color savedSittersBodyBg = Color(0xFFFFFFFF);
+  static const double savedSittersHPad = 20.0;
+
+  // Search field
+  static const Color searchFieldBg = Color(0xFFFFFFFF);
+  static const Color searchFieldBorder = Color(0xFFE5E7EB);
+  static const double searchFieldRadius = 12.0;
+  static const double searchFieldHeight = 52.0;
+  static const Color searchIconColor = Color(0xFF9CA3AF);
+  static TextStyle get searchFieldHintStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF9CA3AF),
+      );
+  static TextStyle get searchFieldTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF1F2937),
+      );
+
+  // List header row
+  static TextStyle get listHeaderTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+
+  // Filter pill
+  static const Color filterPillBg = Color(0xFFFFFFFF);
+  static const Color filterPillBorder = Color(0xFFE5E7EB);
+  static const double filterPillRadius = 20.0;
+  static const double filterPillHeight = 36.0;
+  static TextStyle get filterPillTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static const Color filterPillIconColor = Color(0xFF6B7280);
+
+  // Saved sitter card
+  static const double savedCardRadius = 16.0;
+  static const Color savedCardBg = Color(0xFFFFFFFF);
+  static const Color savedCardBorder = Color(0xFFE8F4FA);
+  static List<BoxShadow> get savedCardShadow => [
+        BoxShadow(
+          color: const Color(0xFF000000).withOpacity(0.04),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ];
+  static TextStyle get savedSitterNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get savedSitterLocationStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static TextStyle get savedStatLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static TextStyle get savedStatValueStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get savedPriceBigStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 28,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF1F2937),
+      );
+  static TextStyle get savedPriceSuffixStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+  static const Color viewProfileButtonBg = Color(0xFF89CFF0);
+  static const double viewProfileButtonRadius = 20.0;
+  static TextStyle get viewProfileButtonTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFFFFFFFF),
+      );
+  static const Color bookmarkContainerBg = Color(0xFFFFFFFF);
+  static const Color bookmarkContainerBorder = Color(0xFFE5E7EB);
+  static const Color bookmarkIconColor = Color(0xFF1F2937);
+  static const Color ratingStarColor = Color(0xFFFBBF24);
+  static TextStyle get savedRatingTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF1F2937),
+      );
 }

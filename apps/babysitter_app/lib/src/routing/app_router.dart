@@ -47,6 +47,9 @@ import '../features/jobs/domain/job_details.dart';
 import '../features/jobs/presentation/applications/applications_screen.dart';
 import '../features/jobs/presentation/applications/booking_application_screen.dart';
 import '../features/jobs/domain/applications/booking_application.dart';
+import '../features/settings/presentation/settings_screen.dart';
+import '../features/account/payment/presentation/payment_screen.dart';
+import '../features/sitters/presentation/saved/saved_sitters_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -264,12 +267,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ),
             routes: [
               GoRoute(
-                path: 'profile', // /account/profile
+                path: 'profile', // /parent/account/profile
                 builder: (context, state) => const ProfileDetailsScreen(),
+              ),
+              GoRoute(
+                path: 'settings', // /parent/account/settings
+                builder: (context, state) => const SettingsScreen(),
+              ),
+              GoRoute(
+                path: 'payment', // /parent/account/payment
+                builder: (context, state) => const PaymentScreen(),
               ),
             ],
           ),
         ],
+      ),
+
+      // Saved Sitters Route
+      GoRoute(
+        path: Routes.parentSavedSitters,
+        builder: (context, state) => const SavedSittersScreen(),
       ),
 
       // Booking Flow Step 1

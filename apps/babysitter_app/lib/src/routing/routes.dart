@@ -34,6 +34,9 @@ class Routes {
   static const String reportIssue = '/parent/report-issue';
   static const String parentJobs = '/parent/jobs';
   static const String parentAccount = '/parent/account';
+  static const String parentSettings = '/parent/account/settings';
+  static const String parentPayment = '/parent/account/payment';
+  static const String parentSavedSitters = '/parent/saved-sitters';
   static const String parentBookingStep1 = '/parent/booking/step1';
   static const String postJob = '/parent/post-job'; // Job posting flow
   static const String sitterProfile = '/parent/sitter-profile'; // Base path
