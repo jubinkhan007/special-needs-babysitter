@@ -42,6 +42,11 @@ import '../features/bookings/presentation/booking_details_screen.dart';
 import '../features/bookings/domain/booking_details.dart';
 import '../features/bookings/presentation/active_booking_details_screen.dart';
 import '../features/bookings/presentation/map_route/map_route_screen.dart';
+import '../features/jobs/presentation/job_details/job_details_screen.dart';
+import '../features/jobs/domain/job_details.dart';
+import '../features/jobs/presentation/applications/applications_screen.dart';
+import '../features/jobs/presentation/applications/booking_application_screen.dart';
+import '../features/jobs/domain/applications/booking_application.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -321,6 +326,44 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             );
           }
           return MapRouteScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Job Details
+      GoRoute(
+        path: Routes.jobDetails,
+        builder: (context, state) {
+          final job = state.extra as JobDetails?;
+          if (job == null) {
+            return const Scaffold(
+              body: Center(child: Text('Error: Missing job details')),
+            );
+          }
+          return JobDetailsScreen(job: job);
+        },
+      ),
+
+      GoRoute(
+        path: Routes.applications,
+        builder: (context, state) => const ApplicationsScreen(),
+      ),
+
+      GoRoute(
+        path: Routes.applications,
+        builder: (context, state) => const ApplicationsScreen(),
+      ),
+
+      GoRoute(
+        path: Routes.bookingApplication,
+        builder: (context, state) {
+          final app = state.extra as BookingApplication?;
+          if (app == null) {
+            return const Scaffold(
+              body: Center(
+                  child: Text('Error: Missing booking application details')),
+            );
+          }
+          return BookingApplicationScreen(application: app);
         },
       ),
 

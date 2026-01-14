@@ -479,4 +479,355 @@ class AppTokens {
         color: textSecondary,
         height: 1.2,
       );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // JOBS SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Screen & List
+  static const Color jobsScreenBg = Color(0xFFF3FAFD); // Matches booking bg
+  static const double jobsListHorizontalPadding = 16.0;
+  static const double jobsListTopPadding = 24.0;
+  static const double jobsCardSpacing = 16.0;
+
+  // App Bar
+  static const Color jobsAppBarBg = Color(0xFFF3FAFD);
+  static TextStyle get jobsAppBarTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 17,
+        fontWeight: FontWeight.w500,
+        color: textSecondary, // Grey title per screenshot
+      );
+  static const Color jobsAppBarIconColor = Color(0xFF8A949C);
+  static const List<BoxShadow> jobsAppBarShadow = [
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.05),
+      blurRadius: 4,
+      offset: Offset(0, 1),
+    ),
+  ];
+
+  // Card
+  static const Color jobsCardBg = Colors.white;
+  static const Color jobsCardBorder = Color(0xFFE4F4FC); // Subtle border
+  static const double jobsCardRadius = 12.0;
+  static const List<BoxShadow> jobsCardShadow = [
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.04),
+      blurRadius: 12,
+      offset: Offset(0, 4),
+    ),
+  ];
+  static const double jobsCardPadding = 16.0;
+  static TextStyle get jobsCardTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+      );
+
+  // Status Chip
+  static const Color jobChipBgActive =
+      Color(0xFFE0F2F1); // Light blue/teal pill
+  static const Color jobChipDotActive = Color(0xFF00B0FF); // Vivid blue dot
+  static TextStyle get jobChipTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: textPrimary,
+      );
+  static const double jobChipRadius = 100.0;
+  static const double jobChipHeight = 24.0;
+  static const double jobChipHorizontalPadding = 8.0;
+
+  // Info Grid
+  static const Color jobInfoIconColor = Color(0xFF8A949C);
+  static const double jobInfoIconSize = 18.0;
+  static TextStyle get jobInfoLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+        height: 1.3,
+      );
+  static TextStyle get jobInfoValueStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: textSecondary,
+        height: 1.3,
+      );
+  static const Color jobInfoValueAccentColor =
+      Color(0xFF2D8EFF); // Blue for (4y)
+
+  static const double jobInfoColumnGap = 16.0;
+  static const double jobInfoRowGap = 16.0;
+  static const double jobInfoLabelValueGap = 4.0;
+
+  // Divider + Buttons
+  static const Color jobDividerColor = Color(0xFFF0F0F0);
+  static const double jobDividerThickness = 1.0;
+  static const double jobButtonsTopPadding = 16.0;
+  static const double jobButtonHeight = 48.0;
+  static const double jobButtonRadius = 8.0;
+  static const Color jobPrimaryBtnBg = Color(0xFF89CFF0); // Light blue
+  static const Color jobSecondaryBtnBg = Color(0xFF1A2B3C); // Dark Navy
+  static TextStyle get jobButtonTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        height: 1.0, // Fix vertical alignment/clipping
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // JOB DETAILS SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Screen
+  static const Color jobDetailsBg = Color(0xFFF3FAFD); // Matches all jobs bg
+  static const double jobDetailsHorizontalPadding = 16.0;
+  static const double jobDetailsTopPadding = 16.0;
+  static const double jobDetailsSectionSpacing = 24.0;
+  static const double jobDetailsBottomPaddingForScroll =
+      120.0; // Space for sticky bottom bar
+
+  // Typography
+  static TextStyle get jobDetailsTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.2,
+      );
+  static TextStyle get jobDetailsSubtitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: textSecondary,
+      );
+  static TextStyle get jobDetailsSectionTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      );
+  static TextStyle get jobDetailsLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: textSecondary, // Grey
+      );
+  static TextStyle get jobDetailsValueStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: textPrimary, // Dark
+      );
+  static TextStyle get jobDetailsParagraphStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: textSecondary, // Grey
+        height: 1.5,
+      );
+
+  // Dividers
+  static const Color jobDetailsDividerColor = Color(0xFFF0F0F0);
+  static const double jobDetailsDividerThickness = 1.0;
+  static const double jobDetailsSectionDividerPaddingY = 16.0;
+
+  // Buttons
+  static const double jobDetailsButtonHeight = 48.0;
+  static const double jobDetailsButtonRadius = 8.0;
+  static const double jobDetailsButtonGap = 12.0;
+
+  static const Color jobDetailsPrimaryBtnBg = Color(0xFF89CFF0); // Light blue
+  static const Color jobDetailsSecondaryBtnBg = Color(0xFF1A2B3C); // Dark Navy
+  static const Color jobDetailsOutlinedBorderColor = Color(0xFFE0E0E0);
+  static const Color jobDetailsOutlinedTextColor = Color(0xFF1A2B3C);
+
+  static TextStyle get jobDetailsButtonTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        height: 1.0,
+      );
+  static TextStyle get jobDetailsOutlinedTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: jobDetailsOutlinedTextColor,
+        height: 1.0,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // APPLICATIONS SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Screen
+  static const Color applicationsBg = Color(0xFFF3FAFD); // Matches bookings bg
+  static const double applicationsHorizontalPadding = 16.0;
+  static const double applicationsTopPadding = 16.0;
+  static const double applicationsCardGap = 16.0;
+
+  // Card
+  static const double applicationsCardPadding = 16.0;
+  static const Color applicationsInnerDividerColor = Color(0xFFF0F0F0);
+
+  // Typography
+  static TextStyle get applicationsNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      );
+  static TextStyle get applicationsMetaStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: textSecondary, // Grey
+      );
+  static TextStyle get applicationsJobTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      );
+  static TextStyle get applicationsScheduledStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textPrimary, // Darker than meta
+      );
+  static TextStyle get applicationsStatLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: textSecondary, // Grey
+      );
+  static TextStyle get applicationsStatValueStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+      );
+  static TextStyle get applicationsRatingTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      );
+
+  // Chip (Application specific)
+  static const Color applicationChipBg = Color(0xFFFCE4F4); // Pink/Lavender
+  static const Color applicationChipDot = Color(0xFFD3009B); // Pink/Magenta
+  static TextStyle get applicationChipTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // BOOKING APPLICATION SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Layout
+  static const double sectionTopGap = 24.0;
+  static const double sectionGap = 24.0;
+  static const double pageBottomSpacer = 40.0;
+  static const double bookingApplicationBottomBarPadding =
+      16.0; // Renamed to avoid key collision
+  static const double bottomBarGap = 12.0;
+
+  // Dashed Divider
+  static const Color dashColor = Color(0xFFE0E0E0);
+  static const double dashHeight = 1.0;
+  static const double dashGap = 4.0;
+  static const double dashLength = 4.0;
+
+  // Typography
+  static TextStyle get sectionTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF111827), // Dark Title
+      );
+  static TextStyle get bodyParagraphStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280), // Body/Grey
+        height: 1.5,
+      );
+  static TextStyle get transportLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF374151), // Darker Grey/Label
+      );
+  static TextStyle get transportValueStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280), // Body/Grey
+        height: 1.5,
+      );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REJECT REASON BOTTOM SHEET TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  // Sheet
+  static const Color rejectSheetBg = Colors.white;
+  static const double rejectSheetTopRadius = 24.0;
+  static const double rejectSheetHorizontalPadding = 20.0;
+  static const Color rejectSheetCloseIconColor = Color(0xFF6B7280);
+  static const double rejectSheetCloseIconSize = 24.0;
+  static TextStyle get rejectSheetTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF111827),
+      );
+
+  // Radio Rows
+  static const Color rejectRadioOuterColor = Color(0xFFD1D5DB); // Grey outline
+  static const Color rejectRadioSelectedColor = Color(0xFF5EBFC0); // Cyan/Teal
+  static const double rejectRadioRowHeight = 52.0;
+  static const double rejectRadioGap = 16.0;
+  static TextStyle get rejectRadioTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF374151),
+      );
+
+  // Add Other Field
+  static const Color rejectOtherFieldBorderColor =
+      Color(0xFFD1D5DB); // Light grey border
+  static const Color rejectOtherFieldBg = Color(0xFFFFFFFF); // White
+  static const double rejectOtherFieldRadius = 8.0;
+  static const double rejectOtherFieldHeight = 52.0; // Match button height
+  static const EdgeInsets rejectOtherFieldPadding =
+      EdgeInsets.symmetric(horizontal: 16);
+  static TextStyle get rejectOtherHintStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF9CA3AF),
+      );
+  static TextStyle get rejectOtherTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF374151),
+      );
+  static const Color rejectOtherPlusIconColor = Color(0xFF6B7280);
+  static const double rejectOtherPlusIconSize = 20.0;
+
+  // Submit Button
+  static const double rejectSubmitHeight = 52.0;
+  static const double rejectSubmitRadius = 12.0;
+  static const Color rejectSubmitBg = Color(0xFF89CFF0); // Baby blue
+  static const Color rejectSubmitTextColor = Colors.white;
+  static TextStyle get rejectSubmitTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18, // Slightly larger for better match
+        fontWeight: FontWeight.w600,
+        color: rejectSubmitTextColor,
+      );
 }

@@ -25,6 +25,9 @@ class Routes {
       '/parent/booking-details'; // /parent/booking-details?id=...&status=...
   static const String activeBooking = '/parent/active-booking';
   static const String mapRoute = '/parent/map-route';
+  static const String jobDetails = '/parent/jobs/details';
+  static const String applications = '/parent/jobs/applications';
+  static const String bookingApplication = '/parent/jobs/applications/details';
 
   // Review & Report
   static const String parentReview = '/parent/review';
