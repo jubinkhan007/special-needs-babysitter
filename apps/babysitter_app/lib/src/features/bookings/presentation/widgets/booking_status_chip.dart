@@ -30,8 +30,8 @@ class BookingStatusChip extends StatelessWidget {
         text = 'Pending';
         break;
       case BookingStatus.completed:
-        bg = AppTokens.chipGreyBg;
-        dot = AppTokens.chipGreyDot;
+        bg = AppTokens.chipPurpleBg;
+        dot = AppTokens.chipPurpleDot;
         text = 'Completed';
         break;
       case BookingStatus.cancelled:

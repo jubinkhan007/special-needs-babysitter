@@ -7,6 +7,10 @@ import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
 
 import 'routes.dart';
+import '../features/bookings/presentation/review/report_issue_screen.dart';
+import '../features/bookings/presentation/review/review_screen.dart';
+import '../features/bookings/domain/review/review_args.dart';
+import '../features/bookings/domain/review/report_issue_args.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/onboarding/onboarding_screen.dart';
 import '../features/auth/sign_in_screen.dart';
@@ -34,6 +38,10 @@ import '../features/sitter_profile_setup/presentation/screens/sitter_profile_set
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
 import '../features/parent/search/presentation/screens/sitter_search_results_screen.dart';
 import '../features/parent/booking_flow/presentation/screens/parent_booking_step1_screen.dart';
+import '../features/bookings/presentation/booking_details_screen.dart';
+import '../features/bookings/domain/booking_details.dart';
+import '../features/bookings/presentation/active_booking_details_screen.dart';
+import '../features/bookings/presentation/map_route/map_route_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -269,6 +277,80 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.sitterSearch,
         builder: (context, state) => const SitterSearchResultsScreen(),
+      ),
+
+      // Booking Details
+      GoRoute(
+        path: Routes.bookingDetails,
+        builder: (context, state) {
+          final args = state.extra as BookingDetailsArgs?;
+          if (args == null) {
+            // Fallback/Error handling
+            return const Scaffold(
+              body: Center(
+                  child: Text('Error: Missing booking details arguments')),
+            );
+          }
+          return BookingDetailsScreen(args: args);
+        },
+      ),
+
+      // Active Booking Details
+      GoRoute(
+        path: Routes.activeBooking,
+        builder: (context, state) {
+          final bookingId = state.extra as String?;
+          if (bookingId == null) {
+            return const Scaffold(
+              body: Center(child: Text('Error: Missing booking ID')),
+            );
+          }
+          return ActiveBookingDetailsScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Map Route
+      GoRoute(
+        path: Routes.mapRoute,
+        builder: (context, state) {
+          final bookingId = state.extra as String?;
+          if (bookingId == null) {
+            return const Scaffold(
+              body: Center(
+                  child: Text('Error: Missing booking ID for map route')),
+            );
+          }
+          return MapRouteScreen(bookingId: bookingId);
+        },
+      ),
+
+      // Booking Review
+      GoRoute(
+        path: Routes.parentReview,
+        builder: (context, state) {
+          final args = state.extra as ReviewArgs?;
+          if (args == null) {
+            return const Scaffold(
+              body: Center(child: Text('Error: Missing review arguments')),
+            );
+          }
+          return ReviewScreen(args: args);
+        },
+      ),
+
+      // Report Issue
+      GoRoute(
+        path: Routes.reportIssue,
+        builder: (context, state) {
+          final args = state.extra as ReportIssueArgs?;
+          if (args == null) {
+            return const Scaffold(
+              body:
+                  Center(child: Text('Error: Missing report issue arguments')),
+            );
+          }
+          return ReportIssueScreen(args: args);
+        },
       ),
 
       // Post Job Flow (outside shell for full-screen experience)

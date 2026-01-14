@@ -21,6 +21,14 @@ class Routes {
   static const String parentHome = '/parent/home';
   static const String parentMessages = '/parent/messages';
   static const String parentBookings = '/parent/bookings';
+  static const String bookingDetails =
+      '/parent/booking-details'; // /parent/booking-details?id=...&status=...
+  static const String activeBooking = '/parent/active-booking';
+  static const String mapRoute = '/parent/map-route';
+
+  // Review & Report
+  static const String parentReview = '/parent/review';
+  static const String reportIssue = '/parent/report-issue';
   static const String parentJobs = '/parent/jobs';
   static const String parentAccount = '/parent/account';
   static const String parentBookingStep1 = '/parent/booking/step1';

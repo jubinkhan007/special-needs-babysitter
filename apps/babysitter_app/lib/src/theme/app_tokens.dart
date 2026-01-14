@@ -238,4 +238,245 @@ class AppTokens {
 
   static const Color chipGreyBg = Color(0xFFEFF2F5);
   static const Color chipGreyDot = Color(0xFF9AA3AB);
+
+  static const Color chipPurpleBg = Color(0xFFF0E4FF); // Completed
+  static const Color chipPurpleDot = Color(0xFF9747FF);
+
+  // ========= Booking Details Specific =========
+  static const Color bookingDetailsHeaderBg = Color(0xFFF3FAFD);
+  static const Color bookingDetailsCardBg = Colors.white;
+  static const Color bookingDetailsDivider = Color(0xFFE4F4FC);
+
+  static const Color skillTagBg = Color(0xFFF3FAFD);
+  static const Color skillTagText = Color(0xFF54595C);
+  static const double skillTagRadius = 8;
+  static const double skillTagVerticalPadding = 6;
+  static const double skillTagHorizontalPadding = 12;
+
+  static TextStyle get sectionTitle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.2,
+      );
+
+  static TextStyle get detailKey => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: textSecondary,
+        height: 1.5, // Taller line height for readability
+      );
+
+  static TextStyle get detailValue => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+        height: 1.5,
+      );
+
+  static TextStyle get totalCostLabel => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: textSecondary,
+        height: 1.2,
+      );
+
+  static TextStyle get totalCostValue => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.2,
+      );
+
+  static TextStyle get skillTagStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: skillTagText,
+        height: 1.2,
+      );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REVIEW & REPORT SCREENS TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  static const Color formFieldBg = Colors.white;
+  static const Color formFieldBorder = Color(0xFFE4F4FC);
+  static const Color formFieldHint = Color(0xFF8A949C);
+  static const Color formFieldText = textPrimary;
+  static const double formFieldRadius = 12;
+  static const double formFieldPaddingX = 16;
+  static const double formFieldPaddingY = 16;
+
+  static const Color uploadTileBg = Color(0xFFF0F4F8); // Subtle grey/blue
+  static const Color uploadTileIconColor = primaryBlue;
+  static const Color uploadTileText = textSecondary;
+  static const double uploadTileRadius = 12;
+  static const double uploadTileSize = 80;
+
+  static const Color outlinedButtonBorder = Color(0xFFE4F4FC); // Or divider
+  static const Color outlinedButtonText = textPrimary;
+
+  static const double bottomBarHeight = 80;
+  static const double bottomBarPadding = 16;
+  // bottom action bar often uses screen horizontal padding (24)
+
+  static TextStyle get formHintStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: formFieldHint,
+        height: 1.4,
+      );
+
+  static TextStyle get formTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: formFieldText,
+        height: 1.4,
+      );
+
+  static TextStyle get subLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+        height: 1.2,
+      );
+
+  static TextStyle get helperTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: textSecondary,
+        height: 1.4,
+      );
+
+  static TextStyle get uploadTileTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: uploadTileText,
+        height: 1.2, // Tighter for wrapping
+      );
+
+  static TextStyle get outlinedButtonTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+        color: outlinedButtonText,
+        height: 1.2,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ACTIVE BOOKING DETAILS TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  static const Color activeHeaderBg = Color(0xFFF3FAFD);
+  static const Color mapCardBg = Colors.white;
+  static const Color mapRouteBlue = Color(0xFF89CFF0);
+  static const Color mapPinDark = Color(0xFF1B2225);
+  static const Color linkTextGrey = Color(0xFF8A949C);
+  static const Color sectionTitleColor = Color(0xFF1B2225);
+  static const Color dashedDividerColor = Color(0xFFE4F4FC);
+
+  // Layout
+  static const double detailsHorizontalPadding = 24.0;
+  static const double detailsSectionTopGap = 24.0;
+  static const double detailsHeaderBottomGap = 24.0;
+  static const double mapHeight = 220.0;
+  static const double mapCardRadius = 16.0;
+
+  static const double bottomCtaHeight = 48.0;
+  static const double bottomCtaGap = 16.0;
+  static const double bottomCtaRadius = 12.0;
+
+  // Typography
+  static TextStyle get activeSectionTitle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: sectionTitleColor,
+        height: 1.2,
+      );
+
+  static TextStyle get linkTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: linkTextGrey,
+        height: 1.2,
+      );
+
+  static TextStyle get kvLabel => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: textSecondary,
+        height: 1.5,
+      );
+
+  static TextStyle get kvValue => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight
+            .w500, // Slightly less bold than w600 if needed, or match detailValue
+        color: textPrimary,
+        height: 1.5,
+      );
+
+  static TextStyle get kvValueStrong => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+        color: textPrimary,
+        height: 1.5,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MAP ROUTE SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  static const Color mapRouteHeaderBg = Color(0xFFF3FAFD);
+  static const double mapRouteHeaderHeight = 56.0;
+  static const Color mapRouteIconColor = Color(0xFF8A949C);
+
+  static const Color routeCardBg = Colors.white;
+  static const double routeCardRadius =
+      24.0; // Slightly rounder for bottom sheet look
+  static const List<BoxShadow> routeCardShadow = [
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.08),
+      blurRadius: 20,
+      offset: Offset(0, -4),
+    ),
+  ];
+  static const double routeCardPadding = 24.0;
+  static const double routeCardMarginHorizontal = 16.0;
+  static const double routeCardBottomInset = 34.0; // Lift above gesture bar
+
+  static const double routeRowGapVertical = 28.0;
+
+  static const double routeDotSize = 12.0;
+  static const Color routeDotActiveFill = Color(0xFF89CFF0);
+  static const Color routeDotInactiveFill = Colors.white;
+  static const Color routeDotBorderColor = Color(0xFFE4F4FC);
+  static const Color routeConnectorColor = Color(0xFFE4F4FC);
+
+  static TextStyle get routeAddressTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: textPrimary,
+        height: 1.4,
+      );
+
+  static TextStyle get routeTimeTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: textSecondary,
+        height: 1.2,
+      );
 }

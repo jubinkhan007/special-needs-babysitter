@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 import 'cancellation_confirmation_dialog.dart';
+import 'refund_options_dialog.dart';
 
 Future<void> showBookingMoreOptionsSheet(
   BuildContext context, {
@@ -249,7 +250,12 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
                       tier: tier,
                     );
                     if (confirmed == true) {
-                      widget.onCancel();
+                      // Show refund options dialog
+                      final refundOption =
+                          await showRefundOptionsDialog(context);
+                      if (refundOption != null) {
+                        widget.onCancel();
+                      }
                     }
                   }
                 : null,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../routing/routes.dart';
 import '../../../theme/app_tokens.dart';
 import '../application/bookings_controller.dart';
+import '../domain/booking_details.dart';
 import '../domain/booking_status.dart';
 import 'widgets/booking_card.dart';
 import 'widgets/bookings_app_bar.dart';
@@ -42,7 +45,6 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
   Widget build(BuildContext context) {
     final controller = ref.watch(bookingsControllerProvider);
 
-    // bookings_screen.dart (only adjust paddings)
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const BookingsAppBar(),
@@ -77,7 +79,22 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                     return BookingCard(
                       booking: booking,
                       onMessage: () {},
-                      onViewDetails: () {},
+                      onViewDetails: () {
+                        if (booking.status == BookingStatus.active) {
+                          context.push(
+                            Routes.activeBooking,
+                            extra: booking.id,
+                          );
+                        } else {
+                          context.push(
+                            Routes.bookingDetails,
+                            extra: BookingDetailsArgs(
+                              bookingId: booking.id,
+                              status: booking.status,
+                            ),
+                          );
+                        }
+                      },
                       onMenuTap: () {},
                     );
                   },
