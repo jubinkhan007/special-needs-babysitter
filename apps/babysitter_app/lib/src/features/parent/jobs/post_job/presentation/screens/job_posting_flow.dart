@@ -101,6 +101,9 @@ class _JobPostingFlowState extends ConsumerState<JobPostingFlow> {
         return JobPostStep5ReviewScreen(
           onSubmit: _onComplete,
           onBack: _goBack,
+          onEditChild: () => _goToStep(0),
+          onEditJobDetail: () => _goToStep(1),
+          onEditAdditional: () => _goToStep(3),
         );
       default:
         return SelectChildStep1View(

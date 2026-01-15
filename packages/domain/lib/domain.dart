@@ -53,6 +53,7 @@ export 'src/jobs/usecases/create_job_usecase.dart';
 export 'src/jobs/usecases/save_local_draft_usecase.dart';
 export 'src/jobs/usecases/get_local_draft_usecase.dart';
 export 'src/jobs/usecases/clear_local_draft_usecase.dart';
+export 'src/jobs/usecases/update_job_usecase.dart';
 
 // Sitter Profile
 export 'src/sitter_profile/repositories/sitter_profile_repository.dart';

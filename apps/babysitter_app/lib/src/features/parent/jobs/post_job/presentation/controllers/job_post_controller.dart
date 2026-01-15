@@ -122,16 +122,23 @@ class JobPostState extends Equatable {
 /// Controller for managing the job posting flow state.
 class JobPostController extends StateNotifier<JobPostState> {
   final CreateJobUseCase _createJobUseCase;
+  final UpdateJobUseCase _updateJobUseCase;
   final SaveLocalDraftUseCase _saveLocalDraftUseCase;
   final GetLocalDraftUseCase _getLocalDraftUseCase;
   final ClearLocalDraftUseCase _clearLocalDraftUseCase;
 
   JobPostController(
     this._createJobUseCase,
+    this._updateJobUseCase,
     this._saveLocalDraftUseCase,
     this._getLocalDraftUseCase,
     this._clearLocalDraftUseCase,
   ) : super(const JobPostState());
+
+  // ... (previous methods omitted for brevity in replace call, only matching necessary parts if possible)
+
+  // Wait, I need to match a large block or multiple blocks. I'll do this in chunks.
+  // Chunk 1: Constructor and Fields.
 
   void updateChildIds(List<String> childIds) {
     state = state.copyWith(childIds: childIds);
@@ -232,6 +239,7 @@ class JobPostController extends StateNotifier<JobPostState> {
     }
 
     return Job(
+      id: state.jobId, // Pass existing ID if any
       childIds: state.childIds,
       title: state.title,
       startDate: formatDate(state.rawStartDate),
@@ -260,17 +268,27 @@ class JobPostController extends StateNotifier<JobPostState> {
   }
 
   Future<bool> _saveJob({required bool isDraft}) async {
-    print('DEBUG: JobPostController submitting job to API. isDraft: $isDraft');
+    print(
+        'DEBUG: JobPostController submitting job to API. isDraft: $isDraft, isUpdate: ${state.jobId != null}');
     state = state.copyWith(isLoading: true, error: null);
 
     try {
       final job = _buildJobEntity(isDraft: isDraft);
-      final jobId = await _createJobUseCase(job);
+
+      if (state.jobId != null && !isDraft) {
+        // Update existing job
+        await _updateJobUseCase(job);
+        // jobId remains same
+      } else {
+        // Create new job
+        final jobId = await _createJobUseCase(job);
+        state = state.copyWith(jobId: jobId);
+      }
 
       // If successful, clear local draft
       await _clearLocalDraftUseCase();
 
-      state = state.copyWith(isLoading: false, jobId: jobId);
+      state = state.copyWith(isLoading: false);
       return true;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());

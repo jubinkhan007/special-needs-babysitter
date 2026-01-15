@@ -27,41 +27,38 @@ class BottomActionStack extends StatelessWidget {
         AppTokens.jobDetailsHorizontalPadding,
         16.0,
         AppTokens.jobDetailsHorizontalPadding,
-        MediaQuery.of(context).padding.bottom + 16.0,
+        MediaQuery.of(context).padding.bottom,
       ),
-      child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Primary
-            _buildButton(
-              context,
-              label: primaryLabel,
-              bgColor: AppTokens.jobDetailsPrimaryBtnBg,
-              textColor: Colors.white,
-              onTap: onPrimary,
-            ),
-            const SizedBox(height: AppTokens.jobDetailsButtonGap),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Primary
+          _buildButton(
+            context,
+            label: primaryLabel,
+            bgColor: AppTokens.jobDetailsPrimaryBtnBg,
+            textColor: Colors.white,
+            onTap: onPrimary,
+          ),
+          const SizedBox(height: AppTokens.jobDetailsButtonGap),
 
-            // Secondary
-            _buildButton(
-              context,
-              label: secondaryLabel,
-              bgColor: AppTokens.jobDetailsSecondaryBtnBg,
-              textColor: Colors.white,
-              onTap: onSecondary,
-            ),
-            const SizedBox(height: AppTokens.jobDetailsButtonGap),
+          // Secondary
+          _buildButton(
+            context,
+            label: secondaryLabel,
+            bgColor: AppTokens.jobDetailsSecondaryBtnBg,
+            textColor: Colors.white,
+            onTap: onSecondary,
+          ),
+          const SizedBox(height: AppTokens.jobDetailsButtonGap),
 
-            // Outlined
-            _buildOutlinedButton(
-              context,
-              label: outlinedLabel,
-              onTap: onOutlined,
-            ),
-          ],
-        ),
+          // Outlined
+          _buildOutlinedButton(
+            context,
+            label: outlinedLabel,
+            onTap: onOutlined,
+          ),
+        ],
       ),
     );
   }

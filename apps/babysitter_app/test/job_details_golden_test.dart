@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:babysitter_app/src/features/jobs/domain/job.dart';
 import 'package:babysitter_app/src/features/jobs/domain/job_details.dart';
 import 'package:babysitter_app/src/features/jobs/presentation/job_details/job_details_screen.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/job_details/job_details_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   // Mock Data
@@ -20,8 +22,13 @@ void main() {
     scheduleEndDate: DateTime(2025, 8, 17),
     scheduleStartTime: const TimeOfDay(hour: 9, minute: 0),
     scheduleEndTime: const TimeOfDay(hour: 18, minute: 0),
-    address:
-        '7448, Kub Oval, 2450 Brian Meadow, District of Columbia, Lake Edna',
+    address: const Address(
+      streetAddress: '7448, Kub Oval',
+      aptUnit: '',
+      city: 'Lake Edna',
+      state: 'DC',
+      zipCode: '2450',
+    ),
     emergencyContactName: 'Ally Ronson',
     emergencyContactPhone: '+987452135',
     emergencyContactRelation: 'Father',
@@ -35,9 +42,15 @@ void main() {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: JobDetailsScreen(job: mockJobDetails),
+        return ProviderScope(
+          overrides: [
+            jobDetailsProvider(mockJobDetails.id)
+                .overrideWith((ref) => Future.value(mockJobDetails)),
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: JobDetailsScreen(jobId: mockJobDetails.id),
+          ),
         );
       },
     );

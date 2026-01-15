@@ -84,7 +84,7 @@ class JobDetailsUiModel {
       childDetailsRows: kidsRows,
       dateRangeText: dateRange,
       timeRangeText: timeRange,
-      addressText: job.address,
+      addressText: job.address.fullAddress,
       emergencyName: job.emergencyContactName,
       emergencyPhone: job.emergencyContactPhone,
       emergencyRelation: job.emergencyContactRelation,

@@ -11,11 +11,17 @@ import 'job_post_step_header.dart';
 class JobPostStep5ReviewScreen extends ConsumerWidget {
   final VoidCallback onSubmit;
   final VoidCallback onBack;
+  final VoidCallback? onEditJobDetail;
+  final VoidCallback? onEditChild;
+  final VoidCallback? onEditAdditional;
 
   const JobPostStep5ReviewScreen({
     super.key,
     required this.onSubmit,
     required this.onBack,
+    this.onEditJobDetail,
+    this.onEditChild,
+    this.onEditAdditional,
   });
 
   // Design Constants
@@ -53,7 +59,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
 
                     // Section A: Job Detail
-                    _buildSectionHeader('Job Detail'),
+                    _buildSectionHeader('Job Detail', onEditJobDetail),
                     const SizedBox(height: 12),
                     _buildTextLine(state.title),
                     const SizedBox(height: 10),
@@ -64,7 +70,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
                     const SizedBox(height: 32),
 
                     // Section B: Child
-                    _buildSectionHeader('Child'),
+                    _buildSectionHeader('Child', onEditChild),
                     const SizedBox(height: 12),
                     profileDetailsAsync.when(
                       data: (details) {
@@ -91,7 +97,8 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
                     const SizedBox(height: 32),
 
                     // Section C: Additional Details & Pay Rate
-                    _buildSectionHeader('Additional Details & Pay Rate'),
+                    _buildSectionHeader(
+                        'Additional Details & Pay Rate', onEditAdditional),
                     const SizedBox(height: 12),
                     Text(
                       state.additionalDetails,
@@ -142,7 +149,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(String title, VoidCallback? onEdit) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -154,10 +161,13 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
             color: _titleColor,
           ),
         ),
-        const Icon(
-          Icons.edit_outlined,
-          size: 20,
-          color: _editIconColor,
+        GestureDetector(
+          onTap: onEdit,
+          child: const Icon(
+            Icons.edit_outlined,
+            size: 20,
+            color: _editIconColor,
+          ),
         ),
       ],
     );

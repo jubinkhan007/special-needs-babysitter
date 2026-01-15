@@ -69,6 +69,12 @@ final createJobUseCaseProvider = Provider<CreateJobUseCase>((ref) {
   return CreateJobUseCase(repository);
 });
 
+/// Provider for the UpdateJobUseCase.
+final updateJobUseCaseProvider = Provider<UpdateJobUseCase>((ref) {
+  final repository = ref.watch(jobRepositoryProvider);
+  return UpdateJobUseCase(repository);
+});
+
 /// Provider for the SaveLocalDraftUseCase.
 final saveLocalDraftUseCaseProvider = Provider<SaveLocalDraftUseCase>((ref) {
   final repository = ref.watch(jobRepositoryProvider);
@@ -91,12 +97,14 @@ final clearLocalDraftUseCaseProvider = Provider<ClearLocalDraftUseCase>((ref) {
 final jobPostControllerProvider =
     StateNotifierProvider<JobPostController, JobPostState>((ref) {
   final createJobUseCase = ref.watch(createJobUseCaseProvider);
+  final updateJobUseCase = ref.watch(updateJobUseCaseProvider);
   final saveLocalDraftUseCase = ref.watch(saveLocalDraftUseCaseProvider);
   final getLocalDraftUseCase = ref.watch(getLocalDraftUseCaseProvider);
   final clearLocalDraftUseCase = ref.watch(clearLocalDraftUseCaseProvider);
 
   return JobPostController(
     createJobUseCase,
+    updateJobUseCase,
     saveLocalDraftUseCase,
     getLocalDraftUseCase,
     clearLocalDraftUseCase,

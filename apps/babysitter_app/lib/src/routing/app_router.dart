@@ -45,6 +45,7 @@ import '../features/bookings/presentation/active_booking_details_screen.dart';
 import '../features/bookings/presentation/map_route/map_route_screen.dart';
 import '../features/jobs/presentation/job_details/job_details_screen.dart';
 import '../features/jobs/domain/job_details.dart';
+import '../features/jobs/presentation/edit_job/edit_job_screen.dart';
 import '../features/jobs/presentation/applications/applications_screen.dart';
 import '../features/jobs/presentation/applications/booking_application_screen.dart';
 import '../features/jobs/domain/applications/booking_application.dart';
@@ -372,17 +373,37 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-      // Job Details
       GoRoute(
         path: Routes.jobDetails,
         builder: (context, state) {
-          final job = state.extra as JobDetails?;
-          if (job == null) {
+          final extra = state.extra;
+          String? jobId;
+          if (extra is JobDetails) {
+            jobId = extra.id;
+          } else if (extra is String) {
+            jobId = extra;
+          }
+
+          if (jobId == null) {
             return const Scaffold(
-              body: Center(child: Text('Error: Missing job details')),
+              body: Center(child: Text('Error: Missing job ID')),
             );
           }
-          return JobDetailsScreen(job: job);
+          return JobDetailsScreen(jobId: jobId);
+        },
+      ),
+
+      // Edit Job
+      GoRoute(
+        path: Routes.editJob,
+        builder: (context, state) {
+          final jobId = state.extra as String?;
+          if (jobId == null) {
+            return const Scaffold(
+              body: Center(child: Text('Error: Missing job ID')),
+            );
+          }
+          return EditJobScreen(jobId: jobId);
         },
       ),
 

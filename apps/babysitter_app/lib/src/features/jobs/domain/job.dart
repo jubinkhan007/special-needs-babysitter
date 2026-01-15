@@ -33,3 +33,23 @@ class ChildDetail {
     required this.ageYears,
   });
 }
+
+class Address {
+  final String streetAddress;
+  final String aptUnit;
+  final String city;
+  final String state;
+  final String zipCode;
+
+  const Address({
+    required this.streetAddress,
+    required this.aptUnit,
+    required this.city,
+    required this.state,
+    required this.zipCode,
+  });
+
+  String get publicLocation => '$city, $state';
+  String get fullAddress =>
+      '$streetAddress${aptUnit.isNotEmpty ? ", $aptUnit" : ""}, $city, $state $zipCode';
+}

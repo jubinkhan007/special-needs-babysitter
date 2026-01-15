@@ -11,7 +11,7 @@ class JobDetails {
   final DateTime scheduleEndDate;
   final TimeOfDay scheduleStartTime;
   final TimeOfDay scheduleEndTime;
-  final String address;
+  final Address address;
   final String emergencyContactName;
   final String emergencyContactPhone;
   final String emergencyContactRelation;

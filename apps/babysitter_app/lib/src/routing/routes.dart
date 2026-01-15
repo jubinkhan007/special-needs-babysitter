@@ -32,6 +32,7 @@ class Routes {
   static const String jobDetails = '/parent/jobs/details';
   static const String applications = '/parent/jobs/applications';
   static const String bookingApplication = '/parent/jobs/applications/details';
+  static const String editJob = '/parent/jobs/edit';
 
   // Review & Report
   static const String parentReview = '/parent/review';
