@@ -10,6 +10,10 @@ import 'widgets/transport_preferences_table.dart';
 import 'widgets/bottom_decision_bar.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'controllers/applications_controller.dart';
+import '../widgets/reject_reason_bottom_sheet.dart';
+import '../../domain/rejection_reason.dart';
+import 'package:go_router/go_router.dart';
 import 'providers/applications_providers.dart';
 
 class BookingApplicationScreen extends ConsumerWidget {
@@ -27,6 +31,29 @@ class BookingApplicationScreen extends ConsumerWidget {
     final args =
         ApplicationDetailArgs(jobId: jobId, applicationId: applicationId);
     final applicationAsync = ref.watch(applicationDetailProvider(args));
+
+    // Listen for controller state changes
+    ref.listen<AsyncValue<void>>(
+      applicationsControllerProvider,
+      (prev, next) {
+        next.whenOrNull(
+          error: (error, stack) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: $error')),
+            );
+          },
+          data: (_) {
+            if (prev?.isLoading == true) {
+              // Success!
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Action completed successfully')),
+              );
+              context.pop(); // Go back to applications list
+            }
+          },
+        );
+      },
+    );
 
     return Scaffold(
       backgroundColor: AppTokens.applicationsBg,
@@ -127,8 +154,24 @@ class BookingApplicationScreen extends ConsumerWidget {
       bottomNavigationBar: BottomDecisionBar(
         primaryLabel: 'Accept',
         secondaryLabel: 'Reject',
-        onPrimary: () {}, // TODO: Implement Accept
-        onSecondary: () {}, // TODO: Implement Reject
+        onPrimary: () {
+          ref
+              .read(applicationsControllerProvider.notifier)
+              .acceptApplication(jobId, applicationId);
+        },
+        onSecondary: () async {
+          final result = await showRejectReasonBottomSheet(context);
+          if (result != null) {
+            final reason = result.otherText ?? result.reason.displayLabel;
+            ref
+                .read(applicationsControllerProvider.notifier)
+                .declineApplication(
+                  jobId,
+                  applicationId,
+                  reason,
+                );
+          }
+        },
       ),
     );
   }

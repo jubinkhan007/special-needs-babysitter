@@ -138,7 +138,8 @@ void main() {
             applicationDetailProvider.overrideWith(
               (ref, args) => Future.value(mockBookingApp),
             ),
-            // No need to mock repos if provider is mocked directly
+            applicationsRepositoryProvider
+                .overrideWithValue(MockApplicationsRepository()),
           ],
           child: const MaterialApp(
             debugShowCheckedModeBanner: false,
