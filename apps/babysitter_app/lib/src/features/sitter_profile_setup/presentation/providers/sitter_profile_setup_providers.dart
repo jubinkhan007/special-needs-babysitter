@@ -6,6 +6,7 @@ import 'package:domain/domain.dart';
 import 'package:data/data.dart';
 import 'package:auth/auth.dart';
 import 'package:intl/intl.dart';
+import '../../../../constants/app_constants.dart';
 
 enum AvailabilityMode { singleDay, multipleDays }
 
@@ -464,10 +465,12 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
 
 // ============ PROVIDERS ============
 
+// ... (existing imports/code)
+
 /// Dio provider with auth interceptor for sitter profile API calls.
 final sitterProfileDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
+    baseUrl: AppConstants.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

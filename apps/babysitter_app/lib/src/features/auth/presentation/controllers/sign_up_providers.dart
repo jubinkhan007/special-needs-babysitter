@@ -3,12 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/data.dart';
 import 'package:core/core.dart';
+import '../../../../constants/app_constants.dart';
 
 /// Dio provider configured for registration API
 final registrationDioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
-      baseUrl: 'https://babysitter-backend.waywisetech.com/api',
+      baseUrl: AppConstants.baseUrl,
       connectTimeout: Constants.connectionTimeout,
       receiveTimeout: Constants.receiveTimeout,
       headers: {

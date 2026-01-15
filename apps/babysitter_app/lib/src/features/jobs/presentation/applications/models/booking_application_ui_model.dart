@@ -6,6 +6,7 @@ class BookingApplicationUiModel {
 
   // Sitter
   final String sitterName;
+  final String avatarUrl;
   final String distanceText;
   final bool isVerified;
   final String ratingText;
@@ -35,6 +36,7 @@ class BookingApplicationUiModel {
   const BookingApplicationUiModel({
     required this.id,
     required this.sitterName,
+    required this.avatarUrl,
     required this.distanceText,
     required this.isVerified,
     required this.ratingText,
@@ -67,6 +69,7 @@ class BookingApplicationUiModel {
     return BookingApplicationUiModel(
       id: item.id,
       sitterName: item.sitterName,
+      avatarUrl: item.avatarUrl,
       distanceText: '${item.distanceMiles.toInt()} Miles Away',
       isVerified: item.isVerified,
       ratingText: item.rating.toString(),

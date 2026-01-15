@@ -48,7 +48,6 @@ import '../features/jobs/domain/job_details.dart';
 import '../features/jobs/presentation/edit_job/edit_job_screen.dart';
 import '../features/jobs/presentation/applications/applications_screen.dart';
 import '../features/jobs/presentation/applications/booking_application_screen.dart';
-import '../features/jobs/domain/applications/booking_application.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../features/account/payment/presentation/payment_screen.dart';
 import '../features/sitters/presentation/saved/saved_sitters_screen.dart';
@@ -409,25 +408,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       GoRoute(
         path: Routes.applications,
-        builder: (context, state) => const ApplicationsScreen(),
+        builder: (context, state) {
+          final jobId = state.extra as String? ?? '';
+          return ApplicationsScreen(jobId: jobId);
+        },
       ),
-
-      GoRoute(
-        path: Routes.applications,
-        builder: (context, state) => const ApplicationsScreen(),
-      ),
-
       GoRoute(
         path: Routes.bookingApplication,
         builder: (context, state) {
-          final app = state.extra as BookingApplication?;
-          if (app == null) {
-            return const Scaffold(
-              body: Center(
-                  child: Text('Error: Missing booking application details')),
-            );
-          }
-          return BookingApplicationScreen(application: app);
+          final extras = state.extra as Map<String, String>;
+          return BookingApplicationScreen(
+            jobId: extras['jobId']!,
+            applicationId: extras['applicationId']!,
+          );
         },
       ),
 

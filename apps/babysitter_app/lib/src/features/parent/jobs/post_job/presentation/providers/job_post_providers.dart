@@ -3,13 +3,14 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:auth/auth.dart';
+import '../../../../../../constants/app_constants.dart';
 import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/providers/profile_details_providers.dart';
 import '../controllers/job_post_controller.dart';
 
 /// Authenticated Dio provider for Job API.
 final jobPostDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
+    baseUrl: AppConstants.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

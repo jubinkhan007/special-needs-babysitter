@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 class ApplicationItemUiModel {
   final String id;
   final String sitterName;
+  final String avatarUrl;
   final String distanceText;
   final bool isVerified;
   final String ratingText;
@@ -18,6 +19,7 @@ class ApplicationItemUiModel {
   const ApplicationItemUiModel({
     required this.id,
     required this.sitterName,
+    required this.avatarUrl,
     required this.distanceText,
     required this.isVerified,
     required this.ratingText,
@@ -37,6 +39,7 @@ class ApplicationItemUiModel {
     return ApplicationItemUiModel(
       id: item.id,
       sitterName: item.sitterName,
+      avatarUrl: item.avatarUrl,
       distanceText: '${item.distanceMiles.toInt()} Miles Away',
       isVerified: item.isVerified,
       ratingText: item.rating.toString(),

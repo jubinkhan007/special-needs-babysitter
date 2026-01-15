@@ -3,13 +3,14 @@ import 'package:domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:data/data.dart';
 import 'package:auth/auth.dart';
+import '../../../../constants/app_constants.dart';
 import '../controllers/parent_profile_controller.dart';
 
-/// Temporarily creating a local Dio provider if a global one isn't easily accessible
+/// Dio provider with auth interceptor for parent profile API calls.
 /// In a real app, import this from core/network/dio_provider.dart
 final parentProfileDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
+    baseUrl: AppConstants.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

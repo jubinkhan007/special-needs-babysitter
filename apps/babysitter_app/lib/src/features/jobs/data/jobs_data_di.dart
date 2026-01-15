@@ -1,14 +1,15 @@
+// ignore: depend_on_referenced_packages
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
-
+import '../../../constants/app_constants.dart';
 import '../domain/jobs_repository.dart';
 import 'repositories/jobs_repository_impl.dart';
 
 // Dio Provider for Jobs
 final jobsDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
+    baseUrl: AppConstants.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

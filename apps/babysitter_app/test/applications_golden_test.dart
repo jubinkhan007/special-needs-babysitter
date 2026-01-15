@@ -10,7 +10,7 @@ void main() {
       builder: (context, child) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: ApplicationsScreen(),
+          home: ApplicationsScreen(jobId: 'test-job-id'),
         );
       },
     );

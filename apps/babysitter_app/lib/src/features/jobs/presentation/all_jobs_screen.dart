@@ -67,7 +67,7 @@ class AllJobsScreen extends ConsumerWidget {
                     context.push(Routes.jobDetails, extra: job.id);
                   },
                   onManageApplication: () {
-                    context.push(Routes.applications);
+                    context.push(Routes.applications, extra: job.id);
                   },
                 );
               },

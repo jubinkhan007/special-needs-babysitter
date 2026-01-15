@@ -89,7 +89,9 @@ extension JobDtoMapper on JobDto {
       status: mapStatus(status),
       title: title,
       postedAt: DateTime.parse(postedAt),
-      children: [], // Missing child details
+      children: childIds
+          .map((id) => const ChildDetail(name: 'Child', ageYears: 0))
+          .toList(),
       scheduleStartDate: parseDate(startDate),
       scheduleEndDate: parseDate(endDate),
       scheduleStartTime: parseTime(startTime),

@@ -211,7 +211,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                   );
                   ref.invalidate(jobDetailsProvider(widget.jobId));
                 },
-          onSecondary: () => context.push(Routes.applications),
+          onSecondary: () => context.push(Routes.applications, extra: job.id),
           onOutlined: _isDeleting ? () {} : () => _deleteJob(job.id),
         ),
         orElse: () => const SizedBox.shrink(),

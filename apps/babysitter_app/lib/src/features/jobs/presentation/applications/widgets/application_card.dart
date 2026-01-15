@@ -36,11 +36,15 @@ class ApplicationCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Avatar (Placeholder for now)
-              const CircleAvatar(
+              // Avatar
+              CircleAvatar(
                 radius: 20,
-                backgroundImage: AssetImage('assets/images/user1.png'), // Mock
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.grey[300],
+                backgroundImage:
+                    ui.avatarUrl.isNotEmpty ? NetworkImage(ui.avatarUrl) : null,
+                child: ui.avatarUrl.isEmpty
+                    ? const Icon(Icons.person, color: Colors.grey)
+                    : null,
               ),
               const SizedBox(width: 12),
 

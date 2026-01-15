@@ -11,6 +11,8 @@ class ApplicationItem {
   final String jobTitle;
   final DateTime scheduledDate;
   final bool isApplication; // To show "Application" chip (assuming logic)
+  final String? status; // From API: pending, accepted, rejected, etc.
+  final String? sitterId; // Sitter's ID for navigation
 
   const ApplicationItem({
     required this.id,
@@ -25,5 +27,12 @@ class ApplicationItem {
     required this.jobTitle,
     required this.scheduledDate,
     required this.isApplication,
+    this.status,
+    this.sitterId,
+    this.coverLetter,
+    this.skills,
   });
+
+  final String? coverLetter;
+  final List<String>? skills;
 }
