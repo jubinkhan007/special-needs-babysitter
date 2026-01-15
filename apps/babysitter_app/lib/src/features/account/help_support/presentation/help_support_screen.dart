@@ -62,7 +62,7 @@ class HelpSupportScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 32.h),
+                  // SizedBox(height: 0), // Removed top spacing per user request
                   // Hero Icon
                   Container(
                     width: AppTokens.heroSize,
@@ -79,13 +79,13 @@ class HelpSupportScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 16.h),
                   // Big Title
                   Text(
                     'Help & Support',
                     style: AppTokens.helpSupportHeaderStyle,
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 16.h),
                   // Action Tiles
                   AppActionTile(
                     leadingIcon: Icon(
@@ -96,7 +96,7 @@ class HelpSupportScreen extends StatelessWidget {
                     title: 'Contact Live Chat',
                     onTap: () => context.push(Routes.supportChat),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 10.h),
                   AppActionTile(
                     leadingIcon: Icon(
                       Icons.mail_outline,
@@ -114,7 +114,7 @@ class HelpSupportScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 10.h),
                   AppActionTile(
                     leadingIcon: Icon(
                       Icons.help_outline,
@@ -125,7 +125,7 @@ class HelpSupportScreen extends StatelessWidget {
                     // Placeholder for FAQ screen if it were real
                     onTap: () {},
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 10.h),
                   AppActionTile(
                     leadingIcon: Icon(
                       Icons.description_outlined,

@@ -38,7 +38,7 @@ class SupportComposerBar extends StatelessWidget {
               height:
                   48.h, // Fixed height for the composer field as per screenshot
               decoration: BoxDecoration(
-                color: AppTokens.supportComposerFieldBg,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(
                   color: Colors.transparent, // No visible border in screenshot
@@ -58,15 +58,27 @@ class SupportComposerBar extends StatelessWidget {
                     child: TextField(
                       controller: controller,
                       decoration: InputDecoration(
-                        hintText:
-                            'Type your message....', // 4 dots in screenshot
-                        hintStyle: AppTokens.composerHintStyle,
+                        hintText: 'Type your message....',
+                        filled: true, // Ensure we control the fill
+                        fillColor: Colors
+                            .transparent, // Background comes from parent Container
+                        hintStyle: AppTokens.composerHintStyle.copyWith(
+                          backgroundColor: Colors.transparent,
+                          background: null,
+                        ),
                         border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
                       ),
-                      style: AppTokens.chatBubbleStyle
-                          .copyWith(color: Colors.black),
+                      style: AppTokens.chatBubbleStyle.copyWith(
+                        color: Colors.black,
+                        backgroundColor: Colors.transparent,
+                        background: null,
+                      ),
                     ),
                   ),
 
