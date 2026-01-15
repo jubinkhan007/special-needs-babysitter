@@ -1142,4 +1142,544 @@ class AppTokens {
         fontWeight: FontWeight.w500,
         color: const Color(0xFF1F2937),
       );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REVIEWS SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Layout & Backgrounds
+  static const Color reviewsHeaderBg = Color(0xFFF3FAFD);
+  static const double reviewsTopSpacing = 24.0;
+  static const double reviewItemVerticalPadding = 16.0;
+  static const Color reviewItemDividerColor =
+      Color(0xFFF3F4F6); // Very light grey
+  static const double reviewItemDividerThickness = 1.0;
+
+  // Typography
+  static TextStyle get reviewsTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16, // Medium-bold, likely 16 or 18
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+
+  static TextStyle get reviewsSummaryStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+
+  static TextStyle get reviewerNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF1F2937),
+      );
+
+  static TextStyle get reviewTimeAgoStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 11, // Small grey text
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF9CA3AF),
+      );
+
+  static TextStyle get reviewCommentStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF4B5563),
+        height: 1.5, // Tuned/comfortable line height
+      );
+
+  // Avatar
+  static const double reviewAvatarSize = 40.0;
+  static const double reviewAvatarRadius = 20.0; // Half of size
+  static const Color avatarPlaceholderBg = Color(0xFFE5E7EB);
+
+  // Stars
+  static const double starsSize = 14.0;
+  static const double starsGap = 2.0; // Space between stars
+  static const Color starFilledColor =
+      Color(0xFFFBBF24); // Same as ratingStarColor
+  static const Color starEmptyColor = Color(0xFFE5E7EB); // Light grey
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FILTER SHEET TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Sheet Layout
+  static const Color sheetBg = Color(0xFFFFFFFF);
+  static const double sheetRadiusTop = 24.0;
+  static const double sheetHorizontalPadding = 24.0;
+  static const double sheetTopPadding = 24.0;
+  static const double sheetSectionSpacing = 24.0;
+  static const double sheetFieldSpacing = 16.0;
+
+  // Typography
+  static TextStyle get sheetTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+        color: const Color(0xFF1F2937),
+        height: 1.2,
+      );
+
+  static TextStyle get sheetSectionTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15, // Label size
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+
+  static TextStyle get sheetFieldHintStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF6B7280),
+      );
+
+  static TextStyle get sheetFieldTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF1F2937),
+      );
+
+  static TextStyle get sheetCheckboxTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: const Color(0xFF4B5563),
+      );
+
+  // Form Fields (Sheet specific)
+  static const Color sheetFieldBg = Color(0xFFFFFFFF);
+  static const Color sheetFieldBorder = Color(0xFFE5E7EB);
+  static const double sheetFieldRadius = 12.0;
+  static const double sheetFieldHeight = 48.0;
+  static const double sheetFieldPadding = 16.0;
+  static const Color sheetFieldIconColor = Color(0xFF6B7280);
+
+  // Slider
+  static const Color sliderActiveColor = Color(
+      0xFF87CEEB); // Sky blue (approx from screenshot) -> Actually Figma screenshot looks like primaryBlue or lighter. Let's use primaryBlue 0xFF6EC1F5 or similar if defined, else define here.
+  // Using explicit color from screenshot (lightish blue for active track/thumb area glow)
+  // Re-checking standard primary: 6EC1F5 is typical in this app.
+  static const Color sliderTrackActive = Color(0xFF6EC1F5);
+  static const Color sliderTrackInactive = Color(0xFFE5E7EB);
+  static const Color sliderThumbColor = Color(0xFF6EC1F5);
+  static const double sliderThumbRadius = 10.0;
+  static const double sliderTrackHeight = 4.0;
+  static const Color sliderValuePillBg =
+      Color(0xFFEAF6FF); // Light blue bg for pill
+  static const double sliderValuePillRadius = 12.0;
+  static TextStyle get sheetSliderPillTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF1F2937),
+      );
+
+  static TextStyle get sheetSliderLabelStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+        color: const Color(0xFF6B7280),
+      );
+
+  // Checkbox
+  static const double checkboxSize = 20.0;
+  static const double checkboxRadius = 4.0;
+  static const Color checkboxBorderColor = Color(0xFF6B7280);
+
+  // Sticky Button
+  // Assuming reusing generic PrimaryButton tokens but defining specific paddings
+  static const double filterBottomBarHeight =
+      84.0; // Height of the sticky container
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MESSAGES SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Colors
+  static const Color messagesHeaderBg = Color(0xFFF3FAFD); // Same as screenBg
+  static const Color messagesScreenBg = Color(0xFFFFFFFF); // White body
+  static const Color messageRowDivider = Color(0xFFE4F4FC); // Soft divider
+  static const Color messageNameColor = Color(0xFF1B2225); // textPrimary
+  static const Color messagePreviewColor = Color(0xFF6B7680); // textSecondary
+  static const Color messageTimeColor = Color(0xFF8A949C); // iconGrey
+  static const Color unreadBadgeBg = Color(0xFF1F2B35); // Dark navy
+  static const Color unreadBadgeText = Color(0xFFFFFFFF); // White
+  static const Color verifiedBadgeBlue = Color(0xFF4FC3F7); // Light Blue check
+  static const Color systemAvatarBg = Color(0xFFF3FAFD); // Pale blue bg
+
+  // Layout
+  static double get messageRowHorizontalPadding => 24.w;
+  static double get messageRowVerticalPadding => 16.h;
+  static double get messageAvatarSize => 48.w;
+  static double get verifiedIconSize => 16.w;
+  static double get unreadBadgeSize => 20.w;
+  static double get messageDividerHeight => 1.0;
+  static double get rowGapNameToPreview => 4.h;
+  static double get trailingColumnWidth => 60.w;
+
+  // Typography
+  static TextStyle get messagesTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 17.sp,
+        fontWeight: FontWeight.w500,
+        color: appBarTitleGrey,
+        height: 1.2,
+      );
+
+  static TextStyle get messageNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15.sp,
+        fontWeight: FontWeight.w600,
+        color: messageNameColor,
+        height: 1.2,
+      );
+
+  static TextStyle get messagePreviewStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 13.sp,
+        fontWeight: FontWeight.w400,
+        color: messagePreviewColor,
+        height: 1.3,
+      );
+
+  static TextStyle get messageTimeStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+        color: messageTimeColor,
+        height: 1.0,
+      );
+
+  static TextStyle get unreadBadgeTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 11.sp,
+        fontWeight: FontWeight.w600,
+        color: unreadBadgeText,
+        height: 1.0,
+      );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CHAT THREAD SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Colors
+  static const Color chatHeaderBg = Color(0xFFF3FAFD); // Pale blue
+  static const Color chatScreenBg = Color(0xFFFFFFFF); // White body/bg
+  static const Color chatBubbleIncomingBg =
+      Color(0xFFF3F4F6); // Soft grey/white
+  static const Color chatBubbleOutgoingBg = Color(0xFF89CFF0); // Primary blue
+  static const Color chatBubbleOutgoingText = Colors.white;
+  static const Color chatMetaText = Color(0xFF9CA3AF); // Light grey timestamps
+  static const Color chatDividerText = Color(0xFF9CA3AF); // "Today"
+  static const Color callTileBg = Color(0xFFF0F9FF); // Very light blue tile
+  static const Color composerBg = Color(0xFFF3FAFD); // Bottom area bg
+  static const Color composerFieldBg = Colors.white;
+  static const Color composerFieldBorder = Color(0xFFE5E7EB);
+  static const Color composerPlaceholder = Color(0xFF9CA3AF);
+  static const Color composerIconColor = Color(0xFF6B7280);
+  static const Color sendButtonBg = Color(0xFF89CFF0);
+
+  // Layout
+  static double get chatHorizontalPadding => 24.w;
+  static double get chatBubbleRadius => 16.r;
+  static double get composerHeight => 80.h;
+  static double get composerFieldHeight => 48.h;
+  static double get composerRadius => 24.r;
+  static double get sendButtonSize => 48.w;
+  static double get bubbleMaxWidthFactor => 0.75; // 75% of screen width
+
+  // Typography
+  static TextStyle get chatSenderNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.2,
+      );
+
+  static TextStyle get chatMessageTextStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15.sp,
+        fontWeight: FontWeight.w400,
+        color: textPrimary,
+        height: 1.4,
+      );
+
+  static TextStyle get chatMetaStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 12.sp,
+        fontWeight: FontWeight.w400,
+        color: chatMetaText,
+        height: 1.2,
+      );
+
+  static TextStyle get callTileTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500,
+        color: textSecondary,
+        height: 1.2,
+      );
+
+  static TextStyle get callTileSubStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w600,
+        color: textSecondary,
+        height: 1.2,
+      );
+
+  static TextStyle get composerHintStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w400,
+        color: composerPlaceholder,
+        height: 1.2,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // AUDIO CALL SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Colors
+  static const Color callBg = Color(0xFFFFFFFF); // Base bg
+  static const Color callHeaderText =
+      Color(0xFF1B2225); // Dark text for title/name
+  static const Color callControlBarBg = Color(0xFFF3FAFD); // Light pill bg
+  static const Color callControlButtonBg = Color(
+      0xFF6B7280); // Grey buttons (from visual) -> Actually screenshot shows grey circles
+  static const Color callControlIconColor = Colors.white;
+  static const Color callEndButtonBg = Color(0xFFEF4444); // Red
+  static const Color callSubText = Color(0xFF6B7280); // Grey status/timer
+
+  // Layout
+  static double get callAvatarLargeSize => 120.w;
+  static double get callAvatarMediumSize => 80.w;
+  static double get callAvatarRadius => 100.r; // Circular
+  static double get callControlsBarRadius => 32.r;
+  static double get callControlsBarPadding => 8.w;
+  static double get callControlsBarHeight => 80.h;
+  static double get callControlsBarWidthFactor => 0.9;
+  static double get callControlButtonSize => 56.w;
+  static double get callControlIconSize => 24.w;
+  static double get callEndButtonSize =>
+      64.w; // Slightly larger usually, or same
+  static double get callHorizontalPadding => 24.w;
+  static double get callVerticalSpacingLg => 48.h;
+  static double get callVerticalSpacingMd => 24.h;
+  static double get callVerticalSpacingSm => 8.h;
+
+  // Typography
+  static TextStyle get callTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 18.sp,
+        fontWeight: FontWeight.w500,
+        color: callHeaderText,
+        height: 1.2,
+      );
+
+  static TextStyle get callNameLargeStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 24.sp,
+        fontWeight: FontWeight.w600,
+        color: callHeaderText,
+        height: 1.2,
+      );
+
+  static TextStyle get callNameMediumStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20.sp,
+        fontWeight: FontWeight.w600,
+        color: callHeaderText,
+        height: 1.2,
+      );
+
+  static TextStyle get callStatusStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w400,
+        color: callSubText,
+        height: 1.2,
+      );
+
+  static TextStyle get callTimerStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w400,
+        color: callSubText,
+        height: 1.2,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VIDEO CALL SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Colors
+  static const Color callOverlayText = Colors.white;
+  static const Color callOverlayIcon = Colors.white;
+  static const Color callControlBarBgVideo = Color(
+      0xB3F3F4F6); // Translucent pinkish/white (0xB3 is ~70% opacity, F3F4F6 is light grey) - actually aiming for the subtle pinkish tone seen in screenshot. Let's try a bit warmer: 0xB3FFF0F5 or similar? Screenshot looks more like a blur with light tint. Let's stick to a safe translucent white/grey for now or match "pinkish" if user insisted. "Bar has translucent background tint (slight pinkish tone in screenshot)". Let's try Color(0xCCFFEEEE).
+  static const Color pipBg = Colors.black; // Fallback
+  static const Color pipShadowColor = Colors.black26;
+  static const Color pipIconBg = Color(0x80FFFFFF); // Translucent white circle
+  static const Color pipIconColor = Color(0xFF1B2225); // Dark grey
+
+  // Layout
+  static double get callTopBarVPadding => 8.h; // Plus safe area
+  static double get callTopBarHPadding => 16.w;
+  static double get callTopIconSize => 24.w;
+
+  static double get pipWidth => 100.w;
+  static double get pipHeight => 140.h; // Approx 3.5:5 ratio
+  static double get pipRadius => 12.r;
+  static double get pipMarginRight => 16.w;
+  static double get pipMarginBottom =>
+      16.h; // relative to control bar or bottom
+
+  static double get pipInnerIconSize => 20.w;
+  static double get pipInnerIconPadding => 4.w;
+
+  // Typography for Video Call (White overlay)
+  static TextStyle get callTopNameStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
+        color: callOverlayText,
+        height: 1.2,
+      );
+
+  static TextStyle get callTopTimerStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 14.sp,
+        fontWeight: FontWeight.w500, // Slightly lighter than name
+        color: callOverlayText,
+        height: 1.2,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SUPPORT CHAT SCREEN TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Colors
+  static const Color chatHeaderTitleColor = Color(0xFF1B2225);
+  static const Color chatHeaderIconColor = Color(0xFF1B2225); // Dark grey/black
+  static const Color chatSupportBadgeBg = Color(0xFF1B2225); // Black badge
+  static const Color chatSupportBadgeIcon = Colors.white;
+
+  static const Color supportBubbleBg = Colors.white;
+  static const Color userBubbleBg =
+      Color(0xFF7DD3FC); // Light blue similar to screenshot
+  static const Color userBubbleText = Color(0xFF000000); // Dark text
+  static const Color supportBubbleText = Color(0xFF374151); // Dark grey text
+
+  static const Color chatMetaTextColor = Color(0xFF6B7280); // Grey 500
+  static const Color chatDaySeparatorText = Color(0xFF9CA3AF); // Grey 400
+
+  // Composer
+  static const Color supportComposerBg = Color(0xFFF0F9FF); // Pale blue strip
+  static const Color supportComposerFieldBg = Colors.white;
+  static const Color supportComposerIconColor = Color(0xFF6B7280); // Grey
+  static const Color supportSendBtnBg = Color(0xFF7DD3FC); // Blue
+  static const Color supportSendBtnIcon = Colors.white;
+
+  // Layout
+  static double get supportAvatarSize => 40.w;
+  static double get userAvatarSize => 40
+      .w; // Actually screenshot has user avatar slightly overlap or sit effectively
+  static double get supportBubbleRadius => 16.r;
+  static double get supportBubbleMaxWidth => 0.75.sw;
+
+  static double get chatHPadding => 16.w;
+  static double get chatVPadding => 16.h;
+  static double get bubblePadding => 12.w;
+
+  // Typography
+  static TextStyle get chatHeaderTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
+        color: chatHeaderTitleColor,
+        height: 1.2,
+      );
+
+  static TextStyle get chatBubbleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15.sp,
+        fontWeight: FontWeight.w400,
+        color: supportBubbleText, // Default
+        height: 1.4,
+      );
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DIALOG TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Colors
+  static const Color dialogBg = Colors.white;
+  static const Color dialogTitleColor = Color(0xFF1B2225); // Near black
+  static const Color dialogBodyColor = Color(0xFF374151); // Dark grey text
+  static const Color dialogDestructiveTextColor =
+      Color(0xFF6B7280); // Gray (as per screenshot requirement)
+  static const Color dialogPrimaryBtnBg = Color(0xFF7DD3FC); // Light blue
+  static const Color dialogPrimaryBtnText = Colors.white;
+  static const Color dialogCloseIconColor = Color(0xFF1B2225);
+
+  // Layout
+  static double get dialogRadius => 24.r; // Large radius
+  static double get dialogPadding => 24.w; // Generous padding
+  static double get dialogCloseIconSize => 20.w;
+  static double get dialogPrimaryBtnHeight => 48.h;
+  static double get dialogActionGap =>
+      16.w; // Gap between actions if needed, though spaced between
+
+  // Typography
+  static TextStyle get dialogTitleStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20.sp, // Large and bold
+        fontWeight: FontWeight.w700,
+        color: dialogTitleColor,
+        height: 1.2,
+        letterSpacing: -0.5,
+      );
+
+  static TextStyle get dialogBodyStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 15.sp, // Readable body
+        fontWeight: FontWeight.w400,
+        color: dialogBodyColor,
+        height: 1.5, // Airy line height
+      );
+
+  static TextStyle get dialogDestructiveActionStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
+        color: dialogDestructiveTextColor,
+      );
+
+  static TextStyle get dialogPrimaryBtnStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
+        color: dialogPrimaryBtnText,
+      );
+  // ═══════════════════════════════════════════════════════════════════════════
+  // HELP & SUPPORT TOKENS
+  // ═══════════════════════════════════════════════════════════════════════════
+  static const Color heroBg = Color(0xFFD9F0FF); // Light pastel blue
+  static const Color heroIconColor = Color(0xFF89CFF0); // Slightly darker blue
+  static double get heroRadius => 24.r; // Rounded square
+  static double get heroSize => 100.w; // Large hero size
+  static double get heroIconSize => 48.w;
+
+  static TextStyle get helpSupportHeaderStyle => TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 24.sp,
+        fontWeight: FontWeight.w700,
+        color: textPrimary,
+        height: 1.2,
+      );
 }

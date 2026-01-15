@@ -3,6 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../theme/app_tokens.dart';
 import '../domain/settings_item.dart';
 import 'widgets/settings_item_tile.dart';
+import 'dialogs/show_delete_account_dialog.dart';
+import '../change_password/presentation/change_password_screen.dart';
+import '../manage_notifications/presentation/manage_notifications_screen.dart';
+import '../privacy_settings/presentation/privacy_settings_screen.dart';
 
 /// The Settings screen displaying configurable options.
 class SettingsScreen extends StatefulWidget {
@@ -55,19 +59,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ),
   ];
 
-  void _handleItemTap(SettingsItem item) {
+  Future<void> _handleItemTap(SettingsItem item) async {
     switch (item.id) {
       case 'change_password':
-        widget.onChangePassword?.call();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ChangePasswordScreen(),
+          ),
+        );
         break;
       case 'manage_notifications':
-        widget.onManageNotifications?.call();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ManageNotificationsScreen(),
+          ),
+        );
         break;
       case 'privacy_settings':
-        widget.onPrivacySettings?.call();
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const PrivacySettingsScreen(),
+          ),
+        );
         break;
       case 'delete_account':
-        widget.onDeleteAccount?.call();
+        // Show confirmation dialog
+        final confirmed = await showDeleteAccountDialog(context);
+        if (confirmed == true) {
+          widget.onDeleteAccount?.call();
+        }
         break;
     }
   }

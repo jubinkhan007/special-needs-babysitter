@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
 class ReviewsSection extends StatelessWidget {
-  const ReviewsSection({super.key});
+  final VoidCallback? onTapSeeAll;
+
+  const ReviewsSection({super.key, this.onTapSeeAll});
 
   @override
   Widget build(BuildContext context) {
@@ -23,32 +25,36 @@ class ReviewsSection extends StatelessWidget {
                   letterSpacing: -0.5,
                 ),
               ),
-              Row(
-                children: const [
-                  Icon(Icons.star_rounded,
-                      color: AppUiTokens.starYellow, size: 20),
-                  SizedBox(width: 4),
-                  Text(
-                    "4.5",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppUiTokens.textPrimary,
+              GestureDetector(
+                onTap: onTapSeeAll,
+                behavior: HitTestBehavior.opaque, // Ensure tap target is good
+                child: Row(
+                  children: const [
+                    Icon(Icons.star_rounded,
+                        color: AppUiTokens.starYellow, size: 20),
+                    SizedBox(width: 4),
+                    Text(
+                      "4.5",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: AppUiTokens.textPrimary,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    "(112 Reviews)", // Figma color check? Usually lighter
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                      color: AppUiTokens.textSecondary,
+                    SizedBox(width: 4),
+                    Text(
+                      "(112 Reviews)", // Figma color check? Usually lighter
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: AppUiTokens.textSecondary,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 4),
-                  Icon(Icons.chevron_right,
-                      size: 20, color: AppUiTokens.textSecondary),
-                ],
+                    SizedBox(width: 4),
+                    Icon(Icons.chevron_right,
+                        size: 20, color: AppUiTokens.textSecondary),
+                  ],
+                ),
               ),
             ],
           ),

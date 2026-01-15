@@ -5,6 +5,7 @@ import '../domain/account_menu_item.dart';
 import 'widgets/account_profile_card.dart';
 import 'widgets/account_stat_cards_row.dart';
 import 'widgets/account_menu_tile.dart';
+import '../about/presentation/about_special_needs_sitters_screen.dart';
 
 /// The Account tab screen displaying user profile, stats, and menu options.
 class AccountScreen extends StatelessWidget {
@@ -38,6 +39,11 @@ class AccountScreen extends StatelessWidget {
       AccountMenuItem(
         icon: Icons.description_outlined,
         title: 'About Special Needs Sitters',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const AboutSpecialNeedsSittersScreen(),
+          ),
+        ),
       ),
       AccountMenuItem(
         icon: Icons.article_outlined,

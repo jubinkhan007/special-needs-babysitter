@@ -9,7 +9,7 @@ import '../controllers/parent_profile_controller.dart';
 /// In a real app, import this from core/network/dio_provider.dart
 final parentProfileDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://sns-apis.tausifk.com/api',
+    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

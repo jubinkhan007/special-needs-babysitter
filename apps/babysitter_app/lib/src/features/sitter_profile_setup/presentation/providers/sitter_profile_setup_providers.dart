@@ -467,7 +467,7 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
 /// Dio provider with auth interceptor for sitter profile API calls.
 final sitterProfileDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://sns-apis.tausifk.com/api',
+    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

@@ -7,8 +7,25 @@ import '../widgets/filter_row.dart';
 import '../widgets/sitter_card.dart';
 import '../../../../../routing/routes.dart';
 
-class SitterSearchResultsScreen extends StatelessWidget {
+import '../filter/controller/search_filter_controller.dart';
+import '../filter/filter_bottom_sheet.dart';
+
+class SitterSearchResultsScreen extends StatefulWidget {
   const SitterSearchResultsScreen({super.key});
+
+  @override
+  State<SitterSearchResultsScreen> createState() =>
+      _SitterSearchResultsScreenState();
+}
+
+class _SitterSearchResultsScreenState extends State<SitterSearchResultsScreen> {
+  final SearchFilterController _filterController = SearchFilterController();
+
+  @override
+  void dispose() {
+    _filterController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +40,12 @@ class SitterSearchResultsScreen extends StatelessWidget {
             const SearchTopBar(),
 
             // Filter Row (White background)
-            FilterRow(count: SitterListData.sitters.length),
+            FilterRow(
+              count: SitterListData.sitters.length,
+              onFilterTap: () {
+                FilterBottomSheet.show(context, _filterController);
+              },
+            ),
 
             // List of Cards
             Expanded(

@@ -7,6 +7,8 @@ import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/w
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/widgets/profile_header.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/widgets/profile_tabs.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../routing/routes.dart';
 
 class SitterProfileView extends StatelessWidget {
   final SitterModel sitter;
@@ -42,6 +44,15 @@ class SitterProfileView extends StatelessWidget {
                   onMessage: () {
                     // TODO: navigate to chat screen
                   },
+                  onTapRating: () {
+                    context.push(
+                      Uri(
+                        path: Routes.sitterReviews,
+                        queryParameters: {'id': sitter.id},
+                      ).toString(),
+                      extra: {'name': sitter.name},
+                    );
+                  },
                 ),
 
                 // Tabs
@@ -54,7 +65,17 @@ class SitterProfileView extends StatelessWidget {
                 const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
                 const AvailabilitySection(),
                 const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
-                const ReviewsSection(),
+                ReviewsSection(
+                  onTapSeeAll: () {
+                    context.push(
+                      Uri(
+                        path: Routes.sitterReviews,
+                        queryParameters: {'id': sitter.id},
+                      ).toString(),
+                      extra: {'name': sitter.name},
+                    );
+                  },
+                ),
               ],
             ),
           ),

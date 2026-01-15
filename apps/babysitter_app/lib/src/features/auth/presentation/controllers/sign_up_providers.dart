@@ -8,7 +8,7 @@ import 'package:core/core.dart';
 final registrationDioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
-      baseUrl: 'https://sns-apis.tausifk.com/api',
+      baseUrl: 'https://babysitter-backend.waywisetech.com/api',
       connectTimeout: Constants.connectionTimeout,
       receiveTimeout: Constants.receiveTimeout,
       headers: {

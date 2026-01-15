@@ -20,6 +20,10 @@ class Routes {
   // Parent shell routes
   static const String parentHome = '/parent/home';
   static const String parentMessages = '/parent/messages';
+  static const String parentChatThread = 'chat/:id'; // Sub-route of messages
+  static const String audioCall = '/audio-call'; // Full screen route
+  static const String videoCall = '/video-call'; // Full screen route
+  static const String supportChat = '/support-chat'; // Full screen route
   static const String parentBookings = '/parent/bookings';
   static const String bookingDetails =
       '/parent/booking-details'; // /parent/booking-details?id=...&status=...
@@ -46,6 +50,7 @@ class Routes {
       '/parent/sitter-profile/$sitterId';
 
   static const String sitterSearch = '/parent/search';
+  static const String sitterReviews = '/parent/sitter/reviews';
 
   // Sitter shell routes
   static const String sitterHome = '/sitter/home';

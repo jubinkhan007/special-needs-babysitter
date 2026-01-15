@@ -9,6 +9,10 @@ import 'widgets/profile_header_card.dart';
 import 'widgets/stats_row.dart';
 import 'widgets/account_menu_list.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/account/about/presentation/about_special_needs_sitters_screen.dart';
+import 'package:babysitter_app/src/features/account/terms/presentation/terms_and_conditions_screen.dart';
+import 'package:babysitter_app/src/features/account/help_support/presentation/help_support_screen.dart';
+import 'package:babysitter_app/src/features/account/dialogs/show_sign_out_dialog.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});
@@ -110,18 +114,33 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                 AccountMenuList(
                   onTapPayment: () => context.push(Routes.parentPayment),
                   onTapSettings: () => context.push(Routes.parentSettings),
-                  onTapAbout: () {},
-                  onTapTerms: () {},
-                  onTapHelp: () {},
-                  onTapSignOut: () {
-                    ref
-                        .read(accountControllerProvider.notifier)
-                        .signOut()
-                        .then((_) {
-                      if (context.mounted) {
-                        context.go(Routes.signIn);
-                      }
-                    });
+                  onTapAbout: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const AboutSpecialNeedsSittersScreen(),
+                    ),
+                  ),
+                  onTapTerms: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const TermsAndConditionsScreen(),
+                    ),
+                  ),
+                  onTapHelp: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const HelpSupportScreen(),
+                    ),
+                  ),
+                  onTapSignOut: () async {
+                    final confirmed = await showSignOutDialog(context);
+                    if (confirmed == true && context.mounted) {
+                      ref
+                          .read(accountControllerProvider.notifier)
+                          .signOut()
+                          .then((_) {
+                        if (context.mounted) {
+                          context.go(Routes.signIn);
+                        }
+                      });
+                    }
                   },
                 ),
                 const SizedBox(height: 32),

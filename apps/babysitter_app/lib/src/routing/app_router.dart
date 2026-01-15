@@ -24,6 +24,7 @@ import '../features/parent/home/parent_home_screen.dart';
 import '../features/parent/messages/parent_messages_screen.dart';
 import '../features/bookings/presentation/bookings_screen.dart';
 import '../features/parent/jobs/parent_jobs_screen.dart';
+import '../features/messages/presentation/chat_thread_screen.dart';
 import '../features/parent/account/parent_account_screen.dart';
 import '../features/parent/account/profile_details/presentation/profile_details_screen.dart';
 
@@ -50,6 +51,13 @@ import '../features/jobs/domain/applications/booking_application.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../features/account/payment/presentation/payment_screen.dart';
 import '../features/sitters/presentation/saved/saved_sitters_screen.dart';
+import '../features/sitters/presentation/reviews/reviews_screen.dart';
+import '../features/calls/presentation/audio_call_screen.dart';
+import '../features/calls/presentation/video_call_screen.dart';
+import '../features/support/presentation/support_chat_screen.dart';
+import '../features/calls/domain/audio_call_args.dart';
+import '../features/calls/domain/video_call_args.dart';
+import '../features/support/domain/support_chat_args.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -247,6 +255,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => const NoTransitionPage(
               child: ParentMessagesScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'chat/:id', // matches /parent/messages/chat/:id
+                parentNavigatorKey: rootNavigatorKey, // Hide bottom nav
+                builder: (context, state) => const ChatThreadScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: Routes.parentBookings,
@@ -299,6 +314,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.sitterSearch,
         builder: (context, state) => const SitterSearchResultsScreen(),
+      ),
+
+      // Sitter Reviews
+      GoRoute(
+        path: Routes.sitterReviews, // e.g. /parent/sitter/reviews
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          final sitterId = state.uri.queryParameters['id'] ?? '';
+          final name = extra?['name'] as String? ?? 'Krystina';
+          return ReviewsScreen(sitterId: sitterId, sitterName: name);
+        },
       ),
 
       // Booking Details
@@ -417,6 +443,45 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.postJob,
         builder: (context, state) => const JobPostingFlow(),
+      ),
+
+      // Audio Call Screen
+      GoRoute(
+        path: Routes.audioCall,
+        parentNavigatorKey: rootNavigatorKey, // Full screen, no bottom nav
+        builder: (context, state) {
+          final args = state.extra as AudioCallArgs?;
+          if (args == null) {
+            return const Scaffold(
+                body: Center(child: Text('Error: Missing audio call args')));
+          }
+          return AudioCallScreen(args: args);
+        },
+      ),
+
+      // Video Call Screen
+      GoRoute(
+        path: Routes.videoCall,
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final args = state.extra as VideoCallArgs?;
+          if (args == null) {
+            return const Scaffold(
+                body: Center(child: Text('Error: Missing video call args')));
+          }
+          return VideoCallScreen(args: args);
+        },
+      ),
+
+      // Support Chat Screen
+      GoRoute(
+        path: Routes.supportChat,
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final args =
+              state.extra as SupportChatArgs? ?? const SupportChatArgs();
+          return SupportChatScreen(args: args);
+        },
       ),
 
       // Sitter Profile View (outside shell for full-screen experience)

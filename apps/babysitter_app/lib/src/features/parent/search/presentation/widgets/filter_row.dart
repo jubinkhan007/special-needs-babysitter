@@ -3,8 +3,9 @@ import '../theme/app_ui_tokens.dart';
 
 class FilterRow extends StatelessWidget {
   final int count;
+  final VoidCallback? onFilterTap;
 
-  const FilterRow({super.key, required this.count});
+  const FilterRow({super.key, required this.count, this.onFilterTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,31 +23,34 @@ class FilterRow extends StatelessWidget {
             style: AppUiTokens.filterText,
           ),
           // Filter Pill
-          Container(
-            height: AppUiTokens.filterPillHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppUiTokens.radiusCircle),
-              border: Border.all(color: AppUiTokens.borderColor),
-            ),
-            child: Row(
-              children: const [
-                Text(
-                  'Filter By:',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+          GestureDetector(
+            onTap: onFilterTap,
+            child: Container(
+              height: AppUiTokens.filterPillHeight,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppUiTokens.radiusCircle),
+                border: Border.all(color: AppUiTokens.borderColor),
+              ),
+              child: Row(
+                children: const [
+                  Text(
+                    'Filter By:',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppUiTokens.textSecondary,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 16,
                     color: AppUiTokens.textSecondary,
                   ),
-                ),
-                SizedBox(width: 4),
-                Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  size: 16,
-                  color: AppUiTokens.textSecondary,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

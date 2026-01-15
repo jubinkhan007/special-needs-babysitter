@@ -13,6 +13,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
     this.onBack,
     this.onBookmark,
     this.onShare,
+    this.onTapRating,
   });
 
   final String name;
@@ -24,6 +25,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
   final VoidCallback? onBack;
   final VoidCallback? onBookmark;
   final VoidCallback? onShare;
+  final VoidCallback? onTapRating;
 
   // Colors from your current implementation (tweak if your Figma uses slightly different tints)
   static const _blueBg = Color(0xFFEAF6FF);
@@ -239,16 +241,23 @@ class SitterProfileHeaderExact extends StatelessWidget {
                     const Spacer(),
 
                     // Rating (star + number)
-                    const Icon(Icons.star_rounded,
-                        color: _starYellow, size: 20),
-                    const SizedBox(width: 4),
-                    Text(
-                      ratingText,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: _textPrimary,
-                        height: 1.0,
+                    GestureDetector(
+                      onTap: onTapRating,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.star_rounded,
+                              color: _starYellow, size: 20),
+                          const SizedBox(width: 4),
+                          Text(
+                            ratingText,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: _textPrimary,
+                              height: 1.0,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 12),

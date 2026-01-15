@@ -9,7 +9,7 @@ import '../controllers/job_post_controller.dart';
 /// Authenticated Dio provider for Job API.
 final jobPostDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://sns-apis.tausifk.com/api',
+    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {
