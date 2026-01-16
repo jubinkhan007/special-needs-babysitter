@@ -219,22 +219,17 @@ class BookingApplicationScreen extends ConsumerWidget {
         displayText = 'Status: ${status.toUpperCase()}';
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      decoration: BoxDecoration(
-        color: bgColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
+    return Material(
+      color: bgColor,
+      elevation: 8,
       child: SafeArea(
-        child: Center(
+        top: false,
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           child: Text(
             displayText,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
