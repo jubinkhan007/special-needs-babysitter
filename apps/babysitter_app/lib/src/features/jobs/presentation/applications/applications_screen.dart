@@ -91,6 +91,15 @@ class ApplicationsScreen extends ConsumerWidget {
                               bottom: AppTokens.applicationsCardGap),
                           child: ApplicationCard(
                             ui: ui,
+                            onCardTap: () {
+                              context.push(
+                                Routes.bookingApplication,
+                                extra: {
+                                  'jobId': jobId,
+                                  'applicationId': item.id,
+                                },
+                              );
+                            },
                             onAccept: () async {
                               try {
                                 final repo =
@@ -167,7 +176,9 @@ class ApplicationsScreen extends ConsumerWidget {
                                 }
                               }
                             },
-                            onMoreOptions: () {},
+                            onMoreOptions: () {
+                              _showMoreOptionsMenu(context, item.sitterId);
+                            },
                           ),
                         );
                       },
@@ -178,6 +189,66 @@ class ApplicationsScreen extends ConsumerWidget {
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+
+  void _showMoreOptionsMenu(BuildContext context, String? sitterId) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.person_outline),
+              title: const Text('View Profile'),
+              onTap: () {
+                Navigator.pop(ctx);
+                if (sitterId != null) {
+                  context.push('/parent/sitter/$sitterId');
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.chat_bubble_outline),
+              title: const Text('Message'),
+              onTap: () {
+                Navigator.pop(ctx);
+                // TODO: Navigate to chat with sitter
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Messaging coming soon!')),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.flag_outlined, color: Colors.red),
+              title: const Text('Report', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                Navigator.pop(ctx);
+                // TODO: Show report dialog
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Report feature coming soon!')),
+                );
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
         ),
       ),
     );
