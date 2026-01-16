@@ -88,7 +88,7 @@ class JobsRepositoryImpl implements JobsRepository {
   Future<List<Job>> getJobs() async {
     try {
       final response = await _client.get('/jobs', queryParameters: {
-        'status': 'posted', // Default as per screenshot
+        // Removed status filter to fetch all jobs
         'limit': 20,
         'offset': 0,
       });
