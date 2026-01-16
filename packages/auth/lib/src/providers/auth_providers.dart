@@ -16,7 +16,7 @@ final sessionStoreProvider = Provider<SessionStore>((ref) {
 final authDioProvider = Provider<Dio>((ref) {
   // Use the same base URL as the rest of the app
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://babysitter-backend.waywisetech.com/api',
+    baseUrl: 'https://sns-apis.tausifk.com/api',
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {
