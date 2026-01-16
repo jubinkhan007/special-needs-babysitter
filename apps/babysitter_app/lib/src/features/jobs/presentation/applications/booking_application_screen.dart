@@ -55,18 +55,35 @@ class BookingApplicationScreen extends ConsumerWidget {
       },
     );
 
-    return Scaffold(
-      backgroundColor: AppTokens.applicationsBg,
-      appBar: const JobsAppBar(
-        title: 'Booking Application',
-        showSupportIcon: true,
+    return applicationAsync.when(
+      loading: () => Scaffold(
+        backgroundColor: AppTokens.applicationsBg,
+        appBar: const JobsAppBar(
+          title: 'Booking Application',
+          showSupportIcon: true,
+        ),
+        body: const Center(child: CircularProgressIndicator()),
       ),
-      body: applicationAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
-        data: (application) {
-          final ui = BookingApplicationUiModel.fromDomain(application);
-          return MediaQuery(
+      error: (error, stack) => Scaffold(
+        backgroundColor: AppTokens.applicationsBg,
+        appBar: const JobsAppBar(
+          title: 'Booking Application',
+          showSupportIcon: true,
+        ),
+        body: Center(child: Text('Error: $error')),
+      ),
+      data: (application) {
+        final ui = BookingApplicationUiModel.fromDomain(application);
+        final isPending =
+            application.status == null || application.status == 'pending';
+
+        return Scaffold(
+          backgroundColor: AppTokens.applicationsBg,
+          appBar: const JobsAppBar(
+            title: 'Booking Application',
+            showSupportIcon: true,
+          ),
+          body: MediaQuery(
             data: MediaQuery.of(context)
                 .copyWith(textScaler: TextScaler.noScaling),
             child: CustomScrollView(
@@ -148,30 +165,83 @@ class BookingApplicationScreen extends ConsumerWidget {
                 ),
               ],
             ),
-          );
-        },
+          ),
+          bottomNavigationBar: isPending
+              ? BottomDecisionBar(
+                  primaryLabel: 'Accept',
+                  secondaryLabel: 'Reject',
+                  onPrimary: () {
+                    ref
+                        .read(applicationsControllerProvider.notifier)
+                        .acceptApplication(jobId, applicationId);
+                  },
+                  onSecondary: () async {
+                    final result = await showRejectReasonBottomSheet(context);
+                    if (result != null) {
+                      final reason =
+                          result.otherText ?? result.reason.displayLabel;
+                      ref
+                          .read(applicationsControllerProvider.notifier)
+                          .declineApplication(
+                            jobId,
+                            applicationId,
+                            reason,
+                          );
+                    }
+                  },
+                )
+              : _buildStatusBar(application.status ?? 'processed'),
+        );
+      },
+    );
+  }
+
+  Widget _buildStatusBar(String status) {
+    Color bgColor;
+    Color textColor;
+    String displayText;
+
+    switch (status.toLowerCase()) {
+      case 'accepted':
+        bgColor = const Color(0xFFE8F5E9);
+        textColor = const Color(0xFF2E7D32);
+        displayText = 'Application Accepted';
+        break;
+      case 'rejected':
+      case 'declined':
+        bgColor = const Color(0xFFFFEBEE);
+        textColor = const Color(0xFFC62828);
+        displayText = 'Application Rejected';
+        break;
+      default:
+        bgColor = const Color(0xFFF5F5F5);
+        textColor = const Color(0xFF757575);
+        displayText = 'Status: ${status.toUpperCase()}';
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      decoration: BoxDecoration(
+        color: bgColor,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, -2),
+          ),
+        ],
       ),
-      bottomNavigationBar: BottomDecisionBar(
-        primaryLabel: 'Accept',
-        secondaryLabel: 'Reject',
-        onPrimary: () {
-          ref
-              .read(applicationsControllerProvider.notifier)
-              .acceptApplication(jobId, applicationId);
-        },
-        onSecondary: () async {
-          final result = await showRejectReasonBottomSheet(context);
-          if (result != null) {
-            final reason = result.otherText ?? result.reason.displayLabel;
-            ref
-                .read(applicationsControllerProvider.notifier)
-                .declineApplication(
-                  jobId,
-                  applicationId,
-                  reason,
-                );
-          }
-        },
+      child: SafeArea(
+        child: Center(
+          child: Text(
+            displayText,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
+          ),
+        ),
       ),
     );
   }

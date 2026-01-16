@@ -140,6 +140,7 @@ final applicationDetailProvider = FutureProvider.autoDispose
       experienceYears: appItem.experienceYears,
       skills: appItem.skills ?? [],
       coverLetter: appItem.coverLetter ?? 'No cover letter provided.',
+      status: appItem.status,
       familyName: 'The Family', // Not available in JobDetails
       numberOfChildren: jobDetails.children.length,
       startDate: jobDetails.scheduleStartDate,

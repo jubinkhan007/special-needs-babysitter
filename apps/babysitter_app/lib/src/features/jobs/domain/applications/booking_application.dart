@@ -13,6 +13,7 @@ class BookingApplication {
 
   // Application Details
   final String coverLetter;
+  final String? status;
 
   // Job/Service Details
   final String familyName;
@@ -43,6 +44,7 @@ class BookingApplication {
     required this.experienceYears,
     required this.skills,
     required this.coverLetter,
+    this.status,
     required this.familyName,
     required this.numberOfChildren,
     required this.startDate,
