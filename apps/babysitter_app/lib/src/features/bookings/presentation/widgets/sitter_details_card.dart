@@ -28,7 +28,9 @@ class SitterDetailsCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage(uiModel.avatarUrl), // Or NetworkImage
+                    image: uiModel.avatarUrl.startsWith('http')
+                        ? NetworkImage(uiModel.avatarUrl) as ImageProvider
+                        : AssetImage(uiModel.avatarUrl),
                     fit: BoxFit.cover,
                   ),
                 ),

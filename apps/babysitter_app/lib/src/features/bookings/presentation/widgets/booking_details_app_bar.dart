@@ -13,46 +13,36 @@ class BookingDetailsAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTokens.bookingDetailsHeaderBg, // Match page bg
-      child: SafeArea(
-        bottom: false,
+    return AppBar(
+      backgroundColor: AppTokens.bookingDetailsHeaderBg,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
+      toolbarHeight: AppTokens.appBarHeight,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: AppTokens.iconGrey, size: 24),
+        onPressed: () => context.pop(),
+      ),
+      title: Text(title, style: AppTokens.appBarTitle),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.headset_mic_outlined,
+              color: AppTokens.iconGrey, size: 24),
+          onPressed: () {
+            // Support action
+          },
+        ),
+      ],
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
         child: Container(
-          height: AppTokens.appBarHeight,
-          padding: const EdgeInsets.symmetric(
-              horizontal: 4), // Adjust for IconButton padding
-          decoration: BoxDecoration(
-            // No shadow by default unless scrolled? Figma shows subtle shadow in header?
-            // Plan said "Use exact shadow used in cards and header".
-            // AppTokens.appBarShadow exists.
-            color: AppTokens.bookingDetailsHeaderBg,
-            boxShadow: AppTokens.appBarShadow,
-          ),
-          child: NavigationToolbar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back,
-                  color: AppTokens.appBarTitleGrey),
-              onPressed: () => context.pop(),
-            ),
-            middle: Text(
-              title,
-              style:
-                  AppTokens.appBarTitle.copyWith(fontWeight: FontWeight.w600),
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.headset_mic_outlined,
-                  color: AppTokens.appBarTitleGrey), // Headset icon
-              onPressed: () {
-                // Support action
-              },
-            ),
-            centerMiddle: true,
-          ),
+          height: 1,
+          color: const Color.fromRGBO(0, 0, 0, 0.03), // very subtle line
         ),
       ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(AppTokens.appBarHeight);
+  Size get preferredSize => const Size.fromHeight(AppTokens.appBarHeight + 1);
 }

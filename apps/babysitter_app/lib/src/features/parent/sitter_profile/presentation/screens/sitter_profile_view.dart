@@ -59,13 +59,27 @@ class SitterProfileView extends StatelessWidget {
                 const ProfileTabs(),
 
                 // Sections
-                OverviewSection(bio: sitter.bio),
+                OverviewSection(
+                  bio: sitter.bio,
+                  willingToTravel: sitter.willingToTravel,
+                  travelRadius: sitter.travelRadius,
+                  hasTransportation: sitter.hasTransportation,
+                  transportationType: sitter.transportationType,
+                ),
                 const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
-                const SkillsSection(),
+                SkillsSection(
+                  languages: sitter.languages,
+                  certifications: sitter.certifications,
+                  skills: sitter.badges, // Using badges as skills
+                ),
                 const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
-                const AvailabilitySection(),
+                AvailabilitySection(availability: sitter.availability),
                 const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
                 ReviewsSection(
+                  reviews: sitter.reviews,
+                  averageRating: sitter.rating,
+                  totalReviews: sitter.reviews
+                      .length, // Or use a field if count differs from list length
                   onTapSeeAll: () {
                     context.push(
                       Uri(

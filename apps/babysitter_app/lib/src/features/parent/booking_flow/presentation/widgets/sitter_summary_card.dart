@@ -53,12 +53,22 @@ class SitterSummaryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage(avatarUrl), // Placeholder
+                    image: avatarUrl.startsWith('http')
+                        ? NetworkImage(avatarUrl)
+                        : AssetImage(avatarUrl) as ImageProvider,
                     fit: BoxFit.cover,
+                    onError: (_, __) {
+                      // Error handling is done by the child Icon fallback if image fails to load
+                      // But DecorationImage doesn't propagate errors nicely to 'child'
+                      // For a robust solution, we might want to use cached_network_image package
+                      // For now, we rely on the placeholder if the url is empty/invalid
+                    },
                   ),
                 ),
-                // Fallback icon for demo if asset missing
-                child: const Icon(Icons.person, color: Colors.grey),
+                // Fallback icon for demo if asset missing or failed
+                child: avatarUrl.isEmpty
+                    ? const Icon(Icons.person, color: Colors.grey)
+                    : null,
               ),
               const SizedBox(width: 12),
 

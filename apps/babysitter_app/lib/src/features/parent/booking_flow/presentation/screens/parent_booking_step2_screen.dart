@@ -1,50 +1,325 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/booking_flow_provider.dart';
 import '../widgets/booking_step_header.dart';
 import '../widgets/booking_primary_bottom_button.dart';
-import '../widgets/booking_text_field.dart';
-import '../widgets/booking_date_range_field.dart';
-import '../widgets/booking_time_field.dart';
 import 'parent_booking_step3_screen.dart';
 
-class ParentBookingStep2Screen extends StatefulWidget {
+class ParentBookingStep2Screen extends ConsumerStatefulWidget {
   const ParentBookingStep2Screen({super.key});
 
   @override
-  State<ParentBookingStep2Screen> createState() =>
+  ConsumerState<ParentBookingStep2Screen> createState() =>
       _ParentBookingStep2ScreenState();
 }
 
-class _ParentBookingStep2ScreenState extends State<ParentBookingStep2Screen> {
+class _ParentBookingStep2ScreenState
+    extends ConsumerState<ParentBookingStep2Screen> {
   final TextEditingController _jobTitleController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
 
-  // Mock State
-  String? _dateRangeText =
-      "14-08-2025- 17-08-2025"; // Pre-filled to match screenshot
-  String? _startTime;
-  String? _endTime;
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  // Design Constants (matching job post flow)
+  static const _bgColor = Color(0xFFF0F9FF);
+  static const _titleColor = Color(0xFF101828);
+  static const _mutedText = Color(0xFF667085);
+  static const _borderColor = Color(0xFFB2DDFF);
+  static const _progressFill = Color(0xFF88CBE6);
 
   @override
   void dispose() {
     _jobTitleController.dispose();
+    _dateController.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
     super.dispose();
+  }
+
+  Future<void> _onDateTap() async {
+    final now = DateTime.now();
+    final pickedRange = await showDateRangePicker(
+      context: context,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.light,
+            colorScheme: const ColorScheme.light(
+              primary: _titleColor,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: _titleColor,
+              secondary: _progressFill,
+            ),
+            dialogBackgroundColor: Colors.white,
+            datePickerTheme: DatePickerThemeData(
+              headerBackgroundColor: Colors.white,
+              headerForegroundColor: _titleColor,
+              rangeSelectionBackgroundColor: _progressFill.withOpacity(0.3),
+              rangePickerBackgroundColor: Colors.white,
+              todayBorder: const BorderSide(color: _progressFill),
+            ),
+          ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: child!,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    if (pickedRange != null) {
+      final months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      final startStr =
+          '${months[pickedRange.start.month - 1]} ${pickedRange.start.day}';
+      final endStr =
+          '${months[pickedRange.end.month - 1]} ${pickedRange.end.day}';
+      setState(() {
+        _dateController.text = '$startStr - $endStr';
+        _startDate = pickedRange.start;
+        _endDate = pickedRange.end;
+      });
+    }
+  }
+
+  Future<void> _onStartTimeTap() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              textTheme: Theme.of(context).textTheme.copyWith(
+                    bodySmall: const TextStyle(color: _titleColor),
+                    bodyMedium: const TextStyle(color: _titleColor),
+                    displayLarge: const TextStyle(color: _titleColor),
+                    displayMedium: const TextStyle(color: _titleColor),
+                    displaySmall: const TextStyle(color: _titleColor),
+                    titleMedium: const TextStyle(color: _titleColor),
+                    labelSmall: const TextStyle(color: _titleColor),
+                  ),
+              colorScheme: const ColorScheme.light(
+                primary: _progressFill,
+                onPrimary: Colors.white,
+                surface: Color(0xFFEAF6FF),
+                onSurface: _titleColor,
+                secondary: _progressFill,
+                onSurfaceVariant: _titleColor,
+                outline: _progressFill,
+              ),
+              timePickerTheme: TimePickerThemeData(
+                backgroundColor: const Color(0xFFEAF6FF),
+                helpTextStyle: const TextStyle(
+                  color: _titleColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                entryModeIconColor: _titleColor,
+                hourMinuteShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: _progressFill, width: 2),
+                ),
+                dayPeriodBorderSide: const BorderSide(color: _mutedText),
+                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _progressFill.withOpacity(0.3)
+                        : Colors.transparent),
+                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _titleColor
+                        : _mutedText),
+                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? Colors.white
+                        : _progressFill.withOpacity(0.1)),
+                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _titleColor
+                        : _mutedText),
+                inputDecorationTheme: const InputDecorationTheme(
+                  labelStyle: TextStyle(color: _titleColor),
+                  helperStyle: TextStyle(color: _titleColor),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: _titleColor,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
+    if (picked != null && mounted) {
+      setState(() => _startTimeController.text = picked.format(context));
+    }
+  }
+
+  Future<void> _onEndTimeTap() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.input,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              textTheme: Theme.of(context).textTheme.copyWith(
+                    bodySmall: const TextStyle(color: _titleColor),
+                    bodyMedium: const TextStyle(color: _titleColor),
+                    displayLarge: const TextStyle(color: _titleColor),
+                    displayMedium: const TextStyle(color: _titleColor),
+                    displaySmall: const TextStyle(color: _titleColor),
+                    titleMedium: const TextStyle(color: _titleColor),
+                    labelSmall: const TextStyle(color: _titleColor),
+                  ),
+              colorScheme: const ColorScheme.light(
+                primary: _progressFill,
+                onPrimary: Colors.white,
+                surface: Color(0xFFEAF6FF),
+                onSurface: _titleColor,
+                secondary: _progressFill,
+                onSurfaceVariant: _titleColor,
+                outline: _progressFill,
+              ),
+              timePickerTheme: TimePickerThemeData(
+                backgroundColor: const Color(0xFFEAF6FF),
+                helpTextStyle: const TextStyle(
+                  color: _titleColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                entryModeIconColor: _titleColor,
+                hourMinuteShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: _progressFill, width: 2),
+                ),
+                dayPeriodBorderSide: const BorderSide(color: _mutedText),
+                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _progressFill.withOpacity(0.3)
+                        : Colors.transparent),
+                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _titleColor
+                        : _mutedText),
+                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? Colors.white
+                        : _progressFill.withOpacity(0.1)),
+                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _titleColor
+                        : _mutedText),
+                inputDecorationTheme: const InputDecorationTheme(
+                  labelStyle: TextStyle(color: _titleColor),
+                  helperStyle: TextStyle(color: _titleColor),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: _titleColor,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
+    if (picked != null && mounted) {
+      setState(() => _endTimeController.text = picked.format(context));
+    }
+  }
+
+  Widget _buildField({
+    required TextEditingController controller,
+    required String hint,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    IconData? suffixIcon,
+  }) {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: _borderColor, width: 1.5),
+      ),
+      child: TextField(
+        controller: controller,
+        readOnly: readOnly,
+        onTap: onTap,
+        cursorColor: _progressFill,
+        style: const TextStyle(
+            fontSize: 16, fontWeight: FontWeight.w500, color: _titleColor),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: const TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w400, color: _mutedText),
+          filled: false,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          border: InputBorder.none,
+          suffixIcon: suffixIcon != null
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Icon(suffixIcon, size: 22, color: _mutedText),
+                )
+              : null,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F9FF), // Light blue background
+      backgroundColor: _bgColor,
       body: Column(
         children: [
-          // Header (Handles its own top safe area)
           BookingStepHeader(
             currentStep: 2,
             totalSteps: 4,
             onBack: () => Navigator.of(context).pop(),
             onHelp: () {},
           ),
-
-          // Progress Indicator IS INSIDE HEADER NOW, removing duplicate.
-
           Expanded(
             child: SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
@@ -52,87 +327,77 @@ class _ParentBookingStep2ScreenState extends State<ParentBookingStep2Screen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title found in screenshot "Job Details"
-                  // Spacing between progress and title
-                  const SizedBox(
-                      height: 0), // Progress indicator has tight spacing?
-                  // Screenshot shows significant gap. Let's look at Step 1.
-                  // Step 1 had 24 gap.
-                  // The "Progress Indicator" widget has 24 height.
-
+                  const SizedBox(height: 24),
                   const Text(
                     'Job Details',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xFF101828),
-                      height: 1.2,
+                      color: _titleColor,
                       letterSpacing: -0.5,
                     ),
                   ),
                   const SizedBox(height: 24),
-
-                  // Job Title Field
-                  BookingTextField(
-                    hintText: 'Job Title*',
-                    controller: _jobTitleController,
+                  _buildField(
+                      controller: _jobTitleController, hint: 'Job Title*'),
+                  const SizedBox(height: 16),
+                  _buildField(
+                    controller: _dateController,
+                    hint: 'Date*',
+                    readOnly: true,
+                    onTap: _onDateTap,
+                    suffixIcon: Icons.calendar_month_outlined,
                   ),
                   const SizedBox(height: 16),
-
-                  // Date Range Field
-                  BookingDateRangeField(
-                    value: _dateRangeText,
-                    onTap: () {
-                      // Open Date Picker
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Time Row
                   Row(
                     children: [
                       Expanded(
-                        child: BookingTimeField(
-                          hintText: 'Start Time*',
-                          value: _startTime,
-                          onTap: () {
-                            // Open Time Picker
-                          },
+                        child: _buildField(
+                          controller: _startTimeController,
+                          hint: 'Start Time*',
+                          readOnly: true,
+                          onTap: _onStartTimeTap,
+                          suffixIcon: Icons.access_time,
                         ),
                       ),
-                      const SizedBox(width: 16), // Gap between time fields
+                      const SizedBox(width: 16),
                       Expanded(
-                        child: BookingTimeField(
-                          hintText: 'End Time*',
-                          value: _endTime,
-                          onTap: () {
-                            // Open Time Picker
-                          },
+                        child: _buildField(
+                          controller: _endTimeController,
+                          hint: 'End Time*',
+                          readOnly: true,
+                          onTap: _onEndTimeTap,
+                          suffixIcon: Icons.access_time,
                         ),
                       ),
                     ],
                   ),
-
-                  // Bottom spacing
                   SizedBox(
                       height: 24 + MediaQuery.of(context).padding.bottom + 60),
                 ],
               ),
             ),
           ),
-
-          // Bottom Sticky Button
           Container(
-            color: const Color(0xFFF0F9FF),
+            color: _bgColor,
             padding: EdgeInsets.fromLTRB(
                 24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {
+                // Save to provider
+                ref.read(bookingFlowProvider.notifier).updateStep2(
+                      jobTitle: _jobTitleController.text,
+                      dateRange: _dateController.text,
+                      startDate: _startDate,
+                      endDate: _endDate,
+                      startTime: _startTimeController.text,
+                      endTime: _endTimeController.text,
+                    );
+
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const ParentBookingStep3Screen(),
-                  ),
+                      builder: (context) => const ParentBookingStep3Screen()),
                 );
               },
             ),

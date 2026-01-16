@@ -15,7 +15,7 @@ class BookingPrimaryBottomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 48, // Standard height
+      height: 52,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(

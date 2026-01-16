@@ -185,7 +185,16 @@ class SitterProfileHeaderExact extends StatelessWidget {
                         Border.all(color: Colors.white, width: avatarBorder),
                   ),
                   child: ClipOval(
-                    child: Image.asset(avatarAsset, fit: BoxFit.cover),
+                    child: ClipOval(
+                      child: avatarAsset.startsWith('http')
+                          ? Image.network(
+                              avatarAsset,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Container(color: Colors.grey[200]),
+                            )
+                          : Image.asset(avatarAsset, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
                 // Verified badge (rosette)

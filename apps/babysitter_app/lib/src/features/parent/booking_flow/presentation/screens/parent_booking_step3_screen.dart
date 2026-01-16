@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/booking_flow_provider.dart';
 import '../widgets/booking_step_header.dart';
 import '../widgets/booking_primary_bottom_button.dart';
 import '../widgets/booking_text_field.dart';
 import '../widgets/section_header.dart';
 import 'parent_booking_step4_screen.dart';
 
-class ParentBookingStep3Screen extends StatefulWidget {
+class ParentBookingStep3Screen extends ConsumerStatefulWidget {
   const ParentBookingStep3Screen({super.key});
 
   @override
-  State<ParentBookingStep3Screen> createState() =>
+  ConsumerState<ParentBookingStep3Screen> createState() =>
       _ParentBookingStep3ScreenState();
 }
 
-class _ParentBookingStep3ScreenState extends State<ParentBookingStep3Screen> {
+class _ParentBookingStep3ScreenState
+    extends ConsumerState<ParentBookingStep3Screen> {
   // Address Controllers
   final _streetController = TextEditingController();
   final _aptController = TextEditingController();
@@ -145,6 +148,28 @@ class _ParentBookingStep3ScreenState extends State<ParentBookingStep3Screen> {
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {
+                // Save to provider
+                ref.read(bookingFlowProvider.notifier).updateStep3(
+                      streetAddress: _streetController.text,
+                      aptUnit: _aptController.text.isNotEmpty
+                          ? _aptController.text
+                          : null,
+                      city: _cityController.text,
+                      zipCode: _zipController.text,
+                      emergencyContactName:
+                          _emergencyNameController.text.isNotEmpty
+                              ? _emergencyNameController.text
+                              : null,
+                      emergencyContactPhone:
+                          _emergencyPhoneController.text.isNotEmpty
+                              ? _emergencyPhoneController.text
+                              : null,
+                      emergencyContactRelation:
+                          _emergencyRelationController.text.isNotEmpty
+                              ? _emergencyRelationController.text
+                              : null,
+                    );
+
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const ParentBookingStep4Screen(),

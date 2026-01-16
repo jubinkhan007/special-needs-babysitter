@@ -223,7 +223,7 @@ class AppTokens {
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: Colors.white,
-        height: 1.2,
+        height: 1.0,
       );
 
   // ========= Status chip palette (soft/pastel) =========

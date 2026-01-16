@@ -14,7 +14,7 @@ class BottomBookingBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -26,6 +26,7 @@ class BottomBookingBar extends StatelessWidget {
         ],
       ),
       child: SafeArea(
+        top: false,
         child: Row(
           children: [
             Column(
@@ -38,7 +39,7 @@ class BottomBookingBar extends StatelessWidget {
                       TextSpan(
                         text: '\$${price.toInt()}',
                         style: const TextStyle(
-                          fontSize: 24, // Matches Figma emphasis
+                          fontSize: 22,
                           fontWeight: FontWeight.w700,
                           color: AppUiTokens.textPrimary,
                           letterSpacing: -0.5,
@@ -47,7 +48,7 @@ class BottomBookingBar extends StatelessWidget {
                       const TextSpan(
                         text: '/hr',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: FontWeight.w400,
                           color: AppUiTokens.textSecondary,
                         ),
@@ -60,7 +61,7 @@ class BottomBookingBar extends StatelessWidget {
             const SizedBox(width: 24),
             Expanded(
               child: SizedBox(
-                height: 52, // Taller button per Figma
+                height: 48,
                 child: ElevatedButton(
                   onPressed: onBookPressed,
                   style: ElevatedButton.styleFrom(

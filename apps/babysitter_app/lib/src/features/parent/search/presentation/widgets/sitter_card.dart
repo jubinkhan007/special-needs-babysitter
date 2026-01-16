@@ -36,17 +36,29 @@ class SitterCard extends StatelessWidget {
             children: [
               // Avatar
               ClipOval(
-                child: Image.asset(
-                  sitter.imageAssetPath,
-                  width: AppUiTokens.avatarSize,
-                  height: AppUiTokens.avatarSize,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: AppUiTokens.avatarSize,
-                    height: AppUiTokens.avatarSize,
-                    color: Colors.grey[200],
-                  ),
-                ),
+                child: sitter.imageAssetPath.startsWith('http')
+                    ? Image.network(
+                        sitter.imageAssetPath,
+                        width: AppUiTokens.avatarSize,
+                        height: AppUiTokens.avatarSize,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: AppUiTokens.avatarSize,
+                          height: AppUiTokens.avatarSize,
+                          color: Colors.grey[200],
+                        ),
+                      )
+                    : Image.asset(
+                        sitter.imageAssetPath,
+                        width: AppUiTokens.avatarSize,
+                        height: AppUiTokens.avatarSize,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: AppUiTokens.avatarSize,
+                          height: AppUiTokens.avatarSize,
+                          color: Colors.grey[200],
+                        ),
+                      ),
               ),
               const SizedBox(width: 12),
               // Name + Location

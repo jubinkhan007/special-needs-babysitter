@@ -4,7 +4,16 @@ import '../widgets/certification_chip.dart';
 import '../widgets/skill_chip.dart';
 
 class SkillsSection extends StatelessWidget {
-  const SkillsSection({super.key});
+  final List<String> languages;
+  final List<String> certifications;
+  final List<String> skills;
+
+  const SkillsSection({
+    super.key,
+    this.languages = const [],
+    this.certifications = const [],
+    this.skills = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,77 +23,68 @@ class SkillsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Languages
-          const Text(
-            "Languages",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppUiTokens.textPrimary,
-              letterSpacing: -0.5,
+          if (languages.isNotEmpty) ...[
+            const Text(
+              "Languages",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppUiTokens.textPrimary,
+                letterSpacing: -0.5,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              _buildLanguageItem("English"),
-              _buildDivider(),
-              _buildLanguageItem("Spanish"),
-              _buildDivider(),
-              _buildLanguageItem("French"),
-              _buildDivider(),
-              _buildLanguageItem("Mandarin"),
-            ],
-          ),
-          const SizedBox(height: 32),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                for (int i = 0; i < languages.length; i++) ...[
+                  _buildLanguageItem(languages[i]),
+                  if (i < languages.length - 1) _buildDivider(),
+                ],
+              ],
+            ),
+            const SizedBox(height: 32),
+          ],
 
           // Certifications
-          const Text(
-            "Certifications",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppUiTokens.textPrimary,
-              letterSpacing: -0.5,
+          if (certifications.isNotEmpty) ...[
+            const Text(
+              "Certifications",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppUiTokens.textPrimary,
+                letterSpacing: -0.5,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: const [
-              CertificationChip(label: "CPR & First Aid"),
-              CertificationChip(label: "Special Needs Childcare"),
-              CertificationChip(label: "Infant Care"),
-              CertificationChip(label: "Child Behavior & Safety"),
-            ],
-          ),
-          const SizedBox(height: 32),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: certifications
+                  .map((cert) => CertificationChip(label: cert))
+                  .toList(),
+            ),
+            const SizedBox(height: 32),
+          ],
 
           // Skills
-          const Text(
-            "Skills",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppUiTokens.textPrimary,
-              letterSpacing: -0.5,
+          if (skills.isNotEmpty) ...[
+            const Text(
+              "Skills",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: AppUiTokens.textPrimary,
+                letterSpacing: -0.5,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: const [
-              SkillChip(label: "Special Needs Support"),
-              SkillChip(label: "Meal Prep"),
-              SkillChip(label: "Safe Sleep Practices"),
-              SkillChip(label: "Meal Preparation"),
-              SkillChip(label: "Potty Training"),
-              SkillChip(label: "Sensory Play"),
-              SkillChip(label: "Medication Management"),
-              SkillChip(label: "Light Housekeeping"),
-            ],
-          ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: skills.map((skill) => SkillChip(label: skill)).toList(),
+            ),
+          ],
         ],
       ),
     );

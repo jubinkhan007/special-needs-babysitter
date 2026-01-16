@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../routing/routes.dart';
+import '../../../booking_flow/data/providers/booking_flow_provider.dart';
 import '../providers/sitter_profile_providers.dart';
 import 'sitter_profile_view.dart';
 
@@ -69,7 +70,21 @@ class SitterProfilePage extends ConsumerWidget {
       data: (sitter) => SitterProfileView(
         key: const Key('sitterProfilePage'),
         sitter: sitter,
-        onBookPressed: () => context.push(Routes.parentBookingStep1),
+        onBookPressed: () {
+          // Initialize booking flow with sitter data
+          ref.read(bookingFlowProvider.notifier).initWithSitter(
+                sitterId: sitter.id,
+                sitterName: sitter.name,
+                sitterAvatarUrl: sitter.avatarUrl,
+                sitterRating: sitter.rating,
+                sitterDistance: sitter.distance,
+                sitterResponseRate: '${sitter.responseRate}%',
+                sitterReliabilityRate: '${sitter.reliabilityRate}%',
+                sitterExperience: '${sitter.experienceYears} Years',
+                sitterBadges: sitter.badges,
+              );
+          context.push(Routes.parentBookingStep1);
+        },
       ),
     );
   }

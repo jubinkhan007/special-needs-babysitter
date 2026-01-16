@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
+import '../../../home/presentation/models/home_mock_models.dart';
 
 class ReviewsSection extends StatelessWidget {
   final VoidCallback? onTapSeeAll;
+  final List<ReviewModel> reviews;
+  final double averageRating;
+  final int totalReviews;
 
-  const ReviewsSection({super.key, this.onTapSeeAll});
+  const ReviewsSection({
+    super.key,
+    this.onTapSeeAll,
+    this.reviews = const [],
+    this.averageRating = 0.0,
+    this.totalReviews = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (reviews.isEmpty) {
+      // Optional: hide section or show empty state if no reviews
+      // For now, let's just minimal header or empty container,
+      // but UI might look empty. Let's show header with 0 reviews.
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       child: Column(
@@ -27,31 +43,31 @@ class ReviewsSection extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: onTapSeeAll,
-                behavior: HitTestBehavior.opaque, // Ensure tap target is good
+                behavior: HitTestBehavior.opaque,
                 child: Row(
-                  children: const [
-                    Icon(Icons.star_rounded,
+                  children: [
+                    const Icon(Icons.star_rounded,
                         color: AppUiTokens.starYellow, size: 20),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
-                      "4.5",
-                      style: TextStyle(
+                      averageRating.toStringAsFixed(1),
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         color: AppUiTokens.textPrimary,
                       ),
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
-                      "(112 Reviews)", // Figma color check? Usually lighter
-                      style: TextStyle(
+                      "($totalReviews Reviews)",
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color: AppUiTokens.textSecondary,
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.chevron_right,
+                    const SizedBox(width: 4),
+                    const Icon(Icons.chevron_right,
                         size: 20, color: AppUiTokens.textSecondary),
                   ],
                 ),
@@ -60,61 +76,43 @@ class ReviewsSection extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // List
-          _buildReviewItem(
-            name: "Ayesha K",
-            date: "2 Days Ago",
-            rating: 5,
-            comment:
-                "Krystina communicates well with my daughter who is non verbal. Her calm presence made all the difference.",
-            imageAsset:
-                "apps/babysitter_app/assets/images/reviewer/Ayesha_reviewer.png",
-          ),
-          _buildDivider(),
-          _buildReviewItem(
-            name: "James W",
-            date: "10 Days Ago",
-            rating: 4,
-            comment:
-                "Krystina is reliable, friendly, and communicates clearly. My son always looks forward to seeing her!",
-            imageAsset:
-                "apps/babysitter_app/assets/images/reviewer/james_reviewer.png",
-          ),
-          _buildDivider(),
-          _buildReviewItem(
-            name: "Lina S",
-            date: "15 Days Ago",
-            rating: 5,
-            comment:
-                "We hired Krystina for evening care and she made the process seamless. Punctual, professional, and stays calm.",
-            imageAsset:
-                "apps/babysitter_app/assets/images/reviewer/lina_reviewer.png",
-          ),
-          _buildDivider(),
-          _buildReviewItem(
-            name: "David M",
-            date: "10 Days Ago",
-            rating: 5,
-            comment:
-                "Experience with Krystina has been great! She sets routines that actually work. Highly recommend.",
-            imageAsset:
-                "apps/babysitter_app/assets/images/reviewer/james_reviewer.png", // Reuse
-          ),
-          _buildDivider(),
-          _buildReviewItem(
-            name: "Reema T",
-            date: "20 Days Ago",
-            rating: 5,
-            comment:
-                "Krystina stepped in last minute when our regular sitter canceled. She kept us updated throughout. Amazing and so professional.",
-            imageAsset:
-                "apps/babysitter_app/assets/images/reviewer/Ayesha_reviewer.png", // Reuse
-          ),
+          // Dynamic List
+          if (reviews.isEmpty)
+            const Text(
+              "No reviews yet.",
+              style: TextStyle(color: AppUiTokens.textSecondary),
+            )
+          else
+            ...List.generate(reviews.length, (index) {
+              final review = reviews[index];
+              return Column(
+                children: [
+                  _buildReviewItem(
+                    name: review.authorName,
+                    date: _formatDate(review.date),
+                    rating: review.rating,
+                    comment: review.comment,
+                    imageAsset: review.authorAvatarUrl,
+                  ),
+                  if (index < reviews.length - 1) _buildDivider(),
+                ],
+              );
+            }),
 
-          const SizedBox(height: 100), // Space for bottom bar
+          if (reviews.isNotEmpty)
+            const SizedBox(height: 100), // Space for bottom bar
         ],
       ),
     );
+  }
+
+  String _formatDate(DateTime date) {
+    // Simple logic for "X days ago" or just format
+    final diff = DateTime.now().difference(date);
+    if (diff.inDays > 0) {
+      return "${diff.inDays} Days Ago";
+    }
+    return "Today";
   }
 
   Widget _buildReviewItem({

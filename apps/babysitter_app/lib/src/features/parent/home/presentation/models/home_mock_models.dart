@@ -1,3 +1,21 @@
+class ReviewModel {
+  final String id;
+  final String authorName;
+  final String authorAvatarUrl;
+  final double rating;
+  final String comment;
+  final DateTime date;
+
+  const ReviewModel({
+    required this.id,
+    required this.authorName,
+    required this.authorAvatarUrl,
+    required this.rating,
+    required this.comment,
+    required this.date,
+  });
+}
+
 class SitterModel {
   final String id;
   final String name;
@@ -12,6 +30,16 @@ class SitterModel {
   final double hourlyRate;
   final List<String> badges;
   final String bio;
+  final List<String> languages;
+  final List<String> certifications;
+  final bool willingToTravel;
+  final String? travelRadius; // e.g. "Up to 15 km"
+  final bool hasTransportation;
+  final String? transportationType; // e.g. "Owns vehicle"
+  final Map<String, bool> jobTypesAccepted;
+  final bool openToNegotiating;
+  final List<ReviewModel> reviews;
+  final List<dynamic> availability;
 
   const SitterModel({
     required this.id,
@@ -28,6 +56,16 @@ class SitterModel {
     this.badges = const [],
     this.bio =
         "Hi, I'm Krystina! I've been a sitter for over 5 years. I love kids and pets. I'm a certified CPR and First Aid instructor. I'm also a special needs certified sitter. I'm available for recurring, one-time, and emergency jobs.",
+    this.languages = const [],
+    this.certifications = const [],
+    this.willingToTravel = false,
+    this.travelRadius,
+    this.hasTransportation = false,
+    this.transportationType,
+    this.jobTypesAccepted = const {},
+    this.openToNegotiating = false,
+    this.reviews = const [],
+    this.availability = const [],
   });
 }
 

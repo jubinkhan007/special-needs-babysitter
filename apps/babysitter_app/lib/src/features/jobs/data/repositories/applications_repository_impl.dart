@@ -38,7 +38,7 @@ class ApplicationsRepositoryImpl implements ApplicationsRepository {
     await _remoteDataSource.respondToApplication(
       jobId: jobId,
       applicationId: applicationId,
-      action: 'reject',
+      action: 'decline',
       declineReason: reason,
     );
   }

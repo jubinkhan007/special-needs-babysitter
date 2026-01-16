@@ -4,8 +4,19 @@ import '../widgets/age_experience_item.dart';
 
 class OverviewSection extends StatelessWidget {
   final String bio;
+  final bool willingToTravel;
+  final String? travelRadius;
+  final bool hasTransportation;
+  final String? transportationType;
 
-  const OverviewSection({super.key, required this.bio});
+  const OverviewSection({
+    super.key,
+    required this.bio,
+    required this.willingToTravel,
+    this.travelRadius,
+    required this.hasTransportation,
+    this.transportationType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +24,7 @@ class OverviewSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        // ... (lines 16-64 unchanged)
         children: [
           // Overview
           const Text(
@@ -36,7 +48,7 @@ class OverviewSection extends StatelessWidget {
           ),
           const SizedBox(height: 32),
 
-          // Experience By Age
+          // Experience By Age (Keep hardcoded for now or update if SitterModel has it)
           const Text(
             "Experience By Age",
             style: TextStyle(
@@ -79,9 +91,9 @@ class OverviewSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      "Up to 15 km",
-                      style: TextStyle(
+                    Text(
+                      travelRadius ?? "N/A",
+                      style: const TextStyle(
                           fontSize: 15, color: AppUiTokens.textSecondary),
                     ),
                   ],
@@ -101,13 +113,16 @@ class OverviewSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Row(
-                      children: const [
-                        Icon(Icons.check,
-                            size: 16, color: AppUiTokens.textPrimary),
-                        SizedBox(width: 6),
+                      children: [
+                        if (hasTransportation)
+                          const Icon(Icons.check,
+                              size: 16, color: AppUiTokens.textPrimary),
+                        if (hasTransportation) const SizedBox(width: 6),
                         Text(
-                          "Owns vehicle",
-                          style: TextStyle(
+                          hasTransportation
+                              ? (transportationType ?? "Owns vehicle")
+                              : "No transport",
+                          style: const TextStyle(
                               fontSize: 15, color: AppUiTokens.textSecondary),
                         ),
                       ],
