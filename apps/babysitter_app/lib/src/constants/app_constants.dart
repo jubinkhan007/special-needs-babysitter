@@ -1,3 +1,7 @@
+import 'package:core/core.dart';
+
+/// App-level constants that re-export from core for convenience
 class AppConstants {
-  static const String baseUrl = 'https://sns-apis.tausifk.com/api';
+  /// Single source of truth for API base URL - from core package
+  static String get baseUrl => Constants.baseUrl;
 }

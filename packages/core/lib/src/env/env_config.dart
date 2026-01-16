@@ -1,10 +1,14 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../constants/constants.dart';
 
 /// Environment configuration loaded from .env file
 class EnvConfig {
   EnvConfig._();
 
-  static String get apiBaseUrl => dotenv.env['API_BASE_URL'] ?? '';
+  /// API base URL - uses .env value if set, otherwise falls back to Constants.baseUrl
+  static String get apiBaseUrl => dotenv.env['API_BASE_URL']?.isNotEmpty == true
+      ? dotenv.env['API_BASE_URL']!
+      : Constants.baseUrl;
   static String get agoraAppId => dotenv.env['AGORA_APP_ID'] ?? '';
   static String get agoraTokenServerUrl =>
       dotenv.env['AGORA_TOKEN_SERVER_URL'] ?? '';

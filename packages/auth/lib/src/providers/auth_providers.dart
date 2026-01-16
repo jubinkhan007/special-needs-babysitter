@@ -4,7 +4,8 @@ import 'package:data/data.dart';
 
 import '../session_store.dart';
 
-import 'package:dio/dio.dart'; // Added dio import
+import 'package:dio/dio.dart';
+import 'package:core/core.dart'; // For Constants.baseUrl
 
 /// Provider for SessionStore
 final sessionStoreProvider = Provider<SessionStore>((ref) {
@@ -14,9 +15,9 @@ final sessionStoreProvider = Provider<SessionStore>((ref) {
 
 /// Provider for Auth Dio
 final authDioProvider = Provider<Dio>((ref) {
-  // Use the same base URL as the rest of the app
+  // Use centralized base URL from core package
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://sns-apis.tausifk.com/api',
+    baseUrl: Constants.baseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {
