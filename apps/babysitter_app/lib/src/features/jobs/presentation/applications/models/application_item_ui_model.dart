@@ -15,6 +15,8 @@ class ApplicationItemUiModel {
   final String jobTitle;
   final String scheduledDateText;
   final bool showApplicationChip;
+  final String? status;
+  final bool isPending;
 
   const ApplicationItemUiModel({
     required this.id,
@@ -30,6 +32,8 @@ class ApplicationItemUiModel {
     required this.jobTitle,
     required this.scheduledDateText,
     required this.showApplicationChip,
+    this.status,
+    required this.isPending,
   });
 
   factory ApplicationItemUiModel.fromDomain(ApplicationItem item) {
@@ -49,6 +53,8 @@ class ApplicationItemUiModel {
       experienceText: '${item.experienceYears} Years',
       jobTitle: item.jobTitle,
       scheduledDateText: 'Scheduled: ${dateFormat.format(item.scheduledDate)}',
+      status: item.status,
+      isPending: item.status == null || item.status == 'pending',
       showApplicationChip: item.isApplication,
     );
   }

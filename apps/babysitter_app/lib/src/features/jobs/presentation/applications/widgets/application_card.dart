@@ -165,12 +165,15 @@ class ApplicationCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // 6. Buttons
-          ApplicationActions(
-            onAccept: onAccept,
-            onViewApplication: onViewApplication,
-            onReject: onReject,
-          ),
+          // 6. Buttons or Status
+          if (ui.isPending)
+            ApplicationActions(
+              onAccept: onAccept,
+              onViewApplication: onViewApplication,
+              onReject: onReject,
+            )
+          else
+            _buildStatusLabel(ui.status ?? 'processed'),
         ],
       ),
     );
@@ -190,6 +193,49 @@ class ApplicationCard extends StatelessWidget {
         ),
         Text(value, style: AppTokens.applicationsStatValueStyle),
       ],
+    );
+  }
+
+  Widget _buildStatusLabel(String status) {
+    Color bgColor;
+    Color textColor;
+    String displayText;
+
+    switch (status.toLowerCase()) {
+      case 'accepted':
+        bgColor = const Color(0xFFE8F5E9); // Light green
+        textColor = const Color(0xFF2E7D32); // Dark green
+        displayText = 'Accepted';
+        break;
+      case 'rejected':
+      case 'declined':
+        bgColor = const Color(0xFFFFEBEE); // Light red
+        textColor = const Color(0xFFC62828); // Dark red
+        displayText = 'Rejected';
+        break;
+      default:
+        bgColor = const Color(0xFFF5F5F5);
+        textColor = const Color(0xFF757575);
+        displayText = status.toUpperCase();
+    }
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: Text(
+          displayText,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: textColor,
+          ),
+        ),
+      ),
     );
   }
 }
