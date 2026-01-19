@@ -60,4 +60,5 @@ export 'src/sitter_profile/repositories/sitter_profile_repository.dart';
 
 // Bookings Feature
 export 'src/bookings/entities/booking_result.dart';
+export 'src/bookings/entities/payment_intent_result.dart';
 export 'src/bookings/bookings_repository.dart';

@@ -88,7 +88,7 @@ extension JobDtoMapper on JobDto {
       id: id,
       status: mapStatus(status),
       title: title,
-      postedAt: DateTime.parse(postedAt),
+      postedAt: DateTime.parse(postedAt ?? createdAt),
       children: childIds
           .map((id) => const ChildDetail(name: 'Child', ageYears: 0))
           .toList(),

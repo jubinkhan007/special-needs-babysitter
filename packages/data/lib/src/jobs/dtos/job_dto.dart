@@ -4,6 +4,9 @@ import 'package:domain/domain.dart';
 part 'job_dto.freezed.dart';
 part 'job_dto.g.dart';
 
+// Helper to handle zipCode being int or String
+String _toString(dynamic value) => value.toString();
+
 @freezed
 class JobAddressDto with _$JobAddressDto {
   const factory JobAddressDto({
@@ -11,7 +14,7 @@ class JobAddressDto with _$JobAddressDto {
     String? aptUnit,
     required String city,
     required String state,
-    required String zipCode,
+    @JsonKey(fromJson: _toString) required String zipCode,
     double? latitude,
     double? longitude,
   }) = _JobAddressDto;
@@ -32,11 +35,11 @@ class JobAddressDto with _$JobAddressDto {
       );
 
   JobAddress toDomain() => JobAddress(
-        streetAddress: streetAddress,
+        streetAddress: streetAddress ?? '',
         aptUnit: aptUnit,
-        city: city,
-        state: state,
-        zipCode: zipCode,
+        city: city ?? '',
+        state: state ?? '',
+        zipCode: zipCode ?? '',
         latitude: latitude,
         longitude: longitude,
       );
@@ -65,20 +68,52 @@ class JobLocationDto with _$JobLocationDto {
       );
 }
 
+class GeoJsonConverter
+    implements JsonConverter<JobLocationDto?, Map<String, dynamic>?> {
+  const GeoJsonConverter();
+
+  @override
+  JobLocationDto? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+    // Handle GeoJSON format: { "type": "Point", "coordinates": [long, lat] }
+    if (json['type'] == 'Point' && json['coordinates'] is List) {
+      final coords = json['coordinates'] as List;
+      if (coords.length >= 2) {
+        return JobLocationDto(
+          latitude: (coords[1] as num).toDouble(),
+          longitude: (coords[0] as num).toDouble(),
+        );
+      }
+    }
+    // Fallback to standard
+    try {
+      return JobLocationDto.fromJson(json);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Map<String, dynamic>? toJson(JobLocationDto? object) {
+    if (object == null) return null;
+    return object.toJson();
+  }
+}
+
 @freezed
 class JobDto with _$JobDto {
   const factory JobDto({
     String? id,
-    required List<String> childIds,
-    required String title,
-    required String startDate,
-    required String endDate,
-    required String startTime,
-    required String endTime,
+    @Default([]) List<String> childIds,
+    String? title,
+    String? startDate,
+    String? endDate,
+    String? startTime,
+    String? endTime,
     required JobAddressDto address,
-    JobLocationDto? location,
-    required String additionalDetails,
-    required double payRate,
+    @GeoJsonConverter() JobLocationDto? location,
+    String? additionalDetails,
+    double? payRate,
     @Default(false) bool saveAsDraft,
   }) = _JobDto;
 
@@ -106,15 +141,15 @@ class JobDto with _$JobDto {
   Job toDomain() => Job(
         id: id,
         childIds: childIds,
-        title: title,
-        startDate: startDate,
-        endDate: endDate,
-        startTime: startTime,
-        endTime: endTime,
+        title: title ?? '',
+        startDate: startDate ?? '',
+        endDate: endDate ?? '',
+        startTime: startTime ?? '',
+        endTime: endTime ?? '',
         address: address.toDomain(),
         location: location?.toDomain(),
-        additionalDetails: additionalDetails,
-        payRate: payRate,
+        additionalDetails: additionalDetails ?? '',
+        payRate: payRate ?? 0.0,
         saveAsDraft: saveAsDraft,
       );
 }

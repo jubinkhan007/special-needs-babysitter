@@ -12,7 +12,7 @@ ParentBookingsResponseDto _$ParentBookingsResponseDtoFromJson(
       bookings: (json['bookings'] as List<dynamic>)
           .map((e) => ParentBookingDto.fromJson(e as Map<String, dynamic>))
           .toList(),
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ParentBookingsResponseDtoToJson(
@@ -64,7 +64,7 @@ ParentBookingSitterDto _$ParentBookingSitterDtoFromJson(
       photoUrl: json['photoUrl'] as String?,
       bio: json['bio'] as String?,
       hourlyRate: (json['hourlyRate'] as num?)?.toDouble(),
-      reliabilityScore: json['reliabilityScore'] as int?,
+      reliabilityScore: (json['reliabilityScore'] as num?)?.toInt(),
       skills:
           (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
       address: json['address'] as String?,
@@ -100,7 +100,7 @@ ParentBookingJobDto _$ParentBookingJobDtoFromJson(Map<String, dynamic> json) =>
       status: json['status'] as String?,
       location: json['location'] as String?,
       fullAddress: json['fullAddress'] as String?,
-      childrenCount: json['childrenCount'] as int?,
+      childrenCount: (json['childrenCount'] as num?)?.toInt(),
       additionalDetails: json['additionalDetails'] as String?,
       children: (json['children'] as List<dynamic>?)
           ?.map(
@@ -132,7 +132,7 @@ ParentBookingChildDto _$ParentBookingChildDtoFromJson(
       id: json['id'] as String,
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
-      age: json['age'] as int?,
+      age: (json['age'] as num?)?.toInt(),
       specialNeedsDiagnosis: json['specialNeedsDiagnosis'] as String?,
     );
 

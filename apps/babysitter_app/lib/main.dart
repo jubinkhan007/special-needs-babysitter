@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:core/core.dart';
 import 'package:notifications/notifications.dart';
 
+import 'package:flutter_stripe/flutter_stripe.dart';
+
 import 'app.dart';
 
 /// Top-level background message handler (required by Firebase)
@@ -28,6 +30,11 @@ void main() async {
 
   // Load environment configuration
   await EnvConfig.tryLoad();
+
+  // Initialize Stripe
+  Stripe.publishableKey =
+      'pk_test_51SpPCQA94FXRonexZprCttmNtDC5z91d57n5MVW1r8TjGPApriYe9FTiZXbYOx9TVytNLchLwsAUvfJvuXzDBzmf00LJxEXg8h';
+  await Stripe.instance.applySettings();
 
   // Initialize Firebase with try/catch for missing config
   bool firebaseReady = false;

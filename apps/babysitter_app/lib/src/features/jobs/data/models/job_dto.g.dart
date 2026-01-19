@@ -9,8 +9,10 @@ part of 'job_dto.dart';
 JobDto _$JobDtoFromJson(Map<String, dynamic> json) => JobDto(
       id: json['id'] as String,
       parentUserId: json['parentUserId'] as String,
-      childIds:
-          (json['childIds'] as List<dynamic>).map((e) => e as String).toList(),
+      childIds: (json['childIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       title: json['title'] as String,
       startDate: json['startDate'] as String,
       endDate: json['endDate'] as String,
@@ -27,13 +29,14 @@ JobDto _$JobDtoFromJson(Map<String, dynamic> json) => JobDto(
       status: json['status'] as String,
       estimatedDuration: (json['estimatedDuration'] as num).toInt(),
       estimatedTotal: (json['estimatedTotal'] as num).toDouble(),
-      applicantIds: (json['applicantIds'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      applicantIds: (json['applicantIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       acceptedSitterId: json['acceptedSitterId'] as String?,
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
-      postedAt: json['postedAt'] as String,
+      postedAt: json['postedAt'] as String?,
       cancelledAt: json['cancelledAt'] as String?,
     );
 
@@ -66,7 +69,7 @@ AddressDto _$AddressDtoFromJson(Map<String, dynamic> json) => AddressDto(
       aptUnit: json['aptUnit'] as String?,
       city: json['city'] as String,
       state: json['state'] as String,
-      zipCode: json['zipCode'] as String,
+      zipCode: _toString(json['zipCode']),
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       publicLocation: json['publicLocation'] as String,

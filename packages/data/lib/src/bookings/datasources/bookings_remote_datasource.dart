@@ -40,4 +40,40 @@ class BookingsRemoteDataSource {
       rethrow;
     }
   }
+
+  /// POST /payments/create-intent - Create Stripe payment intent
+  Future<PaymentIntentResult> createPaymentIntent(String jobId) async {
+    try {
+      print(
+          'DEBUG: BookingsRemoteDataSource.createPaymentIntent jobId: $jobId');
+      final response = await _dio.post(
+        '/payments/create-intent',
+        data: {'jobId': jobId},
+      );
+
+      print(
+          'DEBUG: BookingsRemoteDataSource.createPaymentIntent response: ${response.data}');
+
+      if (response.data['success'] == true) {
+        final resultData = response.data['data'] as Map<String, dynamic>;
+        return PaymentIntentResult(
+          clientSecret: resultData['clientSecret'] ?? '',
+          paymentIntentId: resultData['paymentIntentId'] ?? '',
+        );
+      } else {
+        throw Exception(
+            response.data['error'] ?? 'Failed to create payment intent');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print(
+            'DEBUG: BookingsRemoteDataSource createPaymentIntent DioError: ${e.response?.data}');
+        final errorData = e.response?.data;
+        if (errorData is Map && errorData['error'] != null) {
+          throw Exception(errorData['error']);
+        }
+      }
+      rethrow;
+    }
+  }
 }

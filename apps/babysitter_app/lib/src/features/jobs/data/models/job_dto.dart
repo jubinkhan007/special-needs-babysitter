@@ -2,10 +2,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'job_dto.g.dart';
 
+// Helper to handle zipCode/numbers as String
+String _toString(dynamic value) => value.toString();
+
 @JsonSerializable()
 class JobDto {
   final String id;
   final String parentUserId;
+  @JsonKey(defaultValue: [])
   final List<String> childIds;
   final String title;
   final String startDate;
@@ -19,11 +23,12 @@ class JobDto {
   final String status;
   final int estimatedDuration;
   final double estimatedTotal;
+  @JsonKey(defaultValue: [])
   final List<String> applicantIds;
   final String? acceptedSitterId;
   final String createdAt;
   final String updatedAt;
-  final String postedAt;
+  final String? postedAt; // Made nullable as it might be missing
   final String? cancelledAt;
 
   JobDto({
@@ -46,7 +51,7 @@ class JobDto {
     this.acceptedSitterId,
     required this.createdAt,
     required this.updatedAt,
-    required this.postedAt,
+    this.postedAt,
     this.cancelledAt,
   });
 
@@ -60,6 +65,7 @@ class AddressDto {
   final String? aptUnit;
   final String city;
   final String state;
+  @JsonKey(fromJson: _toString)
   final String zipCode;
   final double latitude;
   final double longitude;

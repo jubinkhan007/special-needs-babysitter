@@ -61,8 +61,8 @@ BookingDetailsSitterDto _$BookingDetailsSitterDtoFromJson(
       firstName: json['firstName'] as String?,
       lastName: json['lastName'] as String?,
       photoUrl: json['photoUrl'] as String?,
-      reliabilityScore: json['reliabilityScore'] as int?,
-      responseRate: json['responseRate'] as int?,
+      reliabilityScore: (json['reliabilityScore'] as num?)?.toInt(),
+      responseRate: (json['responseRate'] as num?)?.toInt(),
       yearsOfExperience: json['yearsOfExperience'] as String?,
       skills:
           (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -95,7 +95,7 @@ BookingDetailsJobDto _$BookingDetailsJobDtoFromJson(
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
       payRate: (json['payRate'] as num?)?.toDouble(),
-      numberOfDays: json['numberOfDays'] as int?,
+      numberOfDays: (json['numberOfDays'] as num?)?.toInt(),
       additionalDetails: json['additionalDetails'] as String?,
       fullAddress: json['fullAddress'] as String?,
       location: json['location'] as String?,
@@ -140,7 +140,7 @@ BookingDetailsFamilyDto _$BookingDetailsFamilyDtoFromJson(
         Map<String, dynamic> json) =>
     BookingDetailsFamilyDto(
       familyName: json['familyName'] as String?,
-      childrenCount: json['childrenCount'] as int?,
+      childrenCount: (json['childrenCount'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$BookingDetailsFamilyDtoToJson(

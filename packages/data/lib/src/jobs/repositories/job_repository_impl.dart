@@ -18,7 +18,18 @@ class JobRepositoryImpl implements JobRepository {
   @override
   Future<List<Job>> getJobs() async {
     final jobDtos = await _remoteDataSource.getJobs();
-    return jobDtos.map((dto) => dto.toDomain()).toList();
+    print('DEBUG: JobRepositoryImpl received ${jobDtos.length} jobs');
+    return jobDtos.map((dto) {
+      try {
+        return dto.toDomain();
+      } catch (e, stack) {
+        print('ERROR: Failed to convert JobDto to Domain: ${dto.id}');
+        print('Error details: $e');
+        print('Stack trace: $stack');
+        print('Problematic DTO: $dto');
+        rethrow;
+      }
+    }).toList();
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import '../../data/providers/booking_flow_provider.dart';
 import '../../data/providers/bookings_di.dart';
 import '../theme/booking_ui_tokens.dart';
@@ -23,6 +24,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   Future<void> _onSubmit() async {
     final bookingState = ref.read(bookingFlowProvider);
     final repository = ref.read(bookingsRepositoryProvider);
+    final selectedPaymentMethod = bookingState.selectedPaymentMethod;
 
     setState(() {
       _isLoading = true;
@@ -35,6 +37,30 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       final result = await repository.createDirectBooking(payload);
 
       print('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
+      print(
+          'DEBUG: ServiceDetailsScreen applicationId: ${result.applicationId}');
+
+      // If Stripe is selected, create payment intent
+      if (selectedPaymentMethod == 'Stripe') {
+        print('DEBUG: Creating Stripe payment intent...');
+        final paymentIntent =
+            await repository.createPaymentIntent(result.applicationId);
+        print(
+            'DEBUG: Payment intent created: ${paymentIntent.paymentIntentId}');
+
+        // Initialize Stripe Payment Sheet
+        await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: paymentIntent.clientSecret,
+            merchantDisplayName: 'Special Needs Sitters',
+            // style: ThemeMode.light, // Optional: customize style
+          ),
+        );
+
+        // Present Stripe Payment Sheet
+        await Stripe.instance.presentPaymentSheet();
+        print('DEBUG: Payment completed successfully');
+      }
 
       if (mounted) {
         // Reset booking state after successful creation
@@ -49,9 +75,17 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     } catch (e) {
       print('DEBUG: ServiceDetailsScreen booking error: $e');
       if (mounted) {
+        String errorMessage = 'Failed to create booking';
+        if (e is StripeException) {
+          errorMessage =
+              'Payment cancelled or failed: ${e.error.localizedMessage}';
+        } else {
+          errorMessage = 'Error: ${e.toString()}';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to create booking: ${e.toString()}'),
+            content: Text(errorMessage),
             backgroundColor: const Color(0xFFD92D20),
           ),
         );

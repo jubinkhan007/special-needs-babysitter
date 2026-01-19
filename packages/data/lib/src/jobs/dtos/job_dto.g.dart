@@ -12,7 +12,7 @@ _$JobAddressDtoImpl _$$JobAddressDtoImplFromJson(Map<String, dynamic> json) =>
       aptUnit: json['aptUnit'] as String?,
       city: json['city'] as String,
       state: json['state'] as String,
-      zipCode: json['zipCode'] as String,
+      zipCode: _toString(json['zipCode']),
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
     );
@@ -43,19 +43,20 @@ Map<String, dynamic> _$$JobLocationDtoImplToJson(
 
 _$JobDtoImpl _$$JobDtoImplFromJson(Map<String, dynamic> json) => _$JobDtoImpl(
       id: json['id'] as String?,
-      childIds:
-          (json['childIds'] as List<dynamic>).map((e) => e as String).toList(),
-      title: json['title'] as String,
-      startDate: json['startDate'] as String,
-      endDate: json['endDate'] as String,
-      startTime: json['startTime'] as String,
-      endTime: json['endTime'] as String,
+      childIds: (json['childIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      title: json['title'] as String?,
+      startDate: json['startDate'] as String?,
+      endDate: json['endDate'] as String?,
+      startTime: json['startTime'] as String?,
+      endTime: json['endTime'] as String?,
       address: JobAddressDto.fromJson(json['address'] as Map<String, dynamic>),
-      location: json['location'] == null
-          ? null
-          : JobLocationDto.fromJson(json['location'] as Map<String, dynamic>),
-      additionalDetails: json['additionalDetails'] as String,
-      payRate: (json['payRate'] as num).toDouble(),
+      location: const GeoJsonConverter()
+          .fromJson(json['location'] as Map<String, dynamic>?),
+      additionalDetails: json['additionalDetails'] as String?,
+      payRate: (json['payRate'] as num?)?.toDouble(),
       saveAsDraft: json['saveAsDraft'] as bool? ?? false,
     );
 
@@ -69,7 +70,7 @@ Map<String, dynamic> _$$JobDtoImplToJson(_$JobDtoImpl instance) =>
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'address': instance.address,
-      'location': instance.location,
+      'location': const GeoJsonConverter().toJson(instance.location),
       'additionalDetails': instance.additionalDetails,
       'payRate': instance.payRate,
       'saveAsDraft': instance.saveAsDraft,
