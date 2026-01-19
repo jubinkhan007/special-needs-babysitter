@@ -40,30 +40,41 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       try {
         return Child(
           id: c['id'],
-          firstName: c['firstName'],
-          lastName: c['lastName'],
+          firstName: c['firstName'] ?? c['first_name'],
+          lastName: c['lastName'] ?? c['last_name'],
           age: c['age'],
-          specialNeedsDiagnosis: c['specialNeedsDiagnosis'] ?? '',
-          personalityDescription: c['personalityDescription'] ?? '',
-          medicationDietaryNeeds: c['medicationDietaryNeeds'] ?? '',
+          specialNeedsDiagnosis:
+              c['specialNeedsDiagnosis'] ?? c['special_needs_diagnosis'] ?? '',
+          personalityDescription:
+              c['personalityDescription'] ?? c['personality_description'] ?? '',
+          medicationDietaryNeeds: c['medicationDietaryNeeds'] ??
+              c['medication_dietary_needs'] ??
+              '',
           routine: c['routine'] ?? '',
-          hasAllergies: c['hasAllergies'] ?? false,
-          allergyTypes:
-              (c['allergyTypes'] as List<dynamic>?)?.cast<String>() ?? [],
-          hasTriggers: c['hasTriggers'] ?? false,
-          triggerTypes:
-              (c['triggerTypes'] as List<dynamic>?)?.cast<String>() ?? [],
-          calmingMethods: c['calmingMethods'] ?? '',
+          hasAllergies: c['hasAllergies'] ?? c['has_allergies'] ?? false,
+          allergyTypes: (c['allergyTypes'] as List<dynamic>?)?.cast<String>() ??
+              (c['allergy_types'] as List<dynamic>?)?.cast<String>() ??
+              [],
+          hasTriggers: c['hasTriggers'] ?? c['has_triggers'] ?? false,
+          triggerTypes: (c['triggerTypes'] as List<dynamic>?)?.cast<String>() ??
+              (c['trigger_types'] as List<dynamic>?)?.cast<String>() ??
+              [],
+          calmingMethods: c['calmingMethods'] ?? c['calming_methods'] ?? '',
           triggers: c['triggers'] ?? '',
-          transportationModes:
-              (c['transportationModes'] as List<dynamic>?)?.cast<String>() ??
-                  [],
+          transportationModes: (c['transportationModes'] as List<dynamic>?)
+                  ?.cast<String>() ??
+              (c['transportation_modes'] as List<dynamic>?)?.cast<String>() ??
+              [],
           equipmentSafety:
-              (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ?? [],
-          needsDropoff: c['needsDropoff'] ?? false,
-          pickupLocation: c['pickupLocation'] ?? '',
-          dropoffLocation: c['dropoffLocation'] ?? '',
-          transportSpecialInstructions: c['transportSpecialInstructions'] ?? '',
+              (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ??
+                  (c['equipment_safety'] as List<dynamic>?)?.cast<String>() ??
+                  [],
+          needsDropoff: c['needsDropoff'] ?? c['needs_dropoff'] ?? false,
+          pickupLocation: c['pickupLocation'] ?? c['pickup_location'] ?? '',
+          dropoffLocation: c['dropoffLocation'] ?? c['dropoff_location'] ?? '',
+          transportSpecialInstructions: c['transportSpecialInstructions'] ??
+              c['transport_special_instructions'] ??
+              '',
         );
       } catch (e) {
         print('DEBUG: Error mapping child: $e');
@@ -147,9 +158,67 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     await _remoteDataSource.updateProfileDetails(data, step: step);
   }
 
+  Map<String, dynamic> _prepareChildPayload(Map<String, dynamic> data) {
+    // Sending both snake_case and camelCase to ensure backend compatibility
+    // and avoid "received undefined" errors if naming conventions are mixed.
+    return {
+      // Identity
+      'first_name': data['firstName'],
+      'firstName': data['firstName'],
+      'last_name': data['lastName'],
+      'lastName': data['lastName'],
+      'age': data['age'],
+
+      // Special Needs
+      'special_needs_diagnosis': data['specialNeedsDiagnosis'],
+      'specialNeedsDiagnosis': data['specialNeedsDiagnosis'],
+      'personality_description': data['personalityDescription'],
+      'personalityDescription': data['personalityDescription'],
+      'medication_dietary_needs': data['medicationDietaryNeeds'],
+      'medicationDietaryNeeds': data['medicationDietaryNeeds'],
+      'routine': data['routine'],
+      // routine is same
+
+      // Allergies
+      'has_allergies': data['hasAllergies'],
+      'hasAllergies': data['hasAllergies'],
+      'allergy_types': data['allergyTypes'],
+      'allergyTypes': data['allergyTypes'],
+      'allergies': data['allergyTypes'], // Common alias
+
+      // Triggers
+      'has_triggers': data['hasTriggers'],
+      'hasTriggers': data['hasTriggers'],
+      'trigger_types': data['triggerTypes'],
+      'triggerTypes': data['triggerTypes'],
+      'triggers': data['triggers'],
+      'trigger_description': data['triggers'], // Alias for description
+
+      // Calming
+      'calming_methods': data['calmingMethods'],
+      'calmingMethods': data['calmingMethods'],
+
+      // Transport & Equipment
+      'transportation_modes': data['transportationModes'],
+      'transportationModes': data['transportationModes'],
+      'equipment_safety': data['equipmentSafety'],
+      'equipmentSafety': data['equipmentSafety'],
+      'needs_dropoff': data['needsDropoff'],
+      'needsDropoff': data['needsDropoff'],
+      'pickup_location': data['pickupLocation'],
+      'pickupLocation': data['pickupLocation'],
+      'pickup_address': data['pickupLocation'], // Alias
+      'dropoff_location': data['dropoffLocation'],
+      'dropoffLocation': data['dropoffLocation'],
+      'dropoff_address': data['dropoffLocation'], // Alias
+      'transport_special_instructions': data['transportSpecialInstructions'],
+      'transportSpecialInstructions': data['transportSpecialInstructions'],
+    }..removeWhere((key, value) => value == null);
+  }
+
   @override
   Future<void> addChild(Map<String, dynamic> childData) async {
-    await _remoteDataSource.addChild(childData);
+    await _remoteDataSource.addChild(_prepareChildPayload(childData));
   }
 
   @override
@@ -177,33 +246,47 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     final c = await _remoteDataSource.getChild(childId);
     return Child(
       id: c['id'],
-      firstName: c['firstName'],
-      lastName: c['lastName'],
+      firstName: c['firstName'] ?? c['first_name'],
+      lastName: c['lastName'] ?? c['last_name'],
       age: c['age'],
-      specialNeedsDiagnosis: c['specialNeedsDiagnosis'] ?? '',
-      personalityDescription: c['personalityDescription'] ?? '',
-      medicationDietaryNeeds: c['medicationDietaryNeeds'] ?? '',
+      specialNeedsDiagnosis:
+          c['specialNeedsDiagnosis'] ?? c['special_needs_diagnosis'] ?? '',
+      personalityDescription:
+          c['personalityDescription'] ?? c['personality_description'] ?? '',
+      medicationDietaryNeeds:
+          c['medicationDietaryNeeds'] ?? c['medication_dietary_needs'] ?? '',
       routine: c['routine'] ?? '',
-      hasAllergies: c['hasAllergies'] ?? false,
-      allergyTypes: (c['allergyTypes'] as List<dynamic>?)?.cast<String>() ?? [],
-      hasTriggers: c['hasTriggers'] ?? false,
-      triggerTypes: (c['triggerTypes'] as List<dynamic>?)?.cast<String>() ?? [],
-      calmingMethods: c['calmingMethods'] ?? '',
+      hasAllergies: c['hasAllergies'] ?? c['has_allergies'] ?? false,
+      allergyTypes: (c['allergyTypes'] as List<dynamic>?)?.cast<String>() ??
+          (c['allergy_types'] as List<dynamic>?)?.cast<String>() ??
+          [],
+      hasTriggers: c['hasTriggers'] ?? c['has_triggers'] ?? false,
+      triggerTypes: (c['triggerTypes'] as List<dynamic>?)?.cast<String>() ??
+          (c['trigger_types'] as List<dynamic>?)?.cast<String>() ??
+          [],
+      calmingMethods: c['calmingMethods'] ?? c['calming_methods'] ?? '',
       triggers: c['triggers'] ?? '',
       transportationModes:
-          (c['transportationModes'] as List<dynamic>?)?.cast<String>() ?? [],
+          (c['transportationModes'] as List<dynamic>?)?.cast<String>() ??
+              (c['transportation_modes'] as List<dynamic>?)?.cast<String>() ??
+              [],
       equipmentSafety:
-          (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ?? [],
-      needsDropoff: c['needsDropoff'] ?? false,
-      pickupLocation: c['pickupLocation'] ?? '',
-      dropoffLocation: c['dropoffLocation'] ?? '',
-      transportSpecialInstructions: c['transportSpecialInstructions'] ?? '',
+          (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ??
+              (c['equipment_safety'] as List<dynamic>?)?.cast<String>() ??
+              [],
+      needsDropoff: c['needsDropoff'] ?? c['needs_dropoff'] ?? false,
+      pickupLocation: c['pickupLocation'] ?? c['pickup_location'] ?? '',
+      dropoffLocation: c['dropoffLocation'] ?? c['dropoff_location'] ?? '',
+      transportSpecialInstructions: c['transportSpecialInstructions'] ??
+          c['transport_special_instructions'] ??
+          '',
     );
   }
 
   @override
   Future<void> updateChild(
       String childId, Map<String, dynamic> childData) async {
-    await _remoteDataSource.updateChild(childId, childData);
+    await _remoteDataSource.updateChild(
+        childId, _prepareChildPayload(childData));
   }
 }

@@ -42,3 +42,7 @@ export 'src/jobs/repositories/job_repository_impl.dart';
 // Sitter Profile
 export 'src/sitter_profile/datasources/sitter_profile_remote_datasource.dart';
 export 'src/sitter_profile/repositories/sitter_profile_repository_impl.dart';
+
+// Bookings Feature
+export 'src/bookings/datasources/bookings_remote_datasource.dart';
+export 'src/bookings/repositories/bookings_repository_impl.dart';

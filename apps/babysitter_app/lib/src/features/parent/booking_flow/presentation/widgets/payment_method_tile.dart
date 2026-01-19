@@ -4,7 +4,7 @@ import 'pixel_radio.dart';
 
 class PaymentMethodTile extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final String? subtitle; // Now optional
   final IconData? icon; // Placeholder for asset
   final bool isSelected;
   final bool isWhiteDisc;
@@ -13,7 +13,7 @@ class PaymentMethodTile extends StatelessWidget {
   const PaymentMethodTile({
     super.key,
     required this.title,
-    required this.subtitle,
+    this.subtitle, // Optional
     this.icon,
     required this.isSelected,
     this.isWhiteDisc = false,
@@ -60,16 +60,19 @@ class PaymentMethodTile extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     title,
                     style: BookingUiTokens.itemTitle,
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: BookingUiTokens.itemSubtitle,
-                  ),
+                  if (subtitle != null && subtitle!.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle!,
+                      style: BookingUiTokens.itemSubtitle,
+                    ),
+                  ],
                 ],
               ),
             ),

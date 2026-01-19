@@ -57,3 +57,7 @@ export 'src/jobs/usecases/update_job_usecase.dart';
 
 // Sitter Profile
 export 'src/sitter_profile/repositories/sitter_profile_repository.dart';
+
+// Bookings Feature
+export 'src/bookings/entities/booking_result.dart';
+export 'src/bookings/bookings_repository.dart';

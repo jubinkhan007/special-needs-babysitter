@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/booking_flow_provider.dart';
 import '../theme/booking_ui_tokens.dart';
 import '../widgets/booking_top_bar.dart';
 import '../widgets/payment_detail_row.dart';
@@ -8,15 +10,17 @@ import '../widgets/dashed_divider.dart';
 import 'select_payment_method_screen.dart';
 import 'service_details_screen.dart';
 
-class PaymentDetailsScreen extends StatelessWidget {
+class PaymentDetailsScreen extends ConsumerWidget {
   const PaymentDetailsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bookingState = ref.watch(bookingFlowProvider);
+
     return Scaffold(
       backgroundColor: BookingUiTokens.pageBackground,
       appBar: BookingTopBar(
-        title: 'Book Krystina',
+        title: 'Book ${bookingState.sitterName ?? 'Sitter'}',
         onBack: () => Navigator.of(context).pop(),
         onHelp: () {},
       ),
@@ -40,22 +44,34 @@ class PaymentDetailsScreen extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Payment Rows
-                const PaymentDetailRow(label: 'Sub Total', value: '\$ 300'),
+                PaymentDetailRow(
+                  label: 'Sub Total',
+                  value: '\$ ${bookingState.subTotal.toStringAsFixed(2)}',
+                ),
                 _buildDashedDivider(),
-                const PaymentDetailRow(label: 'Total Hours', value: '40 Hours'),
+                PaymentDetailRow(
+                  label: 'Total Hours',
+                  value: '${bookingState.totalHours.toStringAsFixed(1)} Hours',
+                ),
                 _buildDashedDivider(),
-                const PaymentDetailRow(label: 'Hourly Rate', value: '\$ 20/hr'),
+                PaymentDetailRow(
+                  label: 'Hourly Rate',
+                  value: '\$ ${bookingState.payRate.toStringAsFixed(2)}/hr',
+                ),
                 _buildDashedDivider(),
-                const PaymentDetailRow(label: 'Platform Fee', value: '\$ 20'),
+                PaymentDetailRow(
+                  label: 'Platform Fee',
+                  value: '\$ ${bookingState.platformFee.toStringAsFixed(2)}',
+                ),
                 _buildDashedDivider(),
-                const PaymentDetailRow(label: 'Discount', value: '\$ 0'),
+                const PaymentDetailRow(label: 'Discount', value: '\$ 0.00'),
                 _buildDashedDivider(),
 
                 const SizedBox(height: 16),
                 // Estimated Total
-                const PaymentDetailRow(
+                PaymentDetailRow(
                   label: 'Estimated Total Cost',
-                  value: '\$ 320',
+                  value: '\$ ${bookingState.totalCost.toStringAsFixed(2)}',
                   isLargeTotal: true,
                 ),
 
@@ -81,6 +97,7 @@ class PaymentDetailsScreen extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: PaymentMethodSheet(
+              totalCost: bookingState.totalCost,
               onChange: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

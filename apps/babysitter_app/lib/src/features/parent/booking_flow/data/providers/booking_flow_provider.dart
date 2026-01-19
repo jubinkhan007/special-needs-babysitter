@@ -96,6 +96,11 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
     );
   }
 
+  /// Update selected payment method
+  void updatePaymentMethod(String method) {
+    state = state.copyWith(selectedPaymentMethod: method);
+  }
+
   /// Reset state (e.g., after booking completed or cancelled)
   void reset() {
     state = const BookingFlowState();

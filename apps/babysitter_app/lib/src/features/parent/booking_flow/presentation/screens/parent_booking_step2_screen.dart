@@ -106,6 +106,13 @@ class _ParentBookingStep2ScreenState
     }
   }
 
+  String _formatTimeOfDay(TimeOfDay time) {
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return '$hour:$minute $period';
+  }
+
   Future<void> _onStartTimeTap() async {
     final picked = await showTimePicker(
       context: context,
@@ -183,7 +190,7 @@ class _ParentBookingStep2ScreenState
       },
     );
     if (picked != null && mounted) {
-      setState(() => _startTimeController.text = picked.format(context));
+      setState(() => _startTimeController.text = _formatTimeOfDay(picked));
     }
   }
 
@@ -264,7 +271,7 @@ class _ParentBookingStep2ScreenState
       },
     );
     if (picked != null && mounted) {
-      setState(() => _endTimeController.text = picked.format(context));
+      setState(() => _endTimeController.text = _formatTimeOfDay(picked));
     }
   }
 

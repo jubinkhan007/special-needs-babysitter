@@ -43,6 +43,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
   bool _hasTriggers = false;
   bool _needsDropoff = false;
   bool _otherEquipmentSelected = false;
+  String? _validationError; // Inline validation error message
 
   static const _transportOptions = [
     'No transportation (care at home only)',
@@ -132,6 +133,39 @@ class _AddChildDialogState extends State<AddChildDialog> {
 
   void _onSave() {
     if (_formKey.currentState!.validate()) {
+      // Validate pickup/dropoff fields if needsDropoff is checked
+      if (_needsDropoff) {
+        if (_pickupLocController.text.trim().isEmpty ||
+            _dropoffLocController.text.trim().isEmpty) {
+          setState(() {
+            _validationError =
+                'Please fill in Pickup and Drop-off locations, or uncheck the drop-off option.';
+          });
+          return;
+        }
+      }
+
+      // Clear any previous error
+      setState(() {
+        _validationError = null;
+      });
+
+      // Debug logging for pickup/dropoff fields
+      print('DEBUG AddChildDialog: needsDropoff=$_needsDropoff');
+      print(
+          'DEBUG AddChildDialog: pickupLocController.text=${_pickupLocController.text}');
+      print(
+          'DEBUG AddChildDialog: dropoffLocController.text=${_dropoffLocController.text}');
+      print(
+          'DEBUG AddChildDialog: transportInstrController.text=${_transportInstrController.text}');
+
+      final pickupValue = _needsDropoff ? _pickupLocController.text : '';
+      final dropoffValue = _needsDropoff ? _dropoffLocController.text : '';
+      final instrValue = _needsDropoff ? _transportInstrController.text : '';
+
+      print('DEBUG AddChildDialog: Sending pickupLocation=$pickupValue');
+      print('DEBUG AddChildDialog: Sending dropoffLocation=$dropoffValue');
+
       widget.onSave({
         'firstName': _firstNameController.text,
         'lastName': _lastNameController.text,
@@ -167,9 +201,9 @@ class _AddChildDialogState extends State<AddChildDialog> {
                 .where((e) => e.isNotEmpty),
         ].cast<String>(),
         'needsDropoff': _needsDropoff,
-        'pickupLocation': _pickupLocController.text,
-        'dropoffLocation': _dropoffLocController.text,
-        'transportSpecialInstructions': _transportInstrController.text,
+        'pickupLocation': pickupValue,
+        'dropoffLocation': dropoffValue,
+        'transportSpecialInstructions': instrValue,
       });
       Navigator.of(context).pop();
     }
@@ -350,28 +384,56 @@ class _AddChildDialogState extends State<AddChildDialog> {
 
                     const SizedBox(height: 16),
 
-                    const Text(
-                      'Pickup / Drop-off Details',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF344054)),
-                    ),
-                    const SizedBox(height: 8),
-                    _buildField(_pickupLocController,
-                        'Pickup Location (e.g., School gate)'),
-                    const SizedBox(height: 8),
-                    _buildField(_dropoffLocController,
-                        'Drop-off Location (e.g. 123 Main ST)'),
-                    const SizedBox(height: 8),
-                    _buildField(_transportInstrController,
-                        'Special Instructions (e.g. Avoid highways)',
-                        maxLines: 3),
+                    if (_needsDropoff) ...[
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Pickup / Drop-off Details',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF344054)),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildField(_pickupLocController,
+                          'Pickup Location (e.g., School gate)'),
+                      const SizedBox(height: 8),
+                      _buildField(_dropoffLocController,
+                          'Drop-off Location (e.g. 123 Main ST)'),
+                      const SizedBox(height: 8),
+                      _buildField(_transportInstrController,
+                          'Special Instructions (e.g. Avoid highways)',
+                          maxLines: 3),
+                    ],
                   ],
                 ),
               ),
             ),
           ),
+
+          // Inline Error Message
+          if (_validationError != null)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              color: const Color(0xFFFEE4E2),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline,
+                      color: Color(0xFFD92D20), size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _validationError!,
+                      style: const TextStyle(
+                        color: Color(0xFFD92D20),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
           // Footer Buttons
           Padding(

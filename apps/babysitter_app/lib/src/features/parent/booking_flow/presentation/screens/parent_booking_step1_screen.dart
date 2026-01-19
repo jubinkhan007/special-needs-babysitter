@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:domain/domain.dart';
 import '../../data/models/child_ui_model.dart';
 import '../../data/providers/booking_flow_provider.dart';
 import '../widgets/booking_step_header.dart';
@@ -25,15 +26,11 @@ class _ParentBookingStep1ScreenState
     extends ConsumerState<ParentBookingStep1Screen> {
   String? _selectedChildId;
   String? _selectedChildName;
+  Child? _selectedChild; // Track the full child object for transportation data
   final TextEditingController _additionalDetailsController =
       TextEditingController();
   final TextEditingController _payRateController =
       TextEditingController(text: '20');
-
-  // Transportation data from child details
-  String? _transportationMode;
-  String? _equipmentSafety;
-  String? _pickupDropoffDetails;
 
   @override
   void dispose() {
@@ -42,14 +39,12 @@ class _ParentBookingStep1ScreenState
     super.dispose();
   }
 
-  void _onChildSelected(String childId, String childName) {
+  void _onChildSelected(String childId, String childName, Child child) {
     setState(() {
       _selectedChildId = childId;
       _selectedChildName = childName;
+      _selectedChild = child;
     });
-
-    // Transportation preferences will be populated if Child model has these fields
-    // For now, we leave them null as they depend on API schema
   }
 
   void _onAddChild() {
@@ -75,11 +70,63 @@ class _ParentBookingStep1ScreenState
     );
   }
 
+  void _onEditChild(Child child) {
+    showDialog(
+      context: context,
+      builder: (context) => AddChildDialog(
+        existingChild: child.toMap(),
+        onSave: (childData) async {
+          final success = await ref
+              .read(profileDetailsControllerProvider.notifier)
+              .updateChild(child.id, childData);
+
+          if (success) {
+            ref.invalidate(profileDetailsProvider);
+          } else {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to update child')),
+              );
+            }
+          }
+        },
+      ),
+    );
+  }
+
   void _onNext() {
     // Save to provider
     final payRate = double.tryParse(
             _payRateController.text.replaceAll(RegExp(r'[^\d.]'), '')) ??
         0;
+
+    // Build transportation data from selected child
+    String? transportationMode;
+    String? equipmentSafety;
+    String? pickupDropoffDetails;
+
+    if (_selectedChild != null) {
+      final child = _selectedChild!;
+      transportationMode = child.transportationModes.isNotEmpty
+          ? child.transportationModes.join(', ')
+          : null;
+      equipmentSafety = child.equipmentSafety.isNotEmpty
+          ? child.equipmentSafety.join(', ')
+          : null;
+
+      // Build pickup/dropoff details
+      final details = <String>[];
+      if (child.pickupLocation.isNotEmpty) {
+        details.add('Pickup: ${child.pickupLocation}');
+      }
+      if (child.dropoffLocation.isNotEmpty) {
+        details.add('Drop-off: ${child.dropoffLocation}');
+      }
+      if (child.transportSpecialInstructions.isNotEmpty) {
+        details.add('Notes: ${child.transportSpecialInstructions}');
+      }
+      pickupDropoffDetails = details.isNotEmpty ? details.join('\n') : null;
+    }
 
     ref.read(bookingFlowProvider.notifier).updateStep1(
           childIds: _selectedChildId != null ? [_selectedChildId!] : [],
@@ -88,9 +135,9 @@ class _ParentBookingStep1ScreenState
           additionalDetails: _additionalDetailsController.text.isNotEmpty
               ? _additionalDetailsController.text
               : null,
-          transportationMode: _transportationMode,
-          equipmentSafety: _equipmentSafety,
-          pickupDropoffDetails: _pickupDropoffDetails,
+          transportationMode: transportationMode,
+          equipmentSafety: equipmentSafety,
+          pickupDropoffDetails: pickupDropoffDetails,
         );
 
     Navigator.of(context).push(
@@ -154,8 +201,9 @@ class _ParentBookingStep1ScreenState
                               ageText: '${child.age} Years old',
                               isSelected: _selectedChildId == child.id,
                             ),
-                            onTap: () => _onChildSelected(child.id, childName),
-                            onEdit: () {},
+                            onTap: () =>
+                                _onChildSelected(child.id, childName, child),
+                            onEdit: () => _onEditChild(child),
                           );
                         }),
                       const SizedBox(height: 16),

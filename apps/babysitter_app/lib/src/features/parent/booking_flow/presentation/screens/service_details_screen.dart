@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/booking_flow_provider.dart';
+import '../../data/providers/bookings_di.dart';
 import '../theme/booking_ui_tokens.dart';
 import '../widgets/booking_top_bar.dart';
 import '../widgets/payment_detail_row.dart';
@@ -6,15 +9,70 @@ import '../widgets/payment_method_sheet.dart';
 import '../widgets/dashed_divider.dart';
 import 'booking_request_sent_screen.dart';
 
-class ServiceDetailsScreen extends StatelessWidget {
+class ServiceDetailsScreen extends ConsumerStatefulWidget {
   const ServiceDetailsScreen({super.key});
 
   @override
+  ConsumerState<ServiceDetailsScreen> createState() =>
+      _ServiceDetailsScreenState();
+}
+
+class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
+  bool _isLoading = false;
+
+  Future<void> _onSubmit() async {
+    final bookingState = ref.read(bookingFlowProvider);
+    final repository = ref.read(bookingsRepositoryProvider);
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final payload = bookingState.toDirectBookingPayload();
+      print('DEBUG: ServiceDetailsScreen submitting booking: $payload');
+
+      final result = await repository.createDirectBooking(payload);
+
+      print('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
+
+      if (mounted) {
+        // Reset booking state after successful creation
+        ref.read(bookingFlowProvider.notifier).reset();
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const BookingRequestSentScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      print('DEBUG: ServiceDetailsScreen booking error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to create booking: ${e.toString()}'),
+            backgroundColor: const Color(0xFFD92D20),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final bookingState = ref.watch(bookingFlowProvider);
+
     return Scaffold(
       backgroundColor: BookingUiTokens.pageBackground,
       appBar: BookingTopBar(
-        title: 'Book Krystina',
+        title: 'Book ${bookingState.sitterName ?? 'Sitter'}',
         onBack: () => Navigator.of(context).pop(),
         onHelp: () {},
       ),
@@ -40,41 +98,59 @@ class ServiceDetailsScreen extends StatelessWidget {
                 const SizedBox(height: 4),
 
                 // Service Data Rows
-                const PaymentDetailRow(label: 'No. Of Child', value: '3'),
+                PaymentDetailRow(
+                    label: 'No. Of Child',
+                    value: bookingState.selectedChildIds.length.toString()),
                 _buildRowGap(),
-                const PaymentDetailRow(label: 'Date', value: '14 Aug - 17 Aug'),
+                PaymentDetailRow(
+                    label: 'Date', value: bookingState.dateRange ?? 'N/A'),
                 _buildRowGap(),
-                const PaymentDetailRow(label: 'No of Days', value: '4'),
+                PaymentDetailRow(
+                    label: 'No of Days',
+                    value: bookingState.numberOfDays.toString()),
                 _buildRowGap(),
                 const PaymentDetailRow(label: 'Job Type', value: 'Part Time'),
                 _buildRowGap(),
-                const PaymentDetailRow(label: 'Time', value: '09 AM - 06 PM'),
-                _buildRowGap(),
-                const PaymentDetailRow(
-                    label: 'Address',
+                PaymentDetailRow(
+                    label: 'Time',
                     value:
-                        '7448, Kub Oval, 2450 Brian Meadow, District of Columbia, Lake Edna'),
+                        '${bookingState.startTime ?? ''} - ${bookingState.endTime ?? ''}'),
+                _buildRowGap(),
+                PaymentDetailRow(
+                    label: 'Address', value: bookingState.fullAddress),
 
                 const SizedBox(height: 24),
                 _buildDashedDivider(),
                 const SizedBox(height: 8),
 
                 // Cost Breakdown
-                const PaymentDetailRow(label: 'Sub Total', value: '\$ 300'),
+                PaymentDetailRow(
+                  label: 'Sub Total',
+                  value: '\$ ${bookingState.subTotal.toStringAsFixed(2)}',
+                ),
                 _buildRowGap(),
                 _buildDashedDivider(),
                 _buildRowGap(),
 
-                const PaymentDetailRow(label: 'Total Hours', value: '40 Hours'),
+                PaymentDetailRow(
+                  label: 'Total Hours',
+                  value: '${bookingState.totalHours.toStringAsFixed(1)} Hours',
+                ),
                 _buildRowGap(),
-                const PaymentDetailRow(label: 'Hourly Rate', value: '\$ 20/hr'),
+                PaymentDetailRow(
+                  label: 'Hourly Rate',
+                  value: '\$ ${bookingState.payRate.toStringAsFixed(2)}/hr',
+                ),
                 _buildRowGap(),
                 _buildDashedDivider(),
                 _buildRowGap(),
 
-                const PaymentDetailRow(label: 'Platform Fee', value: '\$ 20'),
+                PaymentDetailRow(
+                  label: 'Platform Fee',
+                  value: '\$ ${bookingState.platformFee.toStringAsFixed(2)}',
+                ),
                 _buildRowGap(),
-                const PaymentDetailRow(label: 'Discount', value: '\$ 0'),
+                const PaymentDetailRow(label: 'Discount', value: '\$ 0.00'),
 
                 // Bottom Spacing for Sticky Sheet
                 SizedBox(
@@ -90,19 +166,21 @@ class ServiceDetailsScreen extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: PaymentMethodSheet(
-              ctaLabel: 'Submit',
-              onChange: () {
-                // Change payment method logic
-              },
-              onConfirm: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const BookingRequestSentScreen(),
-                  ),
-                );
-              },
+              totalCost: bookingState.totalCost,
+              ctaLabel: _isLoading ? 'Submitting...' : 'Submit',
+              showChange: false,
+              onConfirm: _isLoading ? () {} : _onSubmit,
             ),
           ),
+
+          // Loading Overlay
+          if (_isLoading)
+            Container(
+              color: Colors.black26,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
         ],
       ),
     );

@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/booking_flow_provider.dart';
 import '../theme/booking_ui_tokens.dart';
 
-class PaymentMethodSheet extends StatelessWidget {
-  final VoidCallback onChange;
+class PaymentMethodSheet extends ConsumerWidget {
+  final VoidCallback? onChange;
   final VoidCallback onConfirm;
   final String ctaLabel;
+  final double totalCost;
+  final bool showChange;
 
   const PaymentMethodSheet({
     super.key,
-    required this.onChange,
+    this.onChange,
     required this.onConfirm,
     this.ctaLabel = 'Confirm Payment & Address',
+    required this.totalCost,
+    this.showChange = true,
   });
 
+  IconData _getIconForMethod(String method) {
+    switch (method) {
+      case 'App balance':
+        return Icons.account_balance_wallet_outlined;
+      case 'Paypal':
+        return Icons.paypal;
+      case 'Stripe':
+        return Icons.credit_card;
+      case 'Apple Pay':
+        return Icons.apple;
+      case 'Google Pay':
+        return Icons.g_mobiledata;
+      default:
+        return Icons.payment;
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedMethod = ref.watch(
+        bookingFlowProvider.select((state) => state.selectedPaymentMethod));
+
     return Container(
       decoration: const BoxDecoration(
         color: BookingUiTokens.bottomSheetBg,
@@ -50,17 +76,18 @@ class PaymentMethodSheet extends StatelessWidget {
                   color: BookingUiTokens.primaryText,
                 ),
               ),
-              GestureDetector(
-                onTap: onChange,
-                child: const Text(
-                  'Change',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: BookingUiTokens.iconGrey,
+              if (showChange && onChange != null)
+                GestureDetector(
+                  onTap: onChange,
+                  child: const Text(
+                    'Change',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: BookingUiTokens.iconGrey,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
 
@@ -77,41 +104,27 @@ class PaymentMethodSheet extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
-                child: const Icon(Icons.paypal,
-                    color: Colors.blue, size: 28), // Asset would be better
+                child: Icon(_getIconForMethod(selectedMethod),
+                    color: Colors.blue, size: 28),
               ),
               const SizedBox(width: 14),
 
               // Text
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Paypal',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: BookingUiTokens.primaryText,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      '*****doe@gmail.com',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: BookingUiTokens.labelText,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  selectedMethod,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: BookingUiTokens.primaryText,
+                  ),
                 ),
               ),
 
               // Amount
-              const Text(
-                '\$ 320',
-                style: TextStyle(
+              Text(
+                '\$ ${totalCost.toStringAsFixed(2)}',
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
                   color: BookingUiTokens.primaryText,

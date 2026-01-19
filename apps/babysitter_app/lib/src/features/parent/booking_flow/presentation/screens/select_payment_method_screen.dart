@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/providers/booking_flow_provider.dart';
 import '../theme/booking_ui_tokens.dart';
 import '../widgets/booking_modal_top_bar.dart';
 import '../widgets/payment_method_tile.dart';
 import '../widgets/inset_divider.dart';
 
-class SelectPaymentMethodScreen extends StatelessWidget {
+class SelectPaymentMethodScreen extends ConsumerWidget {
   const SelectPaymentMethodScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedMethod = ref.watch(
+        bookingFlowProvider.select((state) => state.selectedPaymentMethod));
+
+    void onSelectMethod(String method) {
+      ref.read(bookingFlowProvider.notifier).updatePaymentMethod(method);
+    }
+
     return Scaffold(
       backgroundColor: BookingUiTokens.pageBackground,
       appBar: BookingModalTopBar(
@@ -39,74 +48,48 @@ class SelectPaymentMethodScreen extends StatelessWidget {
               title: 'App balance',
               subtitle: '\$ 700.00',
               icon: Icons.account_balance_wallet_outlined,
-              isSelected: false,
-              onTap: () {},
+              isSelected: selectedMethod == 'App balance',
+              onTap: () => onSelectMethod('App balance'),
               isWhiteDisc: false,
             ),
             const InsetDivider(),
 
-            // 2. Paypal (Selected)
+            // 2. Paypal
             PaymentMethodTile(
               title: 'Paypal',
-              subtitle: '*****doe@gmail.com',
-              icon: Icons.paypal, // Needs specific icon, using close match
-              isSelected: true,
-              onTap: () {},
+              icon: Icons.paypal,
+              isSelected: selectedMethod == 'Paypal',
+              onTap: () => onSelectMethod('Paypal'),
               isWhiteDisc: true,
             ),
             const InsetDivider(),
 
-            // 3. Square
+            // 3. Stripe
             PaymentMethodTile(
-              title: 'Square',
-              subtitle: '*****doe@gmail.com',
-              icon: Icons.square,
-              isSelected: false,
-              onTap: () {},
-              isWhiteDisc: true,
-            ),
-            const InsetDivider(),
-
-            // 4. Credit Card
-            PaymentMethodTile(
-              title: 'Credit Card Or Debit Card',
-              subtitle: '**** **** 1234',
+              title: 'Stripe',
               icon: Icons.credit_card,
-              isSelected: false,
-              onTap: () {},
+              isSelected: selectedMethod == 'Stripe',
+              onTap: () => onSelectMethod('Stripe'),
               isWhiteDisc: false,
             ),
             const InsetDivider(),
 
-            // 5. Apple Pay
+            // 4. Apple Pay
             PaymentMethodTile(
               title: 'Apple Pay',
-              subtitle: '******123',
               icon: Icons.apple,
-              isSelected: false,
-              onTap: () {},
+              isSelected: selectedMethod == 'Apple Pay',
+              onTap: () => onSelectMethod('Apple Pay'),
               isWhiteDisc: false,
             ),
             const InsetDivider(),
 
-            // 6. Google Pay
+            // 5. Google Pay
             PaymentMethodTile(
               title: 'Google Pay',
-              subtitle: '******123',
-              icon: Icons.g_mobiledata, // Fallback
-              isSelected: false,
-              onTap: () {},
-              isWhiteDisc: false,
-            ),
-            const InsetDivider(),
-
-            // 7. Bank Account
-            PaymentMethodTile(
-              title: 'Bank Account',
-              subtitle: '******123',
-              icon: Icons.account_balance,
-              isSelected: false,
-              onTap: () {},
+              icon: Icons.g_mobiledata,
+              isSelected: selectedMethod == 'Google Pay',
+              onTap: () => onSelectMethod('Google Pay'),
               isWhiteDisc: false,
             ),
 
