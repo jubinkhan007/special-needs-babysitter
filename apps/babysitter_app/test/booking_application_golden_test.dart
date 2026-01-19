@@ -50,6 +50,9 @@ class MockJobsRepository implements JobsRepository {
 
   @override
   Future<void> deleteJob(String id) async {}
+
+  @override
+  Future<void> inviteSitter(String jobId, String sitterId) async {}
 }
 
 class MockApplicationsRepository implements ApplicationsRepository {

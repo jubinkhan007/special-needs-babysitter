@@ -35,11 +35,11 @@ class JobAddressDto with _$JobAddressDto {
       );
 
   JobAddress toDomain() => JobAddress(
-        streetAddress: streetAddress ?? '',
+        streetAddress: streetAddress,
         aptUnit: aptUnit,
-        city: city ?? '',
-        state: state ?? '',
-        zipCode: zipCode ?? '',
+        city: city,
+        state: state,
+        zipCode: zipCode,
         latitude: latitude,
         longitude: longitude,
       );

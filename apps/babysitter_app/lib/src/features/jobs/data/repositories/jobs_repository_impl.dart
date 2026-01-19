@@ -122,7 +122,7 @@ class JobsRepositoryImpl implements JobsRepository {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return;
       } else {
-        throw ExceptionTheme(
+        throw Exception(
             'Failed to invite sitter: Status ${response.statusCode}');
       }
     } catch (e) {
