@@ -25,6 +25,7 @@ class SittersRepositoryImpl implements SittersRepository {
   SitterListItemModel _mapToSitterListItem(SitterDto dto) {
     return SitterListItemModel(
       id: dto.id, // Using SitterProfile ID (uuid)
+      userId: dto.userId, // Map the User ID
       name: dto.firstName, // Just first name per design
       imageAssetPath: dto
           .photoUrl, // It's a URL, but field name is imageAssetPath. We fixed consumers to handle URLs.
@@ -45,6 +46,7 @@ class SittersRepositoryImpl implements SittersRepository {
   SitterModel _mapToSitterModel(SitterProfileDto dto) {
     return SitterModel(
       id: dto.id,
+      userId: dto.userId,
       name: dto.firstName,
       avatarUrl: dto.photoUrl,
       isVerified: true, // Assuming true

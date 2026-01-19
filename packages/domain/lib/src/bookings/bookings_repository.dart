@@ -10,4 +10,7 @@ abstract class BookingsRepository {
   /// Create a Stripe payment intent for a job
   /// Returns [PaymentIntentResult] on success
   Future<PaymentIntentResult> createPaymentIntent(String jobId);
+
+  /// Cancel a direct booking
+  Future<void> cancelDirectBooking(String bookingId);
 }

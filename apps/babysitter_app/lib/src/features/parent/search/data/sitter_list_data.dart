@@ -5,6 +5,7 @@ class SitterListData {
   static const List<SitterListItemModel> sitters = [
     SitterListItemModel(
       id: '1',
+      userId: 'u1',
       name: 'Krystina',
       imageAssetPath: 'assets/images/sitters/krystina_sitter.png',
       isVerified: true,
@@ -18,6 +19,7 @@ class SitterListData {
     ),
     SitterListItemModel(
       id: '2',
+      userId: 'u2',
       name:
           'Krystina', // Reusing name per Figma screenshot, though in real life would differ
       imageAssetPath: 'assets/images/sitters/krystina_sitter_2.png',
@@ -32,6 +34,7 @@ class SitterListData {
     ),
     SitterListItemModel(
       id: '3',
+      userId: 'u3',
       name: 'Krystina',
       imageAssetPath: 'assets/images/sitters/krystina_sitter_3.png',
       isVerified: true,
@@ -45,6 +48,7 @@ class SitterListData {
     ),
     SitterListItemModel(
       id: '4',
+      userId: 'u4',
       name: 'Krystina',
       imageAssetPath: 'assets/images/avatars/avatar_jessica.png',
       isVerified: true,
@@ -58,6 +62,7 @@ class SitterListData {
     ),
     SitterListItemModel(
       id: '5',
+      userId: 'u5',
       name: 'Krystina',
       imageAssetPath: 'assets/images/sitters/krystina_sitter.png',
       isVerified: true,
@@ -71,6 +76,7 @@ class SitterListData {
     ),
     SitterListItemModel(
       id: '6',
+      userId: 'u6',
       name: 'Krystina',
       imageAssetPath: 'assets/images/sitters/krystina_sitter_2.png',
       isVerified: true,

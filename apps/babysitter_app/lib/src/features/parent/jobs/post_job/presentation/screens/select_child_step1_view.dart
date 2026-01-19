@@ -184,9 +184,13 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
       loading: () => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       ),
-      error: (err, stack) => Scaffold(
-        body: Center(child: Text('Error: $err')),
-      ),
+      error: (err, stack) {
+        print('ERROR: SelectChildStep1View error: $err');
+        print('DEBUG: Stack trace: $stack');
+        return Scaffold(
+          body: Center(child: Text('Error: $err')),
+        );
+      },
     );
   }
 

@@ -36,6 +36,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
         status = BookingStatus.upcoming;
         break;
       case 'pending':
+      case 'direct_booking':
         status = BookingStatus.pending;
         break;
       case 'completed':
@@ -150,7 +151,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
 
     if (rawStatus == 'active' || rawStatus == 'in_progress') {
       status = BookingStatus.active;
-    } else if (rawStatus == 'pending') {
+    } else if (rawStatus == 'pending' || rawStatus == 'direct_booking') {
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
       status = BookingStatus.cancelled;

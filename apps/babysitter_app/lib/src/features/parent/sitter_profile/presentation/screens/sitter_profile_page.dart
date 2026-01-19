@@ -73,7 +73,7 @@ class SitterProfilePage extends ConsumerWidget {
         onBookPressed: () {
           // Initialize booking flow with sitter data
           ref.read(bookingFlowProvider.notifier).initWithSitter(
-                sitterId: sitter.id,
+                sitterId: sitter.userId,
                 sitterName: sitter.name,
                 sitterAvatarUrl: sitter.avatarUrl,
                 sitterRating: sitter.rating,

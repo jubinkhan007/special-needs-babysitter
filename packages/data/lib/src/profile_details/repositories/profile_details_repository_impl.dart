@@ -23,6 +23,7 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     // Map from "data" root
     // Handle null profile safely
     final profileData = (data['profile'] as Map<String, dynamic>?) ?? {};
+    print('DEBUG: RepoImpl profileData: $profileData');
 
     // Use photoUrl from profile if available (fresher than account repo?)
     final photoUrl = profileData['photoUrl'] as String?;
@@ -37,12 +38,13 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     print('DEBUG: RepoImpl mapping children...');
     // Map children
     final children = childrenList.map((c) {
+      print('DEBUG: Mapping child row: $c');
       try {
         return Child(
-          id: c['id'],
-          firstName: c['firstName'] ?? c['first_name'],
-          lastName: c['lastName'] ?? c['last_name'],
-          age: c['age'],
+          id: (c['id'] ?? '').toString(),
+          firstName: (c['firstName'] ?? c['first_name'] ?? '').toString(),
+          lastName: (c['lastName'] ?? c['last_name'] ?? '').toString(),
+          age: int.tryParse(c['age']?.toString() ?? '0') ?? 0,
           specialNeedsDiagnosis:
               c['specialNeedsDiagnosis'] ?? c['special_needs_diagnosis'] ?? '',
           personalityDescription:
@@ -52,23 +54,53 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
               '',
           routine: c['routine'] ?? '',
           hasAllergies: c['hasAllergies'] ?? c['has_allergies'] ?? false,
-          allergyTypes: (c['allergyTypes'] as List<dynamic>?)?.cast<String>() ??
-              (c['allergy_types'] as List<dynamic>?)?.cast<String>() ??
-              [],
+          allergyTypes: (c['allergyTypes'] is List)
+              ? (c['allergyTypes'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : (c['allergy_types'] is List)
+                  ? (c['allergy_types'] as List)
+                      .where((e) => e != null)
+                      .map((e) => e.toString())
+                      .toList()
+                  : [],
           hasTriggers: c['hasTriggers'] ?? c['has_triggers'] ?? false,
-          triggerTypes: (c['triggerTypes'] as List<dynamic>?)?.cast<String>() ??
-              (c['trigger_types'] as List<dynamic>?)?.cast<String>() ??
-              [],
+          triggerTypes: (c['triggerTypes'] is List)
+              ? (c['triggerTypes'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : (c['trigger_types'] is List)
+                  ? (c['trigger_types'] as List)
+                      .where((e) => e != null)
+                      .map((e) => e.toString())
+                      .toList()
+                  : [],
           calmingMethods: c['calmingMethods'] ?? c['calming_methods'] ?? '',
           triggers: c['triggers'] ?? '',
-          transportationModes: (c['transportationModes'] as List<dynamic>?)
-                  ?.cast<String>() ??
-              (c['transportation_modes'] as List<dynamic>?)?.cast<String>() ??
-              [],
-          equipmentSafety:
-              (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ??
-                  (c['equipment_safety'] as List<dynamic>?)?.cast<String>() ??
-                  [],
+          transportationModes: (c['transportationModes'] is List)
+              ? (c['transportationModes'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : (c['transportation_modes'] is List)
+                  ? (c['transportation_modes'] as List)
+                      .where((e) => e != null)
+                      .map((e) => e.toString())
+                      .toList()
+                  : [],
+          equipmentSafety: (c['equipmentSafety'] is List)
+              ? (c['equipmentSafety'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : (c['equipment_safety'] is List)
+                  ? (c['equipment_safety'] as List)
+                      .where((e) => e != null)
+                      .map((e) => e.toString())
+                      .toList()
+                  : [],
           needsDropoff: c['needsDropoff'] ?? c['needs_dropoff'] ?? false,
           pickupLocation: c['pickupLocation'] ?? c['pickup_location'] ?? '',
           dropoffLocation: c['dropoffLocation'] ?? c['dropoff_location'] ?? '',
@@ -76,8 +108,10 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
               c['transport_special_instructions'] ??
               '',
         );
-      } catch (e) {
-        print('DEBUG: Error mapping child: $e');
+      } catch (e, stack) {
+        print('ERROR: Failed mapping child: $e');
+        print('DEBUG: Problematic child data: $c');
+        print('DEBUG: Stack trace: $stack');
         rethrow;
       }
     }).toList();
@@ -87,10 +121,12 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     CareApproach? careApproach;
     if (childrenList.isNotEmpty) {
       final firstChild = childrenList.first;
-      final transportModes =
-          (firstChild['transportationModes'] as List<dynamic>?)
-                  ?.cast<String>() ??
-              [];
+      final transportModes = (firstChild['transportationModes'] is List)
+          ? (firstChild['transportationModes'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : [];
 
       careApproach = CareApproach(
         // Use personality description as general description if not available elsewhere
@@ -142,12 +178,20 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       numberOfFamilyMembers: profileData['numberOfFamilyMembers'] ?? 0,
       familyBio: profileData['familyBio'] ?? '',
       numberOfPets: profileData['numberOfPets'] ?? 0,
-      languages:
-          (profileData['languages'] as List<dynamic>?)?.cast<String>() ?? [],
+      languages: (profileData['languages'] is List)
+          ? (profileData['languages'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : [],
       familyName: profileData['familyName'] ?? '',
       hasPets: profileData['hasPets'] ?? false,
-      petTypes:
-          (profileData['petTypes'] as List<dynamic>?)?.cast<String>() ?? [],
+      petTypes: (profileData['petTypes'] is List)
+          ? (profileData['petTypes'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : [],
       speaksOtherLanguages: profileData['speaksOtherLanguages'] ?? false,
     );
   }
@@ -245,10 +289,10 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
   Future<Child> getChild(String childId) async {
     final c = await _remoteDataSource.getChild(childId);
     return Child(
-      id: c['id'],
-      firstName: c['firstName'] ?? c['first_name'],
-      lastName: c['lastName'] ?? c['last_name'],
-      age: c['age'],
+      id: (c['id'] ?? '').toString(),
+      firstName: (c['firstName'] ?? c['first_name'] ?? '').toString(),
+      lastName: (c['lastName'] ?? c['last_name'] ?? '').toString(),
+      age: int.tryParse(c['age']?.toString() ?? '0') ?? 0,
       specialNeedsDiagnosis:
           c['specialNeedsDiagnosis'] ?? c['special_needs_diagnosis'] ?? '',
       personalityDescription:
@@ -257,23 +301,53 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
           c['medicationDietaryNeeds'] ?? c['medication_dietary_needs'] ?? '',
       routine: c['routine'] ?? '',
       hasAllergies: c['hasAllergies'] ?? c['has_allergies'] ?? false,
-      allergyTypes: (c['allergyTypes'] as List<dynamic>?)?.cast<String>() ??
-          (c['allergy_types'] as List<dynamic>?)?.cast<String>() ??
-          [],
+      allergyTypes: (c['allergyTypes'] is List)
+          ? (c['allergyTypes'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : (c['allergy_types'] is List)
+              ? (c['allergy_types'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : [],
       hasTriggers: c['hasTriggers'] ?? c['has_triggers'] ?? false,
-      triggerTypes: (c['triggerTypes'] as List<dynamic>?)?.cast<String>() ??
-          (c['trigger_types'] as List<dynamic>?)?.cast<String>() ??
-          [],
+      triggerTypes: (c['triggerTypes'] is List)
+          ? (c['triggerTypes'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : (c['trigger_types'] is List)
+              ? (c['trigger_types'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : [],
       calmingMethods: c['calmingMethods'] ?? c['calming_methods'] ?? '',
       triggers: c['triggers'] ?? '',
-      transportationModes:
-          (c['transportationModes'] as List<dynamic>?)?.cast<String>() ??
-              (c['transportation_modes'] as List<dynamic>?)?.cast<String>() ??
-              [],
-      equipmentSafety:
-          (c['equipmentSafety'] as List<dynamic>?)?.cast<String>() ??
-              (c['equipment_safety'] as List<dynamic>?)?.cast<String>() ??
-              [],
+      transportationModes: (c['transportationModes'] is List)
+          ? (c['transportationModes'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : (c['transportation_modes'] is List)
+              ? (c['transportation_modes'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : [],
+      equipmentSafety: (c['equipmentSafety'] is List)
+          ? (c['equipmentSafety'] as List)
+              .where((e) => e != null)
+              .map((e) => e.toString())
+              .toList()
+          : (c['equipment_safety'] is List)
+              ? (c['equipment_safety'] as List)
+                  .where((e) => e != null)
+                  .map((e) => e.toString())
+                  .toList()
+              : [],
       needsDropoff: c['needsDropoff'] ?? c['needs_dropoff'] ?? false,
       pickupLocation: c['pickupLocation'] ?? c['pickup_location'] ?? '',
       dropoffLocation: c['dropoffLocation'] ?? c['dropoff_location'] ?? '',

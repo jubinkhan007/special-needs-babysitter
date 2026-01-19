@@ -16,4 +16,9 @@ class BookingsRepositoryImpl implements BookingsRepository {
   Future<PaymentIntentResult> createPaymentIntent(String jobId) async {
     return _remoteDataSource.createPaymentIntent(jobId);
   }
+
+  @override
+  Future<void> cancelDirectBooking(String bookingId) async {
+    return _remoteDataSource.cancelDirectBooking(bookingId);
+  }
 }

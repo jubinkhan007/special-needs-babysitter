@@ -11,11 +11,20 @@ class BookingsRemoteDataSource {
     print('DEBUG: BookingsRemoteDataSource.getBookings called');
     try {
       final response = await _dio.get('/parents/bookings');
+      print(
+          'DEBUG: BookingsRemoteDataSource.getBookings raw response: ${response.data}');
       final responseData = response.data['data'];
       if (responseData == null) {
+        print(
+            'DEBUG: BookingsRemoteDataSource.getBookings responseData is null');
         return [];
       }
       final data = ParentBookingsResponseDto.fromJson(responseData);
+      print(
+          'DEBUG: BookingsRemoteDataSource.getBookings parsed ${data.bookings.length} bookings');
+      for (var b in data.bookings) {
+        print('DEBUG: Booking id=${b.id}, status=${b.status}');
+      }
       return data.bookings;
     } catch (e) {
       print('DEBUG: BookingsRemoteDataSource error: $e');

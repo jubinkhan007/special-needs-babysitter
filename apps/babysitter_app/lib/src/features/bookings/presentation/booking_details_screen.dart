@@ -15,8 +15,10 @@ import 'widgets/key_value_row.dart';
 import 'widgets/section_header_row.dart';
 import 'widgets/sitter_details_card.dart';
 import 'providers/booking_details_provider.dart';
+import '../../parent/booking_flow/data/providers/bookings_di.dart';
+import '../application/bookings_controller.dart';
 
-class BookingDetailsScreen extends ConsumerWidget {
+class BookingDetailsScreen extends ConsumerStatefulWidget {
   final BookingDetailsArgs args;
 
   const BookingDetailsScreen({
@@ -25,8 +27,76 @@ class BookingDetailsScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncDetails = ref.watch(bookingDetailsProvider(args.bookingId));
+  ConsumerState<BookingDetailsScreen> createState() =>
+      _BookingDetailsScreenState();
+}
+
+class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
+  bool _isCancelling = false;
+
+  Future<void> _cancelBooking(String bookingId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title:
+            const Text('Cancel Booking', style: TextStyle(color: Colors.black)),
+        content: const Text(
+          'Are you sure you want to cancel this booking? This action cannot be undone.',
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => context.pop(false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => context.pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Yes, Cancel'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() => _isCancelling = true);
+
+    try {
+      final repo = ref.read(bookingsRepositoryProvider);
+      await repo.cancelDirectBooking(bookingId);
+
+      // Invalidate bookings list to refresh
+      ref.invalidate(bookingsControllerProvider);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Booking cancelled successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        context.pop();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error cancelling booking: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isCancelling = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final asyncDetails =
+        ref.watch(bookingDetailsProvider(widget.args.bookingId));
 
     return asyncDetails.when(
       loading: () => const Scaffold(
@@ -39,6 +109,7 @@ class BookingDetailsScreen extends ConsumerWidget {
       data: (details) {
         final variant = BookingDetailsVariant.fromStatus(details.status);
         final uiModel = BookingDetailsUiModel.fromDomain(details);
+        final isPending = details.status == BookingStatus.pending;
 
         return MediaQuery(
           data:
@@ -47,24 +118,37 @@ class BookingDetailsScreen extends ConsumerWidget {
             backgroundColor: AppTokens
                 .bookingDetailsHeaderBg, // Use header bg for main to blend
             appBar: BookingDetailsAppBar(title: variant.appBarTitle),
-            bottomNavigationBar: BottomCtaBar(
-              label: variant.ctaLabel,
-              onTap: () {
-                if (details.status == BookingStatus.completed) {
-                  context.push(
-                    Routes.parentReview,
-                    extra: ReviewArgs(
-                      bookingId: args.bookingId,
-                      sitterId:
-                          'sitter-123', // Placeholder as BookingDetails domain doesn't expose authId yet.
-                      sitterName: details.sitterName,
-                      sitterData: uiModel,
-                      status: details.status,
+            bottomNavigationBar: _isCancelling
+                ? Container(
+                    color: AppTokens.surfaceWhite,
+                    child: const SafeArea(
+                      top: false,
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
                     ),
-                  );
-                }
-              },
-            ),
+                  )
+                : isPending
+                    ? _buildPendingBottomBar(details.id)
+                    : BottomCtaBar(
+                        label: variant.ctaLabel,
+                        onTap: () {
+                          if (details.status == BookingStatus.completed) {
+                            context.push(
+                              Routes.parentReview,
+                              extra: ReviewArgs(
+                                bookingId: widget.args.bookingId,
+                                sitterId:
+                                    'sitter-123', // Placeholder as BookingDetails domain doesn't expose authId yet.
+                                sitterName: details.sitterName,
+                                sitterData: uiModel,
+                                status: details.status,
+                              ),
+                            );
+                          }
+                        },
+                      ),
             body: Container(
                 color: AppTokens.screenBg, // Body bg
                 child: CustomScrollView(
@@ -145,6 +229,75 @@ class BookingDetailsScreen extends ConsumerWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPendingBottomBar(String bookingId) {
+    return Container(
+      color: AppTokens.surfaceWhite,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTokens.screenHorizontalPadding,
+            vertical: 16,
+          ),
+          child: Row(
+            children: [
+              // Message Button
+              Expanded(
+                child: SizedBox(
+                  height: AppTokens.buttonHeight,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // TODO: Implement message functionality
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppTokens.primaryBlue),
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppTokens.buttonRadius),
+                      ),
+                    ),
+                    child: Text(
+                      'Message',
+                      style: TextStyle(
+                        color: AppTokens.primaryBlue,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Cancel Button
+              Expanded(
+                child: SizedBox(
+                  height: AppTokens.buttonHeight,
+                  child: ElevatedButton(
+                    onPressed: () => _cancelBooking(bookingId),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(AppTokens.buttonRadius),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Cancel Booking',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

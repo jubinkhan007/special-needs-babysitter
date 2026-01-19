@@ -24,7 +24,6 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   Future<void> _onSubmit() async {
     final bookingState = ref.read(bookingFlowProvider);
     final repository = ref.read(bookingsRepositoryProvider);
-    final selectedPaymentMethod = bookingState.selectedPaymentMethod;
 
     setState(() {
       _isLoading = true;
@@ -37,29 +36,27 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       final result = await repository.createDirectBooking(payload);
 
       print('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
-      print(
-          'DEBUG: ServiceDetailsScreen applicationId: ${result.applicationId}');
+      print('DEBUG: ServiceDetailsScreen jobId: ${result.jobId}');
+      print('DEBUG: ServiceDetailsScreen clientSecret: ${result.clientSecret}');
 
-      // If Stripe is selected, create payment intent
-      if (selectedPaymentMethod == 'Stripe') {
-        print('DEBUG: Creating Stripe payment intent...');
-        final paymentIntent =
-            await repository.createPaymentIntent(result.applicationId);
-        print(
-            'DEBUG: Payment intent created: ${paymentIntent.paymentIntentId}');
+      // The direct booking API returns clientSecret directly - use it for Stripe payment
+      if (result.clientSecret.isNotEmpty) {
+        print('DEBUG: Initializing Stripe payment sheet...');
 
         // Initialize Stripe Payment Sheet
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
-            paymentIntentClientSecret: paymentIntent.clientSecret,
+            paymentIntentClientSecret: result.clientSecret,
             merchantDisplayName: 'Special Needs Sitters',
-            // style: ThemeMode.light, // Optional: customize style
           ),
         );
 
         // Present Stripe Payment Sheet
+        print('DEBUG: Presenting Stripe payment sheet...');
         await Stripe.instance.presentPaymentSheet();
         print('DEBUG: Payment completed successfully');
+      } else {
+        print('DEBUG: No clientSecret in response, skipping Stripe');
       }
 
       if (mounted) {

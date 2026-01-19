@@ -11,10 +11,56 @@ class ProfileRemoteDataSource {
 
   Future<UserDto> getMe() async {
     final response = await _dio.get('/users/me');
-    return UserDto.fromJson(response.data as Map<String, dynamic>);
+    print('DEBUG: ProfileRemoteDataSource getMe raw: ${response.data}');
+
+    final data = response.data;
+    if (data is! Map<String, dynamic>) {
+      print('ERROR: ProfileRemoteDataSource response is not a Map: $data');
+      throw FormatException('Invalid response format: $data');
+    }
+
+    Map<String, dynamic>? userMap;
+
+    // 1. Try nested data.user (as seen in logs)
+    if (data['data'] is Map<String, dynamic>) {
+      final innerData = data['data'] as Map<String, dynamic>;
+      if (innerData['user'] is Map<String, dynamic>) {
+        print('DEBUG: ProfileRemoteDataSource using data.user');
+        userMap = innerData['user'] as Map<String, dynamic>;
+      } else if (innerData.containsKey('id') &&
+          innerData.containsKey('email')) {
+        print('DEBUG: ProfileRemoteDataSource using data');
+        userMap = innerData;
+      }
+    }
+
+    // 2. Try root keys (legacy or different endpoint)
+    if (userMap == null) {
+      if (data['user'] is Map<String, dynamic>) {
+        print('DEBUG: ProfileRemoteDataSource using root.user');
+        userMap = data['user'] as Map<String, dynamic>;
+      } else if (data.containsKey('id') && data.containsKey('email')) {
+        print('DEBUG: ProfileRemoteDataSource using root');
+        userMap = data;
+      }
+    }
+
+    if (userMap == null) {
+      print(
+          'ERROR: ProfileRemoteDataSource failed to find user object. Keys: ${data.keys}');
+      // Final attempt with the root just to keep old behavior but likely to fail if keys missing
+      userMap = data;
+    }
+
+    // Extra safety: ensure id and email are present before calling fromJson if possible
+    // though fromJson will throw anyway if we don't fix the DTO.
+    print('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
+
+    return UserDto.fromJson(userMap);
   }
 
   Future<UserDto> updateProfile(UpdateProfileParams params) async {
+    print('DEBUG: ProfileRemoteDataSource updating with: ${params.firstName}');
     final response = await _dio.patch(
       '/users/me',
       data: {
@@ -24,6 +70,26 @@ class ProfileRemoteDataSource {
         if (params.avatarUrl != null) 'avatar_url': params.avatarUrl,
       },
     );
-    return UserDto.fromJson(response.data as Map<String, dynamic>);
+    print(
+        'DEBUG: ProfileRemoteDataSource update response raw: ${response.data}');
+
+    final data = response.data;
+    if (data is! Map<String, dynamic>) {
+      throw FormatException('Invalid response format: $data');
+    }
+
+    Map<String, dynamic>? userMap;
+    if (data['data'] is Map<String, dynamic>) {
+      final innerData = data['data'] as Map<String, dynamic>;
+      if (innerData['user'] is Map<String, dynamic>) {
+        userMap = innerData['user'] as Map<String, dynamic>;
+      } else {
+        userMap = innerData;
+      }
+    } else {
+      userMap = data;
+    }
+
+    return UserDto.fromJson(userMap);
   }
 }

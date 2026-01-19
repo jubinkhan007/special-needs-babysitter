@@ -245,7 +245,11 @@ class _ParentBookingStep1ScreenState
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error: $err')),
+              error: (err, stack) {
+                print('ERROR: ParentBookingStep1Screen error: $err');
+                print('DEBUG: Stack trace: $stack');
+                return Center(child: Text('Error: $err'));
+              },
             ),
           ),
           Container(

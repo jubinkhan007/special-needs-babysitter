@@ -20,6 +20,7 @@ class BookingFlowState {
   final String? streetAddress;
   final String? aptUnit;
   final String? city;
+  final String? state;
   final String? zipCode;
   final String? emergencyContactName;
   final String? emergencyContactPhone;
@@ -58,6 +59,7 @@ class BookingFlowState {
     this.streetAddress,
     this.aptUnit,
     this.city,
+    this.state,
     this.zipCode,
     this.emergencyContactName,
     this.emergencyContactPhone,
@@ -91,6 +93,7 @@ class BookingFlowState {
     String? streetAddress,
     String? aptUnit,
     String? city,
+    String? state,
     String? zipCode,
     String? emergencyContactName,
     String? emergencyContactPhone,
@@ -123,6 +126,7 @@ class BookingFlowState {
       streetAddress: streetAddress ?? this.streetAddress,
       aptUnit: aptUnit ?? this.aptUnit,
       city: city ?? this.city,
+      state: state ?? this.state,
       zipCode: zipCode ?? this.zipCode,
       emergencyContactName: emergencyContactName ?? this.emergencyContactName,
       emergencyContactPhone:
@@ -149,7 +153,7 @@ class BookingFlowState {
 
   /// Computed: Full address string
   String get fullAddress {
-    final parts = [streetAddress, aptUnit, city, zipCode]
+    final parts = [streetAddress, aptUnit, city, state, zipCode]
         .where((p) => p != null && p.isNotEmpty)
         .toList();
     return parts.join(', ');
@@ -237,7 +241,8 @@ class BookingFlowState {
         'streetAddress': streetAddress ?? '',
         'aptUnit': aptUnit ?? '',
         'city': city ?? '',
-        'state': '', // Not collected in current flow
+        'state': state ??
+            'CA', // Default to CA if somehow null to avoid validation error
         'zipCode': zipCode ?? '',
         'latitude': 0.0, // Not collected in current flow
         'longitude': 0.0, // Not collected in current flow

@@ -18,6 +18,7 @@ class ReviewModel {
 
 class SitterModel {
   final String id;
+  final String userId;
   final String name;
   final String avatarUrl;
   final bool isVerified;
@@ -43,6 +44,7 @@ class SitterModel {
 
   const SitterModel({
     required this.id,
+    required this.userId,
     required this.name,
     required this.avatarUrl,
     this.isVerified = true,
@@ -92,6 +94,7 @@ class HomeMockData {
 
   static const activeBookingSitter = SitterModel(
     id: '1',
+    userId: 'u1',
     name: 'Krystina',
     avatarUrl: 'assets/images/avatars/avatar_krystina.png',
     rating: 4.5,
@@ -115,6 +118,7 @@ class HomeMockData {
   static const sittersNearYou = [
     SitterModel(
       id: '2',
+      userId: 'u2',
       name: 'Krystina', // Reusing same mock data from design
       avatarUrl: 'assets/images/avatars/avatar_krystina.png',
       rating: 4.5,
@@ -130,6 +134,7 @@ class HomeMockData {
     ),
     SitterModel(
       id: '3',
+      userId: 'u3',
       name: 'Jessica',
       avatarUrl: 'assets/images/avatars/avatar_jessica.png',
       rating: 4.8,
@@ -148,6 +153,7 @@ class HomeMockData {
   static const savedSitters = [
     SitterModel(
       id: '1',
+      userId: 'u1',
       name: 'Krystina',
       avatarUrl: 'assets/images/sitters/sitter_krystina_feed.png',
       rating: 4.5,
@@ -160,6 +166,7 @@ class HomeMockData {
     ),
     SitterModel(
       id: '4',
+      userId: 'u4',
       name: 'Krystina',
       avatarUrl: 'assets/images/sitters/sitter_krystina_feed_2.png',
       rating: 4.5,

@@ -21,6 +21,7 @@ class _ParentBookingStep3ScreenState
   final _streetController = TextEditingController();
   final _aptController = TextEditingController();
   final _cityController = TextEditingController();
+  final _stateController = TextEditingController();
   final _zipController = TextEditingController();
 
   // Emergency Controllers
@@ -33,6 +34,7 @@ class _ParentBookingStep3ScreenState
     _streetController.dispose();
     _aptController.dispose();
     _cityController.dispose();
+    _stateController.dispose();
     _zipController.dispose();
     _emergencyNameController.dispose();
     _emergencyPhoneController.dispose();
@@ -90,6 +92,11 @@ class _ParentBookingStep3ScreenState
                   BookingTextField(
                     hintText: 'City*',
                     controller: _cityController,
+                  ),
+                  const SizedBox(height: 16),
+                  BookingTextField(
+                    hintText: 'State*',
+                    controller: _stateController,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
@@ -155,6 +162,7 @@ class _ParentBookingStep3ScreenState
                           ? _aptController.text
                           : null,
                       city: _cityController.text,
+                      addressState: _stateController.text,
                       zipCode: _zipController.text,
                       emergencyContactName:
                           _emergencyNameController.text.isNotEmpty

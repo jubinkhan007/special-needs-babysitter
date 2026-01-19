@@ -12,12 +12,12 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<AccountOverview> getAccountOverview(String userId) async {
     // 1. Fetch fresh user profile
     final user = await _profileRepository.getMe();
-    if (user == null) {
-      throw const FormatException('User not found');
-    }
+    print(
+        'DEBUG: AccountRepo user firstName: ${user.firstName}, lastName: ${user.lastName}');
 
     // 2. Fetch stats (mocked in datasource)
     final stats = await _remoteDataSource.getAccountStats(userId);
+    print('DEBUG: AccountRepo stats: $stats');
 
     // 3. Calculate profile completion (logic could be more complex)
     double completion = 0.0;
@@ -29,15 +29,14 @@ class AccountRepositoryImpl implements AccountRepository {
 
     // Fallback to 60% as per design/mock if calculation is low?
     final effectiveCompletion = completion > 0 ? completion : 0.60;
-    // Let's stick to the calculated or a strict value.
-    // The design shows '60%'. Let's ensure the User entity has enough distinct fields to map this real.
-    // effectiveCompletion = user.isProfileComplete ? 1.0 : 0.6; // Mock for demo
 
-    return AccountOverview(
+    final overview = AccountOverview(
       user: user,
       bookingHistoryCount: stats['bookingHistoryCount'] as int? ?? 0,
       savedSittersCount: stats['savedSittersCount'] as int? ?? 0,
       profileCompletionPercent: effectiveCompletion,
     );
+    print('DEBUG: AccountRepo mapping overview successful');
+    return overview;
   }
 }
