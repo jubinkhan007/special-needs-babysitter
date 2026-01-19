@@ -47,8 +47,20 @@ class _SitterSearchResultsScreenState
       }
     } catch (e) {
       if (mounted) {
+        String message = 'Failed to invite sitter.';
+        if (e.toString().contains('posted jobs')) {
+          message =
+              'Job is still processing. Please wait a moment and try again.';
+        } else {
+          message = e.toString().replaceAll('Exception: ', '');
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to invite sitter: $e')),
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.orange,
+            duration: const Duration(seconds: 4),
+          ),
         );
       }
     }

@@ -56,7 +56,8 @@ class _JobPostingFlowState extends ConsumerState<JobPostingFlow> {
           ref.read(jobPostControllerProvider.notifier).resetState();
           Navigator.pop(context);
           if (jobId != null) {
-            context.push(Routes.sitterSearch, extra: {'jobId': jobId});
+            context
+                .pushReplacement(Routes.sitterSearch, extra: {'jobId': jobId});
           } else {
             context.go(Routes.parentHome);
           }
