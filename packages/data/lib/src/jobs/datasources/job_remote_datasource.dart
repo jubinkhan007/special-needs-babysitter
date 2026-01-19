@@ -81,4 +81,28 @@ class JobRemoteDataSource {
       rethrow;
     }
   }
+
+  Future<void> inviteSitter(String jobId, String sitterId) async {
+    try {
+      final response = await _dio.post(
+        '/jobs/$jobId/invite',
+        data: {'sitterId': sitterId},
+      );
+
+      print(
+          'DEBUG: JobRemoteDataSource.inviteSitter response: ${response.data}');
+
+      if (response.data['success'] != true) {
+        throw Exception(response.data['message'] ??
+            response.data['error'] ??
+            'Failed to invite sitter');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        throw Exception(
+            'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}');
+      }
+      rethrow;
+    }
+  }
 }

@@ -25,4 +25,7 @@ abstract class JobRepository {
 
   /// Clears the locally saved job draft.
   Future<void> clearLocalDraft();
+
+  /// Invites a sitter to a job.
+  Future<void> inviteSitter(String jobId, String sitterId);
 }

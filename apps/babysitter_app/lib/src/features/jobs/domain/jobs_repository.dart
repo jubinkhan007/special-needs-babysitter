@@ -6,4 +6,5 @@ abstract class JobsRepository {
   Future<JobDetails> getJobDetails(String id);
   Future<void> updateJob(String id, Map<String, dynamic> data);
   Future<void> deleteJob(String id);
+  Future<void> inviteSitter(String jobId, String sitterId);
 }

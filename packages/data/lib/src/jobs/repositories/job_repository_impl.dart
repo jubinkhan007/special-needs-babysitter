@@ -65,4 +65,9 @@ class JobRepositoryImpl implements JobRepository {
   Future<void> clearLocalDraft() async {
     await _localDataSource.clearDraft();
   }
+
+  @override
+  Future<void> inviteSitter(String jobId, String sitterId) async {
+    return _remoteDataSource.inviteSitter(jobId, sitterId);
+  }
 }

@@ -52,9 +52,14 @@ class _JobPostingFlowState extends ConsumerState<JobPostingFlow> {
       barrierDismissible: false,
       builder: (context) => JobPostSuccessDialog(
         onInviteSitters: () {
+          final jobId = ref.read(jobPostControllerProvider).jobId;
           ref.read(jobPostControllerProvider.notifier).resetState();
           Navigator.pop(context);
-          context.go(Routes.parentHome);
+          if (jobId != null) {
+            context.push(Routes.sitterSearch, extra: {'jobId': jobId});
+          } else {
+            context.go(Routes.parentHome);
+          }
         },
         onGoToHome: () {
           ref.read(jobPostControllerProvider.notifier).resetState();

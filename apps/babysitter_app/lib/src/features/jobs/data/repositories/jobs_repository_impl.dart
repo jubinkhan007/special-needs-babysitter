@@ -110,4 +110,27 @@ class JobsRepositoryImpl implements JobsRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<void> inviteSitter(String jobId, String sitterId) async {
+    try {
+      final response = await _client.post(
+        '/jobs/$jobId/invite',
+        data: {'sitterId': sitterId},
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return;
+      } else {
+        throw ExceptionTheme(
+            'Failed to invite sitter: Status ${response.statusCode}');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        throw Exception(
+            'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}');
+      }
+      rethrow;
+    }
+  }
 }

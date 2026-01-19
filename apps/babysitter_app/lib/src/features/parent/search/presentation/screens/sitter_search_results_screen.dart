@@ -11,6 +11,8 @@ import '../filter/controller/search_filter_controller.dart';
 import '../filter/filter_bottom_sheet.dart';
 import '../providers/sitters_list_provider.dart';
 
+import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart';
+
 class SitterSearchResultsScreen extends ConsumerStatefulWidget {
   const SitterSearchResultsScreen({super.key});
 
@@ -23,14 +25,43 @@ class _SitterSearchResultsScreenState
     extends ConsumerState<SitterSearchResultsScreen> {
   final SearchFilterController _filterController = SearchFilterController();
 
+  // Track invited sitters to update UI state locally if needed
+  final Set<String> _invitedSitterIds = {};
+
   @override
   void dispose() {
     _filterController.dispose();
     super.dispose();
   }
 
+  Future<void> _inviteSitter(String jobId, String sitterId) async {
+    try {
+      await ref.read(jobsRepositoryProvider).inviteSitter(jobId, sitterId);
+      if (mounted) {
+        setState(() {
+          _invitedSitterIds.add(sitterId);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sitter invited successfully!')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to invite sitter: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Check for jobId in extra or query params
+    final Map<String, dynamic>? extra =
+        GoRouterState.of(context).extra as Map<String, dynamic>?;
+    final String? jobId = extra?['jobId'] ??
+        GoRouterState.of(context).uri.queryParameters['jobId'];
+
     // Watch the provider
     final asyncSitters = ref.watch(sittersListProvider);
 
@@ -79,6 +110,9 @@ class _SitterSearchResultsScreenState
                                       height: AppUiTokens.itemSpacing),
                               itemBuilder: (context, index) {
                                 final sitter = sitters[index];
+                                final bool isInvited =
+                                    _invitedSitterIds.contains(sitter.id);
+
                                 return SitterCard(
                                   sitter: sitter,
                                   onTap: () {
@@ -86,6 +120,13 @@ class _SitterSearchResultsScreenState
                                     context.push(
                                         Routes.sitterProfilePath(sitter.id));
                                   },
+                                  onInvite: jobId != null
+                                      ? () {
+                                          if (!isInvited) {
+                                            _inviteSitter(jobId, sitter.id);
+                                          }
+                                        }
+                                      : null,
                                 );
                               },
                             ),

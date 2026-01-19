@@ -9,11 +9,13 @@ import 'primary_pill_button.dart';
 class SitterCard extends StatelessWidget {
   final SitterListItemModel sitter;
   final VoidCallback onTap;
+  final VoidCallback? onInvite;
 
   const SitterCard({
     super.key,
     required this.sitter,
     required this.onTap,
+    this.onInvite,
   });
 
   @override
@@ -179,8 +181,8 @@ class SitterCard extends StatelessWidget {
               ),
               const Spacer(),
               PrimaryPillButton(
-                text: 'View Profile',
-                onPressed: onTap,
+                text: onInvite != null ? 'Invite' : 'View Profile',
+                onPressed: onInvite ?? onTap,
               ),
             ],
           ),
