@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../routing/routes.dart';
 import '../providers/job_post_providers.dart';
 import '../widgets/job_draft_saved_dialog.dart';
 import 'job_post_step_header.dart';
+import '../../../../booking_flow/data/providers/bookings_di.dart';
 
 /// Job Post Step 5: Review
 /// Pixel-perfect implementation matching Figma design
-class JobPostStep5ReviewScreen extends ConsumerWidget {
+class JobPostStep5ReviewScreen extends ConsumerStatefulWidget {
   final VoidCallback onSubmit;
   final VoidCallback onBack;
   final VoidCallback? onEditJobDetail;
@@ -24,6 +26,13 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
     this.onEditAdditional,
   });
 
+  @override
+  ConsumerState<JobPostStep5ReviewScreen> createState() =>
+      _JobPostStep5ReviewScreenState();
+}
+
+class _JobPostStep5ReviewScreenState
+    extends ConsumerState<JobPostStep5ReviewScreen> {
   // Design Constants
   static const _bgColor = Color(0xFFEAF6FF); // Light sky background
   static const _titleColor = Color(0xFF0B1736); // Deep navy
@@ -32,10 +41,101 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
   static const _primaryBtn = Color(0xFF8CCFF0); // Submit button
   static const _editIconColor = Color(0xFF7C8A9A); // Edit icon grey
 
+  bool _isProcessingPayment = false;
+
+  Future<void> _submitWithPayment() async {
+    final controller = ref.read(jobPostControllerProvider.notifier);
+    final bookingsRepo = ref.read(bookingsRepositoryProvider);
+
+    // Step 1: Submit the job
+    final success = await controller.submitJob();
+    if (!success) {
+      if (mounted) {
+        final latestError = ref.read(jobPostControllerProvider).error;
+        if (latestError != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(latestError)),
+          );
+        }
+      }
+      return;
+    }
+
+    // Step 2: Get the job ID from state
+    final jobId = ref.read(jobPostControllerProvider).jobId;
+    if (jobId == null || jobId.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Job created but no ID returned')),
+        );
+      }
+      // Still call onSubmit since job was created
+      widget.onSubmit();
+      return;
+    }
+
+    setState(() => _isProcessingPayment = true);
+
+    try {
+      // Step 3: Create payment intent
+      print('DEBUG: JobPostStep5 creating payment intent for jobId: $jobId');
+      final paymentIntent = await bookingsRepo.createPaymentIntent(jobId);
+      print(
+          'DEBUG: JobPostStep5 payment intent created: ${paymentIntent.paymentIntentId}');
+
+      // Step 4: Initialize Stripe Payment Sheet
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymentIntent.clientSecret,
+          merchantDisplayName: 'Special Needs Sitters',
+        ),
+      );
+
+      // Step 5: Present Payment Sheet
+      print('DEBUG: JobPostStep5 presenting payment sheet');
+      await Stripe.instance.presentPaymentSheet();
+      print('DEBUG: JobPostStep5 payment completed successfully');
+
+      if (mounted) {
+        widget.onSubmit();
+      }
+    } on StripeException catch (e) {
+      print('DEBUG: JobPostStep5 Stripe error: ${e.error.localizedMessage}');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text('Payment cancelled: ${e.error.localizedMessage ?? ""}'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        // Job is created but payment cancelled - still proceed to success
+        widget.onSubmit();
+      }
+    } catch (e) {
+      print('DEBUG: JobPostStep5 payment error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Payment error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        // Job is created but payment failed - still proceed to success
+        widget.onSubmit();
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessingPayment = false);
+      }
+    }
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final state = ref.watch(jobPostControllerProvider);
     final profileDetailsAsync = ref.watch(profileDetailsProvider);
+    final isLoading = state.isLoading || _isProcessingPayment;
 
     return Scaffold(
       backgroundColor: _bgColor,
@@ -46,7 +146,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
             JobPostStepHeader(
               activeStep: 5,
               totalSteps: 5,
-              onBack: onBack,
+              onBack: widget.onBack,
             ),
 
             // Main Content
@@ -59,7 +159,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
 
                     // Section A: Job Detail
-                    _buildSectionHeader('Job Detail', onEditJobDetail),
+                    _buildSectionHeader('Job Detail', widget.onEditJobDetail),
                     const SizedBox(height: 12),
                     _buildTextLine(state.title),
                     const SizedBox(height: 10),
@@ -70,7 +170,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
                     const SizedBox(height: 32),
 
                     // Section B: Child
-                    _buildSectionHeader('Child', onEditChild),
+                    _buildSectionHeader('Child', widget.onEditChild),
                     const SizedBox(height: 12),
                     profileDetailsAsync.when(
                       data: (details) {
@@ -97,8 +197,8 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
                     const SizedBox(height: 32),
 
                     // Section C: Additional Details & Pay Rate
-                    _buildSectionHeader(
-                        'Additional Details & Pay Rate', onEditAdditional),
+                    _buildSectionHeader('Additional Details & Pay Rate',
+                        widget.onEditAdditional),
                     const SizedBox(height: 12),
                     Text(
                       state.additionalDetails,
@@ -142,7 +242,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
             ),
 
             // Bottom Bar
-            _buildBottomBar(context, ref),
+            _buildBottomBar(context, isLoading),
           ],
         ),
       ),
@@ -209,9 +309,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBottomBar(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(jobPostControllerProvider);
-
+  Widget _buildBottomBar(BuildContext context, bool isLoading) {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 22),
       child: Row(
@@ -219,7 +317,7 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
         children: [
           // Save For Later Button
           TextButton(
-            onPressed: state.isLoading
+            onPressed: isLoading
                 ? null
                 : () async {
                     final success = await ref
@@ -271,38 +369,19 @@ class JobPostStep5ReviewScreen extends ConsumerWidget {
 
           // Submit Button
           GestureDetector(
-            onTap: state.isLoading
-                ? null
-                : () async {
-                    final success = await ref
-                        .read(jobPostControllerProvider.notifier)
-                        .submitJob();
-                    if (success && context.mounted) {
-                      onSubmit();
-                    } else if (context.mounted) {
-                      final latestError =
-                          ref.read(jobPostControllerProvider).error;
-                      if (latestError != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(latestError)),
-                        );
-                      }
-                    }
-                  },
+            onTap: isLoading ? null : _submitWithPayment,
             child: Container(
               width: 200, // ~190-220
               height: 60, // ~56-62
               decoration: BoxDecoration(
-                color: state.isLoading
-                    ? _primaryBtn.withOpacity(0.5)
-                    : _primaryBtn,
+                color: isLoading ? _primaryBtn.withOpacity(0.5) : _primaryBtn,
                 borderRadius: BorderRadius.circular(14), // ~12-14
               ),
               child: Center(
-                child: state.isLoading
+                child: isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
                     : const Text(
-                        'Submit',
+                        'Submit & Pay',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
