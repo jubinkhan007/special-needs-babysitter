@@ -8,13 +8,18 @@ import '../../../../../../common/widgets/primary_action_button.dart';
 /// Matches Figma: Woman with phone, "Create Your Family Profile", Next button.
 class Step0Intro extends ConsumerWidget {
   final VoidCallback onNext;
+  final bool? isSitter;
 
-  const Step0Intro({super.key, required this.onNext});
+  const Step0Intro({
+    super.key,
+    required this.onNext,
+    this.isSitter,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authNotifierProvider).value?.user;
-    final isSitter = user?.role == UserRole.sitter;
+    final isSitterMode = isSitter ?? (user?.role == UserRole.sitter);
 
     return Scaffold(
       body: Stack(
@@ -43,7 +48,7 @@ class Step0Intro extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    isSitter
+                    isSitterMode
                         ? 'Create Your Profile'
                         : 'Create Your Family Profile',
                     textAlign: TextAlign.center,
@@ -56,7 +61,7 @@ class Step0Intro extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    isSitter
+                    isSitterMode
                         ? 'Let families get to know you — start building your sitter profile today.'
                         : 'Fill out your profile and tell us about your child’s unique needs so you can find the right sitter.',
                     textAlign: TextAlign.center,

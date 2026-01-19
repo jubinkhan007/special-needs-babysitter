@@ -48,6 +48,7 @@ class _SitterProfileSetupFlowState
       case 0:
         return Step0Intro(
           onNext: () => _goToStep(1),
+          isSitter: true,
         );
       case 1:
         return Step1UploadPhoto(
