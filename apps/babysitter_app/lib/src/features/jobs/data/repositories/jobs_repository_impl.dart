@@ -94,8 +94,7 @@ class JobsRepositoryImpl implements JobsRepository {
       });
 
       if (response.statusCode == 200 && response.data != null) {
-        print(
-            'DEBUG: Jobs API Response: ${response.data}'); // Requested debug log
+        // print('DEBUG: Jobs API Response: ${response.data}'); // Requested debug log
         final jobResponse = JobResponse.fromJson(response.data);
         if (jobResponse.success) {
           return jobResponse.data.jobs.map((dto) => dto.toDomain()).toList();
