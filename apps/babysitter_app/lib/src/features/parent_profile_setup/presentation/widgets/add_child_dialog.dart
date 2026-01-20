@@ -222,9 +222,9 @@ class _AddChildDialogState extends State<AddChildDialog> {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                const Text(
-                  'Add a Child',
-                  style: TextStyle(
+                Text(
+                  widget.existingChild != null ? 'Update Child' : 'Add a Child',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF1A1A1A),

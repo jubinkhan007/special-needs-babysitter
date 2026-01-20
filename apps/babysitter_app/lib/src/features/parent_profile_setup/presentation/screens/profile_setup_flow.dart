@@ -57,6 +57,7 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
         );
       case 1:
         return Step1FamilyIntro(
+          profileData: _profileData,
           onNext: () => _goToStep(2),
           onBack: _goBack,
         );

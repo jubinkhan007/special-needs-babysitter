@@ -16,4 +16,7 @@ abstract class ParentProfileRepository {
   ///
   /// [childData] - The map containing child details.
   Future<void> addUpdateChild(Map<String, dynamic> childData);
+
+  /// Marks the current user's profile as complete on the user record.
+  Future<void> markProfileComplete();
 }

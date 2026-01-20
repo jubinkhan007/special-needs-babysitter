@@ -14,11 +14,13 @@ import 'add_item_dialog.dart';
 class Step1FamilyIntro extends ConsumerStatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
+  final Map<String, dynamic> profileData;
 
   const Step1FamilyIntro({
     super.key,
     required this.onNext,
     required this.onBack,
+    required this.profileData,
   });
 
   @override
@@ -96,6 +98,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
         'languages':
             _languages.entries.where((e) => e.value).map((e) => e.key).toList(),
       };
+
+      // Save to profileData for summary
+      widget.profileData.addAll(data);
 
       // Call API
       print('DEBUG: Calling updateProfile with data: $data');

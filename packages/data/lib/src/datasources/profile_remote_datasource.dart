@@ -62,6 +62,36 @@ class ProfileRemoteDataSource {
           'User profile missing required fields (id/email)');
     }
 
+    // AVOID REDIRECT LOOP: Explicitly check for both keys and percentage
+    // 1. Check percentage if available in nested or root data
+    Map<String, dynamic>? profileCompletion;
+    if (data['data'] is Map<String, dynamic>) {
+      profileCompletion =
+          data['data']['profileCompletion'] as Map<String, dynamic>?;
+    }
+    profileCompletion ??= data['profileCompletion'] as Map<String, dynamic>?;
+
+    if (profileCompletion != null) {
+      final percentage = profileCompletion['percentage'] as num? ?? 0;
+      print(
+          'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage');
+      if (percentage >= 100) {
+        userMap['profileSetupComplete'] = true;
+        print(
+            'DEBUG: Overriding profileSetupComplete=true due to 100% completion');
+      }
+    } else {
+      print(
+          'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response');
+    }
+
+    // 2. Sync between snake_case and camelCase
+    if (userMap['profile_setup_complete'] == true) {
+      userMap['profileSetupComplete'] = true;
+    } else if (userMap['profileSetupComplete'] == true) {
+      userMap['profile_setup_complete'] = true;
+    }
+
     try {
       return UserDto.fromJson(userMap);
     } catch (e, stack) {

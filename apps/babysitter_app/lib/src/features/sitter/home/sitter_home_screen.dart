@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:auth/auth.dart';
+
+import '../../../routing/routes.dart';
 
 import 'presentation/widgets/sitter_home_header.dart';
 import 'presentation/widgets/app_search_field.dart';
 import 'presentation/widgets/job_preview_card.dart';
+import 'presentation/widgets/background_check_banner.dart';
 import 'presentation/providers/sitter_home_providers.dart';
 import 'presentation/mappers/job_preview_mapper.dart';
 import 'presentation/screens/sitter_all_jobs_screen.dart';
@@ -61,6 +65,12 @@ class SitterHomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
+          ),
+          SizedBox(height: 20.h),
+          BackgroundCheckBanner(
+            onStart: () {
+              context.push(Routes.sitterVerifyIdentity);
+            },
           ),
           SizedBox(height: 20.h),
           // Section Title
@@ -125,7 +135,7 @@ class SitterHomeScreen extends ConsumerWidget {
                     return JobPreviewCard(
                       job: preview,
                       onViewDetails: () {
-                        // TODO: Navigate to job details
+                        context.push('${Routes.sitterJobDetails}/${job.id}');
                       },
                       onBookmark: () {
                         // TODO: Toggle bookmark

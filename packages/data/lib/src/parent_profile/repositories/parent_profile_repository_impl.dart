@@ -67,4 +67,9 @@ class ParentProfileRepositoryImpl implements ParentProfileRepository {
     // Only supporting POST (Add) for now based on requirements
     await _remoteDataSource.addChild(childData);
   }
+
+  @override
+  Future<void> markProfileComplete() async {
+    await _remoteDataSource.markProfileComplete();
+  }
 }

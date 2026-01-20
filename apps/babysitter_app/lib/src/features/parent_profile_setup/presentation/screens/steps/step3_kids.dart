@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
+import '../../providers/parent_profile_providers.dart';
 import '../../widgets/add_child_dialog.dart';
 
 /// Step 3: Add Kids - List of children with add button
@@ -60,7 +61,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
     setState(() => _kids.removeAt(index));
   }
 
-  void _saveAndNext() {
+  Future<void> _saveAndNext() async {
     if (_kids.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -70,8 +71,17 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
       );
       return;
     }
-    widget.profileData['kids'] = _kids;
-    widget.onNext();
+
+    // Call API for Step 2 (Children Mark Complete)
+    // As per user requirement: Step 2 - Children (mark complete after adding children via POST /children)
+    final success = await ref
+        .read(parentProfileControllerProvider.notifier)
+        .updateProfile(step: 2, data: {});
+
+    if (success && mounted) {
+      widget.profileData['kids'] = _kids;
+      widget.onNext();
+    }
   }
 
   @override

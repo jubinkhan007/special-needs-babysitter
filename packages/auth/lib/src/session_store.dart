@@ -99,6 +99,11 @@ class SessionStore {
     return _storage.read(key: Constants.accessTokenKey);
   }
 
+  /// Get stored refresh token
+  Future<String?> getRefreshToken() async {
+    return _storage.read(key: Constants.refreshTokenKey);
+  }
+
   /// Clear all stored session data
   Future<void> clearSession() async {
     await _storage.delete(key: Constants.accessTokenKey);

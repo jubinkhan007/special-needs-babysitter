@@ -5,6 +5,8 @@ import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../widgets/add_child_dialog.dart';
 import '../../widgets/add_emergency_contact_dialog.dart';
+import 'package:auth/auth.dart';
+import '../../providers/parent_profile_providers.dart';
 
 /// Step 4: Review Your Profile
 /// Matches Figma: Icon header, Profile Photo, Edit sections, Confirm button.
@@ -303,10 +305,30 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             const SizedBox(height: 48),
 
             // Footer Button
-            PrimaryActionButton(
-              label: 'Confirm & Continue',
-              onPressed: widget.onFinish,
-            ),
+            ref.watch(parentProfileControllerProvider).isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : PrimaryActionButton(
+                    label: 'Confirm & Continue',
+                    onPressed: () async {
+                      // Call API for Step 4 (Complete)
+                      final success = await ref
+                          .read(parentProfileControllerProvider.notifier)
+                          .updateProfile(step: 4, data: {});
+
+                      if (success) {
+                        // Mark profile complete on user record explicitly
+                        await ref
+                            .read(parentProfileControllerProvider.notifier)
+                            .markProfileComplete();
+
+                        // Refresh profile to update isProfileComplete flag in auth state
+                        await ref
+                            .read(authNotifierProvider.notifier)
+                            .refreshProfile();
+                        widget.onFinish();
+                      }
+                    },
+                  ),
             const SizedBox(height: 24),
           ],
         ),

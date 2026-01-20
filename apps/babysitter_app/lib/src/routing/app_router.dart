@@ -58,6 +58,11 @@ import '../features/support/presentation/support_chat_screen.dart';
 import '../features/calls/domain/audio_call_args.dart';
 import '../features/calls/domain/video_call_args.dart';
 import '../features/support/domain/support_chat_args.dart';
+import '../features/sitter/job_details/presentation/screens/sitter_job_details_screen.dart';
+import '../features/sitter/application/presentation/screens/sitter_application_preview_screen.dart';
+import '../features/sitter/background_check/presentation/screens/verify_identity_screen.dart';
+import '../features/sitter/background_check/presentation/screens/background_check_screen.dart';
+import '../features/sitter/background_check/presentation/screens/background_check_complete_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -139,7 +144,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Authenticated - get user from session (avoids currentUserProvider cycle)
       final user = session.user;
       print(
-          'DEBUG ROUTER: Authenticated, user.isProfileComplete=${user.isProfileComplete}, user.role=${user.role}');
+          'DEBUG ROUTER: Authenticated, user.id=${user.id}, user.isProfileComplete=${user.isProfileComplete}, user.role=${user.role}');
+      if (!user.isProfileComplete) {
+        print(
+            'DEBUG ROUTER: User object details for incomplete profile: firstName=${user.firstName}, lastName=${user.lastName}, email=${user.email}');
+      }
 
       // Authenticated but on auth/onboarding route, redirect to appropriate home
       if (isAuthRoute || isSplash || isOnboarding) {
@@ -511,6 +520,40 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final sitterId = state.pathParameters['sitterId'] ?? '';
           return SitterProfilePage(sitterId: sitterId);
         },
+      ),
+
+      // Sitter Job Details (outside shell for full-screen experience)
+      GoRoute(
+        path: '${Routes.sitterJobDetails}/:jobId',
+        builder: (context, state) {
+          final jobId = state.pathParameters['jobId'] ?? '';
+          return SitterJobDetailsScreen(jobId: jobId);
+        },
+        routes: [
+          GoRoute(
+            path: 'application-preview',
+            builder: (context, state) {
+              final jobId = state.pathParameters['jobId']!;
+              final coverLetter = state.extra as String? ?? '';
+              return SitterApplicationPreviewScreen(
+                jobId: jobId,
+                coverLetter: coverLetter,
+              );
+            },
+          ),
+        ],
+      ),
+      GoRoute(
+        path: Routes.sitterVerifyIdentity,
+        builder: (context, state) => const VerifyIdentityScreen(),
+      ),
+      GoRoute(
+        path: Routes.sitterBackgroundCheck,
+        builder: (context, state) => const BackgroundCheckScreen(),
+      ),
+      GoRoute(
+        path: Routes.sitterBackgroundCheckComplete,
+        builder: (context, state) => const BackgroundCheckCompleteScreen(),
       ),
 
       // Sitter shell

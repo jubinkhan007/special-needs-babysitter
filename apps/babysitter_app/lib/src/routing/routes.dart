@@ -59,6 +59,13 @@ class Routes {
   static const String sitterBookings = '/sitter/bookings';
   static const String sitterMessages = '/sitter/messages';
   static const String sitterAccount = '/sitter/account';
+  static const String sitterJobDetails = '/sitter/job-details';
+  static const String sitterApplicationPreview = '/sitter/jobs';
+  static const String sitterVerifyIdentity =
+      '/sitter/background-check/verify-identity';
+  static const String sitterBackgroundCheck = '/sitter/background-check/submit';
+  static const String sitterBackgroundCheckComplete =
+      '/sitter/background-check/complete';
 
   /// Check if route is an auth route
   static bool isAuthRoute(String path) {

@@ -27,11 +27,11 @@ class AuthRemoteDataSource {
         data['profileCompletion'] as Map<String, dynamic>?;
     if (profileCompletion != null) {
       final percentage = profileCompletion['percentage'] as num? ?? 0;
+      print('DEBUG: SignIn profileCompletion percentage=$percentage');
       if (percentage >= 100) {
         // Override profileSetupComplete to true since profile is 100% complete
         userMap['profileSetupComplete'] = true;
-        print(
-            'DEBUG: profileCompletion.percentage=$percentage, setting profileSetupComplete=true');
+        print('DEBUG: SignIn overriding profileSetupComplete=true');
       }
     }
 
@@ -125,7 +125,21 @@ class AuthRemoteDataSource {
     // We need to return AuthSessionDto, but standard fromJson might miss the cookie token
     // So we manually construct it if we found a cookie
     if (accessToken.isNotEmpty) {
-      final userMap = data['user'] as Map<String, dynamic>;
+      final userMap =
+          Map<String, dynamic>.from(data['user'] as Map<String, dynamic>);
+
+      // Check profileCompletion.percentage
+      final profileCompletion =
+          data['profileCompletion'] as Map<String, dynamic>?;
+      if (profileCompletion != null) {
+        final percentage = profileCompletion['percentage'] as num? ?? 0;
+        print('DEBUG: SignUp profileCompletion percentage=$percentage');
+        if (percentage >= 100) {
+          userMap['profileSetupComplete'] = true;
+          print('DEBUG: SignUp overriding profileSetupComplete=true');
+        }
+      }
+
       return AuthSessionDto(
         user: UserDto.fromJson(userMap),
         accessToken: accessToken,

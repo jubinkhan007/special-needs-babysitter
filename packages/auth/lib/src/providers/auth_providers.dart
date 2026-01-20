@@ -46,8 +46,59 @@ final authDioProvider = Provider<Dio>((ref) {
 
       return handler.next(options);
     },
-    onError: (DioException e, handler) {
+    onError: (DioException e, handler) async {
       print('DEBUG: AuthDio API Error: ${e.message} ${e.response?.statusCode}');
+
+      // Handle 401 Unauthorized (Token Expired)
+      if (e.response?.statusCode == 401) {
+        print('DEBUG: AuthDio encountered 401. Attempting token refresh...');
+        final sessionStore = ref.read(sessionStoreProvider);
+        final refreshToken = await sessionStore.getRefreshToken();
+
+        if (refreshToken != null && refreshToken.isNotEmpty) {
+          try {
+            // Create a temporary Dio to avoid circular interceptor issues
+            final tempDio = Dio(BaseOptions(
+              baseUrl: Constants.baseUrl,
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+            ));
+
+            print('DEBUG: AuthDio calling refresh endpoint...');
+            // Manually recreate AuthRemoteDataSource to use its valid logic including DTO parsing
+            final tempDataSource = AuthRemoteDataSource(tempDio);
+            final newSessionDto =
+                await tempDataSource.refreshToken(refreshToken);
+
+            print('DEBUG: AuthDio token refresh SUCCESS.');
+
+            // Map to domain entity
+            final newSession = AuthMappers.authSessionFromDto(newSessionDto);
+
+            // Update session store
+            await sessionStore.saveSession(newSession);
+
+            // Retry original request with new token
+            final options = e.requestOptions;
+            // Update cookie header
+            options.headers['Cookie'] = 'session_id=${newSession.accessToken}';
+
+            // Retry request using the main dio instance
+            final cloneReq = await dio.fetch(options);
+            return handler.resolve(cloneReq);
+          } catch (refreshError) {
+            print('DEBUG: AuthDio token refresh FAILED: $refreshError');
+            // If refresh fails, clear session and let the 401 propagate
+            await sessionStore.clearSession();
+          }
+        } else {
+          print('DEBUG: AuthDio No refresh token available.');
+          await sessionStore.clearSession();
+        }
+      }
+
       return handler.next(e);
     },
   ));
@@ -125,7 +176,8 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         // If profile status changed, update session
         if (freshUser.isProfileComplete != session.user.isProfileComplete ||
             freshUser.role != session.user.role) {
-          print('DEBUG: AuthNotifier detected stale session data. Updating...');
+          print(
+              'DEBUG: AuthNotifier detected stale session data. freshUser.isProfileComplete=${freshUser.isProfileComplete}, session.user.isProfileComplete=${session.user.isProfileComplete}');
           final updatedSession = session.copyWith(user: freshUser);
           await ref.read(sessionStoreProvider).saveSession(updatedSession);
           return updatedSession;
@@ -248,6 +300,26 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
 
     if (state.hasError) {
       print('DEBUG: AuthNotifier.verifyOtp ERROR: ${state.error}');
+    }
+  }
+
+  Future<void> refreshProfile() async {
+    final session = state.valueOrNull;
+    if (session == null) return;
+
+    try {
+      print('DEBUG: AuthNotifier.refreshProfile called');
+      final profileRepo = ref.read(profileRepositoryProvider);
+      final freshUser = await profileRepo.getMe();
+
+      final updatedSession = session.copyWith(user: freshUser);
+      await ref.read(sessionStoreProvider).saveSession(updatedSession);
+      state = AsyncValue.data(updatedSession);
+      print(
+          'DEBUG: AuthNotifier.refreshProfile success. isProfileComplete=${freshUser.isProfileComplete}');
+    } catch (e, st) {
+      print('DEBUG: AuthNotifier.refreshProfile failed: $e');
+      // If we can't refresh, keep the state as is
     }
   }
 }

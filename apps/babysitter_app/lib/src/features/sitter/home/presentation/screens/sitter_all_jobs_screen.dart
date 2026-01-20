@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../routing/routes.dart';
 import '../providers/sitter_home_providers.dart';
 import '../widgets/job_preview_card.dart';
 import '../mappers/job_preview_mapper.dart';
@@ -108,7 +110,9 @@ class SitterAllJobsScreen extends ConsumerWidget {
                     final preview = JobPreviewMapper.map(job);
                     return JobPreviewCard(
                       job: preview,
-                      onViewDetails: () {},
+                      onViewDetails: () {
+                        context.push('${Routes.sitterJobDetails}/${job.id}');
+                      },
                       onBookmark: () {},
                     );
                   },

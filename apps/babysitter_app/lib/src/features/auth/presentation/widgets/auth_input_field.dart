@@ -14,6 +14,8 @@ class AuthInputField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
+  final int? maxLength;
+  final TextCapitalization textCapitalization;
 
   const AuthInputField({
     super.key,
@@ -24,6 +26,8 @@ class AuthInputField extends StatelessWidget {
     this.textInputAction,
     this.suffixIcon,
     this.validator,
+    this.maxLength,
+    this.textCapitalization = TextCapitalization.none,
   });
 
   @override
@@ -33,6 +37,11 @@ class AuthInputField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
+      maxLength: maxLength,
+      textCapitalization: textCapitalization,
+      buildCounter: (context,
+              {required currentLength, required isFocused, maxLength}) =>
+          null, // Hide counter
       style: const TextStyle(
         fontSize: 15,
         color: AuthTheme.textDark,

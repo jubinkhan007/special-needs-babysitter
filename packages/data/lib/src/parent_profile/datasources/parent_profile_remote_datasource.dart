@@ -79,4 +79,16 @@ class ParentProfileRemoteDataSource {
       ),
     );
   }
+
+  /// PATCH /users/me
+  /// Used to explicitly mark profile as complete
+  Future<void> markProfileComplete() async {
+    await _dio.patch(
+      '/users/me',
+      data: {
+        'profileSetupComplete': true,
+        'profile_setup_complete': true,
+      },
+    );
+  }
 }

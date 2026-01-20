@@ -57,8 +57,27 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
   }
 
   void _onEditChild(Child child) {
-    // TODO: Navigate to edit child screen
-    debugPrint('Edit child: ${child.firstName}');
+    showDialog(
+      context: context,
+      builder: (context) => AddChildDialog(
+        existingChild: child.toMap(),
+        onSave: (data) async {
+          final success = await ref
+              .read(profileDetailsControllerProvider.notifier)
+              .updateChild(child.id, data);
+
+          if (success) {
+            ref.invalidate(profileDetailsProvider);
+          } else {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to update child')),
+              );
+            }
+          }
+        },
+      ),
+    );
   }
 
   void _onAddChild() {

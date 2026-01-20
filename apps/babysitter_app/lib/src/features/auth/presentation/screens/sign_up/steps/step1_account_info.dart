@@ -148,6 +148,8 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                   controller: _middleInitialController,
                   hint: 'Middle Initial',
                   textInputAction: TextInputAction.next,
+                  maxLength: 1,
+                  textCapitalization: TextCapitalization.characters,
                 ),
                 const SizedBox(height: 12),
 
