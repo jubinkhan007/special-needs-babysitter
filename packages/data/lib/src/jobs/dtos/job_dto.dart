@@ -68,13 +68,22 @@ class JobLocationDto with _$JobLocationDto {
       );
 }
 
-class GeoJsonConverter
-    implements JsonConverter<JobLocationDto?, Map<String, dynamic>?> {
+class GeoJsonConverter implements JsonConverter<JobLocationDto?, dynamic> {
   const GeoJsonConverter();
 
   @override
-  JobLocationDto? fromJson(Map<String, dynamic>? json) {
+  JobLocationDto? fromJson(dynamic json) {
     if (json == null) return null;
+
+    // If it comes as a string, try to decode it (if it's a JSON string) or ignore
+    if (json is String) {
+      // Optional: try to decode if we suspect it's a JSON string.
+      // For now, if it's a string not matching expectations, return null.
+      return null;
+    }
+
+    if (json is! Map<String, dynamic>) return null;
+
     // Handle GeoJSON format: { "type": "Point", "coordinates": [long, lat] }
     if (json['type'] == 'Point' && json['coordinates'] is List) {
       final coords = json['coordinates'] as List;
@@ -94,7 +103,7 @@ class GeoJsonConverter
   }
 
   @override
-  Map<String, dynamic>? toJson(JobLocationDto? object) {
+  dynamic toJson(JobLocationDto? object) {
     if (object == null) return null;
     return object.toJson();
   }
@@ -104,17 +113,25 @@ class GeoJsonConverter
 class JobDto with _$JobDto {
   const factory JobDto({
     String? id,
+    String? parentUserId,
     @Default([]) List<String> childIds,
     String? title,
     String? startDate,
     String? endDate,
     String? startTime,
     String? endTime,
-    required JobAddressDto address,
+    JobAddressDto? address,
     @GeoJsonConverter() JobLocationDto? location,
     String? additionalDetails,
     double? payRate,
     @Default(false) bool saveAsDraft,
+    String? status,
+    int? estimatedDuration,
+    double? estimatedTotal,
+    @Default([]) List<String> applicantIds,
+    String? acceptedSitterId,
+    DateTime? createdAt,
+    DateTime? postedAt,
   }) = _JobDto;
 
   const JobDto._();
@@ -123,6 +140,7 @@ class JobDto with _$JobDto {
 
   factory JobDto.fromDomain(Job job) => JobDto(
         id: job.id,
+        parentUserId: job.parentUserId,
         childIds: job.childIds,
         title: job.title,
         startDate: job.startDate,
@@ -136,20 +154,41 @@ class JobDto with _$JobDto {
         additionalDetails: job.additionalDetails,
         payRate: job.payRate,
         saveAsDraft: job.saveAsDraft,
+        status: job.status,
+        estimatedDuration: job.estimatedDuration,
+        estimatedTotal: job.estimatedTotal,
+        applicantIds: job.applicantIds,
+        acceptedSitterId: job.acceptedSitterId,
+        createdAt: job.createdAt,
+        postedAt: job.postedAt,
       );
 
   Job toDomain() => Job(
         id: id,
+        parentUserId: parentUserId,
         childIds: childIds,
         title: title ?? '',
         startDate: startDate ?? '',
         endDate: endDate ?? '',
         startTime: startTime ?? '',
         endTime: endTime ?? '',
-        address: address.toDomain(),
+        address: address?.toDomain() ??
+            const JobAddress(
+              streetAddress: '',
+              city: '',
+              state: '',
+              zipCode: '',
+            ),
         location: location?.toDomain(),
         additionalDetails: additionalDetails ?? '',
         payRate: payRate ?? 0.0,
         saveAsDraft: saveAsDraft,
+        status: status,
+        estimatedDuration: estimatedDuration,
+        estimatedTotal: estimatedTotal,
+        applicantIds: applicantIds,
+        acceptedSitterId: acceptedSitterId,
+        createdAt: createdAt,
+        postedAt: postedAt,
       );
 }

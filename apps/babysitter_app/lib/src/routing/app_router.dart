@@ -109,6 +109,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // Still loading auth state - stay on splash
       if (authState.isLoading) {
+        // Allow auth routes to handle their own loading state (spinners etc)
+        if (isAuthRoute) {
+          print('DEBUG ROUTER: isLoading, but on auth route, returning null');
+          return null;
+        }
+
         if (!isSplash) {
           print('DEBUG ROUTER: isLoading, returning /splash');
           return Routes.splash;

@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/sitter_profile_setup_providers.dart';
 import '../../widgets/onboarding_header.dart';
@@ -40,6 +42,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
       final controller =
           ref.read(sitterProfileSetupControllerProvider.notifier);
       final repository = ref.read(sitterProfileRepositoryProvider);
+      print('DEBUG UI: Step 9 Submit Button Tapped');
       final success = await controller.submitSitterProfile(repository);
 
       if (!mounted) return;
@@ -64,6 +67,31 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
         setState(() => _isSubmitting = false);
       }
     }
+  }
+
+  /// Returns the appropriate ImageProvider for the profile photo.
+  /// Uses FileImage for local file paths, AssetImage for assets.
+  /// Returns null for missing paths - CircleAvatar will show child icon.
+  ImageProvider? _getProfileImage(String? path) {
+    if (path == null || path.isEmpty) {
+      return null; // Let CircleAvatar use child icon
+    }
+    // Check if it's a local file path (starts with / or contains cache/data)
+    if (path.startsWith('/') ||
+        path.contains('cache') ||
+        path.contains('data')) {
+      final file = File(path);
+      if (file.existsSync()) {
+        return FileImage(file);
+      }
+      return null; // File doesn't exist
+    }
+    // Fallback to AssetImage if it looks like an asset path
+    if (path.startsWith('assets/')) {
+      return AssetImage(path);
+    }
+    // Default: return null
+    return null;
   }
 
   @override
@@ -111,13 +139,13 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                           CircleAvatar(
                             radius: 40,
                             backgroundColor: Colors.grey[200],
-                            backgroundImage: state.profilePhotoPath != null
-                                ? AssetImage(
-                                    state.profilePhotoPath!) // Mock/Local
-                                : const AssetImage(
-                                    'assets/images/placeholder_avatar.png'),
-                            // Ideally FileImage if local, but state stores string.
-                            // Assuming path is local file system or asset for this exercise.
+                            backgroundImage:
+                                _getProfileImage(state.profilePhotoPath),
+                            child: state.profilePhotoPath == null ||
+                                    state.profilePhotoPath!.isEmpty
+                                ? const Icon(Icons.person,
+                                    size: 40, color: Colors.grey)
+                                : null,
                           ),
                           Positioned(
                             bottom: 0,
@@ -225,7 +253,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                             fontFamily: 'Inter'),
                       ),
                       const SizedBox(height: 16),
-                      _buildCalendarLikeFigma(
+                      _buildCalendarLikeFigma(state,
                           onEdit: () =>
                               widget.onEditStep(7)), // 7 is Availability
                       const SizedBox(height: 24),
@@ -453,15 +481,51 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
     );
   }
 
-  // Purely visual implementation of the calendar to match Figma
-  Widget _buildCalendarLikeFigma({required VoidCallback onEdit}) {
-    // Figma shows Aug 2025.
-    // We will build the exact grid shown in the image roughly.
-    // S M T W T F S
-    // 26 27 28 29 30 31 1 ...
-    // ...
-    // 16 17 18 19 20 ... Green circles on 17, 18, 19, 20
-    // 23 24 25 26 27 ... Red circles on 24, 25, 26, 27
+  // Dynamic Calendar Implementation
+  Widget _buildCalendarLikeFigma(SitterProfileState state,
+      {required VoidCallback onEdit}) {
+    // Determine which month to show
+    DateTime targetDate = DateTime.now();
+    if (state.singleDate != null) {
+      targetDate = state.singleDate!;
+    } else if (state.dateRangeStart != null) {
+      targetDate = state.dateRangeStart!;
+    }
+
+    final monthName = DateFormat('MMM').format(targetDate);
+    final yearStr = DateFormat('yyyy').format(targetDate);
+
+    // Calculate calendar days
+    final daysInMonth = DateTime(targetDate.year, targetDate.month + 1, 0).day;
+    final firstDayOfMonth = DateTime(targetDate.year, targetDate.month, 1);
+    // Sunday = 7 in DateTime.weekday, but usually calendars show Sun as index 0.
+    // Let's assume standard layout S M T W T F S
+    // standard DateTime: Mon=1 ... Sun=7.
+    // We want Sun=0, Mon=1...Sat=6.
+    // So if weekday is 7 (Sun), index is 0. Else weekday.
+    final firstWeekdayIndex =
+        firstDayOfMonth.weekday == 7 ? 0 : firstDayOfMonth.weekday;
+
+    // We need a list of strings for the grid cells, and bools for styling.
+    // Total cells = padding + days. Round up to full weeks (rows).
+    final totalCells = ((firstWeekdayIndex + daysInMonth) / 7).ceil() * 7;
+
+    // Build days list
+    // Use empty string for padding days
+    List<String> dayLabels = [];
+    List<DateTime?> cellDates = [];
+
+    for (int i = 0; i < totalCells; i++) {
+      if (i < firstWeekdayIndex || i >= firstWeekdayIndex + daysInMonth) {
+        dayLabels.add('');
+        cellDates.add(null);
+      } else {
+        final dayNum = i - firstWeekdayIndex + 1;
+        dayLabels.add(dayNum.toString());
+        cellDates.add(DateTime(targetDate.year, targetDate.month, dayNum));
+      }
+    }
+
     return Column(
       children: [
         // Header
@@ -470,15 +534,18 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
           children: [
             IconButton(
                 icon: const Icon(Icons.chevron_left, color: _greyText),
-                onPressed: () {}),
+                onPressed: () {
+                  // In a real generic component, this would change month.
+                  // Here we just static to the selected date's month for "best effort".
+                }),
             Row(
-              children: const [
-                Text('Aug',
-                    style: TextStyle(
+              children: [
+                Text(monthName,
+                    style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: _textDark)),
-                Icon(Icons.arrow_drop_down, color: _greyText),
+                const Icon(Icons.arrow_drop_down, color: _greyText),
               ],
             ),
             IconButton(
@@ -486,13 +553,13 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                 onPressed: () {}),
             const Spacer(),
             Row(
-              children: const [
-                Text('2025',
-                    style: TextStyle(
+              children: [
+                Text(yearStr,
+                    style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: _textDark)),
-                Icon(Icons.arrow_drop_down, color: _greyText),
+                const Icon(Icons.arrow_drop_down, color: _greyText),
               ],
             ),
           ],
@@ -508,67 +575,86 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
               .toList(),
         ),
         const SizedBox(height: 12),
-        // Grid - We'll manually build 5 rows to match the look
-        _buildCalRow(['26', '27', '28', '29', '30', '31', '1'],
-            [true, true, true, true, true, true, false]),
-        _buildCalRow(['2', '3', '4', '5', '6', '7', '8'],
-            [false, false, false, false, false, false, false]),
-        _buildCalRow(['9', '10', '11', '12', '13', '14', '15'],
-            [false, false, false, false, false, false, false]),
-        _buildCalRow(['16', '17', '18', '19', '20', '21', '22'],
-            [false, false, false, false, false, false, false],
-            greenIndices: [1, 2, 3, 4]),
-        _buildCalRow(['23', '24', '25', '26', '27', '28', '29'],
-            [false, false, false, false, false, false, false],
-            redIndices: [1, 2, 3, 4]),
-        _buildCalRow(['30', '1', '2', '3', '4', '5', '6'],
-            [false, true, true, true, true, true, true]),
+        // Grid Rows
+        ...List.generate((totalCells / 7).round(), (rowIndex) {
+          final startIndex = rowIndex * 7;
+          final rowDays = dayLabels.sublist(startIndex, startIndex + 7);
+          final rowDates = cellDates.sublist(startIndex, startIndex + 7);
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(7, (colIndex) {
+                final text = rowDays[colIndex];
+                final date = rowDates[colIndex];
+
+                if (text.isEmpty || date == null) {
+                  return const SizedBox(width: 32, height: 32);
+                }
+
+                // Determine highlighting
+                bool isGreen = false;
+                // bool isRed = false; // Add this if we had "unavailable" logic to show
+
+                if (state.availabilityMode == AvailabilityMode.singleDay) {
+                  if (state.singleDate != null &&
+                      isSameDay(date, state.singleDate!)) {
+                    isGreen = true;
+                  }
+                } else {
+                  // Range
+                  if (state.dateRangeStart != null &&
+                      state.dateRangeEnd != null) {
+                    // Check if date is within start and end (inclusive)
+                    // Using isAtSameMomentAs to include start/end boundaries accurately
+                    final start = DateTime(state.dateRangeStart!.year,
+                        state.dateRangeStart!.month, state.dateRangeStart!.day);
+                    final end = DateTime(state.dateRangeEnd!.year,
+                        state.dateRangeEnd!.month, state.dateRangeEnd!.day);
+                    // Normalize current cell date to midnight
+                    final current = DateTime(date.year, date.month, date.day);
+
+                    if ((current.isAfter(start) ||
+                            current.isAtSameMomentAs(start)) &&
+                        (current.isBefore(end) ||
+                            current.isAtSameMomentAs(end))) {
+                      isGreen = true;
+                    }
+                  }
+                }
+
+                BoxDecoration? decoration;
+                if (isGreen) {
+                  decoration = BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.green, width: 1.5),
+                    color: Colors.green.withOpacity(0.1),
+                  );
+                }
+
+                return Container(
+                  width: 32,
+                  height: 32,
+                  decoration: decoration,
+                  alignment: Alignment.center,
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      color: _textDark,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                );
+              }),
+            ),
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildCalRow(List<String> days, List<bool> isGrey,
-      {List<int> greenIndices = const [], List<int> redIndices = const []}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(7, (index) {
-          final isGreen = greenIndices.contains(index);
-          final isRed = redIndices.contains(index);
-          final text = days[index];
-          final grey = isGrey[index];
-
-          BoxDecoration? decoration;
-          if (isGreen) {
-            decoration = BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.green, width: 1.5),
-              color: Colors.green.withOpacity(0.1),
-            );
-          } else if (isRed) {
-            decoration = BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.red, width: 1.5),
-              color: Colors.red.withOpacity(0.1),
-            );
-          }
-
-          return Container(
-            width: 32,
-            height: 32,
-            decoration: decoration,
-            alignment: Alignment.center,
-            child: Text(
-              text,
-              style: TextStyle(
-                color: grey ? Colors.grey[300] : _textDark,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          );
-        }),
-      ),
-    );
+  bool isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

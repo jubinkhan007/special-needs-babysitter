@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/sitter_profile_setup_providers.dart';
 import '../../widgets/onboarding_header.dart';
@@ -23,6 +25,58 @@ class Step3Location extends ConsumerStatefulWidget {
 class _Step3LocationState extends ConsumerState<Step3Location> {
   static const _textDark = Color(0xFF1A1A1A);
   static const _primaryBlue = Color(0xFF88CBE6);
+
+  bool _isLocating = false;
+
+  Future<void> _getCurrentLocation() async {
+    setState(() => _isLocating = true);
+
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw 'Location services are disabled.';
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw 'Location permissions are denied';
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw 'Location permissions are permanently denied. Please enable in settings.';
+      }
+
+      final position = await Geolocator.getCurrentPosition();
+
+      // Reverse geocoding
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      if (placemarks.isNotEmpty && mounted) {
+        final place = placemarks.first;
+        // Construct address like "City, State"
+        final city = place.locality ?? '';
+        final state = place.administrativeArea ?? '';
+        final address = '$city, $state';
+
+        ref.read(sitterProfileSetupControllerProvider.notifier).updateLocation(
+            address: address, lat: position.latitude, lng: position.longitude);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isLocating = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,20 +184,17 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
 
                   // Use Current Location Button
                   OutlinedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Simulating location fetch...')));
-                      // Simulate fetching a location
-                      Future.delayed(const Duration(seconds: 1), () {
-                        controller.updateLocation(
-                            address: 'San Francisco, CA',
-                            lat: 37.7749,
-                            lng: -122.4194);
-                      });
-                    },
-                    icon: const Icon(Icons.my_location, color: _primaryBlue),
-                    label: const Text('Use my Current Location',
-                        style: TextStyle(
+                    onPressed: _isLocating ? null : _getCurrentLocation,
+                    icon: _isLocating
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2, color: _primaryBlue))
+                        : const Icon(Icons.my_location, color: _primaryBlue),
+                    label: Text(
+                        _isLocating ? 'Locating...' : 'Use my Current Location',
+                        style: const TextStyle(
                             color: _primaryBlue,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Inter',

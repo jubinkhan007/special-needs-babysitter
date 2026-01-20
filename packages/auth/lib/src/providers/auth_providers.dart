@@ -114,6 +114,28 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     print('DEBUG: AuthNotifier.build called');
     final session = await ref.read(authRepositoryProvider).getCurrentSession();
     print('DEBUG: AuthNotifier.build session loaded: ${session != null}');
+
+    // If we have a session, refresh the user profile to ensure up-to-date status
+    if (session != null) {
+      try {
+        print('DEBUG: AuthNotifier refreshing user profile...');
+        final profileRepo = ref.read(profileRepositoryProvider);
+        final freshUser = await profileRepo.getMe();
+
+        // If profile status changed, update session
+        if (freshUser.isProfileComplete != session.user.isProfileComplete ||
+            freshUser.role != session.user.role) {
+          print('DEBUG: AuthNotifier detected stale session data. Updating...');
+          final updatedSession = session.copyWith(user: freshUser);
+          await ref.read(sessionStoreProvider).saveSession(updatedSession);
+          return updatedSession;
+        }
+      } catch (e) {
+        print('DEBUG: AuthNotifier failed to refresh profile: $e');
+        // Continue with stored session if fetch fails (offline etc)
+      }
+    }
+
     return session;
   }
 

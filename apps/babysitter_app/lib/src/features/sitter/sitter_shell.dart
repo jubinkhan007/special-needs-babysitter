@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:core/core.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../parent/home/presentation/theme/home_design_tokens.dart';
 
 import '../../routing/routes.dart';
 
@@ -16,7 +17,7 @@ class SitterShell extends StatelessWidget {
     if (location == Routes.sitterJobs) return 1;
     if (location == Routes.sitterBookings) return 2;
     if (location == Routes.sitterMessages) return 3;
-    if (location == Routes.sitterAccount) return 4;
+    if (location.startsWith(Routes.sitterAccount)) return 4;
     return 0;
   }
 
@@ -42,38 +43,97 @@ class SitterShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedColor = HomeDesignTokens.bottomNavSelected;
+    final unselectedColor = HomeDesignTokens.bottomNavUnselected;
+
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _calculateSelectedIndex(context),
-        onDestinationSelected: (index) => _onItemTapped(context, index),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.work_outline),
-            selectedIcon: Icon(Icons.work),
-            label: 'Find Jobs',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_today_outlined),
-            selectedIcon: Icon(Icons.calendar_today),
-            label: 'Bookings',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.message_outlined),
-            selectedIcon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
+      bottomNavigationBar: Container(
+        height: HomeDesignTokens.bottomNavHeight,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _calculateSelectedIndex(context),
+          onTap: (index) => _onItemTapped(context, index),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: selectedColor,
+          unselectedItemColor: unselectedColor,
+          selectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
+          unselectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
+          elevation: 0,
+          items: [
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_home.svg',
+                colorFilter: ColorFilter.mode(unselectedColor, BlendMode.srcIn),
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_home.svg',
+                colorFilter: ColorFilter.mode(selectedColor, BlendMode.srcIn),
+              ),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_jobs.svg',
+                colorFilter: ColorFilter.mode(unselectedColor, BlendMode.srcIn),
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_jobs.svg',
+                colorFilter: ColorFilter.mode(selectedColor, BlendMode.srcIn),
+              ),
+              label: 'Jobs',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/bottom_nav/ic_bookings.png',
+                color: unselectedColor,
+                width: 24,
+                height: 24,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/bottom_nav/ic_bookings.png',
+                color: selectedColor,
+                width: 24,
+                height: 24,
+              ),
+              label: 'Bookings',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_messages.svg',
+                colorFilter: ColorFilter.mode(unselectedColor, BlendMode.srcIn),
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_messages.svg',
+                colorFilter: ColorFilter.mode(selectedColor, BlendMode.srcIn),
+              ),
+              label: 'Messages',
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_account.svg',
+                colorFilter: ColorFilter.mode(unselectedColor, BlendMode.srcIn),
+              ),
+              activeIcon: SvgPicture.asset(
+                'assets/icons/bottom_nav/ic_account.svg',
+                colorFilter: ColorFilter.mode(selectedColor, BlendMode.srcIn),
+              ),
+              label: 'Account',
+            ),
+          ],
+        ),
       ),
     );
   }

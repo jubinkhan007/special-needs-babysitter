@@ -6,12 +6,14 @@ class UpdateProfileParams {
   final String? lastName;
   final String? phoneNumber;
   final String? avatarUrl;
+  final bool? isProfileComplete;
 
   const UpdateProfileParams({
     this.firstName,
     this.lastName,
     this.phoneNumber,
     this.avatarUrl,
+    this.isProfileComplete,
   });
 }
 

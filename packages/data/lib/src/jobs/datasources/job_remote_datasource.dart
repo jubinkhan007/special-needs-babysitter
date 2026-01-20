@@ -27,13 +27,33 @@ class JobRemoteDataSource {
     }
   }
 
-  Future<List<JobDto>> getJobs() async {
+  Future<List<JobDto>> getJobs({
+    String? status,
+    int? limit,
+    int? offset,
+  }) async {
     try {
-      final response = await _dio.get('/jobs');
+      final queryParams = <String, dynamic>{};
+      if (status != null) queryParams['status'] = status;
+      if (limit != null) queryParams['limit'] = limit;
+      if (offset != null) queryParams['offset'] = offset;
+
+      print('DEBUG: JobRemoteDataSource.getJobs called with status=$status');
+      final response = await _dio.get(
+        '/jobs',
+        queryParameters: queryParams,
+      );
+      print(
+          'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}');
       if (response.data['success'] == true) {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
-        return jobsJson.map((json) => JobDto.fromJson(json)).toList();
+        print(
+            'DEBUG: JobRemoteDataSource found ${jobsJson.length} jobs in response');
+        return jobsJson
+            .map((json) => JobDto.fromJson(json as Map<String, dynamic>))
+            .toList();
       } else {
+        print('DEBUG: JobRemoteDataSource failed: ${response.data}');
         throw Exception('Failed to fetch jobs');
       }
     } catch (e) {

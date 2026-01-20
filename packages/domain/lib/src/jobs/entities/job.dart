@@ -49,6 +49,7 @@ class JobLocation extends Equatable {
 /// Job entity representing a job posting.
 class Job extends Equatable {
   final String? id;
+  final String? parentUserId;
   final List<String> childIds;
   final String title;
   final String startDate; // Represented as YYYY-MM-DD
@@ -60,9 +61,17 @@ class Job extends Equatable {
   final String additionalDetails;
   final double payRate;
   final bool saveAsDraft;
+  final String? status;
+  final int? estimatedDuration;
+  final double? estimatedTotal;
+  final List<String> applicantIds;
+  final String? acceptedSitterId;
+  final DateTime? createdAt;
+  final DateTime? postedAt;
 
   const Job({
     this.id,
+    this.parentUserId,
     required this.childIds,
     required this.title,
     required this.startDate,
@@ -74,11 +83,19 @@ class Job extends Equatable {
     required this.additionalDetails,
     required this.payRate,
     this.saveAsDraft = false,
+    this.status,
+    this.estimatedDuration,
+    this.estimatedTotal,
+    this.applicantIds = const [],
+    this.acceptedSitterId,
+    this.createdAt,
+    this.postedAt,
   });
 
   @override
   List<Object?> get props => [
         id,
+        parentUserId,
         childIds,
         title,
         startDate,
@@ -90,5 +107,12 @@ class Job extends Equatable {
         additionalDetails,
         payRate,
         saveAsDraft,
+        status,
+        estimatedDuration,
+        estimatedTotal,
+        applicantIds,
+        acceptedSitterId,
+        createdAt,
+        postedAt,
       ];
 }

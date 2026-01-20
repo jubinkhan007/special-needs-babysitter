@@ -34,11 +34,14 @@ class _SitterSearchResultsScreenState
     super.dispose();
   }
 
-  Future<void> _inviteSitter(String jobId, String sitterId) async {
+  Future<void> _inviteSitter(
+      String jobId, String sitterId, String userId) async {
     try {
-      await ref.read(jobsRepositoryProvider).inviteSitter(jobId, sitterId);
+      // API expects userId
+      await ref.read(jobsRepositoryProvider).inviteSitter(jobId, userId);
       if (mounted) {
         setState(() {
+          // UI tracking uses sitterId
           _invitedSitterIds.add(sitterId);
         });
         ScaffoldMessenger.of(context).showSnackBar(
@@ -135,7 +138,8 @@ class _SitterSearchResultsScreenState
                                   onInvite: jobId != null
                                       ? () {
                                           if (!isInvited) {
-                                            _inviteSitter(jobId, sitter.id);
+                                            _inviteSitter(jobId, sitter.id,
+                                                sitter.userId);
                                           }
                                         }
                                       : null,

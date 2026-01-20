@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../common/theme/auth_theme.dart';
 
 class DobDropdownRow extends StatelessWidget {
   final DateTime? dob;
@@ -61,6 +62,24 @@ class DobDropdownRow extends StatelessWidget {
             initialDate: dob ?? DateTime(1995),
             firstDate: DateTime(1900),
             lastDate: DateTime.now(),
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: AuthTheme.primaryBlue, // Header background color
+                    onPrimary: Colors.white, // Header text color
+                    onSurface: Color(0xFF1A1A1A), // Body text color
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor:
+                          AuthTheme.primaryBlue, // Button text color
+                    ),
+                  ),
+                ),
+                child: child!,
+              );
+            },
           );
           if (picked != null) onDateSelected(picked);
         },

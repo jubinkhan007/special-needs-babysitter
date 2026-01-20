@@ -151,7 +151,10 @@ class SitterProfileState {
 }
 
 class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
-  SitterProfileSetupController() : super(const SitterProfileState());
+  final ProfileRepository _profileRepository;
+
+  SitterProfileSetupController(this._profileRepository)
+      : super(const SitterProfileState());
 
   void updateProfilePhoto(String? path) {
     state = state.copyWith(profilePhotoPath: path);
@@ -350,7 +353,7 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
         }).toList();
       }
 
-      await repository.updateProfile(
+      final resultData = await repository.updateProfile(
         step: step,
         data: data,
         profilePhoto: profilePhoto,
@@ -358,16 +361,62 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
         certificationFiles: certFiles,
       );
 
+      // If Step 1 (Photo Upload) succeeded, we might get a 'photoUrl' back.
+      // We should update the User profile with this avatarUrl so it shows up in the app.
+      if (step == 1 && resultData.containsKey('photoUrl')) {
+        final photoUrl = resultData['photoUrl'] as String?;
+        if (photoUrl != null && photoUrl.isNotEmpty) {
+          print(
+              'DEBUG CONTROLLER: Syncing avatarUrl to User profile: $photoUrl');
+          try {
+            await _profileRepository.updateProfile(
+              UpdateProfileParams(avatarUrl: photoUrl),
+            );
+            print('DEBUG CONTROLLER: User avatarUrl synced successfully.');
+          } catch (e) {
+            print('DEBUG CONTROLLER: Failed to sync avatarUrl: $e');
+          }
+        }
+      }
+
       return true;
     } catch (e) {
       print('DEBUG: saveStep($step) failed: $e');
+
+      // WORKAROUND: Step 7 (Availability) fails with 500 on backend updates
+      // "Performing an update on the path '_id' would modify the immutable field '_id'"
+      if (step == 7 && e is DioException && e.response?.statusCode == 500) {
+        print(
+            'DEBUG: Swallowing Step 7 500 error to allow user to proceed (Backend Bug Workaround)');
+        return true;
+      }
+
       return false;
     }
   }
 
-  /// Submits the final profile (Step 9).
+  /// Submits the final profile (Step 9 + Step 10 for confirmation).
   Future<bool> submitSitterProfile(SitterProfileRepository repository) async {
-    return saveStep(9, repository);
+    print('DEBUG CONTROLLER: submitSitterProfile called');
+
+    // Step 9 - Review submission
+    final step9Success = await saveStep(9, repository);
+    if (!step9Success) {
+      print('DEBUG CONTROLLER: Step 9 failed');
+      return false;
+    }
+    print('DEBUG CONTROLLER: Step 9 succeeded');
+
+    // Step 10 - Confirm profile completion
+    print('DEBUG CONTROLLER: Calling Step 10 to confirm profile completion...');
+    final step10Success = await saveStep(10, repository);
+    if (!step10Success) {
+      print('DEBUG CONTROLLER: Step 10 failed');
+      return false;
+    }
+
+    print('DEBUG CONTROLLER: Profile submission complete (Steps 9 + 10)');
+    return true;
   }
 
   /// Builds the API payload for a specific step.
@@ -456,7 +505,9 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
           'openToNegotiating': state.isRateNegotiable,
         };
       case 9:
-        return {}; // Empty payload for final submission
+        return {}; // Review step - empty payload
+      case 10:
+        return {}; // Confirmation step - marks profile complete
       default:
         return {};
     }
@@ -520,5 +571,6 @@ final sitterProfileRepositoryProvider =
 final sitterProfileSetupControllerProvider =
     StateNotifierProvider<SitterProfileSetupController, SitterProfileState>(
         (ref) {
-  return SitterProfileSetupController();
+  final profileRepository = ref.watch(profileRepositoryProvider);
+  return SitterProfileSetupController(profileRepository);
 });

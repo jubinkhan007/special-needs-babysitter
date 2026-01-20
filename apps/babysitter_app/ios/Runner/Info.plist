@@ -64,5 +64,9 @@
 	<!-- Face ID (optional) -->
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app uses Face ID for secure authentication.</string>
+
+    <!-- Location -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to help families find you nearby.</string>
 </dict>
 </plist>

@@ -121,9 +121,11 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                 const SizedBox(height: 16),
 
                 // Title - pure dark, not blue-tinted
-                const Text(
-                  'Create Your Account',
-                  style: TextStyle(
+                Text(
+                  widget.formData['role'] == 'sitter'
+                      ? 'Create Your Sitter Account'
+                      : 'Create Your Family Account',
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF1A1A1A), // Pure dark, not teal

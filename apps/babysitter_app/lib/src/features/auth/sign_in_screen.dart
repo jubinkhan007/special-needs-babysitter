@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:auth/auth.dart';
+import 'package:core/core.dart';
 
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
@@ -44,9 +45,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
     final authState = ref.read(authNotifierProvider);
     if (authState.hasError) {
+      final appError = AppErrorHandler.parse(authState.error!);
+      // Login-specific: 401 means invalid credentials, not session expired
+      final message = appError.type == AppExceptionType.unauthorized
+          ? 'Invalid email or password. Please try again.'
+          : appError.message;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(authState.error.toString()),
+          content: Text(message),
           backgroundColor: AuthTheme.errorRed,
         ),
       );

@@ -43,6 +43,7 @@ Map<String, dynamic> _$$JobLocationDtoImplToJson(
 
 _$JobDtoImpl _$$JobDtoImplFromJson(Map<String, dynamic> json) => _$JobDtoImpl(
       id: json['id'] as String?,
+      parentUserId: json['parentUserId'] as String?,
       childIds: (json['childIds'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -52,17 +53,33 @@ _$JobDtoImpl _$$JobDtoImplFromJson(Map<String, dynamic> json) => _$JobDtoImpl(
       endDate: json['endDate'] as String?,
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
-      address: JobAddressDto.fromJson(json['address'] as Map<String, dynamic>),
-      location: const GeoJsonConverter()
-          .fromJson(json['location'] as Map<String, dynamic>?),
+      address: json['address'] == null
+          ? null
+          : JobAddressDto.fromJson(json['address'] as Map<String, dynamic>),
+      location: const GeoJsonConverter().fromJson(json['location']),
       additionalDetails: json['additionalDetails'] as String?,
       payRate: (json['payRate'] as num?)?.toDouble(),
       saveAsDraft: json['saveAsDraft'] as bool? ?? false,
+      status: json['status'] as String?,
+      estimatedDuration: (json['estimatedDuration'] as num?)?.toInt(),
+      estimatedTotal: (json['estimatedTotal'] as num?)?.toDouble(),
+      applicantIds: (json['applicantIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      acceptedSitterId: json['acceptedSitterId'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      postedAt: json['postedAt'] == null
+          ? null
+          : DateTime.parse(json['postedAt'] as String),
     );
 
 Map<String, dynamic> _$$JobDtoImplToJson(_$JobDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'parentUserId': instance.parentUserId,
       'childIds': instance.childIds,
       'title': instance.title,
       'startDate': instance.startDate,
@@ -74,4 +91,11 @@ Map<String, dynamic> _$$JobDtoImplToJson(_$JobDtoImpl instance) =>
       'additionalDetails': instance.additionalDetails,
       'payRate': instance.payRate,
       'saveAsDraft': instance.saveAsDraft,
+      'status': instance.status,
+      'estimatedDuration': instance.estimatedDuration,
+      'estimatedTotal': instance.estimatedTotal,
+      'applicantIds': instance.applicantIds,
+      'acceptedSitterId': instance.acceptedSitterId,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'postedAt': instance.postedAt?.toIso8601String(),
     };

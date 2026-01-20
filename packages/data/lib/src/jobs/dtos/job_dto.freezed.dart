@@ -475,18 +475,26 @@ JobDto _$JobDtoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$JobDto {
   String? get id => throw _privateConstructorUsedError;
+  String? get parentUserId => throw _privateConstructorUsedError;
   List<String> get childIds => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get startDate => throw _privateConstructorUsedError;
   String? get endDate => throw _privateConstructorUsedError;
   String? get startTime => throw _privateConstructorUsedError;
   String? get endTime => throw _privateConstructorUsedError;
-  JobAddressDto get address => throw _privateConstructorUsedError;
+  JobAddressDto? get address => throw _privateConstructorUsedError;
   @GeoJsonConverter()
   JobLocationDto? get location => throw _privateConstructorUsedError;
   String? get additionalDetails => throw _privateConstructorUsedError;
   double? get payRate => throw _privateConstructorUsedError;
   bool get saveAsDraft => throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+  int? get estimatedDuration => throw _privateConstructorUsedError;
+  double? get estimatedTotal => throw _privateConstructorUsedError;
+  List<String> get applicantIds => throw _privateConstructorUsedError;
+  String? get acceptedSitterId => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get postedAt => throw _privateConstructorUsedError;
 
   /// Serializes this JobDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -504,19 +512,27 @@ abstract class $JobDtoCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
+      String? parentUserId,
       List<String> childIds,
       String? title,
       String? startDate,
       String? endDate,
       String? startTime,
       String? endTime,
-      JobAddressDto address,
+      JobAddressDto? address,
       @GeoJsonConverter() JobLocationDto? location,
       String? additionalDetails,
       double? payRate,
-      bool saveAsDraft});
+      bool saveAsDraft,
+      String? status,
+      int? estimatedDuration,
+      double? estimatedTotal,
+      List<String> applicantIds,
+      String? acceptedSitterId,
+      DateTime? createdAt,
+      DateTime? postedAt});
 
-  $JobAddressDtoCopyWith<$Res> get address;
+  $JobAddressDtoCopyWith<$Res>? get address;
   $JobLocationDtoCopyWith<$Res>? get location;
 }
 
@@ -536,22 +552,34 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
   @override
   $Res call({
     Object? id = freezed,
+    Object? parentUserId = freezed,
     Object? childIds = null,
     Object? title = freezed,
     Object? startDate = freezed,
     Object? endDate = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
-    Object? address = null,
+    Object? address = freezed,
     Object? location = freezed,
     Object? additionalDetails = freezed,
     Object? payRate = freezed,
     Object? saveAsDraft = null,
+    Object? status = freezed,
+    Object? estimatedDuration = freezed,
+    Object? estimatedTotal = freezed,
+    Object? applicantIds = null,
+    Object? acceptedSitterId = freezed,
+    Object? createdAt = freezed,
+    Object? postedAt = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parentUserId: freezed == parentUserId
+          ? _value.parentUserId
+          : parentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
       childIds: null == childIds
           ? _value.childIds
@@ -577,10 +605,10 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
               as String?,
-      address: null == address
+      address: freezed == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as JobAddressDto,
+              as JobAddressDto?,
       location: freezed == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
@@ -597,6 +625,34 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
           ? _value.saveAsDraft
           : saveAsDraft // ignore: cast_nullable_to_non_nullable
               as bool,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      estimatedDuration: freezed == estimatedDuration
+          ? _value.estimatedDuration
+          : estimatedDuration // ignore: cast_nullable_to_non_nullable
+              as int?,
+      estimatedTotal: freezed == estimatedTotal
+          ? _value.estimatedTotal
+          : estimatedTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+      applicantIds: null == applicantIds
+          ? _value.applicantIds
+          : applicantIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      acceptedSitterId: freezed == acceptedSitterId
+          ? _value.acceptedSitterId
+          : acceptedSitterId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      postedAt: freezed == postedAt
+          ? _value.postedAt
+          : postedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 
@@ -604,8 +660,12 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $JobAddressDtoCopyWith<$Res> get address {
-    return $JobAddressDtoCopyWith<$Res>(_value.address, (value) {
+  $JobAddressDtoCopyWith<$Res>? get address {
+    if (_value.address == null) {
+      return null;
+    }
+
+    return $JobAddressDtoCopyWith<$Res>(_value.address!, (value) {
       return _then(_value.copyWith(address: value) as $Val);
     });
   }
@@ -634,20 +694,28 @@ abstract class _$$JobDtoImplCopyWith<$Res> implements $JobDtoCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
+      String? parentUserId,
       List<String> childIds,
       String? title,
       String? startDate,
       String? endDate,
       String? startTime,
       String? endTime,
-      JobAddressDto address,
+      JobAddressDto? address,
       @GeoJsonConverter() JobLocationDto? location,
       String? additionalDetails,
       double? payRate,
-      bool saveAsDraft});
+      bool saveAsDraft,
+      String? status,
+      int? estimatedDuration,
+      double? estimatedTotal,
+      List<String> applicantIds,
+      String? acceptedSitterId,
+      DateTime? createdAt,
+      DateTime? postedAt});
 
   @override
-  $JobAddressDtoCopyWith<$Res> get address;
+  $JobAddressDtoCopyWith<$Res>? get address;
   @override
   $JobLocationDtoCopyWith<$Res>? get location;
 }
@@ -666,22 +734,34 @@ class __$$JobDtoImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
+    Object? parentUserId = freezed,
     Object? childIds = null,
     Object? title = freezed,
     Object? startDate = freezed,
     Object? endDate = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
-    Object? address = null,
+    Object? address = freezed,
     Object? location = freezed,
     Object? additionalDetails = freezed,
     Object? payRate = freezed,
     Object? saveAsDraft = null,
+    Object? status = freezed,
+    Object? estimatedDuration = freezed,
+    Object? estimatedTotal = freezed,
+    Object? applicantIds = null,
+    Object? acceptedSitterId = freezed,
+    Object? createdAt = freezed,
+    Object? postedAt = freezed,
   }) {
     return _then(_$JobDtoImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      parentUserId: freezed == parentUserId
+          ? _value.parentUserId
+          : parentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
       childIds: null == childIds
           ? _value._childIds
@@ -707,10 +787,10 @@ class __$$JobDtoImplCopyWithImpl<$Res>
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
               as String?,
-      address: null == address
+      address: freezed == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
-              as JobAddressDto,
+              as JobAddressDto?,
       location: freezed == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
@@ -727,6 +807,34 @@ class __$$JobDtoImplCopyWithImpl<$Res>
           ? _value.saveAsDraft
           : saveAsDraft // ignore: cast_nullable_to_non_nullable
               as bool,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      estimatedDuration: freezed == estimatedDuration
+          ? _value.estimatedDuration
+          : estimatedDuration // ignore: cast_nullable_to_non_nullable
+              as int?,
+      estimatedTotal: freezed == estimatedTotal
+          ? _value.estimatedTotal
+          : estimatedTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+      applicantIds: null == applicantIds
+          ? _value._applicantIds
+          : applicantIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      acceptedSitterId: freezed == acceptedSitterId
+          ? _value.acceptedSitterId
+          : acceptedSitterId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      postedAt: freezed == postedAt
+          ? _value.postedAt
+          : postedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -736,18 +844,27 @@ class __$$JobDtoImplCopyWithImpl<$Res>
 class _$JobDtoImpl extends _JobDto {
   const _$JobDtoImpl(
       {this.id,
+      this.parentUserId,
       final List<String> childIds = const [],
       this.title,
       this.startDate,
       this.endDate,
       this.startTime,
       this.endTime,
-      required this.address,
+      this.address,
       @GeoJsonConverter() this.location,
       this.additionalDetails,
       this.payRate,
-      this.saveAsDraft = false})
+      this.saveAsDraft = false,
+      this.status,
+      this.estimatedDuration,
+      this.estimatedTotal,
+      final List<String> applicantIds = const [],
+      this.acceptedSitterId,
+      this.createdAt,
+      this.postedAt})
       : _childIds = childIds,
+        _applicantIds = applicantIds,
         super._();
 
   factory _$JobDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -755,6 +872,8 @@ class _$JobDtoImpl extends _JobDto {
 
   @override
   final String? id;
+  @override
+  final String? parentUserId;
   final List<String> _childIds;
   @override
   @JsonKey()
@@ -775,7 +894,7 @@ class _$JobDtoImpl extends _JobDto {
   @override
   final String? endTime;
   @override
-  final JobAddressDto address;
+  final JobAddressDto? address;
   @override
   @GeoJsonConverter()
   final JobLocationDto? location;
@@ -786,10 +905,31 @@ class _$JobDtoImpl extends _JobDto {
   @override
   @JsonKey()
   final bool saveAsDraft;
+  @override
+  final String? status;
+  @override
+  final int? estimatedDuration;
+  @override
+  final double? estimatedTotal;
+  final List<String> _applicantIds;
+  @override
+  @JsonKey()
+  List<String> get applicantIds {
+    if (_applicantIds is EqualUnmodifiableListView) return _applicantIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_applicantIds);
+  }
+
+  @override
+  final String? acceptedSitterId;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? postedAt;
 
   @override
   String toString() {
-    return 'JobDto(id: $id, childIds: $childIds, title: $title, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, address: $address, location: $location, additionalDetails: $additionalDetails, payRate: $payRate, saveAsDraft: $saveAsDraft)';
+    return 'JobDto(id: $id, parentUserId: $parentUserId, childIds: $childIds, title: $title, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, address: $address, location: $location, additionalDetails: $additionalDetails, payRate: $payRate, saveAsDraft: $saveAsDraft, status: $status, estimatedDuration: $estimatedDuration, estimatedTotal: $estimatedTotal, applicantIds: $applicantIds, acceptedSitterId: $acceptedSitterId, createdAt: $createdAt, postedAt: $postedAt)';
   }
 
   @override
@@ -798,6 +938,8 @@ class _$JobDtoImpl extends _JobDto {
         (other.runtimeType == runtimeType &&
             other is _$JobDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.parentUserId, parentUserId) ||
+                other.parentUserId == parentUserId) &&
             const DeepCollectionEquality().equals(other._childIds, _childIds) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.startDate, startDate) ||
@@ -813,25 +955,47 @@ class _$JobDtoImpl extends _JobDto {
                 other.additionalDetails == additionalDetails) &&
             (identical(other.payRate, payRate) || other.payRate == payRate) &&
             (identical(other.saveAsDraft, saveAsDraft) ||
-                other.saveAsDraft == saveAsDraft));
+                other.saveAsDraft == saveAsDraft) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.estimatedDuration, estimatedDuration) ||
+                other.estimatedDuration == estimatedDuration) &&
+            (identical(other.estimatedTotal, estimatedTotal) ||
+                other.estimatedTotal == estimatedTotal) &&
+            const DeepCollectionEquality()
+                .equals(other._applicantIds, _applicantIds) &&
+            (identical(other.acceptedSitterId, acceptedSitterId) ||
+                other.acceptedSitterId == acceptedSitterId) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.postedAt, postedAt) ||
+                other.postedAt == postedAt));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      const DeepCollectionEquality().hash(_childIds),
-      title,
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      address,
-      location,
-      additionalDetails,
-      payRate,
-      saveAsDraft);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        parentUserId,
+        const DeepCollectionEquality().hash(_childIds),
+        title,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        address,
+        location,
+        additionalDetails,
+        payRate,
+        saveAsDraft,
+        status,
+        estimatedDuration,
+        estimatedTotal,
+        const DeepCollectionEquality().hash(_applicantIds),
+        acceptedSitterId,
+        createdAt,
+        postedAt
+      ]);
 
   /// Create a copy of JobDto
   /// with the given fields replaced by the non-null parameter values.
@@ -852,23 +1016,33 @@ class _$JobDtoImpl extends _JobDto {
 abstract class _JobDto extends JobDto {
   const factory _JobDto(
       {final String? id,
+      final String? parentUserId,
       final List<String> childIds,
       final String? title,
       final String? startDate,
       final String? endDate,
       final String? startTime,
       final String? endTime,
-      required final JobAddressDto address,
+      final JobAddressDto? address,
       @GeoJsonConverter() final JobLocationDto? location,
       final String? additionalDetails,
       final double? payRate,
-      final bool saveAsDraft}) = _$JobDtoImpl;
+      final bool saveAsDraft,
+      final String? status,
+      final int? estimatedDuration,
+      final double? estimatedTotal,
+      final List<String> applicantIds,
+      final String? acceptedSitterId,
+      final DateTime? createdAt,
+      final DateTime? postedAt}) = _$JobDtoImpl;
   const _JobDto._() : super._();
 
   factory _JobDto.fromJson(Map<String, dynamic> json) = _$JobDtoImpl.fromJson;
 
   @override
   String? get id;
+  @override
+  String? get parentUserId;
   @override
   List<String> get childIds;
   @override
@@ -882,7 +1056,7 @@ abstract class _JobDto extends JobDto {
   @override
   String? get endTime;
   @override
-  JobAddressDto get address;
+  JobAddressDto? get address;
   @override
   @GeoJsonConverter()
   JobLocationDto? get location;
@@ -892,6 +1066,20 @@ abstract class _JobDto extends JobDto {
   double? get payRate;
   @override
   bool get saveAsDraft;
+  @override
+  String? get status;
+  @override
+  int? get estimatedDuration;
+  @override
+  double? get estimatedTotal;
+  @override
+  List<String> get applicantIds;
+  @override
+  String? get acceptedSitterId;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get postedAt;
 
   /// Create a copy of JobDto
   /// with the given fields replaced by the non-null parameter values.

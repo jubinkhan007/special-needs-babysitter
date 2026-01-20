@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:core/core.dart';
 import 'package:ui_kit/ui_kit.dart'; // For AppSpacing/Colors if needed, but using custom constants mostly
 
 import 'account_ui_constants.dart';
@@ -76,7 +77,14 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (state.errorMessage != null && state.overview == null) {
-            return Center(child: Text('Error: ${state.errorMessage}'));
+            // Handle legacy errorMessage if any, though we prefer throwing
+            return GlobalErrorWidget(
+              title: 'Error',
+              message: state.errorMessage!,
+              onRetry: () {
+                ref.invalidate(accountControllerProvider);
+              },
+            );
           }
           if (state.overview == null) {
             return const Center(child: Text('No account data'));
@@ -149,20 +157,16 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Failed to load account'),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(accountControllerProvider);
-                  },
-                  child: const Text('Retry')),
-            ],
-          ),
-        ),
+        error: (err, stack) {
+          final appError = AppErrorHandler.parse(err);
+          return GlobalErrorWidget(
+            title: appError.title,
+            message: appError.message,
+            onRetry: () {
+              ref.invalidate(accountControllerProvider);
+            },
+          );
+        },
       ),
     );
   }

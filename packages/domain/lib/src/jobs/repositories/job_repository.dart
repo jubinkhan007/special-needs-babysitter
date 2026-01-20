@@ -8,6 +8,10 @@ abstract class JobRepository {
   /// Fetches all jobs posted by the current user.
   Future<List<Job>> getJobs();
 
+  /// Fetches public jobs (e.g. for sitters).
+  Future<List<Job>> getPublicJobs(
+      {int limit = 20, int offset = 0, String? status = 'posted'});
+
   /// Fetches a specific job by its ID.
   Future<Job> getJobById(String id);
 

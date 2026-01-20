@@ -12,7 +12,7 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
   SitterProfileRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<void> updateProfile({
+  Future<Map<String, dynamic>> updateProfile({
     required int step,
     required Map<String, dynamic> data,
     File? profilePhoto,
@@ -71,6 +71,7 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
           'DEBUG SITTER REPO: Calling updateSitterProfile step=$step, data=$data');
       await _remoteDataSource.updateSitterProfile(step: step, data: data);
       print('DEBUG SITTER REPO: updateSitterProfile step=$step succeeded');
+      return data;
     } catch (e, st) {
       print('DEBUG SITTER REPO: Error in updateProfile step=$step: $e');
       print('DEBUG SITTER REPO: Stack trace: $st');

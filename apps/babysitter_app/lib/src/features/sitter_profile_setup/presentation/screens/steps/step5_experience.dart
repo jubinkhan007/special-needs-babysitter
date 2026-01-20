@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
@@ -38,15 +39,35 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
   }
 
   Future<void> _pickResume() async {
-    // Mock file picker
-    await Future.delayed(const Duration(milliseconds: 500));
-    ref
-        .read(sitterProfileSetupControllerProvider.notifier)
-        .updateResumePath('resume.pdf');
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Resume uploaded: resume.pdf')),
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx'],
       );
+
+      if (result != null && result.files.single.path != null) {
+        final filePath = result.files.single.path!;
+        final fileName = result.files.single.name;
+
+        // Store the full path for upload, not just the name
+        ref
+            .read(sitterProfileSetupControllerProvider.notifier)
+            .updateResumePath(filePath);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Resume uploaded: $fileName')),
+          );
+        }
+      } else {
+        // User canceled the picker
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error picking file: $e')),
+        );
+      }
     }
   }
 
@@ -393,7 +414,8 @@ class _ExperienceForm extends StatelessWidget {
     required ValueChanged<String> onChanged,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      // FIX: Removed padding from Container to eliminate extra left margin
+      // padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -421,6 +443,9 @@ class _ExperienceForm extends StatelessWidget {
           // FIX: Transparent background
           filled: true,
           fillColor: Colors.transparent,
+          // FIX: Added contentPadding here to control internal spacing properly
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
         style: const TextStyle(
           fontSize: 16,

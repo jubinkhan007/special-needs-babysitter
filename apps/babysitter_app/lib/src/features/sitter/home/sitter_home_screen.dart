@@ -1,63 +1,152 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auth/auth.dart';
-import 'package:core/core.dart';
 
-/// Sitter home screen
+import 'presentation/widgets/sitter_home_header.dart';
+import 'presentation/widgets/app_search_field.dart';
+import 'presentation/widgets/job_preview_card.dart';
+import 'presentation/providers/sitter_home_providers.dart';
+import 'presentation/mappers/job_preview_mapper.dart';
+import 'presentation/screens/sitter_all_jobs_screen.dart';
+
+/// Sitter home screen - Jobs near you
 class SitterHomeScreen extends ConsumerWidget {
   const SitterHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print('DEBUG: SitterHomeScreen build called');
     final userAsync = ref.watch(currentUserProvider);
     final user = userAsync.valueOrNull;
 
+    print('DEBUG: SitterHomeScreen watching jobsNotifierProvider');
+    final jobsAsync = ref.watch(jobsNotifierProvider);
+    print('DEBUG: jobsAsync state: ${jobsAsync.toString()}');
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dashboard'),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: AppSpacing.screenPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Welcome, ${user?.firstName ?? 'Sitter'}!',
-                style: Theme.of(context).textTheme.headlineSmall,
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          // Colored Top Section (extends behind status bar)
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE7F5FC),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32.r),
               ),
-              AppSpacing.verticalMd,
-              Text(
-                'Find families who need your help.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textSecondary,
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  SitterHomeHeader(
+                    userName: user?.firstName ?? 'Krystina',
+                    location:
+                        'Nashville, TN', // specific request or current user loc
+                    avatarUrl: user?.avatarUrl,
+                    onNotificationTap: () {
+                      // TODO: Navigate to notifications
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  AppSearchField(
+                    hintText: 'Search jobs by location, date, or keyword',
+                    onTap: () {
+                      // TODO: Navigate to search screen
+                    },
+                  ),
+                  SizedBox(height: 24.h), // Bottom padding
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20.h),
+          // Section Title
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Jobs near you',
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF1D2939),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SitterAllJobsScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'See All',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: const Color(0xFF667085),
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Inter',
                     ),
-              ),
-              AppSpacing.verticalXl,
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 80,
-                        color: AppColors.secondary.withOpacity(0.3),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.h),
+          // Job List
+          Expanded(
+            child: jobsAsync.when(
+              data: (jobs) {
+                if (jobs.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No jobs found nearby.',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.grey,
                       ),
-                      AppSpacing.verticalMd,
-                      Text(
-                        'Sitter Dashboard',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                      ),
-                    ],
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  padding: EdgeInsets.only(bottom: 20.h),
+                  itemCount: jobs.length,
+                  itemBuilder: (context, index) {
+                    final job = jobs[index];
+                    final preview = JobPreviewMapper.map(job);
+                    return JobPreviewCard(
+                      job: preview,
+                      onViewDetails: () {
+                        // TODO: Navigate to job details
+                      },
+                      onBookmark: () {
+                        // TODO: Toggle bookmark
+                      },
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0.w),
+                  child: Text(
+                    'Error loading jobs',
+                    style: TextStyle(color: Colors.red, fontSize: 13.sp),
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

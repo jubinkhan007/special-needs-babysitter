@@ -4,13 +4,13 @@ import 'package:core/src/theme/app_typography.dart';
 class BioTextAreaCard extends StatelessWidget {
   final String text;
   final ValueChanged<String> onChanged;
-  final int maxWords;
+  final int maxChars;
 
   const BioTextAreaCard({
     super.key,
     required this.text,
     required this.onChanged,
-    this.maxWords = 200,
+    this.maxChars = 1000,
   });
 
   @override
@@ -69,6 +69,12 @@ class BioTextAreaCard extends StatelessWidget {
                 initialValue: text,
                 onChanged: onChanged,
                 maxLines: 6,
+                maxLength: maxChars, // Enforce length
+                buildCounter: (context,
+                        {required currentLength,
+                        required isFocused,
+                        required maxLength}) =>
+                    null, // Hide default counter
                 style: AppTypography.textTheme.bodyLarge?.copyWith(
                   color: const Color(0xFF1A1A1A),
                 ),
@@ -85,13 +91,13 @@ class BioTextAreaCard extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(20),
                 ),
               ),
-              // Word Count
+              // Character Count
               Padding(
                 padding: const EdgeInsets.only(right: 16, bottom: 12),
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    'Word Count: ${_getWordCount(text)} / $maxWords',
+                    'Character Count: ${text.length} / $maxChars',
                     style: const TextStyle(
                       color: Color(0xFF98A2B3),
                       fontSize: 12,
@@ -105,10 +111,5 @@ class BioTextAreaCard extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  int _getWordCount(String text) {
-    if (text.trim().isEmpty) return 0;
-    return text.trim().split(RegExp(r'\s+')).length;
   }
 }

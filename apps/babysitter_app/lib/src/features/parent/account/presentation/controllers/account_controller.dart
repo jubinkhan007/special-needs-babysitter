@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:domain/domain.dart';
+import 'package:core/core.dart';
+
 import 'package:auth/auth.dart'; // For currentUserProvider if needed, or AuthSession
 import '../providers/account_providers.dart';
 import '../state/account_state.dart';
@@ -29,7 +30,7 @@ class AccountController extends _$AccountController {
       final overview = await getAccountOverview(user.id);
       return AccountState(overview: overview, isLoading: false);
     } catch (e) {
-      return AccountState(errorMessage: e.toString(), isLoading: false);
+      throw AppErrorHandler.parse(e);
     }
   }
 

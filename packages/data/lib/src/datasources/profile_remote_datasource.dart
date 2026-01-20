@@ -53,10 +53,28 @@ class ProfileRemoteDataSource {
     }
 
     // Extra safety: ensure id and email are present before calling fromJson if possible
-    // though fromJson will throw anyway if we don't fix the DTO.
     print('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
 
-    return UserDto.fromJson(userMap);
+    if (userMap['id'] == null || userMap['email'] == null) {
+      print(
+          'ERROR: ProfileRemoteDataSource missing id or email in userMap: $userMap');
+      throw const FormatException(
+          'User profile missing required fields (id/email)');
+    }
+
+    try {
+      return UserDto.fromJson(userMap);
+    } catch (e, stack) {
+      print('ERROR: ProfileRemoteDataSource DTO parsing failed: $e');
+      print('Stack trace: $stack');
+      print('Bad UserMap: $userMap');
+
+      if (e is TypeError) {
+        throw const FormatException(
+            'User profile data has invalid types (likely null in required String field)');
+      }
+      rethrow;
+    }
   }
 
   Future<UserDto> updateProfile(UpdateProfileParams params) async {
@@ -68,6 +86,8 @@ class ProfileRemoteDataSource {
         if (params.lastName != null) 'last_name': params.lastName,
         if (params.phoneNumber != null) 'phone_number': params.phoneNumber,
         if (params.avatarUrl != null) 'avatar_url': params.avatarUrl,
+        if (params.isProfileComplete != null)
+          'profile_setup_complete': params.isProfileComplete,
       },
     );
     print(

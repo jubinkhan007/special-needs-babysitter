@@ -5,6 +5,7 @@ import '../../providers/sitter_profile_setup_providers.dart';
 import '../../widgets/onboarding_header.dart';
 import '../../widgets/step_progress_dots.dart';
 import '../../sitter_profile_constants.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Step6Certification extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -36,16 +37,33 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
   ];
 
   Future<void> _pickAttachment(String certName) async {
-    // Mock file picker
-    await Future.delayed(const Duration(milliseconds: 500));
-    final fileName = '${certName.replaceAll(' ', '_')}.pdf';
-    ref
-        .read(sitterProfileSetupControllerProvider.notifier)
-        .updateCertAttachment(certName, fileName);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Attached: $fileName')),
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'],
       );
+
+      if (result != null && result.files.single.path != null) {
+        final filePath = result.files.single.path!;
+        final fileName = result.files.single.name;
+
+        // Store the full path for upload, not just the name
+        ref
+            .read(sitterProfileSetupControllerProvider.notifier)
+            .updateCertAttachment(certName, filePath);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Attached: $fileName')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error picking file: $e')),
+        );
+      }
     }
   }
 

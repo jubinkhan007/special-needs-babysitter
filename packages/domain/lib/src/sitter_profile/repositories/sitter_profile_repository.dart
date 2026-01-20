@@ -9,7 +9,7 @@ abstract class SitterProfileRepository {
   /// [profilePhoto] - Optional profile photo file (Step 1).
   /// [resume] - Optional resume file (Step 5).
   /// [certificationFiles] - Optional list of certification files with types (Step 6).
-  Future<void> updateProfile({
+  Future<Map<String, dynamic>> updateProfile({
     required int step,
     required Map<String, dynamic> data,
     File? profilePhoto,

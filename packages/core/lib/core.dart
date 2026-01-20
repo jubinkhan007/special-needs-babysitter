@@ -10,6 +10,11 @@ export 'src/theme/app_typography.dart';
 // Errors
 export 'src/errors/failure.dart';
 export 'src/errors/api_error.dart';
+export 'src/errors/app_exception.dart';
+export 'src/errors/app_error_handler.dart';
+
+// Widgets
+export 'src/widgets/global_error_widget.dart';
 
 // Environment
 export 'src/env/env_config.dart';

@@ -32,16 +32,21 @@ class SitterProfileRemoteDataSource {
     try {
       print(
           'DEBUG: SitterProfileRemoteDataSource updating step=$step with data=$data');
-      await _dio.put(
+      final response = await _dio.put(
         '/sitters/me',
         data: {
           'step': step,
           'data': data,
         },
       );
-      print('DEBUG: SitterProfileRemoteDataSource step=$step succeeded');
+      print('DEBUG REMOTE: SitterProfileRemoteDataSource step=$step succeeded');
+      print('DEBUG REMOTE: Response status: ${response.statusCode}');
+      print('DEBUG REMOTE: Response data: ${response.data}');
     } catch (e) {
-      print('DEBUG: SitterProfileRemoteDataSource error: $e');
+      print('DEBUG REMOTE: SitterProfileRemoteDataSource error: $e');
+      if (e is DioException) {
+        print('DEBUG REMOTE: DioError data: ${e.response?.data}');
+      }
       rethrow;
     }
   }
