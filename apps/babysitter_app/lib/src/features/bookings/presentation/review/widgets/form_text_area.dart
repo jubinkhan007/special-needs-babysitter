@@ -21,6 +21,7 @@ class FormTextArea extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTokens.formFieldBg,
         borderRadius: BorderRadius.circular(AppTokens.formFieldRadius),
+        border: Border.all(color: AppTokens.formFieldBorder),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppTokens.formFieldPaddingX,

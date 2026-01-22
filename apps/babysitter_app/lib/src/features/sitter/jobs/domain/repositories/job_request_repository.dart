@@ -5,9 +5,17 @@ abstract class JobRequestRepository {
   /// Get job request details for a specific application.
   Future<JobRequestDetailsModel> getJobRequestDetails(String applicationId);
 
-  /// Accept a job invitation.
-  Future<void> acceptJobInvitation(String applicationId);
+  /// Accept a job invitation or direct booking.
+  Future<void> acceptJobInvitation(
+    String applicationId, {
+    required String applicationType,
+  });
 
-  /// Decline a job invitation.
-  Future<void> declineJobInvitation(String applicationId);
+  /// Decline a job invitation or direct booking.
+  Future<void> declineJobInvitation(
+    String applicationId, {
+    required String applicationType,
+    required String reason,
+    String? otherReason,
+  });
 }

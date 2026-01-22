@@ -7,19 +7,35 @@ class JobRequestController extends StateNotifier<AsyncValue<void>> {
 
   JobRequestController(this._repository) : super(const AsyncValue.data(null));
 
-  /// Accept a job invitation.
-  Future<void> acceptJobInvitation(String applicationId) async {
+  /// Accept a job invitation or direct booking.
+  Future<void> acceptJobInvitation(
+    String applicationId, {
+    required String applicationType,
+  }) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await _repository.acceptJobInvitation(applicationId);
+      await _repository.acceptJobInvitation(
+        applicationId,
+        applicationType: applicationType,
+      );
     });
   }
 
-  /// Decline a job invitation.
-  Future<void> declineJobInvitation(String applicationId) async {
+  /// Decline a job invitation or direct booking.
+  Future<void> declineJobInvitation(
+    String applicationId, {
+    required String applicationType,
+    required String reason,
+    String? otherReason,
+  }) async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      await _repository.declineJobInvitation(applicationId);
+      await _repository.declineJobInvitation(
+        applicationId,
+        applicationType: applicationType,
+        reason: reason,
+        otherReason: otherReason,
+      );
     });
   }
 }

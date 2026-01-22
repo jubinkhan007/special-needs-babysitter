@@ -6,6 +6,7 @@ import 'job_coordinates_model.dart';
 class JobRequestDetailsModel extends Equatable {
   final String id;
   final String applicationId;
+  final String applicationType;
   final String title;
   final String familyName;
   final int childrenCount;
@@ -31,10 +32,15 @@ class JobRequestDetailsModel extends Equatable {
   final String? clockInMessage;
   final JobCoordinatesModel? jobCoordinates;
   final int? geofenceRadiusMeters;
+  final double? subTotal;
+  final double? totalHours;
+  final double? platformFee;
+  final double? discount;
 
   const JobRequestDetailsModel({
     required this.id,
     required this.applicationId,
+    required this.applicationType,
     required this.title,
     required this.familyName,
     required this.childrenCount,
@@ -60,12 +66,17 @@ class JobRequestDetailsModel extends Equatable {
     this.clockInMessage,
     this.jobCoordinates,
     this.geofenceRadiusMeters,
+    this.subTotal,
+    this.totalHours,
+    this.platformFee,
+    this.discount,
   });
 
   factory JobRequestDetailsModel.fromJson(Map<String, dynamic> json) {
     return JobRequestDetailsModel(
       id: json['id'] as String,
       applicationId: json['applicationId'] as String,
+      applicationType: json['applicationType'] as String? ?? 'invited',
       title: json['title'] as String,
       familyName: json['familyName'] as String,
       childrenCount: json['childrenCount'] as int,
@@ -99,6 +110,10 @@ class JobRequestDetailsModel extends Equatable {
               json['jobCoordinates'] as Map<String, dynamic>)
           : null,
       geofenceRadiusMeters: json['geofenceRadiusMeters'] as int?,
+      subTotal: (json['subTotal'] as num?)?.toDouble(),
+      totalHours: (json['totalHours'] as num?)?.toDouble(),
+      platformFee: (json['platformFee'] as num?)?.toDouble(),
+      discount: (json['discount'] as num?)?.toDouble(),
     );
   }
 
@@ -106,6 +121,7 @@ class JobRequestDetailsModel extends Equatable {
     return {
       'id': id,
       'applicationId': applicationId,
+      'applicationType': applicationType,
       'title': title,
       'familyName': familyName,
       'childrenCount': childrenCount,
@@ -131,6 +147,10 @@ class JobRequestDetailsModel extends Equatable {
       'clockInMessage': clockInMessage,
       'jobCoordinates': jobCoordinates?.toJson(),
       'geofenceRadiusMeters': geofenceRadiusMeters,
+      'subTotal': subTotal,
+      'totalHours': totalHours,
+      'platformFee': platformFee,
+      'discount': discount,
     };
   }
 
@@ -138,6 +158,7 @@ class JobRequestDetailsModel extends Equatable {
   List<Object?> get props => [
         id,
         applicationId,
+        applicationType,
         title,
         familyName,
         childrenCount,
@@ -163,5 +184,9 @@ class JobRequestDetailsModel extends Equatable {
         clockInMessage,
         jobCoordinates,
         geofenceRadiusMeters,
+        subTotal,
+        totalHours,
+        platformFee,
+        discount,
       ];
 }

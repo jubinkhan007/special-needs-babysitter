@@ -9,14 +9,19 @@ import '../providers/sitter_job_applications_provider.dart';
 import '../widgets/job_meta_header.dart';
 import '../widgets/key_value_row.dart';
 import '../widgets/soft_skill_chip.dart';
+import '../widgets/decline_reason_dialog.dart';
 
 /// Screen showing details of a job request (invitation) that a sitter received.
 class SitterJobRequestDetailsScreen extends ConsumerWidget {
   final String applicationId;
+  final String? initialApplicationType;
+  final String? initialApplicationStatus;
 
   const SitterJobRequestDetailsScreen({
     super.key,
     required this.applicationId,
+    this.initialApplicationType,
+    this.initialApplicationStatus,
   });
 
   @override
@@ -56,7 +61,8 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
     );
 
     return jobDetailsAsync.when(
-      data: (jobDetails) => _buildContent(context, ref, jobDetails, controllerState),
+      data: (jobDetails) =>
+          _buildContent(context, ref, jobDetails, controllerState),
       loading: () => Scaffold(
         backgroundColor: Colors.white,
         appBar: _buildAppBar(context),
@@ -132,9 +138,28 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(
-      BuildContext context, WidgetRef ref, JobRequestDetailsModel jobDetails, AsyncValue<void> controllerState) {
+  Widget _buildContent(BuildContext context, WidgetRef ref,
+      JobRequestDetailsModel jobDetails, AsyncValue<void> controllerState) {
     final isLoading = controllerState.isLoading;
+    final actionApplicationId = jobDetails.applicationId.isNotEmpty
+        ? jobDetails.applicationId
+        : applicationId;
+
+    // Determine effective application type (prefer passed param over model default if model is 'invited')
+    final effectiveType = (initialApplicationType != null &&
+            jobDetails.applicationType.toLowerCase() == 'invited')
+        ? initialApplicationType!
+        : jobDetails.applicationType;
+    final statusSource = (initialApplicationStatus != null &&
+            initialApplicationStatus!.trim().isNotEmpty)
+        ? initialApplicationStatus!.trim()
+        : '';
+    final displayStatus = statusSource.isNotEmpty ? statusSource : effectiveType;
+    final displayStatusLower = displayStatus.toLowerCase();
+    final isActionable = displayStatusLower == 'invited' ||
+        displayStatusLower == 'pending' ||
+        displayStatusLower == 'direct_booking';
+    final statusLabel = _formatStatusLabel(displayStatus);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -275,15 +300,16 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 10.w, vertical: 4.h),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFEFF8FF),
+                                color: _getStatusColor(displayStatus)
+                                    .withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: Text(
-                                'Invited',
+                                statusLabel.isNotEmpty ? statusLabel : 'Invited',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF175CD3),
+                                  color: _getStatusColor(displayStatus),
                                   fontFamily: 'Inter',
                                 ),
                               ),
@@ -299,105 +325,164 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
             ),
           ),
 
-          // Fixed Bottom Action Buttons
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  offset: Offset(0, -2.h),
-                  blurRadius: 8.r,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // Accept Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 48.h,
-                  child: ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : () async {
-                            await ref
-                                .read(jobRequestControllerProvider.notifier)
-                                .acceptJobInvitation(applicationId);
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF87C4F2),
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor: const Color(0xFF87C4F2).withValues(alpha: 0.6),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+          // Fixed Bottom Action Buttons or Status Message
+          if (isActionable)
+            Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    offset: Offset(0, -2.h),
+                    blurRadius: 8.r,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Accept Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              await ref
+                                  .read(jobRequestControllerProvider.notifier)
+                                  .acceptJobInvitation(
+                                    actionApplicationId,
+                                    applicationType: effectiveType,
+                                  );
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF87C4F2),
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor:
+                            const Color(0xFF87C4F2).withValues(alpha: 0.6),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
                       ),
+                      child: isLoading
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.h,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Text(
+                              'Accept',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Inter',
+                              ),
+                            ),
                     ),
-                    child: isLoading
-                        ? SizedBox(
-                            width: 20.w,
-                            height: 20.h,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                  SizedBox(height: 12.h),
+                  // Decline Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: ElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              // Show decline reason dialog
+                              showDialog(
+                                context: context,
+                                builder: (context) => DeclineReasonDialog(
+                                  onSubmit: (reason, otherReason) async {
+                                    await ref
+                                        .read(jobRequestControllerProvider
+                                            .notifier)
+                                        .declineJobInvitation(
+                                          actionApplicationId,
+                                          applicationType: effectiveType,
+                                          reason: reason,
+                                          otherReason: otherReason,
+                                        );
+                                  },
+                                ),
+                              );
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1D2939),
+                        foregroundColor: Colors.white,
+                        disabledBackgroundColor:
+                            const Color(0xFF1D2939).withValues(alpha: 0.6),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: isLoading
+                          ? SizedBox(
+                              width: 20.w,
+                              height: 20.h,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Text(
+                              'Decline',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Inter',
+                              ),
                             ),
-                          )
-                        : Text(
-                            'Accept',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Inter',
-                            ),
-                          ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    offset: Offset(0, -2.h),
+                    blurRadius: 8.r,
+                  ),
+                ],
+              ),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12.h),
+                decoration: BoxDecoration(
+                  color: _getStatusColor(displayStatus).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(
+                    color: _getStatusColor(displayStatus),
                   ),
                 ),
-                SizedBox(height: 12.h),
-                // Decline Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 48.h,
-                  child: ElevatedButton(
-                    onPressed: isLoading
-                        ? null
-                        : () async {
-                            await ref
-                                .read(jobRequestControllerProvider.notifier)
-                                .declineJobInvitation(applicationId);
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1D2939),
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor: const Color(0xFF1D2939).withValues(alpha: 0.6),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    child: isLoading
-                        ? SizedBox(
-                            width: 20.w,
-                            height: 20.h,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                        : Text(
-                            'Decline',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Inter',
-                            ),
-                          ),
+                child: Text(
+                  statusLabel.isNotEmpty
+                      ? statusLabel.toUpperCase()
+                      : displayStatus.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: _getStatusColor(displayStatus),
+                    fontFamily: 'Inter',
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -451,5 +536,40 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
     } catch (_) {
       return time;
     }
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'accepted':
+      case 'active':
+        return const Color(0xFF12B76A); // Green
+      case 'invited':
+        return const Color(0xFF175CD3); // Blue
+      case 'declined':
+        return const Color(0xFFF04438); // Red
+      case 'completed':
+        return const Color(0xFF175CD3); // Blue
+      case 'cancelled':
+        return const Color(0xFFF04438); // Red
+      case 'expired':
+        return const Color(0xFF667085); // Grey
+      default:
+        return const Color(0xFFF79009); // Orange (Pending)
+    }
+  }
+
+  String _formatStatusLabel(String status) {
+    if (status.isEmpty) {
+      return '';
+    }
+    final parts = status.split('_');
+    final words = parts.map((part) {
+      if (part.isEmpty) {
+        return part;
+      }
+      final lower = part.toLowerCase();
+      return '${lower[0].toUpperCase()}${lower.substring(1)}';
+    }).toList();
+    return words.join(' ');
   }
 }

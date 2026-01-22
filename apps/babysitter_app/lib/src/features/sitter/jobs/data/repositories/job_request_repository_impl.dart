@@ -13,12 +13,28 @@ class JobRequestRepositoryImpl implements JobRequestRepository {
   }
 
   @override
-  Future<void> acceptJobInvitation(String applicationId) {
-    return _remoteDataSource.acceptJobInvitation(applicationId);
+  Future<void> acceptJobInvitation(
+    String applicationId, {
+    required String applicationType,
+  }) {
+    return _remoteDataSource.acceptJobInvitation(
+      applicationId,
+      applicationType: applicationType,
+    );
   }
 
   @override
-  Future<void> declineJobInvitation(String applicationId) {
-    return _remoteDataSource.declineJobInvitation(applicationId);
+  Future<void> declineJobInvitation(
+    String applicationId, {
+    required String applicationType,
+    required String reason,
+    String? otherReason,
+  }) {
+    return _remoteDataSource.declineJobInvitation(
+      applicationId,
+      applicationType: applicationType,
+      reason: reason,
+      otherReason: otherReason,
+    );
   }
 }

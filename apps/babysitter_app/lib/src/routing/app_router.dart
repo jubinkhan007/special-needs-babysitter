@@ -560,7 +560,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '${Routes.sitterJobRequestDetails}/:applicationId',
         builder: (context, state) {
           final applicationId = state.pathParameters['applicationId'] ?? '';
-          return SitterJobRequestDetailsScreen(applicationId: applicationId);
+          final type = state.uri.queryParameters['type'];
+          final status = state.uri.queryParameters['status'];
+          return SitterJobRequestDetailsScreen(
+            applicationId: applicationId,
+            initialApplicationType: type,
+            initialApplicationStatus: status,
+          );
         },
       ),
       // Sitter Booking Details (viewing an upcoming/confirmed booking)
@@ -568,7 +574,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '${Routes.sitterBookingDetails}/:applicationId',
         builder: (context, state) {
           final applicationId = state.pathParameters['applicationId'] ?? '';
-          return SitterBookingDetailsScreen(applicationId: applicationId);
+          final status = state.uri.queryParameters['status'];
+          return SitterBookingDetailsScreen(
+            applicationId: applicationId,
+            initialStatus: status,
+          );
         },
       ),
       GoRoute(

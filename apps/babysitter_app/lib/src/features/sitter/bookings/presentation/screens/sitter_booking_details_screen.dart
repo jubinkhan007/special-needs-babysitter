@@ -8,14 +8,17 @@ import '../../../jobs/presentation/providers/job_request_providers.dart';
 import '../../../jobs/presentation/widgets/job_meta_header.dart';
 import '../../../jobs/presentation/widgets/key_value_row.dart';
 import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
+import '../../../jobs/presentation/widgets/section_divider.dart';
 
 /// Screen showing details of an upcoming/confirmed booking.
 class SitterBookingDetailsScreen extends ConsumerWidget {
   final String applicationId;
+  final String? initialStatus;
 
   const SitterBookingDetailsScreen({
     super.key,
     required this.applicationId,
+    this.initialStatus,
   });
 
   @override
@@ -26,12 +29,12 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
       data: (jobDetails) => _buildContent(context, ref, jobDetails),
       loading: () => Scaffold(
         backgroundColor: Colors.white,
-        appBar: _buildAppBar(context),
+        appBar: _buildAppBar(context, title: _getAppBarTitle(initialStatus)),
         body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: _buildAppBar(context),
+        appBar: _buildAppBar(context, title: _getAppBarTitle(initialStatus)),
         body: Center(
           child: Padding(
             padding: EdgeInsets.all(20.w),
@@ -68,7 +71,7 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context, {String? title}) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0,
@@ -79,7 +82,7 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
       ),
       centerTitle: true,
       title: Text(
-        'Booking Details',
+        title ?? 'Booking Details',
         style: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,
@@ -101,9 +104,22 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
 
   Widget _buildContent(
       BuildContext context, WidgetRef ref, JobRequestDetailsModel jobDetails) {
+    final statusValue = initialStatus?.trim() ?? '';
+    final statusLower = statusValue.toLowerCase();
+    final isCompleted = statusLower == 'completed';
+    final statusLabel = _formatStatusLabel(statusValue);
+    final scheduledDate = _formatScheduledDate(jobDetails.startDate);
+    final totalHours =
+        jobDetails.totalHours ?? _calculateTotalHours(jobDetails);
+    final subTotal =
+        jobDetails.subTotal ?? (jobDetails.payRate * (totalHours ?? 0));
+    final platformFee = jobDetails.platformFee ?? 0;
+    final discount = jobDetails.discount ?? 0;
+    final estimatedTotal = subTotal + platformFee - discount;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(context, title: _getAppBarTitle(initialStatus)),
       body: Column(
         children: [
           Expanded(
@@ -250,7 +266,21 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
                               ),
                             ),
                             const Spacer(),
-                            if (jobDetails.isToday)
+                            if (isCompleted) ...[
+                              Text(
+                                scheduledDate.isNotEmpty
+                                    ? 'Scheduled: $scheduledDate'
+                                    : 'Scheduled',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: const Color(0xFF667085),
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              _buildStatusPill(statusLabel),
+                            ] else if (jobDetails.isToday)
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10.w, vertical: 4.h),
@@ -283,6 +313,41 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
                               ),
                           ],
                         ),
+                        if (isCompleted) ...[
+                          SizedBox(height: 24.h),
+                          const SectionDivider(),
+                          SizedBox(height: 16.h),
+                          KeyValueRow(
+                            label: 'Sub Total',
+                            value: _formatCurrency(subTotal),
+                            isBoldValue: false,
+                          ),
+                          KeyValueRow(
+                            label: 'Total Hours',
+                            value: '${_formatHours(totalHours)} Hours',
+                            isBoldValue: false,
+                          ),
+                          KeyValueRow(
+                            label: 'Hourly Rate',
+                            value:
+                                '\$${jobDetails.payRate.toStringAsFixed(0)}/hr',
+                            isBoldValue: false,
+                          ),
+                          KeyValueRow(
+                            label: 'Platform Fee',
+                            value: _formatCurrency(platformFee),
+                            isBoldValue: false,
+                          ),
+                          KeyValueRow(
+                            label: 'Discount',
+                            value: _formatCurrency(discount),
+                            isBoldValue: false,
+                          ),
+                          KeyValueRow(
+                            label: 'Estimated Total Cost',
+                            value: _formatCurrency(estimatedTotal),
+                          ),
+                        ],
                         SizedBox(height: 32.h),
                       ],
                     ),
@@ -292,49 +357,38 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
             ),
           ),
 
-          // Fixed Bottom Clock In Button
-          Container(
-            padding: EdgeInsets.all(20.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  offset: Offset(0, -2.h),
-                  blurRadius: 8.r,
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SizedBox(
+          if (isCompleted)
+            Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    offset: Offset(0, -2.h),
+                    blurRadius: 8.r,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
                     height: 48.h,
                     child: ElevatedButton(
-                      onPressed: jobDetails.canClockIn
-                          ? () {
-                              // TODO: Implement clock in logic
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Clock in functionality coming soon'),
-                                ),
-                              );
-                            }
-                          : null,
+                      onPressed: () {
+                        _showMarkCompleteDialog(context);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF87C4F2),
                         foregroundColor: Colors.white,
-                        disabledBackgroundColor:
-                            const Color(0xFF87C4F2).withValues(alpha: 0.6),
-                        disabledForegroundColor: Colors.white.withValues(alpha: 0.7),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
                       child: Text(
-                        'Clock In',
+                        'Mark Job as Complete',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
@@ -343,28 +397,113 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 12.w),
-                Container(
-                  width: 48.w,
-                  height: 48.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: const Color(0xFFD0D5DD)),
-                    borderRadius: BorderRadius.circular(8.r),
+                  SizedBox(height: 12.h),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Report issue coming soon'),
+                          ),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF1D2939),
+                        side: const BorderSide(color: Color(0xFFD0D5DD)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Report An Issue',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
                   ),
-                  child: IconButton(
-                    icon: Icon(Icons.more_vert,
-                        color: const Color(0xFF667085), size: 20.w),
-                    onPressed: () {
-                      // TODO: Show more options menu
-                      _showMoreOptionsMenu(context);
-                    },
+                ],
+              ),
+            )
+          else
+            // Fixed Bottom Clock In Button
+            Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    offset: Offset(0, -2.h),
+                    blurRadius: 8.r,
                   ),
-                ),
-              ],
+                ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 48.h,
+                      child: ElevatedButton(
+                        onPressed: jobDetails.canClockIn
+                            ? () {
+                                // TODO: Implement clock in logic
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Clock in functionality coming soon'),
+                                  ),
+                                );
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF87C4F2),
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor:
+                              const Color(0xFF87C4F2).withValues(alpha: 0.6),
+                          disabledForegroundColor:
+                              Colors.white.withValues(alpha: 0.7),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                        child: Text(
+                          'Clock In',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  Container(
+                    width: 48.w,
+                    height: 48.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: const Color(0xFFD0D5DD)),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.more_vert,
+                          color: const Color(0xFF667085), size: 20.w),
+                      onPressed: () {
+                        // TODO: Show more options menu
+                        _showMoreOptionsMenu(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -521,6 +660,150 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
     }
   }
 
+  String _getAppBarTitle(String? status) {
+    final label = _formatStatusLabel(status?.trim() ?? '');
+    if (label.toLowerCase() == 'completed') {
+      return 'Completed';
+    }
+    return 'Booking Details';
+  }
+
+  String _formatStatusLabel(String status) {
+    if (status.isEmpty) {
+      return '';
+    }
+    final parts = status.split('_');
+    final words = parts.map((part) {
+      if (part.isEmpty) {
+        return part;
+      }
+      final lower = part.toLowerCase();
+      return '${lower[0].toUpperCase()}${lower.substring(1)}';
+    }).toList();
+    return words.join(' ');
+  }
+
+  String _formatScheduledDate(String startDate) {
+    try {
+      final start = DateTime.parse(startDate);
+      return '${start.day} ${_getMonthName(start.month)}, ${start.year}';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  String _formatCurrency(double value) {
+    return '\$${value.toStringAsFixed(0)}';
+  }
+
+  String _formatHours(double? hours) {
+    if (hours == null) {
+      return '0';
+    }
+    if (hours == hours.roundToDouble()) {
+      return hours.toStringAsFixed(0);
+    }
+    return hours.toStringAsFixed(1);
+  }
+
+  double? _calculateTotalHours(JobRequestDetailsModel jobDetails) {
+    final minutes = _minutesBetweenTimes(
+      jobDetails.startTime,
+      jobDetails.endTime,
+    );
+    if (minutes == null) {
+      return null;
+    }
+    final totalMinutes = minutes * jobDetails.numberOfDays;
+    return totalMinutes / 60;
+  }
+
+  int? _minutesBetweenTimes(String startTime, String endTime) {
+    final startMinutes = _parseTimeToMinutes(startTime);
+    final endMinutes = _parseTimeToMinutes(endTime);
+    if (startMinutes == null || endMinutes == null) {
+      return null;
+    }
+    if (endMinutes >= startMinutes) {
+      return endMinutes - startMinutes;
+    }
+    return (24 * 60 - startMinutes) + endMinutes;
+  }
+
+  int? _parseTimeToMinutes(String time) {
+    try {
+      final trimmed = time.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+
+      final lower = trimmed.toLowerCase();
+      final isAm = lower.contains('am');
+      final isPm = lower.contains('pm');
+      final sanitized = lower.replaceAll(RegExp(r'[^0-9:]'), '');
+
+      if (sanitized.isEmpty) {
+        return null;
+      }
+
+      final parts = sanitized.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = parts.length > 1 ? int.parse(parts[1]) : 0;
+      if (minute < 0 || minute > 59) {
+        return null;
+      }
+
+      var adjustedHour = hour;
+      if (isPm && adjustedHour < 12) {
+        adjustedHour += 12;
+      }
+      if (isAm && adjustedHour == 12) {
+        adjustedHour = 0;
+      }
+
+      return adjustedHour * 60 + minute;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Widget _buildStatusPill(String status) {
+    final label = status.isNotEmpty ? status : 'Completed';
+    final color = _getStatusColor(label);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          color: color,
+          fontFamily: 'Inter',
+        ),
+      ),
+    );
+  }
+
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'accepted':
+      case 'active':
+        return const Color(0xFF12B76A);
+      case 'declined':
+      case 'cancelled':
+        return const Color(0xFFF04438);
+      case 'invited':
+        return const Color(0xFF175CD3);
+      default:
+        return const Color(0xFFF79009);
+    }
+  }
+
   void _showMoreOptionsMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -585,6 +868,103 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _showMarkCompleteDialog(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close,
+                        color: const Color(0xFF667085), size: 20.w),
+                    onPressed: () => context.pop(),
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Are You Sure That You Have Completed This Job?',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF1D2939),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Icon(Icons.info_outline,
+                        color: const Color(0xFF98A2B3), size: 18.w),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: ElevatedButton(
+                    onPressed: () => context.pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF87C4F2),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: Text(
+                      'Yes',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: OutlinedButton(
+                    onPressed: () => context.pop(),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF1D2939),
+                      side: const BorderSide(color: Color(0xFFD0D5DD)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: Text(
+                      'No',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -16,6 +16,7 @@ class JobRequestRemoteDataSource {
       final response = await _dio.get('/sitters/bookings/$applicationId');
       print(
           'DEBUG: Job Request Details Response Status: ${response.statusCode}');
+      print('DEBUG: Job Request Details Response Body: ${response.data}');
 
       final data = response.data['data'] as Map<String, dynamic>;
 
@@ -36,11 +37,20 @@ class JobRequestRemoteDataSource {
     }
   }
 
-  /// Accept a job invitation via POST /applications/{id}/accept.
-  Future<void> acceptJobInvitation(String applicationId) async {
+  /// Accept a job invitation or direct booking
+  /// Uses /applications/{id}/accept for invitations
+  /// Uses /applications/{id}/accept-booking for direct bookings
+  Future<void> acceptJobInvitation(
+    String applicationId, {
+    required String applicationType,
+  }) async {
     try {
-      print('DEBUG: Accept Job Request: POST /applications/$applicationId/accept');
-      final response = await _dio.post('/applications/$applicationId/accept');
+      final endpoint = applicationType == 'direct_booking'
+          ? '/applications/$applicationId/accept-booking'
+          : '/applications/$applicationId/accept';
+
+      print('DEBUG: Accept Job Request: POST $endpoint');
+      final response = await _dio.post(endpoint);
       print('DEBUG: Accept Job Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
@@ -56,11 +66,34 @@ class JobRequestRemoteDataSource {
     }
   }
 
-  /// Decline a job invitation via POST /applications/{id}/decline.
-  Future<void> declineJobInvitation(String applicationId) async {
+  /// Decline a job invitation or direct booking
+  /// Uses /applications/{id}/decline for invitations
+  /// Uses /applications/{id}/decline-booking for direct bookings
+  /// Sends reason and otherReason in request body
+  Future<void> declineJobInvitation(
+    String applicationId, {
+    required String applicationType,
+    required String reason,
+    String? otherReason,
+  }) async {
     try {
-      print('DEBUG: Decline Job Request: POST /applications/$applicationId/decline');
-      final response = await _dio.post('/applications/$applicationId/decline');
+      final endpoint = applicationType == 'direct_booking'
+          ? '/applications/$applicationId/decline-booking'
+          : '/applications/$applicationId/decline';
+
+      print('DEBUG: Decline Job Request: POST $endpoint');
+      print('DEBUG: Decline Application ID: $applicationId');
+      print('DEBUG: Decline Application Type: $applicationType');
+
+      final data = {
+        'reason': reason,
+        if (otherReason != null && otherReason.isNotEmpty)
+          'otherReason': otherReason,
+      };
+
+      print('DEBUG: Decline Job Request Body: $data');
+
+      final response = await _dio.post(endpoint, data: data);
       print('DEBUG: Decline Job Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {

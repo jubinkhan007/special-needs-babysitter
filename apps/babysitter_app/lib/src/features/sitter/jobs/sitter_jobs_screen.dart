@@ -189,7 +189,8 @@ class SitterJobsScreen extends ConsumerWidget {
                 if (app.status.toLowerCase() == 'accepted') {
                   context.push('${Routes.sitterBookingDetails}/${app.id}');
                 } else {
-                  context.push('${Routes.sitterJobRequestDetails}/${app.id}');
+                  context.push(
+                      '${Routes.sitterJobRequestDetails}/${app.id}?type=${app.applicationType}&status=${app.status}');
                 }
               },
             );
@@ -269,8 +270,13 @@ class SitterJobsScreen extends ConsumerWidget {
                   if (app.status.toLowerCase() == 'accepted') {
                     context.push('${Routes.sitterBookingDetails}/${app.id}');
                   } else {
-                    context.push('${Routes.sitterJobRequestDetails}/${app.id}');
+                    context.push(
+                        '${Routes.sitterJobRequestDetails}/${app.id}?type=${app.applicationType}&status=${app.status}');
                   }
+                } else if (status != null &&
+                    status.toLowerCase() == 'completed') {
+                  context.push(
+                      '${Routes.sitterBookingDetails}/${app.id}?status=${app.status}');
                 } else {
                   context.push('${Routes.sitterApplicationDetails}/${app.id}');
                 }

@@ -7,6 +7,13 @@ class ReviewArgs {
   final String sitterName;
   final BookingDetailsUiModel sitterData; // Reusing UI model for card display
   final BookingStatus status;
+  final String? jobTitle;
+  final String? location;
+  final String? familyName;
+  final String? childrenCount;
+  final String? paymentLabel;
+  final String? avatarUrl;
+  final String? reviewPrompt;
 
   ReviewArgs({
     required this.bookingId,
@@ -14,5 +21,12 @@ class ReviewArgs {
     required this.sitterName,
     required this.sitterData,
     required this.status,
+    this.jobTitle,
+    this.location,
+    this.familyName,
+    this.childrenCount,
+    this.paymentLabel,
+    this.avatarUrl,
+    this.reviewPrompt,
   });
 }
