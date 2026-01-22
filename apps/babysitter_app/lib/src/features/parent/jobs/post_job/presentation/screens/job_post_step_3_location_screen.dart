@@ -252,9 +252,35 @@ class _JobPostStep3LocationScreenState
   }
 
   void _onContinue() {
+    // Check if required fields are empty
+    if (_streetAddressController.text.isEmpty ||
+        _cityController.text.isEmpty ||
+        _zipCodeController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text('Please fill in all required fields (Street, City, Zip).'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     if (_streetAddressController.text.isNotEmpty &&
         _cityController.text.isNotEmpty &&
         _zipCodeController.text.isNotEmpty) {
+      // Validate Zip Code (must be exactly 5 digits)
+      final zipRegex = RegExp(r'^\d{5}$');
+      if (!zipRegex.hasMatch(_zipCodeController.text)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid 5-digit Zip Code.'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+
       ref.read(jobPostControllerProvider.notifier).updateLocation(
             streetAddress: _streetAddressController.text,
             aptUnit: _unitController.text,

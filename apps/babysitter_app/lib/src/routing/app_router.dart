@@ -32,8 +32,10 @@ import '../features/sitter/sitter_shell.dart';
 import '../features/sitter/home/sitter_home_screen.dart';
 import '../features/sitter/jobs/sitter_jobs_screen.dart';
 import '../features/sitter/bookings/sitter_bookings_screen.dart';
+import '../features/sitter/bookings/presentation/screens/sitter_booking_details_screen.dart';
 import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
+import '../features/sitter/account/presentation/profile_details/presentation/sitter_profile_details_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
@@ -59,6 +61,8 @@ import '../features/calls/domain/audio_call_args.dart';
 import '../features/calls/domain/video_call_args.dart';
 import '../features/support/domain/support_chat_args.dart';
 import '../features/sitter/job_details/presentation/screens/sitter_job_details_screen.dart';
+import '../features/sitter/jobs/presentation/screens/sitter_application_details_screen.dart';
+import '../features/sitter/jobs/presentation/screens/sitter_job_request_details_screen.dart';
 import '../features/sitter/application/presentation/screens/sitter_application_preview_screen.dart';
 import '../features/sitter/background_check/presentation/screens/verify_identity_screen.dart';
 import '../features/sitter/background_check/presentation/screens/background_check_screen.dart';
@@ -543,6 +547,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
+      // Sitter Application Details (viewing an already-submitted application)
+      GoRoute(
+        path: '${Routes.sitterApplicationDetails}/:applicationId',
+        builder: (context, state) {
+          final applicationId = state.pathParameters['applicationId'] ?? '';
+          return SitterApplicationDetailsScreen(applicationId: applicationId);
+        },
+      ),
+      // Sitter Job Request Details (viewing an invitation to a job)
+      GoRoute(
+        path: '${Routes.sitterJobRequestDetails}/:applicationId',
+        builder: (context, state) {
+          final applicationId = state.pathParameters['applicationId'] ?? '';
+          return SitterJobRequestDetailsScreen(applicationId: applicationId);
+        },
+      ),
+      // Sitter Booking Details (viewing an upcoming/confirmed booking)
+      GoRoute(
+        path: '${Routes.sitterBookingDetails}/:applicationId',
+        builder: (context, state) {
+          final applicationId = state.pathParameters['applicationId'] ?? '';
+          return SitterBookingDetailsScreen(applicationId: applicationId);
+        },
+      ),
       GoRoute(
         path: Routes.sitterVerifyIdentity,
         builder: (context, state) => const VerifyIdentityScreen(),
@@ -554,6 +582,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.sitterBackgroundCheckComplete,
         builder: (context, state) => const BackgroundCheckCompleteScreen(),
+      ),
+
+      // Sitter Profile Details (full screen, outside shell)
+      GoRoute(
+        path: Routes.sitterProfileDetails,
+        builder: (context, state) => const SitterProfileDetailsScreen(),
       ),
 
       // Sitter shell

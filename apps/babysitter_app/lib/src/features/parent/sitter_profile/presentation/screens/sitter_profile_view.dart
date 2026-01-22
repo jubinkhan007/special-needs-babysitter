@@ -1,5 +1,4 @@
 import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
-import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/availability_section.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/overview_section.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/reviews_section.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/skills_section.dart';
@@ -8,6 +7,9 @@ import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/w
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/widgets/profile_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/experience_by_age_section.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/calendar_availability_section.dart';
+import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 import '../../../../../routing/routes.dart';
 
 class SitterProfileView extends StatelessWidget {
@@ -29,6 +31,7 @@ class SitterProfileView extends StatelessWidget {
           SingleChildScrollView(
             padding: const EdgeInsets.only(bottom: 100),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // ✅ Use the new pixel-perfect header here
 
@@ -38,7 +41,7 @@ class SitterProfileView extends StatelessWidget {
 
                 SitterProfileHeaderExact(
                   name: sitter.name,
-                  distanceText: "2 Miles Away", // adjust if you have
+                  distanceText: sitter.location, // Dynamic location/distance
                   ratingText: sitter.rating.toStringAsFixed(1),
                   avatarAsset: sitter.avatarUrl, // asset path
                   onMessage: () {
@@ -66,15 +69,93 @@ class SitterProfileView extends StatelessWidget {
                   hasTransportation: sitter.hasTransportation,
                   transportationType: sitter.transportationType,
                 ),
-                const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
+
+                const SizedBox(height: 12),
+                ExperienceByAgeSection(ageRanges: sitter.ageRanges),
+                const SizedBox(height: 24),
+
+                // Travel Radius & Transport Availability
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Travel Radius",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppUiTokens.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  sitter.travelRadius ?? "Up to 15 km",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      color: AppUiTokens.textSecondary),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Transport Availability",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppUiTokens.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    if (sitter.hasTransportation)
+                                      const Icon(Icons.check,
+                                          size: 16,
+                                          color: AppUiTokens.textSecondary),
+                                    if (sitter.hasTransportation)
+                                      const SizedBox(width: 6),
+                                    Expanded(
+                                      child: Text(
+                                        sitter.hasTransportation
+                                            ? (sitter.transportationType ??
+                                                "Owns vehicle")
+                                            : "No transport",
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            color: AppUiTokens.textSecondary),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
                 SkillsSection(
                   languages: sitter.languages,
                   certifications: sitter.certifications,
-                  skills: sitter.badges, // Using badges as skills
+                  skills: sitter.badges,
                 ),
-                const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
-                AvailabilitySection(availability: sitter.availability),
-                const Divider(thickness: 8, color: Color(0xFFF9FAFB)),
+                // Calendar Availability
+                CalendarAvailabilitySection(availability: sitter.availability),
                 ReviewsSection(
                   reviews: sitter.reviews,
                   averageRating: sitter.rating,

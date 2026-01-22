@@ -13,6 +13,8 @@ import 'presentation/widgets/background_check_banner.dart';
 import 'presentation/providers/sitter_home_providers.dart';
 import 'presentation/mappers/job_preview_mapper.dart';
 import 'presentation/screens/sitter_all_jobs_screen.dart';
+import '../background_check/data/models/background_check_status_model.dart';
+import '../background_check/presentation/providers/background_check_status_provider.dart';
 
 /// Sitter home screen - Jobs near you
 class SitterHomeScreen extends ConsumerWidget {
@@ -27,6 +29,16 @@ class SitterHomeScreen extends ConsumerWidget {
     print('DEBUG: SitterHomeScreen watching jobsNotifierProvider');
     final jobsAsync = ref.watch(jobsNotifierProvider);
     print('DEBUG: jobsAsync state: ${jobsAsync.toString()}');
+
+    final backgroundCheckAsync = ref.watch(backgroundCheckStatusProvider);
+    final status = backgroundCheckAsync.valueOrNull?.status ??
+        BackgroundCheckStatusType.notStarted;
+
+    // Status string for Banner
+    String statusStr = 'not_started';
+    if (status == BackgroundCheckStatusType.pending) statusStr = 'pending';
+    if (status == BackgroundCheckStatusType.rejected) statusStr = 'rejected';
+    if (status == BackgroundCheckStatusType.approved) statusStr = 'approved';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -53,6 +65,8 @@ class SitterHomeScreen extends ConsumerWidget {
                     onNotificationTap: () {
                       // TODO: Navigate to notifications
                     },
+                    // You could pass the 'verified' status to the header here if needed
+                    isVerified: status == BackgroundCheckStatusType.approved,
                   ),
                   SizedBox(height: 12.h),
                   AppSearchField(
@@ -67,12 +81,20 @@ class SitterHomeScreen extends ConsumerWidget {
             ),
           ),
           SizedBox(height: 20.h),
-          BackgroundCheckBanner(
-            onStart: () {
-              context.push(Routes.sitterVerifyIdentity);
-            },
-          ),
-          SizedBox(height: 20.h),
+
+          // Background Check Banner (Hidden if approved)
+          if (status != BackgroundCheckStatusType.approved) ...[
+            BackgroundCheckBanner(
+              status: statusStr,
+              onStart: () {
+                if (status == BackgroundCheckStatusType.notStarted) {
+                  context.push(Routes.sitterVerifyIdentity);
+                }
+                // For pending/rejected, maybe navigate to status details or support
+              },
+            ),
+            SizedBox(height: 20.h),
+          ],
           // Section Title
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),

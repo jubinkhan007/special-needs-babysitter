@@ -48,7 +48,7 @@ class SittersRepositoryImpl implements SittersRepository {
       id: dto.id,
       userId: dto.userId,
       name: dto.firstName,
-      avatarUrl: dto.photoUrl,
+      avatarUrl: dto.photoUrl ?? '',
       isVerified: true, // Assuming true
       rating: dto.avgRating,
       location: dto.address ??
@@ -57,10 +57,10 @@ class SittersRepositoryImpl implements SittersRepository {
       responseRate:
           100, // Not in profile DTO directly? reliabilityScore is there.
       reliabilityRate: dto.reliabilityScore.toInt(),
-      experienceYears: _parseExperience(dto.yearsOfExperience),
+      experienceYears: _parseExperience(dto.yearsOfExperience ?? '1'),
       hourlyRate: dto.hourlyRate,
       badges: dto.skills, // Using skills as badges
-      bio: dto.bio,
+      bio: dto.bio ?? "No bio available.",
       reviews: dto.reviews?.map((r) {
             // Defensive parsing since reviews list structure isn't strictly defined in DTO type (List<dynamic>)
             final map = r as Map<String, dynamic>;
@@ -86,6 +86,7 @@ class SittersRepositoryImpl implements SittersRepository {
       transportationType: dto.transportationType,
       jobTypesAccepted: dto.jobTypesAccepted ?? {},
       openToNegotiating: dto.openToNegotiating ?? false,
+      ageRanges: dto.ageRanges,
     );
   }
 

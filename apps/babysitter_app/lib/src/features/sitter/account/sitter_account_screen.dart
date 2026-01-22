@@ -1,128 +1,200 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:auth/auth.dart';
 import 'package:core/core.dart';
-import 'package:ui_kit/ui_kit.dart';
 
 import '../../../routing/routes.dart';
+import '../../account/about/presentation/about_special_needs_sitters_screen.dart';
+import '../../account/terms/presentation/terms_and_conditions_screen.dart';
+import '../../account/help_support/presentation/help_support_screen.dart';
+import '../../account/dialogs/show_sign_out_dialog.dart';
+import 'presentation/sitter_account_ui_constants.dart';
+import 'presentation/controllers/sitter_account_controller.dart';
+import 'presentation/widgets/sitter_profile_header_card.dart';
+import 'presentation/widgets/sitter_stats_row.dart';
+import 'presentation/widgets/sitter_account_menu_list.dart';
 
 /// Sitter account screen
-class SitterAccountScreen extends ConsumerWidget {
+class SitterAccountScreen extends ConsumerStatefulWidget {
   const SitterAccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userAsync = ref.watch(currentUserProvider);
-    final user = userAsync.valueOrNull;
+  ConsumerState<SitterAccountScreen> createState() =>
+      _SitterAccountScreenState();
+}
+
+class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final stateForLoad = ref.watch(sitterAccountControllerProvider);
+
+    ref.listen(sitterAccountControllerProvider, (previous, next) {
+      if (next.hasError && !next.isLoading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${next.error}')),
+        );
+      }
+    });
 
     return Scaffold(
+      backgroundColor: SitterAccountUI.backgroundBlue,
       appBar: AppBar(
-        title: const Text('Account'),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: AppSpacing.screenPadding,
-          child: Column(
-            children: [
-              // User info
-              CircleAvatar(
-                radius: 48,
-                backgroundColor: AppColors.secondary.withOpacity(0.1),
-                child: Text(
-                  user?.initials ?? '?',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        color: AppColors.secondary,
-                      ),
-                ),
-              ),
-              AppSpacing.verticalMd,
-              Text(
-                user?.fullName ?? 'User',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              AppSpacing.verticalXs,
-              Text(
-                user?.email ?? '',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-              ),
-              AppSpacing.verticalXs,
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                ),
-                child: Text(
-                  'Babysitter Account',
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: AppColors.secondary,
-                      ),
-                ),
-              ),
-              if (user?.isSitterApproved == false) ...[
-                AppSpacing.verticalSm,
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.warning.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-                  ),
-                  child: Text(
-                    'Pending Approval',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: AppColors.warning,
-                        ),
-                  ),
-                ),
-              ],
-              AppSpacing.verticalXxl,
-
-              // Settings placeholder
-              ListTile(
-                leading: const Icon(Icons.settings_outlined),
-                title: const Text('Settings'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Settings coming soon')),
-                  );
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.help_outline),
-                title: const Text('Help & Support'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Help coming soon')),
-                  );
-                },
-              ),
-              const Divider(),
-
-              const Spacer(),
-
-              // Sign out button
-              SecondaryButton(
-                label: 'Sign Out',
-                icon: Icons.logout,
-                onPressed: () async {
-                  await ref.read(authNotifierProvider.notifier).signOut();
-                  if (context.mounted) {
-                    context.go(Routes.signIn);
-                  }
-                },
-              ),
-              AppSpacing.verticalMd,
-            ],
+        title: const Text(
+          'Account',
+          style: TextStyle(
+            color: SitterAccountUI.textGray,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        backgroundColor: SitterAccountUI.backgroundBlue,
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: SitterAccountUI.textGray),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go(Routes.sitterHome);
+            }
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_none,
+                color: SitterAccountUI.textGray),
+            onPressed: () {
+              // TODO: Navigate to notifications
+            },
+          ),
+        ],
+      ),
+      body: stateForLoad.when(
+        data: (state) {
+          if (state.isLoading && state.overview == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.errorMessage != null && state.overview == null) {
+            return GlobalErrorWidget(
+              title: 'Error',
+              message: state.errorMessage!,
+              onRetry: () {
+                ref.invalidate(sitterAccountControllerProvider);
+              },
+            );
+          }
+          if (state.overview == null) {
+            return const Center(child: Text('No account data'));
+          }
+          final user = state.overview!.user;
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SitterAccountUI.screenPadding,
+              vertical: 8,
+            ),
+            child: Column(
+              children: [
+                SitterProfileHeaderCard(
+                  userName: user.fullName,
+                  userEmail: user.email,
+                  avatarUrl: user.avatarUrl,
+                  completionPercent: state.overview!.profileCompletionPercent,
+                  onTapDetails: () {
+                    context.push(Routes.sitterProfileDetails);
+                  },
+                ),
+                const SizedBox(height: 20),
+                SitterStatsRow(
+                  completedJobsCount: state.overview!.completedJobsCount,
+                  savedJobsCount: state.overview!.savedJobsCount,
+                  onTapCompletedJobs: () {
+                    // TODO: Navigate to completed jobs
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Completed jobs coming soon')),
+                    );
+                  },
+                  onTapSavedJobs: () {
+                    // TODO: Navigate to saved jobs
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Saved jobs coming soon')),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                SitterAccountMenuList(
+                  onTapRatingsReviews: () {
+                    // TODO: Navigate to ratings & reviews
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Ratings & Reviews coming soon')),
+                    );
+                  },
+                  onTapWallet: () {
+                    // TODO: Navigate to wallet
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('My Wallet coming soon')),
+                    );
+                  },
+                  onTapReferralBonuses: () {
+                    // TODO: Navigate to referral & bonuses
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Referral & Bonuses coming soon')),
+                    );
+                  },
+                  onTapSettings: () {
+                    // TODO: Navigate to settings when available
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Settings coming soon')),
+                    );
+                  },
+                  onTapAbout: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const AboutSpecialNeedsSittersScreen(),
+                    ),
+                  ),
+                  onTapTerms: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const TermsAndConditionsScreen(),
+                    ),
+                  ),
+                  onTapHelp: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const HelpSupportScreen(),
+                    ),
+                  ),
+                  onTapSignOut: () async {
+                    final confirmed = await showSignOutDialog(context);
+                    if (confirmed == true && context.mounted) {
+                      ref
+                          .read(sitterAccountControllerProvider.notifier)
+                          .signOut()
+                          .then((_) {
+                        if (context.mounted) {
+                          context.go(Routes.signIn);
+                        }
+                      });
+                    }
+                  },
+                ),
+                const SizedBox(height: 32),
+              ],
+            ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) {
+          final appError = AppErrorHandler.parse(err);
+          return GlobalErrorWidget(
+            title: appError.title,
+            message: appError.message,
+            onRetry: () {
+              ref.invalidate(sitterAccountControllerProvider);
+            },
+          );
+        },
       ),
     );
   }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
+import 'package:intl/intl.dart';
+
 class AvailabilitySection extends StatelessWidget {
   // Parsing this as raw data for now as API schema for availability wasn't provided fully
   final List<dynamic>? availability;
+  final Map<String, bool>? jobTypesAccepted;
 
-  const AvailabilitySection({super.key, this.availability});
+  const AvailabilitySection(
+      {super.key, this.availability, this.jobTypesAccepted});
 
   @override
   Widget build(BuildContext context) {
@@ -52,17 +56,55 @@ class AvailabilitySection extends StatelessWidget {
               ),
             )
           else ...[
-            // Calendar Wrapper (No Card/Border per Figma)
-            // NOTE: Since we don't have the real availability logic/schema yet, we keep the UI structure
-            // but effectively we should map this to the real dates.
-            // For now, if data exists, we might show a list or this calendar.
-            // Keeping the calendar as "Example" or just hiding it if we can't map it is safer.
-            // Let's assume for this task "Dynamic" means "Don't show fake info".
-            // So if we had data, we'd render it. Since current data is empty, showing "No availability" is CORRECT dynamic behavior.
-            // If we want to keep the calendar structure but data-driven, we'd need complex logic.
-            // I will default to showing "Contact Sitter for compatibility" or keep the structure if we have data.
-            const Text(
-                "Availability data present but rendering not implemented yet."),
+            ...availability!.map((item) {
+              // Safe parsing
+              if (item is! Map<String, dynamic>) return const SizedBox.shrink();
+
+              final dateStr = item['date'] as String? ?? '';
+              final startTime = item['startTime'] as String? ?? '';
+              final endTime = item['endTime'] as String? ?? '';
+              if (dateStr.isEmpty) return const SizedBox.shrink();
+
+              DateTime? date = DateTime.tryParse(dateStr);
+              if (date == null) return const SizedBox.shrink();
+
+              // formatting
+              final dayStr = DateFormat('EEE, MMM d').format(date);
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0F9FF),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.access_time_rounded,
+                          size: 18, color: AppUiTokens.verifiedBlue),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      dayStr,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppUiTokens.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "$startTime - $endTime",
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: AppUiTokens.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ],
 
           const SizedBox(height: 32),
@@ -78,12 +120,34 @@ class AvailabilitySection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          _buildJobTypeItem("Recurring"), // We should map these too
-          _buildJobTypeItem("One-time"),
-          _buildJobTypeItem("Emergency (Same-day)"),
+          if (jobTypesAccepted == null || jobTypesAccepted!.isEmpty)
+            const Text(
+              "No specific job types listed",
+              style: TextStyle(color: AppUiTokens.textSecondary),
+            )
+          else
+            ...jobTypesAccepted!.entries.where((e) => e.value).map((e) {
+              return _buildJobTypeItem(_formatJobType(e.key));
+            }).toList(),
         ],
       ),
     );
+  }
+
+  String _formatJobType(String key) {
+    switch (key.toLowerCase()) {
+      case 'recurring':
+        return 'Recurring';
+      case 'onetime':
+      case 'one-time':
+        return 'One-time';
+      case 'emergency':
+        return 'Emergency (Same-day)';
+      default:
+        // Capitalize first letter
+        if (key.isEmpty) return key;
+        return key[0].toUpperCase() + key.substring(1);
+    }
   }
 
   Widget _buildJobTypeItem(String label) {

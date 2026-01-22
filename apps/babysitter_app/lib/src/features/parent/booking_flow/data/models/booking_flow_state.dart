@@ -176,8 +176,10 @@ class BookingFlowState {
       double startDouble = start.hour + start.minute / 60.0;
       double endDouble = end.hour + end.minute / 60.0;
 
-      // Handle overnight shifts if end time is before start time
-      if (endDouble < startDouble) {
+      // Handle overnight/24-hour shifts:
+      // - If end time equals start time, it's a 24-hour shift
+      // - If end time is before start time, it crosses midnight
+      if (endDouble <= startDouble) {
         endDouble += 24;
       }
 
@@ -188,7 +190,42 @@ class BookingFlowState {
   }
 
   /// Computed: Total hours for the entire booking
-  double get totalHours => hoursPerDay * numberOfDays;
+  /// This calculates the actual duration from start datetime to end datetime
+  double get totalHours {
+    if (startDate == null || endDate == null || startTime == null || endTime == null) {
+      return 0;
+    }
+
+    try {
+      // Parse the times
+      final startTimeOfDay = _parseTime(startTime!);
+      final endTimeOfDay = _parseTime(endTime!);
+
+      // Create full datetime objects
+      final startDateTime = DateTime(
+        startDate!.year,
+        startDate!.month,
+        startDate!.day,
+        startTimeOfDay.hour,
+        startTimeOfDay.minute,
+      );
+
+      final endDateTime = DateTime(
+        endDate!.year,
+        endDate!.month,
+        endDate!.day,
+        endTimeOfDay.hour,
+        endTimeOfDay.minute,
+      );
+
+      // Calculate the actual duration
+      final duration = endDateTime.difference(startDateTime);
+      return duration.inMinutes / 60.0;
+    } catch (e) {
+      // Fallback to old calculation if parsing fails
+      return hoursPerDay * numberOfDays;
+    }
+  }
 
   /// Computed: Subtotal (Total Hours * Hourly Rate)
   double get subTotal => totalHours * payRate;

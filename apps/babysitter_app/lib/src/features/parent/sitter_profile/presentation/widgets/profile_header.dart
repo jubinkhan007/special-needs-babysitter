@@ -134,9 +134,9 @@ class SitterProfileHeaderExact extends StatelessWidget {
                       size: 22,
                     ),
                   ),
-                  const Text(
-                    'Krystina Profile',
-                    style: TextStyle(
+                  Text(
+                    '$name Profile',
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: _iconGrey,
@@ -186,14 +186,24 @@ class SitterProfileHeaderExact extends StatelessWidget {
                   ),
                   child: ClipOval(
                     child: ClipOval(
-                      child: avatarAsset.startsWith('http')
-                          ? Image.network(
-                              avatarAsset,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(color: Colors.grey[200]),
+                      child: avatarAsset.isEmpty
+                          ? Container(
+                              color: Colors.grey[200],
+                              child: const Icon(Icons.person_rounded,
+                                  color: Colors.grey, size: 48),
                             )
-                          : Image.asset(avatarAsset, fit: BoxFit.cover),
+                          : avatarAsset.startsWith('http')
+                              ? Image.network(
+                                  avatarAsset,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                    color: Colors.grey[200],
+                                    child: const Icon(Icons.person_rounded,
+                                        color: Colors.grey, size: 48),
+                                  ),
+                                )
+                              : Image.asset(avatarAsset, fit: BoxFit.cover),
                     ),
                   ),
                 ),
@@ -235,20 +245,33 @@ class SitterProfileHeaderExact extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Icon(Icons.location_on_rounded,
-                        size: 16, color: _accentBlue),
-                    const SizedBox(width: 4),
-                    Text(
-                      distanceText,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: _textSecondary,
-                        height: 1.0,
+                    // Left side: Location (Flexible)
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.location_on_rounded,
+                              size: 16, color: _accentBlue),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              distanceText,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: _textSecondary,
+                                height: 1.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
 
+                    // Right side: Rating + Message
                     // Rating (star + number)
                     GestureDetector(
                       onTap: onTapRating,

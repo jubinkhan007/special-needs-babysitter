@@ -57,9 +57,13 @@ class Routes {
   static const String sitterHome = '/sitter/home';
   static const String sitterJobs = '/sitter/jobs';
   static const String sitterBookings = '/sitter/bookings';
+  static const String sitterBookingDetails = '/sitter/booking-details';
   static const String sitterMessages = '/sitter/messages';
   static const String sitterAccount = '/sitter/account';
+  static const String sitterProfileDetails = '/sitter/account/profile';
   static const String sitterJobDetails = '/sitter/job-details';
+  static const String sitterApplicationDetails = '/sitter/application-details';
+  static const String sitterJobRequestDetails = '/sitter/job-request-details';
   static const String sitterApplicationPreview = '/sitter/jobs';
   static const String sitterVerifyIdentity =
       '/sitter/background-check/verify-identity';

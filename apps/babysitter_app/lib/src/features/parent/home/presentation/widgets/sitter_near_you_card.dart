@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
-import 'package:babysitter_app/src/routing/routes.dart';
 import '../models/home_mock_models.dart';
 import '../theme/home_design_tokens.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/screens/sitter_profile_view.dart';
@@ -204,8 +203,7 @@ class SitterNearYouCard extends StatelessWidget {
                 width: 140,
                 child: ElevatedButton(
                   onPressed: () {
-                    context
-                        .push(Routes.sitterProfile, extra: {'sitter': sitter});
+                    context.push(Routes.sitterProfilePath(sitter.id));
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll(

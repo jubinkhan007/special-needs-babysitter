@@ -5,6 +5,7 @@ import '../../domain/entities/job_application_preview.dart';
 import '../../domain/repositories/application_repository.dart';
 import '../../data/repositories/application_repository_impl.dart';
 import '../../data/sources/application_remote_datasource.dart';
+import '../../data/models/application_model.dart';
 import '../../../job_details/presentation/providers/job_details_providers.dart';
 
 /// Provider for the application remote data source.
@@ -86,7 +87,8 @@ class SubmitApplicationNotifier extends StateNotifier<SubmitApplicationState> {
     required String jobId,
     required String coverLetter,
   }) async {
-    print('DEBUG: SubmitApplicationNotifier.submit called');
+    print(
+        'DEBUG: SubmitApplicationNotifier.submit called with jobId=$jobId, coverLetter=$coverLetter');
     state = state.copyWith(isLoading: true, error: null, isSuccess: false);
 
     try {
@@ -100,6 +102,16 @@ class SubmitApplicationNotifier extends StateNotifier<SubmitApplicationState> {
       return true;
     } catch (e) {
       print('DEBUG: Submit failed: $e');
+      if (e.toString().contains('DioException')) {
+        // Attempt to extract more info if available, requires casting in real code but simple print helps
+        try {
+          // In a real app we'd import Dio and cast, but for quick debug:
+          final dynamic exception = e;
+          print('DEBUG: Dio Error Response: ${exception.response?.data}');
+          print('DEBUG: Dio Error Status: ${exception.response?.statusCode}');
+        } catch (_) {}
+      }
+
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
       state = state.copyWith(
         isLoading: false,
@@ -122,4 +134,11 @@ final submitApplicationControllerProvider =
         (ref) {
   final repository = ref.watch(applicationRepositoryProvider);
   return SubmitApplicationNotifier(repository);
+});
+
+/// Provider for fetching a single application by ID.
+final sitterApplicationDetailsProvider =
+    FutureProvider.family<ApplicationModel, String>((ref, applicationId) async {
+  final repository = ref.watch(applicationRepositoryProvider);
+  return repository.getApplicationById(applicationId);
 });

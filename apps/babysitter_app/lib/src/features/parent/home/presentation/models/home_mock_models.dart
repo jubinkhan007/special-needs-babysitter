@@ -41,6 +41,7 @@ class SitterModel {
   final bool openToNegotiating;
   final List<ReviewModel> reviews;
   final List<dynamic> availability;
+  final List<String> ageRanges;
 
   const SitterModel({
     required this.id,
@@ -68,6 +69,7 @@ class SitterModel {
     this.openToNegotiating = false,
     this.reviews = const [],
     this.availability = const [],
+    this.ageRanges = const [],
   });
 }
 

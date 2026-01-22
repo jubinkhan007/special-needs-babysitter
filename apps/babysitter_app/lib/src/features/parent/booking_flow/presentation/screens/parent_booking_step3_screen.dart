@@ -155,6 +155,32 @@ class _ParentBookingStep3ScreenState
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {
+                // Validation
+                if (_streetController.text.isEmpty ||
+                    _cityController.text.isEmpty ||
+                    _stateController.text.isEmpty ||
+                    _zipController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill in all required fields.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                // Zip Code Validation
+                final zipRegex = RegExp(r'^\d{5}$');
+                if (!zipRegex.hasMatch(_zipController.text)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please enter a valid 5-digit Zip Code.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
                 // Save to provider
                 ref.read(bookingFlowProvider.notifier).updateStep3(
                       streetAddress: _streetController.text,

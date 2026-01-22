@@ -39,32 +39,39 @@ SitterProfileDto _$SitterProfileDtoFromJson(Map<String, dynamic> json) =>
       userId: json['userId'] as String,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
-      photoUrl: json['photoUrl'] as String,
-      bio: json['bio'] as String,
-      hourlyRate: (json['hourlyRate'] as num).toDouble(),
+      photoUrl: json['photoUrl'] as String?,
+      bio: json['bio'] as String?,
+      hourlyRate: (json['hourlyRate'] as num?)?.toDouble() ?? 0.0,
       openToNegotiating: json['openToNegotiating'] as bool?,
       distance: (json['distance'] as num?)?.toDouble(),
       address: json['address'] as String?,
       travelRadiusMiles: (json['travelRadiusMiles'] as num?)?.toDouble(),
-      hasTransportation: json['hasTransportation'] as bool,
-      transportationType: json['transportationType'] as String,
+      hasTransportation: json['hasTransportation'] as bool? ?? false,
+      transportationType: json['transportationType'] as String?,
       willingToTravel: json['willingToTravel'] as bool?,
       overnightAvailable: json['overnightAvailable'] as bool?,
-      skills:
-          (json['skills'] as List<dynamic>).map((e) => e as String).toList(),
-      ageRanges:
-          (json['ageRanges'] as List<dynamic>).map((e) => e as String).toList(),
-      languages:
-          (json['languages'] as List<dynamic>).map((e) => e as String).toList(),
-      certifications: (json['certifications'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      skills: (json['skills'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      ageRanges: (json['ageRanges'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      languages: (json['languages'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      certifications: (json['certifications'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       experiences: json['experiences'] as List<dynamic>?,
-      yearsOfExperience: json['yearsOfExperience'] as String,
-      reliabilityScore: (json['reliabilityScore'] as num).toDouble(),
+      yearsOfExperience: json['yearsOfExperience'] as String?,
+      reliabilityScore: (json['reliabilityScore'] as num?)?.toDouble() ?? 100.0,
       totalJobs: (json['totalJobs'] as num?)?.toInt(),
-      avgRating: (json['avgRating'] as num).toDouble(),
-      reviewCount: (json['reviewCount'] as num).toInt(),
+      avgRating: (json['avgRating'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       jobTypesAccepted:
           (json['jobTypesAccepted'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as bool),

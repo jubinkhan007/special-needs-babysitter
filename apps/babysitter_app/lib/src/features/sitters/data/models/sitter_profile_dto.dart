@@ -29,15 +29,15 @@ class SitterProfileDto {
   final String userId;
   final String firstName;
   final String lastName;
-  final String photoUrl;
-  final String bio;
+  final String? photoUrl;
+  final String? bio;
   final double hourlyRate;
   final bool? openToNegotiating; // Added
   final double? distance;
   final String? address; // Added
   final double? travelRadiusMiles;
   final bool hasTransportation;
-  final String transportationType;
+  final String? transportationType;
   final bool? willingToTravel; // Added
   final bool? overnightAvailable; // Added
   final List<String> skills;
@@ -45,7 +45,7 @@ class SitterProfileDto {
   final List<String> languages;
   final List<String> certifications;
   final List<dynamic>? experiences; // Added
-  final String yearsOfExperience;
+  final String? yearsOfExperience;
   final double reliabilityScore;
   final int? totalJobs; // Added
   final double avgRating;
@@ -64,27 +64,27 @@ class SitterProfileDto {
     required this.userId,
     required this.firstName,
     required this.lastName,
-    required this.photoUrl,
-    required this.bio,
-    required this.hourlyRate,
+    this.photoUrl,
+    this.bio,
+    this.hourlyRate = 0.0,
     this.openToNegotiating,
     this.distance,
     this.address,
     this.travelRadiusMiles,
-    required this.hasTransportation,
-    required this.transportationType,
+    this.hasTransportation = false,
+    this.transportationType,
     this.willingToTravel,
     this.overnightAvailable,
-    required this.skills,
-    required this.ageRanges,
-    required this.languages,
-    required this.certifications,
+    this.skills = const [],
+    this.ageRanges = const [],
+    this.languages = const [],
+    this.certifications = const [],
     this.experiences,
-    required this.yearsOfExperience,
-    required this.reliabilityScore,
+    this.yearsOfExperience,
+    this.reliabilityScore = 100.0,
     this.totalJobs,
-    required this.avgRating,
-    required this.reviewCount,
+    this.avgRating = 0.0,
+    this.reviewCount = 0,
     this.jobTypesAccepted,
     this.reviews,
     this.availability,

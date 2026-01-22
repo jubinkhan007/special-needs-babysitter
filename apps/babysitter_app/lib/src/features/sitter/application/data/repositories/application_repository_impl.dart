@@ -1,7 +1,7 @@
+import '../../data/models/application_model.dart';
+import '../../data/sources/application_remote_datasource.dart';
 import '../../domain/repositories/application_repository.dart';
-import '../sources/application_remote_datasource.dart';
 
-/// Repository implementation for job applications.
 class ApplicationRepositoryImpl implements ApplicationRepository {
   final ApplicationRemoteDataSource _remoteDataSource;
 
@@ -11,12 +11,30 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
   Future<void> submitApplication({
     required String jobId,
     required String coverLetter,
-  }) async {
-    print('DEBUG: ApplicationRepositoryImpl.submitApplication called');
-    await _remoteDataSource.submitApplication(
+  }) {
+    return _remoteDataSource.submitApplication(
       jobId: jobId,
       coverLetter: coverLetter,
     );
-    print('DEBUG: Application submitted successfully');
+  }
+
+  @override
+  Future<List<ApplicationModel>> getApplications({
+    String? status,
+    String? type,
+    int limit = 20,
+    int offset = 0,
+  }) {
+    return _remoteDataSource.getApplications(
+      status: status,
+      type: type,
+      limit: limit,
+      offset: offset,
+    );
+  }
+
+  @override
+  Future<ApplicationModel> getApplicationById(String applicationId) {
+    return _remoteDataSource.getApplicationById(applicationId);
   }
 }

@@ -7,7 +7,7 @@ import 'presentation/widgets/active_booking_card.dart';
 import 'presentation/widgets/complete_profile_card.dart';
 import 'presentation/widgets/home_header.dart';
 import 'presentation/widgets/home_search_bar.dart';
-import 'presentation/widgets/promo_banner_card.dart';
+import 'presentation/widgets/parent_home_banner_card.dart';
 import 'presentation/widgets/saved_sitter_card.dart';
 import 'presentation/widgets/sitter_near_you_card.dart';
 
@@ -33,7 +33,7 @@ class ParentHomeScreen extends StatelessWidget {
                 onTap: () => context.push(Routes.sitterSearch),
               ),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
-              const PromoBannerCard(),
+              const ParentHomeBannerCard(),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
               ActiveBookingCard(booking: HomeMockData.activeBooking),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),

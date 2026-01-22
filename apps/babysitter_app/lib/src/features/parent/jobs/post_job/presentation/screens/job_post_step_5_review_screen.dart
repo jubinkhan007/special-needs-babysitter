@@ -253,12 +253,14 @@ class _JobPostStep5ReviewScreenState
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w700,
-            color: _titleColor,
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: _titleColor,
+            ),
           ),
         ),
         GestureDetector(
@@ -368,26 +370,32 @@ class _JobPostStep5ReviewScreenState
           ),
 
           // Submit Button
-          GestureDetector(
-            onTap: isLoading ? null : _submitWithPayment,
-            child: Container(
-              width: 200, // ~190-220
-              height: 60, // ~56-62
-              decoration: BoxDecoration(
-                color: isLoading ? _primaryBtn.withOpacity(0.5) : _primaryBtn,
-                borderRadius: BorderRadius.circular(14), // ~12-14
-              ),
-              child: Center(
-                child: isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'Submit & Pay',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
+          Flexible(
+            child: GestureDetector(
+              onTap: isLoading ? null : _submitWithPayment,
+              child: Container(
+                constraints: const BoxConstraints(
+                  maxWidth: 200, // Max width, can shrink
+                  minWidth: 160,
+                ),
+                height: 60,
+                decoration: BoxDecoration(
+                  color: isLoading ? _primaryBtn.withOpacity(0.5) : _primaryBtn,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Center(
+                  child: isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          'Submit & Pay',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
+                ),
               ),
             ),
           ),

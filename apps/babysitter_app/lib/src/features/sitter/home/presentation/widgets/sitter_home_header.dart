@@ -8,6 +8,7 @@ class SitterHomeHeader extends StatelessWidget {
   final String location;
   final String? avatarUrl;
   final VoidCallback? onNotificationTap;
+  final bool isVerified;
 
   const SitterHomeHeader({
     super.key,
@@ -15,6 +16,7 @@ class SitterHomeHeader extends StatelessWidget {
     required this.location,
     this.avatarUrl,
     this.onNotificationTap,
+    this.isVerified = false,
   });
 
   @override
@@ -39,14 +41,26 @@ class SitterHomeHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Hi, $userName',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                    fontFamily: 'Inter',
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Hi, $userName',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    if (isVerified) ...[
+                      SizedBox(width: 4.w),
+                      Icon(
+                        Icons.verified,
+                        size: 16.w,
+                        color: const Color(0xFF2B89D6), // Brand blue
+                      ),
+                    ],
+                  ],
                 ),
                 SizedBox(height: 2.h),
                 Row(
