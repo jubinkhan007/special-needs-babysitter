@@ -51,6 +51,14 @@ final authDioProvider = Provider<Dio>((ref) {
 
       // Handle 401 Unauthorized (Token Expired)
       if (e.response?.statusCode == 401) {
+        // Skip token refresh for auth endpoints (login, register, etc.)
+        // These 401s are for invalid credentials, not expired sessions
+        final path = e.requestOptions.path;
+        if (path.startsWith('/auth/')) {
+          print('DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh');
+          return handler.next(e);
+        }
+
         print('DEBUG: AuthDio encountered 401. Attempting token refresh...');
         final sessionStore = ref.read(sessionStoreProvider);
         final refreshToken = await sessionStore.getRefreshToken();
@@ -92,10 +100,14 @@ final authDioProvider = Provider<Dio>((ref) {
             print('DEBUG: AuthDio token refresh FAILED: $refreshError');
             // If refresh fails, clear session and let the 401 propagate
             await sessionStore.clearSession();
+            // Invalidate auth state to trigger router redirect to login
+            ref.invalidate(authNotifierProvider);
           }
         } else {
           print('DEBUG: AuthDio No refresh token available.');
           await sessionStore.clearSession();
+          // Invalidate auth state to trigger router redirect to login
+          ref.invalidate(authNotifierProvider);
         }
       }
 
