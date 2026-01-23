@@ -7,6 +7,7 @@ class ProfessionalInfoSection extends StatelessWidget {
   final bool? hasTransportation;
   final String? transportationDetails;
   final bool? willingToTravel;
+  final VoidCallback? onEditTap;
 
   const ProfessionalInfoSection({
     super.key,
@@ -16,6 +17,7 @@ class ProfessionalInfoSection extends StatelessWidget {
     this.hasTransportation,
     this.transportationDetails,
     this.willingToTravel,
+    this.onEditTap,
   });
 
   @override
@@ -37,13 +39,25 @@ class ProfessionalInfoSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Professional Information',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1D2939),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Professional Information',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1D2939),
+                ),
+              ),
+              if (onEditTap != null)
+                IconButton(
+                  icon: const Icon(Icons.edit, size: 20, color: Color(0xFF667085)),
+                  onPressed: onEditTap,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+            ],
           ),
           const SizedBox(height: 16),
           // Bio

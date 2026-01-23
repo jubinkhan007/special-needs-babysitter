@@ -11,6 +11,7 @@ class Job {
   final String location;
   final DateTime scheduleDate;
   final String rateText;
+  final List<String> childIds;
   final List<ChildDetail> children;
 
   const Job({
@@ -20,6 +21,7 @@ class Job {
     required this.location,
     required this.scheduleDate,
     required this.rateText,
+    this.childIds = const [],
     required this.children,
   });
 }

@@ -9,6 +9,7 @@ import 'widgets/skills_certifications_section.dart';
 import 'widgets/availability_section.dart';
 import 'widgets/hourly_rate_section.dart';
 import 'widgets/professional_info_section.dart';
+import 'widgets/edit_professional_info_dialog.dart';
 
 class SitterProfileDetailsScreen extends ConsumerWidget {
   const SitterProfileDetailsScreen({super.key});
@@ -108,6 +109,28 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                     hasTransportation: profile.hasTransportation,
                     transportationDetails: profile.transportationDetails,
                     willingToTravel: profile.willingToTravel,
+                    onEditTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditProfessionalInfoDialog(
+                          profile: profile,
+                          onSave: (payload) async {
+                            final success = await ref
+                                .read(sitterProfileDetailsControllerProvider.notifier)
+                                .updateProfessionalInfo(payload);
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(success
+                                      ? 'Profile updated successfully'
+                                      : 'Failed to update profile'),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
                 ],

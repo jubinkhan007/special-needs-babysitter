@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../data/models/job_request_details_model.dart';
 
 /// Repository interface for job request operations.
@@ -24,5 +26,15 @@ abstract class JobRequestRepository {
     String applicationId, {
     required double latitude,
     required double longitude,
+  });
+
+  /// Upload cancellation evidence and return the public URL.
+  Future<String> uploadCancellationEvidence(File file);
+
+  /// Cancel a sitter booking.
+  Future<void> cancelBooking(
+    String applicationId, {
+    required String reason,
+    String? fileUrl,
   });
 }

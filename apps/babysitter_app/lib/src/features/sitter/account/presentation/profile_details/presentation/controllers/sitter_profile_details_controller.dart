@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
+import '../../../../../../sitter_profile_setup/presentation/providers/sitter_profile_setup_providers.dart';
 import '../../data/sitter_me_dto.dart';
 import '../../data/sitter_me_remote_datasource.dart';
 
@@ -32,5 +33,16 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _loadProfile());
+  }
+
+  Future<bool> updateProfessionalInfo(Map<String, dynamic> payload) async {
+    try {
+      final repository = ref.read(sitterProfileRepositoryProvider);
+      await repository.updateProfile(step: 2, data: payload);
+      await refresh();
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

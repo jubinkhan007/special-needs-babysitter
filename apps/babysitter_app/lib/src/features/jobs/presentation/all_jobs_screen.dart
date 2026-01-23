@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:domain/domain.dart' as domain;
 import '../../../theme/app_tokens.dart';
+import '../domain/job.dart';
 import 'models/job_ui_model.dart';
 import 'widgets/job_card.dart';
 import 'widgets/jobs_app_bar.dart';
 import 'package:go_router/go_router.dart';
 import '../../../routing/routes.dart';
 import 'providers/jobs_providers.dart';
+import '../../parent/jobs/post_job/presentation/providers/job_post_providers.dart';
 
 class AllJobsScreen extends ConsumerWidget {
   const AllJobsScreen({super.key});
@@ -14,6 +17,12 @@ class AllJobsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final jobsAsync = ref.watch(allJobsProvider);
+    final profileAsync = ref.watch(profileDetailsProvider);
+    final profileDetails = profileAsync.valueOrNull;
+    final childrenById = {
+      for (final child in profileDetails?.children ?? <domain.Child>[])
+        child.id: child,
+    };
 
     return MediaQuery(
       data: MediaQuery.of(context)
@@ -59,7 +68,12 @@ class AllJobsScreen extends ConsumerWidget {
                   const SizedBox(height: AppTokens.jobsCardSpacing),
               itemBuilder: (context, index) {
                 final job = jobs[index];
-                final uiModel = JobUiModel.fromDomain(job);
+                final resolvedChildren =
+                    _resolveChildren(job, childrenById);
+                final uiModel = JobUiModel.fromDomain(
+                  job,
+                  childrenOverride: resolvedChildren,
+                );
 
                 return JobCard(
                   job: uiModel,
@@ -113,5 +127,30 @@ class AllJobsScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  List<ChildDetail> _resolveChildren(
+    Job job,
+    Map<String, domain.Child> childrenById,
+  ) {
+    if (job.childIds.isEmpty) {
+      return job.children;
+    }
+
+    final resolved = <ChildDetail>[];
+    for (final childId in job.childIds) {
+      final child = childrenById[childId];
+      if (child != null) {
+        final name = child.firstName.isNotEmpty ? child.firstName : child.fullName;
+        resolved.add(
+          ChildDetail(
+            name: name.isNotEmpty ? name : 'Child',
+            ageYears: child.age,
+          ),
+        );
+      }
+    }
+
+    return resolved.isNotEmpty ? resolved : job.children;
   }
 } // Close class

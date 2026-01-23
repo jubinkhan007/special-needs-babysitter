@@ -30,6 +30,16 @@ extension JobDtoMapper on JobDto {
       }
     }
 
+    final childCount = childIds.length;
+    final children = childCount > 0
+        ? [
+            ChildDetail(
+              name: '$childCount ${childCount == 1 ? 'Child' : 'Children'}',
+              ageYears: -1,
+            ),
+          ]
+        : <ChildDetail>[];
+
     return Job(
       id: id,
       title: title,
@@ -40,10 +50,9 @@ extension JobDtoMapper on JobDto {
           : '${address?.city ?? "Unknown"}, ${address?.state ?? ""}'.trim(),
       scheduleDate: parseDate(startDate), // API has startDate "2026-01-17"
       rateText: '\$${payRate.toStringAsFixed(0)}/hr', // e.g. $25/hr
-      // Populate children with placeholders if only IDs are available
-      children: childIds
-          .map((id) => const ChildDetail(name: 'Child', ageYears: 0))
-          .toList(),
+      childIds: childIds,
+      // Show a count-based placeholder in list views when only IDs are available.
+      children: children,
     );
   }
 

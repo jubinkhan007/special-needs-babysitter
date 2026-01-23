@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geocoding/geocoding.dart';
 import '../providers/job_post_providers.dart';
 import '../controllers/job_post_controller.dart';
 import 'job_post_step_header.dart';
@@ -31,6 +32,9 @@ class _JobPostStep3LocationScreenState
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _zipCodeController = TextEditingController();
+
+  // Geocoding state
+  bool _isGeocoding = false;
 
   @override
   void initState() {
@@ -64,6 +68,68 @@ class _JobPostStep3LocationScreenState
     _stateController.dispose();
     _zipCodeController.dispose();
     super.dispose();
+  }
+
+  Future<Map<String, dynamic>?> _geocodeAddress() async {
+    final street = _streetAddressController.text.trim();
+    final apt = _unitController.text.trim();
+    final city = _cityController.text.trim();
+    final state = _stateController.text.trim();
+    final zip = _zipCodeController.text.trim();
+
+    if (street.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all required address fields first.'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return null;
+    }
+
+    setState(() => _isGeocoding = true);
+
+    try {
+      // Build address string
+      final parts = [street, apt, city, '$state $zip']
+          .where((p) => p.isNotEmpty)
+          .toList();
+      final fullAddress = parts.join(', ');
+
+      // Geocode address
+      final addresses = await locationFromAddress(fullAddress);
+
+      if (!mounted) return null;
+
+      if (addresses.isEmpty) {
+        setState(() => _isGeocoding = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Address could not be found. Please verify.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return null;
+      }
+
+      final location = addresses.first;
+      setState(() => _isGeocoding = false);
+
+      return {
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+      };
+    } catch (e) {
+      if (!mounted) return null;
+      setState(() => _isGeocoding = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return null;
+    }
   }
 
   @override
@@ -265,7 +331,7 @@ class _JobPostStep3LocationScreenState
     return null;
   }
 
-  void _onContinue() {
+  Future<void> _onContinue() async {
     // Check if required fields are empty
     if (_streetAddressController.text.isEmpty ||
         _cityController.text.isEmpty ||
@@ -280,31 +346,36 @@ class _JobPostStep3LocationScreenState
       return;
     }
 
-    if (_streetAddressController.text.isNotEmpty &&
-        _cityController.text.isNotEmpty &&
-        _zipCodeController.text.isNotEmpty) {
-      // Validate Zip Code (must be exactly 5 digits)
-      final zipRegex = RegExp(r'^\d{5}$');
-      if (!zipRegex.hasMatch(_zipCodeController.text)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please enter a valid 5-digit Zip Code.'),
-            backgroundColor: Colors.orange,
-          ),
+    // Validate Zip Code (must be exactly 5 digits)
+    final zipRegex = RegExp(r'^\d{5}$');
+    if (!zipRegex.hasMatch(_zipCodeController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid 5-digit Zip Code.'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    // Geocode the address
+    final coordinates = await _geocodeAddress();
+    if (coordinates == null) {
+      return;
+    }
+
+    // Update controller with real coordinates
+    ref.read(jobPostControllerProvider.notifier).updateLocation(
+          streetAddress: _streetAddressController.text,
+          aptUnit: _unitController.text,
+          city: _cityController.text,
+          state: _stateController.text,
+          zipCode: _zipCodeController.text,
+          latitude: coordinates['latitude'] as double,
+          longitude: coordinates['longitude'] as double,
         );
-        return;
-      }
 
-      ref.read(jobPostControllerProvider.notifier).updateLocation(
-            streetAddress: _streetAddressController.text,
-            aptUnit: _unitController.text,
-            city: _cityController.text,
-            state: _stateController.text,
-            zipCode: _zipCodeController.text,
-            latitude: 36.1627, // Mock latitude
-            longitude: -86.7816, // Mock longitude
-          );
-
+    if (mounted) {
       widget.onNext();
     }
   }
@@ -336,23 +407,33 @@ class _JobPostStep3LocationScreenState
 
           // Continue Button
           GestureDetector(
-            onTap: _onContinue,
+            onTap: _isGeocoding ? null : _onContinue,
             child: Container(
               width: 190, // width ~180–210
               height: 60, // height ~56–66
               decoration: BoxDecoration(
-                color: _primaryBtn,
+                color: _isGeocoding ? Colors.grey[400] : _primaryBtn,
                 borderRadius: BorderRadius.circular(15), // ~14–16
               ),
-              child: const Center(
-                child: Text(
-                  'Continue',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700, // bold
-                    color: Colors.white,
-                  ),
-                ),
+              child: Center(
+                child: _isGeocoding
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700, // bold
+                          color: Colors.white,
+                        ),
+                      ),
               ),
             ),
           ),

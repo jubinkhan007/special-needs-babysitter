@@ -24,9 +24,10 @@ class JobUiModel {
     required this.childParts,
   });
 
-  factory JobUiModel.fromDomain(Job job) {
+  factory JobUiModel.fromDomain(Job job, {List<ChildDetail>? childrenOverride}) {
     // formatter
     final dateFormat = DateFormat('MM/dd/yyyy'); // 20 May, 2025
+    final children = childrenOverride ?? job.children;
 
     return JobUiModel(
       id: job.id,
@@ -35,17 +36,23 @@ class JobUiModel {
       location: job.location, // "Brooklyn, NY 11201"
       scheduleLabel: dateFormat.format(job.scheduleDate),
       rateLabel: job.rateText, // "$25/hr"
-      childDetailsRaw: _formatChildrenString(job.children),
-      childParts: _generateChildParts(job.children),
+      childDetailsRaw: _formatChildrenString(children),
+      childParts: _generateChildParts(children),
     );
   }
 
   static String _formatChildrenString(List<ChildDetail> children) {
     if (children.isEmpty) return 'No children';
-    return children.map((c) => '${c.name} (${c.ageYears}y)').join(' | ');
+    return children
+        .map((c) => c.ageYears >= 0 ? '${c.name} (${c.ageYears}y)' : c.name)
+        .join(' | ');
   }
 
   static List<ChildPart> _generateChildParts(List<ChildDetail> children) {
+    if (children.isEmpty) {
+      return [ChildPart(text: 'No children', type: ChildPartType.name)];
+    }
+
     // Produces a list of parts so the UI can construct RichText
     // Example: Ally (4y) | Jason (2y)
     // Parts: [Name: "Ally ", Age: "(4y)", Separator: " | ", Name: "Jason ", Age: "(2y)"]
@@ -53,8 +60,10 @@ class JobUiModel {
     for (var i = 0; i < children.length; i++) {
       final child = children[i];
       parts.add(ChildPart(text: '${child.name} ', type: ChildPartType.name));
-      parts.add(
-          ChildPart(text: '(${child.ageYears}y)', type: ChildPartType.age));
+      if (child.ageYears >= 0) {
+        parts.add(
+            ChildPart(text: '(${child.ageYears}y)', type: ChildPartType.age));
+      }
 
       if (i < children.length - 1) {
         parts.add(ChildPart(text: ' | ', type: ChildPartType.separator));

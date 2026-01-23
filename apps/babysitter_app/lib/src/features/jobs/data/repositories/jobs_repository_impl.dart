@@ -31,10 +31,16 @@ class JobsRepositoryImpl implements JobsRepository {
   @override
   Future<void> updateJob(String id, Map<String, dynamic> data) async {
     try {
+      print('=== REPO: Calling PUT /jobs/$id ===');
+      print('=== REPO: Request data: $data ===');
+
       final response = await _client.put(
         '/jobs/$id',
         data: data,
       );
+
+      print('=== REPO: Response status: ${response.statusCode} ===');
+      print('=== REPO: Response data: ${response.data} ===');
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         // Success
@@ -42,7 +48,14 @@ class JobsRepositoryImpl implements JobsRepository {
       } else {
         throw Exception('Failed to update job: Status ${response.statusCode}');
       }
+    } on DioException catch (e) {
+      print('=== REPO: DioException ===');
+      print('=== REPO: Status code: ${e.response?.statusCode} ===');
+      print('=== REPO: Response data: ${e.response?.data} ===');
+      print('=== REPO: Request data sent: ${e.requestOptions.data} ===');
+      rethrow;
     } catch (e) {
+      print('=== REPO: Generic error: $e ===');
       rethrow;
     }
   }
@@ -81,8 +94,20 @@ class JobsRepositoryImpl implements JobsRepository {
               // Check for children in dataParams OR inside the job object itself
               final childrenList = (dataParams['children'] as List<dynamic>?) ??
                   (jobMap['children'] as List<dynamic>?);
+
+              // DEBUG: Print raw job data for emergency contact
+              print('=== GET JOB DETAILS DEBUG ===');
+              print('Full jobMap keys: ${jobMap.keys.toList()}');
+              print(
+                  'Raw jobMap emergencyContact: ${jobMap['emergencyContact']}');
+              print(
+                  'Raw jobMap emergencyContactName: ${jobMap['emergencyContactName']}');
+
               final dto = JobDto.fromJson(jobMap);
               final emergency = _extractEmergencyContact(jobMap);
+
+              print('Extracted emergency: $emergency');
+
               return dto.toJobDetails(
                 emergencyContactName: emergency['name'],
                 emergencyContactPhone: emergency['phone'],

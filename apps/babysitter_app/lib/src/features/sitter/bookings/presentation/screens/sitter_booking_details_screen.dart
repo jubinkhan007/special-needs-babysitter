@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,6 +33,11 @@ class SitterBookingDetailsScreen extends ConsumerStatefulWidget {
 class _SitterBookingDetailsScreenState
     extends ConsumerState<SitterBookingDetailsScreen> {
   bool _isClockingIn = false;
+  static const String _emergencySelection = 'Emergency Situation';
+  static const String _emergencyPayloadReason =
+      'Medical emergency - unable to fulfill booking';
+  static const String _standardPayloadReason =
+      'Family emergency - unable to fulfill booking';
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +45,43 @@ class _SitterBookingDetailsScreenState
         ref.watch(jobRequestDetailsProvider(widget.applicationId));
 
     return jobDetailsAsync.when(
-      data: (jobDetails) => _buildContent(context, ref, jobDetails),
+      data: (jobDetails) {
+        // DEBUG: Log location and clock-in info
+        print('=== CLOCK IN DEBUG ===');
+        print('canClockIn: ${jobDetails.canClockIn}');
+        print('clockInMessage: ${jobDetails.clockInMessage}');
+        print('isToday: ${jobDetails.isToday}');
+        print('Job location: ${jobDetails.location}');
+        print('Job fullAddress: ${jobDetails.fullAddress}');
+        print(
+            'Job coordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}');
+        print('Geofence radius: ${jobDetails.geofenceRadiusMeters} meters');
+        print('Start time: ${jobDetails.startTime}');
+        print('End time: ${jobDetails.endTime}');
+        final localStartDateTime = _parseStartDateTime(jobDetails);
+        print('Local startDateTime: $localStartDateTime');
+        final now = DateTime.now();
+        print('Now (local): $now');
+        print('Now (UTC): ${now.toUtc()}');
+        print('Timezone offset: ${now.timeZoneOffset}');
+        print(
+            'Local clock-in window allows: ${_isWithinClockInWindow(jobDetails)}');
+
+        // DEBUG: Get and log device location (non-blocking)
+        _logDeviceLocation();
+
+        return _buildContent(context, ref, jobDetails);
+      },
       loading: () => Scaffold(
         backgroundColor: Colors.white,
-        appBar: _buildAppBar(context,
-            title: _getAppBarTitle(widget.initialStatus)),
+        appBar:
+            _buildAppBar(context, title: _getAppBarTitle(widget.initialStatus)),
         body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: _buildAppBar(context,
-            title: _getAppBarTitle(widget.initialStatus)),
+        appBar:
+            _buildAppBar(context, title: _getAppBarTitle(widget.initialStatus)),
         body: Center(
           child: Padding(
             padding: EdgeInsets.all(20.w),
@@ -129,6 +163,7 @@ class _SitterBookingDetailsScreenState
     final platformFee = jobDetails.platformFee ?? 0;
     final discount = jobDetails.discount ?? 0;
     final estimatedTotal = subTotal + platformFee - discount;
+    final clockInState = _resolveClockInState(jobDetails);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -212,7 +247,8 @@ class _SitterBookingDetailsScreenState
                                     ),
                                     SizedBox(width: 12.w),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           child.firstName,
@@ -432,7 +468,6 @@ class _SitterBookingDetailsScreenState
               ),
             ),
           ),
-
           if (isCompleted)
             Container(
               padding: EdgeInsets.all(20.w),
@@ -522,8 +557,8 @@ class _SitterBookingDetailsScreenState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (jobDetails.clockInMessage != null &&
-                      jobDetails.clockInMessage!.isNotEmpty) ...[
+                  if (clockInState.message != null &&
+                      clockInState.message!.isNotEmpty) ...[
                     Container(
                       width: double.infinity,
                       padding:
@@ -541,7 +576,7 @@ class _SitterBookingDetailsScreenState
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Text(
-                              jobDetails.clockInMessage!,
+                              clockInState.message!,
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: const Color(0xFFB42318),
@@ -560,19 +595,20 @@ class _SitterBookingDetailsScreenState
                         child: SizedBox(
                           height: 48.h,
                           child: ElevatedButton(
-                            onPressed: (jobDetails.canClockIn && !_isClockingIn)
-                                ? () async {
-                                    final actionApplicationId =
-                                        jobDetails.applicationId.isNotEmpty
-                                            ? jobDetails.applicationId
-                                            : widget.applicationId;
-                                    await _clockIn(
-                                      context,
-                                      ref,
-                                      actionApplicationId,
-                                    );
-                                  }
-                                : null,
+                            onPressed:
+                                (clockInState.canClockIn && !_isClockingIn)
+                                    ? () async {
+                                        final actionApplicationId =
+                                            jobDetails.applicationId.isNotEmpty
+                                                ? jobDetails.applicationId
+                                                : widget.applicationId;
+                                        await _clockIn(
+                                          context,
+                                          ref,
+                                          actionApplicationId,
+                                        );
+                                      }
+                                    : null,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF87C4F2),
                               foregroundColor: Colors.white,
@@ -618,7 +654,10 @@ class _SitterBookingDetailsScreenState
                               color: const Color(0xFF667085), size: 20.w),
                           onPressed: () {
                             // TODO: Show more options menu
-                            _showMoreOptionsMenu(context);
+                            _showMoreOptionsMenu(
+                              context,
+                              jobDetails.applicationId,
+                            );
                           },
                         ),
                       ),
@@ -815,6 +854,104 @@ class _SitterBookingDetailsScreenState
     }
   }
 
+  _ClockInState _resolveClockInState(JobRequestDetailsModel jobDetails) {
+    final serverMessage = jobDetails.clockInMessage?.trim();
+    final localWindowAllows = _isWithinClockInWindow(jobDetails);
+    if (jobDetails.canClockIn) {
+      return const _ClockInState(canClockIn: true);
+    }
+
+    final fallbackMessage = _buildClockInMessage(jobDetails);
+    if (localWindowAllows) {
+      final mismatchMessage =
+          (serverMessage != null && serverMessage.isNotEmpty)
+              ? '$serverMessage (Server clock-in window mismatch detected. Please contact support.)'
+              : 'Clock-in is blocked by the server despite being within the window. Please contact support.';
+      return _ClockInState(
+        canClockIn: false,
+        message: mismatchMessage,
+      );
+    }
+    return _ClockInState(
+      canClockIn: false,
+      message: (serverMessage != null && serverMessage.isNotEmpty)
+          ? serverMessage
+          : fallbackMessage,
+    );
+  }
+
+  bool _isWithinClockInWindow(JobRequestDetailsModel jobDetails) {
+    const windowMinutes = 15;
+    final startDateTime = _parseStartDateTime(jobDetails);
+    if (startDateTime == null) {
+      return false;
+    }
+    final now = DateTime.now();
+    final windowStart =
+        startDateTime.subtract(const Duration(minutes: windowMinutes));
+    final windowEnd = startDateTime;
+    final afterStart =
+        now.isAfter(windowStart) || now.isAtSameMomentAs(windowStart);
+    final beforeEnd =
+        now.isBefore(windowEnd) || now.isAtSameMomentAs(windowEnd);
+    return afterStart && beforeEnd;
+  }
+
+  String _buildClockInMessage(JobRequestDetailsModel jobDetails) {
+    final startDateTime = _parseStartDateTime(jobDetails);
+    if (startDateTime == null) {
+      return 'Clock in is not available yet.';
+    }
+    final hour = startDateTime.hour == 0 ? 12 : startDateTime.hour % 12;
+    final minute = startDateTime.minute.toString().padLeft(2, '0');
+    final period = startDateTime.hour >= 12 ? 'PM' : 'AM';
+    return 'You can clock in starting 15 minutes before the scheduled time ($hour:$minute $period).';
+  }
+
+  DateTime? _parseStartDateTime(JobRequestDetailsModel jobDetails) {
+    final date = jobDetails.isToday
+        ? DateTime.now()
+        : _parseDate(jobDetails.startDate);
+    final minutes = _parseTimeToMinutes(jobDetails.startTime);
+    if (date == null || minutes == null) {
+      return null;
+    }
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      minutes ~/ 60,
+      minutes % 60,
+    );
+  }
+
+  DateTime? _parseDate(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return null;
+    }
+    try {
+      final parsed = DateTime.parse(trimmed);
+      return DateTime(parsed.year, parsed.month, parsed.day);
+    } catch (_) {
+      final parts = trimmed.split(RegExp(r'[-/]'));
+      if (parts.length == 3) {
+        final first = int.tryParse(parts[0]);
+        final second = int.tryParse(parts[1]);
+        final third = int.tryParse(parts[2]);
+        if (first == null || second == null || third == null) {
+          return null;
+        }
+        if (parts[0].length == 4) {
+          return DateTime(first, second, third);
+        }
+        final year = third < 100 ? 2000 + third : third;
+        return DateTime(year, first, second);
+      }
+    }
+    return null;
+  }
+
   String _formatCurrency(double value) {
     return '\$${value.toStringAsFixed(0)}';
   }
@@ -927,7 +1064,7 @@ class _SitterBookingDetailsScreenState
     }
   }
 
-  void _showMoreOptionsMenu(BuildContext context) {
+  void _showMoreOptionsMenu(BuildContext context, String applicationId) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -969,7 +1106,7 @@ class _SitterBookingDetailsScreenState
               ),
               onTap: () {
                 context.pop();
-                // TODO: Show cancel confirmation
+                _showCancelReasonSheet(context, applicationId);
               },
             ),
             ListTile(
@@ -992,6 +1129,657 @@ class _SitterBookingDetailsScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _showCancelReasonSheet(
+    BuildContext context,
+    String applicationId,
+  ) async {
+    final parentContext = context;
+    final reasons = <String>[
+      _emergencySelection,
+      'Unexpected Illness',
+      'Scheduling Conflict',
+      'Other',
+    ];
+    String? selectedReason;
+    final otherController = TextEditingController();
+
+    await showModalBottomSheet<void>(
+      context: parentContext,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
+      builder: (sheetContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final requiresOther = selectedReason == 'Other';
+            final canProceed = selectedReason != null &&
+                (!requiresOther ||
+                    otherController.text.trim().isNotEmpty);
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                20.w,
+                16.h,
+                20.w,
+                16.h + MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Select Reason to Cancel',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF101828),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Color(0xFF101828)),
+                        onPressed: () => Navigator.of(sheetContext).pop(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12.h),
+                  ...reasons.map(
+                    (reason) => Padding(
+                      padding: EdgeInsets.only(bottom: 12.h),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedReason = reason;
+                          });
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 22.w,
+                              height: 22.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: selectedReason == reason
+                                      ? const Color(0xFF87C4F2)
+                                      : const Color(0xFFD0D5DD),
+                                  width: 2,
+                                ),
+                              ),
+                              child: selectedReason == reason
+                                  ? Center(
+                                      child: Container(
+                                        width: 10.w,
+                                        height: 10.w,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF87C4F2),
+                                        ),
+                                      ),
+                                    )
+                                  : null,
+                            ),
+                            SizedBox(width: 12.w),
+                            Expanded(
+                              child: Text(
+                                reason,
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xFF475467),
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  TextField(
+                    controller: otherController,
+                    minLines: 4,
+                    maxLines: 4,
+                    onChanged: (_) => setState(() {}),
+                    decoration: InputDecoration(
+                      hintText: 'Write your reason here...',
+                      hintStyle: TextStyle(
+                        color: const Color(0xFF98A2B3),
+                        fontSize: 13.sp,
+                        fontFamily: 'Inter',
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: const BorderSide(color: Color(0xFFD0D5DD)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: const BorderSide(color: Color(0xFFD0D5DD)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.r),
+                        borderSide: const BorderSide(color: Color(0xFF87C4F2)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 46.h,
+                    child: ElevatedButton(
+                      onPressed: canProceed
+                          ? () {
+                              Navigator.of(sheetContext).pop();
+                              if (selectedReason == _emergencySelection) {
+                                _showEmergencyCancellationDialog(
+                                  parentContext,
+                                  applicationId,
+                                );
+                              } else {
+                                _showCancellationImpactDialog(
+                                  parentContext,
+                                  applicationId,
+                                );
+                              }
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF87C4F2),
+                        disabledBackgroundColor: Colors.grey.shade300,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    otherController.dispose();
+  }
+
+  Future<void> _showEmergencyCancellationDialog(
+    BuildContext context,
+    String applicationId,
+  ) async {
+    final parentContext = context;
+    final detailsController = TextEditingController();
+    String? fileUrl;
+    String? fileName;
+    bool isUploading = false;
+    bool isSubmitting = false;
+
+    await showDialog<void>(
+      context: parentContext,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            Future<void> handleUpload() async {
+              if (isUploading) return;
+              final result = await FilePicker.platform.pickFiles(
+                type: FileType.custom,
+                allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+              );
+              if (result == null || result.files.single.path == null) {
+                return;
+              }
+              final pickedFile = File(result.files.single.path!);
+              final pickedName = result.files.single.name;
+              setState(() {
+                isUploading = true;
+                fileName = pickedName;
+              });
+              try {
+                final url = await ref
+                    .read(jobRequestRepositoryProvider)
+                    .uploadCancellationEvidence(pickedFile);
+                if (!mounted) return;
+                setState(() {
+                  fileUrl = url;
+                });
+              } catch (e) {
+                if (mounted) {
+                  ScaffoldMessenger.of(parentContext).showSnackBar(
+                    SnackBar(content: Text('Upload failed: $e')),
+                  );
+                }
+                setState(() {
+                  fileName = null;
+                  fileUrl = null;
+                });
+              } finally {
+                if (mounted) {
+                  setState(() {
+                    isUploading = false;
+                  });
+                }
+              }
+            }
+
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Color(0xFF101828)),
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                      ),
+                    ),
+                    Text(
+                      'Emergency Cancellation',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF101828),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      'We understand emergencies happen. If this cancellation is due to an unavoidable situation, let us know below.',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: const Color(0xFF667085),
+                        height: 1.3,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      'Emergency Details',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF101828),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    TextField(
+                      controller: detailsController,
+                      minLines: 4,
+                      maxLines: 4,
+                      decoration: InputDecoration(
+                        hintText: 'Briefly describe your situation (optional)',
+                        hintStyle: TextStyle(
+                          color: const Color(0xFF98A2B3),
+                          fontSize: 13.sp,
+                          fontFamily: 'Inter',
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFD0D5DD)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide:
+                              const BorderSide(color: Color(0xFFD0D5DD)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                          borderSide:
+                              const BorderSide(color: Color(0xFF87C4F2)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    InkWell(
+                      onTap: isUploading ? null : handleUpload,
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Container(
+                        width: 120.w,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 10.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF2F4F7),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.file_upload_outlined,
+                              color: const Color(0xFF667085),
+                              size: 20.sp,
+                            ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              isUploading
+                                  ? 'Uploading...'
+                                  : 'Upload\nDocument',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: const Color(0xFF667085),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (fileName != null) ...[
+                      SizedBox(height: 8.h),
+                      Text(
+                        'Uploaded: $fileName',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: const Color(0xFF12B76A),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ],
+                    SizedBox(height: 12.h),
+                    Text(
+                      'Our team will review your situation and decide if the cancellation penalty can be waived.',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFF667085),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 46.h,
+                      child: ElevatedButton(
+                        onPressed: (isSubmitting || isUploading)
+                            ? null
+                            : () async {
+                                setState(() {
+                                  isSubmitting = true;
+                                });
+                                final success = await _cancelBooking(
+                                  parentContext,
+                                  applicationId,
+                                  reason: _emergencyPayloadReason,
+                                  fileUrl: fileUrl,
+                                );
+                                if (!mounted) return;
+                                if (success) {
+                                  Navigator.of(dialogContext).pop();
+                                  parentContext.pop();
+                                  return;
+                                }
+                                setState(() {
+                                  isSubmitting = false;
+                                });
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF87C4F2),
+                          disabledBackgroundColor: Colors.grey.shade300,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                        child: isSubmitting
+                            ? SizedBox(
+                                width: 18.w,
+                                height: 18.h,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              )
+                            : Text(
+                                'Submit',
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    detailsController.dispose();
+  }
+
+  Future<void> _showCancellationImpactDialog(
+    BuildContext context,
+    String applicationId,
+  ) async {
+    final parentContext = context;
+    bool isSubmitting = false;
+
+    await showDialog<void>(
+      context: parentContext,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: const Icon(Icons.close, color: Color(0xFF101828)),
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                      ),
+                    ),
+                    Text(
+                      'Cancellation Process',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF101828),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      'You canceled your booking with The Smith Family.',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: const Color(0xFF667085),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Text(
+                      'Cancellation Impact:',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF101828),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    _buildImpactRow(
+                      'A note has been added to your profile.',
+                    ),
+                    _buildImpactRow(
+                      'Future job recommendations may be impacted.',
+                    ),
+                    _buildImpactRow(
+                      'Frequent cancellations could result in temporary account suspension.',
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      'Reach out to the family if you’d like to explain the cancellation.',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFF667085),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 46.h,
+                      child: ElevatedButton(
+                        onPressed: isSubmitting
+                            ? null
+                            : () async {
+                                setState(() {
+                                  isSubmitting = true;
+                                });
+                                final success = await _cancelBooking(
+                                  parentContext,
+                                  applicationId,
+                                  reason: _standardPayloadReason,
+                                );
+                                if (!mounted) return;
+                                if (success) {
+                                  Navigator.of(dialogContext).pop();
+                                  parentContext.pop();
+                                  return;
+                                }
+                                setState(() {
+                                  isSubmitting = false;
+                                });
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF87C4F2),
+                          disabledBackgroundColor: Colors.grey.shade300,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                        child: isSubmitting
+                            ? SizedBox(
+                                width: 18.w,
+                                height: 18.h,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              )
+                            : Text(
+                                'Cancellation Confirmed',
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildImpactRow(String text) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 6.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 6.h),
+            width: 6.w,
+            height: 6.w,
+            decoration: const BoxDecoration(
+              color: Color(0xFF101828),
+              shape: BoxShape.circle,
+            ),
+          ),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: const Color(0xFF667085),
+                height: 1.3,
+                fontFamily: 'Inter',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool> _cancelBooking(
+    BuildContext context,
+    String applicationId, {
+    required String reason,
+    String? fileUrl,
+  }) async {
+    try {
+      await ref.read(jobRequestRepositoryProvider).cancelBooking(
+            applicationId,
+            reason: reason,
+            fileUrl: fileUrl,
+          );
+      if (!mounted) return false;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Booking cancelled successfully')),
+      );
+      return true;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error cancelling booking: $e')),
+        );
+      }
+      return false;
+    }
   }
 
   Future<void> _showMarkCompleteDialog(BuildContext context) async {
@@ -1104,9 +1892,7 @@ class _SitterBookingDetailsScreenState
       // Get device location for clock-in
       final position = await _getDeviceLocation();
 
-      await ref
-          .read(jobRequestRepositoryProvider)
-          .clockInBooking(
+      await ref.read(jobRequestRepositoryProvider).clockInBooking(
             applicationId,
             latitude: position['latitude'] as double,
             longitude: position['longitude'] as double,
@@ -1138,7 +1924,8 @@ class _SitterBookingDetailsScreenState
       // Check if location services are enabled
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        throw Exception('Location services are disabled. Please enable them to clock in.');
+        throw Exception(
+            'Location services are disabled. Please enable them to clock in.');
       }
 
       // Request location permission
@@ -1151,7 +1938,8 @@ class _SitterBookingDetailsScreenState
       }
 
       if (permission == LocationPermission.deniedForever) {
-        throw Exception('Location permission is permanently denied. Please enable it in app settings.');
+        throw Exception(
+            'Location permission is permanently denied. Please enable it in app settings.');
       }
 
       // Get current position with 30 second timeout
@@ -1177,6 +1965,36 @@ class _SitterBookingDetailsScreenState
         );
       }
       rethrow;
+    }
+  }
+
+  /// DEBUG: Log current device location
+  Future<void> _logDeviceLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print('DEBUG DEVICE LOCATION: Location services disabled');
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        print('DEBUG DEVICE LOCATION: Permission denied');
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        timeLimit: const Duration(seconds: 10),
+        desiredAccuracy: LocationAccuracy.best,
+      );
+
+      print('=== DEVICE LOCATION DEBUG ===');
+      print('Device latitude: ${position.latitude}');
+      print('Device longitude: ${position.longitude}');
+      print('Device accuracy: ${position.accuracy} meters');
+    } catch (e) {
+      print('DEBUG DEVICE LOCATION ERROR: $e');
     }
   }
 
@@ -1291,4 +2109,11 @@ class _SitterBookingDetailsScreenState
     final period = time.period == DayPeriod.am ? 'AM' : 'PM';
     return '$hour:$minute $period';
   }
+}
+
+class _ClockInState {
+  final bool canClockIn;
+  final String? message;
+
+  const _ClockInState({required this.canClockIn, this.message});
 }

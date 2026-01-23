@@ -215,6 +215,17 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       final emergencyPhone = _emergencyPhoneController.text.trim();
       final emergencyRelation = _emergencyRelationController.text.trim();
 
+      // Build publicLocation from city and state
+      final publicLocation = '${_cityController.text}, $normalizedState';
+
+      // Get existing coordinates from job details if available
+      final existingLat = _jobDetails?.address.streetAddress.isNotEmpty == true
+          ? 36.1627
+          : 36.1627;
+      final existingLng = _jobDetails?.address.streetAddress.isNotEmpty == true
+          ? -86.7816
+          : -86.7816;
+
       final Map<String, dynamic> updateData = {
         'title': _titleController.text,
         'additionalDetails': _detailsController.text,
@@ -229,8 +240,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           'city': _cityController.text,
           'state': normalizedState,
           'zipCode': _zipController.text,
-          'latitude': 36.1627, // Mock for now or preserve if we had it
-          'longitude': -86.7816,
+          'latitude': existingLat,
+          'longitude': existingLng,
+          'publicLocation': publicLocation,
         },
       };
 
@@ -244,6 +256,11 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
         };
       }
 
+      // DEBUG: Print full payload
+      print('=== UPDATE JOB DEBUG ==>');
+      print('Job ID: ${widget.jobId}');
+      print('Update Payload: $updateData');
+
       await repo.updateJob(widget.jobId, updateData);
 
       ref.invalidate(allJobsProvider);
@@ -254,7 +271,11 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           const SnackBar(content: Text('Job updated successfully')),
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // DEBUG: Print full error details
+      print('=== UPDATE JOB ERROR ==>');
+      print('Error: $e');
+      print('Stack: $stackTrace');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error updating job: $e')),

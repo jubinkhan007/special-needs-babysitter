@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../domain/repositories/job_request_repository.dart';
 import '../models/job_request_details_model.dart';
 import '../sources/job_request_remote_datasource.dart';
@@ -48,6 +50,24 @@ class JobRequestRepositoryImpl implements JobRequestRepository {
       applicationId,
       latitude: latitude,
       longitude: longitude,
+    );
+  }
+
+  @override
+  Future<String> uploadCancellationEvidence(File file) {
+    return _remoteDataSource.uploadCancellationEvidence(file);
+  }
+
+  @override
+  Future<void> cancelBooking(
+    String applicationId, {
+    required String reason,
+    String? fileUrl,
+  }) {
+    return _remoteDataSource.cancelBooking(
+      applicationId,
+      reason: reason,
+      fileUrl: fileUrl,
     );
   }
 }
