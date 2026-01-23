@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
-import '../models/home_mock_models.dart';
+import 'package:intl/intl.dart';
+import '../../../../bookings/domain/booking.dart';
 import '../theme/home_design_tokens.dart';
 
 class ActiveBookingCard extends StatelessWidget {
-  final BookingModel booking;
+  final Booking booking;
+  final String sectionTitle;
+  final String statusLabel;
+  final Color? statusBackground;
+  final Color? statusTextColor;
 
-  const ActiveBookingCard({super.key, required this.booking});
+  const ActiveBookingCard({
+    super.key,
+    required this.booking,
+    required this.sectionTitle,
+    required this.statusLabel,
+    this.statusBackground,
+    this.statusTextColor,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final displayDate = DateFormat('d MMM, yyyy').format(booking.scheduledDate);
+    final statusBg = statusBackground ?? AppColors.activePillBg;
+    final statusText = statusTextColor ?? AppColors.activePillText;
+    final hasAvatar = booking.avatarAssetOrUrl.trim().isNotEmpty;
+    final experienceValue = _formatExperience(booking.experienceText);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -17,7 +35,7 @@ class ActiveBookingCard extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Text(
-            'Active Booking',
+            sectionTitle,
             style: HomeDesignTokens.sectionHeader,
           ),
         ),
@@ -47,11 +65,21 @@ class ActiveBookingCard extends StatelessWidget {
                       color: AppColors.primary.withAlpha(20),
                     ),
                     clipBehavior: Clip.antiAlias,
-                    child: Image.asset(
-                      booking.sitter.avatarUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => const SizedBox(),
-                    ),
+                    child: hasAvatar
+                        ? (booking.avatarAssetOrUrl.startsWith('http')
+                            ? Image.network(
+                                booking.avatarAssetOrUrl,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) =>
+                                    const SizedBox(),
+                              )
+                            : Image.asset(
+                                booking.avatarAssetOrUrl,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) =>
+                                    const SizedBox(),
+                              ))
+                        : const SizedBox(),
                   ),
                   const SizedBox(width: 12),
 
@@ -63,11 +91,11 @@ class ActiveBookingCard extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              booking.sitter.name,
+                              booking.sitterName,
                               style: HomeDesignTokens.cardTitle,
                             ),
                             const SizedBox(width: 4),
-                            if (booking.sitter.isVerified)
+                            if (booking.isVerified)
                               const Icon(Icons.verified,
                                   size: 16, color: AppColors.verifiedBlue),
                           ],
@@ -79,7 +107,7 @@ class ActiveBookingCard extends StatelessWidget {
                                 size: 14, color: AppColors.neutral30),
                             const SizedBox(width: 4),
                             Text(
-                              booking.sitter.location, // "2 Miles Away"
+                              booking.distanceText,
                               style: HomeDesignTokens.cardSubtitle,
                             ),
                           ],
@@ -89,7 +117,7 @@ class ActiveBookingCard extends StatelessWidget {
                   ),
 
                   // Rating & Menu
-                  const Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       // Rating + Menu (same row, menu is vertical and on the right of the star)
@@ -100,7 +128,7 @@ class ActiveBookingCard extends StatelessWidget {
                               size: 16, color: AppColors.starYellow),
                           const SizedBox(width: 4),
                           Text(
-                            '4.5',
+                            booking.rating.toStringAsFixed(1),
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 13,
@@ -122,15 +150,15 @@ class ActiveBookingCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStat('Response Rate', '${booking.sitter.responseRate}%',
+                  _buildStat('Response Rate', '${booking.responseRate}%',
                       Icons.access_time),
                   _buildStat(
                       'Reliability Rate',
-                      '${booking.sitter.reliabilityRate}%',
+                      '${booking.reliabilityRate}%',
                       Icons.thumb_up_alt_outlined),
                   _buildStat(
                       'Experience',
-                      '${booking.sitter.experienceYears} Years',
+                      experienceValue,
                       Icons.verified_outlined),
                 ],
               ),
@@ -144,7 +172,7 @@ class ActiveBookingCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Scheduled: 20 May,2025', // Hardcoded match for screenshot
+                      'Scheduled: $displayDate',
                       style: const TextStyle(
                         color: AppColors.neutral60,
                         fontWeight: FontWeight.w600,
@@ -156,7 +184,7 @@ class ActiveBookingCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.activePillBg,
+                      color: statusBg,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -164,16 +192,16 @@ class ActiveBookingCard extends StatelessWidget {
                         Container(
                           width: 6,
                           height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppColors.activePillText,
+                          decoration: BoxDecoration(
+                            color: statusText,
                             shape: BoxShape.circle,
                           ),
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Active',
-                          style: const TextStyle(
-                            color: AppColors.activePillText,
+                          statusLabel,
+                          style: TextStyle(
+                            color: statusText,
                             fontWeight: FontWeight.w600,
                             fontSize: 12,
                           ),
@@ -208,5 +236,16 @@ class ActiveBookingCard extends StatelessWidget {
         Text(value, style: HomeDesignTokens.statValue),
       ],
     );
+  }
+
+  String _formatExperience(String experienceText) {
+    final trimmed = experienceText.trim();
+    if (trimmed.isEmpty || trimmed.toLowerCase() == 'n/a') {
+      return 'N/A';
+    }
+    if (trimmed.toLowerCase().contains('year')) {
+      return trimmed;
+    }
+    return '$trimmed Years';
   }
 }

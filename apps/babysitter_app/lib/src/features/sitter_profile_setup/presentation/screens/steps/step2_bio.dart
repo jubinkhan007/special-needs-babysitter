@@ -11,6 +11,7 @@ import '../../widgets/step_progress_dots.dart';
 import '../../sitter_profile_constants.dart';
 import '../../widgets/transportation_section.dart';
 import '../../widgets/willing_to_travel_section.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step2Bio extends ConsumerWidget {
   final VoidCallback onNext;
@@ -143,7 +144,7 @@ class Step2Bio extends ConsumerWidget {
             label: 'Continue',
             onPressed: () {
               if (state.bio.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
+                AppToast.show(context, 
                     const SnackBar(content: Text('Please enter a bio')));
                 return;
               }

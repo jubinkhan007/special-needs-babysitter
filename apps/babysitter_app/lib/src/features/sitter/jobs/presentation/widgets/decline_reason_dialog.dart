@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class DeclineReasonDialog extends StatefulWidget {
   final Function(String reason, String? otherReason) onSubmit;
@@ -37,7 +38,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
 
     if (showOtherField) {
       if (_otherController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(
             content: Text('Please enter a reason'),
             backgroundColor: Color(0xFFEF4444),
@@ -48,7 +49,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
       otherReason = _otherController.text.trim();
       reason = 'Other'; // Set reason to 'Other' when custom text is provided
     } else if (reason.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please select a reason'),
           backgroundColor: Color(0xFFEF4444),

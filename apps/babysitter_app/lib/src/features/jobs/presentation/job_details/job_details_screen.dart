@@ -15,6 +15,7 @@ import 'widgets/bottom_action_stack.dart';
 
 import '../../data/jobs_data_di.dart'; // For repository
 import '../providers/jobs_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class JobDetailsScreen extends ConsumerStatefulWidget {
   final String jobId;
@@ -69,7 +70,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error deleting job: $e')),
         );
       }

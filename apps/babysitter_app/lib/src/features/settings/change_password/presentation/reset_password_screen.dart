@@ -4,6 +4,7 @@ import 'package:babysitter_app/common/widgets/primary_action_button.dart';
 import 'package:babysitter_app/common/theme/auth_theme.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'reset_password_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Reset Password Screen (Step 2)
 /// User enters new password and confirmation
@@ -55,7 +56,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Future<void> _onSavePassword() async {
     final success = await _controller.savePassword();
     if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(content: Text('Password updated successfully!')),
       );
       Navigator.of(context).popUntil((route) => route.isFirst);

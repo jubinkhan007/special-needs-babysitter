@@ -7,6 +7,7 @@ import '../../../widgets/auth_input_field.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
 import '../../../controllers/sign_up_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 2: Password + Security Question (combined per Figma design)
 /// Loads security questions from API, triggers register + sendOtp on Next
@@ -81,7 +82,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedQuestion == null || _selectedQuestion!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please select a security question'),
           backgroundColor: AuthTheme.errorRed,
@@ -106,7 +107,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     } else {
       final state = ref.read(signUpControllerProvider);
       if (state is SignUpError) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text(state.message),
             backgroundColor: AuthTheme.errorRed,

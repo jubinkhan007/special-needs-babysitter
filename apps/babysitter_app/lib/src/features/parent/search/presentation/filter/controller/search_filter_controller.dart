@@ -52,6 +52,10 @@ class SearchFilterController extends ValueNotifier<SearchFilterUiModel> {
     value = value.copyWith(otherLanguage: other);
   }
 
+  void setLocation(double latitude, double longitude) {
+    value = value.copyWith(latitude: latitude, longitude: longitude);
+  }
+
   void reset() {
     value = const SearchFilterUiModel();
   }

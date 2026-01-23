@@ -9,6 +9,7 @@ import '../../../../routing/routes.dart';
 import '../widgets/reject_reason_bottom_sheet.dart';
 import 'providers/applications_providers.dart';
 import '../../domain/rejection_reason.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ApplicationsScreen extends ConsumerWidget {
   final String jobId;
@@ -111,7 +112,7 @@ class ApplicationsScreen extends ConsumerWidget {
                                 // Refresh the list
                                 ref.invalidate(applicationsProvider(jobId));
                                 if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  AppToast.show(context, 
                                     const SnackBar(
                                       content: Text('Application accepted!'),
                                       backgroundColor: Colors.green,
@@ -120,7 +121,7 @@ class ApplicationsScreen extends ConsumerWidget {
                                 }
                               } catch (e) {
                                 if (context.mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  AppToast.show(context, 
                                     SnackBar(
                                       content: Text('Failed to accept: $e'),
                                       backgroundColor: Colors.red,
@@ -157,7 +158,7 @@ class ApplicationsScreen extends ConsumerWidget {
                                   // Refresh the list
                                   ref.invalidate(applicationsProvider(jobId));
                                   if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    AppToast.show(context, 
                                       const SnackBar(
                                         content: Text('Application declined'),
                                         backgroundColor: Colors.orange,
@@ -166,7 +167,7 @@ class ApplicationsScreen extends ConsumerWidget {
                                   }
                                 } catch (e) {
                                   if (context.mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    AppToast.show(context, 
                                       SnackBar(
                                         content: Text('Failed to decline: $e'),
                                         backgroundColor: Colors.red,
@@ -231,7 +232,7 @@ class ApplicationsScreen extends ConsumerWidget {
               onTap: () {
                 Navigator.pop(ctx);
                 // TODO: Navigate to chat with sitter
-                ScaffoldMessenger.of(context).showSnackBar(
+                AppToast.show(context, 
                   const SnackBar(content: Text('Messaging coming soon!')),
                 );
               },
@@ -242,7 +243,7 @@ class ApplicationsScreen extends ConsumerWidget {
               onTap: () {
                 Navigator.pop(ctx);
                 // TODO: Show report dialog
-                ScaffoldMessenger.of(context).showSnackBar(
+                AppToast.show(context, 
                   const SnackBar(content: Text('Report feature coming soon!')),
                 );
               },

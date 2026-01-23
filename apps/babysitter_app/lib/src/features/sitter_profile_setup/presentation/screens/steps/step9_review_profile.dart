@@ -8,6 +8,7 @@ import '../../widgets/onboarding_header.dart';
 import '../../widgets/step_progress_dots.dart';
 import '../../widgets/profile_complete_dialog.dart';
 import '../../sitter_profile_constants.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step9ReviewProfile extends ConsumerStatefulWidget {
   final VoidCallback onFinish;
@@ -51,14 +52,14 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
         await showProfileCompleteDialog(context);
         // Dialog handles navigation internally
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(
               content: Text('Failed to submit profile. Please try again.')),
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error: ${e.toString()}')),
         );
       }

@@ -70,4 +70,9 @@ class JobRequestRepositoryImpl implements JobRequestRepository {
       fileUrl: fileUrl,
     );
   }
+
+  @override
+  Future<void> completeBooking(String applicationId) {
+    return _remoteDataSource.completeBooking(applicationId);
+  }
 }

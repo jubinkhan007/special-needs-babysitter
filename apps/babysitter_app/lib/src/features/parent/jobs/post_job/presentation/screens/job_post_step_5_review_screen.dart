@@ -7,6 +7,7 @@ import '../providers/job_post_providers.dart';
 import '../widgets/job_draft_saved_dialog.dart';
 import 'job_post_step_header.dart';
 import '../../../../booking_flow/data/providers/bookings_di.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Job Post Step 5: Review
 /// Pixel-perfect implementation matching Figma design
@@ -53,7 +54,7 @@ class _JobPostStep5ReviewScreenState
       if (mounted) {
         final latestError = ref.read(jobPostControllerProvider).error;
         if (latestError != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          AppToast.show(context, 
             SnackBar(content: Text(latestError)),
           );
         }
@@ -65,7 +66,7 @@ class _JobPostStep5ReviewScreenState
     final jobId = ref.read(jobPostControllerProvider).jobId;
     if (jobId == null || jobId.isEmpty) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(content: Text('Job created but no ID returned')),
         );
       }
@@ -102,7 +103,7 @@ class _JobPostStep5ReviewScreenState
     } on StripeException catch (e) {
       print('DEBUG: JobPostStep5 Stripe error: ${e.error.localizedMessage}');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content:
                 Text('Payment cancelled: ${e.error.localizedMessage ?? ""}'),
@@ -115,7 +116,7 @@ class _JobPostStep5ReviewScreenState
     } catch (e) {
       print('DEBUG: JobPostStep5 payment error: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text('Payment error: $e'),
             backgroundColor: Colors.red,
@@ -348,7 +349,7 @@ class _JobPostStep5ReviewScreenState
                       final latestError =
                           ref.read(jobPostControllerProvider).error;
                       if (latestError != null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        AppToast.show(context, 
                           SnackBar(content: Text(latestError)),
                         );
                       }

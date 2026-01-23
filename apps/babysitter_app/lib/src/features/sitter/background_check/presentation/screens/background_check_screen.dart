@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../routing/routes.dart';
 import '../controllers/background_check_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Screen to submit the background check.
 class BackgroundCheckScreen extends ConsumerWidget {
@@ -20,7 +21,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
     // Listen for errors
     ref.listen(backgroundCheckControllerProvider, (previous, next) {
       if (next.error != null && previous?.error != next.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text(next.error!),
             backgroundColor: Colors.red,

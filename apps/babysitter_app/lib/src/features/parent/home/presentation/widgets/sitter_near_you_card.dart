@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
-import '../models/home_mock_models.dart';
+import '../../../search/models/sitter_list_item_model.dart';
 import '../theme/home_design_tokens.dart';
-import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/screens/sitter_profile_view.dart';
 
 class SitterNearYouCard extends StatelessWidget {
-  final SitterModel sitter;
+  final SitterListItemModel sitter;
 
   const SitterNearYouCard({super.key, required this.sitter});
 
@@ -36,12 +35,31 @@ class SitterNearYouCard extends StatelessWidget {
             children: [
               // Avatar
               ClipOval(
-                child: Image.asset(
-                  sitter.avatarUrl,
-                  width: 44,
-                  height: 44,
-                  fit: BoxFit.cover,
-                ),
+                child: sitter.imageAssetPath.startsWith('http')
+                    ? Image.network(
+                        sitter.imageAssetPath,
+                        width: 44,
+                        height: 44,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Container(
+                          width: 44,
+                          height: 44,
+                          color: Colors.grey[200],
+                        ),
+                      )
+                    : Image.asset(
+                        sitter.imageAssetPath,
+                        width: 44,
+                        height: 44,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Container(
+                          width: 44,
+                          height: 44,
+                          color: Colors.grey[200],
+                        ),
+                      ),
               ),
               const SizedBox(width: 12),
 
@@ -84,7 +102,7 @@ class SitterNearYouCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            sitter.location,
+                            sitter.distanceText,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -162,9 +180,9 @@ class SitterNearYouCard extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
-              itemCount: sitter.badges.length,
+              itemCount: sitter.tags.length,
               separatorBuilder: (_, __) => const SizedBox(width: 10),
-              itemBuilder: (context, index) => _badge(sitter.badges[index]),
+              itemBuilder: (context, index) => _badge(sitter.tags[index]),
             ),
           ),
 

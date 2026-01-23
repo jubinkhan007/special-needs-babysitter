@@ -9,6 +9,7 @@ import '../../routing/routes.dart';
 import '../../../common/widgets/auth_text_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
 import '../../../common/theme/auth_theme.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sign up screen with role selection tabs
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -41,7 +42,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
     if (!_agreedToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: const Text('Please agree to the Terms and Privacy Policy'),
           backgroundColor: AuthTheme.errorRed,
@@ -62,7 +63,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
     final authState = ref.read(authNotifierProvider);
     if (authState.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text(authState.error.toString()),
           backgroundColor: AuthTheme.errorRed,

@@ -7,6 +7,7 @@ import '../../providers/sitter_profile_setup_providers.dart';
 import '../../widgets/onboarding_header.dart';
 import '../../widgets/step_progress_dots.dart';
 import '../../sitter_profile_constants.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step3Location extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -67,7 +68,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text(e.toString()),
           backgroundColor: Colors.red,
@@ -266,7 +267,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
             label: 'Save Location & Continue',
             onPressed: () {
               if (state.address == null || state.address!.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
+                AppToast.show(context, 
                     const SnackBar(content: Text('Please set a location')));
                 return;
               }

@@ -7,6 +7,7 @@ import 'package:domain/domain.dart';
 import '../../../../../parent_profile_setup/presentation/widgets/add_child_dialog.dart';
 import '../../../../account/profile_details/presentation/providers/profile_details_providers.dart';
 import 'job_post_step_header.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 1: Select a Child for Job Posting
 /// Pixel-perfect implementation matching Figma design
@@ -70,7 +71,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              AppToast.show(context, 
                 const SnackBar(content: Text('Failed to update child')),
               );
             }
@@ -98,7 +99,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              AppToast.show(context, 
                 const SnackBar(content: Text('Failed to add child')),
               );
             }

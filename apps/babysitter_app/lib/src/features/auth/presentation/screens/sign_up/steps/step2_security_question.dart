@@ -6,6 +6,7 @@ import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
 import '../../../widgets/auth_input_field.dart';
 import '../../../controllers/sign_up_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 2: Security Question - Loads questions from API
 class Step2SecurityQuestion extends ConsumerStatefulWidget {
@@ -50,7 +51,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
 
   void _saveAndNext() {
     if (_selectedQuestion == null || _selectedQuestion!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please select a security question'),
           backgroundColor: AuthTheme.errorRed,
@@ -60,7 +61,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
     }
 
     if (_answerController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please enter your answer'),
           backgroundColor: AuthTheme.errorRed,

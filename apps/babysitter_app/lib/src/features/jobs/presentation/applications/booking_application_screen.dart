@@ -15,6 +15,7 @@ import '../widgets/reject_reason_bottom_sheet.dart';
 import '../../domain/rejection_reason.dart';
 import 'package:go_router/go_router.dart';
 import 'providers/applications_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class BookingApplicationScreen extends ConsumerWidget {
   final String jobId;
@@ -38,14 +39,14 @@ class BookingApplicationScreen extends ConsumerWidget {
       (prev, next) {
         next.whenOrNull(
           error: (error, stack) {
-            ScaffoldMessenger.of(context).showSnackBar(
+            AppToast.show(context, 
               SnackBar(content: Text('Error: $error')),
             );
           },
           data: (_) {
             if (prev?.isLoading == true) {
               // Success!
-              ScaffoldMessenger.of(context).showSnackBar(
+              AppToast.show(context, 
                 const SnackBar(content: Text('Action completed successfully')),
               );
               context.pop(); // Go back to applications list

@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
 import '../../../../../routing/app_router.dart'; // For signUpInProgressProvider
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// OTP Verification Screen
 class OtpVerificationScreen extends ConsumerStatefulWidget {
@@ -41,7 +42,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
 
   void _verifyCode() async {
     if (_otp.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please enter the 6-digit code'),
           backgroundColor: AuthTheme.errorRed,
@@ -111,7 +112,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
         }
       });
     } else if (state.hasError) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text('Verification failed: ${state.error}'),
           backgroundColor: AuthTheme.errorRed,
@@ -121,7 +122,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
   }
 
   void _resendCode() {
-    ScaffoldMessenger.of(context).showSnackBar(
+    AppToast.show(context, 
       SnackBar(
         content: Text('Code resent to your ${widget.verificationType}'),
         backgroundColor: AuthTheme.primaryBlue,

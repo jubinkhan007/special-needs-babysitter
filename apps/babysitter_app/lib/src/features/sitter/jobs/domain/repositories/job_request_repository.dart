@@ -37,4 +37,7 @@ abstract class JobRequestRepository {
     required String reason,
     String? fileUrl,
   });
+
+  /// Mark a booking as completed.
+  Future<void> completeBooking(String applicationId);
 }

@@ -10,6 +10,8 @@ class SearchFilterUiModel {
   final List<String> selectedExpertise;
   final List<String> selectedLanguages;
   final String? otherLanguage;
+  final double latitude;
+  final double longitude;
 
   const SearchFilterUiModel({
     this.radius = 10.0,
@@ -21,6 +23,8 @@ class SearchFilterUiModel {
     this.selectedExpertise = const [],
     this.selectedLanguages = const [],
     this.otherLanguage,
+    this.latitude = 36.1627, // Default Nashville latitude
+    this.longitude = -86.7816, // Default Nashville longitude
   });
 
   SearchFilterUiModel copyWith({
@@ -33,6 +37,8 @@ class SearchFilterUiModel {
     List<String>? selectedExpertise,
     List<String>? selectedLanguages,
     String? otherLanguage,
+    double? latitude,
+    double? longitude,
   }) {
     return SearchFilterUiModel(
       radius: radius ?? this.radius,
@@ -45,6 +51,8 @@ class SearchFilterUiModel {
       selectedExpertise: selectedExpertise ?? this.selectedExpertise,
       selectedLanguages: selectedLanguages ?? this.selectedLanguages,
       otherLanguage: otherLanguage ?? this.otherLanguage,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
     );
   }
 }

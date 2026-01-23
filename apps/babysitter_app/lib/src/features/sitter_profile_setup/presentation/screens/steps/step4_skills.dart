@@ -6,6 +6,7 @@ import '../../widgets/onboarding_header.dart';
 import '../../widgets/step_progress_dots.dart';
 import '../../sitter_profile_constants.dart';
 import '../../widgets/multi_select_accordion.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step4Skills extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -122,7 +123,7 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                     onChanged: (values) =>
                         controller.updateCertifications(values),
                     onOtherTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      AppToast.show(context, const SnackBar(
                           content: Text('Add Other Certification tapped')));
                     },
                   ),
@@ -135,7 +136,7 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                     selectedValues: state.skills,
                     onChanged: (values) => controller.updateSkills(values),
                     onOtherTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      AppToast.show(context, const SnackBar(
                           content: Text('Add Other Skill tapped')));
                     },
                   ),

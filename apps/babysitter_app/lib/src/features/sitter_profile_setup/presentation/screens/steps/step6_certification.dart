@@ -6,6 +6,7 @@ import '../../widgets/onboarding_header.dart';
 import '../../widgets/step_progress_dots.dart';
 import '../../sitter_profile_constants.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step6Certification extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -53,14 +54,14 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
             .updateCertAttachment(certName, filePath);
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          AppToast.show(context, 
             SnackBar(content: Text('Attached: $fileName')),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error picking file: $e')),
         );
       }

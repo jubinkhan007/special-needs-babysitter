@@ -259,4 +259,25 @@ class JobRequestRemoteDataSource {
       rethrow;
     }
   }
+
+  /// Mark a booking as completed.
+  /// Uses /applications/{id}/complete
+  Future<void> completeBooking(String applicationId) async {
+    try {
+      final endpoint = '/applications/$applicationId/complete';
+      print('DEBUG: Complete Booking Request: POST $endpoint');
+      final response = await _dio.post(endpoint);
+      print('DEBUG: Complete Booking Response Status: ${response.statusCode}');
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Complete Booking Error: ${e.message}');
+        print('DEBUG: Complete Booking Error Response: ${e.response?.data}');
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
 }

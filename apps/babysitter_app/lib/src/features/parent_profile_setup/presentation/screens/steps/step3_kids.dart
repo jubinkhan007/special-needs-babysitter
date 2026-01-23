@@ -6,6 +6,7 @@ import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
 import '../../providers/parent_profile_providers.dart';
 import '../../widgets/add_child_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 3: Add Kids - List of children with add button
 class Step3Kids extends ConsumerStatefulWidget {
@@ -63,7 +64,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
 
   Future<void> _saveAndNext() async {
     if (_kids.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please add at least one child'),
           backgroundColor: AuthTheme.errorRed,

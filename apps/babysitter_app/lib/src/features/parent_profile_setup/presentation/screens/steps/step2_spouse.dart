@@ -5,6 +5,7 @@ import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/parent_profile_providers.dart';
 import '../../widgets/add_child_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 2: Add a Child
 /// Matches new Figma design: Blue baby icon, "Add Child" dark button // List view
@@ -83,7 +84,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
     // Error Listener
     ref.listen(parentProfileControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text('Error: ${next.error}'),
             backgroundColor: Colors.red,

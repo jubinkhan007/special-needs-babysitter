@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import '../theme/home_design_tokens.dart';
 
 class CompleteProfileCard extends StatelessWidget {
-  const CompleteProfileCard({super.key});
+  final double completionPercent;
+
+  const CompleteProfileCard({
+    super.key,
+    required this.completionPercent,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final clampedPercent = completionPercent.clamp(0.0, 1.0);
+    final displayPercent = (clampedPercent * 100).round();
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       padding: const EdgeInsets.all(20),
@@ -36,7 +44,7 @@ class CompleteProfileCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "You're 60% there! Complete your\nprofile to get better sitter matches.",
+                  "You're $displayPercent% there! Complete your\nprofile to get better sitter matches.",
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.9),
                     fontSize: 14,
@@ -57,16 +65,16 @@ class CompleteProfileCard extends StatelessWidget {
                 height: 64,
                 child: CustomPaint(
                   painter: _ProgressRingPainter(
-                    percentage: 0.6,
+                    percentage: clampedPercent,
                     strokeWidth: 6,
                     backgroundColor: Colors.white.withOpacity(0.25),
                     color: Colors.white,
                   ),
                 ),
               ),
-              const Text(
-                '60',
-                style: TextStyle(
+              Text(
+                '$displayPercent',
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                   fontSize: 18,

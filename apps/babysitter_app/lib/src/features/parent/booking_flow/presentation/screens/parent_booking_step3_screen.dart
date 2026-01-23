@@ -7,6 +7,7 @@ import '../widgets/booking_primary_bottom_button.dart';
 import '../widgets/booking_text_field.dart';
 import '../widgets/section_header.dart';
 import 'parent_booking_step4_screen.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ParentBookingStep3Screen extends ConsumerStatefulWidget {
   const ParentBookingStep3Screen({super.key});
@@ -58,7 +59,7 @@ class _ParentBookingStep3ScreenState
 
     if (street.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please fill in all required address fields first.'),
           backgroundColor: Colors.orange,
@@ -88,7 +89,7 @@ class _ParentBookingStep3ScreenState
           _verificationMessage =
               'Address not found. Please check and try again.';
         });
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(
             content: Text('Address could not be found. Please verify.'),
             backgroundColor: Colors.red,
@@ -112,7 +113,7 @@ class _ParentBookingStep3ScreenState
             'Address verified! (${location.latitude.toStringAsFixed(4)}, ${location.longitude.toStringAsFixed(4)})';
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Address verified successfully!'),
           backgroundColor: Colors.green,
@@ -125,7 +126,7 @@ class _ParentBookingStep3ScreenState
         _addressVerified = false;
         _verificationMessage = 'Error: Unable to verify address.';
       });
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text('Error: ${e.toString()}'),
           backgroundColor: Colors.red,
@@ -307,7 +308,7 @@ class _ParentBookingStep3ScreenState
                     _cityController.text.isEmpty ||
                     _stateController.text.isEmpty ||
                     _zipController.text.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  AppToast.show(context, 
                     const SnackBar(
                       content: Text('Please fill in all required fields.'),
                       backgroundColor: Colors.red,
@@ -319,7 +320,7 @@ class _ParentBookingStep3ScreenState
                 // Zip Code Validation
                 final zipRegex = RegExp(r'^\d{5}$');
                 if (!zipRegex.hasMatch(_zipController.text)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  AppToast.show(context, 
                     const SnackBar(
                       content: Text('Please enter a valid 5-digit Zip Code.'),
                       backgroundColor: Colors.orange,

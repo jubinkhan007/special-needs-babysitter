@@ -11,6 +11,7 @@ import '../widgets/job_meta_header.dart';
 import '../widgets/key_value_row.dart';
 import '../widgets/soft_skill_chip.dart';
 import '../widgets/decline_reason_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Screen showing details of a job request (invitation) that a sitter received.
 class SitterJobRequestDetailsScreen extends ConsumerWidget {
@@ -37,7 +38,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
         next.whenOrNull(
           data: (_) {
             // Success - show message and navigate back
-            ScaffoldMessenger.of(context).showSnackBar(
+            AppToast.show(context, 
               const SnackBar(
                 content: Text('Action completed successfully'),
                 backgroundColor: Color(0xFF10B981),
@@ -50,7 +51,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
           },
           error: (error, stack) {
             // Error - show error message
-            ScaffoldMessenger.of(context).showSnackBar(
+            AppToast.show(context, 
               SnackBar(
                 content: Text(error.toString().replaceFirst('Exception: ', '')),
                 backgroundColor: const Color(0xFFEF4444),

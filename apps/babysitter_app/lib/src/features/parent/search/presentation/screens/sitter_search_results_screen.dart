@@ -7,11 +7,12 @@ import '../widgets/filter_row.dart';
 import '../widgets/sitter_card.dart';
 import '../../../../../routing/routes.dart';
 
-import '../filter/controller/search_filter_controller.dart';
 import '../filter/filter_bottom_sheet.dart';
 import '../providers/sitters_list_provider.dart';
+import '../providers/search_filter_provider.dart';
 
 import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class SitterSearchResultsScreen extends ConsumerStatefulWidget {
   const SitterSearchResultsScreen({super.key});
@@ -23,16 +24,8 @@ class SitterSearchResultsScreen extends ConsumerStatefulWidget {
 
 class _SitterSearchResultsScreenState
     extends ConsumerState<SitterSearchResultsScreen> {
-  final SearchFilterController _filterController = SearchFilterController();
-
   // Track invited sitters to update UI state locally if needed
   final Set<String> _invitedSitterIds = {};
-
-  @override
-  void dispose() {
-    _filterController.dispose();
-    super.dispose();
-  }
 
   Future<void> _inviteSitter(
       String jobId, String sitterId, String userId) async {
@@ -44,7 +37,7 @@ class _SitterSearchResultsScreenState
           // UI tracking uses sitterId
           _invitedSitterIds.add(sitterId);
         });
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context,
           const SnackBar(content: Text('Sitter invited successfully!')),
         );
       }
@@ -58,7 +51,7 @@ class _SitterSearchResultsScreenState
           message = e.toString().replaceAll('Exception: ', '');
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context,
           SnackBar(
             content: Text(message),
             backgroundColor: Colors.orange,
@@ -77,8 +70,11 @@ class _SitterSearchResultsScreenState
     final String? jobId = extra?['jobId'] ??
         GoRouterState.of(context).uri.queryParameters['jobId'];
 
-    // Watch the provider
-    final asyncSitters = ref.watch(sittersListProvider);
+    // Watch the filter state
+    final filterState = ref.watch(searchFilterProvider).value;
+
+    // Watch the sitters list provider with current filters
+    final asyncSitters = ref.watch(sittersListProvider(filterState));
 
     // Using standard standard density to avoid spacing shifts
     return Theme(
@@ -105,7 +101,7 @@ class _SitterSearchResultsScreenState
                     FilterRow(
                       count: sitters.length,
                       onFilterTap: () {
-                        FilterBottomSheet.show(context, _filterController);
+                        FilterBottomSheet.show(context);
                       },
                     ),
 

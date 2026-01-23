@@ -15,6 +15,7 @@ import '../widgets/transportation_section.dart';
 
 import '../widgets/cover_letter_box.dart';
 import '../widgets/job_details_bottom_bar.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter job details screen.
 class SitterJobDetailsScreen extends ConsumerStatefulWidget {
@@ -101,7 +102,7 @@ class _SitterJobDetailsScreenState
               onApply: () {
                 final coverLetter = _coverLetterController.text.trim();
                 if (coverLetter.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  AppToast.show(context, 
                     SnackBar(
                       content:
                           const Text('Please write a cover letter to apply'),

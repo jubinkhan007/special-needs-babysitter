@@ -8,6 +8,7 @@ import '../providers/jobs_providers.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../routing/routes.dart';
 import 'package:intl/intl.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class EditJobScreen extends ConsumerStatefulWidget {
   final String jobId;
@@ -109,7 +110,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Failed to load job details: $e')),
         );
       }
@@ -267,7 +268,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
 
       if (mounted) {
         context.pop(true);
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(content: Text('Job updated successfully')),
         );
       }
@@ -277,7 +278,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       print('Error: $e');
       print('Stack: $stackTrace');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error updating job: $e')),
         );
       }
@@ -345,7 +346,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error deleting job: $e')),
         );
       }

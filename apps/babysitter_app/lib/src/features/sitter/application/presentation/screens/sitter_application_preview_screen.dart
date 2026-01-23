@@ -12,6 +12,7 @@ import '../widgets/job_details_preview_card.dart';
 import '../widgets/cover_letter_preview_card.dart';
 import '../widgets/application_bottom_bar.dart';
 import '../widgets/application_submitted_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter Application Preview Screen.
 class SitterApplicationPreviewScreen extends ConsumerWidget {
@@ -60,7 +61,7 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
           });
         }
         if (next.error != null && previous?.error != next.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          AppToast.show(context, 
             SnackBar(
               content: Text('Error: ${next.error}'),
               backgroundColor: Colors.red,

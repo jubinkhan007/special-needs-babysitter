@@ -13,6 +13,7 @@ import '../widgets/payment_detail_row.dart';
 import '../widgets/payment_method_sheet.dart';
 import '../widgets/dashed_divider.dart';
 import 'booking_request_sent_screen.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ServiceDetailsScreen extends ConsumerStatefulWidget {
   const ServiceDetailsScreen({super.key});
@@ -104,7 +105,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     final validationError = _validateBooking(bookingState);
     if (validationError != null) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text(validationError),
             backgroundColor: const Color(0xFFD92D20),
@@ -174,7 +175,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       if (mounted) {
         String errorMessage = _parseErrorMessage(e);
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text(errorMessage),
             backgroundColor: const Color(0xFFD92D20),

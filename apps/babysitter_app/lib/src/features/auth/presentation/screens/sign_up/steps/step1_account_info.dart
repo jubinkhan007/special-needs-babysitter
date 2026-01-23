@@ -7,6 +7,7 @@ import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
 import '../../../widgets/social_login_row.dart';
 import '../../../../../../routing/routes.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 1: Account Info - Pixel-perfect matching Figma
 class Step1AccountInfo extends StatefulWidget {
@@ -61,7 +62,7 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
   void _saveAndNext() {
     if (!_formKey.currentState!.validate()) return;
     if (!_agreedToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please agree to Terms & Conditions'),
           backgroundColor: AuthTheme.errorRed,

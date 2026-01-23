@@ -5,6 +5,7 @@ import 'package:domain/domain.dart';
 import '../../../../../../common/theme/auth_theme.dart';
 import '../../providers/parent_profile_providers.dart';
 import '../../../../parent/account/profile_details/presentation/widgets/edit_insurance_plan_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step3EmergencyAndInsurance extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -179,7 +180,7 @@ class _Step3EmergencyAndInsuranceState
     // Error Listener
     ref.listen(parentProfileControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text('Error: ${next.error}'),
             backgroundColor: Colors.red,

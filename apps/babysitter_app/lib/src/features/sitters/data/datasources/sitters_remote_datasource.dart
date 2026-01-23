@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import '../models/sitter_dto.dart'; // Adjust path if needed
 import '../models/sitter_profile_dto.dart';
 
@@ -13,17 +14,60 @@ class SittersRemoteDataSource {
   SittersRemoteDataSource(this._dio);
 
   Future<List<SitterDto>> fetchSitters({
+    required double latitude,
+    required double longitude,
     int limit = 20,
     int offset = 0,
-    // Add filters later
+    int? maxDistance,
+    DateTime? date,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
+    String? name,
+    List<String>? skills,
+    double? minRate,
+    double? maxRate,
+    String? location,
   }) async {
     try {
+      final queryParameters = <String, dynamic>{
+        'latitude': latitude,
+        'longitude': longitude,
+        'limit': limit,
+        'offset': offset,
+      };
+
+      // Add optional parameters if provided
+      if (maxDistance != null) {
+        queryParameters['maxDistance'] = maxDistance;
+      }
+      if (date != null) {
+        queryParameters['date'] = _formatDate(date);
+      }
+      if (startTime != null) {
+        queryParameters['startTime'] = _formatTimeOfDay(startTime);
+      }
+      if (endTime != null) {
+        queryParameters['endTime'] = _formatTimeOfDay(endTime);
+      }
+      if (name != null && name.isNotEmpty) {
+        queryParameters['name'] = name;
+      }
+      if (skills != null && skills.isNotEmpty) {
+        queryParameters['skills'] = skills.join(',');
+      }
+      if (minRate != null) {
+        queryParameters['minRate'] = minRate;
+      }
+      if (maxRate != null) {
+        queryParameters['maxRate'] = maxRate;
+      }
+      if (location != null && location.isNotEmpty) {
+        queryParameters['location'] = location;
+      }
+
       final response = await _dio.get(
         '/sitters/browse',
-        queryParameters: {
-          'limit': limit,
-          'offset': offset,
-        },
+        queryParameters: queryParameters,
       );
 
       final data = BrowseSittersResponseDto.fromJson(response.data);
@@ -32,6 +76,16 @@ class SittersRemoteDataSource {
       // Log error
       rethrow;
     }
+  }
+
+  /// Format DateTime to YYYY-MM-DD string
+  String _formatDate(DateTime date) {
+    return date.toIso8601String().split('T')[0];
+  }
+
+  /// Format TimeOfDay to HH:mm string
+  String _formatTimeOfDay(TimeOfDay time) {
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 
   Future<SitterProfileDto> getSitterDetails(String id) async {

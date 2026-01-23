@@ -13,6 +13,7 @@ import 'presentation/controllers/sitter_account_controller.dart';
 import 'presentation/widgets/sitter_profile_header_card.dart';
 import 'presentation/widgets/sitter_stats_row.dart';
 import 'presentation/widgets/sitter_account_menu_list.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter account screen
 class SitterAccountScreen extends ConsumerStatefulWidget {
@@ -30,7 +31,7 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
 
     ref.listen(sitterAccountControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error: ${next.error}')),
         );
       }
@@ -110,14 +111,14 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                   savedJobsCount: state.overview!.savedJobsCount,
                   onTapCompletedJobs: () {
                     // TODO: Navigate to completed jobs
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    AppToast.show(context, 
                       const SnackBar(
                           content: Text('Completed jobs coming soon')),
                     );
                   },
                   onTapSavedJobs: () {
                     // TODO: Navigate to saved jobs
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    AppToast.show(context, 
                       const SnackBar(content: Text('Saved jobs coming soon')),
                     );
                   },
@@ -126,27 +127,27 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                 SitterAccountMenuList(
                   onTapRatingsReviews: () {
                     // TODO: Navigate to ratings & reviews
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    AppToast.show(context, 
                       const SnackBar(
                           content: Text('Ratings & Reviews coming soon')),
                     );
                   },
                   onTapWallet: () {
                     // TODO: Navigate to wallet
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    AppToast.show(context, 
                       const SnackBar(content: Text('My Wallet coming soon')),
                     );
                   },
                   onTapReferralBonuses: () {
                     // TODO: Navigate to referral & bonuses
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    AppToast.show(context, 
                       const SnackBar(
                           content: Text('Referral & Bonuses coming soon')),
                     );
                   },
                   onTapSettings: () {
                     // TODO: Navigate to settings when available
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    AppToast.show(context, 
                       const SnackBar(content: Text('Settings coming soon')),
                     );
                   },

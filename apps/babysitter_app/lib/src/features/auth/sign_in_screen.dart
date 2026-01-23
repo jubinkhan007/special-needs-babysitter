@@ -10,6 +10,7 @@ import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
 import 'presentation/widgets/social_login_row.dart';
 import '../../../common/theme/auth_theme.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 String _normalizeRole(String role) {
   final value = role.toLowerCase();
@@ -59,7 +60,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       final message = appError.type == AppExceptionType.unauthorized
           ? 'Invalid email or password. Please try again.'
           : appError.message;
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text(message),
           backgroundColor: AuthTheme.errorRed,

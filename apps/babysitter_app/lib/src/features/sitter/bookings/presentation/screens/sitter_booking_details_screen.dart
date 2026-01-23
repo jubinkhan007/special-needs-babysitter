@@ -14,6 +14,7 @@ import '../../../jobs/presentation/widgets/key_value_row.dart';
 import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
 import '../../../jobs/presentation/widgets/section_divider.dart';
 import '../providers/bookings_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Screen showing details of an upcoming/confirmed booking.
 class SitterBookingDetailsScreen extends ConsumerStatefulWidget {
@@ -489,7 +490,11 @@ class _SitterBookingDetailsScreenState
                     height: 48.h,
                     child: ElevatedButton(
                       onPressed: () {
-                        _showMarkCompleteDialog(context);
+                        _showMarkCompleteDialog(
+                          context,
+                          jobDetails.applicationId,
+                          jobDetails,
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF87C4F2),
@@ -515,7 +520,7 @@ class _SitterBookingDetailsScreenState
                     height: 48.h,
                     child: OutlinedButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        AppToast.show(context, 
                           const SnackBar(
                             content: Text('Report issue coming soon'),
                           ),
@@ -1145,7 +1150,7 @@ class _SitterBookingDetailsScreenState
       'Other',
     ];
     String? selectedReason;
-    final otherController = TextEditingController();
+    String otherReason = '';
 
     await showModalBottomSheet<void>(
       context: parentContext,
@@ -1162,8 +1167,7 @@ class _SitterBookingDetailsScreenState
             final maxHeight = media.size.height * 0.75;
             final requiresOther = selectedReason == 'Other';
             final canProceed = selectedReason != null &&
-                (!requiresOther ||
-                    otherController.text.trim().isNotEmpty);
+                (!requiresOther || otherReason.trim().isNotEmpty);
             return Padding(
               padding: EdgeInsets.fromLTRB(
                 20.w,
@@ -1253,10 +1257,12 @@ class _SitterBookingDetailsScreenState
                       ),
                       SizedBox(height: 4.h),
                       TextField(
-                        controller: otherController,
                         minLines: 4,
                         maxLines: 4,
-                        onChanged: (_) => setState(() {}),
+                        onChanged: (value) {
+                          otherReason = value;
+                          setState(() {});
+                        },
                         style: TextStyle(
                           color: const Color(0xFF101828),
                           fontSize: 13.sp,
@@ -1338,7 +1344,6 @@ class _SitterBookingDetailsScreenState
       },
     );
 
-    otherController.dispose();
   }
 
   Future<void> _showEmergencyCancellationDialog(
@@ -1346,7 +1351,6 @@ class _SitterBookingDetailsScreenState
     String applicationId,
   ) async {
     final parentContext = context;
-    final detailsController = TextEditingController();
     String? fileUrl;
     String? fileName;
     bool isUploading = false;
@@ -1377,26 +1381,26 @@ class _SitterBookingDetailsScreenState
                 final url = await ref
                     .read(jobRequestRepositoryProvider)
                     .uploadCancellationEvidence(pickedFile);
-                if (!mounted) return;
+                if (!dialogContext.mounted) return;
                 setState(() {
                   fileUrl = url;
                 });
               } catch (e) {
                 if (mounted) {
-                  ScaffoldMessenger.of(parentContext).showSnackBar(
+                  AppToast.show(parentContext, 
                     SnackBar(content: Text('Upload failed: $e')),
                   );
                 }
+                if (!dialogContext.mounted) return;
                 setState(() {
                   fileName = null;
                   fileUrl = null;
                 });
               } finally {
-                if (mounted) {
-                  setState(() {
-                    isUploading = false;
-                  });
-                }
+                if (!dialogContext.mounted) return;
+                setState(() {
+                  isUploading = false;
+                });
               }
             }
 
@@ -1420,8 +1424,8 @@ class _SitterBookingDetailsScreenState
                         child: IconButton(
                           icon: const Icon(Icons.close, color: Color(0xFF101828)),
                           onPressed: () => Navigator.of(dialogContext).pop(),
+                        ),
                       ),
-                    ),
                     Text(
                       'Emergency Cancellation',
                       style: TextStyle(
@@ -1453,7 +1457,6 @@ class _SitterBookingDetailsScreenState
                     ),
                     SizedBox(height: 8.h),
                     TextField(
-                      controller: detailsController,
                       minLines: 4,
                       maxLines: 4,
                       style: TextStyle(
@@ -1544,11 +1547,11 @@ class _SitterBookingDetailsScreenState
                         fontFamily: 'Inter',
                       ),
                     ),
-                      SizedBox(height: 16.h),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 46.h,
-                        child: ElevatedButton(
+                    SizedBox(height: 16.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 46.h,
+                      child: ElevatedButton(
                         onPressed: (isSubmitting || isUploading)
                             ? null
                             : () async {
@@ -1562,15 +1565,15 @@ class _SitterBookingDetailsScreenState
                                   fileUrl: fileUrl,
                                 );
                                 if (!mounted) return;
-                              if (success) {
-                                Navigator.of(dialogContext).pop();
-                                parentContext.pop();
-                                return;
-                              }
-                              setState(() {
-                                isSubmitting = false;
-                              });
-                            },
+                                if (success) {
+                                  Navigator.of(dialogContext).pop();
+                                  parentContext.pop();
+                                  return;
+                                }
+                                setState(() {
+                                  isSubmitting = false;
+                                });
+                              },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF87C4F2),
                           disabledBackgroundColor: Colors.grey.shade300,
@@ -1599,6 +1602,7 @@ class _SitterBookingDetailsScreenState
                                 ),
                               ),
                       ),
+                    ),
                     ],
                   ),
                 ),
@@ -1800,13 +1804,13 @@ class _SitterBookingDetailsScreenState
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider(null));
       if (!mounted) return false;
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(content: Text('Booking cancelled successfully')),
       );
       return true;
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error cancelling booking: $e')),
         );
       }
@@ -1814,10 +1818,19 @@ class _SitterBookingDetailsScreenState
     }
   }
 
-  Future<void> _showMarkCompleteDialog(BuildContext context) async {
+  Future<void> _showMarkCompleteDialog(
+    BuildContext context,
+    String applicationId,
+    JobRequestDetailsModel jobDetails,
+  ) async {
+    final parentContext = context;
     await showDialog<void>(
-      context: context,
-      builder: (context) {
+      context: parentContext,
+      useRootNavigator: true,
+      builder: (dialogContext) {
+        bool isSubmitting = false;
+        return StatefulBuilder(
+          builder: (context, setState) {
         return Dialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
@@ -1834,7 +1847,7 @@ class _SitterBookingDetailsScreenState
                   child: IconButton(
                     icon: Icon(Icons.close,
                         color: const Color(0xFF667085), size: 20.w),
-                    onPressed: () => context.pop(),
+                    onPressed: () => Navigator.of(dialogContext).pop(),
                   ),
                 ),
                 Row(
@@ -1842,7 +1855,7 @@ class _SitterBookingDetailsScreenState
                   children: [
                     Expanded(
                       child: Text(
-                        'Are You Sure That You Have Completed This Job?',
+                        '“Are You Sure That You Have\nCompleted This Job?”',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
@@ -1861,23 +1874,53 @@ class _SitterBookingDetailsScreenState
                   width: double.infinity,
                   height: 48.h,
                   child: ElevatedButton(
-                    onPressed: () => context.pop(),
+                    onPressed: isSubmitting
+                        ? null
+                        : () async {
+                            setState(() {
+                              isSubmitting = true;
+                            });
+                            final success = await _markBookingComplete(
+                              parentContext,
+                              applicationId,
+                              jobDetails,
+                            );
+                            if (!dialogContext.mounted) return;
+                            if (success) {
+                              Navigator.of(dialogContext).pop();
+                              return;
+                            }
+                            setState(() {
+                              isSubmitting = false;
+                            });
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF87C4F2),
                       foregroundColor: Colors.white,
+                      disabledBackgroundColor: Colors.grey.shade300,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                     ),
-                    child: Text(
-                      'Yes',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
+                    child: isSubmitting
+                        ? SizedBox(
+                            width: 18.w,
+                            height: 18.h,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : Text(
+                            'Yes',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter',
+                            ),
+                          ),
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -1885,7 +1928,7 @@ class _SitterBookingDetailsScreenState
                   width: double.infinity,
                   height: 48.h,
                   child: OutlinedButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () => Navigator.of(dialogContext).pop(),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFF1D2939),
                       side: const BorderSide(color: Color(0xFFD0D5DD)),
@@ -1907,7 +1950,87 @@ class _SitterBookingDetailsScreenState
             ),
           ),
         );
+          },
+        );
       },
+    );
+  }
+
+  Future<bool> _markBookingComplete(
+    BuildContext context,
+    String applicationId,
+    JobRequestDetailsModel jobDetails,
+  ) async {
+    try {
+      _logCompleteBookingDebug(applicationId, jobDetails);
+      await ref.read(jobRequestRepositoryProvider).completeBooking(
+            applicationId,
+          );
+      ref.invalidate(jobRequestDetailsProvider(applicationId));
+      ref.invalidate(sitterBookingsProvider('upcoming'));
+      ref.invalidate(sitterBookingsProvider('completed'));
+      ref.invalidate(sitterBookingsProvider(null));
+      if (!mounted) return false;
+      AppToast.show(context, 
+        const SnackBar(content: Text('Job marked as complete')),
+      );
+      return true;
+    } catch (e) {
+      if (mounted) {
+        AppToast.show(context, 
+          SnackBar(content: Text('Error completing job: $e')),
+        );
+      }
+      return false;
+    }
+  }
+
+  void _logCompleteBookingDebug(
+    String applicationId,
+    JobRequestDetailsModel jobDetails,
+  ) {
+    final now = DateTime.now();
+    final startDateTime = _parseStartDateTime(jobDetails);
+    final endDateTime = _parseEndDateTime(jobDetails);
+    print('=== COMPLETE BOOKING DEBUG ===');
+    print('applicationId: $applicationId');
+    print('jobId: ${jobDetails.id}');
+    print('startDate: ${jobDetails.startDate}');
+    print('endDate: ${jobDetails.endDate}');
+    print('startTime: ${jobDetails.startTime}');
+    print('endTime: ${jobDetails.endTime}');
+    print('isToday: ${jobDetails.isToday}');
+    print('canClockIn: ${jobDetails.canClockIn}');
+    print('clockInMessage: ${jobDetails.clockInMessage}');
+    print(
+        'jobCoordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}');
+    print('geofenceRadiusMeters: ${jobDetails.geofenceRadiusMeters}');
+    print('now (local): $now');
+    print('startDateTime (local): $startDateTime');
+    print('endDateTime (local): $endDateTime');
+    if (startDateTime != null) {
+      print('isAfterStart: ${now.isAfter(startDateTime)}');
+    }
+    if (endDateTime != null) {
+      print('isAfterEnd: ${now.isAfter(endDateTime)}');
+    }
+  }
+
+  DateTime? _parseEndDateTime(JobRequestDetailsModel jobDetails) {
+    final dateSource =
+        jobDetails.endDate.isNotEmpty ? jobDetails.endDate : jobDetails.startDate;
+    final date =
+        jobDetails.isToday ? DateTime.now() : _parseDate(dateSource);
+    final minutes = _parseTimeToMinutes(jobDetails.endTime);
+    if (date == null || minutes == null) {
+      return null;
+    }
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      minutes ~/ 60,
+      minutes % 60,
     );
   }
 
@@ -1938,7 +2061,7 @@ class _SitterBookingDetailsScreenState
       if (!mounted) {
         return;
       }
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text(e.toString().replaceFirst('Exception: ', '')),
           backgroundColor: const Color(0xFFEF4444),
@@ -1988,7 +2111,7 @@ class _SitterBookingDetailsScreenState
       // Log error and show user-friendly message
       print('DEBUG: Location Error: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text(e.toString()),
             backgroundColor: const Color(0xFFEF4444),

@@ -14,6 +14,7 @@ import 'package:babysitter_app/src/features/account/about/presentation/about_spe
 import 'package:babysitter_app/src/features/account/terms/presentation/terms_and_conditions_screen.dart';
 import 'package:babysitter_app/src/features/account/help_support/presentation/help_support_screen.dart';
 import 'package:babysitter_app/src/features/account/dialogs/show_sign_out_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class AccountScreen extends ConsumerStatefulWidget {
   const AccountScreen({super.key});
@@ -30,7 +31,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     // We can also listen to errors here
     ref.listen(accountControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error: ${next.error}')),
         );
       }

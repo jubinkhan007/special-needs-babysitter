@@ -7,6 +7,7 @@ import '../../../widgets/auth_input_field.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
 import '../../../controllers/sign_up_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 3: Set Password - Triggers register + sendOtp on Next
 class Step3Password extends ConsumerStatefulWidget {
@@ -67,7 +68,7 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
       // Error occurred - state already has error message
       final state = ref.read(signUpControllerProvider);
       if (state is SignUpError) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text(state.message),
             backgroundColor: AuthTheme.errorRed,

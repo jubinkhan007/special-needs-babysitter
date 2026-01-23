@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../../theme/app_tokens.dart';
 
 class FilterBottomPrimaryBar extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String label;
 
   const FilterBottomPrimaryBar({

@@ -9,6 +9,7 @@ import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/parent_profile_providers.dart';
 import 'add_item_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 1: Family Basics
 /// Matches design: "Upload Photo", Family Name, Members, Pets, Bio
@@ -128,7 +129,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     // Listen for errors
     ref.listen(parentProfileControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text('Error: ${next.error}'),
             backgroundColor: Colors.red,

@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import '../providers/job_post_providers.dart';
 import '../controllers/job_post_controller.dart';
 import 'job_post_step_header.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Job Post Step 3: Location Details
 /// Pixel-perfect implementation matching Figma design
@@ -78,7 +79,7 @@ class _JobPostStep3LocationScreenState
     final zip = _zipCodeController.text.trim();
 
     if (street.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please fill in all required address fields first.'),
           backgroundColor: Colors.orange,
@@ -103,7 +104,7 @@ class _JobPostStep3LocationScreenState
 
       if (addresses.isEmpty) {
         setState(() => _isGeocoding = false);
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(
             content: Text('Address could not be found. Please verify.'),
             backgroundColor: Colors.red,
@@ -122,7 +123,7 @@ class _JobPostStep3LocationScreenState
     } catch (e) {
       if (!mounted) return null;
       setState(() => _isGeocoding = false);
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         SnackBar(
           content: Text('Error: ${e.toString()}'),
           backgroundColor: Colors.red,
@@ -336,7 +337,7 @@ class _JobPostStep3LocationScreenState
     if (_streetAddressController.text.isEmpty ||
         _cityController.text.isEmpty ||
         _zipCodeController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content:
               Text('Please fill in all required fields (Street, City, Zip).'),
@@ -349,7 +350,7 @@ class _JobPostStep3LocationScreenState
     // Validate Zip Code (must be exactly 5 digits)
     final zipRegex = RegExp(r'^\d{5}$');
     if (!zipRegex.hasMatch(_zipCodeController.text)) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please enter a valid 5-digit Zip Code.'),
           backgroundColor: Colors.orange,

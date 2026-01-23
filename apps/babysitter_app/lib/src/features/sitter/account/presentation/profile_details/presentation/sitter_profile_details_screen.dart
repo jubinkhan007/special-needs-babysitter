@@ -10,6 +10,7 @@ import 'widgets/availability_section.dart';
 import 'widgets/hourly_rate_section.dart';
 import 'widgets/professional_info_section.dart';
 import 'widgets/edit_professional_info_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class SitterProfileDetailsScreen extends ConsumerWidget {
   const SitterProfileDetailsScreen({super.key});
@@ -63,7 +64,7 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                   ProfilePhotoSection(
                     photoUrl: profile.photoUrl,
                     onEditTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      AppToast.show(context, 
                         const SnackBar(content: Text('Edit photo coming soon')),
                       );
                     },
@@ -76,7 +77,7 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                     yearsOfExperience: profile.yearsOfExperience,
                     ageRanges: profile.ageRanges,
                     onEditTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      AppToast.show(context, 
                         const SnackBar(content: Text('Edit skills coming soon')),
                       );
                     },
@@ -94,7 +95,7 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                     hourlyRate: profile.hourlyRate,
                     openToNegotiating: profile.openToNegotiating,
                     onEditTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      AppToast.show(context, 
                         const SnackBar(content: Text('Edit rate coming soon')),
                       );
                     },
@@ -119,7 +120,7 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                                 .read(sitterProfileDetailsControllerProvider.notifier)
                                 .updateProfessionalInfo(payload);
                             if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              AppToast.show(context, 
                                 SnackBar(
                                   content: Text(success
                                       ? 'Profile updated successfully'

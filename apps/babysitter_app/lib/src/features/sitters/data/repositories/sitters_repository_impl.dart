@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../../../parent/search/models/sitter_list_item_model.dart';
 import '../../../parent/home/presentation/models/home_mock_models.dart';
 import '../datasources/sitters_remote_datasource.dart';
@@ -11,8 +12,36 @@ class SittersRepositoryImpl implements SittersRepository {
   SittersRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<List<SitterListItemModel>> fetchSitters() async {
-    final dtos = await _remoteDataSource.fetchSitters();
+  Future<List<SitterListItemModel>> fetchSitters({
+    required double latitude,
+    required double longitude,
+    int limit = 20,
+    int offset = 0,
+    int? maxDistance,
+    DateTime? date,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
+    String? name,
+    List<String>? skills,
+    double? minRate,
+    double? maxRate,
+    String? location,
+  }) async {
+    final dtos = await _remoteDataSource.fetchSitters(
+      latitude: latitude,
+      longitude: longitude,
+      limit: limit,
+      offset: offset,
+      maxDistance: maxDistance,
+      date: date,
+      startTime: startTime,
+      endTime: endTime,
+      name: name,
+      skills: skills,
+      minRate: minRate,
+      maxRate: maxRate,
+      location: location,
+    );
     return dtos.map(_mapToSitterListItem).toList();
   }
 

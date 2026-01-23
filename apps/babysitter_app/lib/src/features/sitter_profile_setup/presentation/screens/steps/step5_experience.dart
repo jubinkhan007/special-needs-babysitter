@@ -6,6 +6,7 @@ import '../../providers/sitter_profile_setup_providers.dart';
 import '../../widgets/onboarding_header.dart';
 import '../../widgets/step_progress_dots.dart';
 import '../../sitter_profile_constants.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step5Experience extends ConsumerStatefulWidget {
   final VoidCallback onNext;
@@ -55,7 +56,7 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
             .updateResumePath(filePath);
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
+          AppToast.show(context, 
             SnackBar(content: Text('Resume uploaded: $fileName')),
           );
         }
@@ -64,7 +65,7 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error picking file: $e')),
         );
       }

@@ -17,6 +17,7 @@ import 'widgets/sitter_details_card.dart';
 import 'providers/booking_details_provider.dart';
 import '../../parent/booking_flow/data/providers/bookings_di.dart';
 import '../application/bookings_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class BookingDetailsScreen extends ConsumerStatefulWidget {
   final BookingDetailsArgs args;
@@ -71,7 +72,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
       ref.invalidate(bookingsControllerProvider);
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           const SnackBar(
             content: Text('Booking cancelled successfully'),
             backgroundColor: Colors.green,
@@ -81,7 +82,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
             content: Text('Error cancelling booking: $e'),
             backgroundColor: Colors.red,

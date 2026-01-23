@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
-import '../models/home_mock_models.dart';
 import '../theme/home_design_tokens.dart';
 
 class HomeHeader extends StatelessWidget {
   final VoidCallback? onNotificationTap;
+  final String displayName;
+  final String locationText;
+  final String? avatarUrl;
 
-  const HomeHeader({super.key, this.onNotificationTap});
+  const HomeHeader({
+    super.key,
+    this.onNotificationTap,
+    required this.displayName,
+    required this.locationText,
+    this.avatarUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +23,10 @@ class HomeHeader extends StatelessWidget {
     // Title row: “Hi, Christie” (bold).
     // Under title: location row with pin icon + “Nashville, TN” (grey).
     // Right: bell/notification icon.
+
+    final initials =
+        displayName.isNotEmpty ? displayName.trim()[0].toUpperCase() : '?';
+    final hasAvatar = avatarUrl != null && avatarUrl!.trim().isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -31,11 +43,46 @@ class HomeHeader extends StatelessWidget {
               border: Border.all(color: Colors.white, width: 2),
             ),
             clipBehavior: Clip.antiAlias,
-            child: Image.asset(
-              HomeMockData.currentUser.avatarUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => const SizedBox(),
-            ),
+            child: hasAvatar
+                ? (avatarUrl!.startsWith('http')
+                    ? Image.network(
+                        avatarUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Center(
+                          child: Text(
+                            initials,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.neutral60,
+                              fontFamily: AppTypography.fontFamily,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Image.asset(
+                        avatarUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Center(
+                          child: Text(
+                            initials,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.neutral60,
+                              fontFamily: AppTypography.fontFamily,
+                            ),
+                          ),
+                        ),
+                      ))
+                : Center(
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.neutral60,
+                        fontFamily: AppTypography.fontFamily,
+                      ),
+                    ),
+                  ),
           ),
           const SizedBox(width: 12),
 
@@ -45,7 +92,7 @@ class HomeHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hi, ${HomeMockData.currentUser.name}',
+                  'Hi, $displayName',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -63,7 +110,7 @@ class HomeHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      HomeMockData.currentUser.location,
+                      locationText,
                       style: const TextStyle(
                         color: AppColors.neutral30,
                         fontSize: 13,
@@ -78,12 +125,15 @@ class HomeHeader extends StatelessWidget {
           ),
 
           // Notification Bell
-          Container(
-            padding: const EdgeInsets.all(8),
-            child: const Icon(
-              Icons.notifications_none_outlined,
-              size: 28,
-              color: AppColors.neutral60,
+          GestureDetector(
+            onTap: onNotificationTap,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: const Icon(
+                Icons.notifications_none_outlined,
+                size: 28,
+                color: AppColors.neutral60,
+              ),
             ),
           ),
         ],

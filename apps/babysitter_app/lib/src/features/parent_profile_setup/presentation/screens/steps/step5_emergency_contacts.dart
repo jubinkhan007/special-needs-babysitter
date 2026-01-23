@@ -5,6 +5,7 @@ import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
 import '../../widgets/add_emergency_contact_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 5: Emergency Contacts - List with add button
 class Step5EmergencyContacts extends ConsumerStatefulWidget {
@@ -64,7 +65,7 @@ class _Step5EmergencyContactsState
 
   void _saveAndNext() {
     if (_contacts.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please add at least one emergency contact'),
           backgroundColor: AuthTheme.errorRed,

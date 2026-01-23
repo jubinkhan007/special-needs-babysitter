@@ -13,6 +13,7 @@ import 'steps/step6_certification.dart';
 import 'steps/step7_availability.dart';
 import 'steps/step8_hourly_rate.dart';
 import 'steps/step9_review_profile.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter Profile Setup Flow Controller
 /// Manages navigation through the 9-step profile setup wizard for sitters
@@ -62,7 +63,7 @@ class _SitterProfileSetupFlowState
             'DEBUG FLOW: Step $currentStepNumber saved successfully, advancing to step $nextStepNumber');
         _goToStep(nextStepNumber);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(
               content: Text(
                   'Failed to save step $currentStepNumber. Please try again.')),
@@ -70,7 +71,7 @@ class _SitterProfileSetupFlowState
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        AppToast.show(context, 
           SnackBar(content: Text('Error: $e')),
         );
       }
@@ -162,7 +163,7 @@ class _SitterProfileSetupFlowState
   void _finishSetup() {
     // Navigate to completion / dashboard / review
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(content: Text('Profile Setup Completed!')),
       );
     }

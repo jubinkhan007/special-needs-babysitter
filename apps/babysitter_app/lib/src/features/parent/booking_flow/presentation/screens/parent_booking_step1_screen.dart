@@ -13,6 +13,7 @@ import '../../../../parent_profile_setup/presentation/widgets/add_child_dialog.d
 import '../../../account/profile_details/presentation/providers/profile_details_providers.dart';
 import '../../../jobs/post_job/presentation/providers/job_post_providers.dart';
 import 'parent_booking_step2_screen.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ParentBookingStep1Screen extends ConsumerStatefulWidget {
   const ParentBookingStep1Screen({super.key});
@@ -60,7 +61,7 @@ class _ParentBookingStep1ScreenState
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              AppToast.show(context, 
                 const SnackBar(content: Text('Failed to add child')),
               );
             }
@@ -84,7 +85,7 @@ class _ParentBookingStep1ScreenState
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
+              AppToast.show(context, 
                 const SnackBar(content: Text('Failed to update child')),
               );
             }

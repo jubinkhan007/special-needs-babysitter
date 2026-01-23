@@ -6,6 +6,7 @@ import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
 import '../../../common/theme/auth_theme.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Forgot Password screen - Pixel-perfect matching Figma design
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
@@ -34,7 +35,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final phone = _phoneController.text.trim();
 
     if (email.isEmpty && phone.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      AppToast.show(context, 
         const SnackBar(
           content: Text('Please enter email or phone number'),
           backgroundColor: AuthTheme.errorRed,

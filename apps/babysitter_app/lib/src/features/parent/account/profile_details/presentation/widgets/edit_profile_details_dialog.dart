@@ -5,6 +5,7 @@ import 'package:domain/domain.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui_kit.dart';
 import '../profile_details_ui_constants.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class EditProfileDetailsDialog extends StatefulWidget {
   final UserProfileDetails initialDetails;
@@ -109,7 +110,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
           photoUrl = await widget.onUploadPhoto!(_image!);
         } catch (e) {
           if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
+            AppToast.show(context, 
                 SnackBar(content: Text('Error uploading photo: $e')));
             setState(() => _isSaving = false);
             return;
@@ -145,8 +146,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
         if (mounted) Navigator.of(context).pop();
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Error: $e')));
+          AppToast.show(context, SnackBar(content: Text('Error: $e')));
           setState(() => _isSaving = false);
         }
       }
