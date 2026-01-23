@@ -208,16 +208,18 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       final endH = _selectedTimeEnd!.hour.toString().padLeft(2, '0');
       final endM = _selectedTimeEnd!.minute.toString().padLeft(2, '0');
 
+      final normalizedState = _stateController.text.length > 2
+          ? _stateController.text.substring(0, 2).toUpperCase()
+          : _stateController.text.toUpperCase();
+      final emergencyName = _emergencyNameController.text.trim();
+      final emergencyPhone = _emergencyPhoneController.text.trim();
+      final emergencyRelation = _emergencyRelationController.text.trim();
+
       final Map<String, dynamic> updateData = {
         'title': _titleController.text,
-        'description': _detailsController
-            .text, // Mapped to additionalDetails in repository? or key should be additionalDetails?
-        // JobDto has key "additionalDetails". The PUT endpoint body example in screenshot uses "title", "startDate", ...
-        // It DOES NOT SHOW description key explicitly in visible part. But usually DTO field names match.
-        // Let's use 'additionalDetails' to be safe since JobDto uses it.
         'additionalDetails': _detailsController.text,
-        'startDate': DateFormat('MM/dd/yyyy').format(_selectedDateStart!),
-        'endDate': DateFormat('MM/dd/yyyy').format(_selectedDateEnd!),
+        'startDate': DateFormat('yyyy-MM-dd').format(_selectedDateStart!),
+        'endDate': DateFormat('yyyy-MM-dd').format(_selectedDateEnd!),
         'startTime': '$startH:$startM',
         'endTime': '$endH:$endM',
         'payRate': _payRate,
@@ -225,20 +227,22 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           'streetAddress': _streetController.text,
           'aptUnit': _unitController.text,
           'city': _cityController.text,
-          'state': _stateController.text,
+          'state': normalizedState,
           'zipCode': _zipController.text,
-          // 'latitude': ..., 'longitude': ... // reusing old values or 0 if not edited?
-          // If API requires lat/long, we might fail if we don't send them.
           'latitude': 36.1627, // Mock for now or preserve if we had it
           'longitude': -86.7816,
-          'publicLocation': '${_cityController.text}, ${_stateController.text}'
-        },
-        'emergencyContact': {
-          'name': _emergencyNameController.text.trim(),
-          'phone': _emergencyPhoneController.text.trim(),
-          'relationship': _emergencyRelationController.text.trim(),
         },
       };
+
+      if (emergencyName.isNotEmpty ||
+          emergencyPhone.isNotEmpty ||
+          emergencyRelation.isNotEmpty) {
+        updateData['emergencyContact'] = {
+          'name': emergencyName,
+          'phone': emergencyPhone,
+          'relationship': emergencyRelation,
+        };
+      }
 
       await repo.updateJob(widget.jobId, updateData);
 

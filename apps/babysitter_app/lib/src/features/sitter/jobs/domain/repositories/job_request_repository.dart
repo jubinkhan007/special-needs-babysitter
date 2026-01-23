@@ -19,6 +19,10 @@ abstract class JobRequestRepository {
     String? otherReason,
   });
 
-  /// Clock in to a booking.
-  Future<void> clockInBooking(String applicationId);
+  /// Clock in to a booking with device location.
+  Future<void> clockInBooking(
+    String applicationId, {
+    required double latitude,
+    required double longitude,
+  });
 }

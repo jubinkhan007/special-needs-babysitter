@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geocoding/geocoding.dart';
 import '../../data/providers/booking_flow_provider.dart';
 import '../widgets/booking_step_header.dart';
 import '../widgets/booking_primary_bottom_button.dart';
@@ -29,6 +30,11 @@ class _ParentBookingStep3ScreenState
   final _emergencyPhoneController = TextEditingController();
   final _emergencyRelationController = TextEditingController();
 
+  // Geocoding state
+  bool _isGeocoding = false;
+  bool _addressVerified = false;
+  String? _verificationMessage;
+
   @override
   void dispose() {
     _streetController.dispose();
@@ -40,6 +46,92 @@ class _ParentBookingStep3ScreenState
     _emergencyPhoneController.dispose();
     _emergencyRelationController.dispose();
     super.dispose();
+  }
+
+  Future<void> _geocodeAddress() async {
+    // Build full address string from fields
+    final street = _streetController.text.trim();
+    final apt = _aptController.text.trim();
+    final city = _cityController.text.trim();
+    final state = _stateController.text.trim();
+    final zip = _zipController.text.trim();
+
+    if (street.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill in all required address fields first.'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isGeocoding = true);
+
+    try {
+      // Build address string
+      final parts = [street, apt, city, '$state $zip']
+          .where((p) => p.isNotEmpty)
+          .toList();
+      final fullAddress = parts.join(', ');
+
+      // Geocode address
+      final addresses = await locationFromAddress(fullAddress);
+
+      if (!mounted) return;
+
+      if (addresses.isEmpty) {
+        setState(() {
+          _isGeocoding = false;
+          _addressVerified = false;
+          _verificationMessage =
+              'Address not found. Please check and try again.';
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Address could not be found. Please verify.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
+      final location = addresses.first;
+
+      // Update provider with coordinates
+      ref.read(bookingFlowProvider.notifier).updateLocationCoordinates(
+            latitude: location.latitude,
+            longitude: location.longitude,
+          );
+
+      setState(() {
+        _isGeocoding = false;
+        _addressVerified = true;
+        _verificationMessage =
+            'Address verified! (${location.latitude.toStringAsFixed(4)}, ${location.longitude.toStringAsFixed(4)})';
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Address verified successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isGeocoding = false;
+        _addressVerified = false;
+        _verificationMessage = 'Error: Unable to verify address.';
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -104,6 +196,59 @@ class _ParentBookingStep3ScreenState
                     controller: _zipController,
                     keyboardType: TextInputType.number,
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // Verify Address Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _isGeocoding ? null : _geocodeAddress,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF88CBE6),
+                        disabledBackgroundColor: Colors.grey[300],
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      icon: _isGeocoding
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Icon(Icons.location_on, color: Colors.white),
+                      label: Text(
+                        _isGeocoding
+                            ? 'Verifying...'
+                            : _addressVerified
+                                ? 'Address Verified ✓'
+                                : 'Verify Address',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Verification Message
+                  if (_verificationMessage != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      _verificationMessage!,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: _addressVerified ? Colors.green : Colors.red,
+                      ),
+                    ),
+                  ],
 
                   const SizedBox(height: 24), // Spacing before divider
 

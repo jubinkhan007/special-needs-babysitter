@@ -22,6 +22,8 @@ class BookingFlowState {
   final String? city;
   final String? state;
   final String? zipCode;
+  final double? latitude;
+  final double? longitude;
   final String? emergencyContactName;
   final String? emergencyContactPhone;
   final String? emergencyContactRelation;
@@ -61,6 +63,8 @@ class BookingFlowState {
     this.city,
     this.state,
     this.zipCode,
+    this.latitude,
+    this.longitude,
     this.emergencyContactName,
     this.emergencyContactPhone,
     this.emergencyContactRelation,
@@ -95,6 +99,8 @@ class BookingFlowState {
     String? city,
     String? state,
     String? zipCode,
+    double? latitude,
+    double? longitude,
     String? emergencyContactName,
     String? emergencyContactPhone,
     String? emergencyContactRelation,
@@ -128,6 +134,8 @@ class BookingFlowState {
       city: city ?? this.city,
       state: state ?? this.state,
       zipCode: zipCode ?? this.zipCode,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
       emergencyContactName: emergencyContactName ?? this.emergencyContactName,
       emergencyContactPhone:
           emergencyContactPhone ?? this.emergencyContactPhone,
@@ -281,8 +289,8 @@ class BookingFlowState {
         'state': state ??
             'CA', // Default to CA if somehow null to avoid validation error
         'zipCode': zipCode ?? '',
-        'latitude': 0.0, // Not collected in current flow
-        'longitude': 0.0, // Not collected in current flow
+        'latitude': latitude ?? 0.0,
+        'longitude': longitude ?? 0.0,
       },
       'additionalDetails': additionalDetails ?? '',
       'payRate': payRate.toInt(),

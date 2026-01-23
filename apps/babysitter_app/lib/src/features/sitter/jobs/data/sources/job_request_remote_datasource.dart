@@ -111,11 +111,21 @@ class JobRequestRemoteDataSource {
 
   /// Clock in to a booking
   /// Uses /sitters/bookings/{id}/clock-in
-  Future<void> clockInBooking(String applicationId) async {
+  /// Requires latitude and longitude from device location
+  Future<void> clockInBooking(
+    String applicationId, {
+    required double latitude,
+    required double longitude,
+  }) async {
     try {
       final endpoint = '/sitters/bookings/$applicationId/clock-in';
+      final data = {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
       print('DEBUG: Clock In Request: POST $endpoint');
-      final response = await _dio.post(endpoint);
+      print('DEBUG: Clock In Request Body: $data');
+      final response = await _dio.post(endpoint, data: data);
       print('DEBUG: Clock In Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {

@@ -39,7 +39,15 @@ class JobRequestRepositoryImpl implements JobRequestRepository {
   }
 
   @override
-  Future<void> clockInBooking(String applicationId) {
-    return _remoteDataSource.clockInBooking(applicationId);
+  Future<void> clockInBooking(
+    String applicationId, {
+    required double latitude,
+    required double longitude,
+  }) {
+    return _remoteDataSource.clockInBooking(
+      applicationId,
+      latitude: latitude,
+      longitude: longitude,
+    );
   }
 }

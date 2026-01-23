@@ -40,10 +40,10 @@ extension JobDtoMapper on JobDto {
           : '${address?.city ?? "Unknown"}, ${address?.state ?? ""}'.trim(),
       scheduleDate: parseDate(startDate), // API has startDate "2026-01-17"
       rateText: '\$${payRate.toStringAsFixed(0)}/hr', // e.g. $25/hr
-      // API does not return child names/ages, only IDs.
-      // We return empty list to avoid displaying placeholder data.
-      // If needed, we would need to fetch child details separately.
-      children: [],
+      // Populate children with placeholders if only IDs are available
+      children: childIds
+          .map((id) => const ChildDetail(name: 'Child', ageYears: 0))
+          .toList(),
     );
   }
 
@@ -51,6 +51,7 @@ extension JobDtoMapper on JobDto {
     String? emergencyContactName,
     String? emergencyContactPhone,
     String? emergencyContactRelation,
+    List<dynamic>? childrenData,
   }) {
     // Helper to parse dates
     DateTime parseDate(String dateStr) {
@@ -92,14 +93,31 @@ extension JobDtoMapper on JobDto {
     final trimmedEmergencyPhone = (emergencyContactPhone ?? '').trim();
     final trimmedEmergencyRelation = (emergencyContactRelation ?? '').trim();
 
+    List<ChildDetail> mappedChildren = [];
+    if (childrenData != null && childrenData.isNotEmpty) {
+      mappedChildren = childrenData.map((c) {
+        if (c is Map<String, dynamic>) {
+          final name = c['firstName'] ?? c['name'] ?? c['fullName'] ?? 'Child';
+          final age = c['age'] ?? c['ageYears'];
+          final ageInt = age is int
+              ? age
+              : (age is String ? int.tryParse(age) : 0) ?? 0;
+          return ChildDetail(name: name.toString(), ageYears: ageInt);
+        }
+        return const ChildDetail(name: 'Child', ageYears: 0);
+      }).toList();
+    } else {
+      mappedChildren = childIds
+          .map((id) => const ChildDetail(name: 'Child', ageYears: 0))
+          .toList();
+    }
+
     return JobDetails(
       id: id,
       status: mapStatus(status),
       title: title,
       postedAt: DateTime.parse(postedAt ?? createdAt),
-      children: childIds
-          .map((id) => const ChildDetail(name: 'Child', ageYears: 0))
-          .toList(),
+      children: mappedChildren,
       scheduleStartDate: parseDate(startDate),
       scheduleEndDate: parseDate(endDate),
       scheduleStartTime: parseTime(startTime),

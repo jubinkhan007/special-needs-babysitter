@@ -103,6 +103,17 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
     state = state.copyWith(selectedPaymentMethod: method);
   }
 
+  /// Update location coordinates from geocoding
+  void updateLocationCoordinates({
+    required double latitude,
+    required double longitude,
+  }) {
+    state = state.copyWith(
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
+
   /// Reset state (e.g., after booking completed or cancelled)
   void reset() {
     state = const BookingFlowState();

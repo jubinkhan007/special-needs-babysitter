@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../jobs/data/models/job_request_details_model.dart';
 import '../../../jobs/presentation/providers/job_request_providers.dart';
@@ -1100,9 +1101,16 @@ class _SitterBookingDetailsScreenState
     }
     setState(() => _isClockingIn = true);
     try {
+      // Get device location for clock-in
+      final position = await _getDeviceLocation();
+
       await ref
           .read(jobRequestRepositoryProvider)
-          .clockInBooking(applicationId);
+          .clockInBooking(
+            applicationId,
+            latitude: position['latitude'] as double,
+            longitude: position['longitude'] as double,
+          );
       if (!mounted) {
         return;
       }
@@ -1122,6 +1130,53 @@ class _SitterBookingDetailsScreenState
       if (mounted) {
         setState(() => _isClockingIn = false);
       }
+    }
+  }
+
+  Future<Map<String, double>> _getDeviceLocation() async {
+    try {
+      // Check if location services are enabled
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled. Please enable them to clock in.');
+      }
+
+      // Request location permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permission is required to clock in.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permission is permanently denied. Please enable it in app settings.');
+      }
+
+      // Get current position with 30 second timeout
+      final position = await Geolocator.getCurrentPosition(
+        timeLimit: const Duration(seconds: 30),
+        desiredAccuracy: LocationAccuracy.best,
+      );
+
+      return {
+        'latitude': position.latitude,
+        'longitude': position.longitude,
+      };
+    } catch (e) {
+      // Log error and show user-friendly message
+      print('DEBUG: Location Error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString()),
+            backgroundColor: const Color(0xFFEF4444),
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+      rethrow;
     }
   }
 

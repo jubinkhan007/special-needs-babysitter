@@ -78,12 +78,16 @@ class JobsRepositoryImpl implements JobsRepository {
             if (dataParams.containsKey('job')) {
               // The API returns { data: { job: { ... }, children: [...] } }
               final jobMap = dataParams['job'] as Map<String, dynamic>;
+              // Check for children in dataParams OR inside the job object itself
+              final childrenList = (dataParams['children'] as List<dynamic>?) ??
+                  (jobMap['children'] as List<dynamic>?);
               final dto = JobDto.fromJson(jobMap);
               final emergency = _extractEmergencyContact(jobMap);
               return dto.toJobDetails(
                 emergencyContactName: emergency['name'],
                 emergencyContactPhone: emergency['phone'],
                 emergencyContactRelation: emergency['relationship'],
+                childrenData: childrenList,
               );
             } else {
               // Fallback: maybe 'data' IS the job directly (unlikely based on logs but possible for other endpoints)
@@ -93,6 +97,9 @@ class JobsRepositoryImpl implements JobsRepository {
                 emergencyContactName: emergency['name'],
                 emergencyContactPhone: emergency['phone'],
                 emergencyContactRelation: emergency['relationship'],
+                // Try to find children in dataParams OR inside the object itself
+                childrenData: (dataParams['children'] as List<dynamic>?) ??
+                    (dataParams['kids'] as List<dynamic>?),
               );
             }
           } else {
@@ -103,6 +110,7 @@ class JobsRepositoryImpl implements JobsRepository {
               emergencyContactName: emergency['name'],
               emergencyContactPhone: emergency['phone'],
               emergencyContactRelation: emergency['relationship'],
+              childrenData: map['children'] as List<dynamic>?,
             );
           }
         } catch (e) {

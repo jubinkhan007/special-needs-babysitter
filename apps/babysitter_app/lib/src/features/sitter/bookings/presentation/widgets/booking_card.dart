@@ -15,8 +15,16 @@ class BookingCard extends StatelessWidget {
   });
 
   String _formatTimeDisplay() {
-    if (booking.isToday && booking.hoursUntilStart != null) {
-      final hours = booking.hoursUntilStart!;
+    final startDateTime = _parseStartDateTime();
+    final isToday = startDateTime != null
+        ? _isToday(startDateTime)
+        : booking.isToday;
+    final hoursUntilStart = startDateTime != null
+        ? _hoursUntilStart(startDateTime)
+        : booking.hoursUntilStart;
+
+    if (isToday && hoursUntilStart != null) {
+      final hours = hoursUntilStart;
       if (hours < 1) {
         final minutes = (hours * 60).round();
         return 'Job Starting in $minutes Minutes';
@@ -28,10 +36,108 @@ class BookingCard extends StatelessWidget {
     return '';
   }
 
+  DateTime? _parseStartDateTime() {
+    final date = _parseDate(booking.startDate);
+    final minutes = _parseTimeToMinutes(booking.startTime);
+    if (date == null || minutes == null) {
+      return null;
+    }
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      minutes ~/ 60,
+      minutes % 60,
+    );
+  }
+
+  DateTime? _parseDate(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return null;
+    }
+    try {
+      final parsed = DateTime.parse(trimmed);
+      return DateTime(parsed.year, parsed.month, parsed.day);
+    } catch (_) {
+      final parts = trimmed.split(RegExp(r'[-/]'));
+      if (parts.length == 3) {
+        final first = int.tryParse(parts[0]);
+        final second = int.tryParse(parts[1]);
+        final third = int.tryParse(parts[2]);
+        if (first == null || second == null || third == null) {
+          return null;
+        }
+        if (parts[0].length == 4) {
+          return DateTime(first, second, third);
+        }
+        final year = third < 100 ? 2000 + third : third;
+        return DateTime(year, first, second);
+      }
+    }
+    return null;
+  }
+
+  int? _parseTimeToMinutes(String value) {
+    try {
+      final trimmed = value.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+
+      final lower = trimmed.toLowerCase();
+      final isAm = lower.contains('am');
+      final isPm = lower.contains('pm');
+      final sanitized = lower.replaceAll(RegExp(r'[^0-9:]'), '');
+      if (sanitized.isEmpty) {
+        return null;
+      }
+
+      final parts = sanitized.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = parts.length > 1 ? int.parse(parts[1]) : 0;
+      if (minute < 0 || minute > 59) {
+        return null;
+      }
+
+      var adjustedHour = hour;
+      if (isPm && adjustedHour < 12) {
+        adjustedHour += 12;
+      }
+      if (isAm && adjustedHour == 12) {
+        adjustedHour = 0;
+      }
+      if (!isAm && !isPm && (adjustedHour < 0 || adjustedHour > 23)) {
+        return null;
+      }
+
+      return adjustedHour * 60 + minute;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool _isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
+  }
+
+  double _hoursUntilStart(DateTime startDateTime) {
+    final now = DateTime.now();
+    final minutes = startDateTime.difference(now).inMinutes;
+    final clampedMinutes = minutes < 0 ? 0 : minutes;
+    return clampedMinutes / 60.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final timeDisplay = _formatTimeDisplay();
+    final startDateTime = _parseStartDateTime();
+    final isToday =
+        startDateTime != null ? _isToday(startDateTime) : booking.isToday;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -140,7 +246,7 @@ class BookingCard extends StatelessWidget {
                 const SizedBox(width: 16),
 
                 // Time status badges
-                if (booking.isToday) ...[
+                if (isToday) ...[
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
