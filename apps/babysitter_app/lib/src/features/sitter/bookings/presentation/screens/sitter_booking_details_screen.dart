@@ -13,6 +13,7 @@ import '../../../jobs/presentation/widgets/job_meta_header.dart';
 import '../../../jobs/presentation/widgets/key_value_row.dart';
 import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
 import '../../../jobs/presentation/widgets/section_divider.dart';
+import '../providers/bookings_providers.dart';
 
 /// Screen showing details of an upcoming/confirmed booking.
 class SitterBookingDetailsScreen extends ConsumerStatefulWidget {
@@ -1399,22 +1400,26 @@ class _SitterBookingDetailsScreenState
               }
             }
 
+            final media = MediaQuery.of(context);
+            final maxHeight = media.size.height * 0.8;
             return Dialog(
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.r),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(20.w),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: const Icon(Icons.close, color: Color(0xFF101828)),
-                        onPressed: () => Navigator.of(dialogContext).pop(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: maxHeight),
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(20.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Color(0xFF101828)),
+                          onPressed: () => Navigator.of(dialogContext).pop(),
                       ),
                     ),
                     Text(
@@ -1451,6 +1456,11 @@ class _SitterBookingDetailsScreenState
                       controller: detailsController,
                       minLines: 4,
                       maxLines: 4,
+                      style: TextStyle(
+                        color: const Color(0xFF101828),
+                        fontSize: 13.sp,
+                        fontFamily: 'Inter',
+                      ),
                       decoration: InputDecoration(
                         hintText: 'Briefly describe your situation (optional)',
                         hintStyle: TextStyle(
@@ -1458,6 +1468,8 @@ class _SitterBookingDetailsScreenState
                           fontSize: 13.sp,
                           fontFamily: 'Inter',
                         ),
+                        filled: true,
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.r),
                           borderSide:
@@ -1532,11 +1544,11 @@ class _SitterBookingDetailsScreenState
                         fontFamily: 'Inter',
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 46.h,
-                      child: ElevatedButton(
+                      SizedBox(height: 16.h),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46.h,
+                        child: ElevatedButton(
                         onPressed: (isSubmitting || isUploading)
                             ? null
                             : () async {
@@ -1550,15 +1562,15 @@ class _SitterBookingDetailsScreenState
                                   fileUrl: fileUrl,
                                 );
                                 if (!mounted) return;
-                                if (success) {
-                                  Navigator.of(dialogContext).pop();
-                                  parentContext.pop();
-                                  return;
-                                }
-                                setState(() {
-                                  isSubmitting = false;
-                                });
-                              },
+                              if (success) {
+                                Navigator.of(dialogContext).pop();
+                                parentContext.pop();
+                                return;
+                              }
+                              setState(() {
+                                isSubmitting = false;
+                              });
+                            },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF87C4F2),
                           disabledBackgroundColor: Colors.grey.shade300,
@@ -1587,8 +1599,8 @@ class _SitterBookingDetailsScreenState
                                 ),
                               ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -1596,8 +1608,6 @@ class _SitterBookingDetailsScreenState
         );
       },
     );
-
-    detailsController.dispose();
   }
 
   Future<void> _showCancellationImpactDialog(
@@ -1787,6 +1797,8 @@ class _SitterBookingDetailsScreenState
             reason: reason,
             fileUrl: fileUrl,
           );
+      ref.invalidate(sitterBookingsProvider('upcoming'));
+      ref.invalidate(sitterBookingsProvider(null));
       if (!mounted) return false;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Booking cancelled successfully')),
