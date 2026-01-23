@@ -26,6 +26,7 @@ class AccountMenuList extends StatelessWidget {
         _MenuItem(
           icon: Icons.payment_outlined, // Try to find close match
           label: 'Payment',
+          subtitle: 'Manage your payment methods',
           onTap: onTapPayment,
         ),
         const SizedBox(height: 12),
@@ -66,11 +67,13 @@ class AccountMenuList extends StatelessWidget {
 class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final String? subtitle;
   final VoidCallback onTap;
 
   const _MenuItem({
     required this.icon,
     required this.label,
+    this.subtitle,
     required this.onTap,
   });
 
@@ -86,13 +89,28 @@ class _MenuItem extends StatelessWidget {
             Icon(icon, size: 24, color: AccountUI.textGray),
             const SizedBox(width: 16),
             Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AccountUI.textDark,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: AccountUI.textDark,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AccountUI.textGray,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
           ],

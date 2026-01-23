@@ -38,8 +38,8 @@ class JobDetailsUiModel {
 
   factory JobDetailsUiModel.fromDomain(JobDetails job) {
     // Helper formats
-    final dateFormat = DateFormat('d MMM');
-    final timeFormat = DateFormat('hh a');
+    final dateFormat = DateFormat('MM/dd/yyyy');
+    final timeFormat = DateFormat('h:mm a');
 
     // 1. Posted Ago
     final diff = DateTime.now().difference(job.postedAt);

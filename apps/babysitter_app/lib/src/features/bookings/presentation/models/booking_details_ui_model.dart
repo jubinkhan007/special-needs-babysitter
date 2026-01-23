@@ -55,8 +55,8 @@ class BookingDetailsUiModel {
   });
 
   factory BookingDetailsUiModel.fromDomain(BookingDetails details) {
-    final dateFormat = DateFormat('dd MMM');
-    final timeFormat = DateFormat('hh a'); // 09 AM
+    final dateFormat = DateFormat('MM/dd/yyyy');
+    final timeFormat = DateFormat('h:mm a'); // 09 AM
 
     String formatDateRange(DateTime start, DateTime end) {
       return '${dateFormat.format(start)} - ${dateFormat.format(end)}';

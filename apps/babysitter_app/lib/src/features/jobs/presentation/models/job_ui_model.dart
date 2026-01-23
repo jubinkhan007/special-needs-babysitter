@@ -26,7 +26,7 @@ class JobUiModel {
 
   factory JobUiModel.fromDomain(Job job) {
     // formatter
-    final dateFormat = DateFormat('d MMMM, yyyy'); // 20 May, 2025
+    final dateFormat = DateFormat('MM/dd/yyyy'); // 20 May, 2025
 
     return JobUiModel(
       id: job.id,

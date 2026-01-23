@@ -11,9 +11,18 @@ import '../../../common/widgets/primary_action_button.dart';
 import 'presentation/widgets/social_login_row.dart';
 import '../../../common/theme/auth_theme.dart';
 
+String _normalizeRole(String role) {
+  final value = role.toLowerCase();
+  if (value == 'sitter' || value == 'babysitter') return 'sitter';
+  if (value == 'parent' || value == 'family') return 'parent';
+  return 'parent';
+}
+
 /// Sign in screen - Pixel-perfect matching Figma design
 class SignInScreen extends ConsumerStatefulWidget {
-  const SignInScreen({super.key});
+  const SignInScreen({super.key, this.initialRole = 'parent'});
+
+  final String initialRole;
 
   @override
   ConsumerState<SignInScreen> createState() => _SignInScreenState();
@@ -221,7 +230,16 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                                   fontWeight: FontWeight.w600,
                                 ),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context.go(Routes.signUp),
+                                  ..onTap = () {
+                                    final role =
+                                        _normalizeRole(widget.initialRole);
+                                    context.go(
+                                      Uri(
+                                        path: Routes.signUp,
+                                        queryParameters: {'role': role},
+                                      ).toString(),
+                                    );
+                                  },
                               ),
                             ],
                           ),

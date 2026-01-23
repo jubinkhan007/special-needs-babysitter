@@ -169,7 +169,7 @@ class _ScheduledRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // EXACT Figma-like: "20 May,2025" (no space after comma)
-    final dateText = DateFormat('dd MMM,yyyy').format(booking.scheduledDate);
+    final dateText = DateFormat('MM/dd/yyyy').format(booking.scheduledDate);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

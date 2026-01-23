@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/job_details.dart'; // To use JobDetails and Address
@@ -31,6 +32,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
   late TextEditingController _cityController;
   late TextEditingController _stateController;
   late TextEditingController _zipController;
+  late TextEditingController _emergencyNameController;
+  late TextEditingController _emergencyPhoneController;
+  late TextEditingController _emergencyRelationController;
 
   double _payRate = 15.0;
 
@@ -55,6 +59,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
     _cityController = TextEditingController();
     _stateController = TextEditingController();
     _zipController = TextEditingController();
+    _emergencyNameController = TextEditingController();
+    _emergencyPhoneController = TextEditingController();
+    _emergencyRelationController = TextEditingController();
 
     // Fetch details
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -92,6 +99,12 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
         _cityController.text = details.address.city;
         _stateController.text = details.address.state;
         _zipController.text = details.address.zipCode;
+        _emergencyNameController.text =
+            details.emergencyContactName == 'Not Provided'
+                ? ''
+                : details.emergencyContactName;
+        _emergencyPhoneController.text = details.emergencyContactPhone;
+        _emergencyRelationController.text = details.emergencyContactRelation;
       });
     } catch (e) {
       if (mounted) {
@@ -105,9 +118,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
 
   String _formatDateRange(DateTime? start, DateTime? end) {
     if (start == null) return '';
-    final startStr = DateFormat('MMM d').format(start);
+    final startStr = DateFormat('MM/dd/yyyy').format(start);
     if (end != null && end != start) {
-      final endStr = DateFormat('MMM d').format(end);
+      final endStr = DateFormat('MM/dd/yyyy').format(end);
       return '$startStr - $endStr';
     }
     return startStr;
@@ -133,6 +146,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
     _cityController.dispose();
     _stateController.dispose();
     _zipController.dispose();
+    _emergencyNameController.dispose();
+    _emergencyPhoneController.dispose();
+    _emergencyRelationController.dispose();
     super.dispose();
   }
 
@@ -200,8 +216,8 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
         // It DOES NOT SHOW description key explicitly in visible part. But usually DTO field names match.
         // Let's use 'additionalDetails' to be safe since JobDto uses it.
         'additionalDetails': _detailsController.text,
-        'startDate': DateFormat('yyyy-MM-dd').format(_selectedDateStart!),
-        'endDate': DateFormat('yyyy-MM-dd').format(_selectedDateEnd!),
+        'startDate': DateFormat('MM/dd/yyyy').format(_selectedDateStart!),
+        'endDate': DateFormat('MM/dd/yyyy').format(_selectedDateEnd!),
         'startTime': '$startH:$startM',
         'endTime': '$endH:$endM',
         'payRate': _payRate,
@@ -216,7 +232,12 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           'latitude': 36.1627, // Mock for now or preserve if we had it
           'longitude': -86.7816,
           'publicLocation': '${_cityController.text}, ${_stateController.text}'
-        }
+        },
+        'emergencyContact': {
+          'name': _emergencyNameController.text.trim(),
+          'phone': _emergencyPhoneController.text.trim(),
+          'relationship': _emergencyRelationController.text.trim(),
+        },
       };
 
       await repo.updateJob(widget.jobId, updateData);
@@ -415,6 +436,10 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                       child: TextFormField(
                           controller: _zipController,
                           style: const TextStyle(color: AppTokens.textPrimary),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           decoration: _inputDecoration('Zip Code'),
                           validator: (v) => v!.isEmpty ? 'Required' : null)),
                 ],
@@ -436,6 +461,27 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                           decoration: _inputDecoration('State'),
                           validator: (v) => v!.isEmpty ? 'Required' : null)),
                 ],
+              ),
+              const SizedBox(height: 16),
+              _buildLabel('Emergency Contact'),
+              TextFormField(
+                controller: _emergencyNameController,
+                style: const TextStyle(color: AppTokens.textPrimary),
+                decoration: _inputDecoration('Name'),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _emergencyPhoneController,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                style: const TextStyle(color: AppTokens.textPrimary),
+                decoration: _inputDecoration('Phone Number'),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _emergencyRelationController,
+                style: const TextStyle(color: AppTokens.textPrimary),
+                decoration: _inputDecoration('Relation'),
               ),
               const SizedBox(height: 16),
               _buildLabel('Hourly Rate (\$/hr)'),

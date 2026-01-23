@@ -218,7 +218,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Auth routes
       GoRoute(
         path: Routes.signIn,
-        builder: (context, state) => const SignInScreen(),
+        builder: (context, state) {
+          final role = state.uri.queryParameters['role'] ?? 'parent';
+          return SignInScreen(initialRole: role);
+        },
       ),
       GoRoute(
         path: Routes.signUp,

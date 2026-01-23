@@ -47,7 +47,11 @@ extension JobDtoMapper on JobDto {
     );
   }
 
-  JobDetails toJobDetails() {
+  JobDetails toJobDetails({
+    String? emergencyContactName,
+    String? emergencyContactPhone,
+    String? emergencyContactRelation,
+  }) {
     // Helper to parse dates
     DateTime parseDate(String dateStr) {
       try {
@@ -84,6 +88,10 @@ extension JobDtoMapper on JobDto {
       }
     }
 
+    final trimmedEmergencyName = (emergencyContactName ?? '').trim();
+    final trimmedEmergencyPhone = (emergencyContactPhone ?? '').trim();
+    final trimmedEmergencyRelation = (emergencyContactRelation ?? '').trim();
+
     return JobDetails(
       id: id,
       status: mapStatus(status),
@@ -106,9 +114,10 @@ extension JobDtoMapper on JobDto {
             )
           : const Address(
               streetAddress: '', aptUnit: '', city: '', state: '', zipCode: ''),
-      emergencyContactName: 'Not Provided',
-      emergencyContactPhone: '',
-      emergencyContactRelation: '',
+      emergencyContactName:
+          trimmedEmergencyName.isEmpty ? 'Not Provided' : trimmedEmergencyName,
+      emergencyContactPhone: trimmedEmergencyPhone,
+      emergencyContactRelation: trimmedEmergencyRelation,
       additionalNotes: additionalDetails ?? '',
       hourlyRate: payRate,
       applicantsCount: applicantIds.length,

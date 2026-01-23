@@ -492,7 +492,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
       targetDate = state.dateRangeStart!;
     }
 
-    final monthName = DateFormat('MMM').format(targetDate);
+    final monthName = DateFormat('MMMM').format(targetDate);
     final yearStr = DateFormat('yyyy').format(targetDate);
 
     // Calculate calendar days

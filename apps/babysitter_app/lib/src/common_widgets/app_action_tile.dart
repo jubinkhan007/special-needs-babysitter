@@ -5,6 +5,8 @@ import 'package:babysitter_app/src/theme/app_tokens.dart';
 class AppActionTile extends StatelessWidget {
   final Widget leadingIcon;
   final String title;
+  final String? subtitle;
+  final TextStyle? subtitleStyle;
   final VoidCallback? onTap;
   final bool showChevron;
   final EdgeInsetsGeometry? padding;
@@ -13,6 +15,8 @@ class AppActionTile extends StatelessWidget {
     super.key,
     required this.leadingIcon,
     required this.title,
+    this.subtitle,
+    this.subtitleStyle,
     this.onTap,
     this.showChevron = false,
     this.padding,
@@ -47,13 +51,29 @@ class AppActionTile extends StatelessWidget {
                 leadingIcon,
                 SizedBox(width: 16.w), // Gap
                 Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: AppTokens.textPrimary,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppTokens.textPrimary,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        SizedBox(height: 4.h),
+                        Text(
+                          subtitle!,
+                          style: subtitleStyle ??
+                              TextStyle(
+                                fontSize: 14.sp,
+                                color: AppTokens.textSecondary,
+                              ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
                 if (showChevron)

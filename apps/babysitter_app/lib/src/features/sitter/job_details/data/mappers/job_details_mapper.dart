@@ -107,7 +107,7 @@ class JobDetailsMapper {
         final days = difference.inDays;
         return 'Job posted $days ${days == 1 ? 'day' : 'days'} ago';
       } else {
-        return 'Job posted on ${DateFormat('MMM d').format(createdDate)}';
+        return 'Job posted on ${DateFormat('MM/dd/yyyy').format(createdDate)}';
       }
     } catch (e) {
       return 'Job posted recently';
@@ -119,14 +119,14 @@ class JobDetailsMapper {
 
     try {
       final start = DateTime.parse(startDate);
-      final startFormatted = DateFormat('d MMM').format(start);
+      final startFormatted = DateFormat('MM/dd/yyyy').format(start);
 
       if (endDate == null || startDate == endDate) {
         return startFormatted;
       }
 
       final end = DateTime.parse(endDate);
-      final endFormatted = DateFormat('d MMM').format(end);
+      final endFormatted = DateFormat('MM/dd/yyyy').format(end);
       return '$startFormatted - $endFormatted';
     } catch (e) {
       return startDate;
@@ -151,19 +151,18 @@ class JobDetailsMapper {
   }
 
   static String _formatTime(String time) {
-    final parts = time.split(':');
-    if (parts.length < 2) return time;
+    try {
+      final parts = time.split(':');
+      if (parts.length < 2) return time;
 
-    final hour = int.tryParse(parts[0]) ?? 0;
-    final minute = int.tryParse(parts[1]) ?? 0;
-
-    final period = hour >= 12 ? 'PM' : 'AM';
-    final displayHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-
-    if (minute == 0) {
-      return '${displayHour.toString().padLeft(2, '0')} $period';
+      final hour = int.tryParse(parts[0]) ?? 0;
+      final minute = int.tryParse(parts[1]) ?? 0;
+      final now = DateTime.now();
+      final dt = DateTime(now.year, now.month, now.day, hour, minute);
+      return DateFormat('h:mm a').format(dt);
+    } catch (e) {
+      return time;
     }
-    return '${displayHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
   }
 
   static String _buildLocationFromAddress(JobAddressDto? address) {

@@ -38,7 +38,7 @@ class ApplicationItemUiModel {
 
   factory ApplicationItemUiModel.fromDomain(ApplicationItem item) {
     // Format helpers
-    final dateFormat = DateFormat('d MMM,y');
+    final dateFormat = DateFormat('MM/dd/yyyy');
 
     return ApplicationItemUiModel(
       id: item.id,

@@ -11,7 +11,7 @@ import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
 import '../../../jobs/presentation/widgets/section_divider.dart';
 
 /// Screen showing details of an upcoming/confirmed booking.
-class SitterBookingDetailsScreen extends ConsumerWidget {
+class SitterBookingDetailsScreen extends ConsumerStatefulWidget {
   final String applicationId;
   final String? initialStatus;
 
@@ -22,19 +22,31 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final jobDetailsAsync = ref.watch(jobRequestDetailsProvider(applicationId));
+  ConsumerState<SitterBookingDetailsScreen> createState() =>
+      _SitterBookingDetailsScreenState();
+}
+
+class _SitterBookingDetailsScreenState
+    extends ConsumerState<SitterBookingDetailsScreen> {
+  bool _isClockingIn = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final jobDetailsAsync =
+        ref.watch(jobRequestDetailsProvider(widget.applicationId));
 
     return jobDetailsAsync.when(
       data: (jobDetails) => _buildContent(context, ref, jobDetails),
       loading: () => Scaffold(
         backgroundColor: Colors.white,
-        appBar: _buildAppBar(context, title: _getAppBarTitle(initialStatus)),
+        appBar: _buildAppBar(context,
+            title: _getAppBarTitle(widget.initialStatus)),
         body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: Colors.white,
-        appBar: _buildAppBar(context, title: _getAppBarTitle(initialStatus)),
+        appBar: _buildAppBar(context,
+            title: _getAppBarTitle(widget.initialStatus)),
         body: Center(
           child: Padding(
             padding: EdgeInsets.all(20.w),
@@ -104,7 +116,7 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
 
   Widget _buildContent(
       BuildContext context, WidgetRef ref, JobRequestDetailsModel jobDetails) {
-    final statusValue = initialStatus?.trim() ?? '';
+    final statusValue = widget.initialStatus?.trim() ?? '';
     final statusLower = statusValue.toLowerCase();
     final isCompleted = statusLower == 'completed';
     final statusLabel = _formatStatusLabel(statusValue);
@@ -119,7 +131,8 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: _buildAppBar(context, title: _getAppBarTitle(initialStatus)),
+      appBar:
+          _buildAppBar(context, title: _getAppBarTitle(widget.initialStatus)),
       body: Column(
         children: [
           Expanded(
@@ -164,6 +177,68 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
                         ? '${jobDetails.distance!.toStringAsFixed(2)} km away'
                         : null,
                   ),
+
+                  if (jobDetails.children.isNotEmpty) ...[
+                    SizedBox(height: 24.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Children',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF101828),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                          ...jobDetails.children.map((child) => Padding(
+                                padding: EdgeInsets.only(bottom: 12.h),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(10.w),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFF2F4F7),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(Icons.person_outline,
+                                          size: 20.w,
+                                          color: const Color(0xFF667085)),
+                                    ),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          child.firstName,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF344054),
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                        Text(
+                                          '${child.age} years old',
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: const Color(0xFF667085),
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
 
                   SizedBox(height: 24.h),
 
@@ -443,63 +518,110 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 48.h,
-                      child: ElevatedButton(
-                        onPressed: jobDetails.canClockIn
-                            ? () {
-                                // TODO: Implement clock in logic
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                        'Clock in functionality coming soon'),
-                                  ),
-                                );
-                              }
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF87C4F2),
-                          foregroundColor: Colors.white,
-                          disabledBackgroundColor:
-                              const Color(0xFF87C4F2).withValues(alpha: 0.6),
-                          disabledForegroundColor:
-                              Colors.white.withValues(alpha: 0.7),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
+                  if (jobDetails.clockInMessage != null &&
+                      jobDetails.clockInMessage!.isNotEmpty) ...[
+                    Container(
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                      margin: EdgeInsets.only(bottom: 12.h),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFEF3F2),
+                        borderRadius: BorderRadius.circular(8.r),
+                        border: Border.all(color: const Color(0xFFFECDCA)),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.info_outline,
+                              size: 16.sp, color: const Color(0xFFB42318)),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: Text(
+                              jobDetails.clockInMessage!,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: const Color(0xFFB42318),
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Inter',
+                              ),
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          'Clock In',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
+                        ],
+                      ),
+                    ),
+                  ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 48.h,
+                          child: ElevatedButton(
+                            onPressed: (jobDetails.canClockIn && !_isClockingIn)
+                                ? () async {
+                                    final actionApplicationId =
+                                        jobDetails.applicationId.isNotEmpty
+                                            ? jobDetails.applicationId
+                                            : widget.applicationId;
+                                    await _clockIn(
+                                      context,
+                                      ref,
+                                      actionApplicationId,
+                                    );
+                                  }
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF87C4F2),
+                              foregroundColor: Colors.white,
+                              disabledBackgroundColor: Colors.grey.shade300,
+                              disabledForegroundColor: Colors.grey.shade600,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                            ),
+                            child: _isClockingIn
+                                ? SizedBox(
+                                    width: 20.w,
+                                    height: 20.h,
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
+                                    ),
+                                  )
+                                : Text(
+                                    'Clock In',
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Inter',
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Container(
-                    width: 48.w,
-                    height: 48.h,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: const Color(0xFFD0D5DD)),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.more_vert,
-                          color: const Color(0xFF667085), size: 20.w),
-                      onPressed: () {
-                        // TODO: Show more options menu
-                        _showMoreOptionsMenu(context);
-                      },
-                    ),
+                      SizedBox(width: 12.w),
+                      Container(
+                        width: 48.w,
+                        height: 48.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xFFD0D5DD)),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.more_vert,
+                              color: const Color(0xFF667085), size: 20.w),
+                          onPressed: () {
+                            // TODO: Show more options menu
+                            _showMoreOptionsMenu(context);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -966,5 +1088,152 @@ class SitterBookingDetailsScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<void> _clockIn(
+    BuildContext context,
+    WidgetRef ref,
+    String applicationId,
+  ) async {
+    if (_isClockingIn) {
+      return;
+    }
+    setState(() => _isClockingIn = true);
+    try {
+      await ref
+          .read(jobRequestRepositoryProvider)
+          .clockInBooking(applicationId);
+      if (!mounted) {
+        return;
+      }
+      await _showClockInDialog(context);
+      ref.invalidate(jobRequestDetailsProvider(applicationId));
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString().replaceFirst('Exception: ', '')),
+          backgroundColor: const Color(0xFFEF4444),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isClockingIn = false);
+      }
+    }
+  }
+
+  Future<void> _showClockInDialog(BuildContext context) async {
+    final time = _formatClockInTime(TimeOfDay.now());
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close,
+                        color: const Color(0xFF667085), size: 20.w),
+                    onPressed: () => context.pop(),
+                  ),
+                ),
+                Text(
+                  'Clocked In\nSuccessfully!',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFF1D2939),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'Start Time:',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF1D2939),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'You Clocked in at $time',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF667085),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                Text(
+                  'Geo-Tracking Notification:',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF1D2939),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'Your location is now visible to the family.',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF667085),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: ElevatedButton(
+                    onPressed: () => context.pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF87C4F2),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatClockInTime(TimeOfDay time) {
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return '$hour:$minute $period';
   }
 }

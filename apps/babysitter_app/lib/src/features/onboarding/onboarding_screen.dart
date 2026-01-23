@@ -141,7 +141,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _goToSignIn() {
-    context.go(Routes.signIn);
+    final role = _selectedRole ?? 'parent';
+    context.go(
+        Uri(path: Routes.signIn, queryParameters: {'role': role}).toString());
   }
 
   void _onBottomLinkTapped() {

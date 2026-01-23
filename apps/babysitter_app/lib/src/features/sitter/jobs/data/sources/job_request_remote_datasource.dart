@@ -108,4 +108,26 @@ class JobRequestRemoteDataSource {
       rethrow;
     }
   }
+
+  /// Clock in to a booking
+  /// Uses /sitters/bookings/{id}/clock-in
+  Future<void> clockInBooking(String applicationId) async {
+    try {
+      final endpoint = '/sitters/bookings/$applicationId/clock-in';
+      print('DEBUG: Clock In Request: POST $endpoint');
+      final response = await _dio.post(endpoint);
+      print('DEBUG: Clock In Response Status: ${response.statusCode}');
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Clock In Error: ${e.message}');
+        print('DEBUG: Clock In Error Response: ${e.response?.data}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
 }

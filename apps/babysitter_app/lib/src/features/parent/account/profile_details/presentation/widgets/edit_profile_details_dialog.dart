@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:domain/domain.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui_kit.dart';
@@ -304,6 +305,9 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                   decoration:
                                       _inputDecoration('Number of Pets'),
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   validator: _hasPets
                                       ? (v) =>
                                           v?.isEmpty == true ? 'Required' : null
@@ -371,6 +375,9 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                   decoration:
                                       _inputDecoration('Number of Languages'),
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   validator: _hasSecondLanguage
                                       ? (v) =>
                                           v?.isEmpty == true ? 'Required' : null

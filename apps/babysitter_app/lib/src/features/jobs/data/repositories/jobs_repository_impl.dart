@@ -11,6 +11,23 @@ class JobsRepositoryImpl implements JobsRepository {
 
   JobsRepositoryImpl(this._client);
 
+  Map<String, String> _extractEmergencyContact(Map<String, dynamic> jobMap) {
+    final contact = jobMap['emergencyContact'];
+    if (contact is Map<String, dynamic>) {
+      return {
+        'name': contact['name']?.toString() ?? '',
+        'phone': contact['phone']?.toString() ?? '',
+        'relationship': contact['relationship']?.toString() ?? '',
+      };
+    }
+
+    return {
+      'name': jobMap['emergencyContactName']?.toString() ?? '',
+      'phone': jobMap['emergencyContactPhone']?.toString() ?? '',
+      'relationship': jobMap['emergencyContactRelation']?.toString() ?? '',
+    };
+  }
+
   @override
   Future<void> updateJob(String id, Map<String, dynamic> data) async {
     try {
@@ -62,16 +79,31 @@ class JobsRepositoryImpl implements JobsRepository {
               // The API returns { data: { job: { ... }, children: [...] } }
               final jobMap = dataParams['job'] as Map<String, dynamic>;
               final dto = JobDto.fromJson(jobMap);
-              return dto.toJobDetails();
+              final emergency = _extractEmergencyContact(jobMap);
+              return dto.toJobDetails(
+                emergencyContactName: emergency['name'],
+                emergencyContactPhone: emergency['phone'],
+                emergencyContactRelation: emergency['relationship'],
+              );
             } else {
               // Fallback: maybe 'data' IS the job directly (unlikely based on logs but possible for other endpoints)
               final dto = JobDto.fromJson(dataParams);
-              return dto.toJobDetails();
+              final emergency = _extractEmergencyContact(dataParams);
+              return dto.toJobDetails(
+                emergencyContactName: emergency['name'],
+                emergencyContactPhone: emergency['phone'],
+                emergencyContactRelation: emergency['relationship'],
+              );
             }
           } else {
             // Maybe direct?
             final dto = JobDto.fromJson(map);
-            return dto.toJobDetails();
+            final emergency = _extractEmergencyContact(map);
+            return dto.toJobDetails(
+              emergencyContactName: emergency['name'],
+              emergencyContactPhone: emergency['phone'],
+              emergencyContactRelation: emergency['relationship'],
+            );
           }
         } catch (e) {
           rethrow;

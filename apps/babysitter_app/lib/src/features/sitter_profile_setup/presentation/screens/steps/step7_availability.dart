@@ -26,7 +26,7 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
   static const _primaryBlue = Color(0xFF88CBE6);
   static const _greyText = Color(0xFF667085);
 
-  final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
+  final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
 
   Future<void> _pickDate({bool isStart = true, bool isRange = false}) async {
     final now = DateTime.now();

@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+final TextInputFormatter _decimalInputFormatter =
+    TextInputFormatter.withFunction((oldValue, newValue) {
+  final text = newValue.text;
+  if (text.isEmpty) return newValue;
+  final isValid = RegExp(r'^\d*\.?\d*$').hasMatch(text);
+  return isValid ? newValue : oldValue;
+});
 
 class BookingRateField extends StatelessWidget {
   final String value;
@@ -25,7 +34,8 @@ class BookingRateField extends StatelessWidget {
       child: TextField(
         controller: TextEditingController(text: numericValue),
         onChanged: onChanged,
-        keyboardType: TextInputType.number,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [_decimalInputFormatter],
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,

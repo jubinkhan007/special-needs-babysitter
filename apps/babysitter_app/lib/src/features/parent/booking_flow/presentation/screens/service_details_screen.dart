@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import '../../data/providers/booking_flow_provider.dart';
+import '../../data/models/booking_flow_state.dart';
 import '../../data/providers/bookings_di.dart';
 import '../theme/booking_ui_tokens.dart';
 import '../widgets/booking_top_bar.dart';
@@ -21,9 +25,95 @@ class ServiceDetailsScreen extends ConsumerStatefulWidget {
 class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   bool _isLoading = false;
 
+  String? _validateBooking(BookingFlowState state) {
+    // Validate required fields
+    if (state.selectedChildIds.isEmpty) {
+      return 'Please select at least one child.';
+    }
+
+    if (state.startDate == null || state.endDate == null) {
+      return 'Please select booking dates.';
+    }
+
+    if (state.startTime == null || state.endTime == null) {
+      return 'Please select booking times.';
+    }
+
+    if (state.payRate <= 0) {
+      return 'Please set a valid hourly rate.';
+    }
+
+    // Validate amount is not zero or too low
+    if (state.totalCost < 0.50) {
+      return 'Booking amount must be at least \$0.50. Please adjust your hours or rate.';
+    }
+
+    // Validate hours calculation
+    if (state.totalHours <= 0) {
+      return 'Invalid booking duration. End time must be after start time.';
+    }
+
+    return null;
+  }
+
+  String _parseErrorMessage(dynamic error) {
+    final errorString = error.toString().toLowerCase();
+
+    // Handle backend validation errors
+    if (errorString.contains('value must be greater than or equal to 1')) {
+      return 'Invalid booking duration. Please check that your end time is after your start time.';
+    }
+
+    if (error is StripeException) {
+      final errorCode = error.error.code;
+      final errorMessage = error.error.localizedMessage ?? '';
+
+      // Handle specific Stripe error codes
+      if (errorCode == 'Cancelled') {
+        return 'Payment cancelled. Please try again.';
+      } else if (errorCode == 'resource_missing' ||
+          errorMessage.contains('minimum charge')) {
+        return 'The booking amount is below the minimum required. Please adjust your hours or rate.';
+      } else if (errorCode == 'card_declined' ||
+          error.error.declineCode != null) {
+        return 'Payment declined by your card. Please try a different card or contact your bank.';
+      } else if (errorCode == 'incorrect_cvc') {
+        return 'Invalid security code. Please check your card details.';
+      } else if (errorCode == 'invalid_expiry_month' ||
+          errorCode == 'invalid_expiry_year') {
+        return 'Your card has expired. Please use a different card.';
+      } else if (errorMessage.isNotEmpty) {
+        return 'Payment error: $errorMessage';
+      } else {
+        return 'Payment failed. Please try again.';
+      }
+    } else if (error is SocketException) {
+      return 'Network error. Please check your connection and try again.';
+    } else if (error is TimeoutException) {
+      return 'Request timed out. Please check your connection and try again.';
+    } else {
+      return 'Error: ${error.toString()}';
+    }
+  }
+
   Future<void> _onSubmit() async {
     final bookingState = ref.read(bookingFlowProvider);
     final repository = ref.read(bookingsRepositoryProvider);
+
+    // Validate booking before submission
+    final validationError = _validateBooking(bookingState);
+    if (validationError != null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(validationError),
+            backgroundColor: const Color(0xFFD92D20),
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+      return;
+    }
 
     setState(() {
       _isLoading = true;
@@ -32,11 +122,14 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     try {
       final payload = bookingState.toDirectBookingPayload();
       print('DEBUG: ServiceDetailsScreen submitting booking: $payload');
+      print('DEBUG: Calculated amount - Hours: ${bookingState.totalHours}, Rate: ${bookingState.payRate}, SubTotal: ${bookingState.subTotal}, Fee: ${bookingState.platformFee}, Total: ${bookingState.totalCost}');
 
       final result = await repository.createDirectBooking(payload);
 
       print('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
       print('DEBUG: ServiceDetailsScreen jobId: ${result.jobId}');
+      print('DEBUG: ServiceDetailsScreen amount (cents): ${result.amount}');
+      print('DEBUG: ServiceDetailsScreen platformFee (cents): ${result.platformFee}');
       print('DEBUG: ServiceDetailsScreen clientSecret: ${result.clientSecret}');
 
       // The direct booking API returns clientSecret directly - use it for Stripe payment
@@ -71,19 +164,21 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       }
     } catch (e) {
       print('DEBUG: ServiceDetailsScreen booking error: $e');
+      print('DEBUG: Error type: ${e.runtimeType}');
+      if (e is StripeException) {
+        print('DEBUG: Stripe error code: ${e.error.code}');
+        print('DEBUG: Stripe error message: ${e.error.localizedMessage}');
+        print('DEBUG: Stripe error decline code: ${e.error.declineCode}');
+      }
+
       if (mounted) {
-        String errorMessage = 'Failed to create booking';
-        if (e is StripeException) {
-          errorMessage =
-              'Payment cancelled or failed: ${e.error.localizedMessage}';
-        } else {
-          errorMessage = 'Error: ${e.toString()}';
-        }
+        String errorMessage = _parseErrorMessage(e);
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMessage),
             backgroundColor: const Color(0xFFD92D20),
+            duration: const Duration(seconds: 5),
           ),
         );
       }

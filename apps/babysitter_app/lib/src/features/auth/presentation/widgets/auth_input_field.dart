@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../../../common/theme/auth_theme.dart';
 
@@ -30,12 +31,22 @@ class AuthInputField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
   });
 
+  List<TextInputFormatter>? _numericInputFormatters(
+      TextInputType? keyboardType) {
+    if (keyboardType == TextInputType.number ||
+        keyboardType == TextInputType.phone) {
+      return [FilteringTextInputFormatter.digitsOnly];
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      inputFormatters: _numericInputFormatters(keyboardType),
       textInputAction: textInputAction,
       maxLength: maxLength,
       textCapitalization: textCapitalization,

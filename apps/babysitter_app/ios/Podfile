@@ -76,4 +76,25 @@ post_install do |installer|
       end
     end
   end
+
+  firebase_header_paths = [
+    File.join(Dir.pwd, '.symlinks', 'plugins', 'firebase_messaging', 'ios',
+      'Classes', 'FLTFirebaseMessagingPlugin.h'),
+    File.join(Dir.pwd, 'Pods', 'Headers', 'Public', 'firebase_messaging',
+      'FLTFirebaseMessagingPlugin.h'),
+  ]
+
+  firebase_header_paths.each do |header_path|
+    next unless File.exist?(header_path)
+
+    contents = File.read(header_path)
+    next unless contents.include?('#import <Firebase/Firebase.h>')
+
+    contents = contents.gsub(
+      '#import <Firebase/Firebase.h>',
+      "#import <FirebaseCore/FirebaseCore.h>\n#import <FirebaseMessaging/FirebaseMessaging.h>"
+    )
+    File.write(header_path, contents)
+    puts "DEBUG: Patched Firebase import in #{header_path}"
+  end
 end

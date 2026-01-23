@@ -89,7 +89,7 @@ class _CalendarAvailabilitySectionState
   }
 
   Widget _buildHeader() {
-    final monthName = DateFormat('MMM').format(_focusedDate);
+    final monthName = DateFormat('MMMM').format(_focusedDate);
     final yearName = DateFormat('yyyy').format(_focusedDate);
 
     return Row(
@@ -210,7 +210,7 @@ class _CalendarAvailabilitySectionState
 
               final date =
                   DateTime(_focusedDate.year, _focusedDate.month, dayNumber);
-              final dateKey = DateFormat('yyyy-MM-dd').format(date);
+              final dateKey = DateFormat('MM/dd/yyyy').format(date);
               final isAvailable = _availableDates.contains(dateKey);
 
               return Container(

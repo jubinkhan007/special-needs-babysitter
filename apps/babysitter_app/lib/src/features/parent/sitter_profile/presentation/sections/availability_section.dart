@@ -69,7 +69,7 @@ class AvailabilitySection extends StatelessWidget {
               if (date == null) return const SizedBox.shrink();
 
               // formatting
-              final dayStr = DateFormat('EEE, MMM d').format(date);
+              final dayStr = DateFormat('EEE, MM/dd/yyyy').format(date);
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),

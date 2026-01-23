@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -372,6 +373,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: TextFormField(
                     controller: _numPetsController,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                     style: const TextStyle(color: _textDark),
                     decoration: InputDecoration(
                       hintText: 'Number of Pets',
@@ -502,6 +506,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: TextFormField(
                     controller: _numLanguagesController,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                     style: const TextStyle(color: _textDark),
                     decoration: InputDecoration(
                       hintText: 'Number of Languages',

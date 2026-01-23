@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/models/job_request_details_model.dart';
 import '../providers/job_request_providers.dart';
@@ -208,6 +209,68 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                         ? '${jobDetails.distance!.toStringAsFixed(2)} km away'
                         : null,
                   ),
+
+                  if (jobDetails.children.isNotEmpty) ...[
+                    SizedBox(height: 24.h),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Children',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF101828),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                          ...jobDetails.children.map((child) => Padding(
+                                padding: EdgeInsets.only(bottom: 12.h),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(10.w),
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFF2F4F7),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(Icons.person_outline,
+                                          size: 20.w,
+                                          color: const Color(0xFF667085)),
+                                    ),
+                                    SizedBox(width: 12.w),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          child.firstName,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF344054),
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                        Text(
+                                          '${child.age} years old',
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: const Color(0xFF667085),
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
 
                   SizedBox(height: 24.h),
 
@@ -495,30 +558,12 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
       if (start.year == end.year &&
           start.month == end.month &&
           start.day == end.day) {
-        return '${start.day} ${_getMonthName(start.month)}';
+        return DateFormat('MM/dd/yyyy').format(start);
       }
-      return '${start.day} ${_getMonthName(start.month)} - ${end.day} ${_getMonthName(end.month)}';
+      return '${DateFormat('MM/dd/yyyy').format(start)} - ${DateFormat('MM/dd/yyyy').format(end)}';
     } catch (_) {
       return '$startDate - $endDate';
     }
-  }
-
-  String _getMonthName(int month) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return months[month - 1];
   }
 
   String _formatTime(String time) {
@@ -527,10 +572,10 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
       final parts = time.split(':');
       if (parts.length >= 2) {
         final hour = int.parse(parts[0]);
-        final minute = parts[1];
-        final period = hour >= 12 ? 'PM' : 'AM';
-        final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
-        return '$displayHour:$minute $period';
+        final minute = int.parse(parts[1]);
+        final now = DateTime.now();
+        final dt = DateTime(now.year, now.month, now.day, hour, minute);
+        return DateFormat('h:mm a').format(dt);
       }
       return time;
     } catch (_) {

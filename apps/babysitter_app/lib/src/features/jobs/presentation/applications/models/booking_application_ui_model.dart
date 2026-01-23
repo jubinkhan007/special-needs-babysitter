@@ -59,8 +59,8 @@ class BookingApplicationUiModel {
   });
 
   factory BookingApplicationUiModel.fromDomain(BookingApplication item) {
-    final dateFormat = DateFormat('d MMM');
-    final timeFormat = DateFormat('hh a');
+    final dateFormat = DateFormat('MM/dd/yyyy');
+    final timeFormat = DateFormat('h:mm a');
 
     String _formatTime(DateTime dt) {
       return timeFormat.format(dt);

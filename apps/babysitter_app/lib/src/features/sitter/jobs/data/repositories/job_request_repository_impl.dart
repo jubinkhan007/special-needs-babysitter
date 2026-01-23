@@ -37,4 +37,9 @@ class JobRequestRepositoryImpl implements JobRequestRepository {
       otherReason: otherReason,
     );
   }
+
+  @override
+  Future<void> clockInBooking(String applicationId) {
+    return _remoteDataSource.clockInBooking(applicationId);
+  }
 }

@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:domain/domain.dart';
 import 'package:babysitter_app/common/theme/auth_theme.dart';
+
+final TextInputFormatter _decimalInputFormatter =
+    TextInputFormatter.withFunction((oldValue, newValue) {
+  final text = newValue.text;
+  if (text.isEmpty) return newValue;
+  final isValid = RegExp(r'^\d*\.?\d*$').hasMatch(text);
+  return isValid ? newValue : oldValue;
+});
 
 class EditInsurancePlanDialog extends StatefulWidget {
   final InsurancePlan? initialPlan;
@@ -255,6 +264,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
             keyboardType: isNum
                 ? const TextInputType.numberWithOptions(decimal: true)
                 : TextInputType.text,
+            inputFormatters: isNum ? [_decimalInputFormatter] : null,
             maxLines: maxLines,
             style: const TextStyle(color: Color(0xFF101828), fontSize: 16),
             decoration: InputDecoration(

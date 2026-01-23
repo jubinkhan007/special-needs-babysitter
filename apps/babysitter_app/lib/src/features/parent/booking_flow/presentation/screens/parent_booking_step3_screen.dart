@@ -102,6 +102,7 @@ class _ParentBookingStep3ScreenState
                   BookingTextField(
                     hintText: 'Zip Code*',
                     controller: _zipController,
+                    keyboardType: TextInputType.number,
                   ),
 
                   const SizedBox(height: 24), // Spacing before divider
@@ -132,6 +133,7 @@ class _ParentBookingStep3ScreenState
                   BookingTextField(
                     hintText: 'Phone Number',
                     controller: _emergencyPhoneController,
+                    keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(

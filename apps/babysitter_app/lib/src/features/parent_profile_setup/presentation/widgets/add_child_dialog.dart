@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../auth/presentation/widgets/auth_input_field.dart';
@@ -492,6 +493,8 @@ class _AddChildDialogState extends State<AddChildDialog> {
           child: TextFormField(
             controller: controller,
             keyboardType: isNum ? TextInputType.number : TextInputType.text,
+            inputFormatters:
+                isNum ? [FilteringTextInputFormatter.digitsOnly] : null,
             maxLines: maxLines,
             style: const TextStyle(
                 color: Color(0xFF1A1A1A), fontSize: 16), // Dark Text

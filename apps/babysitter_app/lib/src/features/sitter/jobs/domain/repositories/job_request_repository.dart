@@ -18,4 +18,7 @@ abstract class JobRequestRepository {
     required String reason,
     String? otherReason,
   });
+
+  /// Clock in to a booking.
+  Future<void> clockInBooking(String applicationId);
 }

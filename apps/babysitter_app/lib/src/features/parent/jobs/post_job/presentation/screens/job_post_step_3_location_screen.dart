@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/job_post_providers.dart';
 import '../controllers/job_post_controller.dart';
@@ -157,6 +158,7 @@ class _JobPostStep3LocationScreenState
                     _buildField(
                       controller: _zipCodeController,
                       hint: 'Zip Code*',
+                      keyboardType: TextInputType.number,
                     ),
 
                     const SizedBox(height: 24),
@@ -206,6 +208,7 @@ class _JobPostStep3LocationScreenState
   Widget _buildField({
     required TextEditingController controller,
     required String hint,
+    TextInputType? keyboardType,
   }) {
     return Container(
       height: 64, // ~64–72
@@ -217,6 +220,8 @@ class _JobPostStep3LocationScreenState
       child: TextField(
         controller: controller,
         cursorColor: _progressFill,
+        keyboardType: keyboardType,
+        inputFormatters: _numericInputFormatters(keyboardType),
         style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
@@ -249,6 +254,15 @@ class _JobPostStep3LocationScreenState
         ),
       ),
     );
+  }
+
+  List<TextInputFormatter>? _numericInputFormatters(
+      TextInputType? keyboardType) {
+    if (keyboardType == TextInputType.number ||
+        keyboardType == TextInputType.phone) {
+      return [FilteringTextInputFormatter.digitsOnly];
+    }
+    return null;
   }
 
   void _onContinue() {
