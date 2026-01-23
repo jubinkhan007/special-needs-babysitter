@@ -7,6 +7,7 @@ import '../../../../../../sitter_profile_setup/presentation/widgets/labeled_drop
 import '../../../../../../sitter_profile_setup/presentation/widgets/selectable_chip_group.dart';
 import '../../../../../../sitter_profile_setup/presentation/widgets/transportation_section.dart';
 import '../../../../../../sitter_profile_setup/presentation/widgets/willing_to_travel_section.dart';
+import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../data/sitter_me_dto.dart';
 
 class EditProfessionalInfoDialog extends StatefulWidget {
@@ -204,27 +205,15 @@ class _EditProfessionalInfoDialogState
           const Divider(height: 1, color: Color(0xFFE5E7EB)),
           Padding(
             padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: _onSave,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF00A3E0), // Primary Blue
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                child: const Text(
-                  'Save Changes',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ),
+            child: PrimaryActionButton(
+              label: 'Save Changes',
+              onPressed: _onSave,
+              backgroundColor: const Color(0xFF00A3E0),
             ),
           ),
         ],
       ),
     );
   }
+}
 }

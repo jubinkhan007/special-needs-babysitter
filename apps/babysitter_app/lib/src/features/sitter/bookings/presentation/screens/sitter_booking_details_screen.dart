@@ -1156,6 +1156,9 @@ class _SitterBookingDetailsScreenState
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (context, setState) {
+            final media = MediaQuery.of(context);
+            final bottomInset = media.viewInsets.bottom;
+            final maxHeight = media.size.height * 0.75;
             final requiresOther = selectedReason == 'Other';
             final canProceed = selectedReason != null &&
                 (!requiresOther ||
@@ -1165,152 +1168,168 @@ class _SitterBookingDetailsScreenState
                 20.w,
                 16.h,
                 20.w,
-                16.h + MediaQuery.of(context).viewInsets.bottom,
+                16.h + bottomInset,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: maxHeight),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Select Reason to Cancel',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFF101828),
-                          fontFamily: 'Inter',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Select Reason to Cancel',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF101828),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          IconButton(
+                            icon:
+                                const Icon(Icons.close, color: Color(0xFF101828)),
+                            onPressed: () => Navigator.of(sheetContext).pop(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+                      ...reasons.map(
+                        (reason) => Padding(
+                          padding: EdgeInsets.only(bottom: 12.h),
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedReason = reason;
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 22.w,
+                                  height: 22.w,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: selectedReason == reason
+                                          ? const Color(0xFF87C4F2)
+                                          : const Color(0xFFD0D5DD),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: selectedReason == reason
+                                      ? Center(
+                                          child: Container(
+                                            width: 10.w,
+                                            height: 10.w,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF87C4F2),
+                                            ),
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Text(
+                                    reason,
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF475467),
+                                      fontFamily: 'Inter',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Color(0xFF101828)),
-                        onPressed: () => Navigator.of(sheetContext).pop(),
+                      SizedBox(height: 4.h),
+                      TextField(
+                        controller: otherController,
+                        minLines: 4,
+                        maxLines: 4,
+                        onChanged: (_) => setState(() {}),
+                        style: TextStyle(
+                          color: const Color(0xFF101828),
+                          fontSize: 13.sp,
+                          fontFamily: 'Inter',
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Write your reason here...',
+                          hintStyle: TextStyle(
+                            color: const Color(0xFF98A2B3),
+                            fontSize: 13.sp,
+                            fontFamily: 'Inter',
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFD0D5DD)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFD0D5DD)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF87C4F2)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46.h,
+                        child: ElevatedButton(
+                          onPressed: canProceed
+                              ? () {
+                                  Navigator.of(sheetContext).pop();
+                                  if (selectedReason == _emergencySelection) {
+                                    _showEmergencyCancellationDialog(
+                                      parentContext,
+                                      applicationId,
+                                    );
+                                  } else {
+                                    _showCancellationImpactDialog(
+                                      parentContext,
+                                      applicationId,
+                                    );
+                                  }
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF87C4F2),
+                            disabledBackgroundColor: Colors.grey.shade300,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+                          child: Text(
+                            'Next',
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 12.h),
-                  ...reasons.map(
-                    (reason) => Padding(
-                      padding: EdgeInsets.only(bottom: 12.h),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedReason = reason;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 22.w,
-                              height: 22.w,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: selectedReason == reason
-                                      ? const Color(0xFF87C4F2)
-                                      : const Color(0xFFD0D5DD),
-                                  width: 2,
-                                ),
-                              ),
-                              child: selectedReason == reason
-                                  ? Center(
-                                      child: Container(
-                                        width: 10.w,
-                                        height: 10.w,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color(0xFF87C4F2),
-                                        ),
-                                      ),
-                                    )
-                                  : null,
-                            ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: Text(
-                                reason,
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF475467),
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  TextField(
-                    controller: otherController,
-                    minLines: 4,
-                    maxLines: 4,
-                    onChanged: (_) => setState(() {}),
-                    decoration: InputDecoration(
-                      hintText: 'Write your reason here...',
-                      hintStyle: TextStyle(
-                        color: const Color(0xFF98A2B3),
-                        fontSize: 13.sp,
-                        fontFamily: 'Inter',
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: const BorderSide(color: Color(0xFFD0D5DD)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: const BorderSide(color: Color(0xFFD0D5DD)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                        borderSide: const BorderSide(color: Color(0xFF87C4F2)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 46.h,
-                    child: ElevatedButton(
-                      onPressed: canProceed
-                          ? () {
-                              Navigator.of(sheetContext).pop();
-                              if (selectedReason == _emergencySelection) {
-                                _showEmergencyCancellationDialog(
-                                  parentContext,
-                                  applicationId,
-                                );
-                              } else {
-                                _showCancellationImpactDialog(
-                                  parentContext,
-                                  applicationId,
-                                );
-                              }
-                            }
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF87C4F2),
-                        disabledBackgroundColor: Colors.grey.shade300,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                      ),
-                      child: Text(
-                        'Next',
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          fontFamily: 'Inter',
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           },
