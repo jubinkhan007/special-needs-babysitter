@@ -20,10 +20,12 @@ class EditProfessionalInfoDialog extends StatefulWidget {
   });
 
   @override
-  State<EditProfessionalInfoDialog> createState() => _EditProfessionalInfoDialogState();
+  State<EditProfessionalInfoDialog> createState() =>
+      _EditProfessionalInfoDialogState();
 }
 
-class _EditProfessionalInfoDialogState extends State<EditProfessionalInfoDialog> {
+class _EditProfessionalInfoDialogState
+    extends State<EditProfessionalInfoDialog> {
   late String _bio;
   late DateTime? _dob;
   late List<String> _ageGroups;
@@ -38,7 +40,9 @@ class _EditProfessionalInfoDialogState extends State<EditProfessionalInfoDialog>
   void initState() {
     super.initState();
     _bio = widget.profile.bio ?? '';
-    _dob = widget.profile.dateOfBirth != null ? DateTime.tryParse(widget.profile.dateOfBirth!) : null;
+    _dob = widget.profile.dateOfBirth != null
+        ? DateTime.tryParse(widget.profile.dateOfBirth!)
+        : null;
     _ageGroups = List<String>.from(widget.profile.ageRanges ?? []);
     _languages = List<String>.from(widget.profile.languages ?? []);
     _yearsExperience = widget.profile.yearsOfExperience;
@@ -51,7 +55,8 @@ class _EditProfessionalInfoDialogState extends State<EditProfessionalInfoDialog>
   void _onSave() {
     final payload = {
       'bio': _bio,
-      'dateOfBirth': _dob != null ? DateFormat('MM/dd/yyyy').format(_dob!) : null,
+      'dateOfBirth':
+          _dob != null ? DateFormat('MM/dd/yyyy').format(_dob!) : null,
       'yearsOfExperience': _yearsExperience,
       'hasTransportation': _hasTransportation,
       'transportationDetails': _transportationDetails ?? '',
@@ -67,20 +72,24 @@ class _EditProfessionalInfoDialogState extends State<EditProfessionalInfoDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      insetPadding: const EdgeInsets.all(16),
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Professional Info',
+                  'Edit Professional Info',
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.bold,
                     color: Color(0xFF1D2939),
                   ),
                 ),
@@ -90,106 +99,131 @@ class _EditProfessionalInfoDialogState extends State<EditProfessionalInfoDialog>
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BioTextAreaCard(
-                      text: _bio,
-                      onChanged: (val) => setState(() => _bio = val),
-                    ),
-                    const SizedBox(height: 24),
-                    DobDropdownRow(
-                      dob: _dob,
-                      onDateSelected: (val) => setState(() => _dob = val),
-                    ),
-                    const SizedBox(height: 24),
-                    SelectableChipGroup(
-                      title: 'Age Range(s) Experience',
-                      options: const ['Infants', 'Toddlers', 'Children', 'Teens'],
-                      selectedValues: _ageGroups,
-                      onSelected: (val) {
-                        setState(() {
-                          if (_ageGroups.contains(val)) {
-                            _ageGroups.remove(val);
-                          } else {
-                            _ageGroups.add(val);
-                          }
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    LabeledDropdownField(
-                      label: 'Languages Spoken',
-                      hint: 'Select Language',
-                      value: null,
-                      items: const ['English', 'Spanish', 'French', 'ASL'],
-                      onChanged: (val) {
-                        if (val != null && !_languages.contains(val)) {
-                          setState(() => _languages.add(val));
+          ),
+          const Divider(height: 1, color: Color(0xFFE5E7EB)),
+
+          // Scrollable Content
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BioTextAreaCard(
+                    text: _bio,
+                    onChanged: (val) => setState(() => _bio = val),
+                  ),
+                  const SizedBox(height: 24),
+                  DobDropdownRow(
+                    dob: _dob,
+                    onDateSelected: (val) => setState(() => _dob = val),
+                  ),
+                  const SizedBox(height: 24),
+                  SelectableChipGroup(
+                    title: 'Age Range(s) Experience',
+                    options: const [
+                      'Infants',
+                      'Toddlers',
+                      'Children',
+                      'Teens'
+                    ],
+                    selectedValues: _ageGroups,
+                    onSelected: (val) {
+                      setState(() {
+                        if (_ageGroups.contains(val)) {
+                          _ageGroups.remove(val);
+                        } else {
+                          _ageGroups.add(val);
                         }
-                      },
-                    ),
-                    if (_languages.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: Wrap(
-                          spacing: 8,
-                          children: _languages
-                              .map((lang) => Chip(
-                                    label: Text(lang),
-                                    onDeleted: () => setState(() => _languages.remove(lang)),
-                                    backgroundColor: Colors.white,
-                                  ))
-                              .toList(),
-                        ),
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  LabeledDropdownField(
+                    label: 'Languages Spoken',
+                    hint: 'Select Language',
+                    value: null,
+                    items: const ['English', 'Spanish', 'French', 'ASL'],
+                    onChanged: (val) {
+                      if (val != null && !_languages.contains(val)) {
+                        setState(() => _languages.add(val));
+                      }
+                    },
+                  ),
+                  if (_languages.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: Wrap(
+                        spacing: 8,
+                        children: _languages
+                            .map((lang) => Chip(
+                                  label: Text(lang),
+                                  onDeleted: () =>
+                                      setState(() => _languages.remove(lang)),
+                                  backgroundColor: Colors.white,
+                                ))
+                            .toList(),
                       ),
-                    const SizedBox(height: 24),
-                    LabeledDropdownField(
-                      label: 'Years of Experience',
-                      hint: 'Select Year',
-                      value: _yearsExperience,
-                      items: const ['< 1 year', '1-3 years', '3-5 years', '5+ years'],
-                      onChanged: (val) => setState(() => _yearsExperience = val),
                     ),
-                    const SizedBox(height: 24),
-                    TransportationSection(
-                      hasReliableTransportation: _hasTransportation,
-                      details: _transportationDetails,
-                      onToggle: (val) => setState(() => _hasTransportation = val),
-                      onDetailsChanged: (val) => setState(() => _transportationDetails = val),
-                    ),
-                    const SizedBox(height: 24),
-                    WillingToTravelSection(
-                      willingToTravel: _willingToTravel,
-                      overnightStay: _overnightAvailable,
-                      onWillingChanged: (val) => setState(() => _willingToTravel = val),
-                      onOvernightChanged: (val) => setState(() => _overnightAvailable = val),
-                    ),
-                  ],
-                ),
+                  const SizedBox(height: 24),
+                  LabeledDropdownField(
+                    label: 'Years of Experience',
+                    hint: 'Select Year',
+                    value: _yearsExperience,
+                    items: const [
+                      '< 1 year',
+                      '1-3 years',
+                      '3-5 years',
+                      '5+ years'
+                    ],
+                    onChanged: (val) => setState(() => _yearsExperience = val),
+                  ),
+                  const SizedBox(height: 24),
+                  TransportationSection(
+                    hasReliableTransportation: _hasTransportation,
+                    details: _transportationDetails,
+                    onToggle: (val) => setState(() => _hasTransportation = val),
+                    onDetailsChanged: (val) =>
+                        setState(() => _transportationDetails = val),
+                  ),
+                  const SizedBox(height: 24),
+                  WillingToTravelSection(
+                    willingToTravel: _willingToTravel,
+                    overnightStay: _overnightAvailable,
+                    onWillingChanged: (val) =>
+                        setState(() => _willingToTravel = val),
+                    onOvernightChanged: (val) =>
+                        setState(() => _overnightAvailable = val),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-            SizedBox(
+          ),
+
+          // Bottom Action Button
+          const Divider(height: 1, color: Color(0xFFE5E7EB)),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
                 onPressed: _onSave,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF88CBE6),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  backgroundColor: const Color(0xFF00A3E0), // Primary Blue
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 child: const Text(
                   'Save Changes',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

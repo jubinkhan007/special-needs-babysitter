@@ -1,5 +1,26 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:path/path.dart' as path;
 import '../models/job_request_details_model.dart';
+
+class JobRequestPresignedUploadResponse {
+  final String uploadUrl;
+  final String publicUrl;
+
+  JobRequestPresignedUploadResponse({
+    required this.uploadUrl,
+    required this.publicUrl,
+  });
+
+  factory JobRequestPresignedUploadResponse.fromJson(
+      Map<String, dynamic> json) {
+    return JobRequestPresignedUploadResponse(
+      uploadUrl: json['uploadUrl'] as String,
+      publicUrl: json['publicUrl'] as String,
+    );
+  }
+}
 
 /// Remote data source for job request API calls.
 class JobRequestRemoteDataSource {
@@ -131,6 +152,104 @@ class JobRequestRemoteDataSource {
       if (e is DioException) {
         print('DEBUG: Clock In Error: ${e.message}');
         print('DEBUG: Clock In Error Response: ${e.response?.data}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
+
+  /// Upload cancellation evidence and return public URL.
+  Future<String> uploadCancellationEvidence(File file) async {
+    try {
+      final fileName = path.basename(file.path);
+      final extension = path.extension(fileName).toLowerCase();
+      String contentType;
+      switch (extension) {
+        case '.jpg':
+        case '.jpeg':
+          contentType = 'image/jpeg';
+          break;
+        case '.png':
+          contentType = 'image/png';
+          break;
+        case '.pdf':
+          contentType = 'application/pdf';
+          break;
+        default:
+          contentType = 'application/octet-stream';
+      }
+
+      final presigned = await _getCancellationPresignedUrl(
+        fileName: fileName,
+        contentType: contentType,
+      );
+
+      final uploadDio = Dio();
+      final length = await file.length();
+      await uploadDio.put(
+        presigned.uploadUrl,
+        data: file.openRead(),
+        options: Options(
+          headers: {
+            Headers.contentLengthHeader: length,
+            Headers.contentTypeHeader: contentType,
+          },
+        ),
+      );
+
+      return presigned.publicUrl;
+    } catch (e) {
+      if (e is DioException) {
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
+
+  Future<JobRequestPresignedUploadResponse> _getCancellationPresignedUrl({
+    required String fileName,
+    required String contentType,
+  }) async {
+    final response = await _dio.post(
+      '/uploads/presign',
+      data: {
+        'uploadType': 'cancellation-evidence',
+        'fileName': fileName,
+        'contentType': contentType,
+      },
+    );
+    final data = response.data['data'] as Map<String, dynamic>;
+    return JobRequestPresignedUploadResponse.fromJson(data);
+  }
+
+  /// Cancel a sitter booking.
+  /// Uses /sitters/bookings/{id}/cancel
+  Future<void> cancelBooking(
+    String applicationId, {
+    required String reason,
+    String? fileUrl,
+  }) async {
+    try {
+      final endpoint = '/sitters/bookings/$applicationId/cancel';
+      final data = {
+        'reason': reason,
+        if (fileUrl != null && fileUrl.isNotEmpty) 'fileUrl': fileUrl,
+      };
+      print('DEBUG: Cancel Booking Request: POST $endpoint');
+      print('DEBUG: Cancel Booking Request Body: $data');
+      final response = await _dio.post(endpoint, data: data);
+      print('DEBUG: Cancel Booking Response Status: ${response.statusCode}');
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Cancel Booking Error: ${e.message}');
+        print('DEBUG: Cancel Booking Error Response: ${e.response?.data}');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {

@@ -1065,13 +1065,14 @@ class _SitterBookingDetailsScreenState
   }
 
   void _showMoreOptionsMenu(BuildContext context, String applicationId) {
+    final parentContext = context;
     showModalBottomSheet(
-      context: context,
+      context: parentContext,
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      builder: (context) => SafeArea(
+      builder: (sheetContext) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -1088,7 +1089,7 @@ class _SitterBookingDetailsScreenState
                 ),
               ),
               onTap: () {
-                context.pop();
+                Navigator.of(sheetContext).pop();
                 // TODO: Navigate to messages
               },
             ),
@@ -1105,8 +1106,8 @@ class _SitterBookingDetailsScreenState
                 ),
               ),
               onTap: () {
-                context.pop();
-                _showCancelReasonSheet(context, applicationId);
+                Navigator.of(sheetContext).pop();
+                _showCancelReasonSheet(parentContext, applicationId);
               },
             ),
             ListTile(
@@ -1121,7 +1122,7 @@ class _SitterBookingDetailsScreenState
                 ),
               ),
               onTap: () {
-                context.pop();
+                Navigator.of(sheetContext).pop();
                 // TODO: Open support
               },
             ),
