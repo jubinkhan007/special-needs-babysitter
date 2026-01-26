@@ -4,6 +4,9 @@ library data;
 // Core DTOs
 export 'src/dtos/auth_session_dto.dart';
 export 'src/dtos/user_dto.dart';
+export 'src/dtos/chat_dto.dart';
+export 'src/dtos/chat_init_dto.dart';
+export 'src/dtos/chat_message_dto.dart';
 
 // Core Mappers
 export 'src/mappers/auth_mappers.dart';

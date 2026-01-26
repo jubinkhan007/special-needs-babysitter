@@ -58,6 +58,7 @@ import '../features/sitters/presentation/reviews/reviews_screen.dart';
 import '../features/calls/presentation/audio_call_screen.dart';
 import '../features/calls/presentation/video_call_screen.dart';
 import '../features/support/presentation/support_chat_screen.dart';
+import '../features/messages/domain/chat_thread_args.dart';
 import '../features/calls/domain/audio_call_args.dart';
 import '../features/calls/domain/video_call_args.dart';
 import '../features/support/domain/support_chat_args.dart';
@@ -282,7 +283,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'chat/:id', // matches /parent/messages/chat/:id
                 parentNavigatorKey: rootNavigatorKey, // Hide bottom nav
-                builder: (context, state) => const ChatThreadScreen(),
+                builder: (context, state) {
+                  final args = state.extra as ChatThreadArgs?;
+                  final id = state.pathParameters['id'] ?? '';
+                  return ChatThreadScreen(
+                    args: args ?? ChatThreadArgs(
+                      otherUserId: id,
+                      otherUserName: 'Chat',
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -646,7 +656,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'chat/:id', // matches /sitter/messages/chat/:id
                 parentNavigatorKey: rootNavigatorKey, // Hide bottom nav
-                builder: (context, state) => const ChatThreadScreen(),
+                builder: (context, state) {
+                  final args = state.extra as ChatThreadArgs?;
+                  final id = state.pathParameters['id'] ?? '';
+                  return ChatThreadScreen(
+                    args: args ?? ChatThreadArgs(
+                      otherUserId: id,
+                      otherUserName: 'Chat',
+                    ),
+                  );
+                },
               ),
             ],
           ),

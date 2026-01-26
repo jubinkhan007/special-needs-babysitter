@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../routing/routes.dart';
 import '../../messages/presentation/messages_screen.dart';
+import '../../messages/domain/chat_thread_args.dart';
 
 /// Parent messages screen - shows conversation list.
 class ParentMessagesScreen extends StatelessWidget {
@@ -12,8 +13,14 @@ class ParentMessagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MessagesScreen(
       onBack: () => context.go(Routes.parentHome),
-      onThreadSelected: (conversationId) {
-        context.go('/parent/messages/chat/$conversationId');
+      onThreadSelected: (conversation) {
+        final args = ChatThreadArgs(
+          otherUserId: conversation.id,
+          otherUserName: conversation.participantName,
+          otherUserAvatarUrl: conversation.participantAvatarUrl,
+          isVerified: conversation.isVerified,
+        );
+        context.go('/parent/messages/chat/${conversation.id}', extra: args);
       },
     );
   }

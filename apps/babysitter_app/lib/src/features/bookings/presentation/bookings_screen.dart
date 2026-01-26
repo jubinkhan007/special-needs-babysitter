@@ -6,6 +6,7 @@ import '../../../theme/app_tokens.dart';
 import '../application/bookings_controller.dart';
 import '../domain/booking_details.dart';
 import '../domain/booking_status.dart';
+import '../../messages/domain/chat_thread_args.dart';
 import 'widgets/booking_card.dart';
 import 'widgets/bookings_app_bar.dart';
 import 'widgets/bookings_tabs.dart';
@@ -78,7 +79,20 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                     final booking = bookings[index];
                     return BookingCard(
                       booking: booking,
-                      onMessage: () {},
+                      onMessage: () {
+                        if (booking.sitterId.isNotEmpty) {
+                          final args = ChatThreadArgs(
+                            otherUserId: booking.sitterId,
+                            otherUserName: booking.sitterName,
+                            otherUserAvatarUrl: booking.avatarAssetOrUrl,
+                            isVerified: booking.isVerified,
+                          );
+                          context.push(
+                            '/parent/messages/chat/${booking.sitterId}',
+                            extra: args,
+                          );
+                        }
+                      },
                       onViewDetails: () {
                         if (booking.status == BookingStatus.active) {
                           context.push(

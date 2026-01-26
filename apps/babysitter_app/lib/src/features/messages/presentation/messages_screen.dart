@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:domain/domain.dart';
 import '../../../theme/app_tokens.dart';
 import 'models/message_thread_ui_model.dart';
 import 'widgets/messages_app_bar.dart';
@@ -9,7 +10,7 @@ import 'providers/chat_providers.dart';
 
 class MessagesScreen extends ConsumerWidget {
   final VoidCallback? onBack;
-  final Function(String conversationId) onThreadSelected;
+  final Function(Conversation conversation) onThreadSelected;
   final bool showBackButton;
 
   const MessagesScreen({
@@ -56,7 +57,7 @@ class MessagesScreen extends ConsumerWidget {
                             MessageThreadUiModel.fromConversation(conversation);
                         return MessageThreadTile(
                           uiModel: uiModel,
-                          onTap: () => onThreadSelected(conversation.id),
+                          onTap: () => onThreadSelected(conversation),
                         );
                       },
                       childCount: conversations.length,

@@ -73,4 +73,39 @@ class BookingsRemoteDataSource {
       rethrow;
     }
   }
+
+  /// Post sitter location updates via POST /sitters/bookings/{id}/location.
+  Future<void> postBookingLocation(
+    String applicationId, {
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final payload = {
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+      print(
+          'DEBUG: Booking Location Request: POST /sitters/bookings/$applicationId/location $payload');
+      final response = await _dio.post(
+        '/sitters/bookings/$applicationId/location',
+        data: payload,
+      );
+      print(
+          'DEBUG: Booking Location Response Status: ${response.statusCode}');
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Booking Location Error: ${e.message}');
+        print('DEBUG: Booking Location Error Response: ${e.response?.data}');
+        print(
+            'DEBUG: Booking Location Error Headers: ${e.requestOptions.headers}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
 }

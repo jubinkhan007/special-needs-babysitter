@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../theme/app_tokens.dart';
+import '../../messages/domain/chat_thread_args.dart';
 
 import 'models/active_booking_details_ui_model.dart';
 import 'widgets/active_bottom_cta_bar.dart';
@@ -22,6 +24,7 @@ class ActiveBookingDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // MOCK DATA for verification
     const mockUiModel = ActiveBookingDetailsUiModel(
+      sitterId: 'mock-sitter-id', // TODO: Replace with actual sitter ID from booking
       sitterName: 'Krystina',
       avatarUrl:
           'assets/images/sitters/krystina_sitter.png', // Ensure this asset exists or use placeholder
@@ -52,7 +55,18 @@ class ActiveBookingDetailsScreen extends StatelessWidget {
           title: 'Active Booking',
         ),
         bottomNavigationBar: ActiveBottomCtaBar(
-          onMessageTap: () {},
+          onMessageTap: () {
+            final args = ChatThreadArgs(
+              otherUserId: mockUiModel.sitterId,
+              otherUserName: mockUiModel.sitterName,
+              otherUserAvatarUrl: mockUiModel.avatarUrl,
+              isVerified: mockUiModel.isVerified,
+            );
+            context.push(
+              '/parent/messages/chat/${mockUiModel.sitterId}',
+              extra: args,
+            );
+          },
           onCallTap: () {},
         ),
         body: CustomScrollView(

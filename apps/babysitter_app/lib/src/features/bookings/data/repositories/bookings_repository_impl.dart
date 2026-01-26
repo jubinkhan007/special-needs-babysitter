@@ -95,6 +95,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
 
     return BookingDetails(
       id: dto.id,
+      sitterId: dto.sitter?.userId ?? '',
       sitterName:
           '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'.trim(),
       avatarUrl: dto.sitter?.photoUrl ?? 'https://via.placeholder.com/150',
@@ -174,6 +175,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
 
     return Booking(
       id: dto.id,
+      sitterId: dto.sitter?.userId ?? '',
       sitterName:
           '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'.trim(),
       distanceText: dto.job?.location ?? 'Unknown location',

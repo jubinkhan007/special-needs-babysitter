@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../data/models/booking_session_model.dart';
 import '../controllers/session_tracking_controller.dart';
 import '../providers/session_tracking_providers.dart';
+import '../widgets/pause_clock_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter Active Booking Screen - Shown when a sitter is on an active session
@@ -37,7 +40,25 @@ class _SitterActiveBookingScreenState
   }
 
   void _togglePause() {
-    ref.read(sessionTrackingControllerProvider.notifier).togglePause();
+    final session = ref.read(sessionTrackingControllerProvider).session;
+    if (session == null) return;
+
+    if (session.isPaused) {
+      // Resume directly
+      ref.read(sessionTrackingControllerProvider.notifier).togglePause();
+    } else {
+      // Show confirmation dialog before pausing
+      showDialog(
+        context: context,
+        builder: (context) => PauseClockDialog(
+          onPause: () {
+            Navigator.of(context).pop();
+            ref.read(sessionTrackingControllerProvider.notifier).togglePause();
+          },
+          onCancel: () => Navigator.of(context).pop(),
+        ),
+      );
+    }
   }
 
   Future<void> _clockOut() async {
@@ -372,6 +393,16 @@ class _SitterActiveBookingScreenState
     final trackingColor = trackingState.isTracking
         ? const Color(0xFF12B76A)
         : const Color(0xFFF04438);
+    final session = trackingState.session;
+    final destination = session?.coordinates;
+    final routePoints = trackingState.routeCoordinates
+        .map((point) => LatLng(point.latitude, point.longitude))
+        .toList();
+    final center = routePoints.isNotEmpty
+        ? routePoints.last
+        : (destination != null
+            ? LatLng(destination.latitude, destination.longitude)
+            : null);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,75 +479,89 @@ class _SitterActiveBookingScreenState
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12.r),
-            child: Stack(
-              children: [
-                // Placeholder map image
-                Container(
-                  decoration: BoxDecoration(
+            child: center == null
+                ? Container(
                     color: const Color(0xFFE8F4F8),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.map_outlined,
-                      size: 64.w,
-                      color: const Color(0xFF87C4F2),
+                    child: Center(
+                      child: Icon(
+                        Icons.map_outlined,
+                        size: 64.w,
+                        color: const Color(0xFF87C4F2),
+                      ),
                     ),
-                  ),
-                ),
-                // Route line overlay (simulated)
-                Positioned(
-                  top: 40.h,
-                  left: 60.w,
-                  child: Container(
-                    width: 200.w,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3B82F6),
-                      borderRadius: BorderRadius.circular(2),
+                  )
+                : FlutterMap(
+                    options: MapOptions(
+                      initialCenter: center,
+                      initialZoom: 14.0,
+                      interactionOptions: const InteractionOptions(
+                        flags: InteractiveFlag.drag |
+                            InteractiveFlag.pinchZoom |
+                            InteractiveFlag.doubleTapZoom,
+                      ),
                     ),
-                  ),
-                ),
-                // Destination marker
-                Positioned(
-                  top: 30.h,
-                  right: 40.w,
-                  child: Container(
-                    width: 32.w,
-                    height: 32.w,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName:
+                            'com.specialneedssitters.parent_app',
+                      ),
+                      if (routePoints.length >= 2)
+                        PolylineLayer(
+                          polylines: [
+                            Polyline(
+                              points: routePoints,
+                              strokeWidth: 4,
+                              color: const Color(0xFF3B82F6),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.location_on,
-                      color: const Color(0xFF1D2939),
-                      size: 20.w,
-                    ),
+                      MarkerLayer(
+                        markers: [
+                          if (routePoints.isNotEmpty)
+                            Marker(
+                              width: 20.w,
+                              height: 20.w,
+                              point: routePoints.last,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF3B82F6),
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                ),
+                              ),
+                            ),
+                          if (destination != null)
+                            Marker(
+                              width: 32.w,
+                              height: 32.w,
+                              point: LatLng(
+                                  destination.latitude, destination.longitude),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.12),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  Icons.location_on,
+                                  color: const Color(0xFF1D2939),
+                                  size: 20.w,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                // Current location marker
-                Positioned(
-                  bottom: 50.h,
-                  left: 40.w,
-                  child: Container(
-                    width: 16.w,
-                    height: 16.w,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3B82F6),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
         SizedBox(height: 12.h),

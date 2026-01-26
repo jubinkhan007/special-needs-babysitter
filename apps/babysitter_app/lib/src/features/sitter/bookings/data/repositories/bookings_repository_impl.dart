@@ -17,4 +17,17 @@ class BookingsRepositoryImpl implements BookingsRepository {
   Future<BookingSessionModel> getBookingSession(String applicationId) {
     return _remoteDataSource.getBookingSession(applicationId);
   }
+
+  @override
+  Future<void> postBookingLocation(
+    String applicationId, {
+    required double latitude,
+    required double longitude,
+  }) {
+    return _remoteDataSource.postBookingLocation(
+      applicationId,
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
 }

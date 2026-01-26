@@ -1,45 +1,108 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auth/auth.dart';
+import 'package:domain/domain.dart';
+
 import '../../../theme/app_tokens.dart';
-import '../domain/chat_message.dart';
-import 'models/chat_message_ui_model.dart';
+import '../domain/chat_thread_args.dart';
+import 'providers/chat_providers.dart';
 import 'widgets/chat_thread_app_bar.dart';
 import 'widgets/chat_background.dart';
 import 'widgets/chat_day_separator.dart';
 import 'widgets/message_bubble.dart';
-import 'widgets/call_log_tile.dart';
 import 'widgets/chat_composer_bar.dart';
+import 'models/chat_message_ui_model.dart';
 
 import 'package:go_router/go_router.dart';
 import '../../../routing/routes.dart';
 import '../../calls/domain/audio_call_args.dart';
 import '../../calls/domain/video_call_args.dart';
 
-// ... other imports
+class ChatThreadScreen extends ConsumerStatefulWidget {
+  final ChatThreadArgs args;
 
-class ChatThreadScreen extends StatelessWidget {
-  const ChatThreadScreen({super.key});
+  const ChatThreadScreen({
+    super.key,
+    required this.args,
+  });
+
+  @override
+  ConsumerState<ChatThreadScreen> createState() => _ChatThreadScreenState();
+}
+
+class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
+  final _messageController = TextEditingController();
+  final _scrollController = ScrollController();
+  bool _isSending = false;
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+  }
+
+  Future<void> _sendMessage() async {
+    final text = _messageController.text.trim();
+    if (text.isEmpty || _isSending) return;
+
+    setState(() {
+      _isSending = true;
+    });
+
+    try {
+      await ref
+          .read(chatMessagesProvider(widget.args.otherUserId).notifier)
+          .sendMessage(text);
+      _messageController.clear();
+      _scrollToBottom();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send message: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Mock Data matching Figma Screenshot
-    final messages = _getMockMessages();
-    final uiModels = ChatMessageUiModel.fromDomainList(messages);
+    final messagesAsync = ref.watch(chatMessagesProvider(widget.args.otherUserId));
+    final currentUser = ref.watch(currentUserProvider).valueOrNull;
+    final currentUserId = currentUser?.id ?? '';
 
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: AppTokens.chatScreenBg,
         appBar: ChatThreadAppBar(
-          title: 'Krystina',
-          isVerified: true,
-          avatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+          title: widget.args.otherUserName,
+          isVerified: widget.args.isVerified,
+          avatarUrl: widget.args.otherUserAvatarUrl,
           onVoiceCall: () {
             context.push(
               Routes.audioCall,
-              extra: const AudioCallArgs(
-                remoteName: 'Krystina',
-                remoteAvatarUrl:
-                    'https://randomuser.me/api/portraits/women/44.jpg',
+              extra: AudioCallArgs(
+                remoteName: widget.args.otherUserName,
+                remoteAvatarUrl: widget.args.otherUserAvatarUrl,
                 isInitialCalling: true,
               ),
             );
@@ -47,12 +110,10 @@ class ChatThreadScreen extends StatelessWidget {
           onVideoCall: () {
             context.push(
               Routes.videoCall,
-              extra: const VideoCallArgs(
-                remoteName: 'Krystina',
-                remoteVideoUrl:
-                    'https://randomuser.me/api/portraits/women/44.jpg', // Placeholder
-                localPreviewUrl:
-                    'https://randomuser.me/api/portraits/women/68.jpg', // Placeholder for self
+              extra: VideoCallArgs(
+                remoteName: widget.args.otherUserName,
+                remoteVideoUrl: widget.args.otherUserAvatarUrl,
+                localPreviewUrl: currentUser?.profilePhoto,
               ),
             );
           },
@@ -68,116 +129,140 @@ class ChatThreadScreen extends StatelessWidget {
             Column(
               children: [
                 Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.only(top: AppTokens.listTopPadding),
-                        sliver: SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final item = uiModels[index];
-
-                              return Column(
-                                children: [
-                                  if (item.showDaySeparator)
-                                    ChatDaySeparator(text: item.dayLabel),
-                                  if (item.isCallLog)
-                                    CallLogTile(uiModel: item)
-                                  else
-                                    MessageBubble(uiModel: item),
-                                ],
-                              );
-                            },
-                            childCount: uiModels.length,
+                  child: messagesAsync.when(
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    error: (error, stack) => Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Error loading messages: $error'),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () => ref.invalidate(
+                              chatMessagesProvider(widget.args.otherUserId),
+                            ),
+                            child: const Text('Retry'),
                           ),
+                        ],
+                      ),
+                    ),
+                    data: (messages) {
+                      if (messages.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'No messages yet.\nStart the conversation!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                            ),
+                          ),
+                        );
+                      }
+
+                      final uiModels = _convertToUiModels(messages, currentUserId);
+
+                      return ListView.builder(
+                        controller: _scrollController,
+                        padding: EdgeInsets.only(
+                          top: AppTokens.listTopPadding,
+                          bottom: AppTokens.composerHeight + 16,
                         ),
-                      ),
-                      // Bottom spacer to ensure last message isn't hidden by composer
-                      // Composer height + extra padding
-                      SliverToBoxAdapter(
-                        child: SizedBox(height: AppTokens.composerHeight),
-                      ),
-                    ],
+                        itemCount: uiModels.length,
+                        itemBuilder: (context, index) {
+                          final item = uiModels[index];
+
+                          return Column(
+                            children: [
+                              if (item.showDaySeparator)
+                                ChatDaySeparator(text: item.dayLabel),
+                              MessageBubble(uiModel: item),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
 
                 // Sticky Composer
-                const ChatComposerBar(),
+                ChatComposerBar(
+                  controller: _messageController,
+                  onSend: _sendMessage,
+                ),
               ],
             ),
+
+            // Loading overlay when sending
+            if (_isSending)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black12,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  List<ChatMessage> _getMockMessages() {
-    final now = DateTime(2024, 1, 14, 16, 27); // 4:27 PM
+  List<ChatMessageUiModel> _convertToUiModels(
+    List<ChatMessageEntity> messages,
+    String currentUserId,
+  ) {
+    final uiModels = <ChatMessageUiModel>[];
+    String? lastDateStr;
 
-    return [
-      // 1. Incoming Text
-      ChatMessage.text(
-        id: '1',
-        senderId: 'krystina',
-        senderName: 'Krystina',
-        senderAvatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-        isMe: false,
-        text: 'Hey there! How\'s Your Day Going?',
-        createdAt: now,
-      ),
+    for (final message in messages) {
+      final dateStr = _formatDate(message.createdAt);
+      final showDaySeparator = dateStr != lastDateStr;
+      lastDateStr = dateStr;
 
-      // 2. Outgoing Text
-      ChatMessage.text(
-        id: '2',
-        senderId: 'me',
-        senderName: 'Me',
-        isMe: true, // "You"
-        text: 'Really Great! What about You? Are You available this weekend?',
-        createdAt: now,
-      ),
+      uiModels.add(ChatMessageUiModel(
+        id: message.id,
+        isMe: message.senderUserId == currentUserId,
+        text: message.textContent ?? '',
+        time: _formatTime(message.createdAt),
+        showDaySeparator: showDaySeparator,
+        dayLabel: _getDayLabel(message.createdAt),
+        avatarUrl: message.senderUserId != currentUserId
+            ? widget.args.otherUserAvatarUrl
+            : null,
+        isCallLog: false,
+      ));
+    }
 
-      // 3. Voice Call (Incoming/Completed)
-      // Icon: diag arrow (call made/received?)
-      // Screenshot shows "Voice Call" with arrow down-left. usually means received.
-      // But text says "Voice Call" generic.
-      // Let's assume its a log entry.
-      ChatMessage.callLog(
-        id: '3',
-        senderId: 'krystina',
-        senderName: 'Krystina',
-        isMe: false,
-        callType: CallType.voice,
-        callStatus: CallStatus.completed,
-        duration: const Duration(minutes: 5, seconds: 43),
-        createdAt: now, // 4:27 PM
-      ),
+    return uiModels;
+  }
 
-      // 4. Missed Voice Call
-      ChatMessage.callLog(
-        id: '4',
-        senderId: 'krystina',
-        senderName: 'Krystina',
-        isMe: false,
-        callType: CallType.voice,
-        callStatus: CallStatus.missed,
-        duration: const Duration(
-            minutes: 5,
-            seconds:
-                43), // Duration on missed call? Maybe ringing time? or just copying screenshot.
-        createdAt: now,
-      ),
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
 
-      // 5. Missed Video Call
-      ChatMessage.callLog(
-        id: '5',
-        senderId: 'krystina',
-        senderName: 'Krystina',
-        isMe: false,
-        callType: CallType.video,
-        callStatus: CallStatus.missed, // Screenshot says Missed Video Call
-        duration: const Duration(minutes: 5, seconds: 43),
-        createdAt: now,
-      ),
-    ];
+  String _formatTime(DateTime date) {
+    final hour = date.hour;
+    final minute = date.minute.toString().padLeft(2, '0');
+    final period = hour >= 12 ? 'PM' : 'AM';
+    final displayHour = hour > 12 ? hour - 12 : (hour == 0 ? 12 : hour);
+    return '$displayHour:$minute $period';
+  }
+
+  String _getDayLabel(DateTime date) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final messageDate = DateTime(date.year, date.month, date.day);
+
+    if (messageDate == today) {
+      return 'Today';
+    } else if (messageDate == today.subtract(const Duration(days: 1))) {
+      return 'Yesterday';
+    } else {
+      return '${date.month}/${date.day}/${date.year}';
+    }
   }
 }

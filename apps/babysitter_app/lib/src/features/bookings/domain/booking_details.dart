@@ -2,6 +2,7 @@ import 'booking_status.dart';
 
 class BookingDetails {
   final String id;
+  final String sitterId;
   final String sitterName;
   final String avatarUrl;
   final bool isVerified;
@@ -35,6 +36,7 @@ class BookingDetails {
 
   const BookingDetails({
     required this.id,
+    required this.sitterId,
     required this.sitterName,
     required this.avatarUrl,
     required this.isVerified,

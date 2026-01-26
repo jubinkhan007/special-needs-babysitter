@@ -11,6 +11,7 @@ import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/s
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/calendar_availability_section.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 import '../../../../../routing/routes.dart';
+import '../../../../messages/domain/chat_thread_args.dart';
 
 class SitterProfileView extends StatelessWidget {
   final SitterModel sitter;
@@ -45,7 +46,16 @@ class SitterProfileView extends StatelessWidget {
                   ratingText: sitter.rating.toStringAsFixed(1),
                   avatarAsset: sitter.avatarUrl, // asset path
                   onMessage: () {
-                    // TODO: navigate to chat screen
+                    final args = ChatThreadArgs(
+                      otherUserId: sitter.id,
+                      otherUserName: sitter.name,
+                      otherUserAvatarUrl: sitter.avatarUrl,
+                      isVerified: true, // Assume verified for now
+                    );
+                    context.push(
+                      '/parent/messages/chat/${sitter.id}',
+                      extra: args,
+                    );
                   },
                   onTapRating: () {
                     context.push(

@@ -1,4 +1,5 @@
 class ActiveBookingDetailsUiModel {
+  final String sitterId;
   final String sitterName;
   final String avatarUrl;
   final bool isVerified;
@@ -23,6 +24,7 @@ class ActiveBookingDetailsUiModel {
   final String address; // Newline separated
 
   const ActiveBookingDetailsUiModel({
+    required this.sitterId,
     required this.sitterName,
     required this.avatarUrl,
     required this.isVerified,

@@ -8,4 +8,11 @@ abstract class BookingsRepository {
 
   /// Get the current booking session for an application.
   Future<BookingSessionModel> getBookingSession(String applicationId);
+
+  /// Post the sitter's live location for an active booking.
+  Future<void> postBookingLocation(
+    String applicationId, {
+    required double latitude,
+    required double longitude,
+  });
 }

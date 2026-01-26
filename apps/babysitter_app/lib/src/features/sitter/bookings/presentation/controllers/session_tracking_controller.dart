@@ -66,6 +66,8 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
   final BookingSessionLocalDataSource _localDataSource;
   StreamSubscription<Position>? _positionSub;
   bool _pendingStart = false;
+  DateTime? _lastLocationSentAt;
+  static const Duration _locationSendInterval = Duration(minutes: 2);
 
   Future<void> restoreSession() async {
     final cached = await _localDataSource.readSession();
@@ -218,22 +220,48 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
       longitude: position.longitude,
     );
 
-    if (!_shouldRecord(point)) {
+    if (_shouldRecord(point)) {
+      final session = state.session;
+      if (session == null) {
+        return;
+      }
+
+      final updatedRoute = [...session.routeCoordinates, point];
+      final updatedSession = session.copyWith(routeCoordinates: updatedRoute);
+      state = state.copyWith(
+        session: updatedSession,
+        lastLocationAt: DateTime.now(),
+      );
+      unawaited(_localDataSource.saveSession(updatedSession));
+    }
+
+    _maybeSendLocation(point);
+  }
+
+  void _maybeSendLocation(JobCoordinatesModel point) {
+    final now = DateTime.now();
+    if (_lastLocationSentAt != null &&
+        now.difference(_lastLocationSentAt!) < _locationSendInterval) {
       return;
     }
 
-    final session = state.session;
-    if (session == null) {
+    final applicationId = state.session?.applicationId;
+    if (applicationId == null || applicationId.isEmpty) {
       return;
     }
 
-    final updatedRoute = [...session.routeCoordinates, point];
-    final updatedSession = session.copyWith(routeCoordinates: updatedRoute);
-    state = state.copyWith(
-      session: updatedSession,
-      lastLocationAt: DateTime.now(),
-    );
-    unawaited(_localDataSource.saveSession(updatedSession));
+    _lastLocationSentAt = now;
+    unawaited(_repository
+        .postBookingLocation(
+          applicationId,
+          latitude: point.latitude,
+          longitude: point.longitude,
+        )
+        .catchError((error) {
+      state = state.copyWith(
+        errorMessage: 'Live tracking error: $error',
+      );
+    }));
   }
 
   bool _shouldRecord(JobCoordinatesModel nextPoint) {
@@ -337,8 +365,8 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return AndroidSettings(
         accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
-        intervalDuration: const Duration(seconds: 10),
+        distanceFilter: 0,
+        intervalDuration: _locationSendInterval,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
           notificationTitle: 'Special Needs Sitters',
           notificationText: 'Live tracking is active during your booking.',
@@ -352,7 +380,7 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
         defaultTargetPlatform == TargetPlatform.macOS) {
       return AppleSettings(
         accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
+        distanceFilter: 0,
         pauseLocationUpdatesAutomatically: false,
         showBackgroundLocationIndicator: true,
         allowBackgroundLocationUpdates: true,

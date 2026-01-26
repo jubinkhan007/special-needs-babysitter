@@ -7,6 +7,8 @@ export 'src/entities/user_role.dart';
 export 'src/entities/auth_session.dart';
 export 'src/entities/conversation.dart';
 export 'src/entities/message_type.dart';
+export 'src/entities/chat_message.dart';
+export 'src/entities/chat_init_result.dart';
 
 // Repositories
 export 'src/repositories/chat_repository.dart';

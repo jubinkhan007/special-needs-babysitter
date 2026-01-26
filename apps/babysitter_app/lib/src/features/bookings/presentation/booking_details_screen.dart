@@ -18,6 +18,7 @@ import 'providers/booking_details_provider.dart';
 import '../../parent/booking_flow/data/providers/bookings_di.dart';
 import '../application/bookings_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../messages/domain/chat_thread_args.dart';
 
 class BookingDetailsScreen extends ConsumerStatefulWidget {
   final BookingDetailsArgs args;
@@ -131,7 +132,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                     ),
                   )
                 : isPending
-                    ? _buildPendingBottomBar(details.id)
+                    ? _buildPendingBottomBar(details)
                     : BottomCtaBar(
                         label: variant.ctaLabel,
                         onTap: () {
@@ -140,8 +141,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                               Routes.parentReview,
                               extra: ReviewArgs(
                                 bookingId: widget.args.bookingId,
-                                sitterId:
-                                    'sitter-123', // Placeholder as BookingDetails domain doesn't expose authId yet.
+                                sitterId: details.sitterId,
                                 sitterName: details.sitterName,
                                 sitterData: uiModel,
                                 status: details.status,
@@ -233,7 +233,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
     );
   }
 
-  Widget _buildPendingBottomBar(String bookingId) {
+  Widget _buildPendingBottomBar(BookingDetails details) {
     return Container(
       color: AppTokens.surfaceWhite,
       child: SafeArea(
@@ -251,7 +251,18 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                   height: AppTokens.buttonHeight,
                   child: OutlinedButton(
                     onPressed: () {
-                      // TODO: Implement message functionality
+                      if (details.sitterId.isNotEmpty) {
+                        final args = ChatThreadArgs(
+                          otherUserId: details.sitterId,
+                          otherUserName: details.sitterName,
+                          otherUserAvatarUrl: details.avatarUrl,
+                          isVerified: details.isVerified,
+                        );
+                        context.push(
+                          '/parent/messages/chat/${details.sitterId}',
+                          extra: args,
+                        );
+                      }
                     },
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: AppTokens.primaryBlue),
@@ -276,7 +287,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                 child: SizedBox(
                   height: AppTokens.buttonHeight,
                   child: ElevatedButton(
-                    onPressed: () => _cancelBooking(bookingId),
+                    onPressed: () => _cancelBooking(details.id),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       shape: RoundedRectangleBorder(

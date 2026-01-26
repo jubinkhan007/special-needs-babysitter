@@ -2,6 +2,7 @@ import 'booking_status.dart';
 
 class Booking {
   final String id;
+  final String sitterId;
   final String sitterName;
   final String distanceText; // "5 Miles Away"
   final double rating; // 4.5
@@ -15,6 +16,7 @@ class Booking {
 
   const Booking({
     required this.id,
+    required this.sitterId,
     required this.sitterName,
     required this.distanceText,
     required this.rating,
