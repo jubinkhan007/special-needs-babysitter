@@ -30,4 +30,14 @@ class BookingsRepositoryImpl implements BookingsRepository {
       longitude: longitude,
     );
   }
+
+  @override
+  Future<DateTime> pauseBooking(String applicationId, {required String reason}) {
+    return _remoteDataSource.pauseBooking(applicationId, reason: reason);
+  }
+
+  @override
+  Future<void> resumeBooking(String applicationId) {
+    return _remoteDataSource.resumeBooking(applicationId);
+  }
 }

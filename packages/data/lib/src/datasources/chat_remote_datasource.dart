@@ -67,6 +67,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   Future<List<ChatDto>> getConversations() async {
     try {
       final response = await _dio.get('/chat/conversations');
+      print('DEBUG: Chat conversations raw response: ${response.data}');
 
       if (response.data == null) {
         print('DEBUG: Chat API returned null data');
@@ -79,14 +80,19 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         return [];
       }
 
-      if (data is! List) {
-         print('DEBUG: Chat API "data" field is not a List: $data');
-         return [];
+      final List<dynamic>? rawList = data is List
+          ? data
+          : (data is Map<String, dynamic> ? data['conversations'] as List? : null);
+
+      if (rawList == null) {
+        print('DEBUG: Chat API "data" field has no conversations list: $data');
+        return [];
       }
 
-      return data.map((json) {
+      return rawList.map((json) {
         try {
-          return ChatDto.fromJson(json as Map<String, dynamic>);
+          final normalized = _normalizeConversationJson(json);
+          return ChatDto.fromJson(normalized);
         } catch (e, stack) {
           print('DEBUG: Error parsing chat item: $json, error: $e, stack: $stack');
           rethrow;
@@ -102,6 +108,59 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       }
       rethrow;
     }
+  }
+
+  Map<String, dynamic> _normalizeConversationJson(Object? json) {
+    final raw = json is Map<String, dynamic> ? json : <String, dynamic>{};
+    final otherUser = raw['otherUser'] is Map<String, dynamic>
+        ? raw['otherUser'] as Map<String, dynamic>
+        : const <String, dynamic>{};
+
+    final firstName = otherUser['firstName']?.toString() ??
+        otherUser['first_name']?.toString() ??
+        '';
+    final lastName = otherUser['lastName']?.toString() ??
+        otherUser['last_name']?.toString() ??
+        '';
+    final fullName = [firstName, lastName].where((s) => s.isNotEmpty).join(' ');
+    final otherUserId = otherUser['_id']?.toString() ??
+        otherUser['id']?.toString() ??
+        otherUser['userId']?.toString() ??
+        otherUser['user_id']?.toString();
+    final avatarUrl = otherUser['avatarUrl'] ??
+        otherUser['profilePhoto'] ??
+        otherUser['profilePhotoUrl'] ??
+        otherUser['photoUrl'] ??
+        otherUser['photoURL'] ??
+        otherUser['photo_url'] ??
+        otherUser['imageUrl'] ??
+        otherUser['profileImageUrl'];
+    final displayName = raw['participant_name']?.toString() ??
+        (fullName.isNotEmpty
+            ? fullName
+            : (otherUser['name']?.toString() ??
+                otherUser['fullName']?.toString() ??
+                'Unknown User'));
+
+    final participantAvatar = _firstNonEmpty(
+      raw['participant_avatar'],
+      avatarUrl,
+    );
+
+    return {
+      'id': otherUserId ?? raw['id']?.toString() ?? raw['_id']?.toString() ?? '',
+      'participant_name': displayName,
+      'participant_avatar': participantAvatar,
+      'last_message': raw['last_message']?.toString() ??
+          raw['lastMessagePreview']?.toString() ??
+          '',
+      'last_message_type': raw['last_message_type']?.toString(),
+      'last_message_time': raw['last_message_time']?.toString() ??
+          raw['lastMessageAt']?.toString(),
+      'unread_count': raw['unread_count'] ?? raw['unreadCount'] ?? 0,
+      'is_verified': raw['is_verified'] ?? otherUser['isVerified'] ?? false,
+      'is_system': raw['is_system'] ?? false,
+    };
   }
 
   @override
@@ -132,7 +191,8 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       print('DEBUG: Got ${messages.length} messages');
       return messages.map((json) {
-        return ChatMessageDto.fromJson(json as Map<String, dynamic>);
+        final safeJson = _normalizeMessageJson(json);
+        return ChatMessageDto.fromJson(safeJson);
       }).toList();
     } catch (e, stack) {
       print('DEBUG: Error fetching messages: $e');
@@ -142,6 +202,74 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       }
       rethrow;
     }
+  }
+
+  Map<String, dynamic> _normalizeMessageJson(Object? json) {
+    final raw = json is Map<String, dynamic> ? json : <String, dynamic>{};
+    final wrapperMessage = raw['message'];
+    final wrapperContent = raw['content'];
+    final inner = wrapperMessage is Map<String, dynamic>
+        ? wrapperMessage
+        : (wrapperContent is Map<String, dynamic> && _looksLikeMessage(wrapperContent)
+            ? wrapperContent
+            : raw);
+    final safe = Map<String, dynamic>.from(inner);
+
+    if (safe['senderUserId'] == null && safe['senderUser'] is Map<String, dynamic>) {
+      safe['senderUserId'] = (safe['senderUser'] as Map<String, dynamic>)['id'];
+    }
+    if (safe['recipientUserId'] == null && safe['recipientUser'] is Map<String, dynamic>) {
+      safe['recipientUserId'] = (safe['recipientUser'] as Map<String, dynamic>)['id'];
+    }
+
+    if (safe['textContent'] == null && safe['text'] != null) {
+      safe['textContent'] = safe['text'];
+    }
+
+    if (safe['textContent'] is Map<String, dynamic>) {
+      final textMap = safe['textContent'] as Map<String, dynamic>;
+      safe['textContent'] = textMap['text'] ?? textMap['textContent'];
+    }
+
+    if (safe['id'] == null || safe['id'].toString().isEmpty) {
+      final mongoId = safe['_id']?.toString();
+      if (mongoId != null && mongoId.isNotEmpty) {
+        safe['id'] = mongoId;
+      }
+    }
+
+    if (safe['id'] == null || safe['id'].toString().isEmpty) {
+      final fallbackId = safe['agoraMessageId']?.toString();
+      safe['id'] = (fallbackId != null && fallbackId.isNotEmpty)
+          ? fallbackId
+          : '';
+    }
+
+    if (safe['conversationId'] == null && safe['conversation'] != null) {
+      safe['conversationId'] = safe['conversation'].toString();
+    }
+
+    return safe;
+  }
+
+  bool _looksLikeMessage(Map<String, dynamic> value) {
+    return value.containsKey('textContent') ||
+        value.containsKey('senderUserId') ||
+        value.containsKey('recipientUserId') ||
+        value.containsKey('_id') ||
+        value.containsKey('id');
+  }
+
+  String? _firstNonEmpty(dynamic primary, dynamic fallback) {
+    final primaryStr = primary?.toString().trim();
+    if (primaryStr != null && primaryStr.isNotEmpty) {
+      return primaryStr;
+    }
+    final fallbackStr = fallback?.toString().trim();
+    if (fallbackStr != null && fallbackStr.isNotEmpty) {
+      return fallbackStr;
+    }
+    return null;
   }
 
   @override

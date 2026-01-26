@@ -9,6 +9,8 @@ import '../../../../routing/routes.dart';
 import '../widgets/reject_reason_bottom_sheet.dart';
 import 'providers/applications_providers.dart';
 import '../../domain/rejection_reason.dart';
+import '../../domain/applications/application_item.dart';
+import '../../../messages/domain/chat_thread_args.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ApplicationsScreen extends ConsumerWidget {
@@ -178,7 +180,7 @@ class ApplicationsScreen extends ConsumerWidget {
                               }
                             },
                             onMoreOptions: () {
-                              _showMoreOptionsMenu(context, item.sitterId);
+                              _showMoreOptionsMenu(context, item);
                             },
                           ),
                         );
@@ -195,7 +197,8 @@ class ApplicationsScreen extends ConsumerWidget {
     );
   }
 
-  void _showMoreOptionsMenu(BuildContext context, String? sitterId) {
+  void _showMoreOptionsMenu(BuildContext context, ApplicationItem item) {
+    final sitterId = item.sitterId;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -231,10 +234,20 @@ class ApplicationsScreen extends ConsumerWidget {
               title: const Text('Message'),
               onTap: () {
                 Navigator.pop(ctx);
-                // TODO: Navigate to chat with sitter
-                AppToast.show(context, 
-                  const SnackBar(content: Text('Messaging coming soon!')),
+                if (sitterId == null || sitterId.isEmpty) {
+                  AppToast.show(
+                    context,
+                    const SnackBar(content: Text('Sitter info unavailable.')),
+                  );
+                  return;
+                }
+                final args = ChatThreadArgs(
+                  otherUserId: sitterId,
+                  otherUserName: item.sitterName,
+                  otherUserAvatarUrl: item.avatarUrl,
+                  isVerified: item.isVerified,
                 );
+                context.push('/parent/messages/chat/$sitterId', extra: args);
               },
             ),
             ListTile(

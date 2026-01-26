@@ -13,6 +13,7 @@ import '../../../jobs/presentation/widgets/job_meta_header.dart';
 import '../../../jobs/presentation/widgets/key_value_row.dart';
 import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
 import '../../../jobs/presentation/widgets/section_divider.dart';
+import '../../../../messages/domain/chat_thread_args.dart';
 import '../providers/bookings_providers.dart';
 import '../providers/session_tracking_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
@@ -661,10 +662,7 @@ class _SitterBookingDetailsScreenState
                               color: const Color(0xFF667085), size: 20.w),
                           onPressed: () {
                             // TODO: Show more options menu
-                            _showMoreOptionsMenu(
-                              context,
-                              jobDetails.applicationId,
-                            );
+                            _showMoreOptionsMenu(context, jobDetails);
                           },
                         ),
                       ),
@@ -1071,7 +1069,8 @@ class _SitterBookingDetailsScreenState
     }
   }
 
-  void _showMoreOptionsMenu(BuildContext context, String applicationId) {
+  void _showMoreOptionsMenu(
+      BuildContext context, JobRequestDetailsModel jobDetails) {
     final parentContext = context;
     showModalBottomSheet(
       context: parentContext,
@@ -1097,7 +1096,25 @@ class _SitterBookingDetailsScreenState
               ),
               onTap: () {
                 Navigator.of(sheetContext).pop();
-                // TODO: Navigate to messages
+                final parentUserId = jobDetails.parentUserId;
+                if (parentUserId == null || parentUserId.isEmpty) {
+                  AppToast.show(
+                    parentContext,
+                    const SnackBar(
+                      content: Text('Family info unavailable.'),
+                    ),
+                  );
+                  return;
+                }
+                final args = ChatThreadArgs(
+                  otherUserId: parentUserId,
+                  otherUserName: '${jobDetails.familyName} Family',
+                  isVerified: false,
+                );
+                parentContext.push(
+                  '/sitter/messages/chat/$parentUserId',
+                  extra: args,
+                );
               },
             ),
             ListTile(
@@ -1114,7 +1131,7 @@ class _SitterBookingDetailsScreenState
               ),
               onTap: () {
                 Navigator.of(sheetContext).pop();
-                _showCancelReasonSheet(parentContext, applicationId);
+                _showCancelReasonSheet(parentContext, jobDetails.applicationId);
               },
             ),
             ListTile(

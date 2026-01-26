@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import '../../data/models/booking_session_model.dart';
 import '../controllers/session_tracking_controller.dart';
 import '../providers/session_tracking_providers.dart';
+import '../widgets/break_timer_dialog.dart';
 import '../widgets/pause_clock_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
@@ -28,10 +29,12 @@ class SitterActiveBookingScreen extends ConsumerStatefulWidget {
 class _SitterActiveBookingScreenState
     extends ConsumerState<SitterActiveBookingScreen> {
   bool _isClockingOut = false;
+  late final MapController _mapController;
 
   @override
   void initState() {
     super.initState();
+    _mapController = MapController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(sessionTrackingControllerProvider.notifier)
@@ -39,21 +42,46 @@ class _SitterActiveBookingScreenState
     });
   }
 
-  void _togglePause() {
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _togglePause() async {
     final session = ref.read(sessionTrackingControllerProvider).session;
     if (session == null) return;
 
     if (session.isPaused) {
-      // Resume directly
-      ref.read(sessionTrackingControllerProvider.notifier).togglePause();
+      showDialog(
+        context: context,
+        builder: (context) => BreakTimerDialog(
+          pausedAt: session.pausedAt ?? DateTime.now(),
+          onResume: () async {
+            Navigator.of(context).pop();
+            await ref
+                .read(sessionTrackingControllerProvider.notifier)
+                .resumeSession();
+          },
+          onEndBreak: () async {
+            Navigator.of(context).pop();
+            await ref
+                .read(sessionTrackingControllerProvider.notifier)
+                .resumeSession();
+          },
+          onClose: () => Navigator.of(context).pop(),
+        ),
+      );
     } else {
       // Show confirmation dialog before pausing
       showDialog(
         context: context,
         builder: (context) => PauseClockDialog(
-          onPause: () {
+          onPause: () async {
             Navigator.of(context).pop();
-            ref.read(sessionTrackingControllerProvider.notifier).togglePause();
+            await ref
+                .read(sessionTrackingControllerProvider.notifier)
+                .togglePause(breakReason: "Lunch break");
           },
           onCancel: () => Navigator.of(context).pop(),
         ),
@@ -102,6 +130,21 @@ class _SitterActiveBookingScreenState
   @override
   Widget build(BuildContext context) {
     final trackingState = ref.watch(sessionTrackingControllerProvider);
+    
+    // Listen for location updates to move map camera
+    ref.listen(sessionTrackingControllerProvider, (previous, next) {
+      final prevPoints = previous?.routeCoordinates ?? [];
+      final nextPoints = next.routeCoordinates;
+      
+      if (nextPoints.isNotEmpty && nextPoints.length > prevPoints.length) {
+        final lastPoint = nextPoints.last;
+        _mapController.move(
+          LatLng(lastPoint.latitude, lastPoint.longitude),
+          _mapController.camera.zoom,
+        );
+      }
+    });
+
     final now = ref.watch(sessionTickerProvider).maybeWhen(
           data: (value) => value,
           orElse: () => DateTime.now(),
@@ -491,6 +534,7 @@ class _SitterActiveBookingScreenState
                     ),
                   )
                 : FlutterMap(
+                    mapController: _mapController,
                     options: MapOptions(
                       initialCenter: center,
                       initialZoom: 14.0,

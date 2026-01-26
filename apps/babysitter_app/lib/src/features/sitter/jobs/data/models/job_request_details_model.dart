@@ -6,6 +6,7 @@ import 'job_coordinates_model.dart';
 class JobRequestDetailsModel extends Equatable {
   final String id;
   final String applicationId;
+  final String? parentUserId;
   final String applicationType;
   final String title;
   final String familyName;
@@ -41,6 +42,7 @@ class JobRequestDetailsModel extends Equatable {
   const JobRequestDetailsModel({
     required this.id,
     required this.applicationId,
+    this.parentUserId,
     required this.applicationType,
     required this.title,
     required this.familyName,
@@ -101,6 +103,9 @@ class JobRequestDetailsModel extends Equatable {
     return JobRequestDetailsModel(
       id: json['id'] as String,
       applicationId: json['applicationId'] as String,
+      parentUserId: json['parentUserId'] as String? ??
+          json['parentId'] as String? ??
+          json['familyUserId'] as String?,
       applicationType: json['applicationType'] as String? ?? 'invited',
       title: json['title'] as String,
       familyName: json['familyName'] as String,
@@ -147,6 +152,7 @@ class JobRequestDetailsModel extends Equatable {
     return {
       'id': id,
       'applicationId': applicationId,
+      'parentUserId': parentUserId,
       'applicationType': applicationType,
       'title': title,
       'familyName': familyName,
@@ -185,6 +191,7 @@ class JobRequestDetailsModel extends Equatable {
   List<Object?> get props => [
         id,
         applicationId,
+        parentUserId,
         applicationType,
         title,
         familyName,

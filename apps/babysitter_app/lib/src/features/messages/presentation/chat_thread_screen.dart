@@ -86,8 +86,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   @override
   Widget build(BuildContext context) {
     final messagesAsync = ref.watch(chatMessagesProvider(widget.args.otherUserId));
+    final sessionUser = ref.watch(authNotifierProvider).valueOrNull?.user;
     final currentUser = ref.watch(currentUserProvider).valueOrNull;
-    final currentUserId = currentUser?.id ?? '';
+    final currentUserId = sessionUser?.id ?? currentUser?.id ?? '';
 
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
@@ -102,7 +103,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
               Routes.audioCall,
               extra: AudioCallArgs(
                 remoteName: widget.args.otherUserName,
-                remoteAvatarUrl: widget.args.otherUserAvatarUrl,
+                remoteAvatarUrl: widget.args.otherUserAvatarUrl ?? '',
                 isInitialCalling: true,
               ),
             );
@@ -112,8 +113,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
               Routes.videoCall,
               extra: VideoCallArgs(
                 remoteName: widget.args.otherUserName,
-                remoteVideoUrl: widget.args.otherUserAvatarUrl,
-                localPreviewUrl: currentUser?.profilePhoto,
+                remoteVideoUrl: widget.args.otherUserAvatarUrl ?? '',
+                localPreviewUrl: currentUser?.avatarUrl ?? '',
               ),
             );
           },
@@ -223,14 +224,27 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       final showDaySeparator = dateStr != lastDateStr;
       lastDateStr = dateStr;
 
+      final isMe = message.senderUserId == currentUserId ||
+          (message.senderUserId.isEmpty &&
+              message.recipientUserId == widget.args.otherUserId);
+      final messageText = message.textContent?.trim().isNotEmpty == true
+          ? message.textContent!
+          : (message.mediaUrl ?? '');
+
       uiModels.add(ChatMessageUiModel(
         id: message.id,
-        isMe: message.senderUserId == currentUserId,
-        text: message.textContent ?? '',
-        time: _formatTime(message.createdAt),
+        isMe: isMe,
+        bubbleText: messageText,
         showDaySeparator: showDaySeparator,
         dayLabel: _getDayLabel(message.createdAt),
-        avatarUrl: message.senderUserId != currentUserId
+        headerMetaLeft: !isMe
+            ? '${widget.args.otherUserName} • ${_formatTime(message.createdAt)}'
+            : null,
+        headerMetaRight: isMe
+            ? '${_formatTime(message.createdAt)} • You'
+            : null,
+        showAvatar: !isMe,
+        avatarUrl: !isMe
             ? widget.args.otherUserAvatarUrl
             : null,
         isCallLog: false,

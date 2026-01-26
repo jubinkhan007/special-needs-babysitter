@@ -15,4 +15,10 @@ abstract class BookingsRepository {
     required double latitude,
     required double longitude,
   });
+
+  /// Pause the current booking session.
+  Future<DateTime> pauseBooking(String applicationId, {required String reason});
+
+  /// Resume the current booking session.
+  Future<void> resumeBooking(String applicationId);
 }

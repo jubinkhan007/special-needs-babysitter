@@ -42,6 +42,12 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     final repository = ref.watch(chatRepositoryProvider);
     final chatService = ref.watch(chatServiceProvider);
 
+    try {
+      await repository.initChat();
+    } catch (e) {
+      print('DEBUG: Chat init failed: $e');
+    }
+
     // Listen to real-time events for this conversation
     final subscription = chatService.events.listen((event) {
       if (event is MessageReceivedEvent && event.peerId == otherUserId) {
@@ -58,6 +64,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     // Mark conversation as read when viewing
     try {
       await repository.markAsRead(otherUserId);
+      ref.invalidate(chatConversationsProvider);
     } catch (e) {
       print('DEBUG: Error marking conversation as read: $e');
     }
@@ -147,6 +154,13 @@ class ChatConversationsNotifier extends AsyncNotifier<List<Conversation>> {
         print('DEBUG: ChatConversationsNotifier disposing listener');
         subscription.cancel();
       });
+
+      final repository = ref.watch(chatRepositoryProvider);
+      try {
+        await repository.initChat();
+      } catch (e) {
+        print('DEBUG: Chat init failed: $e');
+      }
 
       print('DEBUG: Reading currentUserProvider...');
       // Ensure chat service is logged in

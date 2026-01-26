@@ -108,4 +108,57 @@ class BookingsRemoteDataSource {
       rethrow;
     }
   }
+
+  /// Pause the current booking session via POST /sitters/bookings/{id}/pause.
+  Future<DateTime> pauseBooking(String applicationId,
+      {required String reason}) async {
+    try {
+      final payload = {'reason': reason};
+      print(
+          'DEBUG: Pause Booking Request: POST /sitters/bookings/$applicationId/pause $payload');
+      final response = await _dio.post(
+        '/sitters/bookings/$applicationId/pause',
+        data: payload,
+      );
+      print('DEBUG: Pause Booking Response Status: ${response.statusCode}');
+
+      final data = response.data['data'] as Map<String, dynamic>;
+      final pausedAtStr = data['pausedAt'] as String;
+      return DateTime.parse(pausedAtStr);
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Pause Booking Error: ${e.message}');
+        print('DEBUG: Pause Booking Error Response: ${e.response?.data}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
+
+  /// Resume the current booking session via POST /sitters/bookings/{id}/resume.
+  Future<void> resumeBooking(String applicationId) async {
+    try {
+      print(
+          'DEBUG: Resume Booking Request: POST /sitters/bookings/$applicationId/resume');
+      final response = await _dio.post(
+        '/sitters/bookings/$applicationId/resume',
+      );
+      print('DEBUG: Resume Booking Response Status: ${response.statusCode}');
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Resume Booking Error: ${e.message}');
+        print('DEBUG: Resume Booking Error Response: ${e.response?.data}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
 }

@@ -129,16 +129,49 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     state = const SessionTrackingState();
   }
 
-  void togglePause({String? breakReason}) {
+  Future<void> togglePause({String? breakReason}) async {
     final session = state.session;
     if (session == null) {
       return;
     }
 
     if (session.isPaused) {
+      await resumeSession();
+      return;
+    }
+
+    // Pause via API
+    try {
+      final applicationId = session.applicationId;
+      final reason = breakReason ?? "Lunch break";
+      final pausedAt = await _repository.pauseBooking(applicationId, reason: reason);
+      
+      final updatedSession = session.copyWith(
+        isPaused: true,
+        pausedAt: pausedAt,
+        currentBreakReason: reason,
+      );
+      state = state.copyWith(session: updatedSession);
+      await _localDataSource.saveSession(updatedSession);
+    } catch (e) {
+      state = state.copyWith(
+        errorMessage: 'Failed to pause: ${e.toString().replaceFirst("Exception: ", "")}',
+      );
+    }
+  }
+
+  Future<void> resumeSession() async {
+    final session = state.session;
+    if (session == null || !session.isPaused) {
+      return;
+    }
+
+    final applicationId = session.applicationId;
+    try {
+      await _repository.resumeBooking(applicationId);
+
       final pausedAt = session.pausedAt ?? DateTime.now();
-      final addedSeconds =
-          DateTime.now().difference(pausedAt).inSeconds;
+      final addedSeconds = DateTime.now().difference(pausedAt).inSeconds;
       final updatedSession = session.copyWith(
         isPaused: false,
         pausedAt: null,
@@ -147,17 +180,12 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
         currentBreakReason: null,
       );
       state = state.copyWith(session: updatedSession);
-      unawaited(_localDataSource.saveSession(updatedSession));
-      return;
+      await _localDataSource.saveSession(updatedSession);
+    } catch (e) {
+      state = state.copyWith(
+        errorMessage: 'Failed to resume: ${e.toString().replaceFirst("Exception: ", "")}',
+      );
     }
-
-    final updatedSession = session.copyWith(
-      isPaused: true,
-      pausedAt: DateTime.now(),
-      currentBreakReason: breakReason ?? session.currentBreakReason,
-    );
-    state = state.copyWith(session: updatedSession);
-    unawaited(_localDataSource.saveSession(updatedSession));
   }
 
   Future<void> _startLocationTracking() async {
