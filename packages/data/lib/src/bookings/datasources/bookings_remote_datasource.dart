@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
@@ -10,8 +11,11 @@ class BookingsRemoteDataSource {
   /// POST /direct-bookings - Create a direct booking with a sitter
   Future<BookingResult> createDirectBooking(Map<String, dynamic> data) async {
     try {
-      print(
-          'DEBUG: BookingsRemoteDataSource.createDirectBooking payload: $data');
+      print('DEBUG: BookingsRemoteDataSource.createDirectBooking payload: $data');
+      print('DEBUG: Payload as JSON: ${jsonEncode(data)}');
+      print('DEBUG: Payload keys: ${data.keys.toList()}');
+      print('DEBUG: Address keys: ${(data['address'] as Map?)?.keys.toList()}');
+      print('DEBUG: EmergencyContact keys: ${(data['emergencyContact'] as Map?)?.keys.toList()}');
       final response = await _dio.post(
         '/direct-bookings',
         data: data,

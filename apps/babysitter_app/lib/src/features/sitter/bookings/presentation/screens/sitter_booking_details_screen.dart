@@ -14,6 +14,7 @@ import '../../../jobs/presentation/widgets/key_value_row.dart';
 import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
 import '../../../jobs/presentation/widgets/section_divider.dart';
 import '../providers/bookings_providers.dart';
+import '../providers/session_tracking_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Screen showing details of an upcoming/confirmed booking.
@@ -1801,6 +1802,7 @@ class _SitterBookingDetailsScreenState
             reason: reason,
             fileUrl: fileUrl,
           );
+      ref.invalidate(sitterCurrentBookingsProvider);
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider(null));
       if (!mounted) return false;
@@ -1967,6 +1969,7 @@ class _SitterBookingDetailsScreenState
             applicationId,
           );
       ref.invalidate(jobRequestDetailsProvider(applicationId));
+      ref.invalidate(sitterCurrentBookingsProvider);
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider('completed'));
       ref.invalidate(sitterBookingsProvider(null));
@@ -2055,6 +2058,9 @@ class _SitterBookingDetailsScreenState
       if (!mounted) {
         return;
       }
+      await ref
+          .read(sessionTrackingControllerProvider.notifier)
+          .loadSession(applicationId, forceRefresh: true);
       await _showClockInDialog(context);
       ref.invalidate(jobRequestDetailsProvider(applicationId));
     } catch (e) {

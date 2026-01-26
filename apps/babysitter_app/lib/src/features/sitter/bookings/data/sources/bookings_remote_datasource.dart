@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../models/booking_model.dart';
+import '../models/booking_session_model.dart';
 
 /// Remote data source for bookings API calls.
 class BookingsRemoteDataSource {
@@ -35,6 +36,34 @@ class BookingsRemoteDataSource {
         print('DEBUG: Sitter Bookings Error Response: ${e.response?.data}');
         print(
             'DEBUG: Sitter Bookings Error Headers: ${e.requestOptions.headers}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
+
+  /// Get an active booking session via GET /sitters/bookings/{id}/session.
+  Future<BookingSessionModel> getBookingSession(String applicationId) async {
+    try {
+      print(
+          'DEBUG: Booking Session Request: GET /sitters/bookings/$applicationId/session');
+      final response =
+          await _dio.get('/sitters/bookings/$applicationId/session');
+      print(
+          'DEBUG: Booking Session Response Status: ${response.statusCode}');
+
+      final data = response.data['data'] as Map<String, dynamic>;
+      return BookingSessionModel.fromJson(data);
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Booking Session Error: ${e.message}');
+        print('DEBUG: Booking Session Error Response: ${e.response?.data}');
+        print(
+            'DEBUG: Booking Session Error Headers: ${e.requestOptions.headers}');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {

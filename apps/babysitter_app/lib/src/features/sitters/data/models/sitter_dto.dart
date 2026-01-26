@@ -4,6 +4,7 @@ part 'sitter_dto.g.dart';
 
 @JsonSerializable()
 class BrowseSittersResponseDto {
+  @JsonKey(defaultValue: false)
   final bool success;
   final BrowseSittersDataDto data;
 
@@ -19,6 +20,7 @@ class BrowseSittersDataDto {
   final int total;
   final int limit;
   final int offset;
+  @JsonKey(defaultValue: false)
   final bool hasMore;
 
   BrowseSittersDataDto({
@@ -49,6 +51,7 @@ class SitterDto {
   final double? distance; // Null in example
   final double reliabilityScore; // 100 in example
   final int reviewCount; // 0
+  @JsonKey(defaultValue: false)
   final bool isSaved;
 
   SitterDto({

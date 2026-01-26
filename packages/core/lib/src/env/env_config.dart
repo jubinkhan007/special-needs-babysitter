@@ -5,15 +5,26 @@ import '../constants/constants.dart';
 class EnvConfig {
   EnvConfig._();
 
+  static String? _getEnv(String key) {
+    try {
+      return dotenv.env[key];
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// API base URL - uses .env value if set, otherwise falls back to Constants.baseUrl
-  static String get apiBaseUrl => dotenv.env['API_BASE_URL']?.isNotEmpty == true
-      ? dotenv.env['API_BASE_URL']!
+  static String get apiBaseUrl => _getEnv('API_BASE_URL')?.isNotEmpty == true
+      ? _getEnv('API_BASE_URL')!
       : Constants.baseUrl;
-  static String get agoraAppId => dotenv.env['AGORA_APP_ID'] ?? '';
+  
+  static String get agoraAppId => _getEnv('AGORA_APP_ID') ?? '';
+  
   static String get agoraTokenServerUrl =>
-      dotenv.env['AGORA_TOKEN_SERVER_URL'] ?? '';
+      _getEnv('AGORA_TOKEN_SERVER_URL') ?? '';
+  
   static String get firebaseProjectId =>
-      dotenv.env['FIREBASE_PROJECT_ID'] ?? '';
+      _getEnv('FIREBASE_PROJECT_ID') ?? '';
 
   /// Check if API base URL is configured
   static bool get hasApiBaseUrl => apiBaseUrl.isNotEmpty;
@@ -36,6 +47,7 @@ class EnvConfig {
       return true;
     } catch (e) {
       // .env file not found or invalid
+      print('DEBUG: EnvConfig failed to load .env: $e');
       return false;
     }
   }

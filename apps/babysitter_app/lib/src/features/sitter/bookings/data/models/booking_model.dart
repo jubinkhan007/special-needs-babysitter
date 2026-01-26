@@ -16,6 +16,7 @@ class BookingModel extends Equatable {
   final String endTime;
   final bool isToday;
   final double? hoursUntilStart;
+  final String? status;
 
   const BookingModel({
     required this.id,
@@ -32,6 +33,7 @@ class BookingModel extends Equatable {
     required this.endTime,
     required this.isToday,
     this.hoursUntilStart,
+    this.status,
   });
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
@@ -52,6 +54,43 @@ class BookingModel extends Equatable {
       hoursUntilStart: json['hoursUntilStart'] != null
           ? (json['hoursUntilStart'] as num).toDouble()
           : null,
+      status: json['status'] as String?,
+    );
+  }
+
+  BookingModel copyWith({
+    String? id,
+    String? applicationId,
+    String? title,
+    String? familyName,
+    int? childrenCount,
+    String? location,
+    double? distance,
+    double? payRate,
+    String? startDate,
+    String? endDate,
+    String? startTime,
+    String? endTime,
+    bool? isToday,
+    double? hoursUntilStart,
+    String? status,
+  }) {
+    return BookingModel(
+      id: id ?? this.id,
+      applicationId: applicationId ?? this.applicationId,
+      title: title ?? this.title,
+      familyName: familyName ?? this.familyName,
+      childrenCount: childrenCount ?? this.childrenCount,
+      location: location ?? this.location,
+      distance: distance ?? this.distance,
+      payRate: payRate ?? this.payRate,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      isToday: isToday ?? this.isToday,
+      hoursUntilStart: hoursUntilStart ?? this.hoursUntilStart,
+      status: status ?? this.status,
     );
   }
 
@@ -71,6 +110,7 @@ class BookingModel extends Equatable {
       'endTime': endTime,
       'isToday': isToday,
       'hoursUntilStart': hoursUntilStart,
+      'status': status,
     };
   }
 
@@ -90,5 +130,6 @@ class BookingModel extends Equatable {
         endTime,
         isToday,
         hoursUntilStart,
+        status,
       ];
 }

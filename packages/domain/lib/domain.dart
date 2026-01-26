@@ -1,10 +1,18 @@
 /// Domain layer exports
 library domain;
 
-// Core entities
+// Entities
+export 'src/entities/user.dart';
 export 'src/entities/user_role.dart';
 export 'src/entities/auth_session.dart';
-export 'src/entities/user.dart';
+export 'src/entities/conversation.dart';
+export 'src/entities/message_type.dart';
+
+// Repositories
+export 'src/repositories/chat_repository.dart';
+
+// UseCases
+export 'src/usecases/get_conversations_usecase.dart';
 
 // Core repositories
 export 'src/repositories/auth_repository.dart';

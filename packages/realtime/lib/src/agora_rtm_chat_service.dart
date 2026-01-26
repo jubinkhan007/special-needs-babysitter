@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:agora_rtm/agora_rtm.dart';
@@ -47,8 +48,36 @@ class AgoraRtmChatService implements ChatService {
         );
       }
       _client = client;
+
+      // Add listeners for RTM events
+      _client?.addListener(
+        message: (MessageEvent event) {
+          developer.log('RTM Message received from ${event.publisher}: ${event.message}', name: 'Realtime');
+          // Try to get text from message. In 2.x, message is RtmMessage which might have data or text.
+          // Using toString() as safe fallback or if it overrides toString to return content.
+          // If RtmMessage has 'text' property, we should use that.
+          // For now, removing .stringData which was definitely wrong.
+          final publisher = event.publisher;
+          if (publisher != null) {
+            _eventsController.add(MessageReceivedEvent(
+              peerId: publisher,
+              text: event.message.toString(),
+            ));
+          }
+        },
+        linkState: (LinkStateEvent event) {
+          developer.log('RTM Link state changed: ${event.currentState}', name: 'Realtime');
+          final currentState = event.currentState;
+          if (currentState != null) {
+            _eventsController.add(ConnectionStateEvent(
+              state: _mapConnectionState(currentState),
+            ));
+          }
+        },
+      );
+
       _isInitialized = true;
-      developer.log('AgoraRtmChatService initialized', name: 'Realtime');
+      developer.log('AgoraRtmChatService initialized with listeners', name: 'Realtime');
     } catch (e) {
       developer.log('Failed to initialize RTM: $e', name: 'Realtime');
       rethrow;

@@ -33,6 +33,7 @@ import '../features/sitter/home/sitter_home_screen.dart';
 import '../features/sitter/jobs/sitter_jobs_screen.dart';
 import '../features/sitter/bookings/sitter_bookings_screen.dart';
 import '../features/sitter/bookings/presentation/screens/sitter_booking_details_screen.dart';
+import '../features/sitter/bookings/presentation/screens/sitter_active_booking_screen.dart';
 import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
 import '../features/sitter/account/presentation/profile_details/presentation/sitter_profile_details_screen.dart';
@@ -584,6 +585,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
+      // Sitter Active Booking (active session with timer and tracking)
+      GoRoute(
+        path: '${Routes.sitterActiveBooking}/:applicationId',
+        builder: (context, state) {
+          final applicationId = state.pathParameters['applicationId'] ?? '';
+          return SitterActiveBookingScreen(
+            applicationId: applicationId,
+          );
+        },
+      ),
       GoRoute(
         path: Routes.sitterVerifyIdentity,
         builder: (context, state) => const VerifyIdentityScreen(),
@@ -631,6 +642,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => const NoTransitionPage(
               child: SitterMessagesScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'chat/:id', // matches /sitter/messages/chat/:id
+                parentNavigatorKey: rootNavigatorKey, // Hide bottom nav
+                builder: (context, state) => const ChatThreadScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: Routes.sitterAccount,

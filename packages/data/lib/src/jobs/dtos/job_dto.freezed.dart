@@ -482,6 +482,7 @@ mixin _$JobDto {
   String? get endDate => throw _privateConstructorUsedError;
   String? get startTime => throw _privateConstructorUsedError;
   String? get endTime => throw _privateConstructorUsedError;
+  String? get timezone => throw _privateConstructorUsedError;
   JobAddressDto? get address => throw _privateConstructorUsedError;
   @GeoJsonConverter()
   JobLocationDto? get location => throw _privateConstructorUsedError;
@@ -519,6 +520,7 @@ abstract class $JobDtoCopyWith<$Res> {
       String? endDate,
       String? startTime,
       String? endTime,
+      String? timezone,
       JobAddressDto? address,
       @GeoJsonConverter() JobLocationDto? location,
       String? additionalDetails,
@@ -559,6 +561,7 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
     Object? endDate = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
+    Object? timezone = freezed,
     Object? address = freezed,
     Object? location = freezed,
     Object? additionalDetails = freezed,
@@ -604,6 +607,10 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
       endTime: freezed == endTime
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      timezone: freezed == timezone
+          ? _value.timezone
+          : timezone // ignore: cast_nullable_to_non_nullable
               as String?,
       address: freezed == address
           ? _value.address
@@ -701,6 +708,7 @@ abstract class _$$JobDtoImplCopyWith<$Res> implements $JobDtoCopyWith<$Res> {
       String? endDate,
       String? startTime,
       String? endTime,
+      String? timezone,
       JobAddressDto? address,
       @GeoJsonConverter() JobLocationDto? location,
       String? additionalDetails,
@@ -741,6 +749,7 @@ class __$$JobDtoImplCopyWithImpl<$Res>
     Object? endDate = freezed,
     Object? startTime = freezed,
     Object? endTime = freezed,
+    Object? timezone = freezed,
     Object? address = freezed,
     Object? location = freezed,
     Object? additionalDetails = freezed,
@@ -786,6 +795,10 @@ class __$$JobDtoImplCopyWithImpl<$Res>
       endTime: freezed == endTime
           ? _value.endTime
           : endTime // ignore: cast_nullable_to_non_nullable
+              as String?,
+      timezone: freezed == timezone
+          ? _value.timezone
+          : timezone // ignore: cast_nullable_to_non_nullable
               as String?,
       address: freezed == address
           ? _value.address
@@ -851,6 +864,7 @@ class _$JobDtoImpl extends _JobDto {
       this.endDate,
       this.startTime,
       this.endTime,
+      this.timezone,
       this.address,
       @GeoJsonConverter() this.location,
       this.additionalDetails,
@@ -894,6 +908,8 @@ class _$JobDtoImpl extends _JobDto {
   @override
   final String? endTime;
   @override
+  final String? timezone;
+  @override
   final JobAddressDto? address;
   @override
   @GeoJsonConverter()
@@ -929,7 +945,7 @@ class _$JobDtoImpl extends _JobDto {
 
   @override
   String toString() {
-    return 'JobDto(id: $id, parentUserId: $parentUserId, childIds: $childIds, title: $title, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, address: $address, location: $location, additionalDetails: $additionalDetails, payRate: $payRate, saveAsDraft: $saveAsDraft, status: $status, estimatedDuration: $estimatedDuration, estimatedTotal: $estimatedTotal, applicantIds: $applicantIds, acceptedSitterId: $acceptedSitterId, createdAt: $createdAt, postedAt: $postedAt)';
+    return 'JobDto(id: $id, parentUserId: $parentUserId, childIds: $childIds, title: $title, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, timezone: $timezone, address: $address, location: $location, additionalDetails: $additionalDetails, payRate: $payRate, saveAsDraft: $saveAsDraft, status: $status, estimatedDuration: $estimatedDuration, estimatedTotal: $estimatedTotal, applicantIds: $applicantIds, acceptedSitterId: $acceptedSitterId, createdAt: $createdAt, postedAt: $postedAt)';
   }
 
   @override
@@ -948,6 +964,8 @@ class _$JobDtoImpl extends _JobDto {
             (identical(other.startTime, startTime) ||
                 other.startTime == startTime) &&
             (identical(other.endTime, endTime) || other.endTime == endTime) &&
+            (identical(other.timezone, timezone) ||
+                other.timezone == timezone) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.location, location) ||
                 other.location == location) &&
@@ -983,6 +1001,7 @@ class _$JobDtoImpl extends _JobDto {
         endDate,
         startTime,
         endTime,
+        timezone,
         address,
         location,
         additionalDetails,
@@ -1023,6 +1042,7 @@ abstract class _JobDto extends JobDto {
       final String? endDate,
       final String? startTime,
       final String? endTime,
+      final String? timezone,
       final JobAddressDto? address,
       @GeoJsonConverter() final JobLocationDto? location,
       final String? additionalDetails,
@@ -1055,6 +1075,8 @@ abstract class _JobDto extends JobDto {
   String? get startTime;
   @override
   String? get endTime;
+  @override
+  String? get timezone;
   @override
   JobAddressDto? get address;
   @override

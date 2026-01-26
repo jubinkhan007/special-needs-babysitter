@@ -120,6 +120,7 @@ class JobDto with _$JobDto {
     String? endDate,
     String? startTime,
     String? endTime,
+    String? timezone,
     JobAddressDto? address,
     @GeoJsonConverter() JobLocationDto? location,
     String? additionalDetails,
@@ -147,6 +148,7 @@ class JobDto with _$JobDto {
         endDate: job.endDate,
         startTime: job.startTime,
         endTime: job.endTime,
+        timezone: job.timezone,
         address: JobAddressDto.fromDomain(job.address),
         location: job.location != null
             ? JobLocationDto.fromDomain(job.location!)
@@ -172,6 +174,7 @@ class JobDto with _$JobDto {
         endDate: endDate ?? '',
         startTime: startTime ?? '',
         endTime: endTime ?? '',
+        timezone: timezone,
         address: address?.toDomain() ??
             const JobAddress(
               streetAddress: '',

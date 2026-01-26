@@ -30,6 +30,7 @@ class JobRequestDetailsModel extends Equatable {
   final bool isToday;
   final bool canClockIn;
   final String? clockInMessage;
+  final DateTime? clockInAt;
   final JobCoordinatesModel? jobCoordinates;
   final int? geofenceRadiusMeters;
   final double? subTotal;
@@ -64,6 +65,7 @@ class JobRequestDetailsModel extends Equatable {
     required this.isToday,
     required this.canClockIn,
     this.clockInMessage,
+    this.clockInAt,
     this.jobCoordinates,
     this.geofenceRadiusMeters,
     this.subTotal,
@@ -72,7 +74,30 @@ class JobRequestDetailsModel extends Equatable {
     this.discount,
   });
 
+  static DateTime? _parseDateTime(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+    if (value is String) {
+      final trimmed = value.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+      return DateTime.tryParse(trimmed);
+    }
+    if (value is num) {
+      final milliseconds = value > 1000000000000 ? value : value * 1000;
+      return DateTime.fromMillisecondsSinceEpoch(milliseconds.toInt());
+    }
+    return null;
+  }
+
   factory JobRequestDetailsModel.fromJson(Map<String, dynamic> json) {
+    final clockInRaw = json['clockInAt'] ??
+        json['clockInTime'] ??
+        json['clockedInAt'] ??
+        json['clockedInTime'];
+
     return JobRequestDetailsModel(
       id: json['id'] as String,
       applicationId: json['applicationId'] as String,
@@ -105,6 +130,7 @@ class JobRequestDetailsModel extends Equatable {
       isToday: json['isToday'] as bool,
       canClockIn: json['canClockIn'] as bool,
       clockInMessage: json['clockInMessage'] as String?,
+      clockInAt: _parseDateTime(clockInRaw),
       jobCoordinates: json['jobCoordinates'] != null
           ? JobCoordinatesModel.fromJson(
               json['jobCoordinates'] as Map<String, dynamic>)
@@ -145,6 +171,7 @@ class JobRequestDetailsModel extends Equatable {
       'isToday': isToday,
       'canClockIn': canClockIn,
       'clockInMessage': clockInMessage,
+      'clockInAt': clockInAt?.toIso8601String(),
       'jobCoordinates': jobCoordinates?.toJson(),
       'geofenceRadiusMeters': geofenceRadiusMeters,
       'subTotal': subTotal,
@@ -182,6 +209,7 @@ class JobRequestDetailsModel extends Equatable {
         isToday,
         canClockIn,
         clockInMessage,
+        clockInAt,
         jobCoordinates,
         geofenceRadiusMeters,
         subTotal,

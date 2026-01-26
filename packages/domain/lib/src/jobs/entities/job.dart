@@ -56,6 +56,7 @@ class Job extends Equatable {
   final String endDate; // Represented as YYYY-MM-DD
   final String startTime; // Represented as HH:mm
   final String endTime; // Represented as HH:mm
+  final String? timezone; // IANA timezone e.g. "America/Los_Angeles"
   final JobAddress address;
   final JobLocation? location;
   final String additionalDetails;
@@ -78,6 +79,7 @@ class Job extends Equatable {
     required this.endDate,
     required this.startTime,
     required this.endTime,
+    this.timezone,
     required this.address,
     this.location,
     required this.additionalDetails,
@@ -102,6 +104,7 @@ class Job extends Equatable {
         endDate,
         startTime,
         endTime,
+        timezone,
         address,
         location,
         additionalDetails,

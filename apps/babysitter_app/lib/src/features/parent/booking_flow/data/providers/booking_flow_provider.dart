@@ -44,6 +44,9 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
     String? transportationMode,
     String? equipmentSafety,
     String? pickupDropoffDetails,
+    String? pickupLocation,
+    String? dropoffLocation,
+    String? transportSpecialInstructions,
   }) {
     state = state.copyWith(
       selectedChildIds: childIds,
@@ -53,6 +56,9 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
       transportationMode: transportationMode,
       equipmentSafety: equipmentSafety,
       pickupDropoffDetails: pickupDropoffDetails,
+      pickupLocation: pickupLocation,
+      dropoffLocation: dropoffLocation,
+      transportSpecialInstructions: transportSpecialInstructions,
     );
   }
 

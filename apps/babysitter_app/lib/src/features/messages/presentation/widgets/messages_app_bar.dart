@@ -5,11 +5,13 @@ import '../../../../theme/app_tokens.dart';
 class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBack;
   final VoidCallback? onNotification;
+  final bool showBackButton;
 
   const MessagesAppBar({
     super.key,
     this.onBack,
     this.onNotification,
+    this.showBackButton = true,
   });
 
   @override
@@ -29,14 +31,17 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             children: [
               // Back Button
-              IconButton(
-                onPressed: onBack ?? () => Navigator.of(context).maybePop(),
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppTokens.iconGrey,
-                  size: 24,
-                ),
-              ),
+              if (showBackButton)
+                IconButton(
+                  onPressed: onBack ?? () => Navigator.of(context).maybePop(),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: AppTokens.iconGrey,
+                    size: 24,
+                  ),
+                )
+              else
+                const SizedBox(width: 16), // Spacing if no back button
 
               // Title (Centered)
               Expanded(

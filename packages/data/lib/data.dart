@@ -8,13 +8,16 @@ export 'src/dtos/user_dto.dart';
 // Core Mappers
 export 'src/mappers/auth_mappers.dart';
 
-// Core Datasources
-export 'src/datasources/auth_remote_datasource.dart';
-export 'src/datasources/profile_remote_datasource.dart';
-
-// Core Repository implementations
+// Repositories
 export 'src/repositories/auth_repository_impl.dart';
 export 'src/repositories/profile_repository_impl.dart';
+export 'src/repositories/chat_repository_impl.dart';
+
+// Data Sources
+export 'src/datasources/auth_remote_datasource.dart';
+export 'src/datasources/profile_remote_datasource.dart';
+export 'src/datasources/chat_remote_datasource.dart';
+
 
 // Auth feature (registration)
 export 'src/auth/datasources/registration_remote_datasource.dart';

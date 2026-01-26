@@ -120,6 +120,9 @@ class _ParentBookingStep1ScreenState
     String? transportationMode;
     String? equipmentSafety;
     String? pickupDropoffDetails;
+    String? pickupLocation;
+    String? dropoffLocation;
+    String? transportSpecialInstructions;
 
     if (_selectedChild != null) {
       final child = _selectedChild!;
@@ -130,7 +133,12 @@ class _ParentBookingStep1ScreenState
           ? child.equipmentSafety.join(', ')
           : null;
 
-      // Build pickup/dropoff details
+      // Store pickup/dropoff locations separately for backend
+      pickupLocation = child.pickupLocation;
+      dropoffLocation = child.dropoffLocation;
+      transportSpecialInstructions = child.transportSpecialInstructions;
+
+      // Build pickup/dropoff details for display
       final details = <String>[];
       if (child.pickupLocation.isNotEmpty) {
         details.add('Pickup: ${child.pickupLocation}');
@@ -154,6 +162,9 @@ class _ParentBookingStep1ScreenState
           transportationMode: transportationMode,
           equipmentSafety: equipmentSafety,
           pickupDropoffDetails: pickupDropoffDetails,
+          pickupLocation: pickupLocation,
+          dropoffLocation: dropoffLocation,
+          transportSpecialInstructions: transportSpecialInstructions,
         );
 
     Navigator.of(context).push(

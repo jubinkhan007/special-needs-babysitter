@@ -9,7 +9,7 @@ part of 'sitter_dto.dart';
 BrowseSittersResponseDto _$BrowseSittersResponseDtoFromJson(
         Map<String, dynamic> json) =>
     BrowseSittersResponseDto(
-      success: json['success'] as bool,
+      success: json['success'] as bool? ?? false,
       data: BrowseSittersDataDto.fromJson(json['data'] as Map<String, dynamic>),
     );
 
@@ -29,7 +29,7 @@ BrowseSittersDataDto _$BrowseSittersDataDtoFromJson(
       total: (json['total'] as num).toInt(),
       limit: (json['limit'] as num).toInt(),
       offset: (json['offset'] as num).toInt(),
-      hasMore: json['hasMore'] as bool,
+      hasMore: json['hasMore'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$BrowseSittersDataDtoToJson(
@@ -58,7 +58,7 @@ SitterDto _$SitterDtoFromJson(Map<String, dynamic> json) => SitterDto(
       distance: (json['distance'] as num?)?.toDouble(),
       reliabilityScore: (json['reliabilityScore'] as num).toDouble(),
       reviewCount: (json['reviewCount'] as num).toInt(),
-      isSaved: json['isSaved'] as bool,
+      isSaved: json['isSaved'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$SitterDtoToJson(SitterDto instance) => <String, dynamic>{

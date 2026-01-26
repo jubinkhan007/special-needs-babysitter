@@ -58,6 +58,7 @@ class Routes {
   static const String sitterJobs = '/sitter/jobs';
   static const String sitterBookings = '/sitter/bookings';
   static const String sitterBookingDetails = '/sitter/booking-details';
+  static const String sitterActiveBooking = '/sitter/active-booking';
   static const String sitterMessages = '/sitter/messages';
   static const String sitterAccount = '/sitter/account';
   static const String sitterProfileDetails = '/sitter/account/profile';

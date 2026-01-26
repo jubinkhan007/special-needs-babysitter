@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import '../../data/providers/booking_flow_provider.dart';
 import '../../data/models/booking_flow_state.dart';
 import '../../data/providers/bookings_di.dart';
@@ -28,6 +29,10 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
 
   String? _validateBooking(BookingFlowState state) {
     // Validate required fields
+    if (state.sitterId == null || state.sitterId!.isEmpty) {
+      return 'Missing sitter details. Please return to the sitter profile and try again.';
+    }
+
     if (state.selectedChildIds.isEmpty) {
       return 'Please select at least one child.';
     }
@@ -36,7 +41,10 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       return 'Please select booking dates.';
     }
 
-    if (state.startTime == null || state.endTime == null) {
+    if (state.startTime == null ||
+        state.startTime!.isEmpty ||
+        state.endTime == null ||
+        state.endTime!.isEmpty) {
       return 'Please select booking times.';
     }
 
@@ -121,7 +129,13 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     });
 
     try {
+      // Get the device timezone as a string (e.g., "America/Los_Angeles")
+      final timezoneInfo = await FlutterTimezone.getLocalTimezone();
+      final timezone = timezoneInfo.identifier;
+
       final payload = bookingState.toDirectBookingPayload();
+      payload['timezone'] = timezone;
+      payload['timeZone'] = timezone;
       print('DEBUG: ServiceDetailsScreen submitting booking: $payload');
       print('DEBUG: Calculated amount - Hours: ${bookingState.totalHours}, Rate: ${bookingState.payRate}, SubTotal: ${bookingState.subTotal}, Fee: ${bookingState.platformFee}, Total: ${bookingState.totalCost}');
 

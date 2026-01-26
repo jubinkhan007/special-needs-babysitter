@@ -292,76 +292,71 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   }
 
   Future<void> _addOtherLanguage(SearchFilterController controller) async {
-    final textController = TextEditingController(
-      text: controller.value.otherLanguage ?? '',
-    );
-    try {
-      final result = await showDialog<String>(
-        context: context,
-        builder: (context) {
-          return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: _pickerAccent,
-                onPrimary: Colors.white,
-                surface: Colors.white,
-                onSurface: _pickerTitle,
-              ),
-              dialogBackgroundColor: Colors.white,
+    var draft = controller.value.otherLanguage ?? '';
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: _pickerAccent,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: _pickerTitle,
             ),
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              title: const Text(
-                'Add Other Language',
-                style: TextStyle(
-                  color: _pickerTitle,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              content: TextField(
-                controller: textController,
-                style: const TextStyle(color: _pickerTitle),
-                decoration: InputDecoration(
-                  hintText: 'Enter language',
-                  hintStyle: const TextStyle(color: _pickerMuted),
-                  filled: true,
-                  fillColor: _pickerBackground,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: _pickerAccent),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: _pickerAccent, width: 2),
-                  ),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, textController.text),
-                  child: const Text('Save'),
-                ),
-              ],
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-          );
-        },
-      );
-
-      if (result != null) {
-        controller.setOtherLanguage(
-          result.trim().isEmpty ? null : result.trim(),
+            title: const Text(
+              'Add Other Language',
+              style: TextStyle(
+                color: _pickerTitle,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: TextFormField(
+              initialValue: draft,
+              onChanged: (value) => draft = value,
+              style: const TextStyle(color: _pickerTitle),
+              decoration: InputDecoration(
+                hintText: 'Enter language',
+                hintStyle: const TextStyle(color: _pickerMuted),
+                filled: true,
+                fillColor: _pickerBackground,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: _pickerAccent),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(color: _pickerAccent, width: 2),
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, draft),
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         );
-      }
-    } finally {
-      textController.dispose();
+      },
+    );
+
+    if (result != null) {
+      controller.setOtherLanguage(
+        result.trim().isEmpty ? null : result.trim(),
+      );
     }
   }
 

@@ -11,14 +11,20 @@ import 'presentation/widgets/booking_card.dart';
 class SitterBookingsScreen extends ConsumerWidget {
   const SitterBookingsScreen({super.key});
 
+  bool _isActiveStatus(String? status) {
+    if (status == null) return false;
+    final normalized = status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    return normalized == 'active' || normalized == 'inprogress';
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookingsAsync = ref.watch(sitterBookingsProvider('upcoming'));
+    final bookingsAsync = ref.watch(sitterCurrentBookingsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
@@ -74,17 +80,24 @@ class SitterBookingsScreen extends ConsumerWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              ref.invalidate(sitterBookingsProvider('upcoming'));
+              ref.invalidate(sitterCurrentBookingsProvider);
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: bookings.length,
               itemBuilder: (context, index) {
                 final booking = bookings[index];
+                final isActive = _isActiveStatus(booking.status);
                 return BookingCard(
                   booking: booking,
                   onTap: () {
-                    context.push('${Routes.sitterBookingDetails}/${booking.applicationId}');
+                    if (isActive) {
+                      context.push(
+                          '${Routes.sitterActiveBooking}/${booking.applicationId}');
+                      return;
+                    }
+                    context.push(
+                        '${Routes.sitterBookingDetails}/${booking.applicationId}');
                   },
                 );
               },
@@ -121,7 +134,7 @@ class SitterBookingsScreen extends ConsumerWidget {
               AppSpacing.verticalMd,
               ElevatedButton(
                 onPressed: () {
-                  ref.invalidate(sitterBookingsProvider('upcoming'));
+                  ref.invalidate(sitterCurrentBookingsProvider);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

@@ -44,11 +44,18 @@ class SitterDetailsCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(uiModel.sitterName, style: AppTokens.cardName),
-                        const SizedBox(width: 8),
-                        if (uiModel.isVerified)
+                        Flexible(
+                          child: Text(
+                            uiModel.sitterName,
+                            style: AppTokens.cardName,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (uiModel.isVerified) ...[
+                          const SizedBox(width: 8),
                           const Icon(Icons.verified,
                               size: 16, color: AppTokens.primaryBlue),
+                        ],
                       ],
                     ),
                     const SizedBox(height: 4),

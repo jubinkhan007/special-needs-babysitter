@@ -59,6 +59,7 @@
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>location</string>
 	</array>
 	
 	<!-- Face ID (optional) -->
@@ -68,5 +69,9 @@
     <!-- Location -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to your location to help families find you nearby.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app uses your location to share live tracking during active bookings.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app uses your location to share live tracking during active bookings.</string>
 </dict>
 </plist>

@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   firebase_core
   flutter_secure_storage_windows
+  flutter_timezone
   geolocator_windows
   iris_method_channel
   url_launcher_windows

@@ -53,6 +53,7 @@ _$JobDtoImpl _$$JobDtoImplFromJson(Map<String, dynamic> json) => _$JobDtoImpl(
       endDate: json['endDate'] as String?,
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
+      timezone: json['timezone'] as String?,
       address: json['address'] == null
           ? null
           : JobAddressDto.fromJson(json['address'] as Map<String, dynamic>),
@@ -86,6 +87,7 @@ Map<String, dynamic> _$$JobDtoImplToJson(_$JobDtoImpl instance) =>
       'endDate': instance.endDate,
       'startTime': instance.startTime,
       'endTime': instance.endTime,
+      'timezone': instance.timezone,
       'address': instance.address,
       'location': const GeoJsonConverter().toJson(instance.location),
       'additionalDetails': instance.additionalDetails,

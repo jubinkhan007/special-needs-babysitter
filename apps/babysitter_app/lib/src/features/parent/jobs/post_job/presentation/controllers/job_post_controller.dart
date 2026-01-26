@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
@@ -203,7 +204,11 @@ class JobPostController extends StateNotifier<JobPostState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final job = _buildJobEntity(isDraft: true);
+      // Get the device timezone in IANA format
+      final timezoneInfo = await FlutterTimezone.getLocalTimezone();
+      final timezone = timezoneInfo.identifier;
+
+      final job = _buildJobEntity(isDraft: true, timezone: timezone);
       await _saveLocalDraftUseCase(job);
       state = state.copyWith(isLoading: false);
       return true;
@@ -213,7 +218,7 @@ class JobPostController extends StateNotifier<JobPostState> {
     }
   }
 
-  Job _buildJobEntity({required bool isDraft}) {
+  Job _buildJobEntity({required bool isDraft, String? timezone}) {
     // Format dates to YYYY-MM-DD
     String formatDate(DateTime? dt) {
       if (dt == null) return '';
@@ -246,6 +251,7 @@ class JobPostController extends StateNotifier<JobPostState> {
       endDate: formatDate(state.rawEndDate),
       startTime: formatTime(state.startTime),
       endTime: formatTime(state.endTime),
+      timezone: timezone,
       address: JobAddress(
         streetAddress: state.streetAddress,
         aptUnit: state.aptUnit,
@@ -273,7 +279,12 @@ class JobPostController extends StateNotifier<JobPostState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final job = _buildJobEntity(isDraft: isDraft);
+      // Get the device timezone in IANA format (e.g., "America/Los_Angeles")
+      final timezoneInfo = await FlutterTimezone.getLocalTimezone();
+      final timezone = timezoneInfo.identifier;
+      print('DEBUG: Device timezone: $timezone');
+
+      final job = _buildJobEntity(isDraft: isDraft, timezone: timezone);
 
       if (state.jobId != null && !isDraft) {
         // Update existing job

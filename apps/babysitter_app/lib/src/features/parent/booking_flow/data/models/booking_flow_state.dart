@@ -43,6 +43,9 @@ class BookingFlowState {
   final String? transportationMode;
   final String? equipmentSafety;
   final String? pickupDropoffDetails;
+  final String? pickupLocation;
+  final String? dropoffLocation;
+  final String? transportSpecialInstructions;
 
   // Payment Method
   final String selectedPaymentMethod;
@@ -80,6 +83,9 @@ class BookingFlowState {
     this.transportationMode,
     this.equipmentSafety,
     this.pickupDropoffDetails,
+    this.pickupLocation,
+    this.dropoffLocation,
+    this.transportSpecialInstructions,
     this.selectedPaymentMethod = 'Paypal',
   });
 
@@ -116,6 +122,9 @@ class BookingFlowState {
     String? transportationMode,
     String? equipmentSafety,
     String? pickupDropoffDetails,
+    String? pickupLocation,
+    String? dropoffLocation,
+    String? transportSpecialInstructions,
     String? selectedPaymentMethod,
   }) {
     return BookingFlowState(
@@ -154,6 +163,10 @@ class BookingFlowState {
       transportationMode: transportationMode ?? this.transportationMode,
       equipmentSafety: equipmentSafety ?? this.equipmentSafety,
       pickupDropoffDetails: pickupDropoffDetails ?? this.pickupDropoffDetails,
+      pickupLocation: pickupLocation ?? this.pickupLocation,
+      dropoffLocation: dropoffLocation ?? this.dropoffLocation,
+      transportSpecialInstructions:
+          transportSpecialInstructions ?? this.transportSpecialInstructions,
       selectedPaymentMethod:
           selectedPaymentMethod ?? this.selectedPaymentMethod,
     );
@@ -270,10 +283,15 @@ class BookingFlowState {
 
   /// Convert state to API request payload for POST /direct-bookings
   Map<String, dynamic> toDirectBookingPayload() {
+    final title = jobTitle ?? 'Sitter Needed';
     return {
+      'sitterId': sitterId,
+      // Backwards-compatible key for APIs expecting userId naming
       'sitterUserId': sitterId,
       'childIds': selectedChildIds,
-      'title': jobTitle ?? 'Sitter Needed',
+      'title': title,
+      // Some endpoints expect jobTitle instead of title
+      'jobTitle': title,
       'startDate': startDate != null
           ? '${startDate!.year}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}'
           : null,
@@ -292,6 +310,10 @@ class BookingFlowState {
         'latitude': latitude ?? 0.0,
         'longitude': longitude ?? 0.0,
       },
+      // Location as string (e.g., "San Francisco, CA") for backend compatibility
+      'location': '${city ?? ''}, ${state ?? 'CA'}',
+      // Full address string for backend
+      'fullAddress': fullAddress,
       'additionalDetails': additionalDetails ?? '',
       'payRate': payRate.toInt(),
       'emergencyContact': {
@@ -299,6 +321,12 @@ class BookingFlowState {
         'phone': emergencyContactPhone ?? '',
         'relationship': emergencyContactRelation ?? '',
       },
+      'pickupLocation': pickupLocation ?? '',
+      'dropoffLocation': dropoffLocation ?? '',
+      'transportSpecialInstructions': transportSpecialInstructions ?? '',
+      // Transportation arrays - split from comma-separated strings
+      'transportationModes': transportationMode?.split(', ').where((s) => s.isNotEmpty).toList() ?? <String>[],
+      'equipmentSafety': equipmentSafety?.split(', ').where((s) => s.isNotEmpty).toList() ?? <String>[],
     }..removeWhere((key, value) => value == null);
   }
 
