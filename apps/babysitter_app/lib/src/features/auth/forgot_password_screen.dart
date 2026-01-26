@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:auth/auth.dart';
 
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
@@ -35,7 +36,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final phone = _phoneController.text.trim();
 
     if (email.isEmpty && phone.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please enter email or phone number'),
           backgroundColor: AuthTheme.errorRed,
@@ -46,24 +48,45 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
     setState(() => _isLoading = true);
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return;
-    setState(() => _isLoading = false);
-
-    // Determine which method was used and show appropriate dialog
-    if (email.isNotEmpty) {
-      _showConfirmationDialog(
-        title: 'Email Sent',
-        message:
-            'We have sent a confirmation link on your email. Please click on the link to update your password.',
+    try {
+      final dio = ref.read(authDioProvider);
+      await dio.post(
+        '/auth/forgot-password',
+        data: {'email': email.isNotEmpty ? email : phone},
       );
-    } else {
-      _showConfirmationDialog(
-        title: 'SMS Sent',
-        message:
-            'We have sent a confirmation link on your phone. Please click on the link to update your password.',
+
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      // Determine which method was used and show appropriate dialog
+      if (email.isNotEmpty) {
+        _showConfirmationDialog(
+          title: 'Email Sent',
+          message:
+              'We have sent a confirmation link on your email. Please click on the link to update your password.',
+        );
+      } else {
+        _showConfirmationDialog(
+          title: 'SMS Sent',
+          message:
+              'We have sent a confirmation link on your phone. Please click on the link to update your password.',
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      String errorMessage = 'Failed to send reset link. Please try again.';
+      if (e.toString().contains('404')) {
+        errorMessage = 'Email address not found. Please check and try again.';
+      }
+
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: AuthTheme.errorRed,
+        ),
       );
     }
   }

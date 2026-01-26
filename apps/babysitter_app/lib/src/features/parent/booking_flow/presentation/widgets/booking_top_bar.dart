@@ -33,6 +33,7 @@ class BookingTopBar extends StatelessWidget implements PreferredSizeWidget {
             title,
             style: BookingUiTokens.topBarTitle,
             textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
           trailing: GestureDetector(
             onTap: onHelp,

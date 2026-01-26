@@ -15,6 +15,7 @@ import 'widgets/bottom_action_stack.dart';
 
 import '../../data/jobs_data_di.dart'; // For repository
 import '../providers/jobs_providers.dart';
+import '../../domain/job.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class JobDetailsScreen extends ConsumerStatefulWidget {
@@ -28,6 +29,17 @@ class JobDetailsScreen extends ConsumerStatefulWidget {
 
 class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
   bool _isDeleting = false;
+
+  void _showNotEditableToast() {
+    AppToast.show(
+      context,
+      const SnackBar(
+        content: Text(
+          'This job can\'t be edited or deleted once it is in progress or completed.',
+        ),
+      ),
+    );
+  }
 
   Future<void> _deleteJob(String jobId) async {
     final confirmed = await showDialog<bool>(
@@ -199,22 +211,37 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
               },
             ),
       bottomNavigationBar: jobAsync.maybeWhen(
-        data: (job) => BottomActionStack(
-          primaryLabel: 'Edit job',
-          secondaryLabel: 'Manage Applicants',
-          outlinedLabel: 'Delete Job',
-          onPrimary: _isDeleting
-              ? () {}
-              : () async {
-                  await context.push(
-                    Routes.editJob,
-                    extra: job.id,
-                  );
-                  ref.invalidate(jobDetailsProvider(widget.jobId));
-                },
-          onSecondary: () => context.push(Routes.applications, extra: job.id),
-          onOutlined: _isDeleting ? () {} : () => _deleteJob(job.id),
-        ),
+        data: (job) {
+          final isEditable = job.isEditable;
+          return BottomActionStack(
+            primaryLabel: 'Edit job',
+            secondaryLabel: 'Manage Applicants',
+            outlinedLabel: 'Delete Job',
+            onPrimary: _isDeleting
+                ? () {}
+                : () async {
+                    if (!isEditable) {
+                      _showNotEditableToast();
+                      return;
+                    }
+                    await context.push(
+                      Routes.editJob,
+                      extra: job.id,
+                    );
+                    ref.invalidate(jobDetailsProvider(widget.jobId));
+                  },
+            onSecondary: () => context.push(Routes.applications, extra: job.id),
+            onOutlined: _isDeleting
+                ? () {}
+                : () {
+                    if (!isEditable) {
+                      _showNotEditableToast();
+                      return;
+                    }
+                    _deleteJob(job.id);
+                  },
+          );
+        },
         orElse: () => const SizedBox.shrink(),
       ),
     );

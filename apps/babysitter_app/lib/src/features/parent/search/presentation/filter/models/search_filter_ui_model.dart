@@ -12,6 +12,7 @@ class SearchFilterUiModel {
   final String? otherLanguage;
   final double latitude;
   final double longitude;
+  final String? searchQuery; // Search by name or location
 
   const SearchFilterUiModel({
     this.radius = 10.0,
@@ -25,6 +26,7 @@ class SearchFilterUiModel {
     this.otherLanguage,
     this.latitude = 36.1627, // Default Nashville latitude
     this.longitude = -86.7816, // Default Nashville longitude
+    this.searchQuery,
   });
 
   SearchFilterUiModel copyWith({
@@ -39,6 +41,7 @@ class SearchFilterUiModel {
     String? otherLanguage,
     double? latitude,
     double? longitude,
+    String? searchQuery,
   }) {
     return SearchFilterUiModel(
       radius: radius ?? this.radius,
@@ -53,6 +56,7 @@ class SearchFilterUiModel {
       otherLanguage: otherLanguage ?? this.otherLanguage,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+      searchQuery: searchQuery ?? this.searchQuery,
     );
   }
 }

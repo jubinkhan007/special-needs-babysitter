@@ -1,11 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme/app_ui_tokens.dart';
+import '../providers/search_filter_provider.dart';
 
-class SearchTopBar extends StatelessWidget {
+class SearchTopBar extends ConsumerStatefulWidget {
   const SearchTopBar({super.key});
 
   @override
+  ConsumerState<SearchTopBar> createState() => _SearchTopBarState();
+}
+
+class _SearchTopBarState extends ConsumerState<SearchTopBar> {
+  late TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final filterController = ref.watch(searchFilterProvider);
+    final searchText = filterController.value.searchQuery ?? '';
+
+    // Only update controller text if it's different to avoid unnecessary updates
+    if (_searchController.text != searchText) {
+      _searchController.text = searchText;
+      _searchController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _searchController.text.length),
+      );
+    }
+
     return Container(
       color: AppUiTokens.topBarBackground,
       padding: EdgeInsets.fromLTRB(
@@ -54,8 +86,6 @@ class SearchTopBar extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(AppUiTokens.radiusMedium),
-              border: Border.all(color: AppUiTokens.borderColor),
-              // Optional subtle shadow if desired, but spec said "Rounded rectangle with white background... Use subtle border/shadow if present"
             ),
             child: Row(
               children: [
@@ -65,10 +95,30 @@ class SearchTopBar extends StatelessWidget {
                   size: 20,
                 ),
                 const SizedBox(width: 8),
-                const Expanded(
-                  child: Text(
-                    'Search By Sitter Name or Location',
-                    style: AppUiTokens.searchPlaceholder,
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      filterController.setSearchQuery(value);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Search By Sitter Name or Location',
+                      hintStyle: AppUiTokens.searchPlaceholder,
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],

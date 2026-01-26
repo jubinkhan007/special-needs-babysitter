@@ -10,6 +10,9 @@ import '../../../../../routing/routes.dart';
 import '../filter/filter_bottom_sheet.dart';
 import '../providers/sitters_list_provider.dart';
 import '../providers/search_filter_provider.dart';
+import '../../../shared/providers/location_access_provider.dart';
+import '../../../shared/widgets/location_access_banner.dart';
+import '../../utils/location_helper.dart';
 
 import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
@@ -26,6 +29,14 @@ class _SitterSearchResultsScreenState
     extends ConsumerState<SitterSearchResultsScreen> {
   // Track invited sitters to update UI state locally if needed
   final Set<String> _invitedSitterIds = {};
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _syncLocationIfAllowed();
+    });
+  }
 
   Future<void> _inviteSitter(
       String jobId, String sitterId, String userId) async {
@@ -62,6 +73,17 @@ class _SitterSearchResultsScreenState
     }
   }
 
+  Future<void> _syncLocationIfAllowed() async {
+    final status = await LocationHelper.getStatus();
+    if (!mounted || status != LocationAccessStatus.available) {
+      return;
+    }
+    final (latitude, longitude) =
+        await LocationHelper.getLocation(requestPermission: false);
+    if (!mounted) return;
+    ref.read(searchFilterProvider).setLocation(latitude, longitude);
+  }
+
   @override
   Widget build(BuildContext context) {
     // Check for jobId in extra or query params
@@ -71,10 +93,16 @@ class _SitterSearchResultsScreenState
         GoRouterState.of(context).uri.queryParameters['jobId'];
 
     // Watch the filter state
-    final filterState = ref.watch(searchFilterProvider).value;
+    final filterController = ref.watch(searchFilterProvider);
+    final filterState = filterController.value;
 
     // Watch the sitters list provider with current filters
     final asyncSitters = ref.watch(sittersListProvider(filterState));
+    final locationStatusAsync = ref.watch(locationAccessStatusProvider);
+    final locationStatus = locationStatusAsync.maybeWhen(
+      data: (status) => status,
+      orElse: () => null,
+    );
 
     // Using standard standard density to avoid spacing shifts
     return Theme(
@@ -97,6 +125,20 @@ class _SitterSearchResultsScreenState
                 ),
                 data: (sitters) => Column(
                   children: [
+                    if (locationStatus != null &&
+                        locationStatus != LocationAccessStatus.available)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12, bottom: 4),
+                        child: LocationAccessBanner(
+                          title: _locationTitle(locationStatus),
+                          message: _locationMessage(locationStatus),
+                          actionLabel: _locationActionLabel(locationStatus),
+                          onAction: () {
+                            _handleLocationAction(locationStatus);
+                          },
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                      ),
                     // Filter Row (White background)
                     FilterRow(
                       count: sitters.length,
@@ -151,5 +193,70 @@ class _SitterSearchResultsScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _handleLocationAction(
+    LocationAccessStatus status,
+  ) async {
+    switch (status) {
+      case LocationAccessStatus.permissionDenied:
+        await LocationHelper.requestPermission();
+        break;
+      case LocationAccessStatus.permissionDeniedForever:
+        await LocationHelper.openAppSettings();
+        break;
+      case LocationAccessStatus.serviceDisabled:
+        await LocationHelper.openLocationSettings();
+        break;
+      case LocationAccessStatus.available:
+        return;
+    }
+
+    if (!mounted) return;
+    ref.invalidate(locationAccessStatusProvider);
+
+    final (latitude, longitude) =
+        await LocationHelper.getLocation(requestPermission: false);
+    if (!mounted) return;
+    ref.read(searchFilterProvider).setLocation(latitude, longitude);
+  }
+
+  String _locationTitle(LocationAccessStatus status) {
+    switch (status) {
+      case LocationAccessStatus.serviceDisabled:
+        return 'Turn on location services';
+      case LocationAccessStatus.permissionDenied:
+        return 'Enable location access';
+      case LocationAccessStatus.permissionDeniedForever:
+        return 'Location access blocked';
+      case LocationAccessStatus.available:
+        return '';
+    }
+  }
+
+  String _locationMessage(LocationAccessStatus status) {
+    switch (status) {
+      case LocationAccessStatus.serviceDisabled:
+        return 'Enable location services to see nearby sitters.';
+      case LocationAccessStatus.permissionDenied:
+        return 'Allow location access to show nearby sitters.';
+      case LocationAccessStatus.permissionDeniedForever:
+        return 'Open settings to allow location access.';
+      case LocationAccessStatus.available:
+        return '';
+    }
+  }
+
+  String _locationActionLabel(LocationAccessStatus status) {
+    switch (status) {
+      case LocationAccessStatus.serviceDisabled:
+        return 'Turn On';
+      case LocationAccessStatus.permissionDenied:
+        return 'Allow';
+      case LocationAccessStatus.permissionDeniedForever:
+        return 'Open Settings';
+      case LocationAccessStatus.available:
+        return '';
+    }
   }
 }

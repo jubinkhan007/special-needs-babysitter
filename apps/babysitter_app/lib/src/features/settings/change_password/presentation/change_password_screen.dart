@@ -1,39 +1,92 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
 import 'package:babysitter_app/common/theme/auth_theme.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
-import 'change_password_controller.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:auth/auth.dart';
 import 'reset_password_screen.dart';
 
 /// Change Password / Reset Your Password screen
 /// Matches Figma design pixel-for-pixel
-class ChangePasswordScreen extends StatefulWidget {
+class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
 
   @override
-  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
+  ConsumerState<ChangePasswordScreen> createState() =>
+      _ChangePasswordScreenState();
 }
 
-class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  late final ChangePasswordController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = ChangePasswordController();
-    _controller.addListener(_onControllerUpdate);
-  }
-
-  void _onControllerUpdate() {
-    if (mounted) setState(() {});
-  }
+class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  String? _emailError;
+  bool _isLoading = false;
 
   @override
   void dispose() {
-    _controller.removeListener(_onControllerUpdate);
-    _controller.dispose();
+    _emailController.dispose();
     super.dispose();
+  }
+
+  /// Validates email and returns error if invalid
+  String? _validateEmail() {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      return 'Email is required';
+    }
+    final regex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,}$');
+    if (!regex.hasMatch(email)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  Future<void> _sendResetLink() async {
+    _emailError = _validateEmail();
+    if (_emailError != null) {
+      setState(() {});
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _emailError = null;
+    });
+
+    try {
+      final dio = ref.read(authDioProvider);
+      await dio.post(
+        '/auth/forgot-password',
+        data: {'email': _emailController.text.trim()},
+      );
+
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      // Navigate to reset password screen on success
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const ResetPasswordScreen(),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+
+      String errorMessage = 'Failed to send reset link. Please try again.';
+      if (e.toString().contains('404')) {
+        errorMessage = 'Email address not found. Please check and try again.';
+      }
+
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: AuthTheme.errorRed,
+        ),
+      );
+    }
   }
 
   void _showHelpDialog() {
@@ -148,10 +201,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
                 // Email field (without label - just hint inside)
                 TextFormField(
-                  controller: _controller.emailController,
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) => _controller.sendResetLink(),
+                  onFieldSubmitted: (_) => _sendResetLink(),
                   style: TextStyle(
                     fontSize: 15.sp,
                     color: AuthTheme.textDark,
@@ -183,7 +236,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         width: 1.5,
                       ),
                     ),
-                    errorText: _controller.emailError,
+                    errorText: _emailError,
                   ),
                 ),
 
@@ -192,17 +245,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 // Send Reset Link Button
                 PrimaryActionButton(
                   label: 'Send Reset Link',
-                  isLoading: _controller.isLoading,
-                  onPressed: () async {
-                    await _controller.sendResetLink();
-                    if (mounted && _controller.emailError == null) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const ResetPasswordScreen(),
-                        ),
-                      );
-                    }
-                  },
+                  isLoading: _isLoading,
+                  onPressed: _sendResetLink,
                 ),
 
                 const Spacer(),

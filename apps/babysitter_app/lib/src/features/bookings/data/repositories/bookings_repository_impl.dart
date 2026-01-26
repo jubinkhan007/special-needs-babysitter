@@ -24,47 +24,16 @@ class BookingsRepositoryImpl implements BookingsRepository {
   }
 
   BookingDetails _mapToDetailsEntity(BookingDetailsDto dto) {
-    // Map status string to enum
-    BookingStatus status;
-    switch (dto.status.toLowerCase()) {
-      case 'active':
-      case 'in_progress':
-        status = BookingStatus.active;
-        break;
-      case 'upcoming':
-      case 'accepted':
-        status = BookingStatus.upcoming;
-        break;
-      case 'pending':
-      case 'direct_booking':
-        status = BookingStatus.pending;
-        break;
-      case 'completed':
-        status = BookingStatus.completed;
-        break;
-      case 'cancelled':
-      case 'declined':
-        status = BookingStatus.cancelled;
-        break;
-      default:
-        status = BookingStatus.upcoming;
-    }
-
     // Safely parse dates
     DateTime startDate = DateTime.now();
     DateTime endDate = DateTime.now();
     DateTime startTime = DateTime.now();
     DateTime endTime = DateTime.now();
+    DateTime? jobStartDateTime;
 
     if (dto.job?.startDate != null) {
       try {
         startDate = DateTime.parse(dto.job!.startDate!);
-        // Logic check: if accepted & start date passed -> completed (reuse logic if needed)
-        final now = DateTime.now();
-        // If combining with time... similar to getBookings logic
-        if (dto.status.toLowerCase() == 'accepted' && startDate.isBefore(now)) {
-          // status = BookingStatus.completed; // Re-evaluate status if necessary
-        }
       } catch (_) {}
     }
     if (dto.job?.endDate != null) {
@@ -80,6 +49,13 @@ class BookingsRepositoryImpl implements BookingsRepository {
         final parts = dto.job!.startTime!.split(':');
         startTime =
             DateTime(2000, 1, 1, int.parse(parts[0]), int.parse(parts[1]));
+        jobStartDateTime = DateTime(
+          startDate.year,
+          startDate.month,
+          startDate.day,
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+        );
       } catch (_) {}
     }
 
@@ -89,6 +65,32 @@ class BookingsRepositoryImpl implements BookingsRepository {
         endTime =
             DateTime(2000, 1, 1, int.parse(parts[0]), int.parse(parts[1]));
       } catch (_) {}
+    }
+    jobStartDateTime ??= startDate;
+
+    // Map status string to enum (align with list logic)
+    final rawStatus =
+        dto.status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    BookingStatus status;
+    if (rawStatus == 'active' || rawStatus == 'inprogress') {
+      status = BookingStatus.active;
+    } else if (rawStatus == 'pending' || rawStatus == 'directbooking') {
+      status = BookingStatus.pending;
+    } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
+      status = BookingStatus.cancelled;
+    } else if (rawStatus == 'accepted') {
+      final now = DateTime.now();
+      if (jobStartDateTime.isBefore(now)) {
+        status = BookingStatus.completed;
+      } else {
+        status = BookingStatus.upcoming;
+      }
+    } else if (rawStatus == 'completed') {
+      status = BookingStatus.completed;
+    } else if (rawStatus == 'upcoming') {
+      status = BookingStatus.upcoming;
+    } else {
+      status = BookingStatus.upcoming;
     }
 
     return BookingDetails(

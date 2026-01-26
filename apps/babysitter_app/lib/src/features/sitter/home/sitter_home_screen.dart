@@ -149,7 +149,9 @@ class SitterHomeScreen extends ConsumerWidget {
                   );
                 }
                 return ListView.builder(
-                  padding: EdgeInsets.only(bottom: 20.h),
+                  padding: EdgeInsets.only(
+                    bottom: 20.h + MediaQuery.of(context).padding.bottom,
+                  ),
                   itemCount: jobs.length,
                   itemBuilder: (context, index) {
                     final job = jobs[index];

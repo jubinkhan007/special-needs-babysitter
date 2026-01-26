@@ -118,6 +118,7 @@ class PaymentMethodSheet extends ConsumerWidget {
                     fontWeight: FontWeight.w700,
                     color: BookingUiTokens.primaryText,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
 

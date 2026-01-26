@@ -44,24 +44,16 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
             barrierDismissible: false,
             builder: (context) => ApplicationSubmittedDialog(
               onViewApplications: () {
-                context.pop(); // Pop dialog
-                context.go(Routes.sitterJobs);
+                Navigator.of(context).pop(); // Pop dialog
+                // Navigate to sitter jobs screen - 'Applied' tab is first/default
+                context.go('/sitter/jobs');
               },
             ),
-          ).then((_) {
-            // If they just closed the dialog without clicking the button,
-            // we should still go somewhere other than the preview screen.
-            if (context.mounted &&
-                GoRouterState.of(context)
-                    .uri
-                    .toString()
-                    .contains('application-preview')) {
-              context.go(Routes.sitterHome);
-            }
-          });
+          );
         }
         if (next.error != null && previous?.error != next.error) {
-          AppToast.show(context, 
+          AppToast.show(
+            context,
             SnackBar(
               content: Text('Error: ${next.error}'),
               backgroundColor: Colors.red,

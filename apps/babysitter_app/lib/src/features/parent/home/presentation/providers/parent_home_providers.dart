@@ -14,7 +14,8 @@ final parentHomeBookingsProvider =
 final parentHomeSittersProvider =
     FutureProvider.autoDispose<List<SitterListItemModel>>((ref) async {
   final repository = ref.watch(sittersRepositoryProvider);
-  final (latitude, longitude) = await LocationHelper.getLocation();
+  final (latitude, longitude) =
+      await LocationHelper.getLocation(requestPermission: false);
   return repository.fetchSitters(
     latitude: latitude,
     longitude: longitude,

@@ -281,7 +281,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
 
                 // Bottom Spacing for Sticky Sheet
                 SizedBox(
-                  height: 280 + MediaQuery.of(context).padding.bottom,
+                  height: 300 + MediaQuery.of(context).padding.bottom,
                 ),
               ],
             ),

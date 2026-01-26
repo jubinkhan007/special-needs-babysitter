@@ -42,6 +42,12 @@ class _ParentBookingStep1ScreenState
 
   void _onChildSelected(String childId, String childName, Child child) {
     setState(() {
+      if (_selectedChildId == childId) {
+        _selectedChildId = null;
+        _selectedChildName = null;
+        _selectedChild = null;
+        return;
+      }
       _selectedChildId = childId;
       _selectedChildName = childName;
       _selectedChild = child;
@@ -96,6 +102,15 @@ class _ParentBookingStep1ScreenState
   }
 
   void _onNext() {
+    if (_selectedChildId == null) {
+      AppToast.show(
+        context,
+        const SnackBar(
+          content: Text('Please select at least one child to continue.'),
+        ),
+      );
+      return;
+    }
     // Save to provider
     final payRate = double.tryParse(
             _payRateController.text.replaceAll(RegExp(r'[^\d.]'), '')) ??

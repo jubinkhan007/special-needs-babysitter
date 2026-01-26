@@ -49,7 +49,6 @@ class SitterShell extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: Container(
-        height: HomeDesignTokens.bottomNavHeight,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [

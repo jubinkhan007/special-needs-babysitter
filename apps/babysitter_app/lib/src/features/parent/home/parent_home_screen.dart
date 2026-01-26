@@ -16,6 +16,9 @@ import 'presentation/widgets/saved_sitter_card.dart';
 import 'presentation/widgets/sitter_near_you_card.dart';
 import 'presentation/providers/parent_home_providers.dart';
 import '../account/presentation/controllers/account_controller.dart';
+import '../shared/providers/location_access_provider.dart';
+import '../shared/widgets/location_access_banner.dart';
+import '../search/utils/location_helper.dart';
 
 class ParentHomeScreen extends ConsumerWidget {
   const ParentHomeScreen({super.key});
@@ -32,6 +35,11 @@ class ParentHomeScreen extends ConsumerWidget {
     final bookingsAsync = ref.watch(parentHomeBookingsProvider);
     final sittersAsync = ref.watch(parentHomeSittersProvider);
     final accountAsync = ref.watch(accountControllerProvider);
+    final locationStatusAsync = ref.watch(locationAccessStatusProvider);
+    final locationStatus = locationStatusAsync.maybeWhen(
+      data: (status) => status,
+      orElse: () => null,
+    );
     final headerLocation = bookingsAsync.maybeWhen(
       data: _resolveHeaderLocation,
       orElse: () => 'Location not set',
@@ -42,7 +50,9 @@ class ParentHomeScreen extends ConsumerWidget {
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 100), // Space for bottom nav
+          padding: EdgeInsets.only(
+            bottom: 100 + MediaQuery.of(context).padding.bottom,
+          ), // Space for bottom nav + safe area
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -87,6 +97,21 @@ class ParentHomeScreen extends ConsumerWidget {
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
               _buildSectionHeader('Sitters Near You', onSeeAll: () {}),
               const SizedBox(height: HomeDesignTokens.itemSpacing),
+              if (locationStatus != null &&
+                  locationStatus != LocationAccessStatus.available) ...[
+                LocationAccessBanner(
+                  title: _locationTitle(locationStatus),
+                  message: _locationMessage(locationStatus),
+                  actionLabel: _locationActionLabel(locationStatus),
+                  onAction: () {
+                    _handleLocationAction(
+                      ref,
+                      locationStatus,
+                    );
+                  },
+                ),
+                const SizedBox(height: HomeDesignTokens.itemSpacing),
+              ],
               sittersAsync.when(
                 loading: () => SizedBox(
                   height: HomeDesignTokens.sitterNearYouHeight,
@@ -181,6 +206,67 @@ class ParentHomeScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+Future<void> _handleLocationAction(
+  WidgetRef ref,
+  LocationAccessStatus status,
+) async {
+  switch (status) {
+    case LocationAccessStatus.permissionDenied:
+      await LocationHelper.requestPermission();
+      break;
+    case LocationAccessStatus.permissionDeniedForever:
+      await LocationHelper.openAppSettings();
+      break;
+    case LocationAccessStatus.serviceDisabled:
+      await LocationHelper.openLocationSettings();
+      break;
+    case LocationAccessStatus.available:
+      return;
+  }
+
+  ref.invalidate(locationAccessStatusProvider);
+  ref.invalidate(parentHomeSittersProvider);
+}
+
+String _locationTitle(LocationAccessStatus status) {
+  switch (status) {
+    case LocationAccessStatus.serviceDisabled:
+      return 'Turn on location services';
+    case LocationAccessStatus.permissionDenied:
+      return 'Enable location access';
+    case LocationAccessStatus.permissionDeniedForever:
+      return 'Location access blocked';
+    case LocationAccessStatus.available:
+      return '';
+  }
+}
+
+String _locationMessage(LocationAccessStatus status) {
+  switch (status) {
+    case LocationAccessStatus.serviceDisabled:
+      return 'Enable location services to see sitters near you.';
+    case LocationAccessStatus.permissionDenied:
+      return 'Allow location access to show nearby sitters.';
+    case LocationAccessStatus.permissionDeniedForever:
+      return 'Open settings to allow location access.';
+    case LocationAccessStatus.available:
+      return '';
+  }
+}
+
+String _locationActionLabel(LocationAccessStatus status) {
+  switch (status) {
+    case LocationAccessStatus.serviceDisabled:
+      return 'Turn On';
+    case LocationAccessStatus.permissionDenied:
+      return 'Allow';
+    case LocationAccessStatus.permissionDeniedForever:
+      return 'Open Settings';
+    case LocationAccessStatus.available:
+      return '';
   }
 }
 

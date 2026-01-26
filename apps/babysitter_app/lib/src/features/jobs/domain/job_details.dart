@@ -37,4 +37,9 @@ class JobDetails {
     required this.hourlyRate,
     required this.applicantsCount,
   });
+
+  /// Returns true if the job can be edited/deleted.
+  /// A job is editable only if status is pending (not active/in-progress or closed/completed).
+  /// The server will enforce additional validation (e.g., if job has actually started).
+  bool get isEditable => status == JobStatus.pending;
 }

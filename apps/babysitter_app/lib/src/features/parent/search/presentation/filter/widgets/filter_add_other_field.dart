@@ -3,8 +3,13 @@ import '../../../../../../theme/app_tokens.dart';
 
 class FilterAddOtherField extends StatelessWidget {
   final VoidCallback onTap;
+  final String? value;
 
-  const FilterAddOtherField({super.key, required this.onTap});
+  const FilterAddOtherField({
+    super.key,
+    required this.onTap,
+    this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +28,10 @@ class FilterAddOtherField extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Add Other',
-              style: AppTokens.sheetFieldHintStyle,
+              value ?? 'Add Other',
+              style: value != null
+                  ? AppTokens.sheetFieldTextStyle
+                  : AppTokens.sheetFieldHintStyle,
             ),
             Icon(
               Icons.add,

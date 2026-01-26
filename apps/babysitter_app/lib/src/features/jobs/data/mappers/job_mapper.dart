@@ -16,13 +16,16 @@ extension JobDtoMapper on JobDto {
 
     // Helper to map status
     JobStatus mapStatus(String statusStr) {
-      switch (statusStr.toLowerCase()) {
-        case 'posted':
+      final normalized =
+          statusStr.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+      switch (normalized) {
         case 'active':
+        case 'inprogress':
           return JobStatus.active;
         case 'completed':
         case 'closed':
           return JobStatus.closed;
+        case 'posted':
         case 'draft':
         case 'pending':
         default:
@@ -84,13 +87,16 @@ extension JobDtoMapper on JobDto {
 
     // Reuse mapStatus from toDomain if possible or duplicate
     JobStatus mapStatus(String statusStr) {
-      switch (statusStr.toLowerCase()) {
-        case 'posted':
+      final normalized =
+          statusStr.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+      switch (normalized) {
         case 'active':
+        case 'inprogress':
           return JobStatus.active;
         case 'completed':
         case 'closed':
           return JobStatus.closed;
+        case 'posted':
         case 'draft':
         case 'pending':
         default:

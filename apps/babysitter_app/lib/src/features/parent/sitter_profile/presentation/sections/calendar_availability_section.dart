@@ -25,16 +25,28 @@ class _CalendarAvailabilitySectionState
   }
 
   void _parseAvailability() {
+    _availableDates.clear();
     if (widget.availability == null) return;
     for (var item in widget.availability!) {
       if (item is Map<String, dynamic>) {
         final dateStr = item['date'] as String?;
         if (dateStr != null) {
-          // Assuming YYYY-MM-DD
-          _availableDates.add(dateStr);
+          final parsed = DateTime.tryParse(dateStr);
+          if (parsed != null) {
+            _availableDates.add(_formatDateKey(parsed));
+          }
+        }
+      } else if (item is String) {
+        final parsed = DateTime.tryParse(item);
+        if (parsed != null) {
+          _availableDates.add(_formatDateKey(parsed));
         }
       }
     }
+  }
+
+  String _formatDateKey(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 
   void _nextMonth() {
@@ -93,66 +105,67 @@ class _CalendarAvailabilitySectionState
     final yearName = DateFormat('yyyy').format(_focusedDate);
 
     return Row(
+      children: [
+        Expanded(
+          child: _buildSelectorRow(
+            label: monthName,
+            onPrev: _prevMonth,
+            onNext: _nextMonth,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: _buildSelectorRow(
+            label: yearName,
+            onPrev: _prevYear,
+            onNext: _nextYear,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSelectorRow({
+    required String label,
+    required VoidCallback onPrev,
+    required VoidCallback onNext,
+  }) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Month Selector
         IconButton(
-          icon:
-              const Icon(Icons.chevron_left, color: AppUiTokens.textSecondary),
-          onPressed: _prevMonth,
+          icon: const Icon(Icons.chevron_left,
+              color: AppUiTokens.textSecondary),
+          onPressed: onPrev,
           padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
+          constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
+          iconSize: 18,
         ),
-        const SizedBox(width: 4),
-        Text(
-          monthName,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: AppUiTokens.textPrimary,
+        const SizedBox(width: 2),
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: AppUiTokens.textPrimary,
+              ),
+            ),
           ),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 2),
         const Icon(Icons.arrow_drop_down,
-            size: 18, color: AppUiTokens.textSecondary),
-        const SizedBox(width: 4),
+            size: 16, color: AppUiTokens.textSecondary),
+        const SizedBox(width: 2),
         IconButton(
-          icon:
-              const Icon(Icons.chevron_right, color: AppUiTokens.textSecondary),
-          onPressed: _nextMonth,
+          icon: const Icon(Icons.chevron_right,
+              color: AppUiTokens.textSecondary),
+          onPressed: onNext,
           padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-
-        const SizedBox(width: 16), // Spacer between Month and Year selectors
-
-        // Year Selector
-        IconButton(
-          icon:
-              const Icon(Icons.chevron_left, color: AppUiTokens.textSecondary),
-          onPressed: _prevYear,
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          yearName,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            color: AppUiTokens.textPrimary,
-          ),
-        ),
-        const SizedBox(width: 4),
-        const Icon(Icons.arrow_drop_down,
-            size: 18, color: AppUiTokens.textSecondary),
-        const SizedBox(width: 4),
-        IconButton(
-          icon:
-              const Icon(Icons.chevron_right, color: AppUiTokens.textSecondary),
-          onPressed: _nextYear,
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
+          constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
+          iconSize: 18,
         ),
       ],
     );
@@ -210,7 +223,7 @@ class _CalendarAvailabilitySectionState
 
               final date =
                   DateTime(_focusedDate.year, _focusedDate.month, dayNumber);
-              final dateKey = DateFormat('MM/dd/yyyy').format(date);
+              final dateKey = _formatDateKey(date);
               final isAvailable = _availableDates.contains(dateKey);
 
               return Container(

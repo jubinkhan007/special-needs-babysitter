@@ -23,7 +23,7 @@ class BackgroundCheckBanner extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.w),
         width: double.infinity,
-        height: 140.h,
+        constraints: BoxConstraints(minHeight: 140.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.r),
           gradient: const LinearGradient(

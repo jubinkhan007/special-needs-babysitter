@@ -56,6 +56,10 @@ class SearchFilterController extends ValueNotifier<SearchFilterUiModel> {
     value = value.copyWith(latitude: latitude, longitude: longitude);
   }
 
+  void setSearchQuery(String? query) {
+    value = value.copyWith(searchQuery: query);
+  }
+
   void reset() {
     value = const SearchFilterUiModel();
   }

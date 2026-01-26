@@ -50,7 +50,6 @@ class ParentShell extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: Container(
-        height: HomeDesignTokens.bottomNavHeight, // 84
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
@@ -61,19 +60,21 @@ class ParentShell extends StatelessWidget {
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          currentIndex: _calculateSelectedIndex(context),
-          onTap: (index) => _onItemTapped(context, index),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: selectedColor,
-          unselectedItemColor: unselectedColor,
-          selectedLabelStyle:
-              const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
-          unselectedLabelStyle:
-              const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
-          elevation: 0,
-          items: [
+        child: SafeArea(
+          top: false,
+          child: BottomNavigationBar(
+            currentIndex: _calculateSelectedIndex(context),
+            onTap: (index) => _onItemTapped(context, index),
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.transparent,
+            selectedItemColor: selectedColor,
+            unselectedItemColor: unselectedColor,
+            selectedLabelStyle:
+                const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
+            unselectedLabelStyle:
+                const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
+            elevation: 0,
+            items: [
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/icons/bottom_nav/ic_home.svg',
@@ -133,9 +134,10 @@ class ParentShell extends StatelessWidget {
                 'assets/icons/bottom_nav/ic_account.svg',
                 colorFilter: ColorFilter.mode(selectedColor, BlendMode.srcIn),
               ),
-              label: 'Account',
+                label: 'Account',
             ),
           ],
+          ),
         ),
       ),
     );

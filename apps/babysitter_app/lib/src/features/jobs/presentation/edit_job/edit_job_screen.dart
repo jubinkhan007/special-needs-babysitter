@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/job_details.dart'; // To use JobDetails and Address
+import '../../domain/job.dart';
 import '../../data/jobs_data_di.dart';
 import '../providers/jobs_providers.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +47,8 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
 
   bool _isLoading = false;
   JobDetails? _jobDetails;
+
+  bool get _isEditable => _jobDetails?.isEditable ?? false;
 
   @override
   void initState() {
@@ -194,6 +197,19 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
   }
 
   Future<void> _updateJob() async {
+    if (!_isEditable) {
+      if (mounted) {
+        AppToast.show(
+          context,
+          const SnackBar(
+            content: Text(
+              'This job can\'t be updated once it is in progress or completed.',
+            ),
+          ),
+        );
+      }
+      return;
+    }
     if (!_formKey.currentState!.validate()) return;
     if (_selectedDateStart == null || _selectedDateEnd == null) return;
     if (_selectedTimeStart == null || _selectedTimeEnd == null) return;
@@ -278,8 +294,15 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       print('Error: $e');
       print('Stack: $stackTrace');
       if (mounted) {
-        AppToast.show(context, 
-          SnackBar(content: Text('Error updating job: $e')),
+        // Extract user-friendly error message
+        String errorMessage = 'Error updating job';
+        if (e.toString().contains('in progress or completed')) {
+          errorMessage = 'This job can\'t be updated because it is in progress or completed.';
+        } else if (e.toString().contains('400')) {
+          errorMessage = 'Unable to update job. Please try again.';
+        }
+        AppToast.show(context,
+          SnackBar(content: Text(errorMessage)),
         );
       }
     } finally {
@@ -383,6 +406,16 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (!_isEditable) ...[
+                const Text(
+                  'This job can\'t be edited once it is in progress or completed.',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
               _buildLabel('Job Title'),
               TextFormField(
                 controller: _titleController,
@@ -547,7 +580,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _isLoading ? null : _updateJob,
+                  onPressed: _isLoading || !_isEditable ? null : _updateJob,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTokens.primaryBlue,
                     foregroundColor: Colors.white,
@@ -566,7 +599,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: _isLoading ? null : _deleteJob,
+                  onPressed: _isLoading || !_isEditable ? null : _deleteJob,
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Colors.red),
                     foregroundColor: Colors.red,

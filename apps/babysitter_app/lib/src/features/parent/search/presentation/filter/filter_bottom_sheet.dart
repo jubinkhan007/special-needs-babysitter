@@ -32,6 +32,18 @@ class FilterBottomSheet extends ConsumerStatefulWidget {
 
 class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   bool _isApplying = false;
+  final List<int> _radiusOptions = const [5, 10, 15, 25, 50];
+  final List<String> _expertiseOptions = const [
+    'Autism',
+    'ADHD',
+    'Down Syndrome',
+    'Cerebral Palsy',
+    'Behavioral',
+  ];
+  static const _pickerBackground = Color(0xFFEAF6FF);
+  static const _pickerTitle = Color(0xFF0B1736);
+  static const _pickerMuted = Color(0xFF667085);
+  static const _pickerAccent = Color(0xFF88CBE6);
 
   Future<void> _applyFilters() async {
     setState(() {
@@ -40,7 +52,8 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
 
     try {
       // Get device location (uses cache if available)
-      final (latitude, longitude) = await LocationHelper.getLocation();
+      final (latitude, longitude) =
+          await LocationHelper.getLocation(requestPermission: true);
 
       if (mounted) {
         // Update filter provider with location
@@ -65,6 +78,290 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           _isApplying = false;
         });
       }
+    }
+  }
+
+  Future<void> _pickRadius(SearchFilterController controller) async {
+    final selected = await showModalBottomSheet<int>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: _radiusOptions.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final radius = _radiusOptions[index];
+              return ListTile(
+                title: Text(
+                  '$radius Miles',
+                  style: const TextStyle(color: Colors.black87),
+                ),
+                onTap: () => Navigator.pop(context, radius),
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    if (selected != null) {
+      controller.setRadius(selected.toDouble());
+    }
+  }
+
+  Future<void> _pickExpertise(SearchFilterController controller) async {
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: _expertiseOptions.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final option = _expertiseOptions[index];
+              return ListTile(
+                title: Text(
+                  option,
+                  style: const TextStyle(color: Colors.black87),
+                ),
+                onTap: () => Navigator.pop(context, option),
+              );
+            },
+          ),
+        );
+      },
+    );
+
+    if (selected != null) {
+      controller.setSpecialNeedsExpertise(selected);
+    }
+  }
+
+  Future<void> _pickDate(SearchFilterController controller) async {
+    final now = DateTime.now();
+    final selected = await showDatePicker(
+      context: context,
+      initialDate: controller.value.date ?? now,
+      firstDate: now.subtract(const Duration(days: 1)),
+      lastDate: now.add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: _pickerAccent,
+              onPrimary: Colors.white,
+              surface: Colors.white,
+              onSurface: _pickerTitle,
+            ),
+            datePickerTheme: DatePickerThemeData(
+              backgroundColor: Colors.white,
+              headerBackgroundColor: Colors.white,
+              headerForegroundColor: _pickerTitle,
+              todayBorder: const BorderSide(color: _pickerAccent, width: 2),
+              todayForegroundColor:
+                  const MaterialStatePropertyAll(_pickerAccent),
+              todayBackgroundColor:
+                  MaterialStatePropertyAll(_pickerAccent.withOpacity(0.15)),
+              dayForegroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.selected)) {
+                  return Colors.white;
+                }
+                return _pickerTitle;
+              }),
+              dayOverlayColor:
+                  MaterialStatePropertyAll(_pickerAccent.withOpacity(0.1)),
+              yearForegroundColor: const MaterialStatePropertyAll(_pickerTitle),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: _pickerTitle,
+                textStyle: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (selected != null) {
+      controller.setDate(selected);
+    }
+  }
+
+  Future<void> _pickTime(
+    SearchFilterController controller, {
+    required bool isStart,
+  }) async {
+    final initial = isStart
+        ? controller.value.startTime ?? TimeOfDay.now()
+        : controller.value.endTime ?? TimeOfDay.now();
+    final selected = await showTimePicker(
+      context: context,
+      initialTime: initial,
+      initialEntryMode: TimePickerEntryMode.input,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              textTheme: Theme.of(context).textTheme.copyWith(
+                    bodySmall: const TextStyle(color: _pickerTitle),
+                    bodyMedium: const TextStyle(color: _pickerTitle),
+                    displayLarge: const TextStyle(color: _pickerTitle),
+                    displayMedium: const TextStyle(color: _pickerTitle),
+                    displaySmall: const TextStyle(color: _pickerTitle),
+                    titleMedium: const TextStyle(color: _pickerTitle),
+                    labelSmall: const TextStyle(color: _pickerTitle),
+                  ),
+              colorScheme: const ColorScheme.light(
+                primary: _pickerAccent,
+                onPrimary: Colors.white,
+                surface: _pickerBackground,
+                onSurface: _pickerTitle,
+                secondary: _pickerAccent,
+                onSurfaceVariant: _pickerTitle,
+                outline: _pickerAccent,
+              ),
+              timePickerTheme: TimePickerThemeData(
+                backgroundColor: _pickerBackground,
+                helpTextStyle: const TextStyle(
+                  color: _pickerTitle,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+                entryModeIconColor: _pickerTitle,
+                hourMinuteShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: _pickerAccent, width: 2),
+                ),
+                dayPeriodBorderSide: const BorderSide(color: _pickerMuted),
+                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _pickerAccent.withOpacity(0.3)
+                        : Colors.transparent),
+                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _pickerTitle
+                        : _pickerMuted),
+                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? Colors.white
+                        : _pickerAccent.withOpacity(0.1)),
+                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
+                        ? _pickerTitle
+                        : _pickerMuted),
+                inputDecorationTheme: const InputDecorationTheme(
+                  labelStyle: TextStyle(color: _pickerTitle),
+                  helperStyle: TextStyle(color: _pickerTitle),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: _pickerTitle,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
+
+    if (selected != null) {
+      if (isStart) {
+        controller.setStartTime(selected);
+      } else {
+        controller.setEndTime(selected);
+      }
+    }
+  }
+
+  Future<void> _addOtherLanguage(SearchFilterController controller) async {
+    final textController = TextEditingController(
+      text: controller.value.otherLanguage ?? '',
+    );
+    try {
+      final result = await showDialog<String>(
+        context: context,
+        builder: (context) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: _pickerAccent,
+                onPrimary: Colors.white,
+                surface: Colors.white,
+                onSurface: _pickerTitle,
+              ),
+              dialogBackgroundColor: Colors.white,
+            ),
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: const Text(
+                'Add Other Language',
+                style: TextStyle(
+                  color: _pickerTitle,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: TextField(
+                controller: textController,
+                style: const TextStyle(color: _pickerTitle),
+                decoration: InputDecoration(
+                  hintText: 'Enter language',
+                  hintStyle: const TextStyle(color: _pickerMuted),
+                  filled: true,
+                  fillColor: _pickerBackground,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: _pickerAccent),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: const BorderSide(color: _pickerAccent, width: 2),
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, textController.text),
+                  child: const Text('Save'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      if (result != null) {
+        controller.setOtherLanguage(
+          result.trim().isEmpty ? null : result.trim(),
+        );
+      }
+    } finally {
+      textController.dispose();
     }
   }
 
@@ -107,9 +404,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                       FilterDropdownField(
                         hint: 'Select a radius',
                         value: '${filterState.radius.toInt()} Miles',
-                        onTap: () {
-                          // TODO: Open radius picker
-                        },
+                        onTap: () => _pickRadius(filterController),
                       ),
                       const SizedBox(height: AppTokens.sheetSectionSpacing),
 
@@ -118,9 +413,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                       FilterDropdownField(
                         hint: 'Select Special Needs Expertise',
                         value: filterState.specialNeedsExpertise,
-                        onTap: () {
-                          // TODO: Open expertise picker
-                        },
+                        onTap: () => _pickExpertise(filterController),
                       ),
                       const SizedBox(height: AppTokens.sheetSectionSpacing),
 
@@ -140,9 +433,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                             ? "${filterState.date!.month}/${filterState.date!.day}"
                             : null,
                         icon: Icons.calendar_today_outlined,
-                        onTap: () {
-                          // TODO: Open date picker
-                        },
+                        onTap: () => _pickDate(filterController),
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -153,9 +444,8 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                               value:
                                   filterState.startTime?.format(context),
                               icon: Icons.access_time,
-                              onTap: () {
-                                // TODO: Open time picker
-                              },
+                              onTap: () =>
+                                  _pickTime(filterController, isStart: true),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -164,9 +454,8 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                               hint: 'End Time*',
                               value: filterState.endTime?.format(context),
                               icon: Icons.access_time,
-                              onTap: () {
-                                // TODO: Open time picker
-                              },
+                              onTap: () =>
+                                  _pickTime(filterController, isStart: false),
                             ),
                           ),
                         ],
@@ -198,7 +487,10 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                               ))
                           .toList(),
                       // Add Other
-                      FilterAddOtherField(onTap: () {}),
+                      FilterAddOtherField(
+                        onTap: () => _addOtherLanguage(filterController),
+                        value: filterState.otherLanguage,
+                      ),
 
                       // Extra space at bottom
                       const SizedBox(height: 100),
@@ -210,7 +502,11 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           ),
           bottomNavigationBar: FilterBottomPrimaryBar(
             label: _isApplying ? 'Getting location...' : 'Show 6 Results',
-            onTap: _isApplying ? null : _applyFilters,
+            onTap: _isApplying
+                ? null
+                : () {
+                    _applyFilters();
+                  },
           ),
         ),
       ),
