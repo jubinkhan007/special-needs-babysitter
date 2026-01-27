@@ -126,11 +126,7 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                 const SizedBox(height: 20),
                 SitterAccountMenuList(
                   onTapRatingsReviews: () {
-                    // TODO: Navigate to ratings & reviews
-                    AppToast.show(context, 
-                      const SnackBar(
-                          content: Text('Ratings & Reviews coming soon')),
-                    );
+                    context.push(Routes.sitterRatingsReviews);
                   },
                   onTapWallet: () {
                     // TODO: Navigate to wallet

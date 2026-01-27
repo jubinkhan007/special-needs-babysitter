@@ -1,6 +1,7 @@
 import '../../domain/repositories/bookings_repository.dart';
 import '../models/booking_model.dart';
 import '../models/booking_session_model.dart';
+import '../models/clock_out_result_model.dart';
 import '../sources/bookings_remote_datasource.dart';
 
 class BookingsRepositoryImpl implements BookingsRepository {
@@ -42,7 +43,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
   }
 
   @override
-  Future<void> clockOutBooking(String applicationId) {
+  Future<ClockOutResultModel> clockOutBooking(String applicationId) {
     return _remoteDataSource.clockOutBooking(applicationId);
   }
 }

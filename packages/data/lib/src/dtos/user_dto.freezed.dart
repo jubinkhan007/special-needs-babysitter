@@ -22,21 +22,19 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
 mixin _$UserDto {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'first_name')
   String? get firstName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_name')
   String? get lastName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'phone_number')
   String? get phoneNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: 'avatar_url')
   String? get avatarUrl => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
-  @JsonKey(name: 'profileSetupComplete')
+  @JsonKey(name: 'profile_setup_complete')
   bool get isProfileComplete => throw _privateConstructorUsedError;
-  @JsonKey(name: 'phoneVerified')
-  bool get isSitterApproved =>
-      throw _privateConstructorUsedError; // Mapping phoneVerified to approved for now? Or just ignore?
-// Actually API has phoneVerified. User entity has isSitterApproved.
-// Let's just use what we can.
-// But wait, the previous code had is_sitter_approved.
-// The screenshot has "profileSetupComplete".
-// I'll map profileSetupComplete to isProfileComplete.
+  @JsonKey(name: 'phone_verified')
+  bool get isSitterApproved => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -57,13 +55,13 @@ abstract class $UserDtoCopyWith<$Res> {
   $Res call(
       {String id,
       String email,
-      String? firstName,
-      String? lastName,
-      String? phoneNumber,
-      String? avatarUrl,
+      @JsonKey(name: 'first_name') String? firstName,
+      @JsonKey(name: 'last_name') String? lastName,
+      @JsonKey(name: 'phone_number') String? phoneNumber,
+      @JsonKey(name: 'avatar_url') String? avatarUrl,
       String role,
-      @JsonKey(name: 'profileSetupComplete') bool isProfileComplete,
-      @JsonKey(name: 'phoneVerified') bool isSitterApproved,
+      @JsonKey(name: 'profile_setup_complete') bool isProfileComplete,
+      @JsonKey(name: 'phone_verified') bool isSitterApproved,
       @JsonKey(name: 'created_at') DateTime? createdAt});
 }
 
@@ -148,13 +146,13 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
   $Res call(
       {String id,
       String email,
-      String? firstName,
-      String? lastName,
-      String? phoneNumber,
-      String? avatarUrl,
+      @JsonKey(name: 'first_name') String? firstName,
+      @JsonKey(name: 'last_name') String? lastName,
+      @JsonKey(name: 'phone_number') String? phoneNumber,
+      @JsonKey(name: 'avatar_url') String? avatarUrl,
       String role,
-      @JsonKey(name: 'profileSetupComplete') bool isProfileComplete,
-      @JsonKey(name: 'phoneVerified') bool isSitterApproved,
+      @JsonKey(name: 'profile_setup_complete') bool isProfileComplete,
+      @JsonKey(name: 'phone_verified') bool isSitterApproved,
       @JsonKey(name: 'created_at') DateTime? createdAt});
 }
 
@@ -233,13 +231,13 @@ class _$UserDtoImpl implements _UserDto {
   const _$UserDtoImpl(
       {required this.id,
       required this.email,
-      this.firstName,
-      this.lastName,
-      this.phoneNumber,
-      this.avatarUrl,
+      @JsonKey(name: 'first_name') this.firstName,
+      @JsonKey(name: 'last_name') this.lastName,
+      @JsonKey(name: 'phone_number') this.phoneNumber,
+      @JsonKey(name: 'avatar_url') this.avatarUrl,
       this.role = 'parent',
-      @JsonKey(name: 'profileSetupComplete') this.isProfileComplete = false,
-      @JsonKey(name: 'phoneVerified') this.isSitterApproved = false,
+      @JsonKey(name: 'profile_setup_complete') this.isProfileComplete = false,
+      @JsonKey(name: 'phone_verified') this.isSitterApproved = false,
       @JsonKey(name: 'created_at') this.createdAt});
 
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
@@ -250,28 +248,26 @@ class _$UserDtoImpl implements _UserDto {
   @override
   final String email;
   @override
+  @JsonKey(name: 'first_name')
   final String? firstName;
   @override
+  @JsonKey(name: 'last_name')
   final String? lastName;
   @override
+  @JsonKey(name: 'phone_number')
   final String? phoneNumber;
   @override
+  @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
   @override
   @JsonKey()
   final String role;
   @override
-  @JsonKey(name: 'profileSetupComplete')
+  @JsonKey(name: 'profile_setup_complete')
   final bool isProfileComplete;
   @override
-  @JsonKey(name: 'phoneVerified')
+  @JsonKey(name: 'phone_verified')
   final bool isSitterApproved;
-// Mapping phoneVerified to approved for now? Or just ignore?
-// Actually API has phoneVerified. User entity has isSitterApproved.
-// Let's just use what we can.
-// But wait, the previous code had is_sitter_approved.
-// The screenshot has "profileSetupComplete".
-// I'll map profileSetupComplete to isProfileComplete.
   @override
   @JsonKey(name: 'created_at')
   final DateTime? createdAt;
@@ -340,13 +336,13 @@ abstract class _UserDto implements UserDto {
   const factory _UserDto(
       {required final String id,
       required final String email,
-      final String? firstName,
-      final String? lastName,
-      final String? phoneNumber,
-      final String? avatarUrl,
+      @JsonKey(name: 'first_name') final String? firstName,
+      @JsonKey(name: 'last_name') final String? lastName,
+      @JsonKey(name: 'phone_number') final String? phoneNumber,
+      @JsonKey(name: 'avatar_url') final String? avatarUrl,
       final String role,
-      @JsonKey(name: 'profileSetupComplete') final bool isProfileComplete,
-      @JsonKey(name: 'phoneVerified') final bool isSitterApproved,
+      @JsonKey(name: 'profile_setup_complete') final bool isProfileComplete,
+      @JsonKey(name: 'phone_verified') final bool isSitterApproved,
       @JsonKey(name: 'created_at') final DateTime? createdAt}) = _$UserDtoImpl;
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
@@ -356,27 +352,25 @@ abstract class _UserDto implements UserDto {
   @override
   String get email;
   @override
+  @JsonKey(name: 'first_name')
   String? get firstName;
   @override
+  @JsonKey(name: 'last_name')
   String? get lastName;
   @override
+  @JsonKey(name: 'phone_number')
   String? get phoneNumber;
   @override
+  @JsonKey(name: 'avatar_url')
   String? get avatarUrl;
   @override
   String get role;
   @override
-  @JsonKey(name: 'profileSetupComplete')
+  @JsonKey(name: 'profile_setup_complete')
   bool get isProfileComplete;
   @override
-  @JsonKey(name: 'phoneVerified')
-  bool
-      get isSitterApproved; // Mapping phoneVerified to approved for now? Or just ignore?
-// Actually API has phoneVerified. User entity has isSitterApproved.
-// Let's just use what we can.
-// But wait, the previous code had is_sitter_approved.
-// The screenshot has "profileSetupComplete".
-// I'll map profileSetupComplete to isProfileComplete.
+  @JsonKey(name: 'phone_verified')
+  bool get isSitterApproved;
   @override
   @JsonKey(name: 'created_at')
   DateTime? get createdAt;

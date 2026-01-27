@@ -52,8 +52,34 @@ class ProfileRemoteDataSource {
       userMap = data;
     }
 
+    // Fix for missing avatar_url: try to find it in 'profile' object
+    if (userMap['avatar_url'] == null) {
+      Map<String, dynamic>? profileMap;
+      // Check data.data.profile
+      if (data['data'] is Map<String, dynamic>) {
+        final innerData = data['data'] as Map<String, dynamic>;
+        if (innerData['profile'] is Map<String, dynamic>) {
+          profileMap = innerData['profile'] as Map<String, dynamic>;
+        }
+      }
+      // Check data.profile
+      if (profileMap == null && data['profile'] is Map<String, dynamic>) {
+        profileMap = data['profile'] as Map<String, dynamic>;
+      }
+
+      if (profileMap != null) {
+        final photoUrl = profileMap['photoUrl'] ?? profileMap['photo_url'];
+        if (photoUrl != null) {
+          print('DEBUG: Found photoUrl in profile object, mapping to avatar_url');
+          userMap['avatar_url'] = photoUrl;
+        }
+      }
+    }
+
     // Extra safety: ensure id and email are present before calling fromJson if possible
     print('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
+    print(
+        'DEBUG: ProfileRemoteDataSource avatar_url: ${userMap['avatar_url']}');
 
     if (userMap['id'] == null || userMap['email'] == null) {
       print(
@@ -76,7 +102,7 @@ class ProfileRemoteDataSource {
       print(
           'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage');
       if (percentage >= 100) {
-        userMap['profileSetupComplete'] = true;
+        userMap['profile_setup_complete'] = true;
         print(
             'DEBUG: Overriding profileSetupComplete=true due to 100% completion');
       }
@@ -85,10 +111,8 @@ class ProfileRemoteDataSource {
           'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response');
     }
 
-    // 2. Sync between snake_case and camelCase
-    if (userMap['profile_setup_complete'] == true) {
-      userMap['profileSetupComplete'] = true;
-    } else if (userMap['profileSetupComplete'] == true) {
+    // 2. Handle both snake_case and camelCase from API
+    if (userMap['profileSetupComplete'] == true) {
       userMap['profile_setup_complete'] = true;
     }
 

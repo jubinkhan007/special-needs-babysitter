@@ -4,11 +4,13 @@ import '../theme/booking_ui_tokens.dart';
 class SuccessBottomCard extends StatelessWidget {
   final VoidCallback onViewStatus;
   final VoidCallback onCancel;
+  final String sitterName;
 
   const SuccessBottomCard({
     super.key,
     required this.onViewStatus,
     required this.onCancel,
+    required this.sitterName,
   });
 
   @override
@@ -48,8 +50,8 @@ class SuccessBottomCard extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Body
-          const Text(
-            'Your request has been sent to Krystina.\nYou will be notified if they accept\nor decline.',
+          Text(
+            'Your request has been sent to $sitterName.\nYou will be notified if they accept\nor decline.',
             style: BookingUiTokens.successBody,
             textAlign: TextAlign.center,
           ),

@@ -23,6 +23,7 @@ import '../features/parent/parent_shell.dart';
 import '../features/parent/home/parent_home_screen.dart';
 import '../features/parent/messages/parent_messages_screen.dart';
 import '../features/bookings/presentation/bookings_screen.dart';
+import '../features/bookings/domain/booking_status.dart';
 import '../features/parent/jobs/parent_jobs_screen.dart';
 import '../features/messages/presentation/chat_thread_screen.dart';
 import '../features/parent/account/parent_account_screen.dart';
@@ -37,6 +38,7 @@ import '../features/sitter/bookings/presentation/screens/sitter_active_booking_s
 import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
 import '../features/sitter/account/presentation/profile_details/presentation/sitter_profile_details_screen.dart';
+import '../features/sitter/account/presentation/screens/sitter_reviews_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
@@ -298,9 +300,38 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: Routes.parentBookings,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: BookingsScreen(),
-            ),
+            pageBuilder: (context, state) {
+              final rawTab = state.uri.queryParameters['tab'];
+              BookingStatus? initialTab;
+              if (rawTab != null && rawTab.trim().isNotEmpty) {
+                final normalized =
+                    rawTab.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+                switch (normalized) {
+                  case 'active':
+                    initialTab = BookingStatus.active;
+                    break;
+                  case 'clockedout':
+                    initialTab = BookingStatus.clockedOut;
+                    break;
+                  case 'upcoming':
+                    initialTab = BookingStatus.upcoming;
+                    break;
+                  case 'pending':
+                    initialTab = BookingStatus.pending;
+                    break;
+                  case 'completed':
+                    initialTab = BookingStatus.completed;
+                    break;
+                  case 'cancelled':
+                  case 'canceled':
+                    initialTab = BookingStatus.cancelled;
+                    break;
+                }
+              }
+              return NoTransitionPage(
+                child: BookingsScreen(initialTab: initialTab),
+              );
+            },
           ),
           GoRoute(
             path: Routes.parentJobs,
@@ -622,6 +653,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.sitterProfileDetails,
         builder: (context, state) => const SitterProfileDetailsScreen(),
+      ),
+      GoRoute(
+        path: Routes.sitterRatingsReviews,
+        builder: (context, state) => const SitterReviewsScreen(),
       ),
 
       // Sitter shell

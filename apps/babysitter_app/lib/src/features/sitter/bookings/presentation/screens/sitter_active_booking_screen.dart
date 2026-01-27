@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../data/models/booking_session_model.dart';
+import '../../data/models/booking_model.dart';
+import '../../../../bookings/data/bookings_data_di.dart';
+import '../../../jobs/data/models/job_coordinates_model.dart';
+import '../../../jobs/data/models/job_request_details_model.dart';
+import '../../../jobs/presentation/providers/job_request_providers.dart';
 import '../controllers/session_tracking_controller.dart';
+import '../providers/bookings_providers.dart';
 import '../providers/session_tracking_providers.dart';
 import '../widgets/break_timer_dialog.dart';
 import '../widgets/pause_clock_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
 /// Sitter Active Booking Screen - Shown when a sitter is on an active session
 class SitterActiveBookingScreen extends ConsumerStatefulWidget {
@@ -29,22 +35,17 @@ class SitterActiveBookingScreen extends ConsumerStatefulWidget {
 class _SitterActiveBookingScreenState
     extends ConsumerState<SitterActiveBookingScreen> {
   bool _isClockingOut = false;
-  late final MapController _mapController;
+  GoogleMapController? _mapController;
   bool _isMapReady = false;
   double _mapZoom = 14.0;
   bool _useSatelliteView = false;
-
-  // Tile layer URLs
-  static const _standardTileUrl =
-      'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-  static const _satelliteTileUrl =
-      'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
-  static const _satelliteSubdomains = ['a', 'b', 'c'];
+  DateTime? _lastShiftEndReminderDate;
+  bool _isShiftEndDialogShowing = false;
+  bool _hasStatusRedirected = false;
 
   @override
   void initState() {
     super.initState();
-    _mapController = MapController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(sessionTrackingControllerProvider.notifier)
@@ -54,27 +55,33 @@ class _SitterActiveBookingScreenState
 
   @override
   void dispose() {
-    _mapController.dispose();
+    _mapController?.dispose();
     super.dispose();
   }
 
-  void _zoomIn() {
-    if (!_isMapReady) return;
-    final newZoom = (_mapZoom + 1).clamp(3.0, 18.0);
-    _mapController.move(_mapController.camera.center, newZoom);
-    setState(() => _mapZoom = newZoom);
+  Future<void> _zoomIn() async {
+    if (!_isMapReady || _mapController == null) return;
+    try {
+      final currentZoom = await _mapController!.getZoomLevel();
+      await _mapController!.animateCamera(CameraUpdate.zoomTo(currentZoom + 1));
+    } catch (e) {
+      debugPrint('Error zooming in: $e');
+    }
   }
 
-  void _zoomOut() {
-    if (!_isMapReady) return;
-    final newZoom = (_mapZoom - 1).clamp(3.0, 18.0);
-    _mapController.move(_mapController.camera.center, newZoom);
-    setState(() => _mapZoom = newZoom);
+  Future<void> _zoomOut() async {
+    if (!_isMapReady || _mapController == null) return;
+    try {
+      final currentZoom = await _mapController!.getZoomLevel();
+      await _mapController!.animateCamera(CameraUpdate.zoomTo(currentZoom - 1));
+    } catch (e) {
+      debugPrint('Error zooming out: $e');
+    }
   }
 
   void _centerOnLocation(LatLng? location) {
-    if (!_isMapReady || location == null) return;
-    _mapController.move(location, _mapZoom);
+    if (!_isMapReady || _mapController == null || location == null) return;
+    _mapController!.animateCamera(CameraUpdate.newLatLng(location));
   }
 
   void _toggleMapType() {
@@ -127,20 +134,58 @@ class _SitterActiveBookingScreenState
 
     try {
       if (mounted) {
-        await ref
+        final result = await ref
             .read(sessionTrackingControllerProvider.notifier)
             .clockOut(widget.applicationId);
+        final jobDetails =
+            ref.read(jobRequestDetailsProvider(widget.applicationId)).valueOrNull;
+        final isFinalDay = result.isFinalDay || _isFinalDay(jobDetails);
         AppToast.show(
           context,
-          const SnackBar(
-            content: Text('Successfully clocked out!'),
+          SnackBar(
+            content: Text(result.message.isNotEmpty
+                ? result.message
+                : 'Successfully clocked out!'),
             backgroundColor: Color(0xFF22C55E),
           ),
         );
-        context.pop();
+        if (isFinalDay) {
+          _goToBookingDetails(status: 'completed');
+        } else {
+          context.pop();
+        }
       }
     } catch (e) {
       if (mounted) {
+        final message = e.toString().replaceFirst('Exception: ', '');
+        if (message.contains('Cannot clock out from this booking')) {
+          AppToast.show(
+            context,
+            SnackBar(
+              content: Text(message),
+              backgroundColor: const Color(0xFFF59E0B),
+            ),
+          );
+          final jobDetails = ref
+              .read(jobRequestDetailsProvider(widget.applicationId))
+              .valueOrNull;
+          final bookings =
+              ref.read(sitterCurrentBookingsProvider).valueOrNull;
+          final bookingStatus =
+              _findBookingStatus(bookings, widget.applicationId);
+          final effectiveStatus =
+              _resolveApplicationStatus(jobDetails, bookingStatus);
+          if (jobDetails != null &&
+              _hasFinalEndPassed(jobDetails, DateTime.now())) {
+            _goToBookingDetails(status: 'completed');
+          } else if (effectiveStatus != null &&
+              effectiveStatus.trim().isNotEmpty) {
+            _goToBookingDetails(status: effectiveStatus);
+          } else {
+            _goToBookingDetails();
+          }
+          return;
+        }
         AppToast.show(
           context,
           SnackBar(
@@ -160,21 +205,25 @@ class _SitterActiveBookingScreenState
   @override
   Widget build(BuildContext context) {
     final trackingState = ref.watch(sessionTrackingControllerProvider);
+    final jobDetailsAsync =
+        ref.watch(jobRequestDetailsProvider(widget.applicationId));
+    final bookingsAsync = ref.watch(sitterCurrentBookingsProvider);
 
     // Listen for location updates to move map camera
     ref.listen(sessionTrackingControllerProvider, (previous, next) {
       final prevPoints = previous?.routeCoordinates ?? [];
       final nextPoints = next.routeCoordinates;
 
-      if (!_isMapReady) {
+      if (!_isMapReady || _mapController == null) {
         return;
       }
 
       if (nextPoints.isNotEmpty && nextPoints.length > prevPoints.length) {
         final lastPoint = nextPoints.last;
-        _mapController.move(
-          LatLng(lastPoint.latitude, lastPoint.longitude),
-          _mapZoom,
+        _mapController!.animateCamera(
+          CameraUpdate.newLatLng(
+            LatLng(lastPoint.latitude, lastPoint.longitude),
+          ),
         );
       }
     });
@@ -184,6 +233,16 @@ class _SitterActiveBookingScreenState
           orElse: () => DateTime.now(),
         );
     final session = trackingState.session;
+    final jobDetails = jobDetailsAsync.valueOrNull;
+    final bookingStatus =
+        _findBookingStatus(bookingsAsync.valueOrNull, widget.applicationId);
+    final effectiveStatus =
+        _resolveApplicationStatus(jobDetails, bookingStatus);
+    _maybeRedirectIfClockedOut(effectiveStatus, jobDetails, session, now);
+    if (session != null) {
+      final shiftEnd = _resolveShiftEndDateTime(now, session, jobDetails);
+      _maybeShowShiftEndReminder(now, shiftEnd);
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -570,94 +629,53 @@ class _SitterActiveBookingScreenState
                   )
                 : Stack(
                     children: [
-                      FlutterMap(
-                        mapController: _mapController,
-                        options: MapOptions(
-                          initialCenter: center,
-                          initialZoom: 14.0,
-                          onMapReady: () {
-                            if (!mounted) {
-                              return;
-                            }
+                      GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: center,
+                          zoom: 14.0,
+                        ),
+                        onMapCreated: (controller) {
+                          _mapController = controller;
+                          if (mounted) {
                             setState(() {
                               _isMapReady = true;
-                              _mapZoom = _mapController.camera.zoom;
                             });
-                          },
-                          onMapEvent: (event) {
-                            _mapZoom = event.camera.zoom;
-                          },
-                          interactionOptions: const InteractionOptions(
-                            flags: InteractiveFlag.drag |
-                                InteractiveFlag.pinchZoom |
-                                InteractiveFlag.doubleTapZoom,
-                          ),
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate: _useSatelliteView
-                                ? _satelliteTileUrl
-                                : _standardTileUrl,
-                            subdomains: _useSatelliteView
-                                ? _satelliteSubdomains
-                                : const [],
-                            userAgentPackageName:
-                                'com.specialneedssitters.parent_app',
-                          ),
+                          }
+                        },
+                        onCameraMove: (position) {
+                          _mapZoom = position.zoom;
+                        },
+                        mapType: _useSatelliteView
+                            ? MapType.hybrid
+                            : MapType.normal,
+                        polylines: {
                           if (routePoints.length >= 2)
-                            PolylineLayer(
-                              polylines: [
-                                Polyline(
-                                  points: routePoints,
-                                  strokeWidth: 4,
-                                  color: const Color(0xFF3B82F6),
-                                ),
-                              ],
+                            Polyline(
+                              polylineId: const PolylineId('route'),
+                              points: routePoints,
+                              width: 4,
+                              color: const Color(0xFF3B82F6),
                             ),
-                          MarkerLayer(
-                            markers: [
-                              if (routePoints.isNotEmpty)
-                                Marker(
-                                  width: 20.w,
-                                  height: 20.w,
-                                  point: routePoints.last,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF3B82F6),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                    ),
-                                  ),
-                                ),
-                              if (destination != null)
-                                Marker(
-                                  width: 32.w,
-                                  height: 32.w,
-                                  point: LatLng(destination.latitude,
-                                      destination.longitude),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.12),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Icon(
-                                      Icons.location_on,
-                                      color: const Color(0xFF1D2939),
-                                      size: 20.w,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
+                        },
+                        markers: {
+                          if (routePoints.isNotEmpty)
+                            Marker(
+                              markerId: const MarkerId('current'),
+                              position: routePoints.last,
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                  BitmapDescriptor.hueAzure),
+                            ),
+                          if (destination != null)
+                            Marker(
+                              markerId: const MarkerId('destination'),
+                              position: LatLng(destination.latitude,
+                                  destination.longitude),
+                            ),
+                        },
+                        zoomControlsEnabled: false,
+                        myLocationButtonEnabled: false,
+                        compassEnabled: false,
+                        mapToolbarEnabled: false,
                       ),
                       // Map Controls Overlay
                       Positioned(
@@ -905,14 +923,12 @@ class _SitterActiveBookingScreenState
                     itemCount: route.length,
                     separatorBuilder: (context, index) => Divider(height: 16.h),
                     itemBuilder: (context, index) {
-                      final point = route[index];
-                      return Text(
-                        '${index + 1}. ${point.latitude.toStringAsFixed(5)}, ${point.longitude.toStringAsFixed(5)}',
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          color: const Color(0xFF344054),
-                          fontFamily: 'Inter',
-                        ),
+                      // Show newest first
+                      final reverseIndex = route.length - 1 - index;
+                      final point = route[reverseIndex];
+                      return _RoutePointItem(
+                        index: reverseIndex + 1,
+                        point: point,
                       );
                     },
                   ),
@@ -1003,6 +1019,356 @@ class _SitterActiveBookingScreenState
           ),
         ],
       ),
+    );
+  }
+
+  void _maybeShowShiftEndReminder(DateTime now, DateTime? shiftEnd) {
+    if (shiftEnd == null) {
+      return;
+    }
+    final today = DateTime(now.year, now.month, now.day);
+    if (_lastShiftEndReminderDate != null &&
+        _isSameDate(_lastShiftEndReminderDate!, today)) {
+      return;
+    }
+    final reminderTime = shiftEnd.subtract(const Duration(minutes: 5));
+    final withinWindow =
+        (now.isAfter(reminderTime) || now.isAtSameMomentAs(reminderTime)) &&
+            (now.isBefore(shiftEnd) || now.isAtSameMomentAs(shiftEnd));
+    if (!withinWindow || _isShiftEndDialogShowing) {
+      return;
+    }
+    _isShiftEndDialogShowing = true;
+    _lastShiftEndReminderDate = today;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
+      await _showShiftEndDialog();
+      if (!mounted) return;
+      setState(() => _isShiftEndDialogShowing = false);
+    });
+  }
+
+  Future<void> _showShiftEndDialog() async {
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Color(0xFF667085)),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                const Text(
+                  'Notifications',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF101828),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Your shift ends soon. Please remember to clock out!',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF667085),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 44,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF87C4F2),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: const Text(
+                      'Confirm',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String? _findBookingStatus(
+    List<BookingModel>? bookings,
+    String applicationId,
+  ) {
+    if (bookings == null || bookings.isEmpty) {
+      return null;
+    }
+    for (final booking in bookings) {
+      if (booking.applicationId == applicationId) {
+        return booking.status;
+      }
+    }
+    return null;
+  }
+
+  String? _resolveApplicationStatus(
+    JobRequestDetailsModel? jobDetails,
+    String? bookingStatus,
+  ) {
+    if (bookingStatus != null && bookingStatus.trim().isNotEmpty) {
+      return bookingStatus;
+    }
+    final fallback = jobDetails?.status.trim();
+    return (fallback != null && fallback.isNotEmpty) ? fallback : null;
+  }
+
+  void _maybeRedirectIfClockedOut(
+    String? status,
+    JobRequestDetailsModel? jobDetails,
+    BookingSessionModel? session,
+    DateTime now,
+  ) {
+    if (_hasStatusRedirected || status == null || status.trim().isEmpty) {
+      return;
+    }
+    final normalized =
+        status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    if (normalized != 'clockedout' && normalized != 'completed') {
+      return;
+    }
+    _hasStatusRedirected = true;
+    if (session != null) {
+      ref.read(sessionTrackingControllerProvider.notifier).stopSession();
+    }
+    final shouldComplete = normalized == 'completed' ||
+        (jobDetails != null && _hasFinalEndPassed(jobDetails, now));
+    final targetStatus = shouldComplete ? 'completed' : status;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _goToBookingDetails(status: targetStatus);
+    });
+  }
+
+  void _goToBookingDetails({String? status}) {
+    final query = status != null && status.trim().isNotEmpty
+        ? '?status=${Uri.encodeComponent(status)}'
+        : '';
+    context.go('${Routes.sitterBookingDetails}/${widget.applicationId}$query');
+  }
+
+  DateTime? _resolveShiftEndDateTime(
+    DateTime now,
+    BookingSessionModel session,
+    JobRequestDetailsModel? jobDetails,
+  ) {
+    if (jobDetails != null) {
+      final activeDate = _resolveActiveDate(jobDetails, now);
+      final endMinutes = _parseTimeToMinutes(jobDetails.endTime);
+      if (activeDate != null && endMinutes != null) {
+        return DateTime(
+          activeDate.year,
+          activeDate.month,
+          activeDate.day,
+          endMinutes ~/ 60,
+          endMinutes % 60,
+        );
+      }
+    }
+    return session.scheduledEndTime?.toLocal();
+  }
+
+  DateTime? _resolveActiveDate(JobRequestDetailsModel jobDetails, DateTime now) {
+    final today = DateTime(now.year, now.month, now.day);
+    final start = _parseDate(jobDetails.startDate);
+    final end = _parseDate(jobDetails.endDate);
+    if (start != null && end != null) {
+      final startsBeforeOrToday =
+          _isSameDate(today, start) || today.isAfter(start);
+      final endsAfterOrToday =
+          _isSameDate(today, end) || today.isBefore(end);
+      if (startsBeforeOrToday && endsAfterOrToday) {
+        return today;
+      }
+    }
+    return start;
+  }
+
+  int? _parseTimeToMinutes(String value) {
+    try {
+      final trimmed = value.trim();
+      if (trimmed.isEmpty) {
+        return null;
+      }
+
+      final lower = trimmed.toLowerCase();
+      final isAm = lower.contains('am');
+      final isPm = lower.contains('pm');
+      final sanitized = lower.replaceAll(RegExp(r'[^0-9:]'), '');
+      if (sanitized.isEmpty) {
+        return null;
+      }
+
+      final parts = sanitized.split(':');
+      final hour = int.parse(parts[0]);
+      final minute = parts.length > 1 ? int.parse(parts[1]) : 0;
+      var adjustedHour = hour;
+      if (isPm && adjustedHour < 12) {
+        adjustedHour += 12;
+      }
+      if (isAm && adjustedHour == 12) {
+        adjustedHour = 0;
+      }
+      return adjustedHour * 60 + minute;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  DateTime? _parseDate(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return null;
+    }
+    try {
+      final parsed = DateTime.parse(trimmed);
+      return DateTime(parsed.year, parsed.month, parsed.day);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  bool _hasFinalEndPassed(JobRequestDetailsModel jobDetails, DateTime now) {
+    final endDate = _parseDate(jobDetails.endDate);
+    final endMinutes = _parseTimeToMinutes(jobDetails.endTime);
+    if (endDate == null || endMinutes == null) {
+      return false;
+    }
+    final endDateTime = DateTime(
+      endDate.year,
+      endDate.month,
+      endDate.day,
+      endMinutes ~/ 60,
+      endMinutes % 60,
+    );
+    return now.isAfter(endDateTime) || now.isAtSameMomentAs(endDateTime);
+  }
+
+  bool _isFinalDay(JobRequestDetailsModel? jobDetails) {
+    if (jobDetails == null) {
+      return false;
+    }
+    final end = _parseDate(jobDetails.endDate);
+    if (end == null) {
+      return false;
+    }
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return _isSameDate(today, end);
+  }
+
+  bool _isSameDate(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+}
+
+class _RoutePointItem extends ConsumerStatefulWidget {
+  final int index;
+  final JobCoordinatesModel point;
+
+  const _RoutePointItem({
+    required this.index,
+    required this.point,
+  });
+
+  @override
+  ConsumerState<_RoutePointItem> createState() => _RoutePointItemState();
+}
+
+class _RoutePointItemState extends ConsumerState<_RoutePointItem> {
+  String? _address;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAddress();
+  }
+
+  Future<void> _fetchAddress() async {
+    try {
+      final geocoder = ref.read(googleGeocodingRemoteDataSourceProvider);
+      final address = await geocoder.reverseGeocode(
+        latitude: widget.point.latitude,
+        longitude: widget.point.longitude,
+      );
+      
+      if (mounted) {
+        setState(() {
+          _address = address;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lat = widget.point.latitude.toStringAsFixed(5);
+    final lng = widget.point.longitude.toStringAsFixed(5);
+    final fallback = '$lat, $lng';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${widget.index}. ${_isLoading ? "Loading address..." : (_address ?? fallback)}',
+          style: TextStyle(
+            fontSize: 13.sp,
+            color: const Color(0xFF344054),
+            fontFamily: 'Inter',
+          ),
+        ),
+        if (!_isLoading && _address != null)
+          Padding(
+            padding: EdgeInsets.only(left: 18.w),
+            child: Text(
+              '($lat, $lng)',
+              style: TextStyle(
+                fontSize: 11.sp,
+                color: const Color(0xFF98A2B3),
+                fontFamily: 'Inter',
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

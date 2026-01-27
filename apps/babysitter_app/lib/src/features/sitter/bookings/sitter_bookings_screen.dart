@@ -88,16 +88,28 @@ class SitterBookingsScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final booking = bookings[index];
                 final isActive = _isActiveStatus(booking.status);
+                print(
+                    'DEBUG: BookingCard[$index] - applicationId: ${booking.applicationId}, title: ${booking.title}, status: ${booking.status}');
                 return BookingCard(
                   booking: booking,
                   onTap: () {
+                    print(
+                        'DEBUG: Tapped booking[$index] - applicationId: ${booking.applicationId}');
                     if (isActive) {
-                      context.push(
-                          '${Routes.sitterActiveBooking}/${booking.applicationId}');
+                      final route =
+                          '${Routes.sitterActiveBooking}/${booking.applicationId}';
+                      print('DEBUG: Navigating to active booking: $route');
+                      context.push(route);
                       return;
                     }
-                    context.push(
-                        '${Routes.sitterBookingDetails}/${booking.applicationId}');
+                    final status = booking.status?.trim();
+                    final query = status != null && status.isNotEmpty
+                        ? '?status=${Uri.encodeComponent(status)}'
+                        : '';
+                    final route =
+                        '${Routes.sitterBookingDetails}/${booking.applicationId}$query';
+                    print('DEBUG: Navigating to booking details: $route');
+                    context.push(route);
                   },
                 );
               },

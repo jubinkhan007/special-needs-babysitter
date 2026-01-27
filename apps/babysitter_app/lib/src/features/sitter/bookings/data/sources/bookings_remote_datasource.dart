@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../models/booking_model.dart';
 import '../models/booking_session_model.dart';
+import '../models/clock_out_result_model.dart';
 
 /// Remote data source for bookings API calls.
 class BookingsRemoteDataSource {
@@ -17,19 +18,29 @@ class BookingsRemoteDataSource {
         queryParams['tab'] = tab;
       }
 
-      print('DEBUG: Sitter Bookings Request: GET /sitters/bookings${queryParams.isNotEmpty ? '?${queryParams.entries.map((e) => '${e.key}=${e.value}').join('&')}' : ''}');
+      print(
+          'DEBUG: Sitter Bookings Request: GET /sitters/bookings${queryParams.isNotEmpty ? '?${queryParams.entries.map((e) => '${e.key}=${e.value}').join('&')}' : ''}');
       final response = await _dio.get(
         '/sitters/bookings',
         queryParameters: queryParams,
       );
       print('DEBUG: Sitter Bookings Response Status: ${response.statusCode}');
+      print('DEBUG: Sitter Bookings Raw Response: ${response.data}');
 
       final data = response.data['data'] as Map<String, dynamic>;
       final bookings = data['bookings'] as List;
+      print('DEBUG: Sitter Bookings Count: ${bookings.length}');
 
-      return bookings
+      final result = bookings
           .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
           .toList();
+
+      for (var i = 0; i < result.length; i++) {
+        print(
+            'DEBUG: Parsed booking[$i]: id=${result[i].id}, applicationId=${result[i].applicationId}, title=${result[i].title}');
+      }
+
+      return result;
     } catch (e) {
       if (e is DioException) {
         print('DEBUG: Sitter Bookings Error: ${e.message}');
@@ -53,8 +64,7 @@ class BookingsRemoteDataSource {
           'DEBUG: Booking Session Request: GET /sitters/bookings/$applicationId/session');
       final response =
           await _dio.get('/sitters/bookings/$applicationId/session');
-      print(
-          'DEBUG: Booking Session Response Status: ${response.statusCode}');
+      print('DEBUG: Booking Session Response Status: ${response.statusCode}');
 
       final data = response.data['data'] as Map<String, dynamic>;
       return BookingSessionModel.fromJson(data);
@@ -91,8 +101,7 @@ class BookingsRemoteDataSource {
         '/sitters/bookings/$applicationId/location',
         data: payload,
       );
-      print(
-          'DEBUG: Booking Location Response Status: ${response.statusCode}');
+      print('DEBUG: Booking Location Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
         print('DEBUG: Booking Location Error: ${e.message}');
@@ -163,7 +172,7 @@ class BookingsRemoteDataSource {
   }
 
   /// Clock out of the current booking session via POST /sitters/bookings/{id}/clock-out.
-  Future<void> clockOutBooking(String applicationId) async {
+  Future<ClockOutResultModel> clockOutBooking(String applicationId) async {
     try {
       print(
           'DEBUG: Clock Out Request: POST /sitters/bookings/$applicationId/clock-out');
@@ -171,6 +180,8 @@ class BookingsRemoteDataSource {
         '/sitters/bookings/$applicationId/clock-out',
       );
       print('DEBUG: Clock Out Response Status: ${response.statusCode}');
+      final data = response.data['data'] as Map<String, dynamic>? ?? {};
+      return ClockOutResultModel.fromJson(data);
     } catch (e) {
       if (e is DioException) {
         print('DEBUG: Clock Out Error: ${e.message}');

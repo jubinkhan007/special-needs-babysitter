@@ -261,10 +261,10 @@ class JobRequestRemoteDataSource {
   }
 
   /// Mark a booking as completed.
-  /// Uses /applications/{id}/complete
+  /// Uses /sitters/bookings/{applicationId}/mark-complete
   Future<void> completeBooking(String applicationId) async {
     try {
-      final endpoint = '/applications/$applicationId/complete';
+      final endpoint = '/sitters/bookings/$applicationId/mark-complete';
       print('DEBUG: Complete Booking Request: POST $endpoint');
       final response = await _dio.post(endpoint);
       print('DEBUG: Complete Booking Response Status: ${response.statusCode}');

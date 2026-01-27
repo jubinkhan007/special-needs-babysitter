@@ -1,5 +1,6 @@
 import '../../data/models/booking_model.dart';
 import '../../data/models/booking_session_model.dart';
+import '../../data/models/clock_out_result_model.dart';
 
 /// Repository interface for bookings operations.
 abstract class BookingsRepository {
@@ -23,5 +24,5 @@ abstract class BookingsRepository {
   Future<void> resumeBooking(String applicationId);
 
   /// Clock out of the current booking session.
-  Future<void> clockOutBooking(String applicationId);
+  Future<ClockOutResultModel> clockOutBooking(String applicationId);
 }

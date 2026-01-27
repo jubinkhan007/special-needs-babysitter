@@ -12,7 +12,9 @@ import 'widgets/bookings_app_bar.dart';
 import 'widgets/bookings_tabs.dart';
 
 class BookingsScreen extends ConsumerStatefulWidget {
-  const BookingsScreen({super.key});
+  final BookingStatus? initialTab;
+
+  const BookingsScreen({super.key, this.initialTab});
 
   @override
   ConsumerState<BookingsScreen> createState() => _BookingsScreenState();
@@ -33,7 +35,17 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    final initialIndex = widget.initialTab != null
+        ? _tabs.indexOf(widget.initialTab!)
+        : 0;
+    _tabController = TabController(
+      length: _tabs.length,
+      vsync: this,
+      initialIndex: initialIndex >= 0 ? initialIndex : 0,
+    );
+    Future.microtask(() {
+      ref.read(bookingsControllerProvider).refresh();
+    });
   }
 
   @override

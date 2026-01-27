@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../data/models/booking_session_model.dart';
+import '../../data/models/clock_out_result_model.dart';
 import '../../data/sources/booking_session_local_datasource.dart';
 import '../../domain/repositories/bookings_repository.dart';
 import '../../../jobs/data/models/job_coordinates_model.dart';
@@ -129,7 +130,7 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     state = const SessionTrackingState();
   }
 
-  Future<void> clockOut(String applicationId) async {
+  Future<ClockOutResultModel> clockOut(String applicationId) async {
     final session = state.session;
     final resolvedId =
         applicationId.isNotEmpty ? applicationId : session?.applicationId;
@@ -146,9 +147,15 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     }
 
     try {
-      await _repository.clockOutBooking(resolvedId);
+      final result = await _repository.clockOutBooking(resolvedId);
       await stopSession();
+      return result;
     } catch (e) {
+      final message = e.toString().replaceFirst('Exception: ', '');
+      if (message.contains('Cannot clock out from this booking')) {
+        await stopSession();
+        throw Exception(message);
+      }
       if (session != null) {
         state = state.copyWith(session: session);
         await _localDataSource.saveSession(session);

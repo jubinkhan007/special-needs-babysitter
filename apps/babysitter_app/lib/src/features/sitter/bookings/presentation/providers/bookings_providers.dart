@@ -32,42 +32,46 @@ final sitterBookingsProvider =
 final sitterCurrentBookingsProvider =
     FutureProvider.autoDispose<List<BookingModel>>((ref) async {
   final repository = ref.watch(bookingsRepositoryProvider);
-  List<BookingModel> active = [];
-  try {
-    active = await repository.getBookings(tab: 'active');
-  } catch (_) {
-    active = [];
-  }
-  if (active.isEmpty) {
-    try {
-      active = await repository.getBookings(tab: 'in_progress');
-    } catch (_) {
-      active = [];
-    }
-  }
-  if (active.isEmpty) {
-    try {
-      active = await repository.getBookings(tab: 'in-progress');
-    } catch (_) {
-      active = [];
-    }
-  }
-  final upcoming = await repository.getBookings(tab: 'upcoming');
+
+  // Fetch active and upcoming bookings in parallel
+  // Note: API only supports 'active' and 'upcoming' tabs
+  final results = await Future.wait([
+    repository.getBookings(tab: 'active').catchError((_) => <BookingModel>[]),
+    repository.getBookings(tab: 'upcoming').catchError((_) => <BookingModel>[]),
+  ]);
+
+  final active = results[0];
+  final upcoming = results[1];
+
+  print(
+      'DEBUG: Fetched ${active.length} active bookings, ${upcoming.length} upcoming bookings');
 
   final merged = <BookingModel>[];
   final seen = <String>{};
+
   for (final booking in active) {
-    final normalized = booking.copyWith(status: 'active');
+    print(
+        'DEBUG: Active booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}');
+    final normalizedStatus =
+        (booking.status != null && booking.status!.trim().isNotEmpty)
+            ? booking.status
+            : 'active';
+    final normalized = booking.copyWith(status: normalizedStatus);
     merged.add(normalized);
     seen.add(booking.applicationId);
   }
+
   for (final booking in upcoming) {
     if (seen.contains(booking.applicationId)) {
       continue;
     }
+    print(
+        'DEBUG: Upcoming booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}');
     final normalized = booking.copyWith(status: 'upcoming');
     merged.add(normalized);
   }
+
+  print('DEBUG: Total merged bookings: ${merged.length}');
   return merged;
 });
 

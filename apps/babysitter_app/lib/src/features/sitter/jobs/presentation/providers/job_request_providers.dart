@@ -22,8 +22,9 @@ final jobRequestRepositoryProvider = Provider<JobRequestRepository>((ref) {
 
 /// Provider for fetching job request details.
 /// Pass the applicationId to fetch specific job request details.
-final jobRequestDetailsProvider = FutureProvider.family<
-    JobRequestDetailsModel, String>((ref, applicationId) async {
+final jobRequestDetailsProvider =
+    FutureProvider.autoDispose.family<JobRequestDetailsModel, String>(
+        (ref, applicationId) async {
   final repository = ref.watch(jobRequestRepositoryProvider);
   return repository.getJobRequestDetails(applicationId);
 });

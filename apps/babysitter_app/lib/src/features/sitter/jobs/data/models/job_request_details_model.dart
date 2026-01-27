@@ -21,6 +21,7 @@ class JobRequestDetailsModel extends Equatable {
   final String startTime;
   final String endTime;
   final int numberOfDays;
+  final String status;
   final String? additionalNotes;
   final List<String> transportationModes;
   final List<String> equipmentSafety;
@@ -57,6 +58,7 @@ class JobRequestDetailsModel extends Equatable {
     required this.startTime,
     required this.endTime,
     required this.numberOfDays,
+    required this.status,
     this.additionalNotes,
     this.transportationModes = const [],
     this.equipmentSafety = const [],
@@ -122,6 +124,9 @@ class JobRequestDetailsModel extends Equatable {
       startTime: json['startTime'] as String,
       endTime: json['endTime'] as String,
       numberOfDays: json['numberOfDays'] as int,
+      status: json['status'] as String? ??
+          json['applicationStatus'] as String? ??
+          '',
       additionalNotes: json['additionalNotes'] as String?,
       transportationModes:
           (json['transportationModes'] as List?)?.cast<String>() ?? [],
@@ -167,6 +172,7 @@ class JobRequestDetailsModel extends Equatable {
       'startTime': startTime,
       'endTime': endTime,
       'numberOfDays': numberOfDays,
+      'status': status,
       'additionalNotes': additionalNotes,
       'transportationModes': transportationModes,
       'equipmentSafety': equipmentSafety,
@@ -206,6 +212,7 @@ class JobRequestDetailsModel extends Equatable {
         startTime,
         endTime,
         numberOfDays,
+        status,
         additionalNotes,
         transportationModes,
         equipmentSafety,

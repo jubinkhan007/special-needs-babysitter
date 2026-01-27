@@ -173,7 +173,10 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const BookingRequestSentScreen(),
+            builder: (context) => BookingRequestSentScreen(
+              bookingId: result.jobId,
+              sitterName: bookingState.sitterName ?? 'your sitter',
+            ),
           ),
         );
       }
