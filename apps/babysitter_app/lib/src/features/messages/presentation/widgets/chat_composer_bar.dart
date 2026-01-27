@@ -42,6 +42,7 @@ class ChatComposerBar extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         controller: controller,
+                        style: AppTokens.composerHintStyle.copyWith(color: AppTokens.textPrimary),
                         decoration: InputDecoration(
                           hintText: 'Type your message....',
                           hintStyle: AppTokens.composerHintStyle,

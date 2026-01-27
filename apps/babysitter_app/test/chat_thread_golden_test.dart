@@ -15,7 +15,13 @@ void main() {
       builder: (context, child) {
         return ProviderScope(
           overrides: [
-            currentUserProvider.overrideWith((ref) async => null),
+            currentUserProvider.overrideWith((ref) async => const User(
+                  id: 'current-user-id',
+                  email: 'test@example.com',
+                  role: UserRole.parent,
+                  firstName: 'Current',
+                  lastName: 'User',
+                )),
             chatMessagesProvider.overrideWith(TestChatMessagesNotifier.new),
           ],
           child: const MaterialApp(
