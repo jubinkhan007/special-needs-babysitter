@@ -223,7 +223,7 @@ class AppTokens {
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: Colors.white,
-        height: 1.0,
+        height: 1.2,
       );
 
   // ========= Status chip palette (soft/pastel) =========
@@ -575,7 +575,7 @@ class AppTokens {
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: Colors.white,
-        height: 1.0, // Fix vertical alignment/clipping
+        height: 1.2, // Fix vertical alignment/clipping
       );
   // ═══════════════════════════════════════════════════════════════════════════
   // JOB DETAILS SCREEN TOKENS
@@ -648,14 +648,14 @@ class AppTokens {
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: Colors.white,
-        height: 1.0,
+        height: 1.2,
       );
   static TextStyle get jobDetailsOutlinedTextStyle => TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: jobDetailsOutlinedTextColor,
-        height: 1.0,
+        height: 1.2,
       );
   // ═══════════════════════════════════════════════════════════════════════════
   // APPLICATIONS SCREEN TOKENS
