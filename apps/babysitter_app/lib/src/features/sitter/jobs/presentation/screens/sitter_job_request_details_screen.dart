@@ -12,6 +12,7 @@ import '../widgets/key_value_row.dart';
 import '../widgets/soft_skill_chip.dart';
 import '../widgets/decline_reason_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 
 /// Screen showing details of a job request (invitation) that a sitter received.
 class SitterJobRequestDetailsScreen extends ConsumerWidget {
@@ -143,6 +144,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
   Widget _buildContent(BuildContext context, WidgetRef ref,
       JobRequestDetailsModel jobDetails, AsyncValue<void> controllerState) {
     final isLoading = controllerState.isLoading;
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    final jobId = jobDetails.id;
+    final isSaved = savedJobsState.savedJobIds.contains(jobId);
     final actionApplicationId = jobDetails.applicationId.isNotEmpty
         ? jobDetails.applicationId
         : applicationId;
@@ -192,8 +196,31 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        Icon(Icons.bookmark_border,
-                            color: const Color(0xFF667085), size: 24.w),
+                        GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(savedJobsControllerProvider.notifier)
+                                .toggleSaved(jobId)
+                                .catchError((error) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(error
+                                      .toString()
+                                      .replaceFirst('Exception: ', '')),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            });
+                          },
+                          child: Icon(
+                            isSaved
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            color: const Color(0xFF667085),
+                            size: 24.w,
+                          ),
+                        ),
                       ],
                     ),
                   ),

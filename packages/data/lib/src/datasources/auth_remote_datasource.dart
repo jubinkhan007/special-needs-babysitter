@@ -30,7 +30,7 @@ class AuthRemoteDataSource {
       print('DEBUG: SignIn profileCompletion percentage=$percentage');
       if (percentage >= 100) {
         // Override profileSetupComplete to true since profile is 100% complete
-        userMap['profile_setup_complete'] = true;
+        userMap['profileSetupComplete'] = true;
         print('DEBUG: SignIn overriding profileSetupComplete=true');
       }
     }
@@ -135,7 +135,7 @@ class AuthRemoteDataSource {
         final percentage = profileCompletion['percentage'] as num? ?? 0;
         print('DEBUG: SignUp profileCompletion percentage=$percentage');
         if (percentage >= 100) {
-          userMap['profile_setup_complete'] = true;
+          userMap['profileSetupComplete'] = true;
           print('DEBUG: SignUp overriding profileSetupComplete=true');
         }
       }

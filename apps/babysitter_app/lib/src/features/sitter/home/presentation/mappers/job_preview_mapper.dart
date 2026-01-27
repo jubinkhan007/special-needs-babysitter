@@ -2,7 +2,7 @@ import 'package:domain/domain.dart';
 import '../../domain/entities/job_preview.dart';
 
 class JobPreviewMapper {
-  static JobPreview map(Job job) {
+  static JobPreview map(Job job, {bool isBookmarked = false}) {
     return JobPreview(
       id: job.id ?? '',
       title: job.title,
@@ -18,6 +18,7 @@ class JobPreviewMapper {
         'Special Needs'
       ], // Placeholder, maybe extract from details?
       hourlyRate: job.payRate,
+      isBookmarked: isBookmarked,
     );
   }
 }

@@ -13,6 +13,7 @@ import '../widgets/cover_letter_preview_card.dart';
 import '../widgets/application_bottom_bar.dart';
 import '../widgets/application_submitted_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 
 /// Sitter Application Preview Screen.
 class SitterApplicationPreviewScreen extends ConsumerWidget {
@@ -77,20 +78,49 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
           // Content
           Expanded(
             child: previewAsync.when(
-              data: (preview) => SingleChildScrollView(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  children: [
-                    // Card 1 - Job Details Preview
-                    JobDetailsPreviewCard(jobDetails: preview.jobDetails),
-                    SizedBox(height: 12.h),
-                    // Card 2 - Cover Letter Preview
-                    CoverLetterPreviewCard(coverLetter: preview.coverLetter),
-                    // Extra padding at bottom to avoid bottom bar overlap
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
+              data: (preview) {
+                final savedJobsState = ref.watch(savedJobsControllerProvider);
+                final jobId = preview.jobId;
+                final isSaved = savedJobsState.savedJobIds.contains(jobId);
+                return SingleChildScrollView(
+                  padding: EdgeInsets.all(16.w),
+                  child: Column(
+                    children: [
+                      // Card 1 - Job Details Preview
+                      JobDetailsPreviewCard(
+                        jobDetails: preview.jobDetails,
+                        isBookmarked: isSaved,
+                        onBookmarkTap: () {
+                          ref
+                              .read(savedJobsControllerProvider.notifier)
+                              .toggleSaved(jobId)
+                              .catchError((error) {
+                            AppToast.show(
+                              context,
+                              SnackBar(
+                                content: Text(error
+                                    .toString()
+                                    .replaceFirst('Exception: ', '')),
+                                backgroundColor: Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.all(16.w),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                              ),
+                            );
+                          });
+                        },
+                      ),
+                      SizedBox(height: 12.h),
+                      // Card 2 - Cover Letter Preview
+                      CoverLetterPreviewCard(coverLetter: preview.coverLetter),
+                      // Extra padding at bottom to avoid bottom bar overlap
+                      SizedBox(height: 20.h),
+                    ],
+                  ),
+                );
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stack) => Center(
                 child: Padding(

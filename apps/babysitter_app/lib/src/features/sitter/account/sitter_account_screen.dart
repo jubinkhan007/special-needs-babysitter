@@ -117,10 +117,7 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                     );
                   },
                   onTapSavedJobs: () {
-                    // TODO: Navigate to saved jobs
-                    AppToast.show(context, 
-                      const SnackBar(content: Text('Saved jobs coming soon')),
-                    );
+                    context.push(Routes.sitterSavedJobs);
                   },
                 ),
                 const SizedBox(height: 20),

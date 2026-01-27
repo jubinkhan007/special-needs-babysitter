@@ -13,6 +13,8 @@ import '../widgets/section_divider.dart';
 import '../widgets/soft_skill_chip.dart';
 import '../widgets/status_pill.dart';
 import '../widgets/bottom_primary_button.dart';
+import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Screen showing details of a job application the sitter has already submitted.
 class SitterApplicationDetailsScreen extends ConsumerWidget {
@@ -29,7 +31,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
         ref.watch(sitterApplicationDetailsProvider(applicationId));
 
     return applicationAsync.when(
-      data: (application) => _buildContent(context, application),
+      data: (application) => _buildContent(context, ref, application),
       loading: () => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -84,9 +86,13 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, ApplicationModel application) {
+  Widget _buildContent(
+      BuildContext context, WidgetRef ref, ApplicationModel application) {
     final job = application.job;
     final timeAgo = timeago.format(application.createdAt);
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    final jobId = job.id;
+    final isSaved = savedJobsState.savedJobIds.contains(jobId);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -144,10 +150,33 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 4.h),
-                          child: Icon(Icons.bookmark_outline,
-                              color: const Color(0xFF667085), size: 24.w),
+                        GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(savedJobsControllerProvider.notifier)
+                                .toggleSaved(jobId)
+                                .catchError((error) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(error
+                                      .toString()
+                                      .replaceFirst('Exception: ', '')),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 4.h),
+                            child: Icon(
+                              isSaved
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_outline,
+                              color: const Color(0xFF667085),
+                              size: 24.w,
+                            ),
+                          ),
                         ),
                       ],
                     ),

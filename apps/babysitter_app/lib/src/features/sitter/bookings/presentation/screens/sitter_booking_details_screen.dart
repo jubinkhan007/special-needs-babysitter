@@ -14,8 +14,12 @@ import '../../../jobs/presentation/widgets/key_value_row.dart';
 import '../../../jobs/presentation/widgets/soft_skill_chip.dart';
 import '../../../jobs/presentation/widgets/section_divider.dart';
 import '../../../../messages/domain/chat_thread_args.dart';
+import '../../../../bookings/domain/booking_status.dart';
+import '../../../../bookings/domain/review/review_args.dart';
+import '../../../../bookings/presentation/models/booking_details_ui_model.dart';
 import '../providers/bookings_providers.dart';
 import '../providers/session_tracking_providers.dart';
+import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 
@@ -38,6 +42,7 @@ class SitterBookingDetailsScreen extends ConsumerStatefulWidget {
 class _SitterBookingDetailsScreenState
     extends ConsumerState<SitterBookingDetailsScreen> {
   bool _isClockingIn = false;
+  bool _hasRedirectedToActive = false;
   static const String _emergencySelection = 'Emergency Situation';
   static const String _emergencyPayloadReason =
       'Medical emergency - unable to fulfill booking';
@@ -48,6 +53,25 @@ class _SitterBookingDetailsScreenState
   Widget build(BuildContext context) {
     final jobDetailsAsync =
         ref.watch(jobRequestDetailsProvider(widget.applicationId));
+    final trackingState = ref.watch(sessionTrackingControllerProvider);
+    final session = trackingState.session;
+
+    final hasActiveSession =
+        session != null && session.applicationId == widget.applicationId;
+    if (hasActiveSession) {
+      if (!_hasRedirectedToActive) {
+        _hasRedirectedToActive = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          context.go('${Routes.sitterActiveBooking}/${widget.applicationId}');
+        });
+      }
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _buildAppBar(context, title: 'Booking Details'),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
 
     return jobDetailsAsync.when(
       data: (jobDetails) {
@@ -162,6 +186,9 @@ class _SitterBookingDetailsScreenState
 
   Widget _buildContent(
       BuildContext context, WidgetRef ref, JobRequestDetailsModel jobDetails) {
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    final jobId = jobDetails.id;
+    final isSaved = savedJobsState.savedJobIds.contains(jobId);
     final fallbackStatus = jobDetails.status.trim();
     final statusValue =
         (widget.initialStatus?.trim().isNotEmpty == true)
@@ -211,8 +238,31 @@ class _SitterBookingDetailsScreenState
                             ),
                           ),
                         ),
-                        Icon(Icons.bookmark_border,
-                            color: const Color(0xFF667085), size: 24.w),
+                        GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(savedJobsControllerProvider.notifier)
+                                .toggleSaved(jobId)
+                                .catchError((error) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(error
+                                      .toString()
+                                      .replaceFirst('Exception: ', '')),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            });
+                          },
+                          child: Icon(
+                            isSaved
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            color: const Color(0xFF667085),
+                            size: 24.w,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -1991,7 +2041,12 @@ class _SitterBookingDetailsScreenState
                             if (!dialogContext.mounted) return;
                             if (success) {
                               Navigator.of(dialogContext).pop();
-                              parentContext.go(Routes.sitterBookings);
+                              final reviewArgs =
+                                  _buildReviewArgs(applicationId, jobDetails);
+                              parentContext.push(
+                                Routes.sitterReview,
+                                extra: reviewArgs,
+                              );
                               return;
                             }
                             setState(() {
@@ -2181,7 +2236,14 @@ class _SitterBookingDetailsScreenState
       await ref
           .read(sessionTrackingControllerProvider.notifier)
           .loadSession(applicationId, forceRefresh: true);
+      ref.invalidate(sitterCurrentBookingsProvider);
+      ref.invalidate(sitterBookingsProvider('active'));
+      ref.invalidate(sitterBookingsProvider('in_progress'));
+      ref.invalidate(sitterBookingsProvider('upcoming'));
       await _showClockInDialog(context);
+      if (mounted) {
+        context.go('${Routes.sitterActiveBooking}/$applicationId');
+      }
       ref.invalidate(jobRequestDetailsProvider(applicationId));
     } catch (e) {
       if (!mounted) {
@@ -2390,6 +2452,60 @@ class _SitterBookingDetailsScreenState
     final period = time.period == DayPeriod.am ? 'AM' : 'PM';
     return '$hour:$minute $period';
   }
+
+  ReviewArgs _buildReviewArgs(
+    String applicationId,
+    JobRequestDetailsModel jobDetails,
+  ) {
+    final hourlyRate = _formatCurrency(jobDetails.payRate);
+    final timeRange = [
+      _formatTime(jobDetails.startTime),
+      _formatTime(jobDetails.endTime),
+    ].where((value) => value.isNotEmpty).join(' - ');
+    final dateRange = jobDetails.startDate == jobDetails.endDate
+        ? _formatScheduledDate(jobDetails.startDate)
+        : '${_formatScheduledDate(jobDetails.startDate)} - ${_formatScheduledDate(jobDetails.endDate)}';
+    final sitterData = BookingDetailsUiModel(
+      sitterName: jobDetails.familyName,
+      avatarUrl: '',
+      isVerified: false,
+      rating: '',
+      responseRate: '',
+      reliabilityRate: '',
+      experience: '',
+      distance: '',
+      skills: const [],
+      familyName: jobDetails.familyName,
+      numberOfChildren: jobDetails.childrenCount.toString(),
+      dateRange: dateRange,
+      timeRange: timeRange,
+      hourlyRate: '$hourlyRate/hour',
+      numberOfDays: jobDetails.numberOfDays.toString(),
+      additionalNotes: jobDetails.additionalNotes ?? '',
+      address: jobDetails.fullAddress,
+      subTotal: '',
+      totalHours: '',
+      platformFee: '',
+      discount: '',
+      estimatedTotalCost: '',
+    );
+
+    return ReviewArgs(
+      bookingId: applicationId,
+      sitterId: jobDetails.parentUserId ?? '',
+      sitterName: jobDetails.familyName,
+      sitterData: sitterData,
+      status: BookingStatus.completed,
+      jobTitle: jobDetails.title,
+      location: jobDetails.location,
+      familyName: jobDetails.familyName,
+      childrenCount: jobDetails.childrenCount.toString(),
+      paymentLabel: '$hourlyRate/hour',
+      avatarUrl: jobDetails.familyPhotoUrl,
+      reviewPrompt: 'Rate Your Experience With This Family\n(Private).',
+    );
+  }
+
 }
 
 class _ClockInState {

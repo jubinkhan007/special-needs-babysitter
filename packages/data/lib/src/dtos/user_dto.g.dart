@@ -10,28 +10,29 @@ _$UserDtoImpl _$$UserDtoImplFromJson(Map<String, dynamic> json) =>
     _$UserDtoImpl(
       id: json['id'] as String,
       email: json['email'] as String,
-      firstName: json['first_name'] as String?,
-      lastName: json['last_name'] as String?,
-      phoneNumber: json['phone_number'] as String?,
-      avatarUrl: json['avatar_url'] as String?,
+      firstName: json['firstName'] as String?,
+      lastName: json['lastName'] as String?,
+      phoneNumber: _readPhone(json, 'phoneNumber') as String?,
+      avatarUrl: _readAvatarUrl(json, 'avatarUrl') as String?,
       role: json['role'] as String? ?? 'parent',
-      isProfileComplete: json['profile_setup_complete'] as bool? ?? false,
-      isSitterApproved: json['phone_verified'] as bool? ?? false,
-      createdAt: json['created_at'] == null
+      isProfileComplete:
+          _readProfileComplete(json, 'isProfileComplete') as bool? ?? false,
+      isSitterApproved: json['phoneVerified'] as bool? ?? false,
+      createdAt: json['createdAt'] == null
           ? null
-          : DateTime.parse(json['created_at'] as String),
+          : DateTime.parse(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$$UserDtoImplToJson(_$UserDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'email': instance.email,
-      'first_name': instance.firstName,
-      'last_name': instance.lastName,
-      'phone_number': instance.phoneNumber,
-      'avatar_url': instance.avatarUrl,
+      'firstName': instance.firstName,
+      'lastName': instance.lastName,
+      'phoneNumber': instance.phoneNumber,
+      'avatarUrl': instance.avatarUrl,
       'role': instance.role,
-      'profile_setup_complete': instance.isProfileComplete,
-      'phone_verified': instance.isSitterApproved,
-      'created_at': instance.createdAt?.toIso8601String(),
+      'isProfileComplete': instance.isProfileComplete,
+      'phoneVerified': instance.isSitterApproved,
+      'createdAt': instance.createdAt?.toIso8601String(),
     };

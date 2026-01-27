@@ -22,20 +22,18 @@ UserDto _$UserDtoFromJson(Map<String, dynamic> json) {
 mixin _$UserDto {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: 'first_name')
   String? get firstName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'last_name')
   String? get lastName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'phone_number')
+  @JsonKey(readValue: _readPhone)
   String? get phoneNumber => throw _privateConstructorUsedError;
-  @JsonKey(name: 'avatar_url')
+  @JsonKey(readValue: _readAvatarUrl)
   String? get avatarUrl => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
-  @JsonKey(name: 'profile_setup_complete')
+  @JsonKey(readValue: _readProfileComplete)
   bool get isProfileComplete => throw _privateConstructorUsedError;
-  @JsonKey(name: 'phone_verified')
+  @JsonKey(name: 'phoneVerified')
   bool get isSitterApproved => throw _privateConstructorUsedError;
-  @JsonKey(name: 'created_at')
+  @JsonKey(name: 'createdAt')
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
   /// Serializes this UserDto to a JSON map.
@@ -55,14 +53,14 @@ abstract class $UserDtoCopyWith<$Res> {
   $Res call(
       {String id,
       String email,
-      @JsonKey(name: 'first_name') String? firstName,
-      @JsonKey(name: 'last_name') String? lastName,
-      @JsonKey(name: 'phone_number') String? phoneNumber,
-      @JsonKey(name: 'avatar_url') String? avatarUrl,
+      String? firstName,
+      String? lastName,
+      @JsonKey(readValue: _readPhone) String? phoneNumber,
+      @JsonKey(readValue: _readAvatarUrl) String? avatarUrl,
       String role,
-      @JsonKey(name: 'profile_setup_complete') bool isProfileComplete,
-      @JsonKey(name: 'phone_verified') bool isSitterApproved,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+      @JsonKey(readValue: _readProfileComplete) bool isProfileComplete,
+      @JsonKey(name: 'phoneVerified') bool isSitterApproved,
+      @JsonKey(name: 'createdAt') DateTime? createdAt});
 }
 
 /// @nodoc
@@ -146,14 +144,14 @@ abstract class _$$UserDtoImplCopyWith<$Res> implements $UserDtoCopyWith<$Res> {
   $Res call(
       {String id,
       String email,
-      @JsonKey(name: 'first_name') String? firstName,
-      @JsonKey(name: 'last_name') String? lastName,
-      @JsonKey(name: 'phone_number') String? phoneNumber,
-      @JsonKey(name: 'avatar_url') String? avatarUrl,
+      String? firstName,
+      String? lastName,
+      @JsonKey(readValue: _readPhone) String? phoneNumber,
+      @JsonKey(readValue: _readAvatarUrl) String? avatarUrl,
       String role,
-      @JsonKey(name: 'profile_setup_complete') bool isProfileComplete,
-      @JsonKey(name: 'phone_verified') bool isSitterApproved,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+      @JsonKey(readValue: _readProfileComplete) bool isProfileComplete,
+      @JsonKey(name: 'phoneVerified') bool isSitterApproved,
+      @JsonKey(name: 'createdAt') DateTime? createdAt});
 }
 
 /// @nodoc
@@ -231,14 +229,14 @@ class _$UserDtoImpl implements _UserDto {
   const _$UserDtoImpl(
       {required this.id,
       required this.email,
-      @JsonKey(name: 'first_name') this.firstName,
-      @JsonKey(name: 'last_name') this.lastName,
-      @JsonKey(name: 'phone_number') this.phoneNumber,
-      @JsonKey(name: 'avatar_url') this.avatarUrl,
+      this.firstName,
+      this.lastName,
+      @JsonKey(readValue: _readPhone) this.phoneNumber,
+      @JsonKey(readValue: _readAvatarUrl) this.avatarUrl,
       this.role = 'parent',
-      @JsonKey(name: 'profile_setup_complete') this.isProfileComplete = false,
-      @JsonKey(name: 'phone_verified') this.isSitterApproved = false,
-      @JsonKey(name: 'created_at') this.createdAt});
+      @JsonKey(readValue: _readProfileComplete) this.isProfileComplete = false,
+      @JsonKey(name: 'phoneVerified') this.isSitterApproved = false,
+      @JsonKey(name: 'createdAt') this.createdAt});
 
   factory _$UserDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDtoImplFromJson(json);
@@ -248,28 +246,26 @@ class _$UserDtoImpl implements _UserDto {
   @override
   final String email;
   @override
-  @JsonKey(name: 'first_name')
   final String? firstName;
   @override
-  @JsonKey(name: 'last_name')
   final String? lastName;
   @override
-  @JsonKey(name: 'phone_number')
+  @JsonKey(readValue: _readPhone)
   final String? phoneNumber;
   @override
-  @JsonKey(name: 'avatar_url')
+  @JsonKey(readValue: _readAvatarUrl)
   final String? avatarUrl;
   @override
   @JsonKey()
   final String role;
   @override
-  @JsonKey(name: 'profile_setup_complete')
+  @JsonKey(readValue: _readProfileComplete)
   final bool isProfileComplete;
   @override
-  @JsonKey(name: 'phone_verified')
+  @JsonKey(name: 'phoneVerified')
   final bool isSitterApproved;
   @override
-  @JsonKey(name: 'created_at')
+  @JsonKey(name: 'createdAt')
   final DateTime? createdAt;
 
   @override
@@ -336,14 +332,14 @@ abstract class _UserDto implements UserDto {
   const factory _UserDto(
       {required final String id,
       required final String email,
-      @JsonKey(name: 'first_name') final String? firstName,
-      @JsonKey(name: 'last_name') final String? lastName,
-      @JsonKey(name: 'phone_number') final String? phoneNumber,
-      @JsonKey(name: 'avatar_url') final String? avatarUrl,
+      final String? firstName,
+      final String? lastName,
+      @JsonKey(readValue: _readPhone) final String? phoneNumber,
+      @JsonKey(readValue: _readAvatarUrl) final String? avatarUrl,
       final String role,
-      @JsonKey(name: 'profile_setup_complete') final bool isProfileComplete,
-      @JsonKey(name: 'phone_verified') final bool isSitterApproved,
-      @JsonKey(name: 'created_at') final DateTime? createdAt}) = _$UserDtoImpl;
+      @JsonKey(readValue: _readProfileComplete) final bool isProfileComplete,
+      @JsonKey(name: 'phoneVerified') final bool isSitterApproved,
+      @JsonKey(name: 'createdAt') final DateTime? createdAt}) = _$UserDtoImpl;
 
   factory _UserDto.fromJson(Map<String, dynamic> json) = _$UserDtoImpl.fromJson;
 
@@ -352,27 +348,25 @@ abstract class _UserDto implements UserDto {
   @override
   String get email;
   @override
-  @JsonKey(name: 'first_name')
   String? get firstName;
   @override
-  @JsonKey(name: 'last_name')
   String? get lastName;
   @override
-  @JsonKey(name: 'phone_number')
+  @JsonKey(readValue: _readPhone)
   String? get phoneNumber;
   @override
-  @JsonKey(name: 'avatar_url')
+  @JsonKey(readValue: _readAvatarUrl)
   String? get avatarUrl;
   @override
   String get role;
   @override
-  @JsonKey(name: 'profile_setup_complete')
+  @JsonKey(readValue: _readProfileComplete)
   bool get isProfileComplete;
   @override
-  @JsonKey(name: 'phone_verified')
+  @JsonKey(name: 'phoneVerified')
   bool get isSitterApproved;
   @override
-  @JsonKey(name: 'created_at')
+  @JsonKey(name: 'createdAt')
   DateTime? get createdAt;
 
   /// Create a copy of UserDto

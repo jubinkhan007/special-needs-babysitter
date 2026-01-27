@@ -53,16 +53,15 @@ class ProfileRemoteDataSource {
     }
 
     // Fix for missing avatar_url: try to find it in 'profile' object
-    if (userMap['avatar_url'] == null) {
+    if (userMap['avatarUrl'] == null) {
+      // 1. Try to find it in the current response first
       Map<String, dynamic>? profileMap;
-      // Check data.data.profile
       if (data['data'] is Map<String, dynamic>) {
         final innerData = data['data'] as Map<String, dynamic>;
         if (innerData['profile'] is Map<String, dynamic>) {
           profileMap = innerData['profile'] as Map<String, dynamic>;
         }
       }
-      // Check data.profile
       if (profileMap == null && data['profile'] is Map<String, dynamic>) {
         profileMap = data['profile'] as Map<String, dynamic>;
       }
@@ -70,16 +69,52 @@ class ProfileRemoteDataSource {
       if (profileMap != null) {
         final photoUrl = profileMap['photoUrl'] ?? profileMap['photo_url'];
         if (photoUrl != null) {
-          print('DEBUG: Found photoUrl in profile object, mapping to avatar_url');
-          userMap['avatar_url'] = photoUrl;
+          print(
+              'DEBUG: Found photoUrl in profile object (local), mapping to avatarUrl');
+          userMap['avatarUrl'] = photoUrl;
+        }
+      }
+
+      // 2. If still null, try fetching role-specific endpoint
+      if (userMap['avatarUrl'] == null) {
+        try {
+          final role = userMap['role']?.toString().toLowerCase();
+          String? endpoint;
+          if (role == 'sitter') {
+            endpoint = '/sitters/me';
+          } else if (role == 'parent') {
+            endpoint = '/parents/me';
+          }
+
+          if (endpoint != null) {
+            print('DEBUG: Fetching $endpoint to get missing avatar_url');
+            final roleResponse = await _dio.get(endpoint);
+            final roleData = roleResponse.data;
+            if (roleData is Map<String, dynamic> &&
+                roleData['data'] is Map<String, dynamic>) {
+              final innerRoleData = roleData['data'] as Map<String, dynamic>;
+              if (innerRoleData['profile'] is Map<String, dynamic>) {
+                final roleProfile =
+                    innerRoleData['profile'] as Map<String, dynamic>;
+                final rolePhoto =
+                    roleProfile['photoUrl'] ?? roleProfile['photo_url'];
+                if (rolePhoto != null) {
+                  print(
+                      'DEBUG: Found photoUrl in $endpoint, mapping to avatarUrl');
+                  userMap['avatarUrl'] = rolePhoto;
+                }
+              }
+            }
+          }
+        } catch (e) {
+          print('DEBUG: Failed to fetch role-specific profile for avatar: $e');
         }
       }
     }
 
     // Extra safety: ensure id and email are present before calling fromJson if possible
     print('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
-    print(
-        'DEBUG: ProfileRemoteDataSource avatar_url: ${userMap['avatar_url']}');
+    print('DEBUG: ProfileRemoteDataSource avatarUrl: ${userMap['avatarUrl']}');
 
     if (userMap['id'] == null || userMap['email'] == null) {
       print(
@@ -102,7 +137,7 @@ class ProfileRemoteDataSource {
       print(
           'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage');
       if (percentage >= 100) {
-        userMap['profile_setup_complete'] = true;
+        userMap['profileSetupComplete'] = true;
         print(
             'DEBUG: Overriding profileSetupComplete=true due to 100% completion');
       }
@@ -113,7 +148,7 @@ class ProfileRemoteDataSource {
 
     // 2. Handle both snake_case and camelCase from API
     if (userMap['profileSetupComplete'] == true) {
-      userMap['profile_setup_complete'] = true;
+      userMap['profileSetupComplete'] = true;
     }
 
     try {

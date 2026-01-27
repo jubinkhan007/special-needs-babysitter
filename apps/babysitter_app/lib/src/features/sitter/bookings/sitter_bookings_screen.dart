@@ -6,6 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 import 'presentation/providers/bookings_providers.dart';
 import 'presentation/widgets/booking_card.dart';
+import 'presentation/providers/session_tracking_providers.dart';
+import '../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter bookings screen
 class SitterBookingsScreen extends ConsumerWidget {
@@ -20,6 +23,9 @@ class SitterBookingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookingsAsync = ref.watch(sitterCurrentBookingsProvider);
+    final activeSession = ref.watch(sessionTrackingControllerProvider).session;
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    ref.watch(savedJobsListProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -88,13 +94,46 @@ class SitterBookingsScreen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final booking = bookings[index];
                 final isActive = _isActiveStatus(booking.status);
+                final jobId = booking.id;
+                final isSaved = savedJobsState.savedJobIds.contains(jobId);
                 print(
                     'DEBUG: BookingCard[$index] - applicationId: ${booking.applicationId}, title: ${booking.title}, status: ${booking.status}');
                 return BookingCard(
                   booking: booking,
+                  isBookmarked: isSaved,
+                  onBookmarkTap: () {
+                    if (jobId.isEmpty) {
+                      AppToast.show(context,
+                        const SnackBar(content: Text('Missing job ID')),
+                      );
+                      return;
+                    }
+                    ref
+                        .read(savedJobsControllerProvider.notifier)
+                        .toggleSaved(jobId)
+                        .catchError((error) {
+                      AppToast.show(
+                        context,
+                        SnackBar(
+                          content: Text(error
+                              .toString()
+                              .replaceFirst('Exception: ', '')),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    });
+                  },
                   onTap: () {
                     print(
                         'DEBUG: Tapped booking[$index] - applicationId: ${booking.applicationId}');
+                    if (activeSession != null &&
+                        activeSession.applicationId == booking.applicationId) {
+                      final route =
+                          '${Routes.sitterActiveBooking}/${booking.applicationId}';
+                      print('DEBUG: Navigating to active booking: $route');
+                      context.push(route);
+                      return;
+                    }
                     if (isActive) {
                       final route =
                           '${Routes.sitterActiveBooking}/${booking.applicationId}';

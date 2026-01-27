@@ -15,6 +15,8 @@ import 'presentation/mappers/job_preview_mapper.dart';
 import 'presentation/screens/sitter_all_jobs_screen.dart';
 import '../background_check/data/models/background_check_status_model.dart';
 import '../background_check/presentation/providers/background_check_status_provider.dart';
+import '../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter home screen - Jobs near you
 class SitterHomeScreen extends ConsumerWidget {
@@ -29,6 +31,8 @@ class SitterHomeScreen extends ConsumerWidget {
     print('DEBUG: SitterHomeScreen watching jobsNotifierProvider');
     final jobsAsync = ref.watch(jobsNotifierProvider);
     print('DEBUG: jobsAsync state: ${jobsAsync.toString()}');
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    ref.watch(savedJobsListProvider);
 
     final backgroundCheckAsync = ref.watch(backgroundCheckStatusProvider);
     final status = backgroundCheckAsync.valueOrNull?.status ??
@@ -155,14 +159,38 @@ class SitterHomeScreen extends ConsumerWidget {
                   itemCount: jobs.length,
                   itemBuilder: (context, index) {
                     final job = jobs[index];
-                    final preview = JobPreviewMapper.map(job);
+                    final isSaved =
+                        savedJobsState.savedJobIds.contains(job.id ?? '');
+                    final preview = JobPreviewMapper.map(
+                      job,
+                      isBookmarked: isSaved,
+                    );
                     return JobPreviewCard(
                       job: preview,
                       onViewDetails: () {
                         context.push('${Routes.sitterJobDetails}/${job.id}');
                       },
                       onBookmark: () {
-                        // TODO: Toggle bookmark
+                        final jobId = job.id ?? '';
+                        if (jobId.isEmpty) {
+                          AppToast.show(context,
+                            const SnackBar(content: Text('Missing job ID')),
+                          );
+                          return;
+                        }
+                        ref
+                            .read(savedJobsControllerProvider.notifier)
+                            .toggleSaved(jobId)
+                            .catchError((error) {
+                          AppToast.show(
+                            context,
+                            SnackBar(
+                              content: Text(
+                                  error.toString().replaceFirst('Exception: ', '')),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        });
                       },
                     );
                   },

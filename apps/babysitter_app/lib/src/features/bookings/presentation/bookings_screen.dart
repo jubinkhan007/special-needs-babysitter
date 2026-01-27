@@ -23,6 +23,7 @@ class BookingsScreen extends ConsumerStatefulWidget {
 class _BookingsScreenState extends ConsumerState<BookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  DateTime? _lastRefreshAt;
 
   final List<BookingStatus> _tabs = [
     BookingStatus.active,
@@ -57,6 +58,9 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(bookingsControllerProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _maybeRefreshBookings();
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -132,5 +136,19 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
         ],
       ),
     );
+  }
+
+  void _maybeRefreshBookings() {
+    final route = ModalRoute.of(context);
+    if (route == null || !route.isCurrent) {
+      return;
+    }
+    final now = DateTime.now();
+    final last = _lastRefreshAt;
+    if (last != null && now.difference(last) < const Duration(seconds: 5)) {
+      return;
+    }
+    _lastRefreshAt = now;
+    ref.read(bookingsControllerProvider).refresh();
   }
 }

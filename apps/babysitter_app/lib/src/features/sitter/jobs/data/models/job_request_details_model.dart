@@ -7,6 +7,7 @@ class JobRequestDetailsModel extends Equatable {
   final String id;
   final String applicationId;
   final String? parentUserId;
+  final String? familyPhotoUrl;
   final String applicationType;
   final String title;
   final String familyName;
@@ -44,6 +45,7 @@ class JobRequestDetailsModel extends Equatable {
     required this.id,
     required this.applicationId,
     this.parentUserId,
+    this.familyPhotoUrl,
     required this.applicationType,
     required this.title,
     required this.familyName,
@@ -108,6 +110,11 @@ class JobRequestDetailsModel extends Equatable {
       parentUserId: json['parentUserId'] as String? ??
           json['parentId'] as String? ??
           json['familyUserId'] as String?,
+      familyPhotoUrl: json['familyPhotoUrl'] as String? ??
+          json['parentPhotoUrl'] as String? ??
+          json['parentAvatarUrl'] as String? ??
+          json['familyAvatarUrl'] as String? ??
+          json['familyPhoto'] as String?,
       applicationType: json['applicationType'] as String? ?? 'invited',
       title: json['title'] as String,
       familyName: json['familyName'] as String,
@@ -158,6 +165,7 @@ class JobRequestDetailsModel extends Equatable {
       'id': id,
       'applicationId': applicationId,
       'parentUserId': parentUserId,
+      'familyPhotoUrl': familyPhotoUrl,
       'applicationType': applicationType,
       'title': title,
       'familyName': familyName,
@@ -198,6 +206,7 @@ class JobRequestDetailsModel extends Equatable {
         id,
         applicationId,
         parentUserId,
+        familyPhotoUrl,
         applicationType,
         title,
         familyName,

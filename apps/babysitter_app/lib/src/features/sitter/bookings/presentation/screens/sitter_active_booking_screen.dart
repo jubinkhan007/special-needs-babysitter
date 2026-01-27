@@ -280,7 +280,13 @@ class _SitterActiveBookingScreenState
       leading: IconButton(
         icon:
             Icon(Icons.arrow_back, color: const Color(0xFF667085), size: 24.w),
-        onPressed: () => context.pop(),
+        onPressed: () {
+          if (context.canPop()) {
+            context.pop();
+          } else {
+            context.go(Routes.sitterBookings);
+          }
+        },
       ),
       centerTitle: true,
       title: Text(

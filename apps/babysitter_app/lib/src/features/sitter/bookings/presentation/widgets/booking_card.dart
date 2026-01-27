@@ -7,11 +7,15 @@ import '../../data/models/booking_model.dart';
 class BookingCard extends StatelessWidget {
   final BookingModel booking;
   final VoidCallback? onTap;
+  final bool isBookmarked;
+  final VoidCallback? onBookmarkTap;
 
   const BookingCard({
     super.key,
     required this.booking,
     this.onTap,
+    this.isBookmarked = false,
+    this.onBookmarkTap,
   });
 
   String _formatTimeDisplay() {
@@ -169,10 +173,13 @@ class BookingCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.bookmark_border,
-                  color: AppColors.textTertiary,
-                  size: 24,
+                GestureDetector(
+                  onTap: onBookmarkTap,
+                  child: Icon(
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                    color: AppColors.textTertiary,
+                    size: 24,
+                  ),
                 ),
               ],
             ),

@@ -39,6 +39,7 @@ import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
 import '../features/sitter/account/presentation/profile_details/presentation/sitter_profile_details_screen.dart';
 import '../features/sitter/account/presentation/screens/sitter_reviews_screen.dart';
+import '../features/sitter/saved_jobs/presentation/screens/sitter_saved_jobs_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
@@ -500,6 +501,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           }
           return ReviewScreen(args: args);
         },
+      ),
+      GoRoute(
+        path: Routes.sitterReview,
+        builder: (context, state) {
+          final args = state.extra as ReviewArgs?;
+          if (args == null) {
+            return const Scaffold(
+              body: Center(child: Text('Error: Missing review arguments')),
+            );
+          }
+          return ReviewScreen(args: args);
+        },
+      ),
+      GoRoute(
+        path: Routes.sitterSavedJobs,
+        builder: (context, state) => const SitterSavedJobsScreen(),
       ),
 
       // Report Issue

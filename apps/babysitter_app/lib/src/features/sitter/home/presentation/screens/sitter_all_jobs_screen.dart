@@ -8,6 +8,8 @@ import '../providers/sitter_home_providers.dart';
 import '../widgets/job_preview_card.dart';
 import '../mappers/job_preview_mapper.dart';
 import '../widgets/app_search_field.dart';
+import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class SitterAllJobsScreen extends ConsumerWidget {
   const SitterAllJobsScreen({super.key});
@@ -15,6 +17,8 @@ class SitterAllJobsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final jobsAsync = ref.watch(jobsNotifierProvider);
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    ref.watch(savedJobsListProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -107,13 +111,37 @@ class SitterAllJobsScreen extends ConsumerWidget {
                   itemCount: jobs.length,
                   itemBuilder: (context, index) {
                     final job = jobs[index];
-                    final preview = JobPreviewMapper.map(job);
+                    final isSaved =
+                        savedJobsState.savedJobIds.contains(job.id ?? '');
+                    final preview =
+                        JobPreviewMapper.map(job, isBookmarked: isSaved);
                     return JobPreviewCard(
                       job: preview,
                       onViewDetails: () {
                         context.push('${Routes.sitterJobDetails}/${job.id}');
                       },
-                      onBookmark: () {},
+                      onBookmark: () {
+                        final jobId = job.id ?? '';
+                        if (jobId.isEmpty) {
+                          AppToast.show(context,
+                            const SnackBar(content: Text('Missing job ID')),
+                          );
+                          return;
+                        }
+                        ref
+                            .read(savedJobsControllerProvider.notifier)
+                            .toggleSaved(jobId)
+                            .catchError((error) {
+                          AppToast.show(
+                            context,
+                            SnackBar(
+                              content: Text(
+                                  error.toString().replaceFirst('Exception: ', '')),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        });
+                      },
                     );
                   },
                 );

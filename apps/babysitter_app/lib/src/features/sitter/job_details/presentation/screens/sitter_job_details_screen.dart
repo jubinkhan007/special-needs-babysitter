@@ -16,6 +16,7 @@ import '../widgets/transportation_section.dart';
 import '../widgets/cover_letter_box.dart';
 import '../widgets/job_details_bottom_bar.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 
 /// Sitter job details screen.
 class SitterJobDetailsScreen extends ConsumerStatefulWidget {
@@ -131,6 +132,9 @@ class _SitterJobDetailsScreenState
   }
 
   Widget _buildContent(BuildContext context, dynamic job) {
+    final savedJobsState = ref.watch(savedJobsControllerProvider);
+    final jobId = job.id as String;
+    final isSaved = savedJobsState.savedJobIds.contains(jobId);
     return SingleChildScrollView(
       padding: EdgeInsets.only(bottom: 20.h),
       child: Column(
@@ -141,9 +145,21 @@ class _SitterJobDetailsScreenState
           JobHeaderBlock(
             title: job.title,
             postedTimeAgo: job.postedTimeAgo,
-            isBookmarked: job.isBookmarked,
+            isBookmarked: isSaved,
             onBookmarkTap: () {
-              // TODO: Toggle bookmark
+              ref
+                  .read(savedJobsControllerProvider.notifier)
+                  .toggleSaved(jobId)
+                  .catchError((error) {
+                AppToast.show(
+                  context,
+                  SnackBar(
+                    content: Text(
+                        error.toString().replaceFirst('Exception: ', '')),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              });
             },
           ),
           SizedBox(height: 16.h),
