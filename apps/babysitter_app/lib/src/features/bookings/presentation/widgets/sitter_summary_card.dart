@@ -13,6 +13,15 @@ class SitterSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final avatarUrl = uiModel.avatarUrl.trim();
+    final hasAvatar = avatarUrl.isNotEmpty;
+    final isNetworkAvatar = avatarUrl.startsWith('http');
+    final ImageProvider? avatarProvider = hasAvatar
+        ? (isNetworkAvatar
+            ? NetworkImage(avatarUrl)
+            : AssetImage(avatarUrl) as ImageProvider)
+        : null;
+
     return BookingSurfaceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,11 +36,17 @@ class SitterSummaryCard extends StatelessWidget {
                 height: AppTokens.avatarSize,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage(uiModel.avatarUrl),
-                    fit: BoxFit.cover,
-                  ),
+                  color: AppTokens.primaryBlue.withAlpha(20),
                 ),
+                clipBehavior: Clip.antiAlias,
+                child: hasAvatar
+                    ? Image(
+                        image: avatarProvider!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            _buildAvatarFallback(),
+                      )
+                    : _buildAvatarFallback(),
               ),
               const SizedBox(width: 14),
 
@@ -42,7 +57,14 @@ class SitterSummaryCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(uiModel.sitterName, style: AppTokens.cardName),
+                        Flexible(
+                          child: Text(
+                            uiModel.sitterName,
+                            style: AppTokens.cardName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                         const SizedBox(width: 8),
                         if (uiModel.isVerified)
                           const Icon(Icons.verified,
@@ -55,7 +77,14 @@ class SitterSummaryCard extends StatelessWidget {
                         const Icon(Icons.location_on,
                             size: 14, color: AppTokens.primaryBlue),
                         const SizedBox(width: 4),
-                        Text(uiModel.distance, style: AppTokens.cardMeta),
+                        Flexible(
+                          child: Text(
+                            uiModel.distance,
+                            style: AppTokens.cardMeta,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -139,6 +168,15 @@ class SitterSummaryCard extends StatelessWidget {
         const SizedBox(height: 4),
         Text(value, style: AppTokens.statValue),
       ],
+    );
+  }
+
+  Widget _buildAvatarFallback() {
+    return const Center(
+      child: Icon(
+        Icons.person,
+        color: AppTokens.primaryBlue,
+      ),
     );
   }
 

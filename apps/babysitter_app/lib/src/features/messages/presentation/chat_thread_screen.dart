@@ -85,7 +85,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final messagesAsync = ref.watch(chatMessagesProvider(widget.args.otherUserId));
+    final messagesAsync =
+        ref.watch(chatMessagesProvider(widget.args.otherUserId));
     final sessionUser = ref.watch(authNotifierProvider).valueOrNull?.user;
     final currentUser = ref.watch(currentUserProvider).valueOrNull;
     final currentUserId = sessionUser?.id ?? currentUser?.id ?? '';
@@ -150,6 +151,14 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                       ),
                     ),
                     data: (messages) {
+                      // Wait for currentUserId to be available to avoid
+                      // messages briefly showing on wrong side
+                      if (currentUserId.isEmpty) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
                       if (messages.isEmpty) {
                         return const Center(
                           child: Text(
@@ -163,7 +172,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                         );
                       }
 
-                      final uiModels = _convertToUiModels(messages, currentUserId);
+                      final uiModels =
+                          _convertToUiModels(messages, currentUserId);
 
                       return ListView.builder(
                         controller: _scrollController,
@@ -224,9 +234,11 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       final showDaySeparator = dateStr != lastDateStr;
       lastDateStr = dateStr;
 
+      // Determine if message is from current user:
+      // 1. senderUserId matches currentUserId, OR
+      // 2. recipientUserId is the other user (meaning we sent it)
       final isMe = message.senderUserId == currentUserId ||
-          (message.senderUserId.isEmpty &&
-              message.recipientUserId == widget.args.otherUserId);
+          message.recipientUserId == widget.args.otherUserId;
       final messageText = message.textContent?.trim().isNotEmpty == true
           ? message.textContent!
           : (message.mediaUrl ?? '');
@@ -240,13 +252,10 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
         headerMetaLeft: !isMe
             ? '${widget.args.otherUserName} • ${_formatTime(message.createdAt)}'
             : null,
-        headerMetaRight: isMe
-            ? '${_formatTime(message.createdAt)} • You'
-            : null,
+        headerMetaRight:
+            isMe ? '${_formatTime(message.createdAt)} • You' : null,
         showAvatar: !isMe,
-        avatarUrl: !isMe
-            ? widget.args.otherUserAvatarUrl
-            : null,
+        avatarUrl: !isMe ? widget.args.otherUserAvatarUrl : null,
         isCallLog: false,
       ));
     }

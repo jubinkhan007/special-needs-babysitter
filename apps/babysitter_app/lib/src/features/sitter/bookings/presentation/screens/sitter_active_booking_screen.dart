@@ -30,6 +30,16 @@ class _SitterActiveBookingScreenState
     extends ConsumerState<SitterActiveBookingScreen> {
   bool _isClockingOut = false;
   late final MapController _mapController;
+  bool _isMapReady = false;
+  double _mapZoom = 14.0;
+  bool _useSatelliteView = false;
+
+  // Tile layer URLs
+  static const _standardTileUrl =
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  static const _satelliteTileUrl =
+      'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
+  static const _satelliteSubdomains = ['a', 'b', 'c'];
 
   @override
   void initState() {
@@ -46,6 +56,29 @@ class _SitterActiveBookingScreenState
   void dispose() {
     _mapController.dispose();
     super.dispose();
+  }
+
+  void _zoomIn() {
+    if (!_isMapReady) return;
+    final newZoom = (_mapZoom + 1).clamp(3.0, 18.0);
+    _mapController.move(_mapController.camera.center, newZoom);
+    setState(() => _mapZoom = newZoom);
+  }
+
+  void _zoomOut() {
+    if (!_isMapReady) return;
+    final newZoom = (_mapZoom - 1).clamp(3.0, 18.0);
+    _mapController.move(_mapController.camera.center, newZoom);
+    setState(() => _mapZoom = newZoom);
+  }
+
+  void _centerOnLocation(LatLng? location) {
+    if (!_isMapReady || location == null) return;
+    _mapController.move(location, _mapZoom);
+  }
+
+  void _toggleMapType() {
+    setState(() => _useSatelliteView = !_useSatelliteView);
   }
 
   Future<void> _togglePause() async {
@@ -93,13 +126,10 @@ class _SitterActiveBookingScreenState
     setState(() => _isClockingOut = true);
 
     try {
-      // TODO: Integrate with actual clock-out API
-      await Future.delayed(const Duration(seconds: 1));
-
       if (mounted) {
         await ref
             .read(sessionTrackingControllerProvider.notifier)
-            .stopSession();
+            .clockOut(widget.applicationId);
         AppToast.show(
           context,
           const SnackBar(
@@ -130,17 +160,21 @@ class _SitterActiveBookingScreenState
   @override
   Widget build(BuildContext context) {
     final trackingState = ref.watch(sessionTrackingControllerProvider);
-    
+
     // Listen for location updates to move map camera
     ref.listen(sessionTrackingControllerProvider, (previous, next) {
       final prevPoints = previous?.routeCoordinates ?? [];
       final nextPoints = next.routeCoordinates;
-      
+
+      if (!_isMapReady) {
+        return;
+      }
+
       if (nextPoints.isNotEmpty && nextPoints.length > prevPoints.length) {
         final lastPoint = nextPoints.last;
         _mapController.move(
           LatLng(lastPoint.latitude, lastPoint.longitude),
-          _mapController.camera.zoom,
+          _mapZoom,
         );
       }
     });
@@ -432,7 +466,8 @@ class _SitterActiveBookingScreenState
   Widget _buildLiveTrackingSection(SessionTrackingState trackingState) {
     final routeCount = trackingState.routeCoordinates.length;
     final lastUpdate = trackingState.lastLocationAt;
-    final trackingLabel = trackingState.isTracking ? 'Tracking on' : 'Tracking off';
+    final trackingLabel =
+        trackingState.isTracking ? 'Tracking on' : 'Tracking off';
     final trackingColor = trackingState.isTracking
         ? const Color(0xFF12B76A)
         : const Color(0xFFF04438);
@@ -533,76 +568,145 @@ class _SitterActiveBookingScreenState
                       ),
                     ),
                   )
-                : FlutterMap(
-                    mapController: _mapController,
-                    options: MapOptions(
-                      initialCenter: center,
-                      initialZoom: 14.0,
-                      interactionOptions: const InteractionOptions(
-                        flags: InteractiveFlag.drag |
-                            InteractiveFlag.pinchZoom |
-                            InteractiveFlag.doubleTapZoom,
-                      ),
-                    ),
+                : Stack(
                     children: [
-                      TileLayer(
-                        urlTemplate:
-                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName:
-                            'com.specialneedssitters.parent_app',
+                      FlutterMap(
+                        mapController: _mapController,
+                        options: MapOptions(
+                          initialCenter: center,
+                          initialZoom: 14.0,
+                          onMapReady: () {
+                            if (!mounted) {
+                              return;
+                            }
+                            setState(() {
+                              _isMapReady = true;
+                              _mapZoom = _mapController.camera.zoom;
+                            });
+                          },
+                          onMapEvent: (event) {
+                            _mapZoom = event.camera.zoom;
+                          },
+                          interactionOptions: const InteractionOptions(
+                            flags: InteractiveFlag.drag |
+                                InteractiveFlag.pinchZoom |
+                                InteractiveFlag.doubleTapZoom,
+                          ),
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate: _useSatelliteView
+                                ? _satelliteTileUrl
+                                : _standardTileUrl,
+                            subdomains: _useSatelliteView
+                                ? _satelliteSubdomains
+                                : const [],
+                            userAgentPackageName:
+                                'com.specialneedssitters.parent_app',
+                          ),
+                          if (routePoints.length >= 2)
+                            PolylineLayer(
+                              polylines: [
+                                Polyline(
+                                  points: routePoints,
+                                  strokeWidth: 4,
+                                  color: const Color(0xFF3B82F6),
+                                ),
+                              ],
+                            ),
+                          MarkerLayer(
+                            markers: [
+                              if (routePoints.isNotEmpty)
+                                Marker(
+                                  width: 20.w,
+                                  height: 20.w,
+                                  point: routePoints.last,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF3B82F6),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: Colors.white, width: 2),
+                                    ),
+                                  ),
+                                ),
+                              if (destination != null)
+                                Marker(
+                                  width: 32.w,
+                                  height: 32.w,
+                                  point: LatLng(destination.latitude,
+                                      destination.longitude),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.12),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: const Color(0xFF1D2939),
+                                      size: 20.w,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
                       ),
-                      if (routePoints.length >= 2)
-                        PolylineLayer(
-                          polylines: [
-                            Polyline(
-                              points: routePoints,
-                              strokeWidth: 4,
-                              color: const Color(0xFF3B82F6),
+                      // Map Controls Overlay
+                      Positioned(
+                        right: 8.w,
+                        top: 8.h,
+                        child: Column(
+                          children: [
+                            // Map type toggle
+                            _buildMapControlButton(
+                              icon: _useSatelliteView
+                                  ? Icons.map_outlined
+                                  : Icons.layers_outlined,
+                              onTap: _toggleMapType,
+                              tooltip: _useSatelliteView
+                                  ? 'Standard view'
+                                  : 'Terrain view',
+                            ),
+                            SizedBox(height: 8.h),
+                            // Re-center button
+                            _buildMapControlButton(
+                              icon: Icons.my_location,
+                              onTap: () => _centerOnLocation(
+                                  routePoints.isNotEmpty
+                                      ? routePoints.last
+                                      : center),
+                              tooltip: 'Center on location',
                             ),
                           ],
                         ),
-                      MarkerLayer(
-                        markers: [
-                          if (routePoints.isNotEmpty)
-                            Marker(
-                              width: 20.w,
-                              height: 20.w,
-                              point: routePoints.last,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF3B82F6),
-                                  shape: BoxShape.circle,
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                ),
-                              ),
+                      ),
+                      // Zoom controls (bottom right)
+                      Positioned(
+                        right: 8.w,
+                        bottom: 8.h,
+                        child: Column(
+                          children: [
+                            _buildMapControlButton(
+                              icon: Icons.add,
+                              onTap: _zoomIn,
+                              tooltip: 'Zoom in',
                             ),
-                          if (destination != null)
-                            Marker(
-                              width: 32.w,
-                              height: 32.w,
-                              point: LatLng(
-                                  destination.latitude, destination.longitude),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.12),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.location_on,
-                                  color: const Color(0xFF1D2939),
-                                  size: 20.w,
-                                ),
-                              ),
+                            SizedBox(height: 4.h),
+                            _buildMapControlButton(
+                              icon: Icons.remove,
+                              onTap: _zoomOut,
+                              tooltip: 'Zoom out',
                             ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -730,6 +834,36 @@ class _SitterActiveBookingScreenState
     return icons[index % icons.length];
   }
 
+  Widget _buildMapControlButton({
+    required IconData icon,
+    required VoidCallback onTap,
+    String? tooltip,
+  }) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8.r),
+      elevation: 2,
+      shadowColor: Colors.black.withOpacity(0.15),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8.r),
+        child: Container(
+          width: 36.w,
+          height: 36.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5),
+          ),
+          child: Icon(
+            icon,
+            size: 20.w,
+            color: const Color(0xFF667085),
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showRouteDetails(
       BuildContext context, SessionTrackingState trackingState) {
     final route = trackingState.routeCoordinates;
@@ -769,8 +903,7 @@ class _SitterActiveBookingScreenState
                   height: 280.h,
                   child: ListView.separated(
                     itemCount: route.length,
-                    separatorBuilder: (context, index) =>
-                        Divider(height: 16.h),
+                    separatorBuilder: (context, index) => Divider(height: 16.h),
                     itemBuilder: (context, index) {
                       final point = route[index];
                       return Text(

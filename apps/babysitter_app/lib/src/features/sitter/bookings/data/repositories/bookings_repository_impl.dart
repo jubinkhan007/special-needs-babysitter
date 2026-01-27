@@ -40,4 +40,9 @@ class BookingsRepositoryImpl implements BookingsRepository {
   Future<void> resumeBooking(String applicationId) {
     return _remoteDataSource.resumeBooking(applicationId);
   }
+
+  @override
+  Future<void> clockOutBooking(String applicationId) {
+    return _remoteDataSource.clockOutBooking(applicationId);
+  }
 }

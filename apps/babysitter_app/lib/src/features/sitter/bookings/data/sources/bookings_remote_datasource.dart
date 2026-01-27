@@ -161,4 +161,27 @@ class BookingsRemoteDataSource {
       rethrow;
     }
   }
+
+  /// Clock out of the current booking session via POST /sitters/bookings/{id}/clock-out.
+  Future<void> clockOutBooking(String applicationId) async {
+    try {
+      print(
+          'DEBUG: Clock Out Request: POST /sitters/bookings/$applicationId/clock-out');
+      final response = await _dio.post(
+        '/sitters/bookings/$applicationId/clock-out',
+      );
+      print('DEBUG: Clock Out Response Status: ${response.statusCode}');
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: Clock Out Error: ${e.message}');
+        print('DEBUG: Clock Out Error Response: ${e.response?.data}');
+
+        final serverMessage = e.response?.data?['error'] as String?;
+        if (serverMessage != null) {
+          throw Exception(serverMessage);
+        }
+      }
+      rethrow;
+    }
+  }
 }

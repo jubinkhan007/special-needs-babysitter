@@ -129,6 +129,34 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     state = const SessionTrackingState();
   }
 
+  Future<void> clockOut(String applicationId) async {
+    final session = state.session;
+    final resolvedId =
+        applicationId.isNotEmpty ? applicationId : session?.applicationId;
+    if (resolvedId == null || resolvedId.isEmpty) {
+      throw Exception('Missing booking application ID');
+    }
+    if (session != null) {
+      final frozen = session.copyWith(
+        isPaused: true,
+        pausedAt: DateTime.now(),
+      );
+      state = state.copyWith(session: frozen);
+      await _localDataSource.saveSession(frozen);
+    }
+
+    try {
+      await _repository.clockOutBooking(resolvedId);
+      await stopSession();
+    } catch (e) {
+      if (session != null) {
+        state = state.copyWith(session: session);
+        await _localDataSource.saveSession(session);
+      }
+      rethrow;
+    }
+  }
+
   Future<void> togglePause({String? breakReason}) async {
     final session = state.session;
     if (session == null) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
 import 'package:data/data.dart';
@@ -53,12 +55,20 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
       if (event is MessageReceivedEvent && event.peerId == otherUserId) {
         // Refresh messages when we receive a message from this user
         ref.invalidateSelf();
+      } else if (event is MessageSentEvent && event.peerId == otherUserId) {
+        // Refresh messages when we receive a message from this user
+        ref.invalidateSelf();
       }
+    });
+
+    final poller = Timer.periodic(const Duration(seconds: 5), (_) {
+      ref.invalidateSelf();
     });
 
     ref.onDispose(() {
       print('DEBUG: ChatMessagesNotifier disposing listener');
       subscription.cancel();
+      poller.cancel();
     });
 
     // Mark conversation as read when viewing
@@ -133,9 +143,13 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
 }
 
 // Controller / List Provider
-final chatConversationsProvider = AsyncNotifierProvider<ChatConversationsNotifier, List<Conversation>>(ChatConversationsNotifier.new);
+final chatConversationsProvider =
+    AsyncNotifierProvider.autoDispose<ChatConversationsNotifier, List<Conversation>>(
+  ChatConversationsNotifier.new,
+);
 
-class ChatConversationsNotifier extends AsyncNotifier<List<Conversation>> {
+class ChatConversationsNotifier
+    extends AutoDisposeAsyncNotifier<List<Conversation>> {
   @override
   Future<List<Conversation>> build() async {
     print('DEBUG: ChatConversationsNotifier.build() START');
@@ -154,6 +168,11 @@ class ChatConversationsNotifier extends AsyncNotifier<List<Conversation>> {
         print('DEBUG: ChatConversationsNotifier disposing listener');
         subscription.cancel();
       });
+
+      final poller = Timer.periodic(const Duration(seconds: 5), (_) {
+        ref.invalidateSelf();
+      });
+      ref.onDispose(poller.cancel);
 
       final repository = ref.watch(chatRepositoryProvider);
       try {

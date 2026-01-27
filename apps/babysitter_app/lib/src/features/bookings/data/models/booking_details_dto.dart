@@ -59,6 +59,7 @@ class BookingDetailsSitterDto {
   final String? yearsOfExperience;
   final List<String>? skills;
   final String? distance; // "2 Miles Away" or null
+  @JsonKey(fromJson: _parseStringFromMap)
   final String? currentLocation;
 
   BookingDetailsSitterDto({
@@ -92,6 +93,7 @@ class BookingDetailsJobDto {
   final int? numberOfDays;
   final String? additionalDetails;
   final String? fullAddress;
+  @JsonKey(fromJson: _parseStringFromMap)
   final String? location;
   final BookingDetailsCoordinatesDto? coordinates;
 
@@ -140,4 +142,11 @@ class BookingDetailsFamilyDto {
       _$BookingDetailsFamilyDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$BookingDetailsFamilyDtoToJson(this);
+}
+
+String? _parseStringFromMap(dynamic value) {
+  if (value is String) {
+    return value;
+  }
+  return null;
 }

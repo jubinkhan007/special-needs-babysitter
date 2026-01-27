@@ -23,6 +23,7 @@ dependencies:
   flutter_stripe: ^10.1.0 # Added for Stripe payments
   geolocator: ^11.0.0
   geocoding: ^3.0.0
+  google_maps_flutter: ^2.6.1
   file_picker: ^8.0.0
 
   # Firebase

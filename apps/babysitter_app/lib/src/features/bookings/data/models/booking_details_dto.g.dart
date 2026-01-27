@@ -67,7 +67,7 @@ BookingDetailsSitterDto _$BookingDetailsSitterDtoFromJson(
       skills:
           (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
       distance: json['distance'] as String?,
-      currentLocation: json['currentLocation'] as String?,
+      currentLocation: _parseStringFromMap(json['currentLocation']),
     );
 
 Map<String, dynamic> _$BookingDetailsSitterDtoToJson(
@@ -98,7 +98,7 @@ BookingDetailsJobDto _$BookingDetailsJobDtoFromJson(
       numberOfDays: (json['numberOfDays'] as num?)?.toInt(),
       additionalDetails: json['additionalDetails'] as String?,
       fullAddress: json['fullAddress'] as String?,
-      location: json['location'] as String?,
+      location: _parseStringFromMap(json['location']),
       coordinates: json['coordinates'] == null
           ? null
           : BookingDetailsCoordinatesDto.fromJson(

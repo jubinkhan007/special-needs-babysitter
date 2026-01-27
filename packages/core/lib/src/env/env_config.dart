@@ -26,6 +26,9 @@ class EnvConfig {
   static String get firebaseProjectId =>
       _getEnv('FIREBASE_PROJECT_ID') ?? '';
 
+  static String get googleGeocodingApiKey =>
+      _getEnv('GOOGLE_GEOCODING_API_KEY') ?? '';
+
   /// Check if API base URL is configured
   static bool get hasApiBaseUrl => apiBaseUrl.isNotEmpty;
 

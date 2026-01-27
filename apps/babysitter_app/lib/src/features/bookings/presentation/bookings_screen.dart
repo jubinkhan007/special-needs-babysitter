@@ -94,7 +94,8 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                         }
                       },
                       onViewDetails: () {
-                        if (booking.status == BookingStatus.active) {
+                        if (booking.status == BookingStatus.active ||
+                            booking.status == BookingStatus.clockedOut) {
                           context.push(
                             Routes.activeBooking,
                             extra: booking.id,

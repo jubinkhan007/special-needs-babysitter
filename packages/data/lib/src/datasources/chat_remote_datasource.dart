@@ -297,7 +297,8 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       }
 
       print('DEBUG: Message sent successfully');
-      return ChatMessageDto.fromJson(data as Map<String, dynamic>);
+      final safeJson = _normalizeMessageJson(data);
+      return ChatMessageDto.fromJson(safeJson);
     } catch (e, stack) {
       print('DEBUG: Error sending message: $e');
       print('DEBUG: Stack trace: $stack');
@@ -337,7 +338,8 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       }
 
       print('DEBUG: Media message sent successfully');
-      return ChatMessageDto.fromJson(data as Map<String, dynamic>);
+      final safeJson = _normalizeMessageJson(data);
+      return ChatMessageDto.fromJson(safeJson);
     } catch (e, stack) {
       print('DEBUG: Error sending media message: $e');
       print('DEBUG: Stack trace: $stack');

@@ -1,10 +1,12 @@
 import '../../domain/booking.dart';
 import '../../domain/booking_details.dart';
+import '../../domain/booking_location.dart';
 import '../../domain/booking_status.dart';
 import '../../domain/bookings_repository.dart';
 import '../datasources/bookings_remote_datasource.dart';
 import '../models/parent_booking_dto.dart';
 import '../models/booking_details_dto.dart';
+import '../models/booking_location_dto.dart';
 
 class BookingsRepositoryImpl implements BookingsRepository {
   final BookingsRemoteDataSource _remoteDataSource;
@@ -21,6 +23,12 @@ class BookingsRepositoryImpl implements BookingsRepository {
   Future<BookingDetails> getBookingDetails(String bookingId) async {
     final dto = await _remoteDataSource.getBookingDetails(bookingId);
     return _mapToDetailsEntity(dto);
+  }
+
+  @override
+  Future<BookingLocation> getBookingLocation(String bookingId) async {
+    final dto = await _remoteDataSource.getBookingLocation(bookingId);
+    return _mapToLocationEntity(dto);
   }
 
   BookingDetails _mapToDetailsEntity(BookingDetailsDto dto) {
@@ -72,25 +80,34 @@ class BookingsRepositoryImpl implements BookingsRepository {
     final rawStatus =
         dto.status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
     BookingStatus status;
+    
+    final now = DateTime.now();
+    final isPast = jobStartDateTime != null && jobStartDateTime.isBefore(now);
+
     if (rawStatus == 'active' || rawStatus == 'inprogress') {
       status = BookingStatus.active;
+    } else if (rawStatus == 'clockedout') {
+      status = BookingStatus.clockedOut;
     } else if (rawStatus == 'pending' || rawStatus == 'directbooking') {
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
       status = BookingStatus.cancelled;
     } else if (rawStatus == 'accepted') {
-      final now = DateTime.now();
-      if (jobStartDateTime.isBefore(now)) {
+      if (isPast) {
         status = BookingStatus.completed;
       } else {
         status = BookingStatus.upcoming;
       }
-    } else if (rawStatus == 'completed') {
+    } else if (rawStatus == 'completed' || rawStatus == 'expired') {
       status = BookingStatus.completed;
     } else if (rawStatus == 'upcoming') {
       status = BookingStatus.upcoming;
     } else {
-      status = BookingStatus.upcoming;
+      if (isPast) {
+        status = BookingStatus.completed;
+      } else {
+        status = BookingStatus.upcoming;
+      }
     }
 
     return BookingDetails(
@@ -145,32 +162,39 @@ class BookingsRepositoryImpl implements BookingsRepository {
         }
         // Fallback to startDate if time parsing fails or is missing
         jobStartDateTime ??= scheduledDate;
-      } catch (_) {}
+      } catch (e) {
+        print('DEBUG: Date parsing error for booking ${dto.id}: $e');
+      }
     }
 
     // Map status string to enum with logic
     BookingStatus status;
-    final rawStatus = dto.status.toLowerCase();
+    final rawStatus = dto.status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    final now = DateTime.now();
+    final isPast = jobStartDateTime != null && jobStartDateTime.isBefore(now);
 
-    if (rawStatus == 'active' || rawStatus == 'in_progress') {
+    if (rawStatus == 'active' || rawStatus == 'inprogress') {
       status = BookingStatus.active;
-    } else if (rawStatus == 'pending' || rawStatus == 'direct_booking') {
+    } else if (rawStatus == 'clockedout') {
+      status = BookingStatus.clockedOut;
+    } else if (rawStatus == 'pending' || rawStatus == 'directbooking') {
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
       status = BookingStatus.cancelled;
     } else if (rawStatus == 'accepted') {
-      // Logic: Accepted but past -> Completed. Accepted but future -> Upcoming.
-      final now = DateTime.now();
-      if (jobStartDateTime != null && jobStartDateTime.isBefore(now)) {
+      if (isPast) {
         status = BookingStatus.completed;
       } else {
         status = BookingStatus.upcoming;
       }
-    } else if (rawStatus == 'completed') {
+    } else if (rawStatus == 'completed' || rawStatus == 'expired') {
       status = BookingStatus.completed;
     } else {
-      // Default fallback
-      status = BookingStatus.upcoming;
+      if (isPast) {
+        status = BookingStatus.completed;
+      } else {
+        status = BookingStatus.upcoming;
+      }
     }
 
     return Booking(
@@ -188,6 +212,36 @@ class BookingsRepositoryImpl implements BookingsRepository {
       avatarAssetOrUrl:
           dto.sitter?.photoUrl ?? 'https://via.placeholder.com/150',
       isVerified: true,
+    );
+  }
+
+  BookingLocation _mapToLocationEntity(BookingLocationDto dto) {
+    BookingLocationPoint? mapPoint(BookingLocationPointDto? point) {
+      if (point == null) {
+        return null;
+      }
+      return BookingLocationPoint(
+        latitude: point.latitude,
+        longitude: point.longitude,
+        timestamp: point.timestamp,
+      );
+    }
+
+    return BookingLocation(
+      currentLocation: mapPoint(dto.currentLocation),
+      routeCoordinates: dto.routeCoordinates
+          .map((point) => BookingLocationPoint(
+                latitude: point.latitude,
+                longitude: point.longitude,
+                timestamp: point.timestamp,
+              ))
+          .toList(),
+      distance: dto.distance,
+      status: dto.status,
+      isPaused: dto.isPaused,
+      pausedAt: dto.pausedAt,
+      currentBreakReason: dto.currentBreakReason,
+      clockInTime: dto.clockInTime,
     );
   }
 }

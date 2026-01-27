@@ -21,4 +21,7 @@ abstract class BookingsRepository {
 
   /// Resume the current booking session.
   Future<void> resumeBooking(String applicationId);
+
+  /// Clock out of the current booking session.
+  Future<void> clockOutBooking(String applicationId);
 }

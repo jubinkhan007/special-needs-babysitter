@@ -7,7 +7,7 @@ part of 'sitter_profile_details_controller.dart';
 // **************************************************************************
 
 String _$sitterProfileDetailsControllerHash() =>
-    r'6ca11e2ba6eeab39eaa0b2327f4c89baef6308e0';
+    r'ab9aa558ac93b7ef08b03323a7ada44fa534cee2';
 
 /// See also [SitterProfileDetailsController].
 @ProviderFor(SitterProfileDetailsController)

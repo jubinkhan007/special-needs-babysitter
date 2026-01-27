@@ -99,8 +99,8 @@ class BookingDetailsVariant {
   static BookingDetailsVariant fromStatus(BookingStatus status) {
     switch (status) {
       case BookingStatus.upcoming:
-      case BookingStatus
-            .active: // Treat active as upcoming for now or add specific
+      case BookingStatus.active: // Treat active as upcoming for now or add specific
+      case BookingStatus.clockedOut:
         return BookingDetailsVariant.upcoming();
       case BookingStatus.pending:
         return BookingDetailsVariant.pending();

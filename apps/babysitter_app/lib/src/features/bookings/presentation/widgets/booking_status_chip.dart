@@ -19,6 +19,11 @@ class BookingStatusChip extends StatelessWidget {
         dot = AppTokens.chipBlueDot;
         text = 'Active';
         break;
+      case BookingStatus.clockedOut:
+        bg = AppTokens.chipBlueBg;
+        dot = AppTokens.chipBlueDot;
+        text = 'Clocked out';
+        break;
       case BookingStatus.upcoming:
         bg = AppTokens.chipGreenBg;
         dot = AppTokens.chipGreenDot;

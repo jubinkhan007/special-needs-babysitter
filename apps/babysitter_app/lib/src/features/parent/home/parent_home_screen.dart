@@ -287,7 +287,8 @@ _HomeBookingSelection? _selectBooking(List<Booking> bookings) {
 
   Booking? active;
   for (final booking in bookings) {
-    if (booking.status == BookingStatus.active) {
+    if (booking.status == BookingStatus.active ||
+        booking.status == BookingStatus.clockedOut) {
       active = booking;
       break;
     }
@@ -296,7 +297,7 @@ _HomeBookingSelection? _selectBooking(List<Booking> bookings) {
     return _HomeBookingSelection(
       booking: active,
       sectionTitle: 'Active Booking',
-      statusLabel: 'Active',
+      statusLabel: _statusLabel(active.status),
     );
   }
 
@@ -325,6 +326,8 @@ String _statusLabel(BookingStatus status) {
   switch (status) {
     case BookingStatus.active:
       return 'Active';
+    case BookingStatus.clockedOut:
+      return 'Clocked out';
     case BookingStatus.upcoming:
       return 'Upcoming';
     case BookingStatus.pending:

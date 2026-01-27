@@ -73,5 +73,7 @@
 	<string>This app uses your location to share live tracking during active bookings.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app uses your location to share live tracking during active bookings.</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>

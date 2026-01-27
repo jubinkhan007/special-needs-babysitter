@@ -25,8 +25,10 @@ class MessageBubble extends StatelessWidget {
           // Meta Header (Name • Time)
           if (uiModel.headerMetaLeft != null || uiModel.headerMetaRight != null)
             Padding(
-              padding: const EdgeInsets.only(
-                  bottom: 4, left: 48, right: 0), // Align with bubble content
+              padding: EdgeInsets.only(
+                  bottom: 4,
+                  left: isMe ? 0 : 48,
+                  right: isMe ? 48 : 0), // Align with bubble content
               child: Text(
                 isMe ? uiModel.headerMetaRight! : uiModel.headerMetaLeft!,
                 style: AppTokens.chatMetaStyle,
@@ -54,7 +56,7 @@ class MessageBubble extends StatelessWidget {
               ],
 
               // If not showing avatar but is sender, add spacing to align
-              if (!isMe && !uiModel.showAvatar) const SizedBox(width: 48),
+              // if (isMe && !uiModel.showAvatar) const SizedBox(width: 48),
 
               // The Bubble with Custom Tail
               Flexible(

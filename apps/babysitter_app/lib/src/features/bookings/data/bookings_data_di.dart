@@ -4,6 +4,7 @@ import 'package:auth/auth.dart';
 import '../../../constants/app_constants.dart';
 import '../../bookings/domain/bookings_repository.dart';
 import 'datasources/bookings_remote_datasource.dart';
+import 'datasources/google_geocoding_remote_datasource.dart';
 import 'repositories/bookings_repository_impl.dart';
 
 // Dio Provider for Bookings
@@ -47,6 +48,27 @@ final bookingsDioProvider = Provider<Dio>((ref) {
 final bookingsRemoteDataSourceProvider =
     Provider<BookingsRemoteDataSource>((ref) {
   return BookingsRemoteDataSource(ref.watch(bookingsDioProvider));
+});
+
+final googleGeocodingDioProvider = Provider<Dio>((ref) {
+  return Dio(
+    BaseOptions(
+      baseUrl: 'https://maps.googleapis.com/maps/api',
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
+});
+
+final googleGeocodingRemoteDataSourceProvider =
+    Provider<GoogleGeocodingRemoteDataSource>((ref) {
+  return GoogleGeocodingRemoteDataSource(
+    ref.watch(googleGeocodingDioProvider),
+  );
 });
 
 // Repository Provider

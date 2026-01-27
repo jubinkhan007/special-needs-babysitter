@@ -18,6 +18,13 @@ class BookingsController extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   List<Booking> bookingsFor(BookingStatus status) {
+    if (status == BookingStatus.active) {
+      return _bookings
+          .where((b) =>
+              b.status == BookingStatus.active ||
+              b.status == BookingStatus.clockedOut)
+          .toList();
+    }
     return _bookings.where((b) => b.status == status).toList();
   }
 
