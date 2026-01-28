@@ -114,6 +114,15 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(jobId)
                               .then((isNowSaved) {
+                            AppToast.show(
+                              context,
+                              SnackBar(
+                                content: Text(
+                                  isNowSaved ? 'Job saved' : 'Job unsaved',
+                                ),
+                                backgroundColor: const Color(0xFF22C55E),
+                              ),
+                            );
                             if (!isNowSaved) {
                               ref.invalidate(savedJobsListProvider);
                             }

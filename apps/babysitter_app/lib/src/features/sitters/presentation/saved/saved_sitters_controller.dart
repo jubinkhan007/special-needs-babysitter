@@ -5,11 +5,10 @@ import '../../../parent/search/models/sitter_list_item_model.dart';
 
 /// Controller for the saved sitters list and bookmark operations.
 class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
-  late final SittersRepository _repository;
+  SittersRepository get _repository => ref.watch(sittersRepositoryProvider);
 
   @override
   Future<List<SitterListItemModel>> build() async {
-    _repository = ref.watch(sittersRepositoryProvider);
     return _fetchSavedSitters();
   }
 
@@ -20,34 +19,47 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
   /// Toggles bookmark status for a sitter.
   /// If the sitter is currently in the list (saved), it removes them.
   /// If not (e.g. called from search screen), it adds them.
-  /// 
+  ///
   /// Note: This logic assumes we want to toggle. The API requires ID.
   /// We need to know current state.
-  /// 
+  ///
   /// For the `SavedSittersScreen`, removing an item is the primary action.
   /// For other screens, we might need a separate method or check existence.
-  Future<void> toggleBookmark(String sitterId, {bool? isCurrentlySaved}) async {
+  Future<void> toggleBookmark(String sitterId,
+      {bool? isCurrentlySaved, SitterListItemModel? sitterItem}) async {
     final currentList = state.valueOrNull ?? [];
-    final isSaved = isCurrentlySaved ?? currentList.any((s) => s.userId == sitterId);
+    final isSaved =
+        isCurrentlySaved ?? currentList.any((s) => s.userId == sitterId);
 
     try {
       if (isSaved) {
+        // Optimistic remove
+        final newList = currentList.where((s) => s.userId != sitterId).toList();
+        state = AsyncValue.data(newList);
         await _repository.removeBookmarkedSitter(sitterId);
-        // Optimistically remove from list
-        state = AsyncValue.data(
-          currentList.where((s) => s.userId != sitterId).toList(),
-        );
       } else {
+        // Optimistic add if item provided
+        if (sitterItem != null) {
+          final newList = [...currentList, sitterItem];
+          state = AsyncValue.data(newList);
+        }
         await _repository.bookmarkSitter(sitterId);
-        // To optimistically add, we'd need the full sitter object.
-        // Since we don't always have it here, we reload the list.
-        ref.invalidateSelf();
+        // Refresh to ensure sync, but optimistic update handles UI
+        if (sitterItem == null) {
+          ref.invalidateSelf();
+        } else {
+          // Silent refresh or just trust optimistic?
+          // Better to refresh eventually to ensure consistency
+          ref.invalidateSelf();
+        }
       }
     } catch (e, st) {
+      // Revert state on error?
+      // For now just error state
       state = AsyncValue.error(e, st);
     }
   }
-  
+
   /// Explicitly add a bookmark (used from other screens)
   Future<void> bookmarkSitter(String sitterId) async {
     try {
@@ -72,7 +84,7 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
       rethrow;
     }
   }
-  
+
   bool isSitterBookmarked(String sitterId) {
     return state.valueOrNull?.any((s) => s.userId == sitterId) ?? false;
   }

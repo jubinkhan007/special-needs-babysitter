@@ -94,7 +94,15 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
                           ref
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(jobId)
-                              .catchError((error) {
+                              .then((isSaved) {
+                            AppToast.show(
+                              context,
+                              SnackBar(
+                                content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
+                                backgroundColor: const Color(0xFF22C55E),
+                              ),
+                            );
+                          }).catchError((error) {
                             AppToast.show(
                               context,
                               SnackBar(
@@ -102,11 +110,6 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
                                     .toString()
                                     .replaceFirst('Exception: ', '')),
                                 backgroundColor: Colors.red,
-                                behavior: SnackBarBehavior.floating,
-                                margin: EdgeInsets.all(16.w),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                ),
                               ),
                             );
                           });

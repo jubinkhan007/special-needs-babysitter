@@ -243,7 +243,15 @@ class _SitterBookingDetailsScreenState
                             ref
                                 .read(savedJobsControllerProvider.notifier)
                                 .toggleSaved(jobId)
-                                .catchError((error) {
+                                .then((isSaved) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
+                                  backgroundColor: const Color(0xFF22C55E),
+                                ),
+                              );
+                            }).catchError((error) {
                               AppToast.show(
                                 context,
                                 SnackBar(

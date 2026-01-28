@@ -7,8 +7,15 @@ import '../theme/home_design_tokens.dart';
 
 class SitterNearYouCard extends StatelessWidget {
   final SitterListItemModel sitter;
+  final bool isBookmarked;
+  final VoidCallback? onBookmarkTap;
 
-  const SitterNearYouCard({super.key, required this.sitter});
+  const SitterNearYouCard({
+    super.key,
+    required this.sitter,
+    this.isBookmarked = false,
+    this.onBookmarkTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +140,16 @@ class SitterNearYouCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Icon(Icons.bookmark_border,
-                      size: 22, color: AppColors.textSecondary),
+                  GestureDetector(
+                    onTap: onBookmarkTap,
+                    child: Icon(
+                      isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      size: 22,
+                      color: isBookmarked
+                          ? AppColors.primary
+                          : AppColors.textSecondary,
+                    ),
+                  ),
                 ],
               ),
             ],

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SitterReviewsScreen extends StatelessWidget {
+import '../../data/models/sitter_review.dart';
+import '../providers/sitter_reviews_providers.dart';
+
+class SitterReviewsScreen extends ConsumerWidget {
   const SitterReviewsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reviewsAsync = ref.watch(sitterReviewsProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -27,38 +32,64 @@ class SitterReviewsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-        itemCount: _mockReviews.length,
-        separatorBuilder: (context, index) => Divider(
-          height: 24.h,
-          thickness: 1,
-          color: const Color(0xFFF2F4F7),
-        ),
-        itemBuilder: (context, index) {
-          final review = _mockReviews[index];
-          return _ReviewCard(review: review);
+      body: reviewsAsync.when(
+        data: (reviews) {
+          if (reviews.isEmpty) {
+            return Center(
+              child: Text(
+                'No reviews yet.',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: const Color(0xFF667085),
+                  fontFamily: 'Inter',
+                ),
+              ),
+            );
+          }
+          return ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            itemCount: reviews.length,
+            separatorBuilder: (context, index) => Divider(
+              height: 24.h,
+              thickness: 1,
+              color: const Color(0xFFF2F4F7),
+            ),
+            itemBuilder: (context, index) {
+              final review = reviews[index];
+              return _ReviewCard(review: review);
+            },
+          );
         },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Text(
+            'Failed to load reviews',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.red,
+              fontFamily: 'Inter',
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
 class _ReviewCard extends StatelessWidget {
-  final _Review review;
+  final SitterReview review;
 
   const _ReviewCard({required this.review});
 
   @override
   Widget build(BuildContext context) {
+    final reviewerName = _reviewerLabel(review);
+    final ratingText = review.rating.toStringAsFixed(1);
+    final timeAgo = _timeAgo(review.createdAt);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(
-          radius: 20.r,
-          backgroundImage:
-              const AssetImage('assets/images/avatars/avatar_krystina.png'),
-        ),
+        _ReviewAvatar(imageUrl: review.imageUrl),
         SizedBox(width: 12.w),
         Expanded(
           child: Column(
@@ -67,7 +98,7 @@ class _ReviewCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    review.name,
+                    reviewerName,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w700,
@@ -80,7 +111,7 @@ class _ReviewCard extends StatelessWidget {
                       size: 14.sp, color: const Color(0xFFFBBF24)),
                   SizedBox(width: 4.w),
                   Text(
-                    review.rating.toStringAsFixed(1),
+                    ratingText,
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
@@ -90,7 +121,7 @@ class _ReviewCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    review.timeAgo,
+                    timeAgo,
                     style: TextStyle(
                       fontSize: 12.sp,
                       color: const Color(0xFF98A2B3),
@@ -101,7 +132,7 @@ class _ReviewCard extends StatelessWidget {
               ),
               SizedBox(height: 6.h),
               Text(
-                review.text,
+                review.reviewText,
                 style: TextStyle(
                   fontSize: 12.sp,
                   height: 1.4,
@@ -117,99 +148,46 @@ class _ReviewCard extends StatelessWidget {
   }
 }
 
-class _Review {
-  final String name;
-  final double rating;
-  final String timeAgo;
-  final String text;
+class _ReviewAvatar extends StatelessWidget {
+  final String imageUrl;
 
-  const _Review({
-    required this.name,
-    required this.rating,
-    required this.timeAgo,
-    required this.text,
-  });
+  const _ReviewAvatar({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    final trimmed = imageUrl.trim();
+    if (trimmed.isNotEmpty && trimmed.startsWith('http')) {
+      return CircleAvatar(
+        radius: 20.r,
+        backgroundImage: NetworkImage(trimmed),
+        backgroundColor: const Color(0xFFEFF4FF),
+      );
+    }
+    return CircleAvatar(
+      radius: 20.r,
+      backgroundColor: const Color(0xFFEFF4FF),
+      child: Icon(Icons.person, size: 18.sp, color: const Color(0xFF98A2B3)),
+    );
+  }
 }
 
-const List<_Review> _mockReviews = [
-  _Review(
-    name: 'Ayesha K',
-    rating: 5.0,
-    timeAgo: '2 Days Ago',
-    text:
-        'Krystina connected so well with my daughter that has sensory needs. '
-        'Her calm presence made all the difference.',
-  ),
-  _Review(
-    name: 'James W',
-    rating: 5.0,
-    timeAgo: '10 Days Ago',
-    text:
-        'Krystina is reliable, friendly, and communicates clearly. '
-        'My son always looks forward to seeing her!',
-  ),
-  _Review(
-    name: 'Lina S',
-    rating: 5.0,
-    timeAgo: '15 Days Ago',
-    text:
-        'We hired Krystina for evening care and she instantly bonded with our child. '
-        'She was very warm, professional, and always on time.',
-  ),
-  _Review(
-    name: 'David M',
-    rating: 5.0,
-    timeAgo: '18 Days Ago',
-    text:
-        'I appreciate how Krystina handles my twins with autism. '
-        'She uses visual aids and routines that actually work. Highly recommend!',
-  ),
-  _Review(
-    name: 'Reema T',
-    rating: 5.0,
-    timeAgo: '20 Days Ago',
-    text:
-        'Krystina stepped in last minute when our regular sitter canceled. '
-        'She kept us updated throughout the evening and left the house spotless.',
-  ),
-  _Review(
-    name: 'Ayesha K',
-    rating: 5.0,
-    timeAgo: '22 Days Ago',
-    text:
-        'Krystina connected so well with my daughter who has sensory needs. '
-        'Her calm presence made all the difference.',
-  ),
-  _Review(
-    name: 'James W',
-    rating: 5.0,
-    timeAgo: '25 Days Ago',
-    text:
-        'Krystina is reliable, friendly, and communicates clearly. '
-        'My son always looks forward to seeing her!',
-  ),
-  _Review(
-    name: 'Lina S',
-    rating: 5.0,
-    timeAgo: '27 Days Ago',
-    text:
-        'We hired Krystina for evening care and she instantly bonded with our child. '
-        'She was very warm, professional, and always on time.',
-  ),
-  _Review(
-    name: 'David M',
-    rating: 5.0,
-    timeAgo: '29 Days Ago',
-    text:
-        'I appreciate how Krystina handles my twins with autism. '
-        'She uses visual aids and routines that actually work. Highly recommend!',
-  ),
-  _Review(
-    name: 'Reema T',
-    rating: 5.0,
-    timeAgo: '30 Days Ago',
-    text:
-        'Krystina stepped in last minute when our regular sitter canceled. '
-        'She kept us updated throughout the evening and left the house spotless.',
-  ),
-];
+String _reviewerLabel(SitterReview review) {
+  final role = review.reviewerRole.trim();
+  if (role.isEmpty) {
+    return 'Parent';
+  }
+  return role[0].toUpperCase() + role.substring(1);
+}
+
+String _timeAgo(DateTime? createdAt) {
+  if (createdAt == null) return '';
+  final now = DateTime.now();
+  final difference = now.difference(createdAt);
+  if (difference.inDays > 0) {
+    return '${difference.inDays} Days Ago';
+  }
+  if (difference.inHours > 0) {
+    return '${difference.inHours} Hours Ago';
+  }
+  return 'Just Now';
+}

@@ -141,70 +141,104 @@ class SitterHomeScreen extends ConsumerWidget {
             ),
           ),
           SizedBox(height: 12.h),
-          // Job List
+          // Job List with Pull to Refresh
           Expanded(
-            child: jobsAsync.when(
-              data: (jobPreviews) {
-                if (jobPreviews.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No jobs found nearby.',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: Colors.grey,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await ref.read(jobPreviewsNotifierProvider.notifier).refresh();
+              },
+              child: jobsAsync.when(
+                data: (jobPreviews) {
+                  if (jobPreviews.isEmpty) {
+                    return ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        SizedBox(height: 100.h),
+                        Center(
+                          child: Text(
+                            'No jobs found nearby.\nPull down to refresh.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(
+                      bottom: 20.h + MediaQuery.of(context).padding.bottom,
+                    ),
+                    itemCount: jobPreviews.length,
+                    itemBuilder: (context, index) {
+                      final preview = jobPreviews[index];
+                      // Update bookmark status from local state
+                      final isSaved =
+                          savedJobsState.savedJobIds.contains(preview.id);
+                      final updatedPreview =
+                          preview.copyWith(isBookmarked: isSaved);
+                      return JobPreviewCard(
+                        job: updatedPreview,
+                        onViewDetails: () {
+                          context
+                              .push('${Routes.sitterJobDetails}/${preview.id}');
+                        },
+                        onBookmark: () {
+                          if (preview.id.isEmpty) {
+                            AppToast.show(
+                              context,
+                              const SnackBar(content: Text('Missing job ID')),
+                            );
+                            return;
+                          }
+                          ref
+                              .read(savedJobsControllerProvider.notifier)
+                              .toggleSaved(preview.id)
+                              .then((isSaved) {
+                            AppToast.show(
+                              context,
+                              SnackBar(
+                                content: Text(
+                                  isSaved ? 'Job saved' : 'Job unsaved',
+                                ),
+                                backgroundColor: const Color(0xFF22C55E),
+                              ),
+                            );
+                          }).catchError((error) {
+                            AppToast.show(
+                              context,
+                              SnackBar(
+                                content: Text(error
+                                    .toString()
+                                    .replaceFirst('Exception: ', '')),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          });
+                        },
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 100.h),
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0.w),
+                        child: Text(
+                          'Error loading jobs.\nPull down to retry.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.red, fontSize: 13.sp),
+                        ),
                       ),
                     ),
-                  );
-                }
-                return ListView.builder(
-                  padding: EdgeInsets.only(
-                    bottom: 20.h + MediaQuery.of(context).padding.bottom,
-                  ),
-                  itemCount: jobPreviews.length,
-                  itemBuilder: (context, index) {
-                    final preview = jobPreviews[index];
-                    // Update bookmark status from local state
-                    final isSaved =
-                        savedJobsState.savedJobIds.contains(preview.id);
-                    final updatedPreview = preview.copyWith(isBookmarked: isSaved);
-                    return JobPreviewCard(
-                      job: updatedPreview,
-                      onViewDetails: () {
-                        context.push('${Routes.sitterJobDetails}/${preview.id}');
-                      },
-                      onBookmark: () {
-                        if (preview.id.isEmpty) {
-                          AppToast.show(context,
-                            const SnackBar(content: Text('Missing job ID')),
-                          );
-                          return;
-                        }
-                        ref
-                            .read(savedJobsControllerProvider.notifier)
-                            .toggleSaved(preview.id)
-                            .catchError((error) {
-                          AppToast.show(
-                            context,
-                            SnackBar(
-                              content: Text(
-                                  error.toString().replaceFirst('Exception: ', '')),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        });
-                      },
-                    );
-                  },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0.w),
-                  child: Text(
-                    'Error loading jobs',
-                    style: TextStyle(color: Colors.red, fontSize: 13.sp),
-                  ),
+                  ],
                 ),
               ),
             ),

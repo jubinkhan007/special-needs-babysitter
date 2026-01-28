@@ -15,10 +15,12 @@ import 'presentation/widgets/parent_home_banner_card.dart';
 import 'presentation/widgets/saved_sitter_card.dart';
 import 'presentation/widgets/sitter_near_you_card.dart';
 import 'presentation/providers/parent_home_providers.dart';
+import '../../sitters/presentation/saved/saved_sitters_controller.dart';
 import '../account/presentation/controllers/account_controller.dart';
 import '../shared/providers/location_access_provider.dart';
 import '../shared/widgets/location_access_banner.dart';
 import '../search/utils/location_helper.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ParentHomeScreen extends ConsumerWidget {
   const ParentHomeScreen({super.key});
@@ -34,6 +36,7 @@ class ParentHomeScreen extends ConsumerWidget {
             : 'there';
     final bookingsAsync = ref.watch(parentHomeBookingsProvider);
     final sittersAsync = ref.watch(parentHomeSittersProvider);
+    final savedSittersAsync = ref.watch(savedSittersControllerProvider);
     final accountAsync = ref.watch(accountControllerProvider);
     final locationStatusAsync = ref.watch(locationAccessStatusProvider);
     final locationStatus = locationStatusAsync.maybeWhen(
@@ -125,6 +128,8 @@ class ParentHomeScreen extends ConsumerWidget {
                 ),
                 data: (sitters) {
                   final displaySitters = sitters.take(6).toList();
+                  final savedSitters = savedSittersAsync.valueOrNull ?? [];
+
                   if (displaySitters.isEmpty) {
                     return SizedBox(
                       height: HomeDesignTokens.sitterNearYouHeight,
@@ -143,29 +148,84 @@ class ParentHomeScreen extends ConsumerWidget {
                           const SizedBox(width: 16),
                       itemBuilder: (context, index) {
                         final sitter = displaySitters[index];
-                        return SitterNearYouCard(sitter: sitter);
+                        final isBookmarked = savedSitters
+                            .any((s) => s.userId == sitter.userId);
+
+                        return SitterNearYouCard(
+                          sitter: sitter,
+                          isBookmarked: isBookmarked,
+                          onBookmarkTap: () {
+                            ref
+                                .read(savedSittersControllerProvider.notifier)
+                                .toggleBookmark(sitter.userId,
+                                    isCurrentlySaved: isBookmarked,
+                                    sitterItem: sitter);
+                            
+                            AppToast.show(context,
+                              SnackBar(
+                                content: Text(isBookmarked
+                                    ? 'Sitter removed from bookmarks'
+                                    : 'Sitter bookmarked'),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   );
                 },
               ),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
-              _buildSectionHeader('Saved Sitters', onSeeAll: () {}),
+              _buildSectionHeader('Saved Sitters', onSeeAll: () {
+                context.push(Routes.parentSavedSitters);
+              }),
               const SizedBox(height: HomeDesignTokens.itemSpacing),
-              SizedBox(
-                height: HomeDesignTokens.savedSitterHeight,
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.none,
-                  itemCount: HomeMockData.savedSitters.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 16),
-                  itemBuilder: (context, index) {
-                    final sitter = HomeMockData.savedSitters[index];
-                    return SavedSitterCard(sitter: sitter);
-                  },
+              savedSittersAsync.when(
+                loading: () => SizedBox(
+                  height: HomeDesignTokens.savedSitterHeight,
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
+                error: (error, stack) => SizedBox(
+                  height: HomeDesignTokens.savedSitterHeight,
+                  child: const Center(child: Text('Error loading saved sitters')),
+                ),
+                data: (savedSitters) {
+                  if (savedSitters.isEmpty) {
+                    return SizedBox(
+                      height: HomeDesignTokens.savedSitterHeight,
+                      child: const Center(child: Text('No saved sitters yet.')),
+                    );
+                  }
+                  return SizedBox(
+                    height: HomeDesignTokens.savedSitterHeight,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      itemCount: savedSitters.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 16),
+                      itemBuilder: (context, index) {
+                        final sitter = savedSitters[index];
+                        return SavedSitterCard(
+                          sitter: sitter,
+                          onTap: () {
+                            context.push(Routes.sitterProfilePath(sitter.userId));
+                          },
+                          onBookmarkTap: () {
+                            ref
+                                .read(savedSittersControllerProvider.notifier)
+                                .removeBookmark(sitter.userId);
+                            AppToast.show(context,
+                              const SnackBar(content: Text('Sitter removed from saved list')),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
               accountAsync.when(
                 loading: () => const SizedBox.shrink(),

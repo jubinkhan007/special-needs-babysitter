@@ -15,6 +15,7 @@ class AppIconBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         width: AppUiTokens.bookmarkBoxSize,
         height: AppUiTokens.bookmarkBoxSize,

@@ -176,12 +176,36 @@ class _SitterSearchResultsScreenState
                                 return SitterCard(
                                   sitter: sitter,
                                   isBookmarked: isBookmarked,
-                                  onBookmarkTap: () {
-                                    ref
-                                        .read(
-                                            savedSittersControllerProvider.notifier)
-                                        .toggleBookmark(sitter.userId,
-                                            isCurrentlySaved: isBookmarked);
+                                  onBookmarkTap: () async {
+                                    try {
+                                      final isCurrentlyBookmarked = isBookmarked;
+                                      await ref
+                                          .read(
+                                              savedSittersControllerProvider.notifier)
+                                          .toggleBookmark(sitter.userId,
+                                              isCurrentlySaved: isCurrentlyBookmarked,
+                                              sitterItem: sitter);
+                                      
+                                      if (mounted) {
+                                        AppToast.show(context,
+                                          SnackBar(
+                                            content: Text(isCurrentlyBookmarked
+                                                ? 'Sitter removed from bookmarks'
+                                                : 'Sitter bookmarked'),
+                                            duration: const Duration(seconds: 2),
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      if (mounted) {
+                                        AppToast.show(context,
+                                          SnackBar(
+                                            content: Text('Failed to update bookmark: $e'),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                      }
+                                    }
                                   },
                                   onTap: () {
                                     // Navigate to profile using the ID

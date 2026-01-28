@@ -129,15 +129,40 @@ class SittersRemoteDataSource {
   Future<List<SitterDto>> getSavedSitters() async {
     try {
       final response = await _dio.get('/parents/bookmarked-sitters');
-      // Assuming response format similar to fetchSitters but for bookmarked list
-      // Adjust parsing based on actual response if different
       if (response.data['success'] == true) {
-        final List<dynamic> list = response.data['data']['bookmarkedSitters'] ?? [];
-        return list.map((e) => SitterDto.fromJson(e)).toList();
+        final List<dynamic> list = response.data['data']['sitters'] ?? [];
+        return list.map((e) => _mapBookmarkedSitterToDto(e)).toList();
       }
       return [];
     } catch (e) {
       rethrow;
     }
+  }
+
+  /// Maps the bookmarked sitter API response to SitterDto.
+  /// The API returns sitter data with nested userId object containing user details.
+  SitterDto _mapBookmarkedSitterToDto(Map<String, dynamic> json) {
+    final userIdData = json['userId'] as Map<String, dynamic>? ?? {};
+
+    // Photo URL can be in userId object or directly on sitter profile
+    final photoUrl =
+        userIdData['photoUrl'] as String? ?? json['photoUrl'] as String? ?? '';
+
+    return SitterDto(
+      id: json['_id'] ?? '',
+      userId: userIdData['_id'] ?? '',
+      firstName: userIdData['firstName'] ?? '',
+      lastName: userIdData['lastName'] ?? '',
+      photoUrl: photoUrl,
+      bio: json['bio'] ?? '',
+      hourlyRate: (json['hourlyRate'] as num?)?.toDouble() ?? 0.0,
+      skills: List<String>.from(json['skills'] ?? []),
+      ageRanges: List<String>.from(json['ageRanges'] ?? []),
+      address: json['address'],
+      distance: (json['distance'] as num?)?.toDouble(),
+      reliabilityScore: (json['reliabilityScore'] as num?)?.toDouble() ?? 100.0,
+      reviewCount: (json['totalJobs'] as num?)?.toInt() ?? 0,
+      isSaved: true, // Always true since this is from saved list
+    );
   }
 }

@@ -164,7 +164,11 @@ class SitterCard extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: sitter.tags.map((tag) => TagChip(label: tag)).toList(),
+            children: [
+              ...sitter.tags.take(2).map((tag) => TagChip(label: tag)),
+              if (sitter.tags.length > 2)
+                TagChip(label: '+${sitter.tags.length - 2} more'),
+            ],
           ),
           const SizedBox(height: 16),
           // Row 4: Footer (Price + Button)

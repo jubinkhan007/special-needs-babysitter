@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../routing/routes.dart';
 import '../../../booking_flow/data/providers/booking_flow_provider.dart';
+import '../../../search/models/sitter_list_item_model.dart';
 import '../../../../sitters/presentation/saved/saved_sitters_controller.dart';
 import '../providers/sitter_profile_providers.dart';
 import 'sitter_profile_view.dart';
@@ -81,9 +82,25 @@ class SitterProfilePage extends ConsumerWidget {
         sitter: sitter,
         isBookmarked: isBookmarked,
         onBookmark: () {
+          // Map SitterModel to SitterListItemModel for optimistic update
+          final sitterItem = SitterListItemModel(
+            id: sitter.id,
+            userId: sitter.userId,
+            name: sitter.name,
+            imageAssetPath: sitter.avatarUrl,
+            isVerified: sitter.isVerified,
+            rating: sitter.rating,
+            distanceText: sitter.distance,
+            responseRate: sitter.responseRate, // assuming int matches
+            reliabilityRate: sitter.reliabilityRate,
+            experienceYears: sitter.experienceYears,
+            tags: sitter.badges,
+            hourlyRate: sitter.hourlyRate,
+          );
+
           ref
               .read(savedSittersControllerProvider.notifier)
-              .toggleBookmark(sitterId, isCurrentlySaved: isBookmarked);
+              .toggleBookmark(sitterId, isCurrentlySaved: isBookmarked, sitterItem: sitterItem);
         },
         onBookPressed: () {
           // Initialize booking flow with sitter data
