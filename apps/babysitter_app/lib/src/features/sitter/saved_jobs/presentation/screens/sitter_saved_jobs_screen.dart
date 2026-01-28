@@ -7,6 +7,7 @@ import '../../../home/presentation/widgets/app_search_field.dart';
 import '../../../home/presentation/widgets/job_preview_card.dart';
 import '../../../home/presentation/mappers/job_preview_mapper.dart';
 import '../providers/saved_jobs_providers.dart';
+import '../providers/location_provider.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 
@@ -17,6 +18,7 @@ class SitterSavedJobsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final savedJobsAsync = ref.watch(savedJobsListProvider);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
+    final userLocationAsync = ref.watch(sitterLocationProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -78,6 +80,7 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                 return RefreshIndicator(
                   onRefresh: () async {
                     ref.invalidate(savedJobsListProvider);
+                    ref.invalidate(sitterLocationProvider);
                   },
                   child: ListView.builder(
                     padding: EdgeInsets.only(
@@ -88,8 +91,11 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                       final job = visibleJobs[index];
                       final jobId = job.id ?? '';
                       final isSaved = savedJobsState.savedJobIds.contains(jobId);
-                      final preview =
-                          JobPreviewMapper.map(job, isBookmarked: isSaved);
+                      final preview = JobPreviewMapper.map(
+                        job,
+                        isBookmarked: isSaved,
+                        userLocation: userLocationAsync.valueOrNull,
+                      );
 
                       return JobPreviewCard(
                         job: preview,

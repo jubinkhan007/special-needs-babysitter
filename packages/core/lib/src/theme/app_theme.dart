@@ -52,6 +52,14 @@ class AppTheme {
         fillColor: AppColors.inputFill,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintStyle: const TextStyle(color: AppColors.textSecondary),
+        labelStyle: const TextStyle(color: AppColors.textSecondary),
+        floatingLabelStyle: const TextStyle(color: AppColors.textPrimary),
+        helperStyle: const TextStyle(color: AppColors.textSecondary),
+        errorStyle: const TextStyle(color: AppColors.error),
+        iconColor: AppColors.textSecondary,
+        prefixIconColor: AppColors.textSecondary,
+        suffixIconColor: AppColors.textSecondary,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -116,6 +124,14 @@ class AppTheme {
         fillColor: AppColors.darkInputFill,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintStyle: const TextStyle(color: AppColors.darkTextSecondary),
+        labelStyle: const TextStyle(color: AppColors.darkTextSecondary),
+        floatingLabelStyle: const TextStyle(color: AppColors.darkTextPrimary),
+        helperStyle: const TextStyle(color: AppColors.darkTextSecondary),
+        errorStyle: const TextStyle(color: AppColors.error),
+        iconColor: AppColors.darkTextSecondary,
+        prefixIconColor: AppColors.darkTextSecondary,
+        suffixIconColor: AppColors.darkTextSecondary,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

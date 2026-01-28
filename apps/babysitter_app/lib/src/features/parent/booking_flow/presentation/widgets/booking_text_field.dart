@@ -27,6 +27,8 @@ class BookingTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return FormFieldCard(
       child: TextField(
         controller: controller,
@@ -34,26 +36,23 @@ class BookingTextField extends StatelessWidget {
         inputFormatters:
             inputFormatters ?? _numericInputFormatters(keyboardType),
         decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white, // Force white bg
+          filled: false,
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           errorBorder: InputBorder.none,
           focusedErrorBorder: InputBorder.none,
           hintText: hintText,
-          hintStyle: const TextStyle(
-            fontSize: 16,
+          hintStyle: theme.textTheme.bodyLarge?.copyWith(
+            color: colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF667085), // Grey 500
           ),
           contentPadding: EdgeInsets.zero,
           isDense: true,
         ),
-        style: const TextStyle(
-          fontSize: 16,
+        style: theme.textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w400,
-          color: Color(0xFF101828), // Dark Text
+          color: colorScheme.onSurface,
         ),
       ),
     );

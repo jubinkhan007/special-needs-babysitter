@@ -36,6 +36,7 @@ export 'src/account/datasources/account_remote_datasource.dart';
 export 'src/account/repositories/account_repository_impl.dart';
 
 // Profile Details Feature
+export 'src/profile_details/dtos/child_dto.dart';
 export 'src/profile_details/datasources/profile_details_remote_datasource.dart';
 export 'src/profile_details/repositories/profile_details_repository_impl.dart';
 

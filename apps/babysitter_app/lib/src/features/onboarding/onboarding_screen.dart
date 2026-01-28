@@ -47,7 +47,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
   String? _selectedRole; // 'family' or 'babysitter'
 
-  static const List<OnboardingSlide> _slides = [
+  // Parent/Family onboarding slides
+  static const List<OnboardingSlide> _parentSlides = [
     OnboardingSlide(
       imagePath: 'assets/onboarding_1.jpg',
       title: 'Welcome to Special\nNeeds Sitters',
@@ -72,37 +73,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       description:
           'Book sitters when you need them — with no\ncommitments or monthly fees.',
     ),
+  ];
+
+  // Sitter/Babysitter onboarding slides
+  static const List<OnboardingSlide> _sitterSlides = [
     OnboardingSlide(
-// This matches the 5th screen in Figma (duplicate of 1st image conceptual flow?) or simply the last step
-// Looking at the Figma request image, the last screen is "Welcome to Special Needs Sitters" again but with bottom sheet style?
-// Wait, the user provided image shows:
-// 1. Welcome ... Select Your Role (Family | Babysitter) - Image 1
-// 2. Specialized Care ... - Image 2
-// 3. Verified & Trusted ... - Image 3
-// 4. No Subscriptions ... - Image 4
-// 5. Welcome to Special Needs Sitters ... (Get Started | Log In) - Image 1 again?
-// Actually, the 5th screen in the provided image sequence looks like the first screen's content but with the standard "Get Started" buttons instead of Role Selection.
-// Let's assume the user wants the standard 4 slides, but the first one has role selection.
-// The 5th image in the strip seems to be a variation or just the final state?
-// The provided image shows 5 screens.
-// Screen 1: Welcome... Select Your Role.
-// Screen 2: Specialized Care.
-// Screen 3: Verified & Trusted.
-// Screen 4: No Subscriptions.
-// Screen 5: Welcome... Get Started/Log In. This looks like the "final destination" or perhaps just an alternative first screen?
-// Based on typical flows, Screen 1 is likely the START. Screens 2-4 are the carousel. Screen 5 might be what validation showed? or maybe the carousel loops?
-// Let's implement the 4 unique content slides.
-// AND the bottom sheet logic.
-// Wait, the UI for Screen 2, 3, 4 has white bottom sheet with "Get Started" buttons.
-// Screen 1 has "Select Your Role".
-// Let's stick to the 4 slides defined in the previous code, but update content/layout.
-      imagePath:
-          'assets/onboarding_1.jpg', // Reusing first image for final slide if needed, but let's stick to 4 for now and see.
+      imagePath: 'assets/onboarding_1.jpg',
       title: 'Welcome to Special\nNeeds Sitters',
       description:
           "We're here to support children with unique\nneeds — and the families who love them.",
     ),
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_2.jpg',
+      title: 'Match with Families\nNeeding Your Skills.',
+      description:
+          'Families are looking for sitters like you — let\nyour skills open the right doors.',
+    ),
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_3.jpg',
+      title: 'Empowering Families\nwith All Abilities',
+      description:
+          'Your skills make a difference — help families\nthrive with confidence.',
+    ),
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_4.jpg',
+      title: "We've Got Your Back,\nSitter or Parent.",
+      description: 'Here to care, here to connect — always\nwith you.',
+    ),
   ];
+
+  // Get slides based on selected role
+  List<OnboardingSlide> get _slides {
+    if (_selectedRole == 'sitter') {
+      return _sitterSlides;
+    }
+    return _parentSlides;
+  }
 
   @override
   void initState() {

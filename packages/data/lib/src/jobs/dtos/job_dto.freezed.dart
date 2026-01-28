@@ -22,7 +22,9 @@ JobAddressDto _$JobAddressDtoFromJson(Map<String, dynamic> json) {
 mixin _$JobAddressDto {
   String get streetAddress => throw _privateConstructorUsedError;
   String? get aptUnit => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _cleanAddressField)
   String get city => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _cleanAddressField)
   String get state => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _toString)
   String get zipCode => throw _privateConstructorUsedError;
@@ -48,8 +50,8 @@ abstract class $JobAddressDtoCopyWith<$Res> {
   $Res call(
       {String streetAddress,
       String? aptUnit,
-      String city,
-      String state,
+      @JsonKey(fromJson: _cleanAddressField) String city,
+      @JsonKey(fromJson: _cleanAddressField) String state,
       @JsonKey(fromJson: _toString) String zipCode,
       double? latitude,
       double? longitude});
@@ -122,8 +124,8 @@ abstract class _$$JobAddressDtoImplCopyWith<$Res>
   $Res call(
       {String streetAddress,
       String? aptUnit,
-      String city,
-      String state,
+      @JsonKey(fromJson: _cleanAddressField) String city,
+      @JsonKey(fromJson: _cleanAddressField) String state,
       @JsonKey(fromJson: _toString) String zipCode,
       double? latitude,
       double? longitude});
@@ -189,8 +191,8 @@ class _$JobAddressDtoImpl extends _JobAddressDto {
   const _$JobAddressDtoImpl(
       {required this.streetAddress,
       this.aptUnit,
-      required this.city,
-      required this.state,
+      @JsonKey(fromJson: _cleanAddressField) required this.city,
+      @JsonKey(fromJson: _cleanAddressField) required this.state,
       @JsonKey(fromJson: _toString) required this.zipCode,
       this.latitude,
       this.longitude})
@@ -204,8 +206,10 @@ class _$JobAddressDtoImpl extends _JobAddressDto {
   @override
   final String? aptUnit;
   @override
+  @JsonKey(fromJson: _cleanAddressField)
   final String city;
   @override
+  @JsonKey(fromJson: _cleanAddressField)
   final String state;
   @override
   @JsonKey(fromJson: _toString)
@@ -262,8 +266,8 @@ abstract class _JobAddressDto extends JobAddressDto {
   const factory _JobAddressDto(
       {required final String streetAddress,
       final String? aptUnit,
-      required final String city,
-      required final String state,
+      @JsonKey(fromJson: _cleanAddressField) required final String city,
+      @JsonKey(fromJson: _cleanAddressField) required final String state,
       @JsonKey(fromJson: _toString) required final String zipCode,
       final double? latitude,
       final double? longitude}) = _$JobAddressDtoImpl;
@@ -277,8 +281,10 @@ abstract class _JobAddressDto extends JobAddressDto {
   @override
   String? get aptUnit;
   @override
+  @JsonKey(fromJson: _cleanAddressField)
   String get city;
   @override
+  @JsonKey(fromJson: _cleanAddressField)
   String get state;
   @override
   @JsonKey(fromJson: _toString)
@@ -475,8 +481,10 @@ JobDto _$JobDtoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$JobDto {
   String? get id => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _parentIdFromJson)
   String? get parentUserId => throw _privateConstructorUsedError;
   List<String> get childIds => throw _privateConstructorUsedError;
+  List<ChildDto> get children => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get startDate => throw _privateConstructorUsedError;
   String? get endDate => throw _privateConstructorUsedError;
@@ -513,8 +521,9 @@ abstract class $JobDtoCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      String? parentUserId,
+      @JsonKey(fromJson: _parentIdFromJson) String? parentUserId,
       List<String> childIds,
+      List<ChildDto> children,
       String? title,
       String? startDate,
       String? endDate,
@@ -556,6 +565,7 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
     Object? id = freezed,
     Object? parentUserId = freezed,
     Object? childIds = null,
+    Object? children = null,
     Object? title = freezed,
     Object? startDate = freezed,
     Object? endDate = freezed,
@@ -588,6 +598,10 @@ class _$JobDtoCopyWithImpl<$Res, $Val extends JobDto>
           ? _value.childIds
           : childIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      children: null == children
+          ? _value.children
+          : children // ignore: cast_nullable_to_non_nullable
+              as List<ChildDto>,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -701,8 +715,9 @@ abstract class _$$JobDtoImplCopyWith<$Res> implements $JobDtoCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      String? parentUserId,
+      @JsonKey(fromJson: _parentIdFromJson) String? parentUserId,
       List<String> childIds,
+      List<ChildDto> children,
       String? title,
       String? startDate,
       String? endDate,
@@ -744,6 +759,7 @@ class __$$JobDtoImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? parentUserId = freezed,
     Object? childIds = null,
+    Object? children = null,
     Object? title = freezed,
     Object? startDate = freezed,
     Object? endDate = freezed,
@@ -776,6 +792,10 @@ class __$$JobDtoImplCopyWithImpl<$Res>
           ? _value._childIds
           : childIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      children: null == children
+          ? _value._children
+          : children // ignore: cast_nullable_to_non_nullable
+              as List<ChildDto>,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -857,8 +877,9 @@ class __$$JobDtoImplCopyWithImpl<$Res>
 class _$JobDtoImpl extends _JobDto {
   const _$JobDtoImpl(
       {this.id,
-      this.parentUserId,
+      @JsonKey(fromJson: _parentIdFromJson) this.parentUserId,
       final List<String> childIds = const [],
+      final List<ChildDto> children = const [],
       this.title,
       this.startDate,
       this.endDate,
@@ -878,6 +899,7 @@ class _$JobDtoImpl extends _JobDto {
       this.createdAt,
       this.postedAt})
       : _childIds = childIds,
+        _children = children,
         _applicantIds = applicantIds,
         super._();
 
@@ -887,6 +909,7 @@ class _$JobDtoImpl extends _JobDto {
   @override
   final String? id;
   @override
+  @JsonKey(fromJson: _parentIdFromJson)
   final String? parentUserId;
   final List<String> _childIds;
   @override
@@ -895,6 +918,15 @@ class _$JobDtoImpl extends _JobDto {
     if (_childIds is EqualUnmodifiableListView) return _childIds;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_childIds);
+  }
+
+  final List<ChildDto> _children;
+  @override
+  @JsonKey()
+  List<ChildDto> get children {
+    if (_children is EqualUnmodifiableListView) return _children;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_children);
   }
 
   @override
@@ -945,7 +977,7 @@ class _$JobDtoImpl extends _JobDto {
 
   @override
   String toString() {
-    return 'JobDto(id: $id, parentUserId: $parentUserId, childIds: $childIds, title: $title, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, timezone: $timezone, address: $address, location: $location, additionalDetails: $additionalDetails, payRate: $payRate, saveAsDraft: $saveAsDraft, status: $status, estimatedDuration: $estimatedDuration, estimatedTotal: $estimatedTotal, applicantIds: $applicantIds, acceptedSitterId: $acceptedSitterId, createdAt: $createdAt, postedAt: $postedAt)';
+    return 'JobDto(id: $id, parentUserId: $parentUserId, childIds: $childIds, children: $children, title: $title, startDate: $startDate, endDate: $endDate, startTime: $startTime, endTime: $endTime, timezone: $timezone, address: $address, location: $location, additionalDetails: $additionalDetails, payRate: $payRate, saveAsDraft: $saveAsDraft, status: $status, estimatedDuration: $estimatedDuration, estimatedTotal: $estimatedTotal, applicantIds: $applicantIds, acceptedSitterId: $acceptedSitterId, createdAt: $createdAt, postedAt: $postedAt)';
   }
 
   @override
@@ -957,6 +989,7 @@ class _$JobDtoImpl extends _JobDto {
             (identical(other.parentUserId, parentUserId) ||
                 other.parentUserId == parentUserId) &&
             const DeepCollectionEquality().equals(other._childIds, _childIds) &&
+            const DeepCollectionEquality().equals(other._children, _children) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
@@ -996,6 +1029,7 @@ class _$JobDtoImpl extends _JobDto {
         id,
         parentUserId,
         const DeepCollectionEquality().hash(_childIds),
+        const DeepCollectionEquality().hash(_children),
         title,
         startDate,
         endDate,
@@ -1035,8 +1069,9 @@ class _$JobDtoImpl extends _JobDto {
 abstract class _JobDto extends JobDto {
   const factory _JobDto(
       {final String? id,
-      final String? parentUserId,
+      @JsonKey(fromJson: _parentIdFromJson) final String? parentUserId,
       final List<String> childIds,
+      final List<ChildDto> children,
       final String? title,
       final String? startDate,
       final String? endDate,
@@ -1062,9 +1097,12 @@ abstract class _JobDto extends JobDto {
   @override
   String? get id;
   @override
+  @JsonKey(fromJson: _parentIdFromJson)
   String? get parentUserId;
   @override
   List<String> get childIds;
+  @override
+  List<ChildDto> get children;
   @override
   String? get title;
   @override

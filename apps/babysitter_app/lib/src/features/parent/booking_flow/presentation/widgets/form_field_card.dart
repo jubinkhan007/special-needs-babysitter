@@ -12,6 +12,7 @@ class FormFieldCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -20,10 +21,10 @@ class FormFieldCard extends StatelessWidget {
             56, // Standard height per generic mobile design, or match Figma exactly if different.
         // Screenshot looks standard ~52-56.
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.surface,
           borderRadius: BorderRadius.circular(12), // Rounded corners
           border: Border.all(
-            color: const Color(0xFFB2DDFF), // Light Blue border #B2DDFF
+            color: colorScheme.outline, // Light Blue border #B2DDFF
             width: 1,
           ),
         ),

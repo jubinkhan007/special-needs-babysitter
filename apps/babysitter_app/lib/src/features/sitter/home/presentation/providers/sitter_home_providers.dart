@@ -5,6 +5,9 @@ import 'package:data/data.dart';
 import 'package:auth/auth.dart';
 import 'package:babysitter_app/src/constants/app_constants.dart';
 
+import '../../data/dtos/sitter_job_preview_dto.dart';
+import '../../domain/entities/job_preview.dart';
+
 /// User authentificated Dio for Sitter Home
 final sitterHomeDioProvider = Provider<Dio>((ref) {
   final dio = Dio(BaseOptions(
@@ -57,21 +60,55 @@ final sitterJobRepositoryProvider = Provider<JobRepository>((ref) {
   return JobRepositoryImpl(remote, local);
 });
 
+/// Notifier for job previews - fetches from API and parses with correct DTO
+class JobPreviewsNotifier extends AsyncNotifier<List<JobPreview>> {
+  @override
+  Future<List<JobPreview>> build() async {
+    final dio = ref.watch(sitterHomeDioProvider);
+
+    final response = await dio.get(
+      '/jobs',
+      queryParameters: {'status': 'posted', 'limit': 20, 'offset': 0},
+    );
+
+    if (response.data['success'] == true) {
+      final List<dynamic> jobsJson = response.data['data']['jobs'];
+
+      final previews = <JobPreview>[];
+      for (final json in jobsJson) {
+        try {
+          final dto =
+              SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
+          previews.add(dto.toDomain());
+        } catch (e) {
+          // Skip jobs that fail to parse
+          print('Warning: Failed to parse job preview: $e');
+        }
+      }
+
+      return previews;
+    } else {
+      throw Exception('Failed to fetch jobs');
+    }
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build());
+  }
+}
+
+/// Provider for job previews - use this in the UI
+final jobPreviewsNotifierProvider =
+    AsyncNotifierProvider<JobPreviewsNotifier, List<JobPreview>>(
+        JobPreviewsNotifier.new);
+
+// Keep the old provider for backwards compatibility with other screens
 class JobsNotifier extends AsyncNotifier<List<Job>> {
   @override
   Future<List<Job>> build() async {
-    print('DEBUG: JobsNotifier build started');
-    try {
-      final repository = ref.watch(sitterJobRepositoryProvider);
-      print('DEBUG: JobsNotifier calling getPublicJobs');
-      final jobs = await repository.getPublicJobs();
-      print('DEBUG: JobsNotifier received ${jobs.length} jobs');
-      return jobs;
-    } catch (e, st) {
-      print('DEBUG: JobsNotifier error: $e');
-      print('DEBUG: JobsNotifier stack: $st');
-      rethrow;
-    }
+    final repository = ref.watch(sitterJobRepositoryProvider);
+    return repository.getPublicJobs();
   }
 
   Future<void> refresh() async {

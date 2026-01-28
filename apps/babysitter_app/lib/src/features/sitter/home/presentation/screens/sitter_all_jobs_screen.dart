@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../../routing/routes.dart';
 import '../providers/sitter_home_providers.dart';
 import '../widgets/job_preview_card.dart';
-import '../mappers/job_preview_mapper.dart';
 import '../widgets/app_search_field.dart';
 import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
@@ -16,7 +15,7 @@ class SitterAllJobsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final jobsAsync = ref.watch(jobsNotifierProvider);
+    final jobsAsync = ref.watch(jobPreviewsNotifierProvider);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     ref.watch(savedJobsListProvider);
 
@@ -102,27 +101,25 @@ class SitterAllJobsScreen extends ConsumerWidget {
           SizedBox(height: 16.h),
           Expanded(
             child: jobsAsync.when(
-              data: (jobs) {
-                if (jobs.isEmpty) {
+              data: (jobPreviews) {
+                if (jobPreviews.isEmpty) {
                   return const Center(child: Text('No jobs found'));
                 }
                 return ListView.builder(
                   padding: EdgeInsets.only(bottom: 20.h),
-                  itemCount: jobs.length,
+                  itemCount: jobPreviews.length,
                   itemBuilder: (context, index) {
-                    final job = jobs[index];
+                    final preview = jobPreviews[index];
                     final isSaved =
-                        savedJobsState.savedJobIds.contains(job.id ?? '');
-                    final preview =
-                        JobPreviewMapper.map(job, isBookmarked: isSaved);
+                        savedJobsState.savedJobIds.contains(preview.id);
+                    final updatedPreview = preview.copyWith(isBookmarked: isSaved);
                     return JobPreviewCard(
-                      job: preview,
+                      job: updatedPreview,
                       onViewDetails: () {
-                        context.push('${Routes.sitterJobDetails}/${job.id}');
+                        context.push('${Routes.sitterJobDetails}/${preview.id}');
                       },
                       onBookmark: () {
-                        final jobId = job.id ?? '';
-                        if (jobId.isEmpty) {
+                        if (preview.id.isEmpty) {
                           AppToast.show(context,
                             const SnackBar(content: Text('Missing job ID')),
                           );
@@ -130,7 +127,7 @@ class SitterAllJobsScreen extends ConsumerWidget {
                         }
                         ref
                             .read(savedJobsControllerProvider.notifier)
-                            .toggleSaved(jobId)
+                            .toggleSaved(preview.id)
                             .catchError((error) {
                           AppToast.show(
                             context,

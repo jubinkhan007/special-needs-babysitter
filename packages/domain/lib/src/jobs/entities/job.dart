@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../profile_details/entities/child.dart';
 
 /// Job Address entity representing the location details of a job.
 class JobAddress extends Equatable {
@@ -51,6 +52,7 @@ class Job extends Equatable {
   final String? id;
   final String? parentUserId;
   final List<String> childIds;
+  final List<Child> children;
   final String title;
   final String startDate; // Represented as YYYY-MM-DD
   final String endDate; // Represented as YYYY-MM-DD
@@ -74,6 +76,7 @@ class Job extends Equatable {
     this.id,
     this.parentUserId,
     required this.childIds,
+    this.children = const [],
     required this.title,
     required this.startDate,
     required this.endDate,
@@ -99,6 +102,7 @@ class Job extends Equatable {
         id,
         parentUserId,
         childIds,
+        children,
         title,
         startDate,
         endDate,

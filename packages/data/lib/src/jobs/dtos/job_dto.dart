@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:domain/domain.dart';
+import '../../profile_details/dtos/child_dto.dart';
 
 part 'job_dto.freezed.dart';
 part 'job_dto.g.dart';
@@ -7,13 +8,35 @@ part 'job_dto.g.dart';
 // Helper to handle zipCode being int or String
 String _toString(dynamic value) => value.toString();
 
+// Helper to handle parentUserId being String or Map
+String? _parentIdFromJson(dynamic value) {
+  if (value == null) return null;
+  if (value is String) return value;
+  if (value is Map<String, dynamic>) {
+    return value['_id'] as String? ?? value['id'] as String?;
+  }
+  return value.toString();
+}
+
+// Helper to clean address fields if they contain GeoJSON garbage
+String _cleanAddressField(dynamic value) {
+  if (value is String) {
+    // Check if it looks like the GeoJSON garbage seen in logs
+    if (value.trim().startsWith('{') || value.contains('type: Point')) {
+      return '';
+    }
+    return value;
+  }
+  return '';
+}
+
 @freezed
 class JobAddressDto with _$JobAddressDto {
   const factory JobAddressDto({
     required String streetAddress,
     String? aptUnit,
-    required String city,
-    required String state,
+    @JsonKey(fromJson: _cleanAddressField) required String city,
+    @JsonKey(fromJson: _cleanAddressField) required String state,
     @JsonKey(fromJson: _toString) required String zipCode,
     double? latitude,
     double? longitude,
@@ -113,8 +136,9 @@ class GeoJsonConverter implements JsonConverter<JobLocationDto?, dynamic> {
 class JobDto with _$JobDto {
   const factory JobDto({
     String? id,
-    String? parentUserId,
+    @JsonKey(fromJson: _parentIdFromJson) String? parentUserId,
     @Default([]) List<String> childIds,
+    @Default([]) List<ChildDto> children,
     String? title,
     String? startDate,
     String? endDate,
@@ -143,6 +167,7 @@ class JobDto with _$JobDto {
         id: job.id,
         parentUserId: job.parentUserId,
         childIds: job.childIds,
+        children: [], // Typically not mapped back to DTO for saving jobs
         title: job.title,
         startDate: job.startDate,
         endDate: job.endDate,
@@ -165,10 +190,24 @@ class JobDto with _$JobDto {
         postedAt: job.postedAt,
       );
 
-  Job toDomain() => Job(
+  Job toDomain() {
+    print('DEBUG: JobDto.toDomain() for job: $id');
+    print('DEBUG:   childIds: $childIds (length: ${childIds.length})');
+    print('DEBUG:   children count: ${children.length}');
+    print('DEBUG:   address: $address');
+    if (address != null) {
+      print('DEBUG:   address.city: ${address!.city}');
+      print('DEBUG:   address.state: ${address!.state}');
+      print('DEBUG:   address.zipCode: ${address!.zipCode}');
+    } else {
+      print('DEBUG:   address is NULL - will use empty defaults');
+    }
+
+    return Job(
         id: id,
         parentUserId: parentUserId,
         childIds: childIds,
+        children: children.map((e) => e.toDomain()).toList(),
         title: title ?? '',
         startDate: startDate ?? '',
         endDate: endDate ?? '',
@@ -194,4 +233,5 @@ class JobDto with _$JobDto {
         createdAt: createdAt,
         postedAt: postedAt,
       );
+  }
 }

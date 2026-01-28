@@ -47,8 +47,6 @@ class JobRemoteDataSource {
           'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}');
       if (response.data['success'] == true) {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
-        print(
-            'DEBUG: JobRemoteDataSource found ${jobsJson.length} jobs in response');
         return jobsJson
             .map((json) => JobDto.fromJson(json as Map<String, dynamic>))
             .toList();

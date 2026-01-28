@@ -25,6 +25,34 @@ class JobPreview {
     required this.hourlyRate,
     this.isBookmarked = false,
   });
+
+  JobPreview copyWith({
+    String? id,
+    String? title,
+    String? familyName,
+    String? familyAvatarUrl,
+    int? childrenCount,
+    List<ChildInfo>? children,
+    String? location,
+    String? distance,
+    List<String>? requiredSkills,
+    double? hourlyRate,
+    bool? isBookmarked,
+  }) {
+    return JobPreview(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      familyName: familyName ?? this.familyName,
+      familyAvatarUrl: familyAvatarUrl ?? this.familyAvatarUrl,
+      childrenCount: childrenCount ?? this.childrenCount,
+      children: children ?? this.children,
+      location: location ?? this.location,
+      distance: distance ?? this.distance,
+      requiredSkills: requiredSkills ?? this.requiredSkills,
+      hourlyRate: hourlyRate ?? this.hourlyRate,
+      isBookmarked: isBookmarked ?? this.isBookmarked,
+    );
+  }
 }
 
 /// Child information for job preview.

@@ -10,8 +10,8 @@ _$JobAddressDtoImpl _$$JobAddressDtoImplFromJson(Map<String, dynamic> json) =>
     _$JobAddressDtoImpl(
       streetAddress: json['streetAddress'] as String,
       aptUnit: json['aptUnit'] as String?,
-      city: json['city'] as String,
-      state: json['state'] as String,
+      city: _cleanAddressField(json['city']),
+      state: _cleanAddressField(json['state']),
       zipCode: _toString(json['zipCode']),
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
@@ -43,9 +43,13 @@ Map<String, dynamic> _$$JobLocationDtoImplToJson(
 
 _$JobDtoImpl _$$JobDtoImplFromJson(Map<String, dynamic> json) => _$JobDtoImpl(
       id: json['id'] as String?,
-      parentUserId: json['parentUserId'] as String?,
+      parentUserId: _parentIdFromJson(json['parentUserId']),
       childIds: (json['childIds'] as List<dynamic>?)
               ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      children: (json['children'] as List<dynamic>?)
+              ?.map((e) => ChildDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       title: json['title'] as String?,
@@ -82,6 +86,7 @@ Map<String, dynamic> _$$JobDtoImplToJson(_$JobDtoImpl instance) =>
       'id': instance.id,
       'parentUserId': instance.parentUserId,
       'childIds': instance.childIds,
+      'children': instance.children,
       'title': instance.title,
       'startDate': instance.startDate,
       'endDate': instance.endDate,

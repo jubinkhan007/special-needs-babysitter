@@ -11,7 +11,6 @@ import 'presentation/widgets/app_search_field.dart';
 import 'presentation/widgets/job_preview_card.dart';
 import 'presentation/widgets/background_check_banner.dart';
 import 'presentation/providers/sitter_home_providers.dart';
-import 'presentation/mappers/job_preview_mapper.dart';
 import 'presentation/screens/sitter_all_jobs_screen.dart';
 import '../background_check/data/models/background_check_status_model.dart';
 import '../background_check/presentation/providers/background_check_status_provider.dart';
@@ -24,13 +23,10 @@ class SitterHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('DEBUG: SitterHomeScreen build called');
     final userAsync = ref.watch(currentUserProvider);
     final user = userAsync.valueOrNull;
 
-    print('DEBUG: SitterHomeScreen watching jobsNotifierProvider');
-    final jobsAsync = ref.watch(jobsNotifierProvider);
-    print('DEBUG: jobsAsync state: ${jobsAsync.toString()}');
+    final jobsAsync = ref.watch(jobPreviewsNotifierProvider);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     ref.watch(savedJobsListProvider);
 
@@ -140,8 +136,8 @@ class SitterHomeScreen extends ConsumerWidget {
           // Job List
           Expanded(
             child: jobsAsync.when(
-              data: (jobs) {
-                if (jobs.isEmpty) {
+              data: (jobPreviews) {
+                if (jobPreviews.isEmpty) {
                   return Center(
                     child: Text(
                       'No jobs found nearby.',
@@ -156,23 +152,20 @@ class SitterHomeScreen extends ConsumerWidget {
                   padding: EdgeInsets.only(
                     bottom: 20.h + MediaQuery.of(context).padding.bottom,
                   ),
-                  itemCount: jobs.length,
+                  itemCount: jobPreviews.length,
                   itemBuilder: (context, index) {
-                    final job = jobs[index];
+                    final preview = jobPreviews[index];
+                    // Update bookmark status from local state
                     final isSaved =
-                        savedJobsState.savedJobIds.contains(job.id ?? '');
-                    final preview = JobPreviewMapper.map(
-                      job,
-                      isBookmarked: isSaved,
-                    );
+                        savedJobsState.savedJobIds.contains(preview.id);
+                    final updatedPreview = preview.copyWith(isBookmarked: isSaved);
                     return JobPreviewCard(
-                      job: preview,
+                      job: updatedPreview,
                       onViewDetails: () {
-                        context.push('${Routes.sitterJobDetails}/${job.id}');
+                        context.push('${Routes.sitterJobDetails}/${preview.id}');
                       },
                       onBookmark: () {
-                        final jobId = job.id ?? '';
-                        if (jobId.isEmpty) {
+                        if (preview.id.isEmpty) {
                           AppToast.show(context,
                             const SnackBar(content: Text('Missing job ID')),
                           );
@@ -180,7 +173,7 @@ class SitterHomeScreen extends ConsumerWidget {
                         }
                         ref
                             .read(savedJobsControllerProvider.notifier)
-                            .toggleSaved(jobId)
+                            .toggleSaved(preview.id)
                             .catchError((error) {
                           AppToast.show(
                             context,

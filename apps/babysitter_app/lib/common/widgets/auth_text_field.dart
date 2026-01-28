@@ -37,6 +37,18 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final labelColor =
+        isDark ? colorScheme.onSurfaceVariant : AuthTheme.textDark.withOpacity(0.8);
+    final textColor = isDark ? colorScheme.onSurface : AuthTheme.textDark;
+    final hintColor =
+        isDark ? colorScheme.onSurfaceVariant : AuthTheme.textDark.withOpacity(0.4);
+    final fillColor = isDark ? colorScheme.surface : Colors.white;
+    final borderColor = isDark ? colorScheme.outline : AuthTheme.inputBorder;
+    final focusBorderColor =
+        isDark ? colorScheme.primary : AuthTheme.primaryBlue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -45,7 +57,7 @@ class AuthTextField extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: AuthTheme.textDark.withOpacity(0.8),
+            color: labelColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -55,36 +67,33 @@ class AuthTextField extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: _numericInputFormatters(keyboardType),
           textInputAction: textInputAction,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 15,
-            color: AuthTheme.textDark,
+            color: textColor,
           ),
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(
               fontSize: 15,
-              color: AuthTheme.textDark.withOpacity(0.4),
+              color: hintColor,
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: fillColor,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 16,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AuthTheme.inputBorder),
+              borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AuthTheme.inputBorder),
+              borderSide: BorderSide(color: borderColor),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AuthTheme.primaryBlue,
-                width: 1.5,
-              ),
+              borderSide: BorderSide(color: focusBorderColor, width: 1.5),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
