@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../routing/routes.dart';
+import '../providers/background_check_status_provider.dart';
 
 /// Final success screen for the background check flow.
-class BackgroundCheckCompleteScreen extends StatelessWidget {
+class BackgroundCheckCompleteScreen extends ConsumerWidget {
   const BackgroundCheckCompleteScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
@@ -87,10 +89,11 @@ class BackgroundCheckCompleteScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     height: 52.h,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.go(Routes.sitterHome);
-                      },
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ref.invalidate(backgroundCheckStatusProvider);
+                      context.go(Routes.sitterHome);
+                    },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF89CFF0), // Light blue
                         foregroundColor: Colors.white,

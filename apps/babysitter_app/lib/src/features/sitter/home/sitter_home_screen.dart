@@ -89,8 +89,16 @@ class SitterHomeScreen extends ConsumerWidget {
               onStart: () {
                 if (status == BackgroundCheckStatusType.notStarted) {
                   context.push(Routes.sitterVerifyIdentity);
+                  return;
                 }
-                // For pending/rejected, maybe navigate to status details or support
+                if (status == BackgroundCheckStatusType.pending) {
+                  context.push(Routes.sitterBackgroundCheck);
+                  return;
+                }
+                if (status == BackgroundCheckStatusType.rejected) {
+                  context.push(Routes.sitterVerifyIdentity);
+                  return;
+                }
               },
             ),
             SizedBox(height: 20.h),

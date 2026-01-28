@@ -14,6 +14,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
     this.onBookmark,
     this.onShare,
     this.onTapRating,
+    this.isBookmarked = false,
   });
 
   final String name;
@@ -26,6 +27,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
   final VoidCallback? onBookmark;
   final VoidCallback? onShare;
   final VoidCallback? onTapRating;
+  final bool isBookmarked;
 
   // Colors from your current implementation (tweak if your Figma uses slightly different tints)
   static const _blueBg = Color(0xFFEAF6FF);
@@ -149,7 +151,9 @@ class SitterProfileHeaderExact extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         _TopIcon(
-                          icon: Icons.bookmark_border_rounded,
+                          icon: isBookmarked
+                              ? Icons.bookmark_rounded
+                              : Icons.bookmark_border_rounded,
                           color: _iconGrey,
                           onTap: onBookmark ?? () {},
                           size: 26,

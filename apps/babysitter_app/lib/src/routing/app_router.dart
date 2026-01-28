@@ -139,13 +139,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // Not authenticated
       if (!isAuthenticated) {
-        // Allow splash, onboarding, and auth routes
-        if (isSplash || isOnboarding || isAuthRoute) {
+        // Allow onboarding and auth routes
+        if (isOnboarding || isAuthRoute) {
           print(
               'DEBUG ROUTER: Not authenticated, on allowed route, returning null');
           return null;
         }
-        // Redirect to onboarding
+        // Redirect to onboarding (including from splash)
         print('DEBUG ROUTER: Not authenticated, returning /onboarding');
         return Routes.onboarding;
       }

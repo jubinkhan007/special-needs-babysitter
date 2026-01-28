@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../routing/routes.dart';
 import '../controllers/background_check_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../providers/background_check_status_provider.dart';
 
 /// Screen to submit the background check.
 class BackgroundCheckScreen extends ConsumerWidget {
@@ -385,6 +386,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
     final success = await controller.submitBackgroundCheck();
 
     if (success && context.mounted) {
+      ref.invalidate(backgroundCheckStatusProvider);
       context.push(Routes.sitterBackgroundCheckComplete);
     }
   }

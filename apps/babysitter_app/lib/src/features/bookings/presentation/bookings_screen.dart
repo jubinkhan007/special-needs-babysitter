@@ -69,69 +69,71 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
         children: [
           BookingsTabs(controller: _tabController, tabs: _tabs),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: _tabs.map((status) {
-                final bookings = controller.bookingsFor(status);
+            child: controller.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : TabBarView(
+                    controller: _tabController,
+                    children: _tabs.map((status) {
+                      final bookings = controller.bookingsFor(status);
 
-                if (bookings.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No ${status.name} bookings',
-                      style: AppTokens.cardMeta,
-                    ),
-                  );
-                }
+                      if (bookings.isEmpty) {
+                        return Center(
+                          child: Text(
+                            'No ${status.name} bookings',
+                            style: AppTokens.cardMeta,
+                          ),
+                        );
+                      }
 
-                return ListView.builder(
-                  padding: const EdgeInsets.only(
-                    left: AppTokens.screenHorizontalPadding,
-                    right: AppTokens.screenHorizontalPadding,
-                    top: 18,
-                    bottom: 24,
+                      return ListView.builder(
+                        padding: const EdgeInsets.only(
+                          left: AppTokens.screenHorizontalPadding,
+                          right: AppTokens.screenHorizontalPadding,
+                          top: 18,
+                          bottom: 24,
+                        ),
+                        itemCount: bookings.length,
+                        itemBuilder: (context, index) {
+                          final booking = bookings[index];
+                          return BookingCard(
+                            booking: booking,
+                            onMessage: () {
+                              if (booking.sitterId.isNotEmpty) {
+                                final args = ChatThreadArgs(
+                                  otherUserId: booking.sitterId,
+                                  otherUserName: booking.sitterName,
+                                  otherUserAvatarUrl: booking.avatarAssetOrUrl,
+                                  isVerified: booking.isVerified,
+                                );
+                                context.push(
+                                  '/parent/messages/chat/${booking.sitterId}',
+                                  extra: args,
+                                );
+                              }
+                            },
+                            onViewDetails: () {
+                              if (booking.status == BookingStatus.active ||
+                                  booking.status == BookingStatus.clockedOut) {
+                                context.push(
+                                  Routes.activeBooking,
+                                  extra: booking.id,
+                                );
+                              } else {
+                                context.push(
+                                  Routes.bookingDetails,
+                                  extra: BookingDetailsArgs(
+                                    bookingId: booking.id,
+                                    status: booking.status,
+                                  ),
+                                );
+                              }
+                            },
+                            onMenuTap: () {},
+                          );
+                        },
+                      );
+                    }).toList(),
                   ),
-                  itemCount: bookings.length,
-                  itemBuilder: (context, index) {
-                    final booking = bookings[index];
-                    return BookingCard(
-                      booking: booking,
-                      onMessage: () {
-                        if (booking.sitterId.isNotEmpty) {
-                          final args = ChatThreadArgs(
-                            otherUserId: booking.sitterId,
-                            otherUserName: booking.sitterName,
-                            otherUserAvatarUrl: booking.avatarAssetOrUrl,
-                            isVerified: booking.isVerified,
-                          );
-                          context.push(
-                            '/parent/messages/chat/${booking.sitterId}',
-                            extra: args,
-                          );
-                        }
-                      },
-                      onViewDetails: () {
-                        if (booking.status == BookingStatus.active ||
-                            booking.status == BookingStatus.clockedOut) {
-                          context.push(
-                            Routes.activeBooking,
-                            extra: booking.id,
-                          );
-                        } else {
-                          context.push(
-                            Routes.bookingDetails,
-                            extra: BookingDetailsArgs(
-                              bookingId: booking.id,
-                              status: booking.status,
-                            ),
-                          );
-                        }
-                      },
-                      onMenuTap: () {},
-                    );
-                  },
-                );
-              }).toList(),
-            ),
           ),
         ],
       ),

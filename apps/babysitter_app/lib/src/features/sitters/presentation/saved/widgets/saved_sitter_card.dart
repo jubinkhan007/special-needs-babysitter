@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../theme/app_tokens.dart';
-import '../models/saved_sitter_ui_model.dart';
+import '../../../../parent/search/models/sitter_list_item_model.dart';
 
 /// Card widget for displaying a saved sitter.
 class SavedSitterCard extends StatelessWidget {
-  final SavedSitterUiModel sitter;
+  final SitterListItemModel sitter;
   final VoidCallback? onViewProfile;
   final VoidCallback? onBookmarkTap;
+  final bool isBookmarked;
 
   const SavedSitterCard({
     super.key,
     required this.sitter,
     this.onViewProfile,
     this.onBookmarkTap,
+    this.isBookmarked = true,
   });
 
   @override
@@ -40,8 +42,8 @@ class SavedSitterCard extends StatelessWidget {
               // Avatar
               CircleAvatar(
                 radius: 24.r,
-                backgroundImage: sitter.avatarUrl.isNotEmpty
-                    ? NetworkImage(sitter.avatarUrl)
+                backgroundImage: sitter.imageAssetPath.isNotEmpty
+                    ? NetworkImage(sitter.imageAssetPath)
                     : const AssetImage('assets/images/user1.png')
                         as ImageProvider,
               ),
@@ -77,7 +79,7 @@ class SavedSitterCard extends StatelessWidget {
                         ),
                         SizedBox(width: 2.w),
                         Text(
-                          sitter.location,
+                          sitter.distanceText, // Using distanceText as location/distance combo
                           style: AppTokens.savedSitterLocationStyle,
                         ),
                       ],
@@ -95,7 +97,7 @@ class SavedSitterCard extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    sitter.ratingText,
+                    sitter.rating.toStringAsFixed(1),
                     style: AppTokens.savedRatingTextStyle,
                   ),
                 ],
@@ -116,7 +118,7 @@ class SavedSitterCard extends StatelessWidget {
                     ),
                   ),
                   child: Icon(
-                    sitter.isBookmarked
+                    isBookmarked
                         ? Icons.bookmark
                         : Icons.bookmark_border,
                     size: 18.sp,
@@ -135,19 +137,19 @@ class SavedSitterCard extends StatelessWidget {
               _StatItem(
                 icon: Icons.access_time_outlined,
                 label: 'Response Rate',
-                value: sitter.responseRateText,
+                value: '${sitter.responseRate}%',
               ),
               SizedBox(width: 16.w),
               _StatItem(
                 icon: Icons.thumb_up_alt_outlined,
                 label: 'Reliability Rate:',
-                value: sitter.reliabilityRateText,
+                value: '${sitter.reliabilityRate}%',
               ),
               SizedBox(width: 16.w),
               _StatItem(
                 icon: Icons.work_outline,
                 label: 'Experience',
-                value: sitter.experienceText,
+                value: '${sitter.experienceYears} Years',
               ),
             ],
           ),
@@ -158,7 +160,7 @@ class SavedSitterCard extends StatelessWidget {
           Wrap(
             spacing: 8.w,
             runSpacing: 8.h,
-            children: sitter.skills.map((skill) => _SkillTag(skill)).toList(),
+            children: sitter.tags.map((skill) => _SkillTag(skill)).toList(),
           ),
 
           SizedBox(height: 16.h),
@@ -174,11 +176,11 @@ class SavedSitterCard extends StatelessWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
-                    sitter.priceDollarAmount,
+                    '\$${sitter.hourlyRate.toInt()}',
                     style: AppTokens.savedPriceBigStyle,
                   ),
                   Text(
-                    sitter.priceSuffix,
+                    '/hr',
                     style: AppTokens.savedPriceSuffixStyle,
                   ),
                 ],

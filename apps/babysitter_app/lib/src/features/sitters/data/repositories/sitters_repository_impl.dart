@@ -51,6 +51,22 @@ class SittersRepositoryImpl implements SittersRepository {
     return _mapToSitterModel(dto);
   }
 
+  @override
+  Future<void> bookmarkSitter(String sitterId) async {
+    return _remoteDataSource.bookmarkSitter(sitterId);
+  }
+
+  @override
+  Future<void> removeBookmarkedSitter(String sitterId) async {
+    return _remoteDataSource.removeBookmarkedSitter(sitterId);
+  }
+
+  @override
+  Future<List<SitterListItemModel>> getSavedSitters() async {
+    final dtos = await _remoteDataSource.getSavedSitters();
+    return dtos.map(_mapToSitterListItem).toList();
+  }
+
   SitterListItemModel _mapToSitterListItem(SitterDto dto) {
     return SitterListItemModel(
       id: dto.id, // Using SitterProfile ID (uuid)

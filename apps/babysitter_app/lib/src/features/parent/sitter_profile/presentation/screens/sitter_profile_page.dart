@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../routing/routes.dart';
 import '../../../booking_flow/data/providers/booking_flow_provider.dart';
+import '../../../../sitters/presentation/saved/saved_sitters_controller.dart';
 import '../providers/sitter_profile_providers.dart';
 import 'sitter_profile_view.dart';
 
@@ -18,6 +19,14 @@ class SitterProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sitterAsync = ref.watch(sitterProfileProvider(sitterId));
+    
+    // Check bookmark status
+    final savedSittersAsync = ref.watch(savedSittersControllerProvider);
+    final savedSitters = savedSittersAsync.valueOrNull ?? [];
+    // We need to match by sitterId. SitterListItemModel uses `userId` as the sitter ID for bookmarks usually.
+    // The `sitterId` passed to this page is likely the `userId` (based on routes).
+    // Let's assume `sitterId` == `userId` for bookmarking.
+    final isBookmarked = savedSitters.any((s) => s.userId == sitterId);
 
     return sitterAsync.when(
       loading: () => Scaffold(
@@ -70,6 +79,12 @@ class SitterProfilePage extends ConsumerWidget {
       data: (sitter) => SitterProfileView(
         key: const Key('sitterProfilePage'),
         sitter: sitter,
+        isBookmarked: isBookmarked,
+        onBookmark: () {
+          ref
+              .read(savedSittersControllerProvider.notifier)
+              .toggleBookmark(sitterId, isCurrentlySaved: isBookmarked);
+        },
         onBookPressed: () {
           // Initialize booking flow with sitter data
           ref.read(bookingFlowProvider.notifier).initWithSitter(

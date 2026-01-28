@@ -3,6 +3,7 @@ import '../sitter_account_ui_constants.dart';
 
 class SitterAccountMenuList extends StatelessWidget {
   final VoidCallback onTapRatingsReviews;
+  final VoidCallback onTapVerification;
   final VoidCallback onTapWallet;
   final VoidCallback onTapReferralBonuses;
   final VoidCallback onTapSettings;
@@ -14,6 +15,7 @@ class SitterAccountMenuList extends StatelessWidget {
   const SitterAccountMenuList({
     super.key,
     required this.onTapRatingsReviews,
+    required this.onTapVerification,
     required this.onTapWallet,
     required this.onTapReferralBonuses,
     required this.onTapSettings,
@@ -32,6 +34,12 @@ class SitterAccountMenuList extends StatelessWidget {
           label: 'Rating & Reviews',
           subtitle: 'Check all your reviews',
           onTap: onTapRatingsReviews,
+        ),
+        const SizedBox(height: 12),
+        _MenuItem(
+          icon: Icons.verified_user_outlined,
+          label: 'Verification & Background Check',
+          onTap: onTapVerification,
         ),
         const SizedBox(height: 12),
         _MenuItem(

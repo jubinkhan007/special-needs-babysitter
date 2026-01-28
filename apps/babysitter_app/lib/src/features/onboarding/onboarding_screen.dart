@@ -100,6 +100,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: "We've Got Your Back,\nSitter or Parent.",
       description: 'Here to care, here to connect — always\nwith you.',
     ),
+    OnboardingSlide(
+      imagePath: 'assets/onboarding_4.jpg',
+      title: 'Specialized Care',
+      description:
+          'Quickly Connect with Families Who Need\nSpecialized Support',
+    ),
   ];
 
   // Get slides based on selected role

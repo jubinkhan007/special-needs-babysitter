@@ -16,6 +16,7 @@ import '../../utils/location_helper.dart';
 
 import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../../../sitters/presentation/saved/saved_sitters_controller.dart';
 
 class SitterSearchResultsScreen extends ConsumerStatefulWidget {
   const SitterSearchResultsScreen({super.key});
@@ -96,6 +97,10 @@ class _SitterSearchResultsScreenState
     final filterController = ref.watch(searchFilterProvider);
     final filterState = filterController.value;
 
+    // Watch saved sitters to update UI state
+    final savedSittersAsync = ref.watch(savedSittersControllerProvider);
+    final savedSitters = savedSittersAsync.valueOrNull ?? [];
+
     // Watch the sitters list provider with current filters
     final asyncSitters = ref.watch(sittersListProvider(filterState));
     final locationStatusAsync = ref.watch(locationAccessStatusProvider);
@@ -165,9 +170,19 @@ class _SitterSearchResultsScreenState
                                 final sitter = sitters[index];
                                 final bool isInvited =
                                     _invitedSitterIds.contains(sitter.id);
+                                final isBookmarked = savedSitters
+                                    .any((s) => s.userId == sitter.userId);
 
                                 return SitterCard(
                                   sitter: sitter,
+                                  isBookmarked: isBookmarked,
+                                  onBookmarkTap: () {
+                                    ref
+                                        .read(
+                                            savedSittersControllerProvider.notifier)
+                                        .toggleBookmark(sitter.userId,
+                                            isCurrentlySaved: isBookmarked);
+                                  },
                                   onTap: () {
                                     // Navigate to profile using the ID
                                     context.push(

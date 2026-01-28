@@ -10,12 +10,16 @@ class SitterCard extends StatelessWidget {
   final SitterListItemModel sitter;
   final VoidCallback onTap;
   final VoidCallback? onInvite;
+  final VoidCallback? onBookmarkTap;
+  final bool isBookmarked;
 
   const SitterCard({
     super.key,
     required this.sitter,
     required this.onTap,
     this.onInvite,
+    this.onBookmarkTap,
+    this.isBookmarked = false,
   });
 
   @override
@@ -126,8 +130,10 @@ class SitterCard extends StatelessWidget {
               const SizedBox(width: 12),
               // Bookmark
               AppIconBox(
-                icon: Icons.bookmark_border_rounded,
-                onTap: () {},
+                icon: isBookmarked
+                    ? Icons.bookmark_rounded
+                    : Icons.bookmark_border_rounded,
+                onTap: onBookmarkTap ?? () {},
               )
             ],
           ),

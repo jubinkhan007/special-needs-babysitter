@@ -19,4 +19,7 @@ abstract class SittersRepository {
     String? location,
   });
   Future<SitterModel> getSitterDetails(String id);
+  Future<void> bookmarkSitter(String sitterId);
+  Future<void> removeBookmarkedSitter(String sitterId);
+  Future<List<SitterListItemModel>> getSavedSitters();
 }

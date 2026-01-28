@@ -97,4 +97,47 @@ class SittersRemoteDataSource {
       rethrow;
     }
   }
+
+  Future<void> bookmarkSitter(String sitterId) async {
+    try {
+      final response = await _dio.post(
+        '/parents/bookmarked-sitters',
+        data: {'sitterUserId': sitterId},
+      );
+      if (response.data['success'] != true) {
+        throw Exception('Failed to bookmark sitter');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> removeBookmarkedSitter(String sitterId) async {
+    try {
+      final response = await _dio.delete(
+        '/parents/bookmarked-sitters',
+        data: {'sitterUserId': sitterId},
+      );
+      if (response.data['success'] != true) {
+        throw Exception('Failed to remove bookmark');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<SitterDto>> getSavedSitters() async {
+    try {
+      final response = await _dio.get('/parents/bookmarked-sitters');
+      // Assuming response format similar to fetchSitters but for bookmarked list
+      // Adjust parsing based on actual response if different
+      if (response.data['success'] == true) {
+        final List<dynamic> list = response.data['data']['bookmarkedSitters'] ?? [];
+        return list.map((e) => SitterDto.fromJson(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

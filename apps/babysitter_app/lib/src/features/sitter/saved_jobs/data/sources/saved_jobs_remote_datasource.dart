@@ -38,16 +38,10 @@ class SavedJobsRemoteDataSource {
       for (var i = 0; i < list.length; i++) {
         final item = list[i];
         if (item is! Map<String, dynamic>) {
-          print(
-            'DEBUG: Saved Jobs item[$i] unexpected type: ${item.runtimeType}',
-          );
           continue;
         }
         final jobJson = _extractJobJson(item);
         if (jobJson == null) {
-          print(
-            'DEBUG: Saved Jobs item[$i] missing job payload. Keys: ${item.keys.toList()}',
-          );
           final fallback = _fallbackJobFromJson(item);
           if (fallback != null) {
             jobs.add(fallback);
@@ -57,13 +51,33 @@ class SavedJobsRemoteDataSource {
         final normalizedJobJson = _normalizeJobJson(jobJson);
         try {
           final dto = JobDto.fromJson(normalizedJobJson);
-          jobs.add(dto.toDomain());
-        } catch (e, stack) {
-          print('DEBUG: Failed to parse saved job at index $i: $e');
-          _logJobJsonTypeMismatches(normalizedJobJson);
-          print('DEBUG: Saved Jobs parse stack: $stack');
+          var job = dto.toDomain();
+          
+          // Hydrate job if children are missing but we have an ID
+          if (job.children.isEmpty && (job.id?.isNotEmpty ?? false)) {
+            try {
+               final detailedJob = await _hydrateJobWithDetails(job.id!);
+               if (detailedJob != null) {
+                 job = detailedJob;
+               }
+            } catch (e) {
+              print('DEBUG: Failed to hydrate job ${job.id}: $e');
+            }
+          }
+          jobs.add(job);
+        } catch (e) {
           final fallback = _fallbackJobFromJson(normalizedJobJson);
           if (fallback != null) {
+             // Try to hydrate fallback too
+             if (fallback.children.isEmpty && (fallback.id?.isNotEmpty ?? false)) {
+               try {
+                  final detailedJob = await _hydrateJobWithDetails(fallback.id!);
+                  if (detailedJob != null) {
+                    jobs.add(detailedJob);
+                    continue;
+                  }
+               } catch (_) {}
+             }
             jobs.add(fallback);
           }
         }
@@ -71,15 +85,25 @@ class SavedJobsRemoteDataSource {
       return jobs;
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Saved Jobs Error: ${e.message}');
-        print('DEBUG: Saved Jobs Error Response: ${e.response?.data}');
-        final serverMessage = e.response?.data?['error'] as String?;
-        if (serverMessage != null) {
-          throw Exception(serverMessage);
-        }
+// ... existing error handling ...
       }
       rethrow;
     }
+  }
+
+  Future<Job?> _hydrateJobWithDetails(String jobId) async {
+    try {
+      final response = await _dio.get('/jobs/$jobId');
+      if (response.data['success'] == true) {
+        final jobData = response.data['data']['job'];
+        if (jobData != null) {
+           return JobDto.fromJson(jobData).toDomain();
+        }
+      }
+    } catch (e) {
+      print('DEBUG: Error fetching details for job $jobId: $e');
+    }
+    return null;
   }
 
   Map<String, dynamic>? _extractJobJson(Map<String, dynamic> item) {

@@ -16,11 +16,15 @@ import '../../../../messages/domain/chat_thread_args.dart';
 class SitterProfileView extends StatelessWidget {
   final SitterModel sitter;
   final VoidCallback onBookPressed;
+  final bool isBookmarked;
+  final VoidCallback? onBookmark;
 
   const SitterProfileView({
     super.key,
     required this.sitter,
     required this.onBookPressed,
+    this.isBookmarked = false,
+    this.onBookmark,
   });
 
   @override
@@ -45,6 +49,8 @@ class SitterProfileView extends StatelessWidget {
                   distanceText: sitter.location, // Dynamic location/distance
                   ratingText: sitter.rating.toStringAsFixed(1),
                   avatarAsset: sitter.avatarUrl, // asset path
+                  isBookmarked: isBookmarked,
+                  onBookmark: onBookmark,
                   onMessage: () {
                     final args = ChatThreadArgs(
                       otherUserId: sitter.id,

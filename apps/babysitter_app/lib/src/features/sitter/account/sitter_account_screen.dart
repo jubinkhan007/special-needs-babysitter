@@ -125,6 +125,9 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                   onTapRatingsReviews: () {
                     context.push(Routes.sitterRatingsReviews);
                   },
+                  onTapVerification: () {
+                    context.push(Routes.sitterVerifyIdentity);
+                  },
                   onTapWallet: () {
                     // TODO: Navigate to wallet
                     AppToast.show(context, 

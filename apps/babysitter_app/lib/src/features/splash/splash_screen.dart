@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../routing/routes.dart';
 
 /// Splash screen with light blue background and centered title
 class SplashScreen extends StatefulWidget {
@@ -40,12 +37,6 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigate after delay
-    Future.delayed(const Duration(milliseconds: 2500), () {
-      if (mounted) {
-        context.go(Routes.onboarding);
-      }
-    });
   }
 
   @override

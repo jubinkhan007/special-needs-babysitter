@@ -23,67 +23,68 @@ class BackgroundCheckBanner extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20.w),
         width: double.infinity,
-        constraints: BoxConstraints(minHeight: 140.h),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF53B1F2), // Lighter Blue
-              Color(0xFF2B89D6), // Darker Blue
-            ],
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF2B89D6).withOpacity(0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            // Background decoration (optional subtle circles/glows could go here)
-
-            Padding(
-              padding: EdgeInsets.fromLTRB(20.w, 20.h, 100.w, 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _getTitle(),
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontFamily: 'Inter',
-                      height: 1.2,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Text(
-                    _getDescription(),
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withOpacity(0.9),
-                      fontFamily: 'Inter',
-                      height: 1.4,
-                    ),
-                  ),
-                ],
+        constraints: BoxConstraints(minHeight: 120.h),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.r),
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  'assets/images/banner/background_check_required.png',
+                ),
+                fit: BoxFit.cover,
               ),
             ),
-
-            // Badge Icon on the right
-            Positioned(
-              right: 16.w,
-              top: 30.h,
-              child: _buildBadge(),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 16.h, 96.w, 16.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _getTitle(),
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontFamily: 'Inter',
+                          height: 1.2,
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      Text(
+                        _getDescription(),
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white.withOpacity(0.9),
+                          fontFamily: 'Inter',
+                          height: 1.35,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      _BannerCta(
+                        label: _getCtaLabel(),
+                        onTap: onStart,
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  right: 16.w,
+                  top: 22.h,
+                  child: Image.asset(
+                    'assets/images/banner/required_bg_check.png',
+                    width: 54.w,
+                    height: 54.w,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -96,8 +97,7 @@ class BackgroundCheckBanner extends StatelessWidget {
       case 'rejected':
         return 'Verification Failed';
       default:
-        // "You're eligible for Institution Clearance."
-        return "You're eligible for\nInstitution Clearance.";
+        return 'Background\nCheck Required';
     }
   }
 
@@ -108,54 +108,54 @@ class BackgroundCheckBanner extends StatelessWidget {
       case 'rejected':
         return 'We could not verify your identity. Please contact support.';
       default:
-        return 'Complete the 3-step process to become an Institution-Cleared Sitter.';
+        return 'Complete your background check to\napply for jobs and appear to families.';
     }
   }
 
-  Widget _buildBadge() {
-    IconData icon;
-    Color color;
-
+  String _getCtaLabel() {
     switch (status) {
       case 'pending':
-        icon = Icons.hourglass_top_rounded;
-        color = Colors.white;
-        break;
+        return 'View Status';
       case 'rejected':
-        icon = Icons.error_outline_rounded;
-        color = Colors.white;
-        break;
+        return 'Try Again';
       default:
-        // Verified badge looking icon
-        return Container(
-          width: 56.w,
-          height: 56.w,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Icon(
-              Icons.verified_rounded,
-              size: 56.w, // Fill the circle
-              color: const Color(0xFF2B89D6),
-            ),
-          ),
-        );
+        return 'Start Verification';
     }
+  }
+}
 
-    return Container(
-      width: 56.w,
-      height: 56.w,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Icon(
-          icon,
-          size: 32.w,
-          color: color,
+class _BannerCta extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _BannerCta({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(color: Colors.white.withOpacity(0.5)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                fontFamily: 'Inter',
+              ),
+            ),
+            SizedBox(width: 4.w),
+            Icon(Icons.arrow_forward_ios, size: 10.sp, color: Colors.white),
+          ],
         ),
       ),
     );
