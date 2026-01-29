@@ -20,6 +20,15 @@ enum PaymentFieldType {
   platformFee,
   discount,
   estimatedTotal,
+  // Actual work fields (for completed bookings)
+  actualMinutesWorked,
+  actualHoursWorked,
+  actualPayout,
+  totalCharged,
+  refundAmount,
+  paymentStatus,
+  clockInTimeActual,
+  clockOutTimeActual,
 }
 
 class BookingDetailsVariant {
@@ -88,7 +97,15 @@ class BookingDetailsVariant {
         ServiceFieldType.time,
         ServiceFieldType.address,
       ],
-      visiblePaymentFields: PaymentFieldType.values,
+      visiblePaymentFields: [
+        PaymentFieldType.hourlyRate,
+        PaymentFieldType.actualMinutesWorked,
+        PaymentFieldType.actualHoursWorked,
+        PaymentFieldType.actualPayout,
+        PaymentFieldType.platformFee,
+        PaymentFieldType.totalCharged,
+        PaymentFieldType.refundAmount,
+      ],
       chipBgColor: AppTokens.chipPurpleBg,
       chipDotColor: AppTokens.chipPurpleDot,
       chipTextColor: AppTokens.textPrimary,

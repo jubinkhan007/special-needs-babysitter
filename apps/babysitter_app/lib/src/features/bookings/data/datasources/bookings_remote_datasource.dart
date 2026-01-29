@@ -37,8 +37,12 @@ class BookingsRemoteDataSource {
     print('DEBUG: getBookingDetails called for $bookingId');
     try {
       final response = await _dio.get('/parents/bookings/$bookingId');
+      print('DEBUG: getBookingDetails raw response: ${response.data}');
       // API returns { "success": true, "data": { ... } }
       final dto = BookingDetailsResponseDto.fromJson(response.data);
+      print('DEBUG: getBookingDetails parsed - sitter firstName: ${dto.data.sitter?.firstName}');
+      print('DEBUG: getBookingDetails parsed - sitter lastName: ${dto.data.sitter?.lastName}');
+      print('DEBUG: getBookingDetails parsed - sitter skills: ${dto.data.sitter?.skills}');
       return dto.data;
     } catch (e) {
       print('DEBUG: getBookingDetails error: $e');

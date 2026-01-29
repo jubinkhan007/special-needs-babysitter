@@ -109,6 +109,16 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
         body: Center(child: Text('Failed to load details: $err')),
       ),
       data: (details) {
+        // Debug: Log booking details data
+        print('DEBUG BookingDetailsScreen: ======= BookingDetails received =======');
+        print('DEBUG BookingDetailsScreen: id = ${details.id}');
+        print('DEBUG BookingDetailsScreen: sitterId = ${details.sitterId}');
+        print('DEBUG BookingDetailsScreen: sitterName = "${details.sitterName}"');
+        print('DEBUG BookingDetailsScreen: sitterName length = ${details.sitterName.length}');
+        print('DEBUG BookingDetailsScreen: sitterName contains DioException = ${details.sitterName.contains('DioException')}');
+        print('DEBUG BookingDetailsScreen: status = ${details.status}');
+        print('DEBUG BookingDetailsScreen: skills = ${details.skills}');
+        print('DEBUG BookingDetailsScreen: =====================================');
         final variant = BookingDetailsVariant.fromStatus(details.status);
         final uiModel = BookingDetailsUiModel.fromDomain(details);
         final isPending = details.status == BookingStatus.pending;
@@ -145,6 +155,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                                 sitterName: details.sitterName,
                                 sitterData: uiModel,
                                 status: details.status,
+                                jobId: details.jobId,
                               ),
                             );
                           }
@@ -355,6 +366,54 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
           label: 'Estimated Total Cost',
           value: uiModel.estimatedTotalCost,
           isTotal: true,
+        );
+      case PaymentFieldType.actualMinutesWorked:
+        if (uiModel.actualMinutesWorked == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Actual Minutes Worked', 
+          value: uiModel.actualMinutesWorked!,
+        );
+      case PaymentFieldType.actualHoursWorked:
+        if (uiModel.actualHoursWorked == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Actual Hours Worked', 
+          value: uiModel.actualHoursWorked!,
+        );
+      case PaymentFieldType.actualPayout:
+        if (uiModel.actualPayout == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Actual Payout to Sitter', 
+          value: uiModel.actualPayout!,
+        );
+      case PaymentFieldType.totalCharged:
+        if (uiModel.totalCharged == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Total Charged', 
+          value: uiModel.totalCharged!,
+        );
+      case PaymentFieldType.refundAmount:
+        if (uiModel.refundAmount == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Refund Amount', 
+          value: uiModel.refundAmount!,
+        );
+      case PaymentFieldType.paymentStatus:
+        if (uiModel.paymentStatus == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Payment Status', 
+          value: uiModel.paymentStatus!,
+        );
+      case PaymentFieldType.clockInTimeActual:
+        if (uiModel.clockInTimeActual == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Clock In Time', 
+          value: uiModel.clockInTimeActual!,
+        );
+      case PaymentFieldType.clockOutTimeActual:
+        if (uiModel.clockOutTimeActual == null) return const SizedBox.shrink();
+        return KeyValueRow(
+          label: 'Clock Out Time', 
+          value: uiModel.clockOutTimeActual!,
         );
     }
   }

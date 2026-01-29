@@ -41,6 +41,12 @@ class JobRequestRemoteDataSource {
 
       final data = response.data['data'] as Map<String, dynamic>;
 
+      // Debug: Log all ID-related fields from API response
+      print('DEBUG: API response id = ${data['id']}');
+      print('DEBUG: API response applicationId = ${data['applicationId']}');
+      print('DEBUG: API response jobId = ${data['jobId']}');
+      print('DEBUG: All keys in response: ${data.keys.toList()}');
+
       return JobRequestDetailsModel.fromJson(data);
     } catch (e) {
       if (e is DioException) {

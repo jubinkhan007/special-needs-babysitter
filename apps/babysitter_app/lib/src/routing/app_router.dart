@@ -35,11 +35,13 @@ import '../features/sitter/jobs/sitter_jobs_screen.dart';
 import '../features/sitter/bookings/sitter_bookings_screen.dart';
 import '../features/sitter/bookings/presentation/screens/sitter_booking_details_screen.dart';
 import '../features/sitter/bookings/presentation/screens/sitter_active_booking_screen.dart';
+import '../features/sitter/bookings/presentation/screens/sitter_review_screen.dart';
 import '../features/sitter/messages/sitter_messages_screen.dart';
 import '../features/sitter/account/sitter_account_screen.dart';
 import '../features/sitter/account/presentation/profile_details/presentation/sitter_profile_details_screen.dart';
 import '../features/sitter/account/presentation/screens/sitter_reviews_screen.dart';
 import '../features/sitter/saved_jobs/presentation/screens/sitter_saved_jobs_screen.dart';
+import '../features/sitter/account/presentation/screens/sitter_settings_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
@@ -72,6 +74,7 @@ import '../features/sitter/application/presentation/screens/sitter_application_p
 import '../features/sitter/background_check/presentation/screens/verify_identity_screen.dart';
 import '../features/sitter/background_check/presentation/screens/background_check_screen.dart';
 import '../features/sitter/background_check/presentation/screens/background_check_complete_screen.dart';
+import '../features/sitter/wallet/presentation/screens/sitter_wallet_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -145,6 +148,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               'DEBUG ROUTER: Not authenticated, on allowed route, returning null');
           return null;
         }
+
+        // Capture the original location to return to after auth
+        final from = state.uri.toString();
+        // Don't redirect to splash or if we are already handling a redirect
+        if (from != Routes.splash && !from.contains(Routes.onboarding)) {
+          print(
+              'DEBUG ROUTER: Not authenticated, redirecting to /onboarding?from=$from');
+          return '${Routes.onboarding}?from=${Uri.encodeComponent(from)}';
+        }
+
         // Redirect to onboarding (including from splash)
         print('DEBUG ROUTER: Not authenticated, returning /onboarding');
         return Routes.onboarding;
@@ -187,6 +200,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           print(
               'DEBUG ROUTER: Profile incomplete, returning /auth/profile-setup');
           return Routes.profileSetup;
+        }
+
+        // Check if we have a return location
+        final from = state.uri.queryParameters['from'];
+        if (from != null && from.isNotEmpty) {
+          print('DEBUG ROUTER: Redirecting to original location: $from');
+          return from;
         }
 
         final home = user.role == UserRole.parent
@@ -290,10 +310,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final args = state.extra as ChatThreadArgs?;
                   final id = state.pathParameters['id'] ?? '';
                   return ChatThreadScreen(
-                    args: args ?? ChatThreadArgs(
-                      otherUserId: id,
-                      otherUserName: 'Chat',
-                    ),
+                    args: args ??
+                        ChatThreadArgs(
+                          otherUserId: id,
+                          otherUserName: 'Chat',
+                        ),
                   );
                 },
               ),
@@ -511,7 +532,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               body: Center(child: Text('Error: Missing review arguments')),
             );
           }
-          return ReviewScreen(args: args);
+          return SitterReviewScreen(args: args);
         },
       ),
       GoRoute(
@@ -665,6 +686,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: Routes.sitterBackgroundCheckComplete,
         builder: (context, state) => const BackgroundCheckCompleteScreen(),
       ),
+      // Sitter Wallet (Stripe Connect onboarding)
+      GoRoute(
+        path: Routes.sitterWallet,
+        builder: (context, state) => const SitterWalletScreen(),
+      ),
 
       // Sitter Profile Details (full screen, outside shell)
       GoRoute(
@@ -712,10 +738,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final args = state.extra as ChatThreadArgs?;
                   final id = state.pathParameters['id'] ?? '';
                   return ChatThreadScreen(
-                    args: args ?? ChatThreadArgs(
-                      otherUserId: id,
-                      otherUserName: 'Chat',
-                    ),
+                    args: args ??
+                        ChatThreadArgs(
+                          otherUserId: id,
+                          otherUserName: 'Chat',
+                        ),
                   );
                 },
               ),
@@ -726,6 +753,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => const NoTransitionPage(
               child: SitterAccountScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'settings',
+                builder: (context, state) => const SitterSettingsScreen(),
+              ),
+            ],
           ),
         ],
       ),

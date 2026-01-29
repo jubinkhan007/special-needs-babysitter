@@ -14,6 +14,7 @@ class ReviewArgs {
   final String? paymentLabel;
   final String? avatarUrl;
   final String? reviewPrompt;
+  final String jobId;
 
   ReviewArgs({
     required this.bookingId,
@@ -28,5 +29,6 @@ class ReviewArgs {
     this.paymentLabel,
     this.avatarUrl,
     this.reviewPrompt,
+    required this.jobId,
   });
 }

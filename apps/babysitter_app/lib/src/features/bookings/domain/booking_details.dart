@@ -2,6 +2,7 @@ import 'booking_status.dart';
 
 class BookingDetails {
   final String id;
+  final String jobId; // The actual job ID (different from application/booking id)
   final String sitterId;
   final String sitterName;
   final String avatarUrl;
@@ -34,8 +35,19 @@ class BookingDetails {
   final double? platformFee;
   final double? discount;
 
+  // Actual Work Details (for completed bookings)
+  final int? actualMinutesWorked;
+  final double? actualHoursWorked;
+  final double? actualPayout;
+  final double? totalCharged;
+  final double? refundAmount;
+  final String? paymentStatus;
+  final DateTime? clockInTimeActual;
+  final DateTime? clockOutTimeActual;
+
   const BookingDetails({
     required this.id,
+    required this.jobId,
     required this.sitterId,
     required this.sitterName,
     required this.avatarUrl,
@@ -61,6 +73,14 @@ class BookingDetails {
     this.totalHours,
     this.platformFee,
     this.discount,
+    this.actualMinutesWorked,
+    this.actualHoursWorked,
+    this.actualPayout,
+    this.totalCharged,
+    this.refundAmount,
+    this.paymentStatus,
+    this.clockInTimeActual,
+    this.clockOutTimeActual,
   });
 
   double get estimatedTotalCost {

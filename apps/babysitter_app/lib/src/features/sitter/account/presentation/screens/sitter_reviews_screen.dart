@@ -83,13 +83,16 @@ class _ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewerName = _reviewerLabel(review);
+    final reviewerName =
+        review.reviewerName.isNotEmpty ? review.reviewerName : _reviewerLabel(review);
     final ratingText = review.rating.toStringAsFixed(1);
     final timeAgo = _timeAgo(review.createdAt);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _ReviewAvatar(imageUrl: review.imageUrl),
+        _ReviewAvatar(imageUrl: review.reviewerAvatar?.isNotEmpty == true
+            ? review.reviewerAvatar
+            : review.imageUrl),
         SizedBox(width: 12.w),
         Expanded(
           child: Column(

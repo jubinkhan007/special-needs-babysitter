@@ -31,7 +31,8 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
 
     ref.listen(sitterAccountControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error: ${next.error}')),
         );
       }
@@ -111,7 +112,8 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                   savedJobsCount: state.overview!.savedJobsCount,
                   onTapCompletedJobs: () {
                     // TODO: Navigate to completed jobs
-                    AppToast.show(context, 
+                    AppToast.show(
+                      context,
                       const SnackBar(
                           content: Text('Completed jobs coming soon')),
                     );
@@ -129,23 +131,18 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                     context.push(Routes.sitterVerifyIdentity);
                   },
                   onTapWallet: () {
-                    // TODO: Navigate to wallet
-                    AppToast.show(context, 
-                      const SnackBar(content: Text('My Wallet coming soon')),
-                    );
+                    context.push(Routes.sitterWallet);
                   },
                   onTapReferralBonuses: () {
                     // TODO: Navigate to referral & bonuses
-                    AppToast.show(context, 
+                    AppToast.show(
+                      context,
                       const SnackBar(
                           content: Text('Referral & Bonuses coming soon')),
                     );
                   },
                   onTapSettings: () {
-                    // TODO: Navigate to settings when available
-                    AppToast.show(context, 
-                      const SnackBar(content: Text('Settings coming soon')),
-                    );
+                    context.push(Routes.sitterSettings);
                   },
                   onTapAbout: () => Navigator.of(context).push(
                     MaterialPageRoute(

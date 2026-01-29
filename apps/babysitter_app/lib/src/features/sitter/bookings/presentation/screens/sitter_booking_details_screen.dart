@@ -2465,6 +2465,18 @@ class _SitterBookingDetailsScreenState
     String applicationId,
     JobRequestDetailsModel jobDetails,
   ) {
+    print('DEBUG _buildReviewArgs: ======= Building ReviewArgs =======');
+    print('DEBUG _buildReviewArgs: applicationId = $applicationId');
+    print('DEBUG _buildReviewArgs: jobDetails.id = ${jobDetails.id}');
+    print('DEBUG _buildReviewArgs: jobDetails.familyName = "${jobDetails.familyName}"');
+    print('DEBUG _buildReviewArgs: jobDetails.parentUserId = ${jobDetails.parentUserId}');
+    print('DEBUG _buildReviewArgs: jobDetails.title = "${jobDetails.title}"');
+    print('DEBUG _buildReviewArgs: jobDetails.location = ${jobDetails.location}');
+    print('DEBUG _buildReviewArgs: jobDetails.familyPhotoUrl = ${jobDetails.familyPhotoUrl}');
+    print('DEBUG _buildReviewArgs: jobDetails.jobId = ${jobDetails.jobId}');
+    print('DEBUG _buildReviewArgs: jobDetails.sitterSkills = ${jobDetails.sitterSkills}');
+    print('DEBUG _buildReviewArgs: Using jobId for review: ${jobDetails.jobId ?? jobDetails.id}');
+    print('DEBUG _buildReviewArgs: =====================================');
     final hourlyRate = _formatCurrency(jobDetails.payRate);
     final timeRange = [
       _formatTime(jobDetails.startTime),
@@ -2499,7 +2511,7 @@ class _SitterBookingDetailsScreenState
     );
 
     return ReviewArgs(
-      bookingId: applicationId,
+      bookingId: jobDetails.id,
       sitterId: jobDetails.parentUserId ?? '',
       sitterName: jobDetails.familyName,
       sitterData: sitterData,
@@ -2511,6 +2523,7 @@ class _SitterBookingDetailsScreenState
       paymentLabel: '$hourlyRate/hour',
       avatarUrl: jobDetails.familyPhotoUrl,
       reviewPrompt: 'Rate Your Experience With This Family\n(Private).',
+      jobId: jobDetails.jobId ?? jobDetails.id, // Use jobId if available, fallback to id
     );
   }
 

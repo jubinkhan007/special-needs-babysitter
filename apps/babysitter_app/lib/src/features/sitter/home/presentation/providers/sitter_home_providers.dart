@@ -39,6 +39,11 @@ final sitterHomeDioProvider = Provider<Dio>((ref) {
     },
     onError: (DioException e, handler) {
       print('DEBUG: Sitter Home API Error: ${e.message}');
+      print('DEBUG: Endpoint: ${e.requestOptions.uri}');
+      if (e.response != null) {
+        print('DEBUG: Status Code: ${e.response?.statusCode}');
+        print('DEBUG: Response Data: ${e.response?.data}');
+      }
       return handler.next(e);
     },
   ));

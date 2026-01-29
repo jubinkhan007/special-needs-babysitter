@@ -110,8 +110,24 @@ class BookingsRepositoryImpl implements BookingsRepository {
       }
     }
 
+    // Parse payment data if available
+    DateTime? clockInTimeActual;
+    DateTime? clockOutTimeActual;
+    
+    if (dto.payment?.clockInTime != null) {
+      try {
+        clockInTimeActual = DateTime.parse(dto.payment!.clockInTime!);
+      } catch (_) {}
+    }
+    if (dto.payment?.clockOutTime != null) {
+      try {
+        clockOutTimeActual = DateTime.parse(dto.payment!.clockOutTime!);
+      } catch (_) {}
+    }
+
     return BookingDetails(
       id: dto.id,
+      jobId: dto.jobId ?? dto.job?.id ?? dto.id, // prefer explicit jobId
       sitterId: dto.sitter?.userId ?? '',
       sitterName:
           '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'.trim(),
@@ -134,6 +150,16 @@ class BookingsRepositoryImpl implements BookingsRepository {
       additionalNotes: dto.job?.additionalDetails,
       address: dto.job?.fullAddress ?? dto.job?.location ?? 'Unknown Address',
       skills: dto.sitter?.skills ?? [],
+      // Payment fields from API
+      actualMinutesWorked: dto.payment?.actualMinutesWorked,
+      actualHoursWorked: dto.payment?.actualHoursWorked,
+      actualPayout: dto.payment?.actualPayout,
+      platformFee: dto.payment?.platformFee,
+      totalCharged: dto.payment?.totalCharged,
+      refundAmount: dto.payment?.refundAmount,
+      paymentStatus: dto.payment?.paymentStatus,
+      clockInTimeActual: clockInTimeActual,
+      clockOutTimeActual: clockOutTimeActual,
     );
   }
 

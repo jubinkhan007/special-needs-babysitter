@@ -1,32 +1,182 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/review/review_args.dart';
+import '../providers/review_providers.dart';
 import 'widgets/star_rating_row.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
-class ReviewScreen extends StatefulWidget {
+class ReviewScreen extends ConsumerStatefulWidget {
   final ReviewArgs args;
 
   const ReviewScreen({super.key, required this.args});
 
   @override
-  State<ReviewScreen> createState() => _ReviewScreenState();
+  ConsumerState<ReviewScreen> createState() => _ReviewScreenState();
 }
 
-class _ReviewScreenState extends State<ReviewScreen> {
+class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   int _rating = 0;
   late final TextEditingController _notesController;
+  bool _isSubmitting = false;
+  final ImagePicker _picker = ImagePicker();
+  File? _selectedImageFile;
 
   @override
   void initState() {
     super.initState();
     _notesController = TextEditingController();
+    // Debug: Log all ReviewArgs values
+    print('DEBUG ReviewScreen: ======= ReviewArgs received =======');
+    print('DEBUG ReviewScreen: bookingId = ${widget.args.bookingId}');
+    print('DEBUG ReviewScreen: sitterId = ${widget.args.sitterId}');
+    print('DEBUG ReviewScreen: sitterName = "${widget.args.sitterName}"');
+    print('DEBUG ReviewScreen: sitterName length = ${widget.args.sitterName.length}');
+    print('DEBUG ReviewScreen: sitterName contains DioException = ${widget.args.sitterName.contains('DioException')}');
+    print('DEBUG ReviewScreen: avatarUrl = ${widget.args.avatarUrl}');
+    print('DEBUG ReviewScreen: jobTitle = "${widget.args.jobTitle}"');
+    print('DEBUG ReviewScreen: location = ${widget.args.location}');
+    print('DEBUG ReviewScreen: familyName = "${widget.args.familyName}"');
+    print('DEBUG ReviewScreen: status = ${widget.args.status}');
+    print('DEBUG ReviewScreen: sitterData.sitterName = "${widget.args.sitterData.sitterName}"');
+    print('DEBUG ReviewScreen: sitterData.sitterName length = ${widget.args.sitterData.sitterName.length}');
+    print('DEBUG ReviewScreen: sitterData.avatarUrl = ${widget.args.sitterData.avatarUrl}');
+    print('DEBUG ReviewScreen: sitterData.skills = ${widget.args.sitterData.skills}');
+    print('DEBUG ReviewScreen: =====================================');
   }
 
   @override
   void dispose() {
     _notesController.dispose();
     super.dispose();
+  }
+
+  Future<void> _submitReview() async {
+    if (_rating == 0) {
+      AppToast.show(
+        context,
+        const SnackBar(content: Text('Please select a rating before submitting')),
+      );
+      return;
+    }
+
+    final jobId = widget.args.jobId;
+    final revieweeId = widget.args.sitterId;
+    if (jobId.isEmpty || revieweeId.isEmpty) {
+      AppToast.show(
+        context,
+        const SnackBar(content: Text('Missing booking or sitter info')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSubmitting = true;
+    });
+    final remote = ref.read(reviewRemoteDataSourceProvider);
+    try {
+      String imageUrl = '';
+      if (_selectedImageFile != null) {
+        final uploadRemote =
+            ref.read(reviewImageUploadRemoteDataSourceProvider);
+        imageUrl = await uploadRemote.uploadReviewImage(_selectedImageFile!);
+      }
+      await remote.postReview(
+        revieweeId: revieweeId,
+        jobId: jobId,
+        rating: _rating,
+        reviewText: _notesController.text.trim(),
+        imageUrl: imageUrl.isEmpty ? null : imageUrl,
+      );
+      if (!mounted) return;
+      AppToast.show(
+        context,
+        const SnackBar(content: Text('Thanks for sharing your review!')),
+      );
+      context.pop();
+    } catch (e) {
+      if (!mounted) return;
+      final message = e.toString().replaceFirst('Exception: ', '');
+      AppToast.show(
+        context,
+        SnackBar(content: Text(message)),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
+  }
+
+  Widget _buildOutlinedButton(String label, {double? maxWidth}) {
+    final effectiveMax = maxWidth ?? 140;
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: 90,
+        maxWidth: effectiveMax,
+      ),
+      child: SizedBox(
+        height: 50,
+        child: OutlinedButton(
+          onPressed: () {},
+          style: OutlinedButton.styleFrom(
+            side: const BorderSide(color: Color(0xFFD0D5DD)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            foregroundColor: const Color(0xFF667085),
+          ),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Inter',
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return SizedBox(
+      height: 50,
+      child: ElevatedButton(
+        onPressed: _isSubmitting ? null : _submitReview,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF8CC8F5),
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: _isSubmitting
+            ? SizedBox(
+                width: 20,
+                height: 20,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : const Text(
+                'Submit',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Inter',
+                ),
+              ),
+      ),
+    );
   }
 
   @override
@@ -74,81 +224,32 @@ class _ReviewScreenState extends State<ReviewScreen> {
             AppTokens.screenHorizontalPadding,
             16 + bottomInset,
           ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 84,
-                height: 46,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFD0D5DD)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    foregroundColor: const Color(0xFF667085),
-                  ),
-                  child: const Text(
-                    'Report',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              SizedBox(
-                width: 70,
-                height: 46,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFD0D5DD)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    foregroundColor: const Color(0xFF667085),
-                  ),
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: SizedBox(
-                  height: 46,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF8CC8F5),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Text(
-                      'Submit',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 340;
+              if (isNarrow) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildOutlinedButton('Report', maxWidth: double.infinity),
+                    const SizedBox(height: 10),
+                    _buildOutlinedButton('Skip', maxWidth: double.infinity),
+                    const SizedBox(height: 10),
+                    _buildSubmitButton(),
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  _buildOutlinedButton('Report'),
+                  const SizedBox(width: 10),
+                  _buildOutlinedButton('Skip'),
+                  const SizedBox(width: 10),
+                  Expanded(child: _buildSubmitButton()),
+                ],
+              );
+            },
           ),
         ),
         body: SingleChildScrollView(
@@ -183,13 +284,73 @@ class _ReviewScreenState extends State<ReviewScreen> {
               const SizedBox(height: 18),
               _NotesField(controller: _notesController),
               const SizedBox(height: 16),
-              const _UploadTile(),
+              _buildUploadTile(),
               const SizedBox(height: 20),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildUploadTile() {
+    return _UploadTile(
+      imageFile: _selectedImageFile,
+      onTap: _showImageSourcePicker,
+    );
+  }
+
+  Future<void> _showImageSourcePicker() async {
+    if (!mounted) return;
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt_outlined),
+                title: const Text('Take photo'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library_outlined),
+                title: const Text('Choose from gallery'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final file = await _picker.pickImage(
+        source: source,
+        maxWidth: 1200,
+        maxHeight: 1200,
+        imageQuality: 80,
+      );
+      if (file == null) return;
+      setState(() {
+        _selectedImageFile = File(file.path);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      AppToast.show(
+        context,
+        SnackBar(content: Text('Failed to pick image: $e')),
+      );
+    }
   }
 }
 
@@ -503,37 +664,51 @@ class _NotesField extends StatelessWidget {
 }
 
 class _UploadTile extends StatelessWidget {
-  const _UploadTile();
+  final File? imageFile;
+  final VoidCallback onTap;
+
+  const _UploadTile({this.imageFile, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Container(
-        width: 76,
-        height: 76,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF2F4F7),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.cloud_upload_outlined,
-                size: 20, color: Color(0xFF98A2B3)),
-            SizedBox(height: 6),
-            Text(
-              'Upload Photo\n/ screenshot',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 9,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF98A2B3),
-                fontFamily: 'Inter',
-                height: 1.1,
-              ),
-            ),
-          ],
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 76,
+          height: 76,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF2F4F7),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: imageFile == null
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.cloud_upload_outlined,
+                          size: 20, color: Color(0xFF98A2B3)),
+                      SizedBox(height: 6),
+                      Text(
+                        'Upload Photo\n/ screenshot',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF98A2B3),
+                          fontFamily: 'Inter',
+                          height: 1.1,
+                        ),
+                      ),
+                    ],
+                  )
+                : Image.file(
+                    imageFile!,
+                    fit: BoxFit.cover,
+                  ),
+          ),
         ),
       ),
     );

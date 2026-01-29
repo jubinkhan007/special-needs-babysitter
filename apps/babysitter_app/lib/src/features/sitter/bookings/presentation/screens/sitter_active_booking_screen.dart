@@ -1097,7 +1097,7 @@ class _SitterActiveBookingScreenState
                 const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
-                  height: 44,
+                  height: 48,
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: ElevatedButton.styleFrom(
@@ -1107,6 +1107,7 @@ class _SitterActiveBookingScreenState
                         borderRadius: BorderRadius.circular(10),
                       ),
                       elevation: 0,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     child: const Text(
                       'Confirm',

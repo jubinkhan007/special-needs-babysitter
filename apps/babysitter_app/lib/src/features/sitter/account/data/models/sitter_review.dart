@@ -4,6 +4,8 @@ class SitterReview {
   final String reviewerId;
   final String revieweeId;
   final String reviewerRole;
+  final String reviewerName;
+  final String reviewerAvatar;
   final double rating;
   final String reviewText;
   final String imageUrl;
@@ -16,6 +18,8 @@ class SitterReview {
     required this.reviewerId,
     required this.revieweeId,
     required this.reviewerRole,
+    required this.reviewerName,
+    required this.reviewerAvatar,
     required this.rating,
     required this.reviewText,
     required this.imageUrl,
@@ -24,12 +28,18 @@ class SitterReview {
   });
 
   factory SitterReview.fromJson(Map<String, dynamic> json) {
+    final reviewer = json['reviewer'] as Map<String, dynamic>?;
+    final reviewerName = _buildName(reviewer);
+    final reviewerAvatar = (reviewer?['profilePhotoUrl'] ?? json['imageUrl'] ?? '')
+        .toString();
     return SitterReview(
       id: (json['_id'] ?? json['id'] ?? '').toString(),
       jobId: (json['jobId'] ?? '').toString(),
-      reviewerId: (json['reviewerId'] ?? '').toString(),
+      reviewerId: (reviewer?['id'] ?? json['reviewerId'] ?? '').toString(),
       revieweeId: (json['revieweeId'] ?? '').toString(),
       reviewerRole: (json['reviewerRole'] ?? '').toString(),
+      reviewerName: reviewerName,
+      reviewerAvatar: reviewerAvatar,
       rating: _toDouble(json['rating']),
       reviewText: (json['reviewText'] ?? '').toString(),
       imageUrl: (json['imageUrl'] ?? '').toString(),
@@ -52,5 +62,15 @@ class SitterReview {
       return DateTime.fromMillisecondsSinceEpoch(milliseconds.toInt());
     }
     return null;
+  }
+
+  static String _buildName(Map<String, dynamic>? payload) {
+    if (payload == null) return '';
+    final first = (payload['firstName'] ?? '').toString().trim();
+    final last = (payload['lastName'] ?? '').toString().trim();
+    if (first.isEmpty && last.isEmpty) {
+      return '';
+    }
+    return [first, last].where((part) => part.isNotEmpty).join(' ');
   }
 }
