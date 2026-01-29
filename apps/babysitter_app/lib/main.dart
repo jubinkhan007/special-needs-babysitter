@@ -34,6 +34,7 @@ void main() async {
   // Initialize Stripe
   Stripe.publishableKey =
       'pk_test_51SpPCQA94FXRonexZprCttmNtDC5z91d57n5MVW1r8TjGPApriYe9FTiZXbYOx9TVytNLchLwsAUvfJvuXzDBzmf00LJxEXg8h';
+  Stripe.merchantIdentifier = 'merchant.com.specialneedssitters';
   await Stripe.instance.applySettings();
 
   // Initialize Firebase with try/catch for missing config

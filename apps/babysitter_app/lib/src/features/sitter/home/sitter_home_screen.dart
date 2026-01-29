@@ -72,7 +72,15 @@ class SitterHomeScreen extends ConsumerWidget {
                   AppSearchField(
                     hintText: 'Search jobs by location, date, or keyword',
                     onTap: () {
-                      // TODO: Navigate to search screen
+                      ref
+                          .read(jobSearchFiltersProvider.notifier)
+                          .resetFilters();
+                      ref.read(jobSearchNotifierProvider.notifier).refresh();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SitterAllJobsScreen(),
+                        ),
+                      );
                     },
                   ),
                   SizedBox(height: 24.h), // Bottom padding

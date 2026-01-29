@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../routing/routes.dart';
 import '../providers/job_post_providers.dart';
@@ -8,6 +7,7 @@ import '../widgets/job_draft_saved_dialog.dart';
 import 'job_post_step_header.dart';
 import '../../../../booking_flow/data/providers/bookings_di.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/common_widgets/payment_method_selector.dart';
 
 /// Job Post Step 5: Review
 /// Pixel-perfect implementation matching Figma design
@@ -54,7 +54,7 @@ class _JobPostStep5ReviewScreenState
       if (mounted) {
         final latestError = ref.read(jobPostControllerProvider).error;
         if (latestError != null) {
-          AppToast.show(context, 
+          AppToast.show(context,
             SnackBar(content: Text(latestError)),
           );
         }
@@ -66,7 +66,7 @@ class _JobPostStep5ReviewScreenState
     final jobId = ref.read(jobPostControllerProvider).jobId;
     if (jobId == null || jobId.isEmpty) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(context,
           const SnackBar(content: Text('Job created but no ID returned')),
         );
       }
@@ -81,53 +81,47 @@ class _JobPostStep5ReviewScreenState
       // Step 3: Create payment intent
       print('DEBUG: JobPostStep5 creating payment intent for jobId: $jobId');
       final paymentIntent = await bookingsRepo.createPaymentIntent(jobId);
-      print(
-          'DEBUG: JobPostStep5 payment intent created: ${paymentIntent.paymentIntentId}');
+      print('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
 
-      // Step 4: Initialize Stripe Payment Sheet
-      await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
+      // Get pay rate from state
+      final state = ref.read(jobPostControllerProvider);
+      final amount = state.payRate * 1.0; // Using pay rate as amount for now
+
+      if (mounted) {
+        setState(() => _isProcessingPayment = false);
+
+        // Step 4: Show payment method selector
+        await PaymentMethodSelector.show(
+          context: context,
+          amount: amount,
           paymentIntentClientSecret: paymentIntent.clientSecret,
-          merchantDisplayName: 'Special Needs Sitters',
-        ),
-      );
-
-      // Step 5: Present Payment Sheet
-      print('DEBUG: JobPostStep5 presenting payment sheet');
-      await Stripe.instance.presentPaymentSheet();
-      print('DEBUG: JobPostStep5 payment completed successfully');
-
-      if (mounted) {
-        widget.onSubmit();
-      }
-    } on StripeException catch (e) {
-      print('DEBUG: JobPostStep5 Stripe error: ${e.error.localizedMessage}');
-      if (mounted) {
-        AppToast.show(context, 
-          SnackBar(
-            content:
-                Text('Payment cancelled: ${e.error.localizedMessage ?? ""}'),
-            backgroundColor: Colors.orange,
-          ),
+          onPaymentSuccess: () {
+            print('DEBUG: Payment completed successfully');
+            widget.onSubmit();
+          },
+          onPaymentError: (error) {
+            print('DEBUG: Payment error: $error');
+            AppToast.show(context,
+              SnackBar(
+                content: Text('Payment error: $error'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            // Job is created but payment failed - still proceed to success
+            widget.onSubmit();
+          },
         );
-        // Job is created but payment cancelled - still proceed to success
-        widget.onSubmit();
       }
     } catch (e) {
-      print('DEBUG: JobPostStep5 payment error: $e');
+      print('DEBUG: JobPostStep5 error: $e');
       if (mounted) {
-        AppToast.show(context, 
+        setState(() => _isProcessingPayment = false);
+        AppToast.show(context,
           SnackBar(
-            content: Text('Payment error: $e'),
+            content: Text('Error: $e'),
             backgroundColor: Colors.red,
           ),
         );
-        // Job is created but payment failed - still proceed to success
-        widget.onSubmit();
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isProcessingPayment = false);
       }
     }
   }
@@ -349,7 +343,7 @@ class _JobPostStep5ReviewScreenState
                       final latestError =
                           ref.read(jobPostControllerProvider).error;
                       if (latestError != null) {
-                        AppToast.show(context, 
+                        AppToast.show(context,
                           SnackBar(content: Text(latestError)),
                         );
                       }

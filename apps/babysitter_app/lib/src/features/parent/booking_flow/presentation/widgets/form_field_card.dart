@@ -21,7 +21,7 @@ class FormFieldCard extends StatelessWidget {
             56, // Standard height per generic mobile design, or match Figma exactly if different.
         // Screenshot looks standard ~52-56.
         decoration: BoxDecoration(
-          color: colorScheme.surface,
+          color: Colors.white, // White background instead of surface
           borderRadius: BorderRadius.circular(12), // Rounded corners
           border: Border.all(
             color: colorScheme.outline, // Light Blue border #B2DDFF

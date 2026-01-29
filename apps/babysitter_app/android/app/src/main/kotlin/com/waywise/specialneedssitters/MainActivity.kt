@@ -1,4 +1,4 @@
-package com.specialneedssitters.parent_app
+package com.waywise.specialneedssitters
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

@@ -78,7 +78,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
 
     return SizedBox(
       // Total height should include blue + the first content line block under it
-      height: top + blueHeight + 120,
+      height: top + blueHeight + 70,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -189,26 +189,39 @@ class SitterProfileHeaderExact extends StatelessWidget {
                         Border.all(color: Colors.white, width: avatarBorder),
                   ),
                   child: ClipOval(
-                    child: ClipOval(
-                      child: avatarAsset.isEmpty
-                          ? Container(
-                              color: Colors.grey[200],
-                              child: const Icon(Icons.person_rounded,
-                                  color: Colors.grey, size: 48),
-                            )
-                          : avatarAsset.startsWith('http')
-                              ? Image.network(
-                                  avatarAsset,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Container(
+                    child: avatarAsset.isEmpty
+                        ? Container(
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.person_rounded,
+                                color: Colors.grey, size: 48),
+                          )
+                        : avatarAsset.startsWith('http')
+                            ? Image.network(
+                                avatarAsset,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(Icons.person_rounded,
+                                      color: Colors.grey, size: 48),
+                                ),
+                              )
+                            : (avatarAsset.trim().isNotEmpty
+                                ? Image.asset(
+                                    avatarAsset,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        Container(
+                                      color: Colors.grey[200],
+                                      child: const Icon(Icons.person_rounded,
+                                          color: Colors.grey, size: 48),
+                                    ),
+                                  )
+                                : Container(
                                     color: Colors.grey[200],
                                     child: const Icon(Icons.person_rounded,
                                         color: Colors.grey, size: 48),
-                                  ),
-                                )
-                              : Image.asset(avatarAsset, fit: BoxFit.cover),
-                    ),
+                                  )),
                   ),
                 ),
                 // Verified badge (rosette)

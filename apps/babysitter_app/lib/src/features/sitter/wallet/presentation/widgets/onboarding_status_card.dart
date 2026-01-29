@@ -95,41 +95,42 @@ class OnboardingStatusCard extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 20.h),
-
           // Action button
-          SizedBox(
-            width: double.infinity,
-            height: 48.h,
-            child: ElevatedButton(
-              onPressed: isLoading ? null : onActionPressed,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: config.buttonColor,
-                foregroundColor: Colors.white,
-                disabledBackgroundColor: config.buttonColor.withOpacity(0.6),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+          if (status.status != StripeConnectStatusType.complete) ...[
+            SizedBox(height: 20.h),
+            SizedBox(
+              width: double.infinity,
+              height: 48.h,
+              child: ElevatedButton(
+                onPressed: isLoading ? null : onActionPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: config.buttonColor,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: config.buttonColor.withOpacity(0.6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  elevation: 0,
                 ),
-                elevation: 0,
+                child: isLoading
+                    ? SizedBox(
+                        width: 24.w,
+                        height: 24.w,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 2.5,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(
+                        config.buttonText,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
-              child: isLoading
-                  ? SizedBox(
-                      width: 24.w,
-                      height: 24.w,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : Text(
-                      config.buttonText,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
             ),
-          ),
+          ],
 
           // Additional info for complete status
           if (status.status == StripeConnectStatusType.complete) ...[

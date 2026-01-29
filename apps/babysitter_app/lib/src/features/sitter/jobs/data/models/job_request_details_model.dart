@@ -117,7 +117,9 @@ class JobRequestDetailsModel extends Equatable {
           json['parentPhotoUrl'] as String? ??
           json['parentAvatarUrl'] as String? ??
           json['familyAvatarUrl'] as String? ??
-          json['familyPhoto'] as String?,
+          json['familyPhoto'] as String? ??
+          json['parent']?['avatarUrl'] as String? ??
+          json['parent']?['photoUrl'] as String?,
       applicationType: json['applicationType'] as String? ?? 'invited',
       title: json['title'] as String,
       familyName: json['familyName'] as String,
@@ -140,8 +142,7 @@ class JobRequestDetailsModel extends Equatable {
       additionalNotes: json['additionalNotes'] as String?,
       transportationModes:
           (json['transportationModes'] as List?)?.cast<String>() ?? [],
-      equipmentSafety:
-          (json['equipmentSafety'] as List?)?.cast<String>() ?? [],
+      equipmentSafety: (json['equipmentSafety'] as List?)?.cast<String>() ?? [],
       pickupLocation: json['pickupLocation'] as String?,
       dropoffLocation: json['dropoffLocation'] as String?,
       transportSpecialInstructions:

@@ -56,7 +56,12 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
     if (_currentStep > 1) {
       setState(() => _currentStep--);
     } else {
-      context.go(Routes.onboarding);
+      final from = GoRouterState.of(context).uri.queryParameters['from'];
+      final params = <String, String>{};
+      if (from != null) {
+        params['from'] = from;
+      }
+      context.go(Uri(path: Routes.onboarding, queryParameters: params).toString());
     }
   }
 
@@ -68,7 +73,12 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   void _onOtpVerified() {
     // After OTP verification, go to profile setup for parents
     // After OTP verification, go to profile setup for both parents and sitters
-    context.go(Routes.profileSetup);
+    final from = GoRouterState.of(context).uri.queryParameters['from'];
+    final params = <String, String>{};
+    if (from != null) {
+      params['from'] = from;
+    }
+    context.go(Uri(path: Routes.profileSetup, queryParameters: params).toString());
   }
 
   @override

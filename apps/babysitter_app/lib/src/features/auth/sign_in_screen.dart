@@ -234,10 +234,17 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                                   ..onTap = () {
                                     final role =
                                         _normalizeRole(widget.initialRole);
+                                    
+                                    final from = GoRouterState.of(context).uri.queryParameters['from'];
+                                    final params = {'role': role};
+                                    if (from != null) {
+                                      params['from'] = from;
+                                    }
+
                                     context.go(
                                       Uri(
                                         path: Routes.signUp,
-                                        queryParameters: {'role': role},
+                                        queryParameters: params,
                                       ).toString(),
                                     );
                                   },

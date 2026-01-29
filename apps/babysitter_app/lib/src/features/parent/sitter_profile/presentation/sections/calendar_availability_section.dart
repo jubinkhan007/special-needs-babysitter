@@ -231,7 +231,9 @@ class _CalendarAvailabilitySectionState
                 height: 32,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isAvailable ? Colors.white : Colors.transparent,
+                  color: isAvailable 
+                      ? const Color(0xFFE8F5E9) // Light green background for available dates
+                      : Colors.transparent,
                   border: isAvailable
                       ? Border.all(
                           color: const Color(0xFF4ADE80),

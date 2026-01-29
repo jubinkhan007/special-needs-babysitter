@@ -9,13 +9,73 @@ import '../widgets/job_preview_card.dart';
 import '../widgets/app_search_field.dart';
 import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'dart:async';
+import '../widgets/job_filter_sheet.dart';
 
-class SitterAllJobsScreen extends ConsumerWidget {
+class SitterAllJobsScreen extends ConsumerStatefulWidget {
   const SitterAllJobsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final jobsAsync = ref.watch(jobPreviewsNotifierProvider);
+  ConsumerState<SitterAllJobsScreen> createState() =>
+      _SitterAllJobsScreenState();
+}
+
+class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
+  final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize search with current query if any
+    final query = ref.read(jobSearchFiltersProvider).searchQuery;
+    if (query != null && query.isNotEmpty) {
+      _searchController.text = query;
+    }
+
+    // Set up scroll listener for pagination
+    _scrollController.addListener(_onScroll);
+
+    // Initial fetch immediately (like home screen) - don't wait for location
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Fetch jobs immediately
+      if (ref.read(jobSearchNotifierProvider).jobs.isEmpty) {
+        ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
+      }
+      
+      // Update location in background for accurate distance results
+      ref.read(jobSearchFiltersProvider.notifier).updateLocationFromDevice();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _scrollController.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      ref.read(jobSearchNotifierProvider.notifier).loadMore();
+    }
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      ref.read(jobSearchFiltersProvider.notifier).setSearchQuery(query);
+      ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final searchState = ref.watch(jobSearchNotifierProvider);
+    final filters = ref.watch(jobSearchFiltersProvider);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     ref.watch(savedJobsListProvider);
 
@@ -53,9 +113,10 @@ class SitterAllJobsScreen extends ConsumerWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
             child: AppSearchField(
               hintText: 'Search jobs by location, date, or keyword',
-              onTap: () {
-                // TODO: Search
-              },
+              enabled: true,
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              autofocus: _searchController.text.isEmpty,
             ),
           ),
           SizedBox(height: 16.h),
@@ -65,34 +126,45 @@ class SitterAllJobsScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Showing ${jobsAsync.valueOrNull?.length ?? 0} Sitters', // Should be Jobs, but matching user mockup text
+                  'Showing ${searchState.jobs.length} Jobs',
                   style: TextStyle(
                     fontSize: 13.sp,
                     color: const Color(0xFF475467),
                     fontFamily: 'Inter',
                   ),
                 ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(color: const Color(0xFFD0D5DD)),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Filter By:',
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          color: const Color(0xFF344054),
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500,
+                GestureDetector(
+                  onTap: () => JobFilterSheet.show(context),
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(color: const Color(0xFFD0D5DD)),
+                      color: filters.hasActiveFilters
+                          ? const Color(0xFFEFF8FF)
+                          : Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Filter By${filters.hasActiveFilters ? " (${filters.activeFilterCount})" : ""}',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            color: filters.hasActiveFilters
+                                ? const Color(0xFF175CD3)
+                                : const Color(0xFF344054),
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      Icon(Icons.keyboard_arrow_down,
-                          size: 16.w, color: const Color(0xFF344054)),
-                    ],
+                        if (!filters.hasActiveFilters) ...[
+                          SizedBox(width: 4.w),
+                          Icon(Icons.keyboard_arrow_down,
+                              size: 16.w, color: const Color(0xFF344054)),
+                        ],
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -100,64 +172,108 @@ class SitterAllJobsScreen extends ConsumerWidget {
           ),
           SizedBox(height: 16.h),
           Expanded(
-            child: jobsAsync.when(
-              data: (jobPreviews) {
-                if (jobPreviews.isEmpty) {
-                  return const Center(child: Text('No jobs found'));
-                }
-                return ListView.builder(
-                  padding: EdgeInsets.only(bottom: 20.h),
-                  itemCount: jobPreviews.length,
-                  itemBuilder: (context, index) {
-                    final preview = jobPreviews[index];
-                    final isSaved =
-                        savedJobsState.savedJobIds.contains(preview.id);
-                    final updatedPreview = preview.copyWith(isBookmarked: isSaved);
-                    return JobPreviewCard(
-                      job: updatedPreview,
-                      onViewDetails: () {
-                        context.push('${Routes.sitterJobDetails}/${preview.id}');
-                      },
-                      onBookmark: () {
-                        if (preview.id.isEmpty) {
-                          AppToast.show(context,
-                            const SnackBar(content: Text('Missing job ID')),
-                          );
-                          return;
-                        }
-                        ref
-                            .read(savedJobsControllerProvider.notifier)
-                            .toggleSaved(preview.id)
-                            .then((isSaved) {
-                          AppToast.show(
-                            context,
-                            SnackBar(
-                              content: Text(
-                                isSaved ? 'Job saved' : 'Job unsaved',
-                              ),
-                              backgroundColor: const Color(0xFF22C55E),
-                            ),
-                          );
-                        }).catchError((error) {
-                          AppToast.show(
-                            context,
-                            SnackBar(
-                              content: Text(
-                                  error.toString().replaceFirst('Exception: ', '')),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        });
-                      },
-                    );
-                  },
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error: $err')),
-            ),
+            child: _buildBody(searchState, savedJobsState),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBody(JobSearchState state, dynamic savedJobsState) {
+    if (state.isLoading && state.jobs.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null && state.jobs.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Error: ${state.error}'),
+            TextButton(
+              onPressed: () =>
+                  ref.read(jobSearchNotifierProvider.notifier).fetchJobs(),
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (state.jobs.isEmpty) {
+      return Center(
+        child: Text(
+          'No jobs found matching your criteria',
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: const Color(0xFF667085),
+          ),
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await ref.read(jobSearchNotifierProvider.notifier).refresh();
+      },
+      child: ListView.builder(
+        controller: _scrollController,
+        padding: EdgeInsets.only(
+            bottom: 20.h + MediaQuery.of(context).padding.bottom),
+        itemCount: state.jobs.length + (state.hasMore ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index == state.jobs.length) {
+            return Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.h),
+                child: const CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          final preview = state.jobs[index];
+          final isSaved = savedJobsState.savedJobIds.contains(preview.id);
+          final updatedPreview = preview.copyWith(isBookmarked: isSaved);
+
+          return JobPreviewCard(
+            job: updatedPreview,
+            onViewDetails: () {
+              context.push('${Routes.sitterJobDetails}/${preview.id}');
+            },
+            onBookmark: () {
+              if (preview.id.isEmpty) {
+                AppToast.show(
+                  context,
+                  const SnackBar(content: Text('Missing job ID')),
+                );
+                return;
+              }
+              ref
+                  .read(savedJobsControllerProvider.notifier)
+                  .toggleSaved(preview.id)
+                  .then((isSaved) {
+                AppToast.show(
+                  context,
+                  SnackBar(
+                    content: Text(
+                      isSaved ? 'Job saved' : 'Job unsaved',
+                    ),
+                    backgroundColor: const Color(0xFF22C55E),
+                  ),
+                );
+              }).catchError((error) {
+                AppToast.show(
+                  context,
+                  SnackBar(
+                    content:
+                        Text(error.toString().replaceFirst('Exception: ', '')),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              });
+            },
+          );
+        },
       ),
     );
   }

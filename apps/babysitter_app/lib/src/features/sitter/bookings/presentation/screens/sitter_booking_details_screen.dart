@@ -190,13 +190,14 @@ class _SitterBookingDetailsScreenState
     final jobId = jobDetails.id;
     final isSaved = savedJobsState.savedJobIds.contains(jobId);
     final fallbackStatus = jobDetails.status.trim();
-    final statusValue =
-        (widget.initialStatus?.trim().isNotEmpty == true)
-            ? widget.initialStatus!.trim()
-            : fallbackStatus;
-    final statusLower = statusValue.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    final statusValue = (widget.initialStatus?.trim().isNotEmpty == true)
+        ? widget.initialStatus!.trim()
+        : fallbackStatus;
+    final statusLower =
+        statusValue.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
     final isCompleted = statusLower == 'completed' ||
         (statusLower == 'clockedout' && _hasFinalEndPassed(jobDetails));
+    final isActuallyCompleted = statusLower == 'completed';
     final statusLabel = _formatStatusLabel(statusValue);
     final scheduledDate = _formatScheduledDate(jobDetails.startDate);
     final totalHours =
@@ -247,7 +248,8 @@ class _SitterBookingDetailsScreenState
                               AppToast.show(
                                 context,
                                 SnackBar(
-                                  content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
+                                  content: Text(
+                                      isSaved ? 'Job saved' : 'Job unsaved'),
                                   backgroundColor: const Color(0xFF22C55E),
                                 ),
                               );
@@ -264,9 +266,7 @@ class _SitterBookingDetailsScreenState
                             });
                           },
                           child: Icon(
-                            isSaved
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
+                            isSaved ? Icons.bookmark : Icons.bookmark_border,
                             color: const Color(0xFF667085),
                             size: 24.w,
                           ),
@@ -281,7 +281,7 @@ class _SitterBookingDetailsScreenState
                     familyName: '${jobDetails.familyName} Family',
                     childCount:
                         '${jobDetails.childrenCount} ${jobDetails.childrenCount == 1 ? 'Child' : 'Children'}',
-                    avatarUrl: null,
+                    avatarUrl: jobDetails.familyPhotoUrl,
                     location: jobDetails.location,
                     distance: jobDetails.distance != null
                         ? '${jobDetails.distance!.toStringAsFixed(2)} km away'
@@ -542,7 +542,86 @@ class _SitterBookingDetailsScreenState
               ),
             ),
           ),
-          if (isCompleted)
+          if (isActuallyCompleted)
+            // Completed status - Show Review button
+            Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    offset: Offset(0, -2.h),
+                    blurRadius: 8.r,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final reviewArgs = _buildReviewArgs(
+                          jobDetails.applicationId,
+                          jobDetails,
+                        );
+                        context.push(Routes.sitterReview, extra: reviewArgs);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF87C4F2),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Review',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        AppToast.show(
+                          context,
+                          const SnackBar(
+                            content: Text('Report issue coming soon'),
+                          ),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF1D2939),
+                        side: const BorderSide(color: Color(0xFFD0D5DD)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Report An Issue',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else if (isCompleted && !isActuallyCompleted)
+            // Clocked Out status - Show Mark Job as Complete button
             Container(
               padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
@@ -592,7 +671,8 @@ class _SitterBookingDetailsScreenState
                     height: 48.h,
                     child: OutlinedButton(
                       onPressed: () {
-                        AppToast.show(context, 
+                        AppToast.show(
+                          context,
                           const SnackBar(
                             content: Text('Report issue coming soon'),
                           ),
@@ -931,8 +1011,9 @@ class _SitterBookingDetailsScreenState
   }
 
   _ClockInState _resolveClockInState(JobRequestDetailsModel jobDetails) {
-    final statusLower =
-        (widget.initialStatus ?? '').toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    final statusLower = (widget.initialStatus ?? '')
+        .toLowerCase()
+        .replaceAll(RegExp(r'[\s_-]'), '');
     final isClockedOut = statusLower == 'clockedout';
     final isMultiDay = _isMultiDay(jobDetails);
     final isLastDay = _isLastDay(jobDetails);
@@ -952,10 +1033,10 @@ class _SitterBookingDetailsScreenState
 
     final fallbackMessage = _buildClockInMessage(jobDetails);
     if (localWindowAllows) {
-      final mismatchMessage =
-          (serverMessage != null && serverMessage.isNotEmpty)
-              ? '$serverMessage (Server clock-in window mismatch detected. Please contact support.)'
-              : 'Clock-in is blocked by the server despite being within the window. Please contact support.';
+      final mismatchMessage = (serverMessage != null &&
+              serverMessage.isNotEmpty)
+          ? '$serverMessage (Server clock-in window mismatch detected. Please contact support.)'
+          : 'Clock-in is blocked by the server despite being within the window. Please contact support.';
       return _ClockInState(
         canClockIn: false,
         message: mismatchMessage,
@@ -1355,8 +1436,8 @@ class _SitterBookingDetailsScreenState
                             ),
                           ),
                           IconButton(
-                            icon:
-                                const Icon(Icons.close, color: Color(0xFF101828)),
+                            icon: const Icon(Icons.close,
+                                color: Color(0xFF101828)),
                             onPressed: () => Navigator.of(sheetContext).pop(),
                           ),
                         ],
@@ -1503,7 +1584,6 @@ class _SitterBookingDetailsScreenState
         );
       },
     );
-
   }
 
   Future<void> _showEmergencyCancellationDialog(
@@ -1547,7 +1627,8 @@ class _SitterBookingDetailsScreenState
                 });
               } catch (e) {
                 if (mounted) {
-                  AppToast.show(parentContext, 
+                  AppToast.show(
+                    parentContext,
                     SnackBar(content: Text('Upload failed: $e')),
                   );
                 }
@@ -1582,187 +1663,189 @@ class _SitterBookingDetailsScreenState
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon: const Icon(Icons.close, color: Color(0xFF101828)),
+                          icon:
+                              const Icon(Icons.close, color: Color(0xFF101828)),
                           onPressed: () => Navigator.of(dialogContext).pop(),
                         ),
                       ),
-                    Text(
-                      'Emergency Cancellation',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFF101828),
-                        fontFamily: 'Inter',
+                      Text(
+                        'Emergency Cancellation',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF101828),
+                          fontFamily: 'Inter',
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'We understand emergencies happen. If this cancellation is due to an unavoidable situation, let us know below.',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: const Color(0xFF667085),
-                        height: 1.3,
-                        fontFamily: 'Inter',
+                      SizedBox(height: 8.h),
+                      Text(
+                        'We understand emergencies happen. If this cancellation is due to an unavoidable situation, let us know below.',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: const Color(0xFF667085),
+                          height: 1.3,
+                          fontFamily: 'Inter',
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'Emergency Details',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF101828),
-                        fontFamily: 'Inter',
+                      SizedBox(height: 16.h),
+                      Text(
+                        'Emergency Details',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF101828),
+                          fontFamily: 'Inter',
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 8.h),
-                    TextField(
-                      minLines: 4,
-                      maxLines: 4,
-                      style: TextStyle(
-                        color: const Color(0xFF101828),
-                        fontSize: 13.sp,
-                        fontFamily: 'Inter',
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Briefly describe your situation (optional)',
-                        hintStyle: TextStyle(
-                          color: const Color(0xFF98A2B3),
+                      SizedBox(height: 8.h),
+                      TextField(
+                        minLines: 4,
+                        maxLines: 4,
+                        style: TextStyle(
+                          color: const Color(0xFF101828),
                           fontSize: 13.sp,
                           fontFamily: 'Inter',
                         ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFD0D5DD)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFD0D5DD)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.r),
-                          borderSide:
-                              const BorderSide(color: Color(0xFF87C4F2)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    InkWell(
-                      onTap: isUploading ? null : handleUpload,
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: Container(
-                        width: 120.w,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 12.w,
-                          vertical: 10.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF2F4F7),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.file_upload_outlined,
-                              color: const Color(0xFF667085),
-                              size: 20.sp,
-                            ),
-                            SizedBox(height: 6.h),
-                            Text(
-                              isUploading
-                                  ? 'Uploading...'
-                                  : 'Upload\nDocument',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: const Color(0xFF667085),
-                                fontFamily: 'Inter',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (fileName != null) ...[
-                      SizedBox(height: 8.h),
-                      Text(
-                        'Uploaded: $fileName',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: const Color(0xFF12B76A),
-                          fontFamily: 'Inter',
-                        ),
-                      ),
-                    ],
-                    SizedBox(height: 12.h),
-                    Text(
-                      'Our team will review your situation and decide if the cancellation penalty can be waived.',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: const Color(0xFF667085),
-                        fontFamily: 'Inter',
-                      ),
-                    ),
-                    SizedBox(height: 16.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 46.h,
-                      child: ElevatedButton(
-                        onPressed: (isSubmitting || isUploading)
-                            ? null
-                            : () async {
-                                setState(() {
-                                  isSubmitting = true;
-                                });
-                                final success = await _cancelBooking(
-                                  parentContext,
-                                  applicationId,
-                                  reason: _emergencyPayloadReason,
-                                  fileUrl: fileUrl,
-                                );
-                                if (!mounted) return;
-                                if (success) {
-                                  Navigator.of(dialogContext).pop();
-                                  parentContext.pop();
-                                  return;
-                                }
-                                setState(() {
-                                  isSubmitting = false;
-                                });
-                              },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF87C4F2),
-                          disabledBackgroundColor: Colors.grey.shade300,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
+                        decoration: InputDecoration(
+                          hintText:
+                              'Briefly describe your situation (optional)',
+                          hintStyle: TextStyle(
+                            color: const Color(0xFF98A2B3),
+                            fontSize: 13.sp,
+                            fontFamily: 'Inter',
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFD0D5DD)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide:
+                                const BorderSide(color: Color(0xFFD0D5DD)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                            borderSide:
+                                const BorderSide(color: Color(0xFF87C4F2)),
                           ),
                         ),
-                        child: isSubmitting
-                            ? SizedBox(
-                                width: 18.w,
-                                height: 18.h,
-                                child: const CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
-                                ),
-                              )
-                            : Text(
-                                'Submit',
+                      ),
+                      SizedBox(height: 12.h),
+                      InkWell(
+                        onTap: isUploading ? null : handleUpload,
+                        borderRadius: BorderRadius.circular(10.r),
+                        child: Container(
+                          width: 120.w,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 10.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF2F4F7),
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.file_upload_outlined,
+                                color: const Color(0xFF667085),
+                                size: 20.sp,
+                              ),
+                              SizedBox(height: 6.h),
+                              Text(
+                                isUploading
+                                    ? 'Uploading...'
+                                    : 'Upload\nDocument',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  color: const Color(0xFF667085),
                                   fontFamily: 'Inter',
                                 ),
                               ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      if (fileName != null) ...[
+                        SizedBox(height: 8.h),
+                        Text(
+                          'Uploaded: $fileName',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: const Color(0xFF12B76A),
+                            fontFamily: 'Inter',
+                          ),
+                        ),
+                      ],
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Our team will review your situation and decide if the cancellation penalty can be waived.',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: const Color(0xFF667085),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46.h,
+                        child: ElevatedButton(
+                          onPressed: (isSubmitting || isUploading)
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    isSubmitting = true;
+                                  });
+                                  final success = await _cancelBooking(
+                                    parentContext,
+                                    applicationId,
+                                    reason: _emergencyPayloadReason,
+                                    fileUrl: fileUrl,
+                                  );
+                                  if (!mounted) return;
+                                  if (success) {
+                                    Navigator.of(dialogContext).pop();
+                                    parentContext.pop();
+                                    return;
+                                  }
+                                  setState(() {
+                                    isSubmitting = false;
+                                  });
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF87C4F2),
+                            disabledBackgroundColor: Colors.grey.shade300,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+                          child: isSubmitting
+                              ? SizedBox(
+                                  width: 18.w,
+                                  height: 18.h,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                )
+                              : Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontFamily: 'Inter',
+                                  ),
+                                ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -1965,13 +2048,15 @@ class _SitterBookingDetailsScreenState
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider(null));
       if (!mounted) return false;
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(content: Text('Booking cancelled successfully')),
       );
       return true;
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error cancelling booking: $e')),
         );
       }
@@ -1992,131 +2077,147 @@ class _SitterBookingDetailsScreenState
         bool isSubmitting = false;
         return StatefulBuilder(
           builder: (context, setState) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(20.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(Icons.close,
-                        color: const Color(0xFF667085), size: 20.w),
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                  ),
-                ),
-                Row(
+            return Dialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        '“Are You Sure That You Have\nCompleted This Job?”',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF1D2939),
-                          fontFamily: 'Inter',
-                        ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: Icon(Icons.close,
+                            color: const Color(0xFF667085), size: 20.w),
+                        onPressed: () => Navigator.of(dialogContext).pop(),
                       ),
                     ),
-                    SizedBox(width: 8.w),
-                    Icon(Icons.info_outline,
-                        color: const Color(0xFF98A2B3), size: 18.w),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48.h,
-                  child: ElevatedButton(
-                    onPressed: isSubmitting
-                        ? null
-                        : () async {
-                            setState(() {
-                              isSubmitting = true;
-                            });
-                            final success = await _markBookingComplete(
-                              parentContext,
-                              applicationId,
-                              jobDetails,
-                            );
-                            if (!dialogContext.mounted) return;
-                            if (success) {
-                              Navigator.of(dialogContext).pop();
-                              final reviewArgs =
-                                  _buildReviewArgs(applicationId, jobDetails);
-                              parentContext.push(
-                                Routes.sitterReview,
-                                extra: reviewArgs,
-                              );
-                              return;
-                            }
-                            setState(() {
-                              isSubmitting = false;
-                            });
-                          },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF87C4F2),
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor: Colors.grey.shade300,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    child: isSubmitting
-                        ? SizedBox(
-                            width: 18.w,
-                            height: 18.h,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                        : Text(
-                            'Yes',
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '“Are You Sure That You Have\nCompleted This Job?”',
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1D2939),
                               fontFamily: 'Inter',
                             ),
                           ),
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48.h,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF1D2939),
-                      side: const BorderSide(color: Color(0xFFD0D5DD)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        SizedBox(width: 8.w),
+                        Icon(Icons.info_outline,
+                            color: const Color(0xFF98A2B3), size: 18.w),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: ElevatedButton(
+                        onPressed: isSubmitting
+                            ? null
+                            : () async {
+                                setState(() {
+                                  isSubmitting = true;
+                                });
+                                final success = await _markBookingComplete(
+                                  parentContext,
+                                  applicationId,
+                                  jobDetails,
+                                );
+                                if (!dialogContext.mounted) return;
+                                if (success) {
+                                  Navigator.of(dialogContext).pop();
+
+                                  // Fetch fresh details to ensure we have the latest data (like familyPhotoUrl)
+                                  // preventing stale data from being passed to the review screen
+                                  JobRequestDetailsModel freshJobDetails =
+                                      jobDetails;
+                                  try {
+                                    freshJobDetails = await ref
+                                        .read(jobRequestRepositoryProvider)
+                                        .getJobRequestDetails(applicationId);
+                                    print(
+                                        'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}');
+                                  } catch (e) {
+                                    print(
+                                        'DEBUG: Failed to fetch fresh details, using cached: $e');
+                                  }
+
+                                  final reviewArgs = _buildReviewArgs(
+                                      applicationId, freshJobDetails);
+                                  parentContext.push(
+                                    Routes.sitterReview,
+                                    extra: reviewArgs,
+                                  );
+                                  return;
+                                }
+                                setState(() {
+                                  isSubmitting = false;
+                                });
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF87C4F2),
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor: Colors.grey.shade300,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                        child: isSubmitting
+                            ? SizedBox(
+                                width: 18.w,
+                                height: 18.h,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              )
+                            : Text(
+                                'Yes',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
                       ),
                     ),
-                    child: Text(
-                      'No',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
+                    SizedBox(height: 12.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48.h,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF1D2939),
+                          side: const BorderSide(color: Color(0xFFD0D5DD)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                        child: Text(
+                          'No',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        );
+              ),
+            );
           },
         );
       },
@@ -2151,7 +2252,8 @@ class _SitterBookingDetailsScreenState
       final errorMessage = e.toString();
       if (errorMessage.contains('Cannot complete this job') ||
           errorMessage.contains('400')) {
-        print('DEBUG: Handling 400 error as success (job likely already complete)');
+        print(
+            'DEBUG: Handling 400 error as success (job likely already complete)');
         ref.invalidate(jobRequestDetailsProvider(applicationId));
         ref.invalidate(sitterCurrentBookingsProvider);
         if (!mounted) return false;
@@ -2204,8 +2306,9 @@ class _SitterBookingDetailsScreenState
   }
 
   DateTime? _parseEndDateTime(JobRequestDetailsModel jobDetails) {
-    final dateSource =
-        jobDetails.endDate.isNotEmpty ? jobDetails.endDate : jobDetails.startDate;
+    final dateSource = jobDetails.endDate.isNotEmpty
+        ? jobDetails.endDate
+        : jobDetails.startDate;
     final date = _parseDate(dateSource);
     final minutes = _parseTimeToMinutes(jobDetails.endTime);
     if (date == null || minutes == null) {
@@ -2257,7 +2360,8 @@ class _SitterBookingDetailsScreenState
       if (!mounted) {
         return;
       }
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         SnackBar(
           content: Text(e.toString().replaceFirst('Exception: ', '')),
           backgroundColor: const Color(0xFFEF4444),
@@ -2307,7 +2411,8 @@ class _SitterBookingDetailsScreenState
       // Log error and show user-friendly message
       print('DEBUG: Location Error: $e');
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
             content: Text(e.toString()),
             backgroundColor: const Color(0xFFEF4444),
@@ -2468,14 +2573,20 @@ class _SitterBookingDetailsScreenState
     print('DEBUG _buildReviewArgs: ======= Building ReviewArgs =======');
     print('DEBUG _buildReviewArgs: applicationId = $applicationId');
     print('DEBUG _buildReviewArgs: jobDetails.id = ${jobDetails.id}');
-    print('DEBUG _buildReviewArgs: jobDetails.familyName = "${jobDetails.familyName}"');
-    print('DEBUG _buildReviewArgs: jobDetails.parentUserId = ${jobDetails.parentUserId}');
+    print(
+        'DEBUG _buildReviewArgs: jobDetails.familyName = "${jobDetails.familyName}"');
+    print(
+        'DEBUG _buildReviewArgs: jobDetails.parentUserId = ${jobDetails.parentUserId}');
     print('DEBUG _buildReviewArgs: jobDetails.title = "${jobDetails.title}"');
-    print('DEBUG _buildReviewArgs: jobDetails.location = ${jobDetails.location}');
-    print('DEBUG _buildReviewArgs: jobDetails.familyPhotoUrl = ${jobDetails.familyPhotoUrl}');
+    print(
+        'DEBUG _buildReviewArgs: jobDetails.location = ${jobDetails.location}');
+    print(
+        'DEBUG _buildReviewArgs: jobDetails.familyPhotoUrl = ${jobDetails.familyPhotoUrl}');
     print('DEBUG _buildReviewArgs: jobDetails.jobId = ${jobDetails.jobId}');
-    print('DEBUG _buildReviewArgs: jobDetails.sitterSkills = ${jobDetails.sitterSkills}');
-    print('DEBUG _buildReviewArgs: Using jobId for review: ${jobDetails.jobId ?? jobDetails.id}');
+    print(
+        'DEBUG _buildReviewArgs: jobDetails.sitterSkills = ${jobDetails.sitterSkills}');
+    print(
+        'DEBUG _buildReviewArgs: Using jobId for review: ${jobDetails.jobId ?? jobDetails.id}');
     print('DEBUG _buildReviewArgs: =====================================');
     final hourlyRate = _formatCurrency(jobDetails.payRate);
     final timeRange = [
@@ -2487,7 +2598,7 @@ class _SitterBookingDetailsScreenState
         : '${_formatScheduledDate(jobDetails.startDate)} - ${_formatScheduledDate(jobDetails.endDate)}';
     final sitterData = BookingDetailsUiModel(
       sitterName: jobDetails.familyName,
-      avatarUrl: '',
+      avatarUrl: jobDetails.familyPhotoUrl ?? '',
       isVerified: false,
       rating: '',
       responseRate: '',
@@ -2523,10 +2634,10 @@ class _SitterBookingDetailsScreenState
       paymentLabel: '$hourlyRate/hour',
       avatarUrl: jobDetails.familyPhotoUrl,
       reviewPrompt: 'Rate Your Experience With This Family\n(Private).',
-      jobId: jobDetails.jobId ?? jobDetails.id, // Use jobId if available, fallback to id
+      jobId: jobDetails.jobId ??
+          jobDetails.id, // Use jobId if available, fallback to id
     );
   }
-
 }
 
 class _ClockInState {

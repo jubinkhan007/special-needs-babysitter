@@ -15,6 +15,7 @@ import '../widgets/payment_method_sheet.dart';
 import '../widgets/dashed_divider.dart';
 import 'booking_request_sent_screen.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/common_widgets/payment_method_selector.dart';
 
 class ServiceDetailsScreen extends ConsumerStatefulWidget {
   const ServiceDetailsScreen({super.key});
@@ -113,7 +114,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     final validationError = _validateBooking(bookingState);
     if (validationError != null) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(context,
           SnackBar(
             content: Text(validationError),
             backgroundColor: const Color(0xFFD92D20),
@@ -149,36 +150,57 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
 
       // The direct booking API returns clientSecret directly - use it for Stripe payment
       if (result.clientSecret.isNotEmpty) {
-        print('DEBUG: Initializing Stripe payment sheet...');
+        print('DEBUG: Showing payment method selector...');
 
-        // Initialize Stripe Payment Sheet
-        await Stripe.instance.initPaymentSheet(
-          paymentSheetParameters: SetupPaymentSheetParameters(
+        if (mounted) {
+          setState(() => _isLoading = false);
+
+          // Show payment method selector with native Google Pay support
+          await PaymentMethodSelector.show(
+            context: context,
+            amount: bookingState.totalCost,
             paymentIntentClientSecret: result.clientSecret,
-            merchantDisplayName: 'Special Needs Sitters',
-          ),
-        );
+            onPaymentSuccess: () {
+              print('DEBUG: Payment completed successfully');
+              // Reset booking state after successful creation
+              ref.read(bookingFlowProvider.notifier).reset();
 
-        // Present Stripe Payment Sheet
-        print('DEBUG: Presenting Stripe payment sheet...');
-        await Stripe.instance.presentPaymentSheet();
-        print('DEBUG: Payment completed successfully');
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => BookingRequestSentScreen(
+                    bookingId: result.jobId,
+                    sitterName: bookingState.sitterName ?? 'your sitter',
+                  ),
+                ),
+              );
+            },
+            onPaymentError: (error) {
+              print('DEBUG: Payment error: $error');
+              AppToast.show(context,
+                SnackBar(
+                  content: Text('Payment error: $error'),
+                  backgroundColor: const Color(0xFFD92D20),
+                  duration: const Duration(seconds: 5),
+                ),
+              );
+            },
+          );
+        }
       } else {
-        print('DEBUG: No clientSecret in response, skipping Stripe');
-      }
+        print('DEBUG: No clientSecret in response, skipping payment');
+        if (mounted) {
+          // Reset booking state after successful creation
+          ref.read(bookingFlowProvider.notifier).reset();
 
-      if (mounted) {
-        // Reset booking state after successful creation
-        ref.read(bookingFlowProvider.notifier).reset();
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => BookingRequestSentScreen(
-              bookingId: result.jobId,
-              sitterName: bookingState.sitterName ?? 'your sitter',
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => BookingRequestSentScreen(
+                bookingId: result.jobId,
+                sitterName: bookingState.sitterName ?? 'your sitter',
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
     } catch (e) {
       print('DEBUG: ServiceDetailsScreen booking error: $e');
@@ -192,7 +214,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       if (mounted) {
         String errorMessage = _parseErrorMessage(e);
 
-        AppToast.show(context, 
+        AppToast.show(context,
           SnackBar(
             content: Text(errorMessage),
             backgroundColor: const Color(0xFFD92D20),

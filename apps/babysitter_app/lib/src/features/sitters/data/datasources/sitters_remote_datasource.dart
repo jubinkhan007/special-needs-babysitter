@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../models/sitter_dto.dart'; // Adjust path if needed
 import '../models/sitter_profile_dto.dart';
+import '../models/review_dto.dart';
 
 // Reusing the dio provider that has AuthInterceptor from BookingsDataDi or similar
 // Actually, let's create a simpler provider setup here or reuse global one.
@@ -164,5 +165,55 @@ class SittersRemoteDataSource {
       reviewCount: (json['totalJobs'] as num?)?.toInt() ?? 0,
       isSaved: true, // Always true since this is from saved list
     );
+  }
+
+  /// Fetch reviews for a specific sitter by user ID
+  Future<List<ReviewDto>> fetchReviews(String sitterUserId) async {
+    try {
+      print('DEBUG: Fetching reviews for sitterUserId: $sitterUserId');
+      final response = await _dio.get(
+        '/reviews',
+        queryParameters: {'userId': sitterUserId},
+      );
+
+      print('DEBUG: Response status: ${response.statusCode}');
+      print('DEBUG: Response data type: ${response.data.runtimeType}');
+
+      // The API returns a direct array, not wrapped in {success, data}
+      if (response.data is List) {
+        final data = response.data as List<dynamic>;
+        print('DEBUG: Response is a List with ${data.length} items');
+        
+        final reviews = <ReviewDto>[];
+        for (var i = 0; i < data.length; i++) {
+          try {
+            print('DEBUG: Parsing review $i');
+            final review = ReviewDto.fromJson(data[i] as Map<String, dynamic>);
+            reviews.add(review);
+          } catch (e, stack) {
+            print('DEBUG: Error parsing review $i: $e');
+            print('DEBUG: Stack: $stack');
+            rethrow;
+          }
+        }
+        return reviews;
+      }
+      
+      // Fallback: try wrapped format
+      if (response.data is Map<String, dynamic>) {
+        final data = response.data['data'];
+        if (data is List) {
+          print('DEBUG: Response is wrapped Map with ${data.length} reviews');
+          return data.map((json) => ReviewDto.fromJson(json as Map<String, dynamic>)).toList();
+        }
+      }
+      
+      print('DEBUG: Unknown response format');
+      return [];
+    } catch (e, stack) {
+      print('DEBUG: Error in fetchReviews: $e');
+      print('DEBUG: Stack trace: $stack');
+      rethrow;
+    }
   }
 }

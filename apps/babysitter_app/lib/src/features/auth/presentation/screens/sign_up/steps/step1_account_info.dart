@@ -259,7 +259,14 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                 // Sign in link
                 Center(
                   child: GestureDetector(
-                    onTap: () => context.go(Routes.signIn),
+                    onTap: () {
+                      final from = GoRouterState.of(context).uri.queryParameters['from'];
+                      final params = <String, String>{};
+                      if (from != null) {
+                        params['from'] = from;
+                      }
+                      context.go(Uri(path: Routes.signIn, queryParameters: params).toString());
+                    },
                     child: RichText(
                       text: const TextSpan(
                         style: TextStyle(

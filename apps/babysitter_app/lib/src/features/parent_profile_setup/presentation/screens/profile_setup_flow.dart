@@ -43,8 +43,13 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
   }
 
   void _onFinish() {
-    // Navigate to main app
-    context.go(Routes.home);
+    // Navigate to main app or return location
+    final from = GoRouterState.of(context).uri.queryParameters['from'];
+    if (from != null && from.isNotEmpty) {
+      context.go(from);
+    } else {
+      context.go(Routes.home);
+    }
   }
 
   @override

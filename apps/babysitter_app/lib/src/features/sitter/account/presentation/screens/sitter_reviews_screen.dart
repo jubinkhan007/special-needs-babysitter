@@ -23,7 +23,7 @@ class SitterReviewsScreen extends ConsumerWidget {
         ),
         centerTitle: true,
         title: Text(
-          'My reviews',
+          'My Reviews',
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
@@ -46,18 +46,56 @@ class SitterReviewsScreen extends ConsumerWidget {
               ),
             );
           }
-          return ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-            itemCount: reviews.length,
-            separatorBuilder: (context, index) => Divider(
-              height: 24.h,
-              thickness: 1,
-              color: const Color(0xFFF2F4F7),
-            ),
-            itemBuilder: (context, index) {
-              final review = reviews[index];
-              return _ReviewCard(review: review);
-            },
+          
+          // Calculate average rating and total reviews
+          final totalReviews = reviews.length;
+          final avgRating = reviews.isNotEmpty
+              ? reviews.map((r) => r.rating).reduce((a, b) => a + b) / totalReviews
+              : 0.0;
+          
+          return CustomScrollView(
+            slivers: [
+              // Header Row with Reviews title and rating summary
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                sliver: SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 8.h, bottom: 8.h),
+                    child: _ReviewsHeaderRow(
+                      avgRating: avgRating,
+                      totalReviews: totalReviews,
+                    ),
+                  ),
+                ),
+              ),
+              // Reviews List
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final review = reviews[index];
+                      return Column(
+                        children: [
+                          _ReviewCard(review: review),
+                          if (index < reviews.length - 1)
+                            Divider(
+                              height: 24.h,
+                              thickness: 1,
+                              color: const Color(0xFFF2F4F7),
+                            ),
+                        ],
+                      );
+                    },
+                    childCount: reviews.length,
+                  ),
+                ),
+              ),
+              // Bottom spacing
+              SliverToBoxAdapter(
+                child: SizedBox(height: 32.h),
+              ),
+            ],
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -76,6 +114,67 @@ class SitterReviewsScreen extends ConsumerWidget {
   }
 }
 
+/// Header row showing "Reviews" title and summary rating
+class _ReviewsHeaderRow extends StatelessWidget {
+  final double avgRating;
+  final int totalReviews;
+
+  const _ReviewsHeaderRow({
+    required this.avgRating,
+    required this.totalReviews,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Reviews',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF1F2937),
+          ),
+        ),
+        Row(
+          children: [
+            Icon(
+              Icons.star_rounded,
+              size: 16.sp,
+              color: const Color(0xFFFBBF24),
+            ),
+            SizedBox(width: 4.w),
+            RichText(
+              text: TextSpan(
+                text: '${avgRating.toStringAsFixed(1)} ',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF1F2937),
+                ),
+                children: [
+                  TextSpan(
+                    text: '($totalReviews Reviews)',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class _ReviewCard extends StatelessWidget {
   final SitterReview review;
 
@@ -85,20 +184,24 @@ class _ReviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final reviewerName =
         review.reviewerName.isNotEmpty ? review.reviewerName : _reviewerLabel(review);
-    final ratingText = review.rating.toStringAsFixed(1);
     final timeAgo = _timeAgo(review.createdAt);
+    
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _ReviewAvatar(imageUrl: review.reviewerAvatar?.isNotEmpty == true
-            ? review.reviewerAvatar
-            : review.imageUrl),
+        // Avatar
+        _ReviewAvatar(
+          imageUrl: _getAvatarUrl(review),
+        ),
         SizedBox(width: 12.w),
+        // Content
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Name and Time Row
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     reviewerName,
@@ -109,37 +212,29 @@ class _ReviewCard extends StatelessWidget {
                       fontFamily: 'Inter',
                     ),
                   ),
-                  SizedBox(width: 8.w),
-                  Icon(Icons.star,
-                      size: 14.sp, color: const Color(0xFFFBBF24)),
-                  SizedBox(width: 4.w),
-                  Text(
-                    ratingText,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF667085),
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                  const Spacer(),
                   Text(
                     timeAgo,
                     style: TextStyle(
-                      fontSize: 12.sp,
-                      color: const Color(0xFF98A2B3),
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF9CA3AF),
                       fontFamily: 'Inter',
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 6.h),
+              SizedBox(height: 4.h),
+              // Star Rating Row
+              _StarRow(rating: review.rating),
+              SizedBox(height: 8.h),
+              // Comment
               Text(
                 review.reviewText,
                 style: TextStyle(
-                  fontSize: 12.sp,
-                  height: 1.4,
-                  color: const Color(0xFF667085),
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 1.5,
+                  color: const Color(0xFF4B5563),
                   fontFamily: 'Inter',
                 ),
               ),
@@ -151,27 +246,74 @@ class _ReviewCard extends StatelessWidget {
   }
 }
 
-class _ReviewAvatar extends StatelessWidget {
-  final String imageUrl;
+/// A row of stars representing a rating
+class _StarRow extends StatelessWidget {
+  final double rating;
 
-  const _ReviewAvatar({required this.imageUrl});
+  const _StarRow({required this.rating});
 
   @override
   Widget build(BuildContext context) {
-    final trimmed = imageUrl.trim();
-    if (trimmed.isNotEmpty && trimmed.startsWith('http')) {
-      return CircleAvatar(
-        radius: 20.r,
-        backgroundImage: NetworkImage(trimmed),
-        backgroundColor: const Color(0xFFEFF4FF),
-      );
-    }
-    return CircleAvatar(
-      radius: 20.r,
-      backgroundColor: const Color(0xFFEFF4FF),
-      child: Icon(Icons.person, size: 18.sp, color: const Color(0xFF98A2B3)),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(5, (index) {
+        final isFilled = index < rating;
+        return Padding(
+          padding: EdgeInsets.only(right: 2.w),
+          child: Icon(
+            Icons.star_rounded,
+            size: 14.sp,
+            color: isFilled ? const Color(0xFFFBBF24) : const Color(0xFFE5E7EB),
+          ),
+        );
+      }),
     );
   }
+}
+
+class _ReviewAvatar extends StatelessWidget {
+  final String? imageUrl;
+
+  const _ReviewAvatar({this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    final trimmed = imageUrl?.trim() ?? '';
+    if (trimmed.isNotEmpty && trimmed.startsWith('http')) {
+      return Container(
+        width: 40.w,
+        height: 40.w,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+            image: NetworkImage(trimmed),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+    return Container(
+      width: 40.w,
+      height: 40.w,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFFE5E7EB),
+      ),
+      child: Icon(Icons.person, size: 20.sp, color: Colors.white),
+    );
+  }
+}
+
+String? _getAvatarUrl(SitterReview review) {
+  final avatar = review.reviewerAvatar;
+  if (avatar.isNotEmpty) {
+    return avatar;
+  }
+  final imageUrl = review.imageUrl;
+  if (imageUrl.isNotEmpty) {
+    return imageUrl;
+  }
+  return null;
 }
 
 String _reviewerLabel(SitterReview review) {

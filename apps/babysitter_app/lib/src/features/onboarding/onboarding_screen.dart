@@ -146,24 +146,44 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _goToSignUp() {
     final role = _selectedRole ?? 'parent'; // Default to parent if null
+    final from = GoRouterState.of(context).uri.queryParameters['from'];
     print(
-        'DEBUG OnboardingScreen: Navigating to SignUp with role=$role from selectedRole=$_selectedRole');
+        'DEBUG OnboardingScreen: Navigating to SignUp with role=$role from selectedRole=$_selectedRole, from=$from');
+    
+    final params = {'role': role};
+    if (from != null) {
+      params['from'] = from;
+    }
+
     context.go(
-        Uri(path: Routes.signUp, queryParameters: {'role': role}).toString());
+        Uri(path: Routes.signUp, queryParameters: params).toString());
   }
 
   void _goToSignIn() {
     final role = _selectedRole ?? 'parent';
+    final from = GoRouterState.of(context).uri.queryParameters['from'];
+    
+    final params = {'role': role};
+    if (from != null) {
+      params['from'] = from;
+    }
+
     context.go(
-        Uri(path: Routes.signIn, queryParameters: {'role': role}).toString());
+        Uri(path: Routes.signIn, queryParameters: params).toString());
   }
 
   void _onBottomLinkTapped() {
     // If currently sitter, switch to parent. If parent, switch to sitter.
     final currentRole = _selectedRole ?? 'parent';
     final targetRole = currentRole == 'sitter' ? 'parent' : 'sitter';
-    context.go(Uri(path: Routes.signUp, queryParameters: {'role': targetRole})
-        .toString());
+    
+    final from = GoRouterState.of(context).uri.queryParameters['from'];
+    final params = {'role': targetRole};
+    if (from != null) {
+      params['from'] = from;
+    }
+
+    context.go(Uri(path: Routes.signUp, queryParameters: params).toString());
   }
 
   @override

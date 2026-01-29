@@ -52,7 +52,7 @@ class BookingTextField extends StatelessWidget {
         ),
         style: theme.textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w400,
-          color: colorScheme.onSurface,
+          color: const Color(0xFF101828), // Dark text for visibility
         ),
       ),
     );

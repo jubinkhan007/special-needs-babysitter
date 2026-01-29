@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -100,7 +101,19 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       context.pop();
     } catch (e) {
       if (!mounted) return;
-      final message = e.toString().replaceFirst('Exception: ', '');
+      
+      String message = e.toString().replaceFirst('Exception: ', '');
+      
+      // Parse detailed error from API if available
+      if (e is DioException) {
+        final data = e.response?.data;
+        if (data is Map && data['error'] != null) {
+          message = data['error'].toString();
+        } else if (data is Map && data['message'] != null) {
+          message = data['message'].toString();
+        }
+      }
+
       AppToast.show(
         context,
         SnackBar(content: Text(message)),

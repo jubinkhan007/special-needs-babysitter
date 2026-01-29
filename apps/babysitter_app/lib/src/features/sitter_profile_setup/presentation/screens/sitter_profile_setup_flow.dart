@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../routing/routes.dart';
 import '../../../parent_profile_setup/presentation/screens/steps/step0_intro.dart';
 import '../providers/sitter_profile_setup_providers.dart';
 import 'steps/step1_upload_photo.dart';
@@ -166,6 +167,13 @@ class _SitterProfileSetupFlowState
       AppToast.show(context, 
         const SnackBar(content: Text('Profile Setup Completed!')),
       );
+
+      final from = GoRouterState.of(context).uri.queryParameters['from'];
+      if (from != null && from.isNotEmpty) {
+        context.go(from);
+      } else {
+        context.go(Routes.home);
+      }
     }
   }
 }

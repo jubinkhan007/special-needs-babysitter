@@ -66,33 +66,24 @@ class _SitterJobDetailsScreenState
               },
               error: (error, stack) {
                 print('DEBUG: SitterJobDetailsScreen ERROR: $error');
-                print('DEBUG: Stack: $stack');
-                return Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.w),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Error loading job details',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          error.toString(),
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12.sp,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  final message = error.toString().contains('Job not found')
+                      ? 'Job is no longer available'
+                      : error.toString().replaceAll('Exception: ', '');
+                      
+                  if (context.mounted) {
+                    AppToast.show(context, 
+                      SnackBar(
+                        content: Text(message),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    context.pop();
+                  }
+                });
+
+                return const SizedBox.shrink();
               },
             ),
           ),

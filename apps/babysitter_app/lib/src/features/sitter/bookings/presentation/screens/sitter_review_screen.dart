@@ -39,13 +39,15 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
     if (_rating == 0) {
       AppToast.show(
         context,
-        const SnackBar(content: Text('Please select a rating before submitting')),
+        const SnackBar(
+            content: Text('Please select a rating before submitting')),
       );
       return;
     }
 
     final jobId = widget.args.jobId;
-    final revieweeId = widget.args.sitterId; // This is the family/parent user ID
+    final revieweeId =
+        widget.args.sitterId; // This is the family/parent user ID
     if (jobId.isEmpty || revieweeId.isEmpty) {
       AppToast.show(
         context,
@@ -174,7 +176,8 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                disabledBackgroundColor: const Color(0xFF87C4F2).withOpacity(0.6),
+                disabledBackgroundColor:
+                    const Color(0xFF87C4F2).withOpacity(0.6),
               ),
               child: _isSubmitting
                   ? SizedBox(
@@ -212,7 +215,8 @@ class _JobFamilyCard extends StatelessWidget {
     final jobTitle = args.jobTitle ?? args.sitterData.familyName;
     final location = args.location ?? args.sitterData.distance;
     final familyName = args.familyName ?? args.sitterData.familyName;
-    final childrenCount = args.childrenCount ?? args.sitterData.numberOfChildren;
+    final childrenCount =
+        args.childrenCount ?? args.sitterData.numberOfChildren;
     final payment = args.paymentLabel ?? args.sitterData.hourlyRate;
     final avatarUrl = args.avatarUrl ?? args.sitterData.avatarUrl;
 
@@ -324,7 +328,9 @@ class _FamilyAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarUrl = url?.trim();
-    if (avatarUrl != null && avatarUrl.isNotEmpty && avatarUrl.startsWith('http')) {
+    if (avatarUrl != null &&
+        avatarUrl.isNotEmpty &&
+        avatarUrl.startsWith('http')) {
       return CircleAvatar(
         radius: radius,
         backgroundImage: NetworkImage(avatarUrl),
@@ -405,9 +411,8 @@ class _StarRating extends StatelessWidget {
             child: Icon(
               isFilled ? Icons.star : Icons.star_border,
               size: 32.w,
-              color: isFilled
-                  ? const Color(0xFFF5B301)
-                  : const Color(0xFFD0D5DD),
+              color:
+                  isFilled ? const Color(0xFFF5B301) : const Color(0xFFD0D5DD),
             ),
           ),
         );
@@ -416,7 +421,6 @@ class _StarRating extends StatelessWidget {
   }
 }
 
-/// Text field for additional notes.
 class _NotesField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -446,8 +450,11 @@ class _NotesField extends StatelessWidget {
             color: const Color(0xFF98A2B3),
             fontFamily: 'Inter',
           ),
+          filled: true,
+          fillColor: Colors.white,
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         ),
       ),
     );
