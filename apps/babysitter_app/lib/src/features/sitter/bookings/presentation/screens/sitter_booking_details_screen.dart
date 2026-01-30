@@ -21,6 +21,7 @@ import '../providers/bookings_providers.dart';
 import '../providers/session_tracking_providers.dart';
 import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 
 /// Screen showing details of an upcoming/confirmed booking.
@@ -2145,6 +2146,49 @@ class _SitterBookingDetailsScreenState
                                         .getJobRequestDetails(applicationId);
                                     print(
                                         'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}');
+
+                                    // If still null, try fetching user profile directly using sittersRepository
+                                    if (freshJobDetails.familyPhotoUrl ==
+                                            null &&
+                                        freshJobDetails.parentUserId != null) {
+                                      print(
+                                          'DEBUG: Family photo still null, fetching user profile for ${freshJobDetails.parentUserId}');
+                                      try {
+                                        // Temporarily accessing sitters repo to get generic user profile
+                                        // Ideally this should be in a shared repository
+                                        final userProfile = await ref
+                                            .read(sittersRepositoryProvider)
+                                            .getUserProfile(
+                                                freshJobDetails.parentUserId!);
+                                        final photoUrl =
+                                            userProfile['profilePhotoUrl']
+                                                    as String? ??
+                                                userProfile['photoUrl']
+                                                    as String? ??
+                                                userProfile['avatarUrl']
+                                                    as String?;
+
+                                        if (photoUrl != null) {
+                                          print(
+                                              'DEBUG: Found photo URL from user profile: $photoUrl');
+                                          // Create a new details object with the photo URL
+                                          // Since JobRequestDetailsModel is immutable, we verify if there's a copyWith or create new
+                                          // It doesn't seem to have copyWith exposed widely, so we pass it via ReviewArgs directly?
+                                          // ReviewArgs takes avatarUrl. _buildReviewArgs uses jobDetails.familyPhotoUrl.
+                                          // We can hack it by passing a modified jobDetails if we can copy it, or modified ReviewArgs.
+
+                                          // Let's modify freshJobDetails using JSON reconstruction if copyWith isn't easy
+                                          final json = freshJobDetails.toJson();
+                                          json['familyPhotoUrl'] = photoUrl;
+                                          freshJobDetails =
+                                              JobRequestDetailsModel.fromJson(
+                                                  json);
+                                        }
+                                      } catch (e) {
+                                        print(
+                                            'DEBUG: Failed to fetch user profile fallback: $e');
+                                      }
+                                    }
                                   } catch (e) {
                                     print(
                                         'DEBUG: Failed to fetch fresh details, using cached: $e');
@@ -2152,9 +2196,17 @@ class _SitterBookingDetailsScreenState
 
                                   final reviewArgs = _buildReviewArgs(
                                       applicationId, freshJobDetails);
+
+                                  // Ensure avatarUrl is set from freshJobDetails if fallback succeeded but _buildReviewArgs somehow missed it
+                                  // (though _buildReviewArgs uses freshJobDetails, let's be safe)
+                                  final finalReviewArgs = reviewArgs.copyWith(
+                                    avatarUrl: freshJobDetails.familyPhotoUrl,
+                                  );
+
+                                  if (!parentContext.mounted) return;
                                   parentContext.push(
                                     Routes.sitterReview,
-                                    extra: reviewArgs,
+                                    extra: finalReviewArgs,
                                   );
                                   return;
                                 }

@@ -208,7 +208,7 @@ class SitterJobApplicationCard extends StatelessWidget {
           // View Details Button
           SizedBox(
             width: double.infinity,
-            height: 48.h,
+            height: 52.h,
             child: ElevatedButton(
               onPressed: onViewDetails ?? () {
                 context.push('${Routes.sitterJobDetails}/$jobId');
@@ -217,8 +217,9 @@ class SitterJobApplicationCard extends StatelessWidget {
                 backgroundColor: const Color(0xFF89CFF0), // Lighter blue
                 foregroundColor: Colors.white,
                 elevation: 0,
+                padding: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r), // Sharper corners
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
               child: Text(
@@ -227,6 +228,7 @@ class SitterJobApplicationCard extends StatelessWidget {
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Inter',
+                  height: 1.0,
                 ),
               ),
             ),

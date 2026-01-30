@@ -10,6 +10,13 @@ class ProfilePhotoSection extends StatelessWidget {
     this.onEditTap,
   });
 
+  /// Adds a cache-busting timestamp to the URL to force reload
+  String _getImageUrlWithCacheBuster(String url) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final separator = url.contains('?') ? '&' : '?';
+    return '$url${separator}_cb=$timestamp';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -28,7 +35,8 @@ class ProfilePhotoSection extends StatelessWidget {
             child: ClipOval(
               child: photoUrl != null && photoUrl!.isNotEmpty
                   ? Image.network(
-                      photoUrl!,
+                      _getImageUrlWithCacheBuster(photoUrl!),
+                      key: ValueKey(photoUrl), // Force rebuild when URL changes
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           _buildPlaceholder(),

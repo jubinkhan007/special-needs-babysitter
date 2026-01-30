@@ -53,10 +53,10 @@ class SittersRepositoryImpl implements SittersRepository {
       _remoteDataSource.getSitterDetails(id),
       _remoteDataSource.fetchReviews(id),
     ]);
-    
+
     final dto = results[0] as SitterProfileDto;
     final reviewDtos = results[1] as List<ReviewDto>;
-    
+
     return _mapToSitterModel(dto, reviewDtos: reviewDtos);
   }
 
@@ -97,16 +97,19 @@ class SittersRepositoryImpl implements SittersRepository {
     );
   }
 
-  SitterModel _mapToSitterModel(SitterProfileDto dto, {List<ReviewDto>? reviewDtos}) {
+  SitterModel _mapToSitterModel(SitterProfileDto dto,
+      {List<ReviewDto>? reviewDtos}) {
     // Use provided reviewDtos or fall back to embedded reviews
-    final reviews = reviewDtos?.map((r) => ReviewModel(
-          id: r.id,
-          authorName: r.reviewer?.displayName ?? 'Anonymous',
-          authorAvatarUrl: r.reviewer?.profilePhotoUrl ?? '',
-          rating: r.rating,
-          comment: r.reviewText,
-          date: r.createdAt ?? DateTime.now(),
-        )).toList() ??
+    final reviews = reviewDtos
+            ?.map((r) => ReviewModel(
+                  id: r.id,
+                  authorName: r.reviewer?.displayName ?? 'Anonymous',
+                  authorAvatarUrl: r.reviewer?.profilePhotoUrl ?? '',
+                  rating: r.rating,
+                  comment: r.reviewText,
+                  date: r.createdAt ?? DateTime.now(),
+                ))
+            .toList() ??
         dto.reviews?.map((r) {
           // Fallback: parse embedded reviews
           final map = r as Map<String, dynamic>;
@@ -169,5 +172,10 @@ class SittersRepositoryImpl implements SittersRepository {
     } catch (e) {
       return 1;
     }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getUserProfile(String userId) async {
+    return _remoteDataSource.getUserProfile(userId);
   }
 }

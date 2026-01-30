@@ -31,4 +31,35 @@ class ReviewArgs {
     this.reviewPrompt,
     required this.jobId,
   });
+  ReviewArgs copyWith({
+    String? bookingId,
+    String? sitterId,
+    String? sitterName,
+    BookingDetailsUiModel? sitterData,
+    BookingStatus? status,
+    String? jobTitle,
+    String? location,
+    String? familyName,
+    String? childrenCount,
+    String? paymentLabel,
+    String? avatarUrl,
+    String? reviewPrompt,
+    String? jobId,
+  }) {
+    return ReviewArgs(
+      bookingId: bookingId ?? this.bookingId,
+      sitterId: sitterId ?? this.sitterId,
+      sitterName: sitterName ?? this.sitterName,
+      sitterData: sitterData ?? this.sitterData,
+      status: status ?? this.status,
+      jobTitle: jobTitle ?? this.jobTitle,
+      location: location ?? this.location,
+      familyName: familyName ?? this.familyName,
+      childrenCount: childrenCount ?? this.childrenCount,
+      paymentLabel: paymentLabel ?? this.paymentLabel,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      reviewPrompt: reviewPrompt ?? this.reviewPrompt,
+      jobId: jobId ?? this.jobId,
+    );
+  }
 }

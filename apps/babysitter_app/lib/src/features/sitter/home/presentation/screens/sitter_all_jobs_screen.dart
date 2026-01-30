@@ -126,14 +126,13 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.w),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        centerTitle: true,
-        title: Text(
-          'Jobs',
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            color: const Color(0xFF101828),
-            fontFamily: 'Inter',
+                centerTitle: true,
+                title: Text(
+                  'Search',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF101828),            fontFamily: 'Inter',
           ),
         ),
         actions: [

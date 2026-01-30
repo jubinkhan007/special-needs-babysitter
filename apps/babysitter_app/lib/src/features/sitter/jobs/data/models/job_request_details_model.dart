@@ -106,6 +106,16 @@ class JobRequestDetailsModel extends Equatable {
         json['clockedInAt'] ??
         json['clockedInTime'];
 
+    // DEBUG: Log all potential avatar keys
+    print('DEBUG: JobRequestDetailsModel parsing JSON for id=${json['id']}');
+    print('DEBUG: json["familyPhotoUrl"] = ${json['familyPhotoUrl']}');
+    print('DEBUG: json["parentPhotoUrl"] = ${json['parentPhotoUrl']}');
+    print('DEBUG: json["parentAvatarUrl"] = ${json['parentAvatarUrl']}');
+    print('DEBUG: json["familyAvatarUrl"] = ${json['familyAvatarUrl']}');
+    print('DEBUG: json["user"] = ${json['user']}');
+    print('DEBUG: json["creator"] = ${json['creator']}');
+    print('DEBUG: json["parent"] = ${json['parent']}');
+
     return JobRequestDetailsModel(
       id: json['id'] as String,
       applicationId: json['applicationId'] as String,

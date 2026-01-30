@@ -55,6 +55,7 @@ class Routes {
 
   // Sitter shell routes
   static const String sitterHome = '/sitter/home';
+  static const String sitterJobSearch = '/sitter/home/search';
   static const String sitterJobs = '/sitter/jobs';
   static const String sitterBookings = '/sitter/bookings';
   static const String sitterBookingDetails = '/sitter/booking-details';

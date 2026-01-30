@@ -11,7 +11,6 @@ import 'presentation/widgets/app_search_field.dart';
 import 'presentation/widgets/job_preview_card.dart';
 import 'presentation/widgets/background_check_banner.dart';
 import 'presentation/providers/sitter_home_providers.dart';
-import 'presentation/screens/sitter_all_jobs_screen.dart';
 import '../background_check/data/models/background_check_status_model.dart';
 import '../background_check/presentation/providers/background_check_status_provider.dart';
 import '../saved_jobs/presentation/providers/saved_jobs_providers.dart';
@@ -75,11 +74,7 @@ class SitterHomeScreen extends ConsumerWidget {
                       print('DEBUG HomeScreen: Search field tapped');
                       // Fetch jobs before navigating to ensure data is loaded
                       ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const SitterAllJobsScreen(),
-                        ),
-                      );
+                      context.push(Routes.sitterJobSearch);
                     },
                   ),
                   SizedBox(height: 24.h), // Bottom padding
@@ -131,11 +126,7 @@ class SitterHomeScreen extends ConsumerWidget {
                     print('DEBUG HomeScreen: See All tapped, navigating to AllJobsScreen');
                     // Reset and fetch to ensure All Jobs screen shows same data
                     ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const SitterAllJobsScreen(),
-                      ),
-                    );
+                    context.push(Routes.sitterJobSearch);
                   },
                   child: Text(
                     'See All',

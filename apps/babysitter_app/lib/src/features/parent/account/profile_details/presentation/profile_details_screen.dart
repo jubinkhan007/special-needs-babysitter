@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'providers/profile_details_providers.dart';
 import 'profile_details_ui_constants.dart';
@@ -12,6 +14,7 @@ import 'widgets/edit_profile_details_dialog.dart';
 import 'widgets/edit_emergency_contact_dialog.dart';
 import 'widgets/edit_insurance_plan_dialog.dart';
 import '../../../../parent_profile_setup/presentation/widgets/add_child_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ProfileDetailsScreen extends ConsumerStatefulWidget {
   const ProfileDetailsScreen({super.key});
@@ -98,7 +101,65 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       ),
                     );
                   },
-                  onEditAvatar: () {},
+                  onEditAvatar: () async {
+                    final picker = ImagePicker();
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.gallery);
+                    if (pickedFile == null) return;
+
+                    final file = File(pickedFile.path);
+                    String? photoUrl;
+
+                    try {
+                      photoUrl = await ref
+                          .read(profileDetailsControllerProvider.notifier)
+                          .uploadPhoto(file);
+                    } catch (e) {
+                      if (context.mounted) {
+                        AppToast.show(context,
+                            SnackBar(content: Text('Error uploading photo: $e')));
+                      }
+                      return;
+                    }
+
+                    if (photoUrl == null || photoUrl.isEmpty) {
+                      if (context.mounted) {
+                        AppToast.show(context,
+                            const SnackBar(content: Text('Upload failed.')));
+                      }
+                      return;
+                    }
+
+                    final payload = <String, dynamic>{
+                      'photoUrl': photoUrl,
+                      'familyName': details.familyName,
+                      'numberOfFamilyMembers': details.numberOfFamilyMembers,
+                      'familyBio': details.familyBio,
+                      'hasPets': details.hasPets,
+                      'numberOfPets': details.numberOfPets,
+                      'petTypes': details.petTypes,
+                      'speaksOtherLanguages': details.speaksOtherLanguages,
+                      'numberOfLanguages': details.speaksOtherLanguages
+                          ? details.languages.length
+                          : 0,
+                      'languages': details.languages,
+                    };
+
+                    final success = await ref
+                        .read(profileDetailsControllerProvider.notifier)
+                        .updateYourDetails(payload, step: 1);
+
+                    if (context.mounted) {
+                      AppToast.show(
+                        context,
+                        SnackBar(
+                          content: Text(success
+                              ? 'Profile photo updated'
+                              : 'Failed to update profile photo'),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 const SizedBox(height: ProfileDetailsUI.cardSpacing),
 

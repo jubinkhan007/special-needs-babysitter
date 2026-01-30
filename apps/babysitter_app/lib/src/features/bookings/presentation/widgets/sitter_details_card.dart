@@ -95,25 +95,35 @@ class SitterDetailsCard extends StatelessWidget {
           const SizedBox(height: 18),
 
           // 2. Stats Section
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildStatColumn(
-                Icons.access_time_filled,
-                'Response Rate',
-                uiModel.responseRate,
-              ),
-              _buildStatColumn(
-                Icons.thumb_up_alt,
-                'Reliability Rate:', // Matches Figma "Reliability Rate:"
-                uiModel.reliabilityRate,
-              ),
-              _buildStatColumn(
-                Icons.verified_user, // Or specific icon
-                'Experience',
-                uiModel.experience,
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Use scrollable row if screen is narrow
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStatColumn(
+                      Icons.access_time_filled,
+                      'Response Rate',
+                      uiModel.responseRate,
+                    ),
+                    SizedBox(width: constraints.maxWidth > 350 ? 24 : 16),
+                    _buildStatColumn(
+                      Icons.thumb_up_alt,
+                      'Reliability Rate:',
+                      uiModel.reliabilityRate,
+                    ),
+                    SizedBox(width: constraints.maxWidth > 350 ? 24 : 16),
+                    _buildStatColumn(
+                      Icons.verified_user,
+                      'Experience',
+                      uiModel.experience,
+                    ),
+                  ],
+                ),
+              );
+            }
           ),
 
           if (uiModel.skills.isNotEmpty) ...[

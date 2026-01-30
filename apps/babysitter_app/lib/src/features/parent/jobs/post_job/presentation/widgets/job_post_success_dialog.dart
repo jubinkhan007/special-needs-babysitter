@@ -28,9 +28,14 @@ class JobPostSuccessDialog extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.8,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                 // Celebration Icon (Party Popper)
                 const Icon(
                   Icons.celebration,
@@ -111,7 +116,9 @@ class JobPostSuccessDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
 

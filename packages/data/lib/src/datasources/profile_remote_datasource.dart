@@ -168,7 +168,7 @@ class ProfileRemoteDataSource {
 
   Future<UserDto> updateProfile(UpdateProfileParams params) async {
     print('DEBUG: ProfileRemoteDataSource updating with: ${params.firstName}');
-    final response = await _dio.patch(
+    final response = await _dio.put(
       '/users/me',
       data: {
         if (params.firstName != null) 'first_name': params.firstName,

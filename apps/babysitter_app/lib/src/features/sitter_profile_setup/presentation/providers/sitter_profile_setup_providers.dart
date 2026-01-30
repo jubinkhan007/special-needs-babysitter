@@ -363,6 +363,7 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
 
       // If Step 1 (Photo Upload) succeeded, we might get a 'photoUrl' back.
       // We should update the User profile with this avatarUrl so it shows up in the app.
+      // NOTE: This is a best-effort sync - the sitter profile already has the photo.
       if (step == 1 && resultData.containsKey('photoUrl')) {
         final photoUrl = resultData['photoUrl'] as String?;
         if (photoUrl != null && photoUrl.isNotEmpty) {
@@ -374,7 +375,9 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
             );
             print('DEBUG CONTROLLER: User avatarUrl synced successfully.');
           } catch (e) {
-            print('DEBUG CONTROLLER: Failed to sync avatarUrl: $e');
+            // Non-critical error - the sitter profile photo is already saved
+            // The user profile avatar sync is optional and may fail if endpoint unavailable
+            print('DEBUG CONTROLLER: Failed to sync avatarUrl (non-critical): $e');
           }
         }
       }

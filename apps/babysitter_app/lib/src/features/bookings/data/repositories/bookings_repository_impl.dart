@@ -88,7 +88,8 @@ class BookingsRepositoryImpl implements BookingsRepository {
       status = BookingStatus.active;
     } else if (rawStatus == 'clockedout') {
       status = BookingStatus.clockedOut;
-    } else if (rawStatus == 'pending' || rawStatus == 'directbooking') {
+    } else if (rawStatus == 'pending' || rawStatus == 'directbooking' || rawStatus == 'invited') {
+      // "invited" means parent sent invitation to sitter, still pending response
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
       status = BookingStatus.cancelled;
@@ -203,7 +204,8 @@ class BookingsRepositoryImpl implements BookingsRepository {
       status = BookingStatus.active;
     } else if (rawStatus == 'clockedout') {
       status = BookingStatus.clockedOut;
-    } else if (rawStatus == 'pending' || rawStatus == 'directbooking') {
+    } else if (rawStatus == 'pending' || rawStatus == 'directbooking' || rawStatus == 'invited') {
+      // "invited" means parent sent invitation to sitter, still pending response
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
       status = BookingStatus.cancelled;

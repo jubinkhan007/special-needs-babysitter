@@ -1,22 +1,17 @@
 // onboarding_screen.dart
 //
-// Pixel-perfect style onboarding carousel (single screen) matching the screenshot:
+// Fully responsive onboarding carousel matching the screenshot:
 // - Fullscreen image carousel (PageView)
 // - Title + subtitle overlay on pages 2..4
 // - Dots indicator (active pill)
 // - Bottom rounded white card with buttons (Get Started / Log In / Looking for Jobs as a Sitter)
 // - Page 1 shows role selection inside the bottom card (Family / Babysitter)
 //
-// Drop this file into:
-// apps/babysitter_app/lib/src/features/onboarding/onboarding_screen.dart
-//
-// NOTE:
-// - Uses your core theme tokens (AppColors/AppSpacing/AppRadii). If names differ, adjust imports.
-// - Replace image assets with your own (assets/onboarding_1.jpg ...).
-// - Hook callbacks to your routing/auth logic.
+// Uses flutter_screenutil for responsive sizing across all devices.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../routing/routes.dart';
@@ -122,12 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness
-            .dark, // Dark icons for white background/light image parts?
-// Actually, for full bleed images (Status bar over image), we usually want light icons if image is dark.
-// Screen 1: Image top.
-// Screen 2-5: Image full bleed.
-// Let's stick to simple defaults for now.
+        statusBarIconBrightness: Brightness.dark,
       ),
     );
   }
@@ -145,18 +135,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _goToSignUp() {
-    final role = _selectedRole ?? 'parent'; // Default to parent if null
+    final role = _selectedRole ?? 'parent';
     final from = GoRouterState.of(context).uri.queryParameters['from'];
-    print(
-        'DEBUG OnboardingScreen: Navigating to SignUp with role=$role from selectedRole=$_selectedRole, from=$from');
     
     final params = {'role': role};
     if (from != null) {
       params['from'] = from;
     }
 
-    context.go(
-        Uri(path: Routes.signUp, queryParameters: params).toString());
+    context.go(Uri(path: Routes.signUp, queryParameters: params).toString());
   }
 
   void _goToSignIn() {
@@ -168,12 +155,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       params['from'] = from;
     }
 
-    context.go(
-        Uri(path: Routes.signIn, queryParameters: params).toString());
+    context.go(Uri(path: Routes.signIn, queryParameters: params).toString());
   }
 
   void _onBottomLinkTapped() {
-    // If currently sitter, switch to parent. If parent, switch to sitter.
     final currentRole = _selectedRole ?? 'parent';
     final targetRole = currentRole == 'sitter' ? 'parent' : 'sitter';
     
@@ -221,10 +206,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
           ),
 
-          // Bottom Sheet / Controls Overlay
+          // Page indicators (dots)
           if (_currentPage > 0)
             Positioned(
-              bottom: 260,
+              bottom: 260.h,
               left: 0,
               right: 0,
               child: Row(
@@ -236,6 +221,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
 
+          // Bottom control bar
           if (_currentPage > 0)
             Positioned(
               left: 0,
@@ -244,7 +230,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: _BottomControlBar(
                 onGetStarted: _goToSignUp,
                 onLogin: _goToSignIn,
-                onBottomLinkTapped: _onBottomLinkTapped, // Pass new callback
+                onBottomLinkTapped: _onBottomLinkTapped,
                 bottomLinkText: _selectedRole == 'sitter'
                     ? "I'm looking for a sitter"
                     : 'Looking for Jobs as a Sitter',
@@ -256,6 +242,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
+/// Welcome Page (Page 1) with role selection
 class _WelcomePage extends StatelessWidget {
   final OnboardingSlide slide;
   final String? selectedRole;
@@ -271,15 +258,20 @@ class _WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    // Responsive calculations based on screen size
+    final imageHeight = screenHeight * 0.58;
+    final cardHeight = screenHeight * 0.45;
+    
     return Stack(
       children: [
-// Top Image Area
-// Use Positioned to fill roughly top 65% of screen
+        // Top Image Area
         Positioned(
           top: 0,
           left: 0,
           right: 0,
-          height: MediaQuery.of(context).size.height * 0.65,
+          height: imageHeight,
           child: Image.asset(
             slide.imagePath,
             fit: BoxFit.cover,
@@ -287,87 +279,112 @@ class _WelcomePage extends StatelessWidget {
           ),
         ),
 
-// Bottom Content Area (White Card effect)
-// ALign to bottom, occupying roughly 40% height.
-// This naturally extends UP over the 65% image bottom boundary due to overlap logic if we just set height.
+        // Bottom Content Area (White Card)
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.40,
+            height: cardHeight,
             width: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32),
-                topRight: Radius.circular(32),
+                topLeft: Radius.circular(32.r),
+                topRight: Radius.circular(32.r),
               ),
             ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    slide.title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A3A4A), // Dark Text
-                      height: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    slide.description,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF6B7280), // Gray Text
-                      height: 1.5,
-                    ),
-                  ),
-                  const Spacer(),
-                  const Text(
-                    'Select Your Role',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF9CA3AF),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _RoleButton(
-                          label: 'Family',
-                          isSelected: selectedRole != 'sitter',
-                          onTap: onFamilySelected,
+            child: SafeArea(
+              top: false,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      physics: const ClampingScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Title
+                              Text(
+                                slide.title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF1A3A4A),
+                                  height: 1.2,
+                                ),
+                              ),
+                              SizedBox(height: 12.h),
+                              
+                              // Description
+                              Text(
+                                slide.description,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFF6B7280),
+                                  height: 1.5,
+                                ),
+                              ),
+                              
+                              const Spacer(),
+                              
+                              // Role selection label
+                              Text(
+                                'Select Your Role',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xFF9CA3AF),
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              
+                              // Role buttons row
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _RoleButton(
+                                      label: 'Family',
+                                      isSelected: selectedRole != 'sitter',
+                                      onTap: onFamilySelected,
+                                    ),
+                                  ),
+                                  SizedBox(width: 16.w),
+                                  Expanded(
+                                    child: _RoleButton(
+                                      label: 'Babysitter',
+                                      isSelected: selectedRole == 'sitter',
+                                      onTap: onBabysitterSelected,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              
+                              SizedBox(height: 16.h),
+                              
+                              // Bottom indicator line
+                              Container(
+                                width: 40.w,
+                                height: 4.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(2.r),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: _RoleButton(
-                          label: 'Babysitter',
-                          isSelected: selectedRole == 'sitter',
-                          onTap: onBabysitterSelected,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-// Small indicator line at very bottom?
-                  Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -377,7 +394,7 @@ class _WelcomePage extends StatelessWidget {
   }
 }
 
-/// Pages 2-5: Feature Showcase
+/// Feature Pages (Pages 2-5)
 class _FeaturePage extends StatelessWidget {
   final OnboardingSlide slide;
 
@@ -385,27 +402,18 @@ class _FeaturePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomSheetHeight = 260.h; // Approximate height of bottom area
+    
     return Stack(
       fit: StackFit.expand,
       children: [
-// Full background image
+        // Full background image
         Image.asset(
           slide.imagePath,
           fit: BoxFit.cover,
         ),
-// Gradient Overlay (Bottom Up)
-// Design shows text sitting on the image, then a WHITE bottom sheet starts.
-// Wait, the design for 2-5 shows:
-// Image Top (~60%), White Card Bottom (~40%). It looks idential structurally to Screen 1!
-// EXCEPT:
-// - Screen 2,3,4: Title is on the IMAGE (White text), Description is on the IMAGE (White text).
-// - Bottom White Card contains: "Get Started", "Log In", "Lookingfor jobs..."
-// - Dots are on the IMAGE/Dark part?
-// Let's re-examine image.
-// Screen 2 (Specialized Care):
-// White text "Specialized Care" + Description is overlaid on the dark bottom part of the IMAGE.
-// THEN there is a White Card at the bottom with buttons.
-// Indicators (dots) are between the text and the white card.
+        
+        // Gradient Overlay
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -414,48 +422,50 @@ class _FeaturePage extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  const Color(0xFF0D1B2A).withOpacity(0.0),
-                  const Color(0xFF0D1B2A)
-                      .withOpacity(0.8), // Darken bottom of image for text
-                  const Color(
-                      0xFF0D1B2A), // Solid dark at very bottom before white card?
+                  const Color(0xFF0D1B2A).withValues(alpha: 0.0),
+                  const Color(0xFF0D1B2A).withValues(alpha: 0.8),
+                  const Color(0xFF0D1B2A),
                 ],
-                stops: const [0.0, 0.4, 0.7, 1.0],
+                stops: const [0.0, 0.4, 0.65, 0.9],
               ),
             ),
           ),
         ),
-// Content on Image
-        Positioned(
-          left: 24,
-          right: 24,
-          bottom: 290, // Push up above the white bottom sheet height
-          child: Column(
-            children: [
-              Text(
-                slide.title,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  height: 1.2,
+        
+        // Content on Image - positioned above bottom area
+        SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 24.w,
+              right: 24.w,
+              bottom: bottomSheetHeight + 20.h,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  slide.title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    height: 1.2,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                slide.description,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white70,
-                  height: 1.5,
+                SizedBox(height: 12.h),
+                Text(
+                  slide.description,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.white70,
+                    height: 1.5,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-// Dots placeholder handled by bottom bar or separate?
-// The design shows dots ON the dark background, above the white card.
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -463,6 +473,7 @@ class _FeaturePage extends StatelessWidget {
   }
 }
 
+/// Bottom control bar for pages 2-5
 class _BottomControlBar extends StatelessWidget {
   final VoidCallback onGetStarted;
   final VoidCallback onLogin;
@@ -478,86 +489,106 @@ class _BottomControlBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // SafeArea handles bottom padding automatically
+    
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
+          topLeft: Radius.circular(32.r),
+          topRight: Radius.circular(32.r),
         ),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton(
-              onPressed: onGetStarted,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF88C6E0),
-                foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8), // Slightly squarer than 12?
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Get Started button
+            SizedBox(
+              width: double.infinity,
+              height: 56.h,
+              child: ElevatedButton(
+                onPressed: onGetStarted,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF88C6E0),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                child: Text(
+                  'Get Started',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    height: 1.0,
+                  ),
                 ),
               ),
-              child: const Text(
-                'Get Started',
+            ),
+            SizedBox(height: 12.h),
+            
+            // Log In button
+            SizedBox(
+              width: double.infinity,
+              height: 56.h,
+              child: OutlinedButton(
+                onPressed: onLogin,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF88C6E0),
+                  side: const BorderSide(color: Color(0xFFE5E7EB)),
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                child: Text(
+                  'Log In',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    height: 1.0,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 16.h),
+            
+            // Bottom link
+            GestureDetector(
+              onTap: onBottomLinkTapped,
+              child: Text(
+                bottomLinkText,
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                  fontSize: 12.sp,
+                  color: const Color(0xFF374151),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: OutlinedButton(
-              onPressed: onLogin,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFF88C6E0), // Blue text
-                side: const BorderSide(
-                    color: Color(0xFFE5E7EB)), // Light gray border
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text('Log In'),
-            ),
-          ),
-          const SizedBox(height: 16),
-          GestureDetector(
-            onTap: onBottomLinkTapped,
-            child: Text(
-              bottomLinkText,
-              style: const TextStyle(
-                decoration: TextDecoration.underline,
-                fontSize: 12,
-                color: Color(0xFF374151), // Dark gray
-                fontWeight: FontWeight.w500,
+            SizedBox(height: 8.h),
+            
+            // Bottom indicator line
+            Container(
+              width: 40.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(2.r),
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
+/// Role selection button
 class _RoleButton extends StatelessWidget {
   final String label;
   final bool isSelected;
@@ -574,29 +605,20 @@ class _RoleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 52,
+        height: 48.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected
               ? const Color(0xFF88C6E0)
-              : const Color(0xFF88C6E0), // Design shows both blue?
-// Wait, design Screen 1:
-// Left button "Family" is Blue background, White text.
-// Right button "Babysitter" is Blue background?
-// Actually, in the first screenshot, "Family" is highlighted blue, "Babysitter" is same blue?
-// Or maybe one is selected and other is unselected.
-// Usually unselected is gray or outlined.
-// Let's assume standard toggle behavior.
-// But looking at the screenshot, "Family" is Solid Blue. "Babysitter" is Solid Blue.
-// Both look identical. Maybe it's just two choices.
-          borderRadius: BorderRadius.circular(8),
+              : const Color(0xFFD1E8F2),
+          borderRadius: BorderRadius.circular(8.r),
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 16,
+          style: TextStyle(
+            fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: isSelected ? Colors.white : const Color(0xFF1A3A4A),
           ),
         ),
       ),
@@ -604,7 +626,7 @@ class _RoleButton extends StatelessWidget {
   }
 }
 
-// Helper for Dots
+/// Page indicator dots
 class _PageIndicator extends StatelessWidget {
   final bool isActive;
 
@@ -614,13 +636,12 @@ class _PageIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      width: isActive ? 24 : 8,
-      height: 8,
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
+      width: isActive ? 24.w : 8.w,
+      height: 8.h,
       decoration: BoxDecoration(
-        color:
-            isActive ? const Color(0xFF88C6E0) : Colors.white24, // Cyan vs dim
-        borderRadius: BorderRadius.circular(4),
+        color: isActive ? const Color(0xFF88C6E0) : Colors.white24,
+        borderRadius: BorderRadius.circular(4.r),
       ),
     );
   }

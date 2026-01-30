@@ -31,6 +31,7 @@ import '../features/parent/account/profile_details/presentation/profile_details_
 
 import '../features/sitter/sitter_shell.dart';
 import '../features/sitter/home/sitter_home_screen.dart';
+import '../features/sitter/home/presentation/screens/sitter_all_jobs_screen.dart';
 import '../features/sitter/jobs/sitter_jobs_screen.dart';
 import '../features/sitter/bookings/sitter_bookings_screen.dart';
 import '../features/sitter/bookings/presentation/screens/sitter_booking_details_screen.dart';
@@ -712,6 +713,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             pageBuilder: (context, state) => const NoTransitionPage(
               child: SitterHomeScreen(),
             ),
+            routes: [
+              GoRoute(
+                path: 'search',
+                builder: (context, state) => const SitterAllJobsScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: Routes.sitterJobs,

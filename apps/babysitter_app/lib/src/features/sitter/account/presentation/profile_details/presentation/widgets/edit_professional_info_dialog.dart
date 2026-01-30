@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import '../../../../../../sitter_profile_setup/presentation/widgets/bio_text_area_card.dart';
 import '../../../../../../sitter_profile_setup/presentation/widgets/dob_dropdown_row.dart';
 import '../../../../../../sitter_profile_setup/presentation/widgets/labeled_dropdown_field.dart';
@@ -12,7 +13,7 @@ import '../../data/sitter_me_dto.dart';
 
 class EditProfessionalInfoDialog extends StatefulWidget {
   final SitterMeProfileDto profile;
-  final Function(Map<String, dynamic> payload) onSave;
+  final Future<bool> Function(Map<String, dynamic> payload) onSave;
 
   const EditProfessionalInfoDialog({
     super.key,
@@ -36,15 +37,14 @@ class _EditProfessionalInfoDialogState
   late String? _transportationDetails;
   late bool _willingToTravel;
   late bool _overnightAvailable;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
     _bio = widget.profile.bio ?? '';
-    _dob = widget.profile.dateOfBirth != null
-        ? DateTime.tryParse(widget.profile.dateOfBirth!)
-        : null;
-    _ageGroups = List<String>.from(widget.profile.ageRanges ?? []);
+    _dob = _parseDob(widget.profile.dateOfBirth);
+    _ageGroups = _normalizeAgeRanges(widget.profile.ageRanges ?? []);
     _languages = List<String>.from(widget.profile.languages ?? []);
     _yearsExperience = widget.profile.yearsOfExperience;
     _hasTransportation = widget.profile.hasTransportation ?? false;
@@ -53,7 +53,35 @@ class _EditProfessionalInfoDialogState
     _overnightAvailable = widget.profile.overnightAvailable ?? false;
   }
 
-  void _onSave() {
+  DateTime? _parseDob(String? value) {
+    if (value == null || value.isEmpty) return null;
+    final parsed = DateTime.tryParse(value);
+    if (parsed != null) return parsed;
+    try {
+      return DateFormat('MM/dd/yyyy').parse(value);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  List<String> _normalizeAgeRanges(List<String> values) {
+    const options = ['Infants', 'Toddlers', 'Children', 'Teens'];
+    final normalized = <String>{};
+    for (final value in values) {
+      final cleaned = value.trim().toLowerCase();
+      final match = options.firstWhere(
+        (option) => option.toLowerCase() == cleaned,
+        orElse: () => value,
+      );
+      normalized.add(match);
+    }
+    return normalized.toList();
+  }
+
+  Future<void> _onSave() async {
+    if (_isSaving) return;
+    setState(() => _isSaving = true);
+
     final payload = {
       'bio': _bio,
       'dateOfBirth':
@@ -66,8 +94,18 @@ class _EditProfessionalInfoDialogState
       'ageRanges': _ageGroups,
       'languages': _languages,
     };
-    widget.onSave(payload);
-    Navigator.of(context).pop();
+    final success = await widget.onSave(payload);
+    if (!mounted) return;
+
+    if (success) {
+      Navigator.of(context).pop();
+    } else {
+      AppToast.show(
+        context,
+        const SnackBar(content: Text('Failed to update profile')),
+      );
+      setState(() => _isSaving = false);
+    }
   }
 
   @override
@@ -206,8 +244,8 @@ class _EditProfessionalInfoDialogState
           Padding(
             padding: const EdgeInsets.all(16),
             child: PrimaryActionButton(
-              label: 'Save Changes',
-              onPressed: _onSave,
+              label: _isSaving ? 'Saving...' : 'Save Changes',
+              onPressed: _isSaving ? null : _onSave,
               backgroundColor: const Color(0xFF00A3E0),
             ),
           ),

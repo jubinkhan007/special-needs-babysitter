@@ -183,7 +183,7 @@ class SittersRemoteDataSource {
       if (response.data is List) {
         final data = response.data as List<dynamic>;
         print('DEBUG: Response is a List with ${data.length} items');
-        
+
         final reviews = <ReviewDto>[];
         for (var i = 0; i < data.length; i++) {
           try {
@@ -198,21 +198,37 @@ class SittersRemoteDataSource {
         }
         return reviews;
       }
-      
+
       // Fallback: try wrapped format
       if (response.data is Map<String, dynamic>) {
         final data = response.data['data'];
         if (data is List) {
           print('DEBUG: Response is wrapped Map with ${data.length} reviews');
-          return data.map((json) => ReviewDto.fromJson(json as Map<String, dynamic>)).toList();
+          return data
+              .map((json) => ReviewDto.fromJson(json as Map<String, dynamic>))
+              .toList();
         }
       }
-      
+
       print('DEBUG: Unknown response format');
       return [];
     } catch (e, stack) {
       print('DEBUG: Error in fetchReviews: $e');
       print('DEBUG: Stack trace: $stack');
+      rethrow;
+    }
+  }
+
+  /// Fetch generic user profile (for parents/sitters) by ID
+  Future<Map<String, dynamic>> getUserProfile(String userId) async {
+    try {
+      final response = await _dio.get('/users/$userId');
+      if (response.data['success'] == true) {
+        return response.data['data'] as Map<String, dynamic>;
+      }
+      throw Exception('Failed to fetch user profile');
+    } catch (e) {
+      print('DEBUG: Error fetching user profile $userId: $e');
       rethrow;
     }
   }

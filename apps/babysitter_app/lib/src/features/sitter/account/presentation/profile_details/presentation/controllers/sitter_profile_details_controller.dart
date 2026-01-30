@@ -59,17 +59,24 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
         profilePhoto: photoFile,
       );
 
+      // Sync to user profile (best effort - don't fail if this doesn't work)
       final photoUrl = resultData['photoUrl'] as String?;
       if (photoUrl != null && photoUrl.isNotEmpty) {
-        final profileRepository = ref.read(profileRepositoryProvider);
-        await profileRepository.updateProfile(
-          UpdateProfileParams(avatarUrl: photoUrl),
-        );
+        try {
+          final profileRepository = ref.read(profileRepositoryProvider);
+          await profileRepository.updateProfile(
+            UpdateProfileParams(avatarUrl: photoUrl),
+          );
+        } catch (syncError) {
+          // User profile sync failed, but sitter photo was saved successfully
+          print('DEBUG: User profile avatar sync failed (non-critical): $syncError');
+        }
       }
 
       await refresh();
       return true;
     } catch (e) {
+      print('DEBUG: updateProfilePhoto failed: $e');
       return false;
     }
   }

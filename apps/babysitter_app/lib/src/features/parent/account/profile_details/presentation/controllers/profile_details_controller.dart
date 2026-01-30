@@ -6,6 +6,7 @@ import 'package:auth/auth.dart';
 import 'package:flutter/widgets.dart';
 import '../state/profile_details_state.dart';
 import '../providers/profile_details_providers.dart';
+import '../../../presentation/controllers/account_controller.dart';
 
 class ProfileDetailsController extends AsyncNotifier<ProfileDetailsState> {
   @override
@@ -48,6 +49,9 @@ class ProfileDetailsController extends AsyncNotifier<ProfileDetailsState> {
       await ref
           .read(profileDetailsRepositoryProvider)
           .updateProfileDetails(user.id, data, step: step);
+
+      await ref.read(authNotifierProvider.notifier).refreshProfile();
+      ref.invalidate(accountControllerProvider);
 
       // Reload and update state properly
       final newState = await _loadDetails();

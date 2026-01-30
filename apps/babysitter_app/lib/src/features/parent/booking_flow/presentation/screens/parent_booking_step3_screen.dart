@@ -262,28 +262,27 @@ class _ParentBookingStep3ScreenState
 
                   const SizedBox(height: 24), // Spacing after divider
 
-                  // Section Header: Emergency Contact
+                  // Section Header: Emergency Contact (Required)
                   const SectionHeader(
                     title: 'Emergency Contact',
-                    optionalText: '(Optional)',
                   ),
 
                   const SizedBox(height: 16),
 
                   // Emergency Fields
                   BookingTextField(
-                    hintText: 'Name',
+                    hintText: 'Name*',
                     controller: _emergencyNameController,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
-                    hintText: 'Phone Number',
+                    hintText: 'Phone Number*',
                     controller: _emergencyPhoneController,
                     keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
-                    hintText: 'Relationship',
+                    hintText: 'Relationship*',
                     controller: _emergencyRelationController,
                   ),
 
@@ -303,14 +302,14 @@ class _ParentBookingStep3ScreenState
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {
-                // Validation
+                // Address Validation
                 if (_streetController.text.isEmpty ||
                     _cityController.text.isEmpty ||
                     _stateController.text.isEmpty ||
                     _zipController.text.isEmpty) {
-                  AppToast.show(context, 
+                  AppToast.show(context,
                     const SnackBar(
-                      content: Text('Please fill in all required fields.'),
+                      content: Text('Please fill in all required address fields.'),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -320,10 +319,23 @@ class _ParentBookingStep3ScreenState
                 // Zip Code Validation
                 final zipRegex = RegExp(r'^\d{5}$');
                 if (!zipRegex.hasMatch(_zipController.text)) {
-                  AppToast.show(context, 
+                  AppToast.show(context,
                     const SnackBar(
                       content: Text('Please enter a valid 5-digit Zip Code.'),
                       backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // Emergency Contact Validation (Required)
+                if (_emergencyNameController.text.trim().isEmpty ||
+                    _emergencyPhoneController.text.trim().isEmpty ||
+                    _emergencyRelationController.text.trim().isEmpty) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Please fill in all emergency contact fields.'),
+                      backgroundColor: Colors.red,
                     ),
                   );
                   return;
@@ -338,18 +350,9 @@ class _ParentBookingStep3ScreenState
                       city: _cityController.text,
                       addressState: _stateController.text,
                       zipCode: _zipController.text,
-                      emergencyContactName:
-                          _emergencyNameController.text.isNotEmpty
-                              ? _emergencyNameController.text
-                              : null,
-                      emergencyContactPhone:
-                          _emergencyPhoneController.text.isNotEmpty
-                              ? _emergencyPhoneController.text
-                              : null,
-                      emergencyContactRelation:
-                          _emergencyRelationController.text.isNotEmpty
-                              ? _emergencyRelationController.text
-                              : null,
+                      emergencyContactName: _emergencyNameController.text.trim(),
+                      emergencyContactPhone: _emergencyPhoneController.text.trim(),
+                      emergencyContactRelation: _emergencyRelationController.text.trim(),
                     );
 
                 Navigator.of(context).push(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,12 @@ class SitterJobsScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: const Color(0xFFE7F5FC),
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Color(0xFFE7F5FC),
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back,
