@@ -36,9 +36,10 @@ class ParentShell extends StatelessWidget {
   int _calculateSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     if (location == Routes.parentHome) return 0;
-    if (location == Routes.parentMessages) return 1;
-    if (location == Routes.parentBookings) return 2;
-    if (location == Routes.parentJobs) return 3;
+    // Messages has sub-routes like /parent/messages/chat/:id, so use startsWith
+    if (location.startsWith(Routes.parentMessages)) return 1;
+    if (location.startsWith(Routes.parentBookings)) return 2;
+    if (location.startsWith(Routes.parentJobs)) return 3;
     // Account has sub-routes like /parent/account/profile, so use startsWith
     if (location.startsWith(Routes.parentAccount)) return 4;
     return 0;

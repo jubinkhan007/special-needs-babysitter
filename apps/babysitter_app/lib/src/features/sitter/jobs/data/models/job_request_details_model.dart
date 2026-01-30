@@ -118,6 +118,10 @@ class JobRequestDetailsModel extends Equatable {
           json['parentAvatarUrl'] as String? ??
           json['familyAvatarUrl'] as String? ??
           json['familyPhoto'] as String? ??
+          json['user']?['avatarUrl'] as String? ??
+          json['user']?['photoUrl'] as String? ??
+          json['creator']?['avatarUrl'] as String? ??
+          json['creator']?['photoUrl'] as String? ??
           json['parent']?['avatarUrl'] as String? ??
           json['parent']?['photoUrl'] as String?,
       applicationType: json['applicationType'] as String? ?? 'invited',

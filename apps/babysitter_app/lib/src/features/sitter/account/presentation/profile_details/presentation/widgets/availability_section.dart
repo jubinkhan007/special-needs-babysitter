@@ -3,10 +3,12 @@ import '../../../profile_details/data/sitter_me_dto.dart';
 
 class AvailabilitySection extends StatefulWidget {
   final List<SitterAvailabilityDto>? availability;
+  final VoidCallback? onEditTap;
 
   const AvailabilitySection({
     super.key,
     this.availability,
+    this.onEditTap,
   });
 
   @override
@@ -77,13 +79,27 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Availability',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1D2939),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Availability',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1D2939),
+                ),
+              ),
+              if (widget.onEditTap != null)
+                GestureDetector(
+                  onTap: widget.onEditTap,
+                  child: const Icon(
+                    Icons.edit_outlined,
+                    size: 20,
+                    color: Color(0xFF667085),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 16),
           // Month selector

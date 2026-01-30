@@ -20,7 +20,7 @@ class ParentMessagesScreen extends StatelessWidget {
           otherUserAvatarUrl: conversation.participantAvatarUrl,
           isVerified: conversation.isVerified,
         );
-        context.go('/parent/messages/chat/${conversation.id}', extra: args);
+        context.push('/parent/messages/chat/${conversation.id}', extra: args);
       },
     );
   }

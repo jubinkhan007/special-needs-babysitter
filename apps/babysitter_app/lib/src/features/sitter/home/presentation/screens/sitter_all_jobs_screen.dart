@@ -28,6 +28,8 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
   @override
   void initState() {
     super.initState();
+    print('DEBUG AllJobsScreen: initState called');
+    
     // Initialize search with current query if any
     final query = ref.read(jobSearchFiltersProvider).searchQuery;
     if (query != null && query.isNotEmpty) {
@@ -39,13 +41,14 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
 
     // Initial fetch immediately (like home screen) - don't wait for location
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Fetch jobs immediately
-      if (ref.read(jobSearchNotifierProvider).jobs.isEmpty) {
-        ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
-      }
+      print('DEBUG AllJobsScreen: postFrameCallback - calling resetAndFetch');
+      // Complete reset to match home screen behavior
+      // This will fetch jobs without location first
+      ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
       
-      // Update location in background for accurate distance results
-      ref.read(jobSearchFiltersProvider.notifier).updateLocationFromDevice();
+      // Update location in background WITHOUT triggering another fetch
+      // The location will be used for the next refresh/search
+      _updateLocationInBackground();
     });
   }
 
@@ -65,11 +68,43 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
   }
 
   void _onSearchChanged(String query) {
+    print('DEBUG _onSearchChanged: query="$query"');
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      ref.read(jobSearchFiltersProvider.notifier).setSearchQuery(query);
-      ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
+      final trimmedQuery = query.trim();
+      print('DEBUG _onSearchChanged debounce fired: trimmedQuery="$trimmedQuery"');
+      if (trimmedQuery.isEmpty) {
+        // When search is cleared, reset filters and fetch all jobs
+        print('DEBUG _onSearchChanged: calling resetAndFetch()');
+        ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
+      } else {
+        ref.read(jobSearchFiltersProvider.notifier).setSearchQuery(trimmedQuery);
+        ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
+      }
     });
+  }
+
+  /// Update location in background without triggering a fetch
+  /// This allows the location to be available for next search/refresh
+  Future<void> _updateLocationInBackground() async {
+    try {
+      final position = await ref.read(deviceLocationProvider.future);
+      if (position != null) {
+        // Directly update filters without triggering refresh
+        final currentFilters = ref.read(jobSearchFiltersProvider);
+        if (currentFilters.latitude != position.latitude ||
+            currentFilters.longitude != position.longitude) {
+          ref.read(jobSearchFiltersProvider.notifier).state = 
+              currentFilters.copyWith(
+                latitude: position.latitude,
+                longitude: position.longitude,
+              );
+          print('DEBUG AllJobsScreen: Location updated in background: ${position.latitude}, ${position.longitude}');
+        }
+      }
+    } catch (e) {
+      print('DEBUG AllJobsScreen: Error getting location: $e');
+    }
   }
 
   @override
@@ -78,6 +113,9 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
     final filters = ref.watch(jobSearchFiltersProvider);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     ref.watch(savedJobsListProvider);
+
+    // Debug logging
+    print('DEBUG AllJobsScreen: isLoading=${searchState.isLoading}, jobs=${searchState.jobs.length}, error=${searchState.error}');
 
     return Scaffold(
       backgroundColor: Colors.white,

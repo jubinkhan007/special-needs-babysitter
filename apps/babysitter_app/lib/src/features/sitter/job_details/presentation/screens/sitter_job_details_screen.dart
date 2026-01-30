@@ -48,76 +48,84 @@ class _SitterJobDetailsScreenState
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          // App bar
-          const JobDetailsAppBar(),
-          // Content
-          Expanded(
-            child: jobDetailsAsync.when(
-              data: (job) {
-                print('DEBUG: SitterJobDetailsScreen loaded job: ${job.title}');
-                return _buildContent(context, job);
-              },
-              loading: () {
-                print(
-                    'DEBUG: SitterJobDetailsScreen loading for jobId=${widget.jobId}');
-                return const Center(child: CircularProgressIndicator());
-              },
-              error: (error, stack) {
-                print('DEBUG: SitterJobDetailsScreen ERROR: $error');
-                
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  final message = error.toString().contains('Job not found')
-                      ? 'Job is no longer available'
-                      : error.toString().replaceAll('Exception: ', '');
-                      
-                  if (context.mounted) {
-                    AppToast.show(context, 
-                      SnackBar(
-                        content: Text(message),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    context.pop();
-                  }
-                });
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Column(
+          children: [
+            // App bar
+            const JobDetailsAppBar(),
+            // Content
+            Expanded(
+              child: jobDetailsAsync.when(
+                data: (job) {
+                  print(
+                      'DEBUG: SitterJobDetailsScreen loaded job: ${job.title}');
+                  return _buildContent(context, job);
+                },
+                loading: () {
+                  print(
+                      'DEBUG: SitterJobDetailsScreen loading for jobId=${widget.jobId}');
+                  return const Center(child: CircularProgressIndicator());
+                },
+                error: (error, stack) {
+                  print('DEBUG: SitterJobDetailsScreen ERROR: $error');
 
-                return const SizedBox.shrink();
-              },
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    final message = error.toString().contains('Job not found')
+                        ? 'Job is no longer available'
+                        : error.toString().replaceAll('Exception: ', '');
+
+                    if (context.mounted) {
+                      AppToast.show(
+                        context,
+                        SnackBar(
+                          content: Text(message),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      context.pop();
+                    }
+                  });
+
+                  return const SizedBox.shrink();
+                },
+              ),
             ),
-          ),
-          // Bottom bar (only show when data is available)
-          jobDetailsAsync.maybeWhen(
-            data: (job) => JobDetailsBottomBar(
-              hourlyRate: job.hourlyRate,
-              onApply: () {
-                final coverLetter = _coverLetterController.text.trim();
-                if (coverLetter.isEmpty) {
-                  AppToast.show(context, 
-                    SnackBar(
-                      content:
-                          const Text('Please write a cover letter to apply'),
-                      backgroundColor: Colors.red,
-                      behavior: SnackBarBehavior.floating,
-                      margin: EdgeInsets.all(16.w),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: jobDetailsAsync.maybeWhen(
+        data: (job) => SafeArea(
+          top: false,
+          child: JobDetailsBottomBar(
+            hourlyRate: job.hourlyRate,
+            onApply: () {
+              final coverLetter = _coverLetterController.text.trim();
+              if (coverLetter.isEmpty) {
+                AppToast.show(
+                  context,
+                  SnackBar(
+                    content: const Text('Please write a cover letter to apply'),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.all(16.w),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
-                  );
-                  return;
-                }
-
-                context.push(
-                  '${Routes.sitterJobDetails}/${widget.jobId}/application-preview',
-                  extra: coverLetter,
+                  ),
                 );
-              },
-            ),
-            orElse: () => const SizedBox.shrink(),
+                return;
+              }
+
+              context.push(
+                '${Routes.sitterJobDetails}/${widget.jobId}/application-preview',
+                extra: coverLetter,
+              );
+            },
           ),
-        ],
+        ),
+        orElse: () => const SizedBox.shrink(),
       ),
     );
   }

@@ -55,7 +55,8 @@ final authDioProvider = Provider<Dio>((ref) {
         // These 401s are for invalid credentials, not expired sessions
         final path = e.requestOptions.path;
         if (path.startsWith('/auth/')) {
-          print('DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh');
+          print(
+              'DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh');
           return handler.next(e);
         }
 
@@ -185,11 +186,10 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         final profileRepo = ref.read(profileRepositoryProvider);
         final freshUser = await profileRepo.getMe();
 
-        // If profile status changed, update session
-        if (freshUser.isProfileComplete != session.user.isProfileComplete ||
-            freshUser.role != session.user.role) {
+        // If user data changed (avatar, name, role, etc.), update session
+        if (freshUser != session.user) {
           print(
-              'DEBUG: AuthNotifier detected stale session data. freshUser.isProfileComplete=${freshUser.isProfileComplete}, session.user.isProfileComplete=${session.user.isProfileComplete}');
+              'DEBUG: AuthNotifier detected stale session data. Updating session.');
           final updatedSession = session.copyWith(user: freshUser);
           await ref.read(sessionStoreProvider).saveSession(updatedSession);
           return updatedSession;

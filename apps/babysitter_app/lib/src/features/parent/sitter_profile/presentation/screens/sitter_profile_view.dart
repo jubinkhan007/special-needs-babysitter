@@ -174,13 +174,13 @@ class _SitterProfileViewState extends State<SitterProfileView> {
                       onBookmark: widget.onBookmark,
                       onMessage: () {
                         final args = ChatThreadArgs(
-                          otherUserId: widget.sitter.id,
+                          otherUserId: widget.sitter.userId,
                           otherUserName: widget.sitter.name,
                           otherUserAvatarUrl: widget.sitter.avatarUrl,
                           isVerified: true,
                         );
                         context.push(
-                          '/parent/messages/chat/${widget.sitter.id}',
+                          '/parent/messages/chat/${widget.sitter.userId}',
                           extra: args,
                         );
                       },

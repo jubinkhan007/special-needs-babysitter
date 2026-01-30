@@ -7,6 +7,7 @@ class ReviewsSection extends StatelessWidget {
   final List<ReviewModel> reviews;
   final double averageRating;
   final int totalReviews;
+  final int maxReviewsToShow;
 
   const ReviewsSection({
     super.key,
@@ -14,15 +15,14 @@ class ReviewsSection extends StatelessWidget {
     this.reviews = const [],
     this.averageRating = 0.0,
     this.totalReviews = 0,
+    this.maxReviewsToShow = 3,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (reviews.isEmpty) {
-      // Optional: hide section or show empty state if no reviews
-      // For now, let's just minimal header or empty container,
-      // but UI might look empty. Let's show header with 0 reviews.
-    }
+    // Limit reviews to show
+    final reviewsToShow = reviews.take(maxReviewsToShow).toList();
+    final hasMoreReviews = reviews.length > maxReviewsToShow;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -83,8 +83,8 @@ class ReviewsSection extends StatelessWidget {
               style: TextStyle(color: AppUiTokens.textSecondary),
             )
           else
-            ...List.generate(reviews.length, (index) {
-              final review = reviews[index];
+            ...List.generate(reviewsToShow.length, (index) {
+              final review = reviewsToShow[index];
               return Column(
                 children: [
                   _buildReviewItem(
@@ -94,10 +94,39 @@ class ReviewsSection extends StatelessWidget {
                     comment: review.comment,
                     imageAsset: review.authorAvatarUrl,
                   ),
-                  if (index < reviews.length - 1) _buildDivider(),
+                  if (index < reviewsToShow.length - 1 || hasMoreReviews) _buildDivider(),
                 ],
               );
             }),
+
+          // See All button when there are more reviews
+          if (hasMoreReviews)
+            GestureDetector(
+              onTap: onTapSeeAll,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "See All Reviews",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppUiTokens.primaryBlue,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 20,
+                      color: AppUiTokens.primaryBlue,
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
           if (reviews.isNotEmpty)
             const SizedBox(height: 100), // Space for bottom bar

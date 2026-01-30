@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:core/core.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../domain/entities/job_preview.dart';
 import 'app_tag_chip.dart';
@@ -100,20 +101,19 @@ class JobPreviewCard extends StatelessWidget {
   Widget _buildFamilyRow() {
     return Row(
       children: [
-        Container(
-          width: 20.w,
-          height: 20.w,
-          decoration: const BoxDecoration(
-            color: Color(0xFFF2F4F7),
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.group,
-            size: 12.w,
-            color: const Color(0xFF667085),
-          ),
-        ),
+        if (job.familyAvatarUrl != null && job.familyAvatarUrl!.isNotEmpty)
+          ClipOval(
+            child: CachedNetworkImage(
+              imageUrl: job.familyAvatarUrl!,
+              width: 24.w,
+              height: 24.w,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => _buildPlaceholderAvatar(),
+              placeholder: (context, url) => _buildPlaceholderAvatar(),
+            ),
+          )
+        else
+          _buildPlaceholderAvatar(),
         SizedBox(width: 8.w),
         Text(
           job.familyName,
@@ -277,6 +277,23 @@ class JobPreviewCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPlaceholderAvatar() {
+    return Container(
+      width: 24.w,
+      height: 24.w,
+      decoration: const BoxDecoration(
+        color: Color(0xFFF2F4F7),
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.group,
+        size: 14.w,
+        color: const Color(0xFF667085),
+      ),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../bookings/domain/review/review_args.dart';
 import '../../../../bookings/presentation/providers/review_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:core/core.dart';
 
 /// Sitter review screen for reviewing a family after completing a job.
 /// Matches the Figma design for sitter_reviews_parents.
@@ -328,12 +329,14 @@ class _FamilyAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarUrl = url?.trim();
-    if (avatarUrl != null &&
-        avatarUrl.isNotEmpty &&
-        avatarUrl.startsWith('http')) {
+    if (avatarUrl != null && avatarUrl.isNotEmpty) {
+      final fullUrl = avatarUrl.startsWith('http')
+          ? avatarUrl
+          : '${Constants.baseUrl}${avatarUrl.startsWith('/') ? '' : '/'}$avatarUrl';
+
       return CircleAvatar(
         radius: radius,
-        backgroundImage: NetworkImage(avatarUrl),
+        backgroundImage: NetworkImage(fullUrl),
         backgroundColor: const Color(0xFFEFF4FF),
       );
     }

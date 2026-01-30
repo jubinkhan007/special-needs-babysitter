@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:core/core.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'controllers/sitter_profile_details_controller.dart';
 import 'widgets/profile_photo_section.dart';
@@ -10,6 +12,9 @@ import 'widgets/availability_section.dart';
 import 'widgets/hourly_rate_section.dart';
 import 'widgets/professional_info_section.dart';
 import 'widgets/edit_professional_info_dialog.dart';
+import 'widgets/edit_skills_certifications_dialog.dart';
+import 'widgets/edit_hourly_rate_dialog.dart';
+import 'widgets/edit_availability_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class SitterProfileDetailsScreen extends ConsumerWidget {
@@ -64,9 +69,7 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                   ProfilePhotoSection(
                     photoUrl: profile.photoUrl,
                     onEditTap: () {
-                      AppToast.show(context, 
-                        const SnackBar(content: Text('Edit photo coming soon')),
-                      );
+                      _pickAndUploadPhoto(context, ref);
                     },
                   ),
                   const SizedBox(height: 24),
@@ -77,8 +80,40 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                     yearsOfExperience: profile.yearsOfExperience,
                     ageRanges: profile.ageRanges,
                     onEditTap: () {
-                      AppToast.show(context, 
-                        const SnackBar(content: Text('Edit skills coming soon')),
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditSkillsCertificationsDialog(
+                          initialSkills: profile.skills ?? [],
+                          initialCertifications: profile.certifications
+                                  ?.map((cert) => cert.type)
+                                  .toList() ??
+                              [],
+                          initialAgeRanges: profile.ageRanges ?? [],
+                          initialYearsOfExperience: profile.yearsOfExperience,
+                          onSave: (payload) async {
+                            final success = await ref
+                                .read(
+                                    sitterProfileDetailsControllerProvider.notifier)
+                                .updateSkillsAndCertifications(
+                                  profile: profile,
+                                  skills: payload.skills,
+                                  certifications: payload.certifications,
+                                  ageRanges: payload.ageRanges,
+                                  yearsOfExperience: payload.yearsOfExperience,
+                                );
+                            if (context.mounted) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(success
+                                      ? 'Profile updated successfully'
+                                      : 'Failed to update profile'),
+                                ),
+                              );
+                            }
+                            return success;
+                          },
+                        ),
                       );
                     },
                   ),
@@ -87,6 +122,31 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                   // Availability
                   AvailabilitySection(
                     availability: profile.availability,
+                    onEditTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditAvailabilityDialog(
+                          initialAvailability: profile.availability,
+                          onSave: (availability) async {
+                            final success = await ref
+                                .read(
+                                    sitterProfileDetailsControllerProvider.notifier)
+                                .updateAvailability(availability);
+                            if (context.mounted) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(success
+                                      ? 'Availability updated successfully'
+                                      : 'Failed to update availability'),
+                                ),
+                              );
+                            }
+                            return success;
+                          },
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
 
@@ -95,8 +155,33 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                     hourlyRate: profile.hourlyRate,
                     openToNegotiating: profile.openToNegotiating,
                     onEditTap: () {
-                      AppToast.show(context, 
-                        const SnackBar(content: Text('Edit rate coming soon')),
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditHourlyRateDialog(
+                          initialRate: profile.hourlyRate ?? 15.0,
+                          initialOpenToNegotiating:
+                              profile.openToNegotiating ?? false,
+                          onSave: (rate, openToNegotiating) async {
+                            final success = await ref
+                                .read(
+                                    sitterProfileDetailsControllerProvider.notifier)
+                                .updateHourlyRate(
+                                  hourlyRate: rate,
+                                  openToNegotiating: openToNegotiating,
+                                );
+                            if (context.mounted) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(success
+                                      ? 'Hourly rate updated successfully'
+                                      : 'Failed to update hourly rate'),
+                                ),
+                              );
+                            }
+                            return success;
+                          },
+                        ),
                       );
                     },
                   ),
@@ -152,5 +237,26 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  Future<void> _pickAndUploadPhoto(BuildContext context, WidgetRef ref) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) return;
+
+    final success = await ref
+        .read(sitterProfileDetailsControllerProvider.notifier)
+        .updateProfilePhoto(File(pickedFile.path));
+
+    if (context.mounted) {
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(success
+              ? 'Profile photo updated successfully'
+              : 'Failed to update profile photo'),
+        ),
+      );
+    }
   }
 }

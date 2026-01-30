@@ -19,7 +19,7 @@ class SitterMessagesScreen extends StatelessWidget {
           otherUserAvatarUrl: conversation.participantAvatarUrl,
           isVerified: conversation.isVerified,
         );
-        context.go('/sitter/messages/chat/${conversation.id}', extra: args);
+        context.push('/sitter/messages/chat/${conversation.id}', extra: args);
       },
     );
   }

@@ -5,6 +5,7 @@ import '../datasources/sitters_remote_datasource.dart';
 import '../../domain/sitters_repository.dart';
 import '../models/sitter_dto.dart';
 import '../models/sitter_profile_dto.dart';
+import '../models/review_dto.dart';
 
 class SittersRepositoryImpl implements SittersRepository {
   final SittersRemoteDataSource _remoteDataSource;
@@ -47,8 +48,16 @@ class SittersRepositoryImpl implements SittersRepository {
 
   @override
   Future<SitterModel> getSitterDetails(String id) async {
-    final dto = await _remoteDataSource.getSitterDetails(id);
-    return _mapToSitterModel(dto);
+    // Fetch profile and reviews in parallel
+    final results = await Future.wait([
+      _remoteDataSource.getSitterDetails(id),
+      _remoteDataSource.fetchReviews(id),
+    ]);
+    
+    final dto = results[0] as SitterProfileDto;
+    final reviewDtos = results[1] as List<ReviewDto>;
+    
+    return _mapToSitterModel(dto, reviewDtos: reviewDtos);
   }
 
   @override
@@ -88,7 +97,31 @@ class SittersRepositoryImpl implements SittersRepository {
     );
   }
 
-  SitterModel _mapToSitterModel(SitterProfileDto dto) {
+  SitterModel _mapToSitterModel(SitterProfileDto dto, {List<ReviewDto>? reviewDtos}) {
+    // Use provided reviewDtos or fall back to embedded reviews
+    final reviews = reviewDtos?.map((r) => ReviewModel(
+          id: r.id,
+          authorName: r.reviewer?.displayName ?? 'Anonymous',
+          authorAvatarUrl: r.reviewer?.profilePhotoUrl ?? '',
+          rating: r.rating,
+          comment: r.reviewText,
+          date: r.createdAt ?? DateTime.now(),
+        )).toList() ??
+        dto.reviews?.map((r) {
+          // Fallback: parse embedded reviews
+          final map = r as Map<String, dynamic>;
+          final reviewDto = ReviewDto.fromJson(map);
+          return ReviewModel(
+            id: reviewDto.id,
+            authorName: reviewDto.reviewer?.displayName ?? 'Anonymous',
+            authorAvatarUrl: reviewDto.reviewer?.profilePhotoUrl ?? '',
+            rating: reviewDto.rating,
+            comment: reviewDto.reviewText,
+            date: reviewDto.createdAt ?? DateTime.now(),
+          );
+        }).toList() ??
+        [];
+
     return SitterModel(
       id: dto.id,
       userId: dto.userId,
@@ -106,20 +139,7 @@ class SittersRepositoryImpl implements SittersRepository {
       hourlyRate: dto.hourlyRate,
       badges: dto.skills, // Using skills as badges
       bio: dto.bio ?? "No bio available.",
-      reviews: dto.reviews?.map((r) {
-            // Defensive parsing since reviews list structure isn't strictly defined in DTO type (List<dynamic>)
-            final map = r as Map<String, dynamic>;
-            final user = map['user'] as Map<String, dynamic>?;
-            return ReviewModel(
-              id: map['id'] ?? '',
-              authorName: user?['firstName'] ?? 'Anonymous',
-              authorAvatarUrl: user?['photoUrl'] ?? '',
-              rating: (map['rating'] as num?)?.toDouble() ?? 0.0,
-              comment: map['comment'] ?? '',
-              date: DateTime.tryParse(map['createdAt'] ?? '') ?? DateTime.now(),
-            );
-          }).toList() ??
-          [],
+      reviews: reviews,
       availability: dto.availability ?? [],
       languages: dto.languages,
       certifications: dto.certifications,

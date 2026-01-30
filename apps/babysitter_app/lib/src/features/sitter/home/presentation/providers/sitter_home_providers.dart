@@ -251,28 +251,41 @@ class JobSearchState {
 /// Notifier for job search with filters and pagination
 class JobSearchNotifier extends StateNotifier<JobSearchState> {
   final Ref _ref;
+  int _requestId = 0; // Track request ID to ignore stale responses
 
   JobSearchNotifier(this._ref) : super(const JobSearchState());
 
   /// Fetch jobs with current filters (replaces existing results)
-  Future<void> fetchJobs() async {
+  /// Optionally accepts [filtersOverride] to use specific filters instead of reading from provider
+  Future<void> fetchJobs({JobSearchFilters? filtersOverride}) async {
+    // Increment request ID to invalidate any in-flight requests
+    final currentRequestId = ++_requestId;
+
     state = state.copyWith(isLoading: true, clearError: true);
 
     try {
       final dio = _ref.read(sitterHomeDioProvider);
-      final filters = _ref.read(jobSearchFiltersProvider);
+      final JobSearchFilters filters = filtersOverride ?? _ref.read(jobSearchFiltersProvider);
 
       print(
-          'DEBUG: Fetching jobs with filters: ${filters.toQueryParameters()}');
+          'DEBUG: Fetching jobs with filters: ${filters.toQueryParameters()} (request #$currentRequestId)');
 
       final response = await dio.get(
         '/jobs',
         queryParameters: filters.toQueryParameters(),
       );
 
+      // Ignore response if a newer request was made
+      if (currentRequestId != _requestId) {
+        print('DEBUG: Ignoring stale response for request #$currentRequestId (current is #$_requestId)');
+        return;
+      }
+
       if (response.data['success'] == true) {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
         final total = response.data['data']['total'] as int? ?? jobsJson.length;
+
+        print('DEBUG: API returned ${jobsJson.length} jobs, total: $total');
 
         final previews = <JobPreview>[];
         for (final json in jobsJson) {
@@ -280,10 +293,13 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
             final dto =
                 SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
             previews.add(dto.toDomain());
-          } catch (e) {
+          } catch (e, stack) {
             print('Warning: Failed to parse job preview: $e');
+            print('Stack: $stack');
           }
         }
+
+        print('DEBUG: Parsed ${previews.length} job previews');
 
         state = state.copyWith(
           jobs: previews,
@@ -291,6 +307,8 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
           hasMore: previews.length >= filters.limit,
           totalCount: total,
         );
+
+        print('DEBUG: Updated state with ${state.jobs.length} jobs');
       } else {
         state = state.copyWith(
           isLoading: false,
@@ -298,6 +316,9 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
         );
       }
     } catch (e) {
+      // Ignore errors from stale requests
+      if (currentRequestId != _requestId) return;
+
       print('DEBUG: Error fetching jobs: $e');
       state = state.copyWith(
         isLoading: false,
@@ -358,10 +379,32 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
     }
   }
 
-  /// Refresh jobs (reset and fetch)
+  /// Refresh jobs (reset pagination and fetch)
   Future<void> refresh() async {
-    _ref.read(jobSearchFiltersProvider.notifier).resetPagination();
-    await fetchJobs();
+    // Get current filters and reset pagination
+    final currentFilters = _ref.read(jobSearchFiltersProvider);
+    final refreshedFilters = currentFilters.copyWith(offset: 0);
+
+    // Update the provider state
+    _ref.read(jobSearchFiltersProvider.notifier).state = refreshedFilters;
+
+    // Pass filters directly to avoid timing issues
+    await fetchJobs(filtersOverride: refreshedFilters);
+  }
+
+  /// Complete reset - clears state and fetches fresh like home screen
+  Future<void> resetAndFetch() async {
+    // Get current filters and create reset version
+    final currentFilters = _ref.read(jobSearchFiltersProvider);
+    print('DEBUG resetAndFetch: currentFilters=${currentFilters.toQueryParameters()}');
+    final resetFilters = currentFilters.reset();
+    print('DEBUG resetAndFetch: resetFilters=${resetFilters.toQueryParameters()}');
+
+    // Update the provider state
+    _ref.read(jobSearchFiltersProvider.notifier).state = resetFilters;
+
+    // Pass reset filters directly to avoid any state read timing issues
+    await fetchJobs(filtersOverride: resetFilters);
   }
 }
 

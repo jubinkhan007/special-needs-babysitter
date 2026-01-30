@@ -29,9 +29,7 @@ class JobDetailsBottomBar extends StatelessWidget {
           ),
         ),
       ),
-      child: SafeArea(
-        top: false,
-        child: Row(
+      child: Row(
           children: [
             // Price
             Expanded(
@@ -71,6 +69,7 @@ class JobDetailsBottomBar extends StatelessWidget {
                   backgroundColor: AppTokens.primaryBlue,
                   foregroundColor: Colors.white,
                   elevation: 0,
+                  padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),
                   ),
@@ -91,13 +90,13 @@ class JobDetailsBottomBar extends StatelessWidget {
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Inter',
+                          height: 1.0,
                         ),
                       ),
               ),
             ),
           ],
         ),
-      ),
     );
   }
 }

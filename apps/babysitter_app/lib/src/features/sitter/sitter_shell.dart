@@ -36,9 +36,10 @@ class SitterShell extends StatelessWidget {
   int _calculateSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     if (location == Routes.sitterHome) return 0;
-    if (location == Routes.sitterJobs) return 1;
-    if (location == Routes.sitterMessages) return 2;
-    if (location == Routes.sitterBookings) return 3;
+    if (location.startsWith(Routes.sitterJobs)) return 1;
+    // Messages has sub-routes like /sitter/messages/chat/:id, so use startsWith
+    if (location.startsWith(Routes.sitterMessages)) return 2;
+    if (location.startsWith(Routes.sitterBookings)) return 3;
     if (location.startsWith(Routes.sitterAccount)) return 4;
     return 0;
   }

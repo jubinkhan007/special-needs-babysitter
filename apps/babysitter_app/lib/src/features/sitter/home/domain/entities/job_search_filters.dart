@@ -124,12 +124,9 @@ class JobSearchFilters extends Equatable {
     );
   }
 
-  /// Reset all filters to defaults
+  /// Reset all filters to defaults (clears everything including location)
   JobSearchFilters reset() {
-    return JobSearchFilters(
-      latitude: latitude,
-      longitude: longitude,
-    );
+    return const JobSearchFilters();
   }
 
   @override

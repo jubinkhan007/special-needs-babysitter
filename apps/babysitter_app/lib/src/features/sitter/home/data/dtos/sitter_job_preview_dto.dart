@@ -102,6 +102,7 @@ class SitterJobPreviewDto {
         id: id,
         title: title,
         familyName: familyName ?? 'Family',
+        familyAvatarUrl: familyPhotoUrl,
         childrenCount: childrenCount,
         children: children.map((c) => c.toDomain()).toList(),
         location: location ?? '',
