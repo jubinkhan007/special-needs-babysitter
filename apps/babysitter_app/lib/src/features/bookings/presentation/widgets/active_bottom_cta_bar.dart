@@ -39,21 +39,19 @@ class ActiveBottomCtaBar extends StatelessWidget {
   }
 
   Widget _buildButton(String label, VoidCallback onTap) {
-    return SizedBox(
-      height: AppTokens.bottomCtaHeight,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppTokens.primaryBlue,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTokens.bottomCtaRadius),
-          ),
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(double.infinity, AppTokens.bottomCtaHeight),
+        backgroundColor: AppTokens.primaryBlue,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppTokens.bottomCtaRadius),
         ),
-        child: Text(
-          label,
-          style: AppTokens.buttonText,
-        ),
+      ),
+      child: Text(
+        label,
+        style: AppTokens.buttonText,
       ),
     );
   }

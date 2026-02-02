@@ -90,15 +90,17 @@ class _AddEmergencyContactDialogState extends State<AddEmergencyContactDialog> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text(
-                    'Emergency Contact',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1A1A1A),
+                  Expanded(
+                    child: Text(
+                      widget.existingContact != null ? 'Edit Emergency Contact' : 'Emergency Contact',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1A1A1A),
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Spacer(),
                   IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),

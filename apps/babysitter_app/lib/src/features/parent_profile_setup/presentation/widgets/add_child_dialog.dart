@@ -250,14 +250,33 @@ class _AddChildDialogState extends State<AddChildDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildField(_firstNameController, 'First Name*'),
-                    const SizedBox(height: 12),
-                    _buildField(_lastNameController, 'Last Name*'),
-                    const SizedBox(height: 12),
-                    _buildField(_ageController, 'Age*', isNum: true),
+                    _buildField(
+                      _firstNameController,
+                      'First Name*',
+                      maxLength: 50,
+                      minLength: 2,
+                    ),
                     const SizedBox(height: 12),
                     _buildField(
-                        _diagnosisController, 'Special Needs Diagnosis*'),
+                      _lastNameController,
+                      'Last Name*',
+                      maxLength: 50,
+                      minLength: 2,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildField(
+                      _ageController,
+                      'Age*',
+                      isNum: true,
+                      maxLength: 2,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildField(
+                      _diagnosisController,
+                      'Special Needs Diagnosis*',
+                      maxLength: 200,
+                      minLength: 2,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       '*Include any diagnoses or areas where your child may need extra support. Leave blank if unsure or still exploring.',
@@ -270,12 +289,23 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     // Personality - Taller
                     _buildField(_personalityController,
                         'Child\'s Personality Description',
-                        maxLines: 5),
+                        maxLines: 5,
+                        maxLength: 500),
                     const SizedBox(height: 12),
 
-                    _buildField(_medsController, 'Medication & Dietary Needs*'),
+                    _buildField(
+                      _medsController,
+                      'Medication & Dietary Needs*',
+                      maxLength: 200,
+                      minLength: 2,
+                    ),
                     const SizedBox(height: 12),
-                    _buildField(_routineController, 'Routine*'),
+                    _buildField(
+                      _routineController,
+                      'Routine*',
+                      maxLength: 200,
+                      minLength: 2,
+                    ),
                     const SizedBox(height: 16),
 
                     // Allergies Checkbox
@@ -283,7 +313,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
                         (v) => setState(() => _hasAllergies = v!)),
                     if (_hasAllergies) ...[
                       const SizedBox(height: 8),
-                      _buildField(_allergyTypeController, 'Type of Allergy'),
+                      _buildField(
+                        _allergyTypeController,
+                        'Type of Allergy',
+                        maxLength: 100,
+                      ),
                     ],
                     const SizedBox(height: 16),
 
@@ -292,12 +326,17 @@ class _AddChildDialogState extends State<AddChildDialog> {
                         (v) => setState(() => _hasTriggers = v!)),
                     if (_hasTriggers) ...[
                       const SizedBox(height: 8),
-                      _buildField(_triggersTypeController, 'Type of Triggers'),
+                      _buildField(
+                        _triggersTypeController,
+                        'Type of Triggers',
+                        maxLength: 100,
+                      ),
                     ],
                     const SizedBox(height: 12),
 
                     _buildField(_calmingController, 'Calming Method',
-                        maxLines: 2),
+                        maxLines: 2,
+                        maxLength: 200),
 
                     const SizedBox(height: 24),
 
@@ -380,7 +419,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     ),
                     if (_otherEquipmentSelected) ...[
                       const SizedBox(height: 8),
-                      _buildField(_otherEquipmentController, 'Other Equipment'),
+                      _buildField(
+                        _otherEquipmentController,
+                        'Other Equipment',
+                        maxLength: 120,
+                      ),
                     ],
 
                     const SizedBox(height: 16),
@@ -396,14 +439,17 @@ class _AddChildDialogState extends State<AddChildDialog> {
                       ),
                       const SizedBox(height: 8),
                       _buildField(_pickupLocController,
-                          'Pickup Location (e.g., School gate)'),
+                          'Pickup Location (e.g., School gate)',
+                          maxLength: 120),
                       const SizedBox(height: 8),
                       _buildField(_dropoffLocController,
-                          'Drop-off Location (e.g. 123 Main ST)'),
+                          'Drop-off Location (e.g. 123 Main ST)',
+                          maxLength: 120),
                       const SizedBox(height: 8),
                       _buildField(_transportInstrController,
                           'Special Instructions (e.g. Avoid highways)',
-                          maxLines: 3),
+                          maxLines: 3,
+                          maxLength: 240),
                     ],
                   ],
                 ),
@@ -468,8 +514,14 @@ class _AddChildDialogState extends State<AddChildDialog> {
     );
   }
 
-  Widget _buildField(TextEditingController controller, String hint,
-      {bool isNum = false, int maxLines = 1}) {
+  Widget _buildField(
+    TextEditingController controller,
+    String hint, {
+    bool isNum = false,
+    int maxLines = 1,
+    int? maxLength,
+    int? minLength,
+  }) {
     // Only show separate label if it's not the hint inside
     // Figma shows Labels outside? No, screenshot shows Hint inside.
     // Actually Figma screenshot shows: "First Name*" inside the box.
@@ -493,8 +545,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
           child: TextFormField(
             controller: controller,
             keyboardType: isNum ? TextInputType.number : TextInputType.text,
-            inputFormatters:
-                isNum ? [FilteringTextInputFormatter.digitsOnly] : null,
+            inputFormatters: [
+              if (isNum) FilteringTextInputFormatter.digitsOnly,
+              if (maxLength != null)
+                LengthLimitingTextInputFormatter(maxLength),
+            ],
             maxLines: maxLines,
             style: const TextStyle(
                 color: Color(0xFF1A1A1A), fontSize: 16), // Dark Text
@@ -523,12 +578,19 @@ class _AddChildDialogState extends State<AddChildDialog> {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               isDense: true,
+              counterText: '',
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 if (hint.endsWith('*'))
                   return 'Required'; // Simple required check
                 return null;
+              }
+              if (minLength != null && value.trim().length < minLength) {
+                return 'Must be at least $minLength characters';
+              }
+              if (maxLength != null && value.trim().length > maxLength) {
+                return 'Must be $maxLength characters or less';
               }
               if (isNum) {
                 final n = int.tryParse(value);

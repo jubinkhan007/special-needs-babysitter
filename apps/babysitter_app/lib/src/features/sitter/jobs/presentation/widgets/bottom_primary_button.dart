@@ -17,24 +17,27 @@ class BottomPrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 56.h,
-      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? const Color(0xFF89CFF0),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.r),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+      child: SafeArea(
+        top: false,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(double.infinity, 56.h),
+            backgroundColor: backgroundColor ?? const Color(0xFF89CFF0),
+            foregroundColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+            ),
+            textStyle: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Inter',
+            ),
           ),
-          textStyle: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Inter',
-          ),
+          child: Text(text),
         ),
-        child: Text(text),
       ),
     );
   }

@@ -363,4 +363,9 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     await _remoteDataSource.updateChild(
         childId, _prepareChildPayload(childData));
   }
+
+  @override
+  Future<void> deleteChild(String childId) async {
+    await _remoteDataSource.deleteChild(childId);
+  }
 }

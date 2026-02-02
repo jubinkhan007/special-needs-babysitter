@@ -4,9 +4,12 @@ import 'package:go_router/go_router.dart';
 import '../../../routing/routes.dart';
 import '../../../theme/app_tokens.dart';
 import '../application/bookings_controller.dart';
+import '../domain/booking.dart';
 import '../domain/booking_details.dart';
 import '../domain/booking_status.dart';
 import '../../messages/domain/chat_thread_args.dart';
+import '../../parent/booking_flow/data/providers/bookings_di.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'widgets/booking_card.dart';
 import 'widgets/bookings_app_bar.dart';
 import 'widgets/bookings_tabs.dart';
@@ -129,6 +132,11 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                               }
                             },
                             onMenuTap: () {},
+                            // Only allow cancellation for pending/upcoming direct bookings
+                            onCancel: (booking.status == BookingStatus.pending ||
+                                    booking.status == BookingStatus.upcoming)
+                                ? () => _cancelBooking(booking)
+                                : null,
                           );
                         },
                       );
@@ -152,5 +160,31 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
     }
     _lastRefreshAt = now;
     ref.read(bookingsControllerProvider).refresh();
+  }
+
+  Future<void> _cancelBooking(Booking booking) async {
+    try {
+      await ref.read(bookingsRepositoryProvider).cancelDirectBooking(booking.id);
+      ref.read(bookingsControllerProvider).refresh();
+      if (mounted) {
+        AppToast.show(
+          context,
+          const SnackBar(
+            content: Text('Booking cancelled successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        AppToast.show(
+          context,
+          SnackBar(
+            content: Text('Failed to cancel booking: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

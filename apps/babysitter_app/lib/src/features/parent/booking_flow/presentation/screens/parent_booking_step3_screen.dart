@@ -31,11 +31,25 @@ class _ParentBookingStep3ScreenState
   final _emergencyNameController = TextEditingController();
   final _emergencyPhoneController = TextEditingController();
   final _emergencyRelationController = TextEditingController();
+  final _emergencyEmailController = TextEditingController();
+  final _emergencyAddressController = TextEditingController();
+  final _specialInstructionsController = TextEditingController();
 
   // Geocoding state
   bool _isGeocoding = false;
   bool _addressVerified = false;
   String? _verificationMessage;
+
+  // Validation constants
+  static const int _maxNameLength = 50;
+  static const int _maxRelationLength = 50;
+  static const int _maxEmailLength = 254;
+  static const int _maxAddressLength = 200;
+  static const int _maxInstructionsLength = 500;
+  static const int _maxStreetLength = 100;
+  static const int _maxCityLength = 50;
+  static const int _maxStateLength = 50;
+  static const int _maxZipLength = 5;
 
   @override
   void initState() {
@@ -50,6 +64,10 @@ class _ParentBookingStep3ScreenState
     _emergencyNameController.text = state.emergencyContactName ?? '';
     _emergencyPhoneController.text = state.emergencyContactPhone ?? '';
     _emergencyRelationController.text = state.emergencyContactRelation ?? '';
+    _emergencyEmailController.text = state.emergencyContactEmail ?? '';
+    _emergencyAddressController.text = state.emergencyContactAddress ?? '';
+    _specialInstructionsController.text =
+        state.emergencyContactInstructions ?? '';
   }
 
   @override
@@ -62,7 +80,36 @@ class _ParentBookingStep3ScreenState
     _emergencyNameController.dispose();
     _emergencyPhoneController.dispose();
     _emergencyRelationController.dispose();
+    _emergencyEmailController.dispose();
+    _emergencyAddressController.dispose();
+    _specialInstructionsController.dispose();
     super.dispose();
+  }
+
+  // Validation helper methods
+  bool _isValidEmail(String email) {
+    if (email.isEmpty) return true; // Email is optional
+    // RFC 5322 compliant regex for email validation
+    final emailRegex = RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
+    );
+    return emailRegex.hasMatch(email) && email.length <= _maxEmailLength;
+  }
+
+  bool _isValidPhone(String phone) {
+    if (phone.isEmpty) return false;
+    // Remove all non-digit characters for validation
+    final digitsOnly = phone.replaceAll(RegExp(r'\D'), '');
+    // US phone numbers should be 10 digits
+    return digitsOnly.length == 10;
+  }
+
+  String _formatPhoneNumber(String phone) {
+    final digitsOnly = phone.replaceAll(RegExp(r'\D'), '');
+    if (digitsOnly.length == 10) {
+      return '(${digitsOnly.substring(0, 3)}) ${digitsOnly.substring(3, 6)}-${digitsOnly.substring(6)}';
+    }
+    return phone;
   }
 
   Future<void> _geocodeAddress() async {
@@ -179,6 +226,18 @@ class _ParentBookingStep3ScreenState
       if (previous?.emergencyContactRelation != next.emergencyContactRelation) {
         _emergencyRelationController.text = next.emergencyContactRelation ?? '';
       }
+      if (previous?.emergencyContactEmail != next.emergencyContactEmail) {
+        _emergencyEmailController.text = next.emergencyContactEmail ?? '';
+      }
+      if (previous?.emergencyContactAddress != next.emergencyContactAddress) {
+        _emergencyAddressController.text =
+            next.emergencyContactAddress ?? '';
+      }
+      if (previous?.emergencyContactInstructions !=
+          next.emergencyContactInstructions) {
+        _specialInstructionsController.text =
+            next.emergencyContactInstructions ?? '';
+      }
     });
     
     return Scaffold(
@@ -219,27 +278,32 @@ class _ParentBookingStep3ScreenState
                   BookingTextField(
                     hintText: 'Street Address*',
                     controller: _streetController,
+                    maxLength: _maxStreetLength,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
-                    hintText: 'Apt/Unit/Suite*',
+                    hintText: 'Apt/Unit/Suite',
                     controller: _aptController,
+                    maxLength: 20,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
                     hintText: 'City*',
                     controller: _cityController,
+                    maxLength: _maxCityLength,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
                     hintText: 'State*',
                     controller: _stateController,
+                    maxLength: _maxStateLength,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
                     hintText: 'Zip Code*',
                     controller: _zipController,
                     keyboardType: TextInputType.number,
+                    maxLength: _maxZipLength,
                   ),
 
                   const SizedBox(height: 16),
@@ -315,19 +379,41 @@ class _ParentBookingStep3ScreenState
 
                   // Emergency Fields
                   BookingTextField(
-                    hintText: 'Name*',
+                    hintText: 'Emergency Contact Name*',
                     controller: _emergencyNameController,
+                    maxLength: _maxNameLength,
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
-                    hintText: 'Phone Number*',
+                    hintText: 'Relationship to Child*',
+                    controller: _emergencyRelationController,
+                    maxLength: _maxRelationLength,
+                  ),
+                  const SizedBox(height: 16),
+                  BookingTextField(
+                    hintText: 'Primary Phone Number (10 digits)*',
                     controller: _emergencyPhoneController,
                     keyboardType: TextInputType.phone,
+                    maxLength: 10, // Exactly 10 digits for US phone numbers
                   ),
                   const SizedBox(height: 16),
                   BookingTextField(
-                    hintText: 'Relationship*',
-                    controller: _emergencyRelationController,
+                    hintText: 'Email Address',
+                    controller: _emergencyEmailController,
+                    keyboardType: TextInputType.emailAddress,
+                    maxLength: _maxEmailLength,
+                  ),
+                  const SizedBox(height: 16),
+                  BookingTextField(
+                    hintText: 'Address',
+                    controller: _emergencyAddressController,
+                    maxLength: _maxAddressLength,
+                  ),
+                  const SizedBox(height: 16),
+                  BookingTextField(
+                    hintText: 'Special Instructions*',
+                    controller: _specialInstructionsController,
+                    maxLength: _maxInstructionsLength,
                   ),
 
                   // Bottom spacing
@@ -347,10 +433,10 @@ class _ParentBookingStep3ScreenState
               text: 'Next',
               onPressed: () {
                 // Address Validation
-                if (_streetController.text.isEmpty ||
-                    _cityController.text.isEmpty ||
-                    _stateController.text.isEmpty ||
-                    _zipController.text.isEmpty) {
+                if (_streetController.text.trim().isEmpty ||
+                    _cityController.text.trim().isEmpty ||
+                    _stateController.text.trim().isEmpty ||
+                    _zipController.text.trim().isEmpty) {
                   AppToast.show(context,
                     const SnackBar(
                       content: Text('Please fill in all required address fields.'),
@@ -360,9 +446,42 @@ class _ParentBookingStep3ScreenState
                   return;
                 }
 
+                // Street Address Length Validation
+                if (_streetController.text.trim().length < 2) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Street address must be at least 2 characters.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // City Length Validation
+                if (_cityController.text.trim().length < 2) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('City name must be at least 2 characters.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // State Length Validation
+                if (_stateController.text.trim().length < 2) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('State must be at least 2 characters.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
                 // Zip Code Validation
                 final zipRegex = RegExp(r'^\d{5}$');
-                if (!zipRegex.hasMatch(_zipController.text)) {
+                if (!zipRegex.hasMatch(_zipController.text.trim())) {
                   AppToast.show(context,
                     const SnackBar(
                       content: Text('Please enter a valid 5-digit Zip Code.'),
@@ -372,31 +491,119 @@ class _ParentBookingStep3ScreenState
                   return;
                 }
 
-                // Emergency Contact Validation (Required)
-                if (_emergencyNameController.text.trim().isEmpty ||
-                    _emergencyPhoneController.text.trim().isEmpty ||
-                    _emergencyRelationController.text.trim().isEmpty) {
+                // Emergency Contact Name Validation
+                if (_emergencyNameController.text.trim().isEmpty) {
                   AppToast.show(context,
                     const SnackBar(
-                      content: Text('Please fill in all emergency contact fields.'),
+                      content: Text('Please enter emergency contact name.'),
                       backgroundColor: Colors.red,
                     ),
                   );
                   return;
                 }
+                if (_emergencyNameController.text.trim().length < 2) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Emergency contact name must be at least 2 characters.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // Relationship Validation
+                if (_emergencyRelationController.text.trim().isEmpty) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Please enter relationship to child.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+                if (_emergencyRelationController.text.trim().length < 2) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Relationship must be at least 2 characters.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // Phone Number Validation
+                if (_emergencyPhoneController.text.trim().isEmpty) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Please enter emergency contact phone number.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+                if (!_isValidPhone(_emergencyPhoneController.text)) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Please enter a valid 10-digit phone number.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // Email Validation (if provided)
+                if (_emergencyEmailController.text.trim().isNotEmpty &&
+                    !_isValidEmail(_emergencyEmailController.text.trim())) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Please enter a valid email address.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // Special Instructions Validation (Required)
+                if (_specialInstructionsController.text.trim().isEmpty) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Please enter special instructions.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+                if (_specialInstructionsController.text.trim().length < 5) {
+                  AppToast.show(context,
+                    const SnackBar(
+                      content: Text('Special instructions must be at least 5 characters.'),
+                      backgroundColor: Colors.orange,
+                    ),
+                  );
+                  return;
+                }
+
+                // Format phone number before saving
+                final formattedPhone = _formatPhoneNumber(_emergencyPhoneController.text.trim());
 
                 // Save to provider
                 ref.read(bookingFlowProvider.notifier).updateStep3(
-                      streetAddress: _streetController.text,
-                      aptUnit: _aptController.text.isNotEmpty
-                          ? _aptController.text
+                      streetAddress: _streetController.text.trim(),
+                      aptUnit: _aptController.text.trim().isNotEmpty
+                          ? _aptController.text.trim()
                           : null,
-                      city: _cityController.text,
-                      addressState: _stateController.text,
-                      zipCode: _zipController.text,
+                      city: _cityController.text.trim(),
+                      addressState: _stateController.text.trim(),
+                      zipCode: _zipController.text.trim(),
                       emergencyContactName: _emergencyNameController.text.trim(),
-                      emergencyContactPhone: _emergencyPhoneController.text.trim(),
+                      emergencyContactPhone: formattedPhone,
                       emergencyContactRelation: _emergencyRelationController.text.trim(),
+                      emergencyContactEmail:
+                          _emergencyEmailController.text.trim(),
+                      emergencyContactAddress:
+                          _emergencyAddressController.text.trim(),
+                      emergencyContactInstructions:
+                          _specialInstructionsController.text.trim(),
                     );
 
                 Navigator.of(context).push(

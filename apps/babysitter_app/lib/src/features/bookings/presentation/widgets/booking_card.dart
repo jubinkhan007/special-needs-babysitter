@@ -16,6 +16,7 @@ class BookingCard extends StatelessWidget {
   final VoidCallback onMessage;
   final VoidCallback onViewDetails;
   final VoidCallback onMenuTap;
+  final VoidCallback? onCancel;
 
   const BookingCard({
     super.key,
@@ -23,6 +24,7 @@ class BookingCard extends StatelessWidget {
     required this.onMessage,
     required this.onViewDetails,
     required this.onMenuTap,
+    this.onCancel,
   });
 
   @override
@@ -42,6 +44,7 @@ class BookingCard extends StatelessWidget {
           _Header(
             booking: booking,
             onMenuTap: onMenuTap,
+            onCancel: onCancel,
           ),
           const SizedBox(height: 12),
           RatingRow(rating: booking.rating),
@@ -80,8 +83,13 @@ class BookingCard extends StatelessWidget {
 class _Header extends StatelessWidget {
   final Booking booking;
   final VoidCallback onMenuTap;
+  final VoidCallback? onCancel;
 
-  const _Header({required this.booking, required this.onMenuTap});
+  const _Header({
+    required this.booking,
+    required this.onMenuTap,
+    this.onCancel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +136,14 @@ class _Header extends StatelessWidget {
                   const Icon(Icons.location_on,
                       size: 18, color: AppTokens.primaryBlue),
                   const SizedBox(width: 6),
-                  Text(booking.distanceText, style: AppTokens.cardMeta),
+                  Expanded(
+                    child: Text(
+                      booking.distanceText,
+                      style: AppTokens.cardMeta,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -141,7 +156,7 @@ class _Header extends StatelessWidget {
             context,
             scheduledDate: booking.scheduledDate,
             onUpdate: () {},
-            onCancel: () {},
+            onCancel: onCancel ?? () {},
             onShare: () {},
           ),
           child: const Icon(Icons.more_vert, color: AppTokens.iconGrey),

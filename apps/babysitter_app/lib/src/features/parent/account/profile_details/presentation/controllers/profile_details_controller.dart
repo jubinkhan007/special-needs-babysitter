@@ -93,6 +93,19 @@ class ProfileDetailsController extends AsyncNotifier<ProfileDetailsState> {
     }
   }
 
+  Future<bool> deleteChild(String childId) async {
+    state = const AsyncValue.loading();
+    try {
+      await ref.read(profileDetailsRepositoryProvider).deleteChild(childId);
+      final newState = await _loadDetails();
+      state = AsyncValue.data(newState);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
+
   void onEditYourDetails(
       UserProfileDetails currentDetails, BuildContext context) {
     // Logic handled in view, but method kept for consistency if needed.

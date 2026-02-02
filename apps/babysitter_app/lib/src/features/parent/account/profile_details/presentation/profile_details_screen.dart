@@ -200,6 +200,45 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       ),
                     );
                   },
+                  onDeleteChild: (childId) async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        title: const Text('Delete child?'),
+                        content: const Text(
+                            'This will permanently remove this child.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(dialogContext).pop(false),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(dialogContext).pop(true),
+                            child: const Text('Delete'),
+                          ),
+                        ],
+                      ),
+                    );
+
+                    if (confirmed != true) return;
+
+                    final success = await ref
+                        .read(profileDetailsControllerProvider.notifier)
+                        .deleteChild(childId);
+
+                    if (context.mounted) {
+                      AppToast.show(
+                        context,
+                        SnackBar(
+                          content: Text(success
+                              ? 'Child deleted'
+                              : 'Failed to delete child'),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 const SizedBox(height: ProfileDetailsUI.cardSpacing),
 

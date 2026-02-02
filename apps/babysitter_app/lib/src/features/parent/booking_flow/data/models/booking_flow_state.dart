@@ -27,6 +27,9 @@ class BookingFlowState {
   final String? emergencyContactName;
   final String? emergencyContactPhone;
   final String? emergencyContactRelation;
+  final String? emergencyContactEmail;
+  final String? emergencyContactAddress;
+  final String? emergencyContactInstructions;
 
   // Sitter Data (passed from profile)
   final String? sitterId;
@@ -71,6 +74,9 @@ class BookingFlowState {
     this.emergencyContactName,
     this.emergencyContactPhone,
     this.emergencyContactRelation,
+    this.emergencyContactEmail,
+    this.emergencyContactAddress,
+    this.emergencyContactInstructions,
     this.sitterId,
     this.sitterName,
     this.sitterAvatarUrl,
@@ -110,6 +116,9 @@ class BookingFlowState {
     String? emergencyContactName,
     String? emergencyContactPhone,
     String? emergencyContactRelation,
+    String? emergencyContactEmail,
+    String? emergencyContactAddress,
+    String? emergencyContactInstructions,
     String? sitterId,
     String? sitterName,
     String? sitterAvatarUrl,
@@ -150,6 +159,12 @@ class BookingFlowState {
           emergencyContactPhone ?? this.emergencyContactPhone,
       emergencyContactRelation:
           emergencyContactRelation ?? this.emergencyContactRelation,
+      emergencyContactEmail:
+          emergencyContactEmail ?? this.emergencyContactEmail,
+      emergencyContactAddress:
+          emergencyContactAddress ?? this.emergencyContactAddress,
+      emergencyContactInstructions:
+          emergencyContactInstructions ?? this.emergencyContactInstructions,
       sitterId: sitterId ?? this.sitterId,
       sitterName: sitterName ?? this.sitterName,
       sitterAvatarUrl: sitterAvatarUrl ?? this.sitterAvatarUrl,
@@ -333,6 +348,9 @@ class BookingFlowState {
         'name': emergencyContactName ?? '',
         'phone': emergencyContactPhone ?? '',
         'relationship': emergencyContactRelation ?? '',
+        'email': emergencyContactEmail ?? '',
+        'address': emergencyContactAddress ?? '',
+        'specialInstructions': emergencyContactInstructions ?? '',
       },
       'pickupLocation': pickupLocation ?? '',
       'dropoffLocation': dropoffLocation ?? '',

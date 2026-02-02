@@ -7,12 +7,14 @@ import 'common_profile_widgets.dart';
 class ChildListCard extends StatelessWidget {
   final List<Child> children;
   final Function(String) onEditChild;
+  final Function(String) onDeleteChild;
   final VoidCallback onAddChild;
 
   const ChildListCard({
     super.key,
     required this.children,
     required this.onEditChild,
+    required this.onDeleteChild,
     required this.onAddChild,
   });
 
@@ -69,6 +71,19 @@ class ChildListCard extends StatelessWidget {
               child: Icon(
                 Icons
                     .edit, // Changed to filled edit icon to match design better if needed, or stick to edit_outlined
+                size: 20,
+                color: ProfileDetailsUI.secondaryText,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          InkWell(
+            onTap: () => onDeleteChild(child.id),
+            borderRadius: BorderRadius.circular(12),
+            child: const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.delete_outline,
                 size: 20,
                 color: ProfileDetailsUI.secondaryText,
               ),

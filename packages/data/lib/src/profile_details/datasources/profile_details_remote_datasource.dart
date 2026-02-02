@@ -136,4 +136,18 @@ class ProfileDetailsRemoteDataSource {
       rethrow;
     }
   }
+
+  Future<void> deleteChild(String childId) async {
+    try {
+      final response = await _dio.delete('/children/$childId');
+      if (response.data['success'] != true) {
+        throw Exception('Failed to delete child');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print('DEBUG: deleteChild DioError: ${e.response?.data}');
+      }
+      rethrow;
+    }
+  }
 }

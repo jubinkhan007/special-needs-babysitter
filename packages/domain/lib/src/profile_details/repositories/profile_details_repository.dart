@@ -9,5 +9,6 @@ abstract class ProfileDetailsRepository {
   Future<void> addChild(Map<String, dynamic> childData);
   Future<Child> getChild(String childId);
   Future<void> updateChild(String childId, Map<String, dynamic> childData);
+  Future<void> deleteChild(String childId);
   Future<String> uploadProfilePhoto(File file); // Returns publicUrl
 }

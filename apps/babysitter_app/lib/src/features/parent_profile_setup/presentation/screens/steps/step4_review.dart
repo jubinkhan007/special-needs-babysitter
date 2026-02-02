@@ -13,12 +13,18 @@ import '../../providers/parent_profile_providers.dart';
 class Step4Review extends ConsumerStatefulWidget {
   final VoidCallback onFinish;
   final VoidCallback onBack;
+  final VoidCallback? onEditStep1;
+  final VoidCallback? onEditStep2;
+  final VoidCallback? onEditStep3;
   final Map<String, dynamic> profileData;
 
   const Step4Review({
     super.key,
     required this.onFinish,
     required this.onBack,
+    this.onEditStep1,
+    this.onEditStep2,
+    this.onEditStep3,
     required this.profileData,
   });
 
@@ -103,15 +109,8 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
 
     // Emergency
     final contacts = widget.profileData['emergencyContacts'] as List? ?? [];
-    final emergencyContact = contacts.isNotEmpty
-        ? contacts.first
-        : {
-            'name': 'Ryan Mike',
-            'relationship': 'Father',
-            'phone': '415-555-0132',
-            'email': 'Ryan29@gmail.com',
-            // address? specialInstruction?
-          };
+    final hasEmergencyContact = contacts.isNotEmpty;
+    final emergencyContact = hasEmergencyContact ? contacts.first : null;
 
     return Scaffold(
       backgroundColor: _bgBlue,
@@ -221,7 +220,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             const SizedBox(height: 24),
 
             // YOUR DETAILS
-            _buildSectionHeader('Your Details', () {/* Edit Step 1 */}),
+            _buildSectionHeader('Your Details', widget.onEditStep1),
             _buildDetailRow('No. of Family Members:', membersCount),
             _buildDetailRow('Family Bio:', familyBio, isLong: true),
             _buildDetailRow('No. of Pets:', petsCount),
@@ -262,19 +261,23 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
 
             // EMERGENCY CONTACT
             _buildSectionHeader('Emergency Contact', _editEmergencyContact),
-            _buildDetailRow('Full Name:', emergencyContact['name']),
-            _buildDetailRow(
-                'Relationship to Child:', emergencyContact['relationship']),
-            _buildDetailRow('Primary Phone Number:', emergencyContact['phone']),
-            _buildDetailRow('Email Address:', emergencyContact['email']),
-            _buildDetailRow('Address:', '123 House, Lorem City, Loem'), // Mock
-            _buildDetailRow(
-                'Special Instruction:', 'My child has a peanut allergy...',
-                isLong: true), // Mock
+            if (hasEmergencyContact) ...[
+              _buildDetailRow('Full Name:', emergencyContact!['name'] ?? 'Not provided'),
+              _buildDetailRow(
+                  'Relationship to Child:', emergencyContact['relationship'] ?? 'Not provided'),
+              _buildDetailRow('Primary Phone Number:', emergencyContact['phone'] ?? 'Not provided'),
+              _buildDetailRow('Email Address:', emergencyContact['email'] ?? 'Not provided'),
+              _buildDetailRow('Address:', emergencyContact['address'] ?? 'Not provided'),
+              _buildDetailRow(
+                  'Special Instruction:', emergencyContact['specialInstructions'] ?? 'None',
+                  isLong: true),
+            ] else
+              const Text('No emergency contact added.',
+                  style: TextStyle(color: Colors.grey)),
             const Divider(height: 32, color: Color(0xFFE4E7EC)),
 
             // INSURANCE PLAN
-            _buildSectionHeader('Insurance Plan', _editInsurance),
+            _buildSectionHeader('Insurance Plan', widget.onEditStep3),
             if ((widget.profileData['insurancePlans'] as List?)?.isNotEmpty ==
                 true)
               ...(widget.profileData['insurancePlans'] as List).map((plan) {

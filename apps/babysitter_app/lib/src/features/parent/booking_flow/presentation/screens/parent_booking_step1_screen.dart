@@ -25,9 +25,10 @@ class ParentBookingStep1Screen extends ConsumerStatefulWidget {
 
 class _ParentBookingStep1ScreenState
     extends ConsumerState<ParentBookingStep1Screen> {
-  String? _selectedChildId;
-  String? _selectedChildName;
-  Child? _selectedChild; // Track the full child object for transportation data
+  // Support multiple child selection
+  final Set<String> _selectedChildIds = {};
+  final Map<String, String> _selectedChildNames = {};
+  final Map<String, Child> _selectedChildren = {};
   final TextEditingController _additionalDetailsController =
       TextEditingController();
   final TextEditingController _payRateController =
@@ -46,11 +47,15 @@ class _ParentBookingStep1ScreenState
     if (state.payRate > 0) {
       _payRateController.text = state.payRate.toStringAsFixed(0);
     }
+    // Load previously selected children
     if (state.selectedChildIds.isNotEmpty) {
-      _selectedChildId = state.selectedChildIds.first;
-      _selectedChildName = state.selectedChildNames.isNotEmpty
-          ? state.selectedChildNames.first
-          : null;
+      _selectedChildIds.addAll(state.selectedChildIds);
+      for (int i = 0; i < state.selectedChildIds.length; i++) {
+        final childId = state.selectedChildIds[i];
+        if (i < state.selectedChildNames.length) {
+          _selectedChildNames[childId] = state.selectedChildNames[i];
+        }
+      }
     }
   }
 
@@ -63,15 +68,17 @@ class _ParentBookingStep1ScreenState
 
   void _onChildSelected(String childId, String childName, Child child) {
     setState(() {
-      if (_selectedChildId == childId) {
-        _selectedChildId = null;
-        _selectedChildName = null;
-        _selectedChild = null;
-        return;
+      if (_selectedChildIds.contains(childId)) {
+        // Deselect
+        _selectedChildIds.remove(childId);
+        _selectedChildNames.remove(childId);
+        _selectedChildren.remove(childId);
+      } else {
+        // Select
+        _selectedChildIds.add(childId);
+        _selectedChildNames[childId] = childName;
+        _selectedChildren[childId] = child;
       }
-      _selectedChildId = childId;
-      _selectedChildName = childName;
-      _selectedChild = child;
     });
   }
 
@@ -123,7 +130,7 @@ class _ParentBookingStep1ScreenState
   }
 
   void _onNext() {
-    if (_selectedChildId == null) {
+    if (_selectedChildIds.isEmpty) {
       AppToast.show(
         context,
         const SnackBar(
@@ -169,55 +176,58 @@ class _ParentBookingStep1ScreenState
       return;
     }
 
-    // Build transportation data from selected child
-    String? transportationMode;
-    String? equipmentSafety;
-    String? pickupDropoffDetails;
-    String? pickupLocation;
-    String? dropoffLocation;
-    String? transportSpecialInstructions;
+    // Build transportation data from all selected children
+    final allTransportationModes = <String>{};
+    final allEquipmentSafety = <String>{};
+    final allPickupLocations = <String>[];
+    final allDropoffLocations = <String>[];
+    final allSpecialInstructions = <String>[];
 
-    if (_selectedChild != null) {
-      final child = _selectedChild!;
-      transportationMode = child.transportationModes.isNotEmpty
-          ? child.transportationModes.join(', ')
-          : null;
-      equipmentSafety = child.equipmentSafety.isNotEmpty
-          ? child.equipmentSafety.join(', ')
-          : null;
-
-      // Store pickup/dropoff locations separately for backend
-      pickupLocation = child.pickupLocation;
-      dropoffLocation = child.dropoffLocation;
-      transportSpecialInstructions = child.transportSpecialInstructions;
-
-      // Build pickup/dropoff details for display
-      final details = <String>[];
+    for (final child in _selectedChildren.values) {
+      allTransportationModes.addAll(child.transportationModes);
+      allEquipmentSafety.addAll(child.equipmentSafety);
       if (child.pickupLocation.isNotEmpty) {
-        details.add('Pickup: ${child.pickupLocation}');
+        allPickupLocations.add(child.pickupLocation);
       }
       if (child.dropoffLocation.isNotEmpty) {
-        details.add('Drop-off: ${child.dropoffLocation}');
+        allDropoffLocations.add(child.dropoffLocation);
       }
       if (child.transportSpecialInstructions.isNotEmpty) {
-        details.add('Notes: ${child.transportSpecialInstructions}');
+        allSpecialInstructions.add(child.transportSpecialInstructions);
       }
-      pickupDropoffDetails = details.isNotEmpty ? details.join('\n') : null;
+    }
+
+    // Build pickup/dropoff details for display
+    final details = <String>[];
+    if (allPickupLocations.isNotEmpty) {
+      details.add('Pickup: ${allPickupLocations.join(", ")}');
+    }
+    if (allDropoffLocations.isNotEmpty) {
+      details.add('Drop-off: ${allDropoffLocations.join(", ")}');
+    }
+    if (allSpecialInstructions.isNotEmpty) {
+      details.add('Notes: ${allSpecialInstructions.join("; ")}');
     }
 
     ref.read(bookingFlowProvider.notifier).updateStep1(
-          childIds: _selectedChildId != null ? [_selectedChildId!] : [],
-          childNames: _selectedChildName != null ? [_selectedChildName!] : [],
+          childIds: _selectedChildIds.toList(),
+          childNames: _selectedChildIds.map((id) => _selectedChildNames[id] ?? '').toList(),
           payRate: payRate,
           additionalDetails: _additionalDetailsController.text.isNotEmpty
               ? _additionalDetailsController.text
               : null,
-          transportationMode: transportationMode,
-          equipmentSafety: equipmentSafety,
-          pickupDropoffDetails: pickupDropoffDetails,
-          pickupLocation: pickupLocation,
-          dropoffLocation: dropoffLocation,
-          transportSpecialInstructions: transportSpecialInstructions,
+          transportationMode: allTransportationModes.isNotEmpty
+              ? allTransportationModes.join(', ')
+              : null,
+          equipmentSafety: allEquipmentSafety.isNotEmpty
+              ? allEquipmentSafety.join(', ')
+              : null,
+          pickupDropoffDetails: details.isNotEmpty ? details.join('\n') : null,
+          pickupLocation: allPickupLocations.isNotEmpty ? allPickupLocations.join(', ') : null,
+          dropoffLocation: allDropoffLocations.isNotEmpty ? allDropoffLocations.join(', ') : null,
+          transportSpecialInstructions: allSpecialInstructions.isNotEmpty
+              ? allSpecialInstructions.join('; ')
+              : null,
         );
 
     Navigator.of(context).push(
@@ -253,12 +263,20 @@ class _ParentBookingStep1ScreenState
                     children: [
                       const SizedBox(height: 24),
                       const Text(
-                        'Select a Child',
+                        'Select Children',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF101828),
                           height: 1.2,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'You can select multiple children for this booking',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF667085),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -279,7 +297,7 @@ class _ParentBookingStep1ScreenState
                               id: child.id,
                               name: childName,
                               ageText: '${child.age} Years old',
-                              isSelected: _selectedChildId == child.id,
+                              isSelected: _selectedChildIds.contains(child.id),
                             ),
                             onTap: () =>
                                 _onChildSelected(child.id, childName, child),

@@ -106,9 +106,13 @@ class ActiveBookingCard extends StatelessWidget {
                             const Icon(Icons.location_on_outlined,
                                 size: 14, color: AppColors.neutral30),
                             const SizedBox(width: 4),
-                            Text(
-                              booking.distanceText,
-                              style: HomeDesignTokens.cardSubtitle,
+                            Expanded(
+                              child: Text(
+                                booking.distanceText,
+                                style: HomeDesignTokens.cardSubtitle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ],
                         ),

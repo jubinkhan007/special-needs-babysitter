@@ -83,6 +83,9 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
           profileData: _profileData,
           onFinish: _onComplete,
           onBack: () => _goToStep(3),
+          onEditStep1: () => _goToStep(1),
+          onEditStep2: () => _goToStep(2),
+          onEditStep3: () => _goToStep(3),
         );
       case 7:
         return Step7Complete(

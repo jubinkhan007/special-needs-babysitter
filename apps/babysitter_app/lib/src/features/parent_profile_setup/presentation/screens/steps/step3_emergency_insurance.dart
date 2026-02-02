@@ -58,6 +58,36 @@ class _Step3EmergencyAndInsuranceState
     } else {
       _wantToAddContact = false;
     }
+
+    final plans = widget.profileData['insurancePlans'];
+    if (plans is List) {
+      _insurancePlans = plans.map((plan) {
+        if (plan is InsurancePlan) return plan;
+        if (plan is Map<String, dynamic>) {
+          return InsurancePlan(
+            planName: plan['planName']?.toString() ?? '',
+            insuranceType: plan['insuranceType']?.toString() ?? '',
+            coverageAmount:
+                double.tryParse(plan['coverageAmount'].toString()) ?? 0.0,
+            monthlyPremium:
+                double.tryParse(plan['monthlyPremium'].toString()) ?? 0.0,
+            yearlyPremium:
+                double.tryParse(plan['yearlyPremium'].toString()) ?? 0.0,
+            description: plan['description']?.toString() ?? '',
+            isActive: plan['isActive'] == true,
+          );
+        }
+        return InsurancePlan(
+          planName: '',
+          insuranceType: '',
+          coverageAmount: 0.0,
+          monthlyPremium: 0.0,
+          yearlyPremium: 0.0,
+          description: '',
+          isActive: false,
+        );
+      }).toList();
+    }
   }
 
   @override
@@ -165,6 +195,33 @@ class _Step3EmergencyAndInsuranceState
 
           setState(() {
             _insurancePlans.add(newPlan);
+          });
+        },
+      ),
+    );
+  }
+
+  Future<void> _showEditInsuranceDialog(InsurancePlan plan, int index) async {
+    await showDialog(
+      context: context,
+      builder: (context) => EditInsurancePlanDialog(
+        initialPlan: plan,
+        onSave: (planMap) {
+          final updatedPlan = InsurancePlan(
+            planName: planMap['planName'],
+            insuranceType: planMap['insuranceType'],
+            coverageAmount:
+                double.tryParse(planMap['coverageAmount'].toString()) ?? 0.0,
+            monthlyPremium:
+                double.tryParse(planMap['monthlyPremium'].toString()) ?? 0.0,
+            yearlyPremium:
+                double.tryParse(planMap['yearlyPremium'].toString()) ?? 0.0,
+            description: planMap['description'],
+            isActive: planMap['isActive'],
+          );
+
+          setState(() {
+            _insurancePlans[index] = updatedPlan;
           });
         },
       ),
@@ -357,19 +414,44 @@ class _Step3EmergencyAndInsuranceState
               // Let's list simplified if added.
               if (_insurancePlans.isNotEmpty) ...[
                 const SizedBox(height: 12),
-                ..._insurancePlans.map((plan) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.check_circle,
-                              color: Colors.green, size: 16),
-                          const SizedBox(width: 8),
-                          Text(plan.planName,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w500)),
-                        ],
-                      ),
-                    )),
+                ..._insurancePlans.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final plan = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.check_circle,
+                            color: Colors.green, size: 16),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            plan.planName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit_outlined,
+                              size: 18, color: Color(0xFF667085)),
+                          onPressed: () =>
+                              _showEditInsuranceDialog(plan, index),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline,
+                              size: 18, color: Color(0xFF667085)),
+                          onPressed: () {
+                            setState(() {
+                              _insurancePlans.removeAt(index);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }),
               ],
 
               const SizedBox(height: 32),

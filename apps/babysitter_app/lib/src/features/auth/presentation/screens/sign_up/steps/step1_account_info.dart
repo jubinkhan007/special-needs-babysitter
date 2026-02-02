@@ -238,9 +238,19 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   hint: 'Email*',
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
+                  maxLength: 254,
+                  helperText: 'Valid email format: name@example.com',
                   validator: (v) {
-                    if (v?.isEmpty == true) return 'Required';
-                    if (!v!.contains('@')) return 'Invalid email';
+                    if (v?.isEmpty == true) return 'Email is required';
+                    if (v!.length < 5) return 'Email must be at least 5 characters';
+                    if (v.length > 254) return 'Email must be 254 characters or less';
+                    // RFC 5322 compliant email regex
+                    final emailRegex = RegExp(
+                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                    );
+                    if (!emailRegex.hasMatch(v)) {
+                      return 'Please enter a valid email address';
+                    }
                     return null;
                   },
                 ),

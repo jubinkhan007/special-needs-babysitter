@@ -3,13 +3,52 @@ import 'package:flutter/services.dart';
 import 'package:domain/domain.dart';
 import 'package:babysitter_app/common/theme/auth_theme.dart';
 
-final TextInputFormatter _decimalInputFormatter =
-    TextInputFormatter.withFunction((oldValue, newValue) {
-  final text = newValue.text;
-  if (text.isEmpty) return newValue;
-  final isValid = RegExp(r'^\d*\.?\d*$').hasMatch(text);
-  return isValid ? newValue : oldValue;
-});
+/// Formatter that only allows digits and at most one decimal point
+class DecimalInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    // Allow empty
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+    
+    // Only allow digits and at most one decimal point
+    final buffer = StringBuffer();
+    bool hasDecimal = false;
+    
+    for (int i = 0; i < newValue.text.length; i++) {
+      final char = newValue.text[i];
+      if (char == '.') {
+        if (!hasDecimal) {
+          buffer.write(char);
+          hasDecimal = true;
+        }
+        // Skip additional decimal points
+      } else if (RegExp(r'[0-9]').hasMatch(char)) {
+        buffer.write(char);
+      }
+      // Skip all other characters (letters, symbols, etc.)
+    }
+    
+    final newText = buffer.toString();
+    
+    // Adjust cursor position if needed
+    int newOffset = newValue.selection.end;
+    if (newOffset > newText.length) {
+      newOffset = newText.length;
+    }
+    
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newOffset),
+    );
+  }
+}
+
+final TextInputFormatter _decimalInputFormatter = DecimalInputFormatter();
 
 class EditInsurancePlanDialog extends StatefulWidget {
   final InsurancePlan? initialPlan;
@@ -36,6 +75,13 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
   late TextEditingController _descriptionController;
 
   bool _isActive = true;
+
+  // Character limits
+  static const int _maxPlanNameLength = 50;
+  static const int _maxTypeLength = 50;
+  static const int _maxCoverageLength = 12; // For numeric values like 999999999.99
+  static const int _maxPremiumLength = 12;
+  static const int _maxDescriptionLength = 500;
 
   @override
   void initState() {
@@ -123,30 +169,55 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    _buildField(_planNameController, 'Insurance Plan Name*'),
+                    _buildField(
+                      _planNameController, 
+                      'Insurance Plan Name*',
+                      maxLength: _maxPlanNameLength,
+                      minLength: 2,
+                    ),
                     const SizedBox(height: 12),
-                    _buildField(_typeController, 'Insurance Type'),
+                    _buildField(
+                      _typeController, 
+                      'Insurance Type',
+                      maxLength: _maxTypeLength,
+                    ),
                     const SizedBox(height: 12),
-                    _buildField(_coverageController, 'Coverage Amount*',
-                        isNum: true),
+                    _buildField(
+                      _coverageController, 
+                      'Coverage Amount*',
+                      isNum: true,
+                      maxLength: _maxCoverageLength,
+                      minValue: 1,
+                    ),
                     const SizedBox(height: 12),
                     Row(
                       children: [
                         Expanded(
                             child: _buildField(
-                                _monthlyPremController, 'Monthly Premium*',
-                                isNum: true)),
+                              _monthlyPremController, 
+                              'Monthly Premium*',
+                              isNum: true,
+                              maxLength: _maxPremiumLength,
+                              minValue: 0,
+                            )),
                         const SizedBox(width: 12),
                         Expanded(
                             child: _buildField(
-                                _yearlyPremController, 'Yearly Premium*',
-                                isNum: true)),
+                              _yearlyPremController, 
+                              'Yearly Premium*',
+                              isNum: true,
+                              maxLength: _maxPremiumLength,
+                              minValue: 0,
+                            )),
                       ],
                     ),
                     const SizedBox(height: 12),
                     _buildField(
-                        _descriptionController, 'Description / Benefits',
-                        maxLines: 4),
+                      _descriptionController, 
+                      'Description / Benefits',
+                      maxLines: 4,
+                      maxLength: _maxDescriptionLength,
+                    ),
 
                     const SizedBox(height: 24),
                     // Status Toggle
@@ -239,11 +310,24 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
     );
   }
 
-  Widget _buildField(TextEditingController controller, String hint,
-      {bool isNum = false, int maxLines = 1}) {
-    // Design has separate label styling?
-    // From screenshot: "Insurance Plan Name*" is Inside text field as hint or label.
-    // We'll mimic styling from Add Child for consistency.
+  Widget _buildField(
+    TextEditingController controller, 
+    String hint, {
+    bool isNum = false, 
+    int maxLines = 1,
+    int? maxLength,
+    int? minLength,
+    double? minValue,
+  }) {
+    // Build input formatters list
+    final List<TextInputFormatter> formatters = [];
+    if (isNum) {
+      formatters.add(_decimalInputFormatter);
+    }
+    if (maxLength != null) {
+      formatters.add(LengthLimitingTextInputFormatter(maxLength));
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -264,7 +348,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
             keyboardType: isNum
                 ? const TextInputType.numberWithOptions(decimal: true)
                 : TextInputType.text,
-            inputFormatters: isNum ? [_decimalInputFormatter] : null,
+            inputFormatters: formatters.isEmpty ? null : formatters,
             maxLines: maxLines,
             style: const TextStyle(color: Color(0xFF101828), fontSize: 16),
             decoration: InputDecoration(
@@ -288,20 +372,53 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               isDense: true,
+              counterText: '', // Hide default counter
             ),
             validator: (value) {
+              // Required field validation
               if (hint.endsWith('*') && (value == null || value.isEmpty)) {
                 return '${hint.replaceAll('*', '')} is required';
               }
+              // Min length validation
+              if (minLength != null && value != null && value.isNotEmpty) {
+                if (value.trim().length < minLength) {
+                  return 'Must be at least $minLength characters';
+                }
+              }
+              // Numeric validation
               if (isNum && value != null && value.isNotEmpty) {
-                if (double.tryParse(value) == null) {
+                final numValue = double.tryParse(value);
+                if (numValue == null) {
                   return 'Please enter a valid number';
+                }
+                if (minValue != null && numValue < minValue) {
+                  return 'Must be at least $minValue';
                 }
               }
               return null;
             },
           ),
         ),
+        // Character counter for text fields
+        if (maxLength != null && !isNum)
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: controller,
+            builder: (context, value, child) {
+              final currentLength = controller.text.length;
+              return Padding(
+                padding: const EdgeInsets.only(top: 4, left: 4),
+                child: Text(
+                  '$currentLength/$maxLength',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: currentLength >= maxLength
+                        ? const Color(0xFFD92D20) // Red at limit
+                        : const Color(0xFF667085), // Gray normally
+                  ),
+                ),
+              );
+            },
+          ),
       ],
     );
   }

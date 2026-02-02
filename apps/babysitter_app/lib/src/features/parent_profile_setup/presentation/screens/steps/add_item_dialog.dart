@@ -4,11 +4,15 @@ import '../../../../../../common/theme/auth_theme.dart';
 class AddItemDialog extends StatefulWidget {
   final String title;
   final Function(String) onAdd;
+  final String? initialValue;
+  final String confirmLabel;
 
   const AddItemDialog({
     super.key,
     required this.title,
     required this.onAdd,
+    this.initialValue,
+    this.confirmLabel = 'Add',
   });
 
   @override
@@ -22,6 +26,9 @@ class _AddItemDialogState extends State<AddItemDialog> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    if (widget.initialValue != null) {
+      _controller.text = widget.initialValue!;
+    }
   }
 
   @override
@@ -77,9 +84,9 @@ class _AddItemDialogState extends State<AddItemDialog> {
               Navigator.pop(context);
             }
           },
-          child: const Text(
-            'Add',
-            style: TextStyle(
+          child: Text(
+            widget.confirmLabel,
+            style: const TextStyle(
                 color: AuthTheme.primaryBlue, fontWeight: FontWeight.w600),
           ),
         ),

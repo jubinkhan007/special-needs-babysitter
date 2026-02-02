@@ -438,13 +438,12 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              child: Column(
-                children: [
-                  // Accept Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: ElevatedButton(
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  children: [
+                    // Accept Button
+                    ElevatedButton(
                       onPressed: isLoading
                           ? null
                           : () async {
@@ -456,6 +455,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                                   );
                             },
                       style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF87C4F2),
                         foregroundColor: Colors.white,
                         disabledBackgroundColor:
@@ -484,13 +484,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               ),
                             ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  // Decline Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: ElevatedButton(
+                    SizedBox(height: 12.h),
+                    // Decline Button
+                    ElevatedButton(
                       onPressed: isLoading
                           ? null
                           : () {
@@ -513,6 +509,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               );
                             },
                       style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF1D2939),
                         foregroundColor: Colors.white,
                         disabledBackgroundColor:
@@ -541,8 +538,8 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               ),
                             ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           else
@@ -559,25 +556,28 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12.h),
-                decoration: BoxDecoration(
-                  color: _getStatusColor(displayStatus).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: _getStatusColor(displayStatus),
+              child: SafeArea(
+                top: false,
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(displayStatus).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(
+                      color: _getStatusColor(displayStatus),
+                    ),
                   ),
-                ),
-                child: Text(
-                  statusLabel.isNotEmpty
-                      ? statusLabel.toUpperCase()
-                      : displayStatus.toUpperCase(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: _getStatusColor(displayStatus),
-                    fontFamily: 'Inter',
+                  child: Text(
+                    statusLabel.isNotEmpty
+                        ? statusLabel.toUpperCase()
+                        : displayStatus.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: _getStatusColor(displayStatus),
+                      fontFamily: 'Inter',
+                    ),
                   ),
                 ),
               ),

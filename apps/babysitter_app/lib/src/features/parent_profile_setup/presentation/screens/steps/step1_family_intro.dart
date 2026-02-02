@@ -46,6 +46,11 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     'Dog': false,
     'Birds': false,
   };
+  static const Set<String> _defaultPetTypes = {
+    'Cat',
+    'Dog',
+    'Birds',
+  };
 
   // Language State
   final _numLanguagesController = TextEditingController();
@@ -56,10 +61,21 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     'Spanish': false,
     'English': false,
   };
+  static const Set<String> _defaultLanguages = {
+    'French',
+    'Spanish',
+    'English',
+  };
 
   static const _bgBlue =
       Color(0xFFF3FAFD); // Light blue background from screenshot
   static const _textDark = Color(0xFF1A1A1A);
+
+  @override
+  void initState() {
+    super.initState();
+    _hydrateFromProfileData();
+  }
 
   @override
   void dispose() {
@@ -68,6 +84,71 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     _numLanguagesController.dispose();
     _bioController.dispose();
     super.dispose();
+  }
+
+  void _hydrateFromProfileData() {
+    final data = widget.profileData;
+    if (data.isEmpty) return;
+
+    _familyNameController.text = data['familyName']?.toString() ?? '';
+    _bioController.text = data['familyBio']?.toString() ?? '';
+
+    final rawMembers = data['numberOfFamilyMembers'];
+    _familyMembersCount = _normalizeFamilyMembers(rawMembers);
+
+    final petTypes =
+        (data['petTypes'] as List?)?.map((e) => e.toString()).toList() ?? [];
+    _hasPets = data['hasPets'] == true || petTypes.isNotEmpty;
+    final numPets = data['numberOfPets'];
+    _numPetsController.text =
+        (numPets != null && numPets.toString() != '0') ? '$numPets' : '';
+
+    // Reset default pet types, then apply selections
+    for (final key in _petTypes.keys) {
+      _petTypes[key] = petTypes.contains(key);
+    }
+    for (final pet in petTypes) {
+      _petTypes.putIfAbsent(pet, () => true);
+      _petTypes[pet] = true;
+    }
+
+    final languages =
+        (data['languages'] as List?)?.map((e) => e.toString()).toList() ?? [];
+    _hasSecondLanguage =
+        data['speaksOtherLanguages'] == true || languages.isNotEmpty;
+    final numLanguages = data['numberOfLanguages'];
+    _numLanguagesController.text = (numLanguages != null &&
+            numLanguages.toString().isNotEmpty &&
+            numLanguages.toString() != '0')
+        ? '$numLanguages'
+        : (languages.isNotEmpty ? '${languages.length}' : '');
+
+    for (final key in _languages.keys) {
+      _languages[key] = languages.contains(key);
+    }
+    for (final lang in languages) {
+      _languages.putIfAbsent(lang, () => true);
+      _languages[lang] = true;
+    }
+  }
+
+  String? _normalizeFamilyMembers(dynamic rawMembers) {
+    if (rawMembers == null) return null;
+    if (rawMembers is String) {
+      final trimmed = rawMembers.trim();
+      if (trimmed.isEmpty) return null;
+      if (trimmed == '6+') return '6+';
+      final parsed = int.tryParse(trimmed);
+      if (parsed == null) return null;
+      if (parsed < 2) return null;
+      return parsed >= 6 ? '6+' : '$parsed';
+    }
+    if (rawMembers is num) {
+      final value = rawMembers.toInt();
+      if (value < 2) return null;
+      return value >= 6 ? '6+' : '$value';
+    }
+    return null;
   }
 
   Future<void> _pickImage() async {
@@ -411,14 +492,55 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   ),
                   child: Column(
                     children: _petTypes.keys.map((key) {
+                      final isCustom = !_defaultPetTypes.contains(key);
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Row(
                           children: [
-                            Text(key,
+                            Expanded(
+                              child: Text(
+                                key,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                    fontSize: 16, color: Color(0xFF475467))),
-                            const Spacer(),
+                                  fontSize: 16,
+                                  color: Color(0xFF475467),
+                                ),
+                              ),
+                            ),
+                            if (isCustom) ...[
+                              IconButton(
+                                onPressed: () {
+                                  _showEditItemDialog(
+                                    title: 'Edit Pet Type',
+                                    initialValue: key,
+                                    onSaved: (val) {
+                                      setState(() {
+                                        _renameMapKey(_petTypes, key, val);
+                                      });
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.edit_outlined,
+                                    size: 18, color: Color(0xFF98A2B3)),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                              const SizedBox(width: 8),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _petTypes.remove(key);
+                                  });
+                                },
+                                icon: const Icon(Icons.delete_outline,
+                                    size: 18, color: Color(0xFF98A2B3)),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                              const SizedBox(width: 8),
+                            ] else
+                              const SizedBox(width: 12),
                             SizedBox(
                               width: 24,
                               height: 24,
@@ -575,16 +697,58 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       if (_isLanguagesExpanded) ...[
                         const Divider(height: 1, color: Color(0xFFEAECF0)),
                         ..._languages.keys.map((key) {
+                          final isCustom = !_defaultLanguages.contains(key);
                           return Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                             child: Row(
                               children: [
-                                Text(key,
+                                Expanded(
+                                  child: Text(
+                                    key,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Color(0xFF475467))),
-                                const Spacer(),
+                                      fontSize: 16,
+                                      color: Color(0xFF475467),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                if (isCustom) ...[
+                                  IconButton(
+                                    onPressed: () {
+                                      _showEditItemDialog(
+                                        title: 'Edit Language',
+                                        initialValue: key,
+                                        onSaved: (val) {
+                                          setState(() {
+                                            _renameMapKey(_languages, key, val);
+                                          });
+                                        },
+                                      );
+                                    },
+                                    icon: const Icon(Icons.edit_outlined,
+                                        size: 18, color: Color(0xFF98A2B3)),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _languages.remove(key);
+                                      });
+                                    },
+                                    icon: const Icon(Icons.delete_outline,
+                                        size: 18, color: Color(0xFF98A2B3)),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                  ),
+                                  const SizedBox(width: 8),
+                                ]
+                                else
+                                  const SizedBox(width: 12),
                                 SizedBox(
                                   width: 24,
                                   height: 24,
@@ -707,6 +871,33 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
         onAdd: onAdded,
       ),
     );
+  }
+
+  Future<void> _showEditItemDialog({
+    required String title,
+    required String initialValue,
+    required Function(String) onSaved,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AddItemDialog(
+        title: title,
+        initialValue: initialValue,
+        confirmLabel: 'Save',
+        onAdd: onSaved,
+      ),
+    );
+  }
+
+  void _renameMapKey(Map<String, bool> map, String oldKey, String newKey) {
+    final trimmed = newKey.trim();
+    if (trimmed.isEmpty || oldKey == trimmed) {
+      return;
+    }
+    final oldValue = map[oldKey] ?? false;
+    final existingValue = map[trimmed] ?? false;
+    map.remove(oldKey);
+    map[trimmed] = existingValue || oldValue;
   }
 
   Widget _buildInputContainer({required Widget child}) {

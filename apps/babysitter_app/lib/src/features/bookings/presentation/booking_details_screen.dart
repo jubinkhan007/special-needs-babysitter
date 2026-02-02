@@ -258,36 +258,34 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
             children: [
               // Message Button
               Expanded(
-                child: SizedBox(
-                  height: AppTokens.buttonHeight,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      if (details.sitterId.isNotEmpty) {
-                        final args = ChatThreadArgs(
-                          otherUserId: details.sitterId,
-                          otherUserName: details.sitterName,
-                          otherUserAvatarUrl: details.avatarUrl,
-                          isVerified: details.isVerified,
-                        );
-                        context.push(
-                          '/parent/messages/chat/${details.sitterId}',
-                          extra: args,
-                        );
-                      }
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: AppTokens.primaryBlue),
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppTokens.buttonRadius),
-                      ),
+                child: OutlinedButton(
+                  onPressed: () {
+                    if (details.sitterId.isNotEmpty) {
+                      final args = ChatThreadArgs(
+                        otherUserId: details.sitterId,
+                        otherUserName: details.sitterName,
+                        otherUserAvatarUrl: details.avatarUrl,
+                        isVerified: details.isVerified,
+                      );
+                      context.push(
+                        '/parent/messages/chat/${details.sitterId}',
+                        extra: args,
+                      );
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(double.infinity, AppTokens.buttonHeight),
+                    side: BorderSide(color: AppTokens.primaryBlue),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppTokens.buttonRadius),
                     ),
-                    child: Text(
-                      'Message',
-                      style: TextStyle(
-                        color: AppTokens.primaryBlue,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                  child: Text(
+                    'Message',
+                    style: TextStyle(
+                      color: AppTokens.primaryBlue,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -295,24 +293,22 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
               const SizedBox(width: 12),
               // Cancel Button
               Expanded(
-                child: SizedBox(
-                  height: AppTokens.buttonHeight,
-                  child: ElevatedButton(
-                    onPressed: () => _cancelBooking(details.id),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppTokens.buttonRadius),
-                      ),
-                      elevation: 0,
+                child: ElevatedButton(
+                  onPressed: () => _cancelBooking(details.id),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, AppTokens.buttonHeight),
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(AppTokens.buttonRadius),
                     ),
-                    child: const Text(
-                      'Cancel Booking',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Cancel Booking',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),

@@ -91,6 +91,9 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
     String? emergencyContactName,
     String? emergencyContactPhone,
     String? emergencyContactRelation,
+    String? emergencyContactEmail,
+    String? emergencyContactAddress,
+    String? emergencyContactInstructions,
   }) {
     state = state.copyWith(
       streetAddress: streetAddress,
@@ -101,6 +104,9 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
       emergencyContactName: emergencyContactName,
       emergencyContactPhone: emergencyContactPhone,
       emergencyContactRelation: emergencyContactRelation,
+      emergencyContactEmail: emergencyContactEmail,
+      emergencyContactAddress: emergencyContactAddress,
+      emergencyContactInstructions: emergencyContactInstructions,
     );
   }
 
