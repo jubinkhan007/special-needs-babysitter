@@ -9,6 +9,9 @@ class ChatMessageUiModel {
   final String? headerMetaLeft; // "Krystina • 4:27 PM"
   final String? headerMetaRight; // "4:27 PM • You"
   final String bubbleText;
+  final String? mediaUrl;
+  final String? mediaType;
+  final String? fileName;
   final bool isMe;
   final bool showAvatar;
   final String? avatarUrl;
@@ -26,6 +29,9 @@ class ChatMessageUiModel {
     this.headerMetaLeft,
     this.headerMetaRight,
     this.bubbleText = '',
+    this.mediaUrl,
+    this.mediaType,
+    this.fileName,
     required this.isMe,
     this.showAvatar = false,
     this.avatarUrl,

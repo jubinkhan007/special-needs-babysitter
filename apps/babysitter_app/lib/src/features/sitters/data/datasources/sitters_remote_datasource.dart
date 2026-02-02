@@ -113,29 +113,37 @@ class SittersRemoteDataSource {
     }
   }
 
-  Future<void> removeBookmarkedSitter(String sitterId) async {
+  Future<void> removeBookmarkedSitter(String sitterUserId) async {
     try {
+      print(
+          'DEBUG removeBookmarkedSitter: Calling DELETE /parents/bookmarked-sitters/$sitterUserId');
       final response = await _dio.delete(
-        '/parents/bookmarked-sitters',
-        data: {'sitterUserId': sitterId},
+        '/parents/bookmarked-sitters/$sitterUserId',
       );
+      print('DEBUG removeBookmarkedSitter: Response status=${response.statusCode}');
+      print('DEBUG removeBookmarkedSitter: Response data=${response.data}');
       if (response.data['success'] != true) {
         throw Exception('Failed to remove bookmark');
       }
     } catch (e) {
+      print('DEBUG removeBookmarkedSitter: Error=$e');
       rethrow;
     }
   }
 
   Future<List<SitterDto>> getSavedSitters() async {
     try {
+      print('DEBUG getSavedSitters: Calling GET /parents/bookmarked-sitters');
       final response = await _dio.get('/parents/bookmarked-sitters');
+      print('DEBUG getSavedSitters: Response data = ${response.data}');
       if (response.data['success'] == true) {
         final List<dynamic> list = response.data['data']['sitters'] ?? [];
+        print('DEBUG getSavedSitters: Found ${list.length} sitters');
         return list.map((e) => _mapBookmarkedSitterToDto(e)).toList();
       }
       return [];
     } catch (e) {
+      print('DEBUG getSavedSitters: Error = $e');
       rethrow;
     }
   }
@@ -143,7 +151,11 @@ class SittersRemoteDataSource {
   /// Maps the bookmarked sitter API response to SitterDto.
   /// The API returns sitter data with nested userId object containing user details.
   SitterDto _mapBookmarkedSitterToDto(Map<String, dynamic> json) {
+    print('DEBUG _mapBookmarkedSitterToDto: Raw JSON = $json');
     final userIdData = json['userId'] as Map<String, dynamic>? ?? {};
+    print('DEBUG _mapBookmarkedSitterToDto: userIdData = $userIdData');
+    print('DEBUG _mapBookmarkedSitterToDto: profile _id (json[_id]) = ${json['_id']}');
+    print('DEBUG _mapBookmarkedSitterToDto: user _id (userIdData[_id]) = ${userIdData['_id']}');
 
     // Photo URL can be in userId object or directly on sitter profile
     final photoUrl =

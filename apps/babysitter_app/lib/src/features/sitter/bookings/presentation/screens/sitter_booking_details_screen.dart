@@ -321,28 +321,32 @@ class _SitterBookingDetailsScreenState
                                           color: const Color(0xFF667085)),
                                     ),
                                     SizedBox(width: 12.w),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          child.firstName,
-                                          style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xFF344054),
-                                            fontFamily: 'Inter',
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            child.firstName,
+                                            style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w600,
+                                              color: const Color(0xFF344054),
+                                              fontFamily: 'Inter',
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ),
-                                        Text(
-                                          '${child.age} years old',
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: const Color(0xFF667085),
-                                            fontFamily: 'Inter',
+                                          Text(
+                                            '${child.age} years old',
+                                            style: TextStyle(
+                                              fontSize: 12.sp,
+                                              color: const Color(0xFF667085),
+                                              fontFamily: 'Inter',
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -454,15 +458,18 @@ class _SitterBookingDetailsScreenState
                             ),
                             const Spacer(),
                             if (isCompleted) ...[
-                              Text(
-                                scheduledDate.isNotEmpty
-                                    ? 'Scheduled: $scheduledDate'
-                                    : 'Scheduled',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: const Color(0xFF667085),
-                                  fontFamily: 'Inter',
+                              Flexible(
+                                child: Text(
+                                  scheduledDate.isNotEmpty
+                                      ? 'Scheduled: $scheduledDate'
+                                      : 'Scheduled',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: const Color(0xFF667085),
+                                    fontFamily: 'Inter',
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               SizedBox(width: 8.w),
@@ -557,12 +564,11 @@ class _SitterBookingDetailsScreenState
                   ),
                 ],
               ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: ElevatedButton(
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  children: [
+                    ElevatedButton(
                       onPressed: () {
                         final reviewArgs = _buildReviewArgs(
                           jobDetails.applicationId,
@@ -571,6 +577,7 @@ class _SitterBookingDetailsScreenState
                         context.push(Routes.sitterReview, extra: reviewArgs);
                       },
                       style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF87C4F2),
                         foregroundColor: Colors.white,
                         elevation: 0,
@@ -587,12 +594,8 @@ class _SitterBookingDetailsScreenState
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: OutlinedButton(
+                    SizedBox(height: 12.h),
+                    OutlinedButton(
                       onPressed: () {
                         AppToast.show(
                           context,
@@ -602,6 +605,7 @@ class _SitterBookingDetailsScreenState
                         );
                       },
                       style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 48.h),
                         foregroundColor: const Color(0xFF1D2939),
                         side: const BorderSide(color: Color(0xFFD0D5DD)),
                         shape: RoundedRectangleBorder(
@@ -617,8 +621,8 @@ class _SitterBookingDetailsScreenState
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           else if (isCompleted && !isActuallyCompleted)
@@ -635,12 +639,11 @@ class _SitterBookingDetailsScreenState
                   ),
                 ],
               ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: ElevatedButton(
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  children: [
+                    ElevatedButton(
                       onPressed: () {
                         _showMarkCompleteDialog(
                           context,
@@ -649,6 +652,7 @@ class _SitterBookingDetailsScreenState
                         );
                       },
                       style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF87C4F2),
                         foregroundColor: Colors.white,
                         elevation: 0,
@@ -665,12 +669,8 @@ class _SitterBookingDetailsScreenState
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: OutlinedButton(
+                    SizedBox(height: 12.h),
+                    OutlinedButton(
                       onPressed: () {
                         AppToast.show(
                           context,
@@ -680,6 +680,7 @@ class _SitterBookingDetailsScreenState
                         );
                       },
                       style: OutlinedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 48.h),
                         foregroundColor: const Color(0xFF1D2939),
                         side: const BorderSide(color: Color(0xFFD0D5DD)),
                         shape: RoundedRectangleBorder(
@@ -695,8 +696,8 @@ class _SitterBookingDetailsScreenState
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           else
@@ -713,46 +714,46 @@ class _SitterBookingDetailsScreenState
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (clockInState.message != null &&
-                      clockInState.message!.isNotEmpty) ...[
-                    Container(
-                      width: double.infinity,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                      margin: EdgeInsets.only(bottom: 12.h),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFEF3F2),
-                        borderRadius: BorderRadius.circular(8.r),
-                        border: Border.all(color: const Color(0xFFFECDCA)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.info_outline,
-                              size: 16.sp, color: const Color(0xFFB42318)),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            child: Text(
-                              clockInState.message!,
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: const Color(0xFFB42318),
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Inter',
+              child: SafeArea(
+                top: false,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (clockInState.message != null &&
+                        clockInState.message!.isNotEmpty) ...[
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 8.h),
+                        margin: EdgeInsets.only(bottom: 12.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEF3F2),
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(color: const Color(0xFFFECDCA)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_outline,
+                                size: 16.sp, color: const Color(0xFFB42318)),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              child: Text(
+                                clockInState.message!,
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: const Color(0xFFB42318),
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'Inter',
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 52.h,
+                    ],
+                    Row(
+                      children: [
+                        Expanded(
                           child: ElevatedButton(
                             onPressed:
                                 (clockInState.canClockIn && !_isClockingIn)
@@ -769,6 +770,7 @@ class _SitterBookingDetailsScreenState
                                       }
                                     : null,
                             style: ElevatedButton.styleFrom(
+                              minimumSize: Size(double.infinity, 52.h),
                               backgroundColor: const Color(0xFF87C4F2),
                               foregroundColor: Colors.white,
                               disabledBackgroundColor: Colors.grey.shade300,
@@ -800,28 +802,28 @@ class _SitterBookingDetailsScreenState
                                   ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 12.w),
-                      Container(
-                        width: 48.w,
-                        height: 48.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: const Color(0xFFD0D5DD)),
-                          borderRadius: BorderRadius.circular(8.r),
+                        SizedBox(width: 12.w),
+                        Container(
+                          width: 48.w,
+                          height: 48.h,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color(0xFFD0D5DD)),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.more_vert,
+                                color: const Color(0xFF667085), size: 20.w),
+                            onPressed: () {
+                              // TODO: Show more options menu
+                              _showMoreOptionsMenu(context, jobDetails);
+                            },
+                          ),
                         ),
-                        child: IconButton(
-                          icon: Icon(Icons.more_vert,
-                              color: const Color(0xFF667085), size: 20.w),
-                          onPressed: () {
-                            // TODO: Show more options menu
-                            _showMoreOptionsMenu(context, jobDetails);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
         ],

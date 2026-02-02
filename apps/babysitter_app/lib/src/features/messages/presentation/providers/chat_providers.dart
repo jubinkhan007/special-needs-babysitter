@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:realtime/realtime.dart';
+
+import '../../data/chat_media_upload_remote_datasource.dart';
 
 // Remote Data Source
 final chatRemoteDataSourceProvider = Provider<ChatRemoteDataSource>((ref) {
@@ -14,6 +17,11 @@ final chatRemoteDataSourceProvider = Provider<ChatRemoteDataSource>((ref) {
 // Repository
 final chatRepositoryProvider = Provider<ChatRepository>((ref) {
   return ChatRepositoryImpl(ref.watch(chatRemoteDataSourceProvider));
+});
+
+final chatMediaUploadDataSourceProvider =
+    Provider<ChatMediaUploadRemoteDataSource>((ref) {
+  return ChatMediaUploadRemoteDataSource(ref.watch(authDioProvider));
 });
 
 // Use Case
@@ -132,6 +140,35 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
       ref.invalidate(chatConversationsProvider);
     } catch (e) {
       print('DEBUG: Error sending media message: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> sendAttachment({
+    required File file,
+    String? text,
+  }) async {
+    final repository = ref.read(chatRepositoryProvider);
+    final uploader = ref.read(chatMediaUploadDataSourceProvider);
+    final otherUserId = arg;
+
+    try {
+      print('DEBUG: Uploading chat attachment for $otherUserId');
+      final uploadResult = await uploader.uploadFile(file);
+
+      final sentMessage = await repository.sendMediaMessage(
+        recipientUserId: otherUserId,
+        mediaUrl: uploadResult.publicUrl,
+        mediaType: uploadResult.mediaType,
+        text: text,
+      );
+
+      final currentMessages = state.valueOrNull ?? [];
+      state = AsyncValue.data([...currentMessages, sentMessage]);
+
+      ref.invalidate(chatConversationsProvider);
+    } catch (e) {
+      print('DEBUG: Error sending attachment: $e');
       rethrow;
     }
   }

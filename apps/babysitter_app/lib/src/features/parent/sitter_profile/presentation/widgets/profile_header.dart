@@ -71,7 +71,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
 
     // Content spacing
     const contentTopPadding = 44.0; // space from seam to name block (tune)
-    const messageHeight = 40.0;
+    const messageHeight = 34.0;
     const messageRadius = 20.0;
     // --------------------------
 
@@ -79,7 +79,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
 
     return SizedBox(
       // Total height should include blue + the first content line block under it
-      height: top + blueHeight + 70,
+      height: top + blueHeight + 95,
       child: Stack(
         clipBehavior: Clip.none,
         children: [

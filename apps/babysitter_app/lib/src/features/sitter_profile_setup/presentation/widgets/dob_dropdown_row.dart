@@ -85,7 +85,7 @@ class DobDropdownRow extends StatelessWidget {
         },
         child: Container(
           height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
@@ -101,14 +101,17 @@ class DobDropdownRow extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  color: isActive
-                      ? const Color(0xFF1A1A1A)
-                      : const Color(0xFF667085),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: isActive
+                        ? const Color(0xFF1A1A1A)
+                        : const Color(0xFF667085),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               const Icon(Icons.keyboard_arrow_down,

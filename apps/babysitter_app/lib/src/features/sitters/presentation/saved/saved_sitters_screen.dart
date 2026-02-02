@@ -124,12 +124,20 @@ class _SavedSittersScreenState extends ConsumerState<SavedSittersScreen> {
                             sitter: sitter,
                             isBookmarked: true, // Always true in saved list
                             onViewProfile: () {
-                              context.push(Routes.sitterProfilePath(sitter.userId));
+                              // Use sitter.id (sitter profile ID) not sitter.userId
+                              context.push(Routes.sitterProfilePath(sitter.id));
                             },
-                            onBookmarkTap: () {
-                              ref
+                            onBookmarkTap: () async {
+                              final success = await ref
                                   .read(savedSittersControllerProvider.notifier)
                                   .removeBookmark(sitter.userId);
+                              if (context.mounted && !success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed to remove sitter'),
+                                  ),
+                                );
+                              }
                             },
                           );
                         },

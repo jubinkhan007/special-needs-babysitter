@@ -182,6 +182,8 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
               )
             : const Text(
                 'Submit',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,

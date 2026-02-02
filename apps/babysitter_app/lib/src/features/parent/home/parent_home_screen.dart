@@ -211,15 +211,22 @@ class ParentHomeScreen extends ConsumerWidget {
                         return SavedSitterCard(
                           sitter: sitter,
                           onTap: () {
-                            context.push(Routes.sitterProfilePath(sitter.userId));
+                            context.push(Routes.sitterProfilePath(sitter.id));
                           },
-                          onBookmarkTap: () {
-                            ref
+                          onBookmarkTap: () async {
+                            final success = await ref
                                 .read(savedSittersControllerProvider.notifier)
                                 .removeBookmark(sitter.userId);
-                            AppToast.show(context,
-                              const SnackBar(content: Text('Sitter removed from saved list')),
-                            );
+                            if (context.mounted) {
+                              AppToast.show(
+                                context,
+                                SnackBar(
+                                  content: Text(success
+                                      ? 'Sitter removed from saved list'
+                                      : 'Failed to remove sitter'),
+                                ),
+                              );
+                            }
                           },
                         );
                       },

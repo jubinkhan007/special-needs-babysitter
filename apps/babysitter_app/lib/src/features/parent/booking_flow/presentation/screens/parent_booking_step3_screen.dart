@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import '../../data/providers/booking_flow_provider.dart';
+import '../../data/models/booking_flow_state.dart';
 import '../widgets/booking_step_header.dart';
 import '../widgets/booking_primary_bottom_button.dart';
 import '../widgets/booking_text_field.dart';
@@ -35,6 +36,21 @@ class _ParentBookingStep3ScreenState
   bool _isGeocoding = false;
   bool _addressVerified = false;
   String? _verificationMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load existing state from provider
+    final state = ref.read(bookingFlowProvider);
+    _streetController.text = state.streetAddress ?? '';
+    _aptController.text = state.aptUnit ?? '';
+    _cityController.text = state.city ?? '';
+    _stateController.text = state.state ?? '';
+    _zipController.text = state.zipCode ?? '';
+    _emergencyNameController.text = state.emergencyContactName ?? '';
+    _emergencyPhoneController.text = state.emergencyContactPhone ?? '';
+    _emergencyRelationController.text = state.emergencyContactRelation ?? '';
+  }
 
   @override
   void dispose() {
@@ -137,6 +153,34 @@ class _ParentBookingStep3ScreenState
 
   @override
   Widget build(BuildContext context) {
+    // Listen for state changes to sync when navigating back
+    ref.listen<BookingFlowState>(bookingFlowProvider, (previous, next) {
+      if (previous?.streetAddress != next.streetAddress) {
+        _streetController.text = next.streetAddress ?? '';
+      }
+      if (previous?.aptUnit != next.aptUnit) {
+        _aptController.text = next.aptUnit ?? '';
+      }
+      if (previous?.city != next.city) {
+        _cityController.text = next.city ?? '';
+      }
+      if (previous?.state != next.state) {
+        _stateController.text = next.state ?? '';
+      }
+      if (previous?.zipCode != next.zipCode) {
+        _zipController.text = next.zipCode ?? '';
+      }
+      if (previous?.emergencyContactName != next.emergencyContactName) {
+        _emergencyNameController.text = next.emergencyContactName ?? '';
+      }
+      if (previous?.emergencyContactPhone != next.emergencyContactPhone) {
+        _emergencyPhoneController.text = next.emergencyContactPhone ?? '';
+      }
+      if (previous?.emergencyContactRelation != next.emergencyContactRelation) {
+        _emergencyRelationController.text = next.emergencyContactRelation ?? '';
+      }
+    });
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF0F9FF), // Light blue background
       body: Column(

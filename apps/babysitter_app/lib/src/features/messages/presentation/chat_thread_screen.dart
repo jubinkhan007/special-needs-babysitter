@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../theme/app_tokens.dart';
 import '../domain/chat_thread_args.dart';
@@ -33,6 +37,7 @@ class ChatThreadScreen extends ConsumerStatefulWidget {
 class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
+  final _imagePicker = ImagePicker();
   bool _isSending = false;
 
   @override
@@ -81,6 +86,114 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
         });
       }
     }
+  }
+
+  Future<void> _sendAttachment(File file) async {
+    if (_isSending) return;
+
+    setState(() {
+      _isSending = true;
+    });
+
+    final caption = _messageController.text.trim();
+
+    try {
+      await ref
+          .read(chatMessagesProvider(widget.args.otherUserId).notifier)
+          .sendAttachment(
+            file: file,
+            text: caption.isNotEmpty ? caption : null,
+          );
+      _messageController.clear();
+      _scrollToBottom();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to send attachment: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _pickAttachment() async {
+    if (_isSending) return;
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.any,
+    );
+
+    if (result == null || result.files.isEmpty) return;
+    final path = result.files.single.path;
+    if (path == null || path.isEmpty) return;
+
+    await _sendAttachment(File(path));
+  }
+
+  Future<void> _pickFromCamera() async {
+    if (_isSending) return;
+    final picked = await _imagePicker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+    );
+    if (picked == null) return;
+
+    await _sendAttachment(File(picked.path));
+  }
+
+  Future<void> _pickFromGallery() async {
+    if (_isSending) return;
+    final picked = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    if (picked == null) return;
+
+    await _sendAttachment(File(picked.path));
+  }
+
+  Future<void> _showCameraPicker() async {
+    if (_isSending) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.photo_camera_outlined),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    _pickFromCamera();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_outlined),
+                  title: const Text('Photo Library'),
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    _pickFromGallery();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -202,6 +315,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                 ChatComposerBar(
                   controller: _messageController,
                   onSend: _sendMessage,
+                  onAttach: _pickAttachment,
+                  onCamera: _showCameraPicker,
                 ),
               ],
             ),
@@ -241,12 +356,20 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           message.recipientUserId == widget.args.otherUserId;
       final messageText = message.textContent?.trim().isNotEmpty == true
           ? message.textContent!
-          : (message.mediaUrl ?? '');
+          : '';
+      final hasMedia =
+          message.mediaUrl?.isNotEmpty == true &&
+          message.type != ChatMessageType.text;
+      final mediaType = hasMedia ? message.type.name : null;
+      final fileName = hasMedia ? _fileNameFromUrl(message.mediaUrl!) : null;
 
       uiModels.add(ChatMessageUiModel(
         id: message.id,
         isMe: isMe,
         bubbleText: messageText,
+        mediaUrl: hasMedia ? message.mediaUrl : null,
+        mediaType: mediaType,
+        fileName: fileName,
         showDaySeparator: showDaySeparator,
         dayLabel: _getDayLabel(message.createdAt),
         headerMetaLeft: !isMe
@@ -261,6 +384,15 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     }
 
     return uiModels;
+  }
+
+  String _fileNameFromUrl(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri != null && uri.pathSegments.isNotEmpty) {
+      return uri.pathSegments.last.split('?').first;
+    }
+    final parts = url.split('/');
+    return parts.isNotEmpty ? parts.last.split('?').first : 'Attachment';
   }
 
   String _formatDate(DateTime date) {

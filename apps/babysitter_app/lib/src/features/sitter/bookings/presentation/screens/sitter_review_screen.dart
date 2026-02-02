@@ -191,8 +191,10 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                     )
                   : Text(
                       'Submit Review',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Inter',
                       ),

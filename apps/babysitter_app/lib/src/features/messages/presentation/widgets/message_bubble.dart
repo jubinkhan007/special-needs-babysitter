@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../theme/app_tokens.dart';
 import '../models/chat_message_ui_model.dart';
 
@@ -87,13 +88,9 @@ class MessageBubble extends StatelessWidget {
                             : Radius.circular(AppTokens.chatBubbleRadius),
                       ),
                     ),
-                    child: Text(
-                      uiModel.bubbleText,
-                      style: AppTokens.chatMessageTextStyle.copyWith(
-                        color: isMe
-                            ? AppTokens.chatBubbleOutgoingText
-                            : AppTokens.textPrimary,
-                      ),
+                    child: _MessageBubbleContent(
+                      uiModel: uiModel,
+                      isMe: isMe,
                     ),
                   ),
                 ),
@@ -114,6 +111,107 @@ class MessageBubble extends StatelessWidget {
                 ),
               ],
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MessageBubbleContent extends StatelessWidget {
+  final ChatMessageUiModel uiModel;
+  final bool isMe;
+
+  const _MessageBubbleContent({
+    required this.uiModel,
+    required this.isMe,
+  });
+
+  bool get _hasMedia =>
+      uiModel.mediaUrl != null &&
+      uiModel.mediaUrl!.isNotEmpty &&
+      (uiModel.mediaType ?? 'text') != 'text';
+
+  bool get _isImage => uiModel.mediaType == 'image';
+
+  IconData _mediaIcon() {
+    switch (uiModel.mediaType) {
+      case 'video':
+        return Icons.videocam_outlined;
+      case 'audio':
+        return Icons.audiotrack_outlined;
+      case 'file':
+        return Icons.insert_drive_file_outlined;
+      default:
+        return Icons.attach_file;
+    }
+  }
+
+  Future<void> _openMediaUrl() async {
+    final url = uiModel.mediaUrl;
+    if (url == null || url.isEmpty) return;
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor =
+        isMe ? AppTokens.chatBubbleOutgoingText : AppTokens.textPrimary;
+    final textStyle = AppTokens.chatMessageTextStyle.copyWith(color: textColor);
+
+    if (!_hasMedia) {
+      return Text(uiModel.bubbleText, style: textStyle);
+    }
+
+    if (_isImage) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: _openMediaUrl,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                uiModel.mediaUrl!,
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 200,
+                  height: 200,
+                  color: Colors.black12,
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.broken_image_outlined),
+                ),
+              ),
+            ),
+          ),
+          if (uiModel.bubbleText.trim().isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(uiModel.bubbleText, style: textStyle),
+          ],
+        ],
+      );
+    }
+
+    final fileLabel = uiModel.fileName ??
+        (uiModel.mediaUrl?.split('/').last.split('?').first ?? 'Attachment');
+
+    return GestureDetector(
+      onTap: _openMediaUrl,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_mediaIcon(), size: 20, color: textColor),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              fileLabel,
+              style: textStyle,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),

@@ -272,10 +272,6 @@ class BookingFlowState {
     if (totalCost < 5.0) {
       return 'Minimum booking amount is \$5.00. Please increase hours or rate.';
     }
-    // Maximum single booking amount is $999.00 (safety limit)
-    if (totalCost > 999.0) {
-      return 'Maximum booking amount is \$999.00. Please reduce hours or rate.';
-    }
     return null;
   }
 

@@ -25,6 +25,8 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
 
   final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
   final DateFormat _timeFormat = DateFormat('h:mm a');
+  final DateFormat _apiDateFormat = DateFormat('yyyy-MM-dd');
+  final DateFormat _apiTimeFormat = DateFormat('HH:mm');
 
   bool _isRange = false;
   DateTime? _singleDate;
@@ -92,7 +94,12 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
       final dt = _timeFormat.parse(value);
       return TimeOfDay.fromDateTime(dt);
     } catch (_) {
-      return null;
+      try {
+        final dt = _apiTimeFormat.parse(value);
+        return TimeOfDay.fromDateTime(dt);
+      } catch (_) {
+        return null;
+      }
     }
   }
 
@@ -106,6 +113,16 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
     final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
     return _timeFormat.format(dt);
+  }
+
+  String _formatDateForApi(DateTime date) {
+    return _apiDateFormat.format(date);
+  }
+
+  String _formatTimeForApi(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    return _apiTimeFormat.format(dt);
   }
 
   Future<void> _pickDate({required bool isStart}) async {
@@ -202,9 +219,9 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
 
     while (!current.isAfter(last)) {
       availability.add({
-        'date': _dateFormat.format(current),
-        'startTime': _formatTime(_startTime),
-        'endTime': _formatTime(_endTime),
+        'date': _formatDateForApi(current),
+        'startTime': _formatTimeForApi(_startTime!),
+        'endTime': _formatTimeForApi(_endTime!),
         'noBookings': _noBookings,
       });
       current = current.add(const Duration(days: 1));

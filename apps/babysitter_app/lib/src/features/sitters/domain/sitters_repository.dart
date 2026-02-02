@@ -20,7 +20,7 @@ abstract class SittersRepository {
   });
   Future<SitterModel> getSitterDetails(String id);
   Future<void> bookmarkSitter(String sitterId);
-  Future<void> removeBookmarkedSitter(String sitterId);
+  Future<void> removeBookmarkedSitter(String sitterUserId);
   Future<List<SitterListItemModel>> getSavedSitters();
   Future<Map<String, dynamic>> getUserProfile(String userId);
 }

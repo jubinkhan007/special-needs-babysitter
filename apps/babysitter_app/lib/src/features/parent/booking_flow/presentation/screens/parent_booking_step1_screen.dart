@@ -33,6 +33,27 @@ class _ParentBookingStep1ScreenState
   final TextEditingController _payRateController =
       TextEditingController(text: '20');
 
+  // Validation constants
+  static const double _minPayRate = 5.0;
+  static const double _maxPayRate = 99.0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load existing state from provider
+    final state = ref.read(bookingFlowProvider);
+    _additionalDetailsController.text = state.additionalDetails ?? '';
+    if (state.payRate > 0) {
+      _payRateController.text = state.payRate.toStringAsFixed(0);
+    }
+    if (state.selectedChildIds.isNotEmpty) {
+      _selectedChildId = state.selectedChildIds.first;
+      _selectedChildName = state.selectedChildNames.isNotEmpty
+          ? state.selectedChildNames.first
+          : null;
+    }
+  }
+
   @override
   void dispose() {
     _additionalDetailsController.dispose();
@@ -111,10 +132,42 @@ class _ParentBookingStep1ScreenState
       );
       return;
     }
-    // Save to provider
+    
+    // Validate pay rate
     final payRate = double.tryParse(
             _payRateController.text.replaceAll(RegExp(r'[^\d.]'), '')) ??
         0;
+    
+    if (payRate < _minPayRate) {
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text('Pay rate must be at least \$${_minPayRate.toStringAsFixed(0)}'),
+        ),
+      );
+      return;
+    }
+    
+    if (payRate > _maxPayRate) {
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text('Pay rate cannot exceed \$${_maxPayRate.toStringAsFixed(0)}'),
+        ),
+      );
+      return;
+    }
+    
+    // Validate additional details
+    if (_additionalDetailsController.text.trim().isEmpty) {
+      AppToast.show(
+        context,
+        const SnackBar(
+          content: Text('Please enter additional details.'),
+        ),
+      );
+      return;
+    }
 
     // Build transportation data from selected child
     String? transportationMode;

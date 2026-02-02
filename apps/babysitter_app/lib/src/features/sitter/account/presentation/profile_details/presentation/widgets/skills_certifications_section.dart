@@ -160,12 +160,15 @@ class _CertificationChip extends StatelessWidget {
             color: Color(0xFF62A8FF),
           ),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF62A8FF),
+          Flexible(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF62A8FF),
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           if (isPending) ...[

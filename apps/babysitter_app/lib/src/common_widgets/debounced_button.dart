@@ -119,7 +119,7 @@ class _DebouncedGestureDetectorState extends State<DebouncedGestureDetector> {
 }
 
 /// An ElevatedButton that debounces tap events.
-class DebouncedElevatedButton extends StatelessWidget {
+class DebouncedElevatedButton extends StatefulWidget {
   final String label;
   final VoidCallback onPressed;
   final Duration debounceDuration;
@@ -136,27 +136,40 @@ class DebouncedElevatedButton extends StatelessWidget {
   });
 
   @override
+  State<DebouncedElevatedButton> createState() => _DebouncedElevatedButtonState();
+}
+
+class _DebouncedElevatedButtonState extends State<DebouncedElevatedButton> {
+  DateTime? _lastTap;
+
+  void _handleTap() {
+    if (widget.isLoading) return;
+
+    final now = DateTime.now();
+    if (_lastTap != null &&
+        now.difference(_lastTap!) < widget.debounceDuration) {
+      return; // Ignore rapid taps
+    }
+    _lastTap = now;
+    widget.onPressed();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return DebouncedGestureDetector(
-      onTap: isLoading ? () {} : onPressed,
-      debounceDuration: debounceDuration,
-      child: AbsorbPointer(
-        absorbing: isLoading,
-        child: ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: style,
-          child: isLoading
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
-              : Text(label),
-        ),
-      ),
+    return ElevatedButton(
+      // Use the debounced handler directly on the button
+      onPressed: widget.isLoading ? null : _handleTap,
+      style: widget.style,
+      child: widget.isLoading
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            )
+          : Text(widget.label),
     );
   }
 }

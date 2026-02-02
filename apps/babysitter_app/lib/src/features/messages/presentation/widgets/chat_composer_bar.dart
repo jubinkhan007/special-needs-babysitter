@@ -5,8 +5,16 @@ import '../../../../theme/app_tokens.dart';
 class ChatComposerBar extends StatelessWidget {
   final TextEditingController? controller;
   final VoidCallback? onSend;
+  final VoidCallback? onAttach;
+  final VoidCallback? onCamera;
 
-  const ChatComposerBar({super.key, this.controller, this.onSend});
+  const ChatComposerBar({
+    super.key,
+    this.controller,
+    this.onSend,
+    this.onAttach,
+    this.onCamera,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +70,7 @@ class ChatComposerBar extends StatelessWidget {
                       ),
                       // Inner Actions
                       IconButton(
-                        onPressed: () {},
+                        onPressed: onCamera,
                         icon: const Icon(Icons
                             .camera_alt_outlined), // Matches screenshot square camera
                         color: AppTokens.composerIconColor,
@@ -71,7 +79,7 @@ class ChatComposerBar extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: onAttach,
                         icon: const Icon(Icons.attach_file), // Paperclip
                         color: AppTokens
                             .composerIconColor, // Icon rotation might be needed if standard is vertical

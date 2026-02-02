@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../routing/routes.dart';
 import '../providers/job_post_providers.dart';
+import '../controllers/job_post_controller.dart';
 import '../widgets/job_draft_saved_dialog.dart';
 import 'job_post_step_header.dart';
 import '../../../../booking_flow/data/providers/bookings_di.dart';
@@ -139,7 +140,9 @@ class _JobPostStep5ReviewScreenState
 
       // Get pay rate from state
       final state = ref.read(jobPostControllerProvider);
-      final amount = state.payRate * 1.0; // Using pay rate as amount for now
+      final amount = _calculateTotalAmount(state);
+      print(
+          'DEBUG: JobPostStep5 calculated amount: $amount (rate=${state.payRate}, start=${state.startDate} ${state.startTime}, end=${state.endDate} ${state.endTime})');
 
       if (mounted) {
         setState(() => _isProcessingPayment = false);
@@ -178,6 +181,83 @@ class _JobPostStep5ReviewScreenState
         );
       }
     }
+  }
+
+  double _calculateTotalAmount(JobPostState state) {
+    final totalHours = _calculateTotalHours(
+      rawStartDate: state.rawStartDate,
+      rawEndDate: state.rawEndDate,
+      startTime: state.startTime,
+      endTime: state.endTime,
+    );
+
+    if (totalHours <= 0) {
+      return state.payRate;
+    }
+
+    return totalHours * state.payRate;
+  }
+
+  double _calculateTotalHours({
+    required DateTime? rawStartDate,
+    required DateTime? rawEndDate,
+    required String startTime,
+    required String endTime,
+  }) {
+    if (rawStartDate == null ||
+        rawEndDate == null ||
+        startTime.isEmpty ||
+        endTime.isEmpty) {
+      return 0;
+    }
+
+    final startTimeOfDay = _parseTimeString(startTime);
+    final endTimeOfDay = _parseTimeString(endTime);
+    if (startTimeOfDay == null || endTimeOfDay == null) {
+      return 0;
+    }
+
+    final startDateTime = DateTime(
+      rawStartDate.year,
+      rawStartDate.month,
+      rawStartDate.day,
+      startTimeOfDay.hour,
+      startTimeOfDay.minute,
+    );
+    final endDateTime = DateTime(
+      rawEndDate.year,
+      rawEndDate.month,
+      rawEndDate.day,
+      endTimeOfDay.hour,
+      endTimeOfDay.minute,
+    );
+
+    final duration = endDateTime.difference(startDateTime);
+    if (duration.inMinutes <= 0) {
+      return 0;
+    }
+
+    return duration.inMinutes / 60.0;
+  }
+
+  TimeOfDay? _parseTimeString(String timeStr) {
+    final cleanTime = timeStr.trim();
+    final parts = cleanTime.split(' ');
+    if (parts.length != 2) return null;
+
+    final timeParts = parts[0].split(':');
+    if (timeParts.length != 2) return null;
+
+    final period = parts[1].toUpperCase();
+    final hour = int.tryParse(timeParts[0]);
+    final minute = int.tryParse(timeParts[1]);
+    if (hour == null || minute == null) return null;
+
+    int resolvedHour = hour;
+    if (period == 'PM' && resolvedHour != 12) resolvedHour += 12;
+    if (period == 'AM' && resolvedHour == 12) resolvedHour = 0;
+
+    return TimeOfDay(hour: resolvedHour, minute: minute);
   }
 
   @override

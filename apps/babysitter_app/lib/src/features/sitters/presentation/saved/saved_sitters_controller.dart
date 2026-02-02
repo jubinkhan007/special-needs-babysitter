@@ -71,17 +71,32 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
     }
   }
 
-  /// Explicitly remove a bookmark
-  Future<void> removeBookmark(String sitterId) async {
+  /// Explicitly remove a bookmark.
+  /// Returns true if successful, false if failed (for UI feedback).
+  Future<bool> removeBookmark(String sitterUserId) async {
+    final currentList = state.valueOrNull ?? [];
+
+    print('DEBUG removeBookmark: sitterUserId=$sitterUserId');
+    print('DEBUG removeBookmark: currentList has ${currentList.length} items');
+    for (final s in currentList) {
+      print('DEBUG removeBookmark: item id=${s.id}, userId=${s.userId}, name=${s.name}');
+    }
+
+    // Optimistic update FIRST for responsive UI
+    final newList =
+        currentList.where((s) => s.userId != sitterUserId).toList();
+    print('DEBUG removeBookmark: newList has ${newList.length} items after filter');
+    state = AsyncValue.data(newList);
+
     try {
-      await _repository.removeBookmarkedSitter(sitterId);
-      // Optimistic update
-      final currentList = state.valueOrNull ?? [];
-      state = AsyncValue.data(
-        currentList.where((s) => s.userId != sitterId).toList(),
-      );
+      await _repository.removeBookmarkedSitter(sitterUserId);
+      print('DEBUG removeBookmark: API call successful');
+      return true;
     } catch (e) {
-      rethrow;
+      // Revert on error - sitter reappears in the list
+      print('DEBUG removeBookmark: API call failed with error: $e');
+      state = AsyncValue.data(currentList);
+      return false;
     }
   }
 

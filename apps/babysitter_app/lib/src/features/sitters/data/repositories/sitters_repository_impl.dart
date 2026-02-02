@@ -66,8 +66,8 @@ class SittersRepositoryImpl implements SittersRepository {
   }
 
   @override
-  Future<void> removeBookmarkedSitter(String sitterId) async {
-    return _remoteDataSource.removeBookmarkedSitter(sitterId);
+  Future<void> removeBookmarkedSitter(String sitterUserId) async {
+    return _remoteDataSource.removeBookmarkedSitter(sitterUserId);
   }
 
   @override
