@@ -165,6 +165,7 @@ class RegistrationRemoteDataSource {
     final response = await _dio.get('/auth/security-questions');
     final data = response.data as Map<String, dynamic>;
     final questions = data['questions'] as List<dynamic>;
-    return questions.cast<String>();
+    // Remove duplicates by converting to Set and back to List
+    return questions.cast<String>().toSet().toList();
   }
 }
