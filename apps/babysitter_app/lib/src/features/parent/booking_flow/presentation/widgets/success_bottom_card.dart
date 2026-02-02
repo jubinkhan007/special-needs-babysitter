@@ -5,12 +5,14 @@ class SuccessBottomCard extends StatelessWidget {
   final VoidCallback onViewStatus;
   final VoidCallback onCancel;
   final String sitterName;
+  final String bookingStatus;
 
   const SuccessBottomCard({
     super.key,
     required this.onViewStatus,
     required this.onCancel,
     required this.sitterName,
+    this.bookingStatus = 'Pending',
   });
 
   @override
@@ -45,6 +47,37 @@ class SuccessBottomCard extends StatelessWidget {
             'Booking Request Sent!',
             style: BookingUiTokens.successTitle,
             textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 16),
+
+          // Status Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: _getStatusColor(bookingStatus).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: _getStatusColor(bookingStatus)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  _getStatusIcon(bookingStatus),
+                  color: _getStatusColor(bookingStatus),
+                  size: 16,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Status: $bookingStatus',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: _getStatusColor(bookingStatus),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -101,5 +134,45 @@ class SuccessBottomCard extends StatelessWidget {
         ],
       ),
     );
+  }
+  
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+      case 'awaiting confirmation':
+        return const Color(0xFFD97706); // Amber
+      case 'confirmed':
+      case 'accepted':
+        return const Color(0xFF059669); // Green
+      case 'declined':
+      case 'rejected':
+        return const Color(0xFFD92D20); // Red
+      case 'cancelled':
+        return const Color(0xFF6B7280); // Grey
+      case 'completed':
+        return const Color(0xFF2563EB); // Blue
+      default:
+        return const Color(0xFFD97706); // Default amber
+    }
+  }
+  
+  IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'pending':
+      case 'awaiting confirmation':
+        return Icons.access_time;
+      case 'confirmed':
+      case 'accepted':
+        return Icons.check_circle;
+      case 'declined':
+      case 'rejected':
+        return Icons.cancel;
+      case 'cancelled':
+        return Icons.block;
+      case 'completed':
+        return Icons.task_alt;
+      default:
+        return Icons.access_time;
+    }
   }
 }

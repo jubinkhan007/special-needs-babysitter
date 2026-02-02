@@ -46,3 +46,10 @@ final registerAndSendOtpUseCaseProvider =
   final repo = ref.watch(registrationRepositoryProvider);
   return RegisterAndSendOtpUseCase(repo);
 });
+
+/// Check uniqueness use case provider
+final checkUniquenessUseCaseProvider =
+    Provider<CheckUniquenessUseCase>((ref) {
+  final repo = ref.watch(registrationRepositoryProvider);
+  return CheckUniquenessUseCase(repo);
+});

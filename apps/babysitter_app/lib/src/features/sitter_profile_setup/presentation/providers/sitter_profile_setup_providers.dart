@@ -432,7 +432,7 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
         return {
           'bio': state.bio,
           'dateOfBirth': state.dob != null
-              ? DateFormat('MM/dd/yyyy').format(state.dob!)
+              ? DateFormat('yyyy-MM-dd').format(state.dob!)
               : null,
           'yearsOfExperience': state.yearsExperience,
           'hasTransportation': state.hasReliableTransportation,
@@ -474,17 +474,18 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
         // Build availability array
         final List<Map<String, dynamic>> availability = [];
 
+        // Format time as HH:mm (24-hour format) for API
         String formatTime(TimeOfDay? time) {
           if (time == null) return '09:00';
-          final now = DateTime.now();
-          final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-          return DateFormat('h:mm a').format(dt);
+          final hour = time.hour.toString().padLeft(2, '0');
+          final minute = time.minute.toString().padLeft(2, '0');
+          return '$hour:$minute';
         }
 
         if (state.availabilityMode == AvailabilityMode.singleDay &&
             state.singleDate != null) {
           availability.add({
-            'date': DateFormat('MM/dd/yyyy').format(state.singleDate!),
+            'date': DateFormat('yyyy-MM-dd').format(state.singleDate!),
             'startTime': formatTime(state.startTime),
             'endTime': formatTime(state.endTime),
             'noBookings': state.noBookings,
@@ -494,7 +495,7 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
           var current = state.dateRangeStart!;
           while (!current.isAfter(state.dateRangeEnd!)) {
             availability.add({
-              'date': DateFormat('MM/dd/yyyy').format(current),
+              'date': DateFormat('yyyy-MM-dd').format(current),
               'startTime': formatTime(state.startTime),
               'endTime': formatTime(state.endTime),
               'noBookings': state.noBookings,

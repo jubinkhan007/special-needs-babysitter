@@ -243,6 +243,19 @@ class JobPostController extends StateNotifier<JobPostState> {
       return time;
     }
 
+    // Determine status: when updating an existing job (has jobId) and not saving as draft,
+    // the status should be "posted" to satisfy API requirements
+    String? status;
+    if (isDraft) {
+      status = 'draft';
+    } else if (state.jobId != null) {
+      // Updating an existing posted job - must keep status as "posted"
+      status = 'posted';
+    } else {
+      // New job being posted
+      status = 'posted';
+    }
+
     return Job(
       id: state.jobId, // Pass existing ID if any
       childIds: state.childIds,
@@ -270,6 +283,7 @@ class JobPostController extends StateNotifier<JobPostState> {
       additionalDetails: state.additionalDetails,
       payRate: state.payRate,
       saveAsDraft: isDraft,
+      status: status,
     );
   }
 
@@ -285,13 +299,16 @@ class JobPostController extends StateNotifier<JobPostState> {
       print('DEBUG: Device timezone: $timezone');
 
       final job = _buildJobEntity(isDraft: isDraft, timezone: timezone);
+      print('DEBUG: Job entity built with status: ${job.status}, id: ${job.id}');
 
       if (state.jobId != null && !isDraft) {
         // Update existing job
+        print('DEBUG: Calling updateJobUseCase for existing job');
         await _updateJobUseCase(job);
         // jobId remains same
       } else {
         // Create new job
+        print('DEBUG: Calling createJobUseCase for new job');
         final jobId = await _createJobUseCase(job);
         state = state.copyWith(jobId: jobId);
       }

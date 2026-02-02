@@ -44,6 +44,60 @@ class _JobPostStep5ReviewScreenState
 
   bool _isProcessingPayment = false;
 
+  /// Check if this is an update to an existing posted job
+  bool get _isExistingJob {
+    final state = ref.read(jobPostControllerProvider);
+    return state.jobId != null && state.jobId!.isNotEmpty;
+  }
+
+  /// Update an existing job without payment flow
+  Future<void> _updateExistingJob() async {
+    final controller = ref.read(jobPostControllerProvider.notifier);
+
+    setState(() => _isProcessingPayment = true);
+
+    try {
+      final success = await controller.submitJob();
+      if (!success) {
+        if (mounted) {
+          final latestError = ref.read(jobPostControllerProvider).error;
+          if (latestError != null) {
+            AppToast.show(context,
+              SnackBar(
+                content: Text(latestError),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+        return;
+      }
+
+      if (mounted) {
+        AppToast.show(context,
+          const SnackBar(
+            content: Text('Job updated successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        widget.onSubmit();
+      }
+    } catch (e) {
+      if (mounted) {
+        AppToast.show(context,
+          SnackBar(
+            content: Text('Error updating job: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessingPayment = false);
+      }
+    }
+  }
+
   Future<void> _submitWithPayment() async {
     final controller = ref.read(jobPostControllerProvider.notifier);
     final bookingsRepo = ref.read(bookingsRepositoryProvider);
@@ -307,71 +361,78 @@ class _JobPostStep5ReviewScreenState
   }
 
   Widget _buildBottomBar(BuildContext context, bool isLoading) {
+    final isExisting = _isExistingJob;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 22),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Save For Later Button
-          TextButton(
-            onPressed: isLoading
-                ? null
-                : () async {
-                    final success = await ref
-                        .read(jobPostControllerProvider.notifier)
-                        .saveJobDraft();
-                    if (success && context.mounted) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => JobDraftSavedDialog(
-                          onEditJob: () {
-                            Navigator.of(context).pop(); // Close dialog
-                          },
-                          onGoToHome: () {
-                            ref
-                                .read(jobPostControllerProvider.notifier)
-                                .resetState();
-                            Navigator.of(context).pop(); // Close dialog
-                            context.go(Routes.parentHome);
-                          },
-                          onClose: () {
-                            Navigator.of(context).pop(); // Close dialog
-                          },
-                        ),
-                      );
-                    } else if (context.mounted) {
-                      final latestError =
-                          ref.read(jobPostControllerProvider).error;
-                      if (latestError != null) {
-                        AppToast.show(context,
-                          SnackBar(content: Text(latestError)),
+          // Save For Later Button - Hidden for existing/posted jobs
+          if (!isExisting)
+            TextButton(
+              onPressed: isLoading
+                  ? null
+                  : () async {
+                      final success = await ref
+                          .read(jobPostControllerProvider.notifier)
+                          .saveJobDraft();
+                      if (success && context.mounted) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => JobDraftSavedDialog(
+                            onEditJob: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                            onGoToHome: () {
+                              ref
+                                  .read(jobPostControllerProvider.notifier)
+                                  .resetState();
+                              Navigator.of(context).pop(); // Close dialog
+                              context.go(Routes.parentHome);
+                            },
+                            onClose: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                          ),
                         );
+                      } else if (context.mounted) {
+                        final latestError =
+                            ref.read(jobPostControllerProvider).error;
+                        if (latestError != null) {
+                          AppToast.show(context,
+                            SnackBar(content: Text(latestError)),
+                          );
+                        }
                       }
-                    }
-                  },
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: const Text(
-              'Save For Later',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF667085), // Grey
+                    },
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
-            ),
-          ),
+              child: const Text(
+                'Save For Later',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF667085), // Grey
+                ),
+              ),
+            )
+          else
+            const SizedBox.shrink(), // Placeholder when hidden
 
-          // Submit Button
+          // Submit/Update Button
           Flexible(
             child: GestureDetector(
-              onTap: isLoading ? null : _submitWithPayment,
+              onTap: isLoading
+                  ? null
+                  : (isExisting ? _updateExistingJob : _submitWithPayment),
               child: Container(
-                constraints: const BoxConstraints(
-                  maxWidth: 200, // Max width, can shrink
-                  minWidth: 160,
+                constraints: BoxConstraints(
+                  maxWidth: isExisting ? 160 : 200, // Adjust width for "Update Job"
+                  minWidth: isExisting ? 140 : 160,
                 ),
                 height: 60,
                 decoration: BoxDecoration(
@@ -381,9 +442,9 @@ class _JobPostStep5ReviewScreenState
                 child: Center(
                   child: isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          'Submit & Pay',
-                          style: TextStyle(
+                      : Text(
+                          isExisting ? 'Update Job' : 'Submit & Pay',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,

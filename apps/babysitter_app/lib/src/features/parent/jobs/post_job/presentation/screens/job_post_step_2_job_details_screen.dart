@@ -335,21 +335,100 @@ class _JobPostStep2JobDetailsScreenState
   }
 
   void _onContinue() {
-    if (_jobTitleController.text.isNotEmpty &&
-        _dateController.text.isNotEmpty &&
-        _startTimeController.text.isNotEmpty &&
-        _endTimeController.text.isNotEmpty) {
-      // Update controller state
-      ref.read(jobPostControllerProvider.notifier).updateJobDetails(
-            title: _jobTitleController.text,
-            startDate: _startStr,
-            endDate: _endStr,
-            startTime: _startTimeController.text,
-            endTime: _endTimeController.text,
-            rawStartDate: _rawStartDate,
-            rawEndDate: _rawEndDate,
-          );
-      widget.onNext();
+    // Validate all required fields
+    if (_jobTitleController.text.trim().isEmpty) {
+      _showError('Please enter a job title');
+      return;
+    }
+    
+    if (_dateController.text.isEmpty) {
+      _showError('Please select dates for the job');
+      return;
+    }
+    
+    if (_startTimeController.text.isEmpty) {
+      _showError('Please select a start time');
+      return;
+    }
+    
+    if (_endTimeController.text.isEmpty) {
+      _showError('Please select an end time');
+      return;
+    }
+    
+    // Validate that end time is after start time
+    if (!_isEndTimeAfterStartTime()) {
+      _showError('End time must be after start time');
+      return;
+    }
+    
+    // Update controller state
+    ref.read(jobPostControllerProvider.notifier).updateJobDetails(
+          title: _jobTitleController.text.trim(),
+          startDate: _startStr,
+          endDate: _endStr,
+          startTime: _startTimeController.text,
+          endTime: _endTimeController.text,
+          rawStartDate: _rawStartDate,
+          rawEndDate: _rawEndDate,
+        );
+    widget.onNext();
+  }
+  
+  bool _isEndTimeAfterStartTime() {
+    if (_startTimeController.text.isEmpty || _endTimeController.text.isEmpty) {
+      return false;
+    }
+    
+    try {
+      final startTime = _parseTimeString(_startTimeController.text);
+      final endTime = _parseTimeString(_endTimeController.text);
+      
+      // Convert to minutes since midnight for comparison
+      final startMinutes = startTime.hour * 60 + startTime.minute;
+      final endMinutes = endTime.hour * 60 + endTime.minute;
+      
+      // If on the same day, end time must be after start time
+      // If spanning multiple days, allow end time to be earlier (overnight shift)
+      if (_rawStartDate != null && 
+          _rawEndDate != null && 
+          _rawStartDate!.isAtSameMomentAs(_rawEndDate!)) {
+        return endMinutes > startMinutes;
+      }
+      
+      return true; // Multi-day booking allows any times
+    } catch (e) {
+      return true; // If parsing fails, let it pass and handle at backend
+    }
+  }
+  
+  TimeOfDay _parseTimeString(String timeStr) {
+    // Handle format like "10:00 AM" or "2:30 PM"
+    final cleanTime = timeStr.trim();
+    final parts = cleanTime.split(' ');
+    if (parts.length != 2) throw FormatException('Invalid time format');
+    
+    final timeParts = parts[0].split(':');
+    final period = parts[1].toUpperCase();
+    
+    int hour = int.parse(timeParts[0]);
+    final int minute = int.parse(timeParts[1]);
+    
+    if (period == 'PM' && hour != 12) hour += 12;
+    if (period == 'AM' && hour == 12) hour = 0;
+    
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+  
+  void _showError(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: const Color(0xFFD92D20),
+          duration: const Duration(seconds: 3),
+        ),
+      );
     }
   }
 
@@ -421,9 +500,22 @@ class _JobPostStep2JobDetailsScreenState
                     const SizedBox(height: 24),
 
                     // Job Title Field
-                    _buildField(
+                    _buildValidatedField(
                       controller: _jobTitleController,
                       hint: 'Job Title*',
+                      maxLength: 100,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Job title is required';
+                        }
+                        if (value.trim().length < 3) {
+                          return 'Must be at least 3 characters';
+                        }
+                        if (value.length > 100) {
+                          return 'Must be 100 characters or less';
+                        }
+                        return null;
+                      },
                     ),
 
                     const SizedBox(height: 20),
@@ -557,6 +649,62 @@ class _JobPostStep2JobDetailsScreenState
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildValidatedField({
+    required TextEditingController controller,
+    required String hint,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    IconData? suffixIcon,
+    int? maxLength,
+    String? Function(String?)? validator,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildField(
+          controller: controller,
+          hint: hint,
+          readOnly: readOnly,
+          onTap: onTap,
+          suffixIcon: suffixIcon,
+        ),
+        if (validator != null)
+          Builder(
+            builder: (context) {
+              final error = validator(controller.text);
+              if (error != null && controller.text.isNotEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 6),
+                  child: Text(
+                    error,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFFD92D20),
+                    ),
+                  ),
+                );
+              }
+              if (maxLength != null) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16, top: 6),
+                  child: Text(
+                    '${controller.text.length}/$maxLength characters',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: controller.text.length > maxLength
+                          ? const Color(0xFFD92D20)
+                          : _mutedText,
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+      ],
     );
   }
 

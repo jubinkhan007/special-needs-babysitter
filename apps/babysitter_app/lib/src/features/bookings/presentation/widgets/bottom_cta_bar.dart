@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../theme/app_tokens.dart';
 
 class BottomCtaBar extends StatelessWidget {
@@ -19,23 +20,33 @@ class BottomCtaBar extends StatelessWidget {
         // Handle bottom notch
         top: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTokens.screenHorizontalPadding,
-            vertical: 16, // Typical padding
+          padding: EdgeInsets.symmetric(
+            horizontal: AppTokens.screenHorizontalPadding.w,
+            vertical: 16.h,
           ),
           child: SizedBox(
-            height: AppTokens.buttonHeight,
+            height: 52.h,
             width: double.infinity,
             child: ElevatedButton(
               onPressed: onTap,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTokens.primaryBlue,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTokens.buttonRadius),
+                  borderRadius: BorderRadius.circular(AppTokens.buttonRadius.r),
                 ),
                 elevation: 0,
+                padding: EdgeInsets.zero,
               ),
-              child: Text(label, style: AppTokens.buttonText),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontFamily: AppTokens.fontFamily,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  height: 1.0,
+                ),
+              ),
             ),
           ),
         ),

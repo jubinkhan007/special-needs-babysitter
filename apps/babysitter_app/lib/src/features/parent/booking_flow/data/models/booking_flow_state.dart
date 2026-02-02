@@ -251,16 +251,33 @@ class BookingFlowState {
   /// Computed: Subtotal (Total Hours * Hourly Rate)
   double get subTotal => totalHours * payRate;
 
-  /// Computed: Platform Fee (Fixed 5% for now or $20 logic)
-  /// Using a simple 5% logic for dynamic calculation
-  /// Or keeping it close to the mockup example ($20 for $300 is ~6.6%)
-  /// constant flat fee + percentage is common. Let's use 5% + $5 flat fee for realism
-  /// actually adhering to the mockup: $300 subtotal -> $20 fee. Let's strictly use 6.67% ~ $20
-  /// Let's stick to a standard 5% for simplicity.
-  double get platformFee => subTotal * 0.20;
+  /// Computed: Platform Fee (15% of subtotal)
+  /// This is a service fee charged to parents for using the platform
+  double get platformFee => subTotal * 0.15;
 
   /// Computed: Total Cost
+  /// The total amount to be charged, including platform fee
   double get totalCost => subTotal + platformFee;
+  
+  /// Validates that the booking meets minimum amount requirements
+  /// Returns an error message if invalid, null if valid
+  String? validateAmount() {
+    if (totalHours <= 0) {
+      return 'Invalid booking duration. Please check your start and end times.';
+    }
+    if (payRate <= 0) {
+      return 'Hourly rate must be greater than 0.';
+    }
+    // Minimum booking amount is $5.00 (Stripe requirement)
+    if (totalCost < 5.0) {
+      return 'Minimum booking amount is \$5.00. Please increase hours or rate.';
+    }
+    // Maximum single booking amount is $999.00 (safety limit)
+    if (totalCost > 999.0) {
+      return 'Maximum booking amount is \$999.00. Please reduce hours or rate.';
+    }
+    return null;
+  }
 
   // Helper to parse "10:00 AM" format
   TimeOfDay _parseTime(String timeStr) {

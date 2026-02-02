@@ -10,12 +10,51 @@ import '../widgets/dashed_divider.dart';
 import 'select_payment_method_screen.dart';
 import 'service_details_screen.dart';
 
+/// Helper widget to show validation errors
+class _ValidationBanner extends StatelessWidget {
+  final String message;
+  const _ValidationBanner({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFEF3F2),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFD92D20)),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.error_outline,
+            color: Color(0xFFD92D20),
+            size: 20,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Color(0xFFB42318),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class PaymentDetailsScreen extends ConsumerWidget {
   const PaymentDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookingState = ref.watch(bookingFlowProvider);
+    final validationError = bookingState.validateAmount();
 
     return Scaffold(
       backgroundColor: BookingUiTokens.pageBackground,
@@ -41,7 +80,13 @@ class PaymentDetailsScreen extends ConsumerWidget {
                   style: BookingUiTokens.pageTitle,
                 ),
 
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
+                
+                // Validation Banner
+                if (validationError != null)
+                  _ValidationBanner(message: validationError),
+
+                const SizedBox(height: 8),
 
                 // Payment Rows
                 PaymentDetailRow(
@@ -60,7 +105,7 @@ class PaymentDetailsScreen extends ConsumerWidget {
                 ),
                 _buildDashedDivider(),
                 PaymentDetailRow(
-                  label: 'Platform Fee',
+                  label: 'Platform Fee (15%)',
                   value: '\$ ${bookingState.platformFee.toStringAsFixed(2)}',
                 ),
                 _buildDashedDivider(),
@@ -98,6 +143,7 @@ class PaymentDetailsScreen extends ConsumerWidget {
             bottom: 0,
             child: PaymentMethodSheet(
               totalCost: bookingState.totalCost,
+              isEnabled: validationError == null,
               onChange: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -105,13 +151,22 @@ class PaymentDetailsScreen extends ConsumerWidget {
                   ),
                 );
               },
-              onConfirm: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const ServiceDetailsScreen(),
-                  ),
-                );
-              },
+              onConfirm: validationError == null
+                  ? () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ServiceDetailsScreen(),
+                        ),
+                      );
+                    }
+                  : () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(validationError),
+                          backgroundColor: const Color(0xFFD92D20),
+                        ),
+                      );
+                    },
             ),
           ),
         ],

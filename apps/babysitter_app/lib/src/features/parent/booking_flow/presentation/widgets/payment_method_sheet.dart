@@ -9,6 +9,7 @@ class PaymentMethodSheet extends ConsumerWidget {
   final String ctaLabel;
   final double totalCost;
   final bool showChange;
+  final bool isEnabled;
 
   const PaymentMethodSheet({
     super.key,
@@ -17,6 +18,7 @@ class PaymentMethodSheet extends ConsumerWidget {
     this.ctaLabel = 'Confirm Payment & Address',
     required this.totalCost,
     this.showChange = true,
+    this.isEnabled = true,
   });
 
   IconData _getIconForMethod(String method) {
@@ -143,7 +145,9 @@ class PaymentMethodSheet extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: onConfirm,
               style: ElevatedButton.styleFrom(
-                backgroundColor: BookingUiTokens.primaryButtonBg,
+                backgroundColor: isEnabled
+                    ? BookingUiTokens.primaryButtonBg
+                    : const Color(0xFFD0D5DD),
                 foregroundColor: BookingUiTokens.ctaButtonText,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -151,7 +155,7 @@ class PaymentMethodSheet extends ConsumerWidget {
                 ),
               ),
               child: Text(
-                ctaLabel,
+                isEnabled ? ctaLabel : 'Invalid Amount',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,

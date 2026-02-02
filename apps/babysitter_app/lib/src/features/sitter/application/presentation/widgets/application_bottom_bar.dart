@@ -36,14 +36,15 @@ class ApplicationBottomBar extends StatelessWidget {
             // Cancel button
             Expanded(
               child: SizedBox(
-                height: 48.h,
+                height: 52.h,
                 child: OutlinedButton(
                   onPressed: isLoading ? null : onCancel,
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppTokens.primaryBlue,
-                    side: BorderSide(color: AppTokens.primaryBlue, width: 1),
+                    side: BorderSide(color: AppTokens.primaryBlue, width: 1.w),
+                    padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   child: Text(
@@ -52,6 +53,7 @@ class ApplicationBottomBar extends StatelessWidget {
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Inter',
+                      height: 1.0,
                     ),
                   ),
                 ),
@@ -61,18 +63,19 @@ class ApplicationBottomBar extends StatelessWidget {
             // Submit button
             Expanded(
               child: SizedBox(
-                height: 48.h,
+                height: 52.h,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : onSubmit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTokens.primaryBlue,
                     foregroundColor: Colors.white,
                     elevation: 0,
+                    padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     disabledBackgroundColor:
-                        AppTokens.primaryBlue.withOpacity(0.6),
+                        AppTokens.primaryBlue.withValues(alpha: 0.6),
                   ),
                   child: isLoading
                       ? SizedBox(
@@ -90,6 +93,7 @@ class ApplicationBottomBar extends StatelessWidget {
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Inter',
+                            height: 1.0,
                           ),
                         ),
                 ),

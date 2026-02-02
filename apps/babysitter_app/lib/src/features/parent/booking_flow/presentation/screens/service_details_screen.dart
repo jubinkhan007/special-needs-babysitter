@@ -53,14 +53,15 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       return 'Please set a valid hourly rate.';
     }
 
-    // Validate amount is not zero or too low
-    if (state.totalCost < 0.50) {
-      return 'Booking amount must be at least \$0.50. Please adjust your hours or rate.';
-    }
-
     // Validate hours calculation
     if (state.totalHours <= 0) {
       return 'Invalid booking duration. End time must be after start time.';
+    }
+    
+    // Use the centralized amount validation from BookingFlowState
+    final amountError = state.validateAmount();
+    if (amountError != null) {
+      return amountError;
     }
 
     return null;

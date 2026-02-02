@@ -77,9 +77,28 @@ class JobRemoteDataSource {
       final id = jobDto.id;
       if (id == null) throw Exception('Job ID is required for update');
 
+      // For updating existing jobs, only send the editable fields
+      // Don't send saveAsDraft or status as the API interprets these as "post" actions
+      final updateData = <String, dynamic>{
+        if (jobDto.childIds.isNotEmpty) 'childIds': jobDto.childIds,
+        if (jobDto.title != null) 'title': jobDto.title,
+        if (jobDto.startDate != null) 'startDate': jobDto.startDate,
+        if (jobDto.endDate != null) 'endDate': jobDto.endDate,
+        if (jobDto.startTime != null) 'startTime': jobDto.startTime,
+        if (jobDto.endTime != null) 'endTime': jobDto.endTime,
+        if (jobDto.timezone != null) 'timezone': jobDto.timezone,
+        if (jobDto.address != null) 'address': jobDto.address!.toJson(),
+        if (jobDto.location != null) 'location': jobDto.location!.toJson(),
+        if (jobDto.additionalDetails != null) 'additionalDetails': jobDto.additionalDetails,
+        if (jobDto.payRate != null) 'payRate': jobDto.payRate,
+        // Intentionally NOT sending: saveAsDraft, status (these are for create/post operations)
+      };
+
+      print('DEBUG: Updating job $id with data: $updateData');
+
       final response = await _dio.put(
         '/jobs/$id',
-        data: jobDto.toJson(),
+        data: updateData,
       );
       if (response.data['success'] != true) {
         throw Exception('Failed to update job');

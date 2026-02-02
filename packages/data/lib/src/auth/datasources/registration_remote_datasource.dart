@@ -126,6 +126,40 @@ class RegistrationRemoteDataSource {
     return AuthSessionDto.fromJson(data);
   }
 
+  /// POST /auth/check-uniqueness
+  /// API returns: { success: true, data: { message: "...", available: true } }
+  Future<UniquenessCheckResult> checkUniqueness(
+    UniquenessCheckPayload payload,
+  ) async {
+    final response = await _dio.post(
+      '/auth/check-uniqueness',
+      data: payload.toJson(),
+    );
+
+    final data = response.data;
+    if (data is! Map<String, dynamic>) {
+      throw FormatException('Invalid response format: $data');
+    }
+
+    final success = data['success'] == true;
+    final inner = data['data'] is Map<String, dynamic>
+        ? data['data'] as Map<String, dynamic>
+        : null;
+    final available = inner?['available'] == true;
+    final message =
+        (inner?['message'] ?? data['message'] ?? data['error'])?.toString();
+
+    return UniquenessCheckResult(
+      success: success,
+      available: available,
+      message: (message != null && message.isNotEmpty)
+          ? message
+          : (available
+              ? 'Email and phone number are available'
+              : 'Email or phone number already exists'),
+    );
+  }
+
   /// GET /auth/security-questions
   Future<List<String>> getSecurityQuestions() async {
     final response = await _dio.get('/auth/security-questions');

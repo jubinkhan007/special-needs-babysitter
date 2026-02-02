@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../../routing/routes.dart';
 import 'job_status_badge.dart';
 
@@ -91,10 +92,26 @@ class SitterJobApplicationCard extends StatelessWidget {
           // Family Info Row
           Row(
             children: [
-              CircleAvatar(
-                radius: 12.w,
-                backgroundImage: NetworkImage(avatarUrl),
-                backgroundColor: const Color(0xFFEAECF0),
+              ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: avatarUrl,
+                  width: 24.w,
+                  height: 24.w,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) => Container(
+                    width: 24.w,
+                    height: 24.w,
+                    color: const Color(0xFFEAECF0),
+                    alignment: Alignment.center,
+                    child: Icon(Icons.person,
+                        size: 16.w, color: const Color(0xFF98A2B3)),
+                  ),
+                  placeholder: (context, url) => Container(
+                    width: 24.w,
+                    height: 24.w,
+                    color: const Color(0xFFEAECF0),
+                  ),
+                ),
               ),
               SizedBox(width: 8.w),
               RichText(

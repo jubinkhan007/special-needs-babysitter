@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:babysitter_app/src/common_widgets/debounced_button.dart';
 
 class SitterProfileHeaderExact extends StatelessWidget {
   const SitterProfileHeaderExact({
@@ -311,11 +312,13 @@ class SitterProfileHeaderExact extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
 
-                    // Message button (dark pill)
+                    // Message button (dark pill) with debouncing
                     SizedBox(
                       height: messageHeight,
-                      child: ElevatedButton(
+                      child: DebouncedElevatedButton(
+                        label: 'Message',
                         onPressed: onMessage,
+                        debounceDuration: const Duration(milliseconds: 600),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _messageBg,
                           foregroundColor: Colors.white,
@@ -329,7 +332,6 @@ class SitterProfileHeaderExact extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        child: const Text('Message'),
                       ),
                     ),
                   ],

@@ -752,7 +752,7 @@ class _SitterBookingDetailsScreenState
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 48.h,
+                          height: 52.h,
                           child: ElevatedButton(
                             onPressed:
                                 (clockInState.canClockIn && !_isClockingIn)
@@ -774,8 +774,9 @@ class _SitterBookingDetailsScreenState
                               disabledBackgroundColor: Colors.grey.shade300,
                               disabledForegroundColor: Colors.grey.shade600,
                               elevation: 0,
+                              padding: EdgeInsets.zero,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
+                                borderRadius: BorderRadius.circular(12.r),
                               ),
                             ),
                             child: _isClockingIn
@@ -794,6 +795,7 @@ class _SitterBookingDetailsScreenState
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w600,
                                       fontFamily: 'Inter',
+                                      height: 1.0,
                                     ),
                                   ),
                           ),
@@ -1333,6 +1335,7 @@ class _SitterBookingDetailsScreenState
                 final args = ChatThreadArgs(
                   otherUserId: parentUserId,
                   otherUserName: '${jobDetails.familyName} Family',
+                  otherUserAvatarUrl: jobDetails.familyPhotoUrl,
                   isVerified: false,
                 );
                 parentContext.push(
@@ -1415,7 +1418,7 @@ class _SitterBookingDetailsScreenState
                 20.w,
                 16.h,
                 20.w,
-                16.h + bottomInset,
+                16.h + bottomInset + media.padding.bottom,
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(maxHeight: maxHeight),

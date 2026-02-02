@@ -100,12 +100,56 @@ class _BookingRequestSentScreenState
               ),
             ),
           ),
+          
+          // Status Badge - Shows Pending Status
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 80,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEF3C7), // Amber background
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFD97706)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      color: Color(0xFFD97706),
+                      size: 20,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Status: Pending Confirmation',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF92400E),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
           // Bottom Card
           Align(
             alignment: Alignment.bottomCenter,
             child: SuccessBottomCard(
               sitterName: widget.sitterName,
+              bookingStatus: 'Pending',
               onViewStatus: () {
                 context.go('${Routes.parentBookings}?tab=pending');
               },

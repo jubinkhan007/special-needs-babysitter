@@ -57,6 +57,18 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
     }
   }
 
+  @override
+  Future<UniquenessCheckResult> checkUniqueness(
+      UniquenessCheckPayload payload) async {
+    try {
+      return await _dataSource.checkUniqueness(payload);
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    } catch (e) {
+      throw ServerFailure(message: 'Failed to check availability: $e');
+    }
+  }
+
   Failure _mapDioException(DioException e) {
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.sendTimeout ||

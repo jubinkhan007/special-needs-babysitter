@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:domain/domain.dart';
+import 'package:core/core.dart';
 
 import '../../../../../../../common/theme/auth_theme.dart';
 import '../../../widgets/auth_input_field.dart';
@@ -8,9 +11,10 @@ import '../../../widgets/step_indicator.dart';
 import '../../../widgets/social_login_row.dart';
 import '../../../../../../routing/routes.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../../controllers/sign_up_providers.dart';
 
 /// Step 1: Account Info - Pixel-perfect matching Figma
-class Step1AccountInfo extends StatefulWidget {
+class Step1AccountInfo extends ConsumerStatefulWidget {
   final VoidCallback onNext;
   final VoidCallback? onBack;
   final Map<String, String> formData;
@@ -23,10 +27,10 @@ class Step1AccountInfo extends StatefulWidget {
   });
 
   @override
-  State<Step1AccountInfo> createState() => _Step1AccountInfoState();
+  ConsumerState<Step1AccountInfo> createState() => _Step1AccountInfoState();
 }
 
-class _Step1AccountInfoState extends State<Step1AccountInfo> {
+class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _firstNameController;
   late final TextEditingController _middleInitialController;
@@ -34,6 +38,7 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
   bool _agreedToTerms = false;
+  bool _isCheckingUniqueness = false;
 
   @override
   void initState() {
@@ -59,7 +64,8 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
     super.dispose();
   }
 
-  void _saveAndNext() {
+  Future<void> _saveAndNext() async {
+    if (_isCheckingUniqueness) return;
     if (!_formKey.currentState!.validate()) return;
     if (!_agreedToTerms) {
       AppToast.show(context, 
@@ -74,11 +80,62 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
     widget.formData['firstName'] = _firstNameController.text.trim();
     widget.formData['middleInitial'] = _middleInitialController.text.trim();
     widget.formData['lastName'] = _lastNameController.text.trim();
-    widget.formData['email'] = _emailController.text.trim();
-    widget.formData['phone'] = _phoneController.text.trim();
+    final email = _emailController.text.trim();
+    final phone = _phoneController.text.trim();
+    widget.formData['email'] = email;
+    widget.formData['phone'] = phone;
     widget.formData['agreedToTerms'] = _agreedToTerms.toString();
 
-    widget.onNext();
+    setState(() => _isCheckingUniqueness = true);
+    try {
+      final useCase = ref.read(checkUniquenessUseCaseProvider);
+      final result = await useCase.call(
+        UniquenessCheckPayload(
+          email: email,
+          phone: phone,
+        ),
+      );
+
+      if (!mounted) return;
+
+      if (result.success && result.available) {
+        widget.onNext();
+      } else {
+        AppToast.show(
+          context,
+          SnackBar(
+            content: Text(
+              result.message.isNotEmpty
+                  ? result.message
+                  : 'Email or phone number already exists',
+            ),
+            backgroundColor: AuthTheme.errorRed,
+          ),
+        );
+      }
+    } on Failure catch (e) {
+      if (!mounted) return;
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(e.message),
+          backgroundColor: AuthTheme.errorRed,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      AppToast.show(
+        context,
+        const SnackBar(
+          content: Text('Failed to check availability. Please try again.'),
+          backgroundColor: AuthTheme.errorRed,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isCheckingUniqueness = false);
+      }
+    }
   }
 
   @override
@@ -140,17 +197,23 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                   controller: _firstNameController,
                   hint: 'First Name*',
                   textInputAction: TextInputAction.next,
-                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                  maxLength: 50,
+                  validator: (v) {
+                    if (v?.isEmpty == true) return 'First name is required';
+                    if (v!.length < 2) return 'Must be at least 2 characters';
+                    if (v.length > 50) return 'Must be 50 characters or less';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 12), // Tighter spacing
 
-                // Middle Initial
+                // Middle Name
                 AuthInputField(
                   controller: _middleInitialController,
-                  hint: 'Middle Initial',
+                  hint: 'Middle Name (Optional)',
                   textInputAction: TextInputAction.next,
-                  maxLength: 1,
-                  textCapitalization: TextCapitalization.characters,
+                  maxLength: 50,
+                  textCapitalization: TextCapitalization.words,
                 ),
                 const SizedBox(height: 12),
 
@@ -159,7 +222,13 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                   controller: _lastNameController,
                   hint: 'Last Name*',
                   textInputAction: TextInputAction.next,
-                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                  maxLength: 50,
+                  validator: (v) {
+                    if (v?.isEmpty == true) return 'Last name is required';
+                    if (v!.length < 2) return 'Must be at least 2 characters';
+                    if (v.length > 50) return 'Must be 50 characters or less';
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 12),
 
@@ -183,7 +252,24 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                   hint: 'Phone*',
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.done,
-                  validator: (v) => v?.isEmpty == true ? 'Required' : null,
+                  maxLength: 14,
+                  validator: (v) {
+                    if (v?.isEmpty == true) return 'Phone number is required';
+                    // Validate US phone number format
+                    final phoneRegex = RegExp(r'^[\d\s\-\(\)\+\.]+$');
+                    if (!phoneRegex.hasMatch(v!)) {
+                      return 'Invalid phone number format';
+                    }
+                    // Extract digits and check count
+                    final digits = v.replaceAll(RegExp(r'[^\d]'), '');
+                    if (digits.length < 10) {
+                      return 'Phone number must be at least 10 digits';
+                    }
+                    if (digits.length > 15) {
+                      return 'Phone number is too long';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 16),
 
@@ -248,6 +334,7 @@ class _Step1AccountInfoState extends State<Step1AccountInfo> {
                 // Next button
                 PrimaryActionButton(
                   label: 'Next',
+                  isLoading: _isCheckingUniqueness,
                   onPressed: _saveAndNext,
                 ),
                 const SizedBox(height: 20), // More breathing room

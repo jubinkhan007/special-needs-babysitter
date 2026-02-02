@@ -66,7 +66,7 @@ class ApplicationSubmittedDialog extends StatelessWidget {
             // Action button
             SizedBox(
               width: double.infinity,
-              height: 54.h,
+              height: 56.h,
               child: ElevatedButton(
                 onPressed: onViewApplications,
                 style: ElevatedButton.styleFrom(
@@ -74,6 +74,7 @@ class ApplicationSubmittedDialog extends StatelessWidget {
                       const Color(0xFF8ED1F2), // Light blue from image
                   foregroundColor: Colors.white,
                   elevation: 0,
+                  padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
@@ -84,6 +85,7 @@ class ApplicationSubmittedDialog extends StatelessWidget {
                     fontSize: 18.sp,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Inter',
+                    height: 1.0,
                   ),
                 ),
               ),

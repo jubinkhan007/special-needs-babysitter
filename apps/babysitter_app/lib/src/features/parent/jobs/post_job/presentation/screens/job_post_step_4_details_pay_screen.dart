@@ -29,6 +29,11 @@ class _JobPostStep4DetailsPayScreenState
 
   // Pay Rate Value
   double _payRate = 15.00;
+  
+  // Validation constants
+  static const double _minPayRate = 5.0;
+  static const double _maxPayRate = 99.0;
+  static const double _payRateIncrement = 0.50;
 
   @override
   void initState() {
@@ -36,7 +41,7 @@ class _JobPostStep4DetailsPayScreenState
     final state = ref.read(jobPostControllerProvider);
     _additionalDetailsController.text = state.additionalDetails;
     if (state.payRate > 0) {
-      _payRate = state.payRate;
+      _payRate = state.payRate.clamp(_minPayRate, _maxPayRate);
     }
   }
 
@@ -59,16 +64,26 @@ class _JobPostStep4DetailsPayScreenState
 
   void _incrementPay() {
     setState(() {
-      _payRate += 0.50;
+      _payRate = (_payRate + _payRateIncrement).clamp(_minPayRate, _maxPayRate);
     });
   }
 
   void _decrementPay() {
-    if (_payRate > 0) {
-      setState(() {
-        _payRate -= 0.50;
-      });
+    setState(() {
+      _payRate = (_payRate - _payRateIncrement).clamp(_minPayRate, _maxPayRate);
+    });
+  }
+  
+  bool get _isPayRateValid => _payRate >= _minPayRate && _payRate <= _maxPayRate;
+  
+  String? get _payRateError {
+    if (_payRate < _minPayRate) {
+      return 'Pay rate must be at least \$${_minPayRate.toStringAsFixed(2)}';
     }
+    if (_payRate > _maxPayRate) {
+      return 'Pay rate cannot exceed \$${_maxPayRate.toStringAsFixed(2)}';
+    }
+    return null;
   }
 
   @override
@@ -212,60 +227,113 @@ class _JobPostStep4DetailsPayScreenState
   }
 
   Widget _buildPayRateField() {
-    return Container(
-      height: 70, // ~68-72
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _borderColor, width: 1.5),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '\$${_payRate.toStringAsFixed(2)}/hr',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color:
-                  _mutedText, // Using grey/muted color for value as per instruction, or titleColor if it's user input? Screenshot shows grey.
+    final error = _payRateError;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 70, // ~68-72
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: error != null ? const Color(0xFFD92D20) : _borderColor,
+              width: 1.5,
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: _incrementPay,
-                child: const Icon(
-                  Icons.keyboard_arrow_up_rounded,
-                  color: _mutedText,
-                  size: 24,
+              Text(
+                '\$${_payRate.toStringAsFixed(2)}/hr',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: error != null ? const Color(0xFFD92D20) : _titleColor,
                 ),
               ),
-              GestureDetector(
-                onTap: _decrementPay,
-                child: const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: _mutedText,
-                  size: 24,
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: _incrementPay,
+                    child: const Icon(
+                      Icons.keyboard_arrow_up_rounded,
+                      color: _mutedText,
+                      size: 24,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: _decrementPay,
+                    child: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: _mutedText,
+                      size: 24,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        if (error != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 8),
+            child: Text(
+              error,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFFD92D20),
+              ),
+            ),
+          )
+        else
+          const Padding(
+            padding: EdgeInsets.only(left: 16, top: 8),
+            child: Text(
+              'Pay rate must be between \$5.00 and \$99.00',
+              style: TextStyle(
+                fontSize: 12,
+                color: _mutedText,
+              ),
+            ),
+          ),
+      ],
     );
   }
 
   void _onContinue() {
-    if (_additionalDetailsController.text.isNotEmpty) {
-      ref.read(jobPostControllerProvider.notifier).updateAdditionalDetails(
-            _additionalDetailsController.text,
-          );
-      ref.read(jobPostControllerProvider.notifier).updatePayRate(_payRate);
-      widget.onComplete();
+    // Validate additional details
+    if (_additionalDetailsController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter additional details'),
+          backgroundColor: Color(0xFFD92D20),
+        ),
+      );
+      return;
     }
+    
+    // Validate pay rate
+    if (!_isPayRateValid) {
+      final error = _payRateError;
+      if (error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+            backgroundColor: const Color(0xFFD92D20),
+          ),
+        );
+      }
+      return;
+    }
+    
+    ref.read(jobPostControllerProvider.notifier).updateAdditionalDetails(
+          _additionalDetailsController.text.trim(),
+        );
+    ref.read(jobPostControllerProvider.notifier).updatePayRate(_payRate);
+    widget.onComplete();
   }
 
   Widget _buildBottomBar() {

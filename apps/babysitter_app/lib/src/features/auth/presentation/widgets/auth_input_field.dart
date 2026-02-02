@@ -17,6 +17,7 @@ class AuthInputField extends StatelessWidget {
   final String? Function(String?)? validator;
   final int? maxLength;
   final TextCapitalization textCapitalization;
+  final String? helperText;
 
   const AuthInputField({
     super.key,
@@ -29,6 +30,7 @@ class AuthInputField extends StatelessWidget {
     this.validator,
     this.maxLength,
     this.textCapitalization = TextCapitalization.none,
+    this.helperText,
   });
 
   List<TextInputFormatter>? _numericInputFormatters(
@@ -59,6 +61,11 @@ class AuthInputField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         hintText: hint,
+        helperText: helperText,
+        helperStyle: TextStyle(
+          fontSize: 12,
+          color: AuthTheme.textDark.withOpacity(0.5),
+        ),
         hintStyle: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
