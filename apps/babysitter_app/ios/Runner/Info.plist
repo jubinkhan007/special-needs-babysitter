@@ -54,12 +54,13 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs photo library access to share images.</string>
 	
-	<!-- Firebase Background Modes -->
+	<!-- Firebase Background Modes + VoIP for CallKit -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
 		<string>location</string>
+		<string>voip</string>
 	</array>
 	
 	<!-- Face ID (optional) -->

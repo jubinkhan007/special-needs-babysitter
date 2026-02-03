@@ -10,6 +10,7 @@ import 'package:notifications/notifications.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 import 'app.dart';
+import 'src/features/calls/services/call_notification_service.dart';
 
 /// Top-level background message handler (required by Firebase)
 @pragma('vm:entry-point')
@@ -23,6 +24,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     'Background message: ${message.notification?.title}',
     name: 'Notifications',
   );
+
+  // Handle incoming call notifications in background
+  final type = message.data['type'];
+  if (type == 'incoming_call') {
+    await CallNotificationService.handleIncomingCallPayload(message.data);
+  }
 }
 
 void main() async {

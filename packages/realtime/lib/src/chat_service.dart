@@ -8,7 +8,7 @@ abstract interface class ChatService {
 
   /// Login to chat service
   /// Token is resolved internally; pass userId only
-  Future<void> login({required String userId});
+  Future<void> login({required String userId, String? token});
 
   /// Logout from chat service
   Future<void> logout();
@@ -18,6 +18,9 @@ abstract interface class ChatService {
 
   /// Stream of chat events
   Stream<ChatEvent> get events;
+
+  /// Wait for the RTM connection to be established
+  Future<bool> waitForConnected({Duration timeout});
 
   /// Dispose resources
   Future<void> dispose();

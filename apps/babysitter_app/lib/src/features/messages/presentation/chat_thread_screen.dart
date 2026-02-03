@@ -17,10 +17,9 @@ import 'widgets/message_bubble.dart';
 import 'widgets/chat_composer_bar.dart';
 import 'models/chat_message_ui_model.dart';
 
-import 'package:go_router/go_router.dart';
-import '../../../routing/routes.dart';
-import '../../calls/domain/audio_call_args.dart';
-import '../../calls/domain/video_call_args.dart';
+import '../../calls/presentation/screens/outgoing_call_screen.dart';
+import '../../calls/domain/entities/call_enums.dart';
+import '../../../routing/app_router.dart';
 
 class ChatThreadScreen extends ConsumerStatefulWidget {
   final ChatThreadArgs args;
@@ -213,22 +212,30 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           isVerified: widget.args.isVerified,
           avatarUrl: widget.args.otherUserAvatarUrl,
           onVoiceCall: () {
-            context.push(
-              Routes.audioCall,
-              extra: AudioCallArgs(
-                remoteName: widget.args.otherUserName,
-                remoteAvatarUrl: widget.args.otherUserAvatarUrl ?? '',
-                isInitialCalling: true,
+            final navigator = rootNavigatorKey.currentState;
+            if (navigator == null) return;
+            navigator.push(
+              MaterialPageRoute(
+                builder: (_) => OutgoingCallScreen(
+                  recipientUserId: widget.args.otherUserId,
+                  recipientName: widget.args.otherUserName,
+                  recipientAvatar: widget.args.otherUserAvatarUrl,
+                  callType: CallType.audio,
+                ),
               ),
             );
           },
           onVideoCall: () {
-            context.push(
-              Routes.videoCall,
-              extra: VideoCallArgs(
-                remoteName: widget.args.otherUserName,
-                remoteVideoUrl: widget.args.otherUserAvatarUrl ?? '',
-                localPreviewUrl: currentUser?.avatarUrl ?? '',
+            final navigator = rootNavigatorKey.currentState;
+            if (navigator == null) return;
+            navigator.push(
+              MaterialPageRoute(
+                builder: (_) => OutgoingCallScreen(
+                  recipientUserId: widget.args.otherUserId,
+                  recipientName: widget.args.otherUserName,
+                  recipientAvatar: widget.args.otherUserAvatarUrl,
+                  callType: CallType.video,
+                ),
               ),
             );
           },

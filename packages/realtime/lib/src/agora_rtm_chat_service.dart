@@ -18,6 +18,7 @@ class AgoraRtmChatService implements ChatService {
   final _eventsController = StreamController<ChatEvent>.broadcast();
   bool _isInitialized = false;
   String? _currentUserId;
+  ChatConnectionState _connectionState = ChatConnectionState.disconnected;
 
   AgoraRtmChatService({
     required AgoraTokenProvider tokenProvider,
@@ -69,9 +70,8 @@ class AgoraRtmChatService implements ChatService {
           developer.log('RTM Link state changed: ${event.currentState}', name: 'Realtime');
           final currentState = event.currentState;
           if (currentState != null) {
-            _eventsController.add(ConnectionStateEvent(
-              state: _mapConnectionState(currentState),
-            ));
+            _connectionState = _mapConnectionState(currentState);
+            _eventsController.add(ConnectionStateEvent(state: _connectionState));
           }
         },
       );
@@ -102,7 +102,7 @@ class AgoraRtmChatService implements ChatService {
   }
 
   @override
-  Future<void> login({required String userId}) async {
+  Future<void> login({required String userId, String? token}) async {
     if (!_isInitialized) {
       await init();
     }
@@ -110,13 +110,15 @@ class AgoraRtmChatService implements ChatService {
     _currentUserId = userId;
 
     // Get token from provider (may be null for dev mode)
-    final token = await _tokenProvider.getRtmToken(userId);
+    final effectiveToken = token ?? await _tokenProvider.getRtmToken(userId);
 
     try {
-      // Login with token (RTM 2.x uses token-based auth)
-      if (token != null && token.isNotEmpty) {
-        await _client?.login(token);
-      }
+      developer.log(
+        'RTM login attempt userId=$userId tokenLen=${effectiveToken?.length ?? 0}',
+        name: 'Realtime',
+      );
+      // RTM 2.x requires login; empty token is allowed when app certificate is disabled.
+      await _client?.login(effectiveToken ?? '');
       developer.log('RTM login success: $userId', name: 'Realtime');
       _eventsController.add(LoginSuccessEvent(userId: userId));
     } catch (e) {
@@ -161,6 +163,10 @@ class AgoraRtmChatService implements ChatService {
         _eventsController.add(MessageSentEvent(peerId: peerId, text: text));
         developer.log('Message sent to $peerId', name: 'Realtime');
       } else {
+        developer.log(
+          'RTM publish failed peerId=$peerId code=${status.errorCode} reason=${status.reason}',
+          name: 'Realtime',
+        );
         throw Exception('Failed to send message: ${status.errorCode}');
       }
     } catch (e) {
@@ -174,6 +180,33 @@ class AgoraRtmChatService implements ChatService {
 
   @override
   Stream<ChatEvent> get events => _eventsController.stream;
+
+  @override
+  Future<bool> waitForConnected({Duration timeout = const Duration(seconds: 5)}) async {
+    if (_connectionState == ChatConnectionState.connected) return true;
+
+    final completer = Completer<bool>();
+    late final StreamSubscription sub;
+    sub = events.listen((event) {
+      if (event is ConnectionStateEvent) {
+        if (event.state == ChatConnectionState.connected &&
+            !completer.isCompleted) {
+          completer.complete(true);
+        }
+      }
+    });
+
+    // Ignore returned future so we don't need to await it.
+    Future.delayed(timeout, () {
+      if (!completer.isCompleted) {
+        completer.complete(false);
+      }
+    });
+
+    final result = await completer.future;
+    await sub.cancel();
+    return result;
+  }
 
   @override
   Future<void> dispose() async {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,8 +89,10 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     }
 
     final messages = await repository.getMessages(otherUserId);
+    final filteredMessages =
+        messages.where((message) => !_isCallInviteMessage(message)).toList();
     print('DEBUG: Loaded ${messages.length} messages for conversation with $otherUserId');
-    return messages;
+    return filteredMessages;
   }
 
   Future<void> sendMessage(String text) async {
@@ -177,6 +180,19 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build(arg));
   }
+
+  bool _isCallInviteMessage(ChatMessageEntity message) {
+    final text = message.textContent?.trim();
+    if (text == null || text.isEmpty) return false;
+    if (!text.contains('call_invite')) return false;
+    try {
+      final decoded = jsonDecode(text);
+      return decoded is Map<String, dynamic> &&
+          decoded['type'] == 'call_invite';
+    } catch (_) {
+      return false;
+    }
+  }
 }
 
 // Controller / List Provider
@@ -226,15 +242,8 @@ class ChatConversationsNotifier
       final user = userAsync.value;
       print('DEBUG: Current User ID: ${user?.id}');
 
-      if (user != null) {
-         print('DEBUG: Initiating chatService.login for user ${user.id}...');
-         chatService.login(userId: user.id).then((_) {
-             print('DEBUG: Chat login initiated successfully');
-         }).catchError((e) {
-             print('DEBUG: Chat login failed: $e');
-         });
-      } else {
-         print('DEBUG: User is null, skipping chat login');
+      if (user == null) {
+        print('DEBUG: User is null, skipping chat login');
       }
 
       print('DEBUG: Calling getConversationsUseCase()...');

@@ -10,21 +10,36 @@ import 'token/agora_token_provider.dart';
 /// Agora RTC implementation of CallService
 class AgoraCallService implements CallService {
   final AgoraTokenProvider _tokenProvider;
-  final String _appId;
+  String _appId;
 
   RtcEngine? _engine;
   final _eventsController = StreamController<CallEvent>.broadcast();
   bool _isInitialized = false;
+  String? _currentChannelName;
 
   AgoraCallService({required AgoraTokenProvider tokenProvider, String? appId})
     : _tokenProvider = tokenProvider,
       _appId = appId ?? EnvConfig.agoraAppId;
 
+  /// Get the underlying RTC engine (for video views)
+  RtcEngine? get engine => _engine;
+
   @override
-  Future<void> initialize() async {
+  bool get isInitialized => _isInitialized;
+
+  @override
+  String? get currentChannelName => _currentChannelName;
+
+  @override
+  Future<void> initialize({String? appId}) async {
+    // Allow overriding appId from backend config
+    if (appId != null && appId.isNotEmpty) {
+      _appId = appId;
+    }
+
     if (_appId.isEmpty) {
       throw const ConfigFailure(
-        message: 'Agora App ID not configured. Set AGORA_APP_ID in .env file.',
+        message: 'Agora App ID not configured. Provide appId or set AGORA_APP_ID in .env file.',
       );
     }
 
@@ -41,7 +56,7 @@ class AgoraCallService implements CallService {
     _setupEventHandlers();
     _isInitialized = true;
 
-    developer.log('AgoraCallService initialized', name: 'Realtime');
+    developer.log('AgoraCallService initialized with appId: ${_appId.substring(0, 8)}...', name: 'Realtime');
   }
 
   void _setupEventHandlers() {
@@ -85,6 +100,10 @@ class AgoraCallService implements CallService {
             UserMuteVideoEvent(uid: remoteUid, muted: muted),
           );
         },
+        onTokenPrivilegeWillExpire: (connection, token) {
+          developer.log('Token will expire soon', name: 'Realtime');
+          _eventsController.add(TokenPrivilegeWillExpireEvent(token: token));
+        },
       ),
     );
   }
@@ -117,11 +136,24 @@ class AgoraCallService implements CallService {
         publishCameraTrack: true,
       ),
     );
+
+    _currentChannelName = channelName;
   }
 
   @override
   Future<void> leaveChannel() async {
     await _engine?.leaveChannel();
+    _currentChannelName = null;
+  }
+
+  @override
+  Future<void> renewToken(String token) async {
+    if (_engine == null) {
+      developer.log('Cannot renew token: engine not initialized', name: 'Realtime');
+      return;
+    }
+    await _engine!.renewToken(token);
+    developer.log('RTC token renewed', name: 'Realtime');
   }
 
   @override
