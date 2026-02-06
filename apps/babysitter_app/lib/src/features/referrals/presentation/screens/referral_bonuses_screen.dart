@@ -246,7 +246,6 @@ class ReferralBonusesScreen extends ConsumerWidget {
     if (resolvedResponse == null) return;
 
     final code = resolvedResponse.referralCode;
-    final url = resolvedResponse.shareUrl;
 
     if (code.isEmpty) {
       AppToast.show(
@@ -256,12 +255,8 @@ class ReferralBonusesScreen extends ConsumerWidget {
       return;
     }
 
-    final shareTextParts = <String>[
-      'Join Special Sitters with my referral code $code and earn a bonus after your first booking!',
-      if (url.isNotEmpty) 'Sign up here: $url',
-    ];
-
-    final shareText = shareTextParts.join('\n');
+    final shareText =
+        'Join Special Sitters with my referral code $code and earn a bonus after your first booking!';
     final box = context.findRenderObject() as RenderBox?;
     final shareOrigin = box == null
         ? null

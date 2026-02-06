@@ -77,6 +77,8 @@ class Routes {
   static const String sitterBackgroundCheckComplete =
       '/sitter/background-check/complete';
   static const String sitterWallet = '/sitter/wallet';
+  static const String sitterPayoutSetup = '/sitter/wallet/payout-setup';
+  static const String sitterPayoutHistory = '/sitter/wallet/payout-history';
   static const String referralBonuses = '/referrals-bonuses';
 
   /// Check if route is an auth route

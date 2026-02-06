@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:core/core.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/review/review_args.dart';
 import '../providers/review_providers.dart';
@@ -101,19 +102,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       context.pop();
     } catch (e) {
       if (!mounted) return;
-      
-      String message = e.toString().replaceFirst('Exception: ', '');
-      
-      // Parse detailed error from API if available
-      if (e is DioException) {
-        final data = e.response?.data;
-        if (data is Map && data['error'] != null) {
-          message = data['error'].toString();
-        } else if (data is Map && data['message'] != null) {
-          message = data['message'].toString();
-        }
-      }
-
+      final message = _resolveErrorMessage(e);
       AppToast.show(
         context,
         SnackBar(content: Text(message)),
@@ -125,6 +114,25 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         });
       }
     }
+  }
+
+  String _resolveErrorMessage(Object error) {
+    if (error is DioException) {
+      final data = error.response?.data;
+      if (data is Map) {
+        final map = Map<String, dynamic>.from(data as Map);
+        final message = map['error'] ?? map['message'];
+        if (message is String && message.trim().isNotEmpty) {
+          return message.trim();
+        }
+      }
+      if (data is String && data.trim().isNotEmpty) {
+        return data.trim();
+      }
+    }
+
+    final appError = AppErrorHandler.parse(error);
+    return appError.message;
   }
 
   Widget _buildOutlinedButton(String label, {double? maxWidth}) {

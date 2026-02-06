@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -89,10 +88,8 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     }
 
     final messages = await repository.getMessages(otherUserId);
-    final filteredMessages =
-        messages.where((message) => !_isCallInviteMessage(message)).toList();
     print('DEBUG: Loaded ${messages.length} messages for conversation with $otherUserId');
-    return filteredMessages;
+    return messages;
   }
 
   Future<void> sendMessage(String text) async {
@@ -181,18 +178,6 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     state = await AsyncValue.guard(() => build(arg));
   }
 
-  bool _isCallInviteMessage(ChatMessageEntity message) {
-    final text = message.textContent?.trim();
-    if (text == null || text.isEmpty) return false;
-    if (!text.contains('call_invite')) return false;
-    try {
-      final decoded = jsonDecode(text);
-      return decoded is Map<String, dynamic> &&
-          decoded['type'] == 'call_invite';
-    } catch (_) {
-      return false;
-    }
-  }
 }
 
 // Controller / List Provider

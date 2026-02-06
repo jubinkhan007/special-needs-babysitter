@@ -21,7 +21,26 @@ import 'models/chat_message_ui_model.dart';
 
 import '../../calls/presentation/screens/outgoing_call_screen.dart';
 import '../../calls/domain/entities/call_enums.dart';
+import '../../calls/domain/entities/call_history_item.dart';
+import '../../calls/presentation/providers/calls_providers.dart';
 import '../../../routing/app_router.dart';
+
+/// Fetches call history and indexes by callId for quick lookup.
+/// Watches chatMessagesProvider so it re-fetches when messages refresh
+/// (e.g. after a call ends and the new call_invite message appears).
+final _callHistoryLookupProvider = FutureProvider.autoDispose
+    .family<Map<String, CallHistoryItem>, String>((ref, otherUserId) async {
+  // Re-fetch whenever messages change (messages poll every 5s)
+  ref.watch(chatMessagesProvider(otherUserId));
+
+  final repo = ref.watch(callsRepositoryProvider);
+  try {
+    final page = await repo.getCallHistory(limit: 100, offset: 0);
+    return {for (final item in page.items) item.callId: item};
+  } catch (_) {
+    return {};
+  }
+});
 
 class ChatThreadScreen extends ConsumerStatefulWidget {
   final ChatThreadArgs args;
@@ -201,6 +220,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   Widget build(BuildContext context) {
     final messagesAsync =
         ref.watch(chatMessagesProvider(widget.args.otherUserId));
+    final callHistoryMap =
+        ref.watch(_callHistoryLookupProvider(widget.args.otherUserId)).valueOrNull ?? {};
     final sessionUser = ref.watch(authNotifierProvider).valueOrNull?.user;
     final currentUser = ref.watch(currentUserProvider).valueOrNull;
     final currentUserId = sessionUser?.id ?? currentUser?.id ?? '';
@@ -295,7 +316,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                       }
 
                       final uiModels =
-                          _convertToUiModels(messages, currentUserId);
+                          _convertToUiModels(messages, currentUserId, callHistoryMap);
 
                       return ListView.builder(
                         controller: _scrollController,
@@ -352,6 +373,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   List<ChatMessageUiModel> _convertToUiModels(
     List<ChatMessageEntity> messages,
     String currentUserId,
+    Map<String, CallHistoryItem> callHistoryMap,
   ) {
     final uiModels = <ChatMessageUiModel>[];
     String? lastDateStr;
@@ -371,8 +393,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       final isCallLog = _isCallLogMessage(message);
 
       if (isCallLog) {
-        // Parse call log details
-        final callDetails = _parseCallLogDetails(message, isMe);
+        // Parse call log details, cross-referencing with call history
+        final callDetails = _parseCallLogDetails(message, isMe, callHistoryMap);
         uiModels.add(ChatMessageUiModel(
           id: message.id,
           isMe: isMe,
@@ -428,48 +450,80 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       return true;
     }
 
-    // Check for call_invite JSON in text
+    // Check for call_invite JSON in text (substring check for robustness)
     final text = message.textContent?.trim() ?? '';
     if (text.isEmpty) return false;
-    if (!text.contains('call_invite')) return false;
-    try {
-      final decoded = jsonDecode(text);
-      return decoded is Map<String, dynamic> && decoded['type'] == 'call_invite';
-    } catch (_) {
-      return false;
-    }
+    return text.startsWith('{') && text.contains('call_invite');
   }
 
-  /// Parse call log details from message
-  Map<String, dynamic> _parseCallLogDetails(ChatMessageEntity message, bool isMe) {
+  /// Parse call log details from message, cross-referencing with call history API.
+  Map<String, dynamic> _parseCallLogDetails(
+    ChatMessageEntity message,
+    bool isMe,
+    Map<String, CallHistoryItem> callHistoryMap,
+  ) {
     final text = message.textContent?.trim() ?? '';
     bool isVideo = false;
     bool isMissed = false;
     String? duration;
+    String? callId;
 
-    // Try to parse call_invite JSON for additional details
+    // Try to parse call_invite JSON for callId and callType
     if (text.contains('call_invite')) {
       try {
         final decoded = jsonDecode(text);
         if (decoded is Map<String, dynamic>) {
-          // Check for call type in the JSON
+          callId = decoded['callId'] as String?;
           final callType = decoded['callType'] as String?;
           isVideo = callType == 'video';
         }
       } catch (_) {
-        // Ignore parse errors
+        // Fallback: check raw text for call type
+        if (text.contains('"video"')) isVideo = true;
+        // Try to extract callId from raw text
+        final match = RegExp(r'"callId"\s*:\s*"([^"]+)"').firstMatch(text);
+        callId = match?.group(1);
       }
     }
 
-    // Determine if missed (for incoming calls that weren't answered)
-    // This is a simplified logic - in reality, you'd check call status from backend
-    isMissed = !isMe; // If it's not from me, it's an incoming call
+    // Cross-reference with call history for accurate duration/status
+    final historyItem = callId != null ? callHistoryMap[callId] : null;
+    if (historyItem != null) {
+      isVideo = historyItem.callType == CallType.video;
+      isMissed = historyItem.wasMissed;
 
+      if (historyItem.duration != null && historyItem.duration! > 0) {
+        final minutes = historyItem.duration! ~/ 60;
+        final seconds = historyItem.duration! % 60;
+        duration = '$minutes Min $seconds Sec';
+      }
+
+      // Use isInitiator from history for accurate direction
+      final isOutgoing = historyItem.isInitiator;
+
+      String title;
+      if (isMissed) {
+        title = isVideo ? 'Missed Video Call' : 'Missed Voice Call';
+      } else if (isOutgoing) {
+        title = isVideo ? 'Outgoing Video Call' : 'Outgoing Voice Call';
+      } else {
+        title = isVideo ? 'Incoming Video Call' : 'Incoming Voice Call';
+      }
+
+      return {
+        'title': title,
+        'subtitle': duration,
+        'isVideo': isVideo,
+        'isMissed': isMissed,
+      };
+    }
+
+    // Fallback when no call history is available
     String title;
-    if (isMissed) {
-      title = isVideo ? 'Missed Video Call' : 'Missed Voice Call';
+    if (isMe) {
+      title = isVideo ? 'Outgoing Video Call' : 'Outgoing Voice Call';
     } else {
-      title = isVideo ? 'Video Call' : 'Voice Call';
+      title = isVideo ? 'Incoming Video Call' : 'Incoming Voice Call';
     }
 
     return {

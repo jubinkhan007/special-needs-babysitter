@@ -77,6 +77,8 @@ import '../features/sitter/background_check/presentation/screens/verify_identity
 import '../features/sitter/background_check/presentation/screens/background_check_screen.dart';
 import '../features/sitter/background_check/presentation/screens/background_check_complete_screen.dart';
 import '../features/sitter/wallet/presentation/screens/sitter_wallet_screen.dart';
+import '../features/wallet/presentation/screens/my_wallet_screen.dart';
+import '../features/wallet/presentation/screens/payout_history_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -691,7 +693,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Sitter Wallet (Stripe Connect onboarding)
       GoRoute(
         path: Routes.sitterWallet,
+        builder: (context, state) => const MyWalletScreen(),
+      ),
+      GoRoute(
+        path: Routes.sitterPayoutSetup,
         builder: (context, state) => const SitterWalletScreen(),
+      ),
+      GoRoute(
+        path: Routes.sitterPayoutHistory,
+        builder: (context, state) => const PayoutHistoryScreen(),
       ),
       GoRoute(
         path: Routes.referralBonuses,

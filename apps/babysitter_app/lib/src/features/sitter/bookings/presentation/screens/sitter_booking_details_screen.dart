@@ -44,6 +44,7 @@ class _SitterBookingDetailsScreenState
     extends ConsumerState<SitterBookingDetailsScreen> {
   bool _isClockingIn = false;
   bool _hasRedirectedToActive = false;
+  bool _markedComplete = false;
   static const String _emergencySelection = 'Emergency Situation';
   static const String _emergencyPayloadReason =
       'Medical emergency - unable to fulfill booking';
@@ -198,7 +199,7 @@ class _SitterBookingDetailsScreenState
         statusValue.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
     final isCompleted = statusLower == 'completed' ||
         (statusLower == 'clockedout' && _hasFinalEndPassed(jobDetails));
-    final isActuallyCompleted = statusLower == 'completed';
+    final isActuallyCompleted = statusLower == 'completed' || _markedComplete;
     final statusLabel = _formatStatusLabel(statusValue);
     final scheduledDate = _formatScheduledDate(jobDetails.startDate);
     final totalHours =
@@ -2083,195 +2084,198 @@ class _SitterBookingDetailsScreenState
         bool isSubmitting = false;
         return StatefulBuilder(
           builder: (context, setState) {
-            return Dialog(
-              backgroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(20.w),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(Icons.close,
-                            color: const Color(0xFF667085), size: 20.w),
-                        onPressed: () => Navigator.of(dialogContext).pop(),
+            return MediaQuery(
+              data: MediaQuery.of(dialogContext)
+                  .copyWith(textScaler: const TextScaler.linear(1)),
+              child: Dialog(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(20.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: Icon(Icons.close,
+                              color: const Color(0xFF667085), size: 20.w),
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                        ),
                       ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '“Are You Sure That You Have\nCompleted This Job?”',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF1D2939),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Icon(Icons.info_outline,
+                              color: const Color(0xFF98A2B3), size: 18.w),
+                        ],
+                      ),
+                      SizedBox(height: 20.h),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48.h,
+                        child: ElevatedButton(
+                          onPressed: isSubmitting
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    isSubmitting = true;
+                                  });
+                                  final success = await _markBookingComplete(
+                                    parentContext,
+                                    applicationId,
+                                    jobDetails,
+                                  );
+                                  if (!dialogContext.mounted) return;
+                                  if (success) {
+                                    Navigator.of(dialogContext).pop();
+
+                                    // Fetch fresh details to ensure we have the latest data (like familyPhotoUrl)
+                                    // preventing stale data from being passed to the review screen
+                                    JobRequestDetailsModel freshJobDetails =
+                                        jobDetails;
+                                    try {
+                                      freshJobDetails = await ref
+                                          .read(jobRequestRepositoryProvider)
+                                          .getJobRequestDetails(applicationId);
+                                      print(
+                                          'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}');
+
+                                      // If still null, try fetching user profile directly using sittersRepository
+                                      if (freshJobDetails.familyPhotoUrl ==
+                                              null &&
+                                          freshJobDetails.parentUserId !=
+                                              null) {
+                                        print(
+                                            'DEBUG: Family photo still null, fetching user profile for ${freshJobDetails.parentUserId}');
+                                        try {
+                                          // Temporarily accessing sitters repo to get generic user profile
+                                          // Ideally this should be in a shared repository
+                                          final userProfile = await ref
+                                              .read(sittersRepositoryProvider)
+                                              .getUserProfile(
+                                                  freshJobDetails.parentUserId!);
+                                          final photoUrl =
+                                              userProfile['profilePhotoUrl']
+                                                      as String? ??
+                                                  userProfile['photoUrl']
+                                                      as String? ??
+                                                  userProfile['avatarUrl']
+                                                      as String?;
+
+                                          if (photoUrl != null) {
+                                            print(
+                                                'DEBUG: Found photo URL from user profile: $photoUrl');
+                                            // Create a new details object with the photo URL
+                                            // Since JobRequestDetailsModel is immutable, we verify if there's a copyWith or create new
+                                            // It doesn't seem to have copyWith exposed widely, so we pass it via ReviewArgs directly?
+                                            // ReviewArgs takes avatarUrl. _buildReviewArgs uses jobDetails.familyPhotoUrl.
+                                            // We can hack it by passing a modified jobDetails if we can copy it, or modified ReviewArgs.
+
+                                            // Let's modify freshJobDetails using JSON reconstruction if copyWith isn't easy
+                                            final json = freshJobDetails.toJson();
+                                            json['familyPhotoUrl'] = photoUrl;
+                                            freshJobDetails =
+                                                JobRequestDetailsModel.fromJson(
+                                                    json);
+                                          }
+                                        } catch (e) {
+                                          print(
+                                              'DEBUG: Failed to fetch user profile fallback: $e');
+                                        }
+                                      }
+                                    } catch (e) {
+                                      print(
+                                          'DEBUG: Failed to fetch fresh details, using cached: $e');
+                                    }
+
+                                    final reviewArgs = _buildReviewArgs(
+                                        applicationId, freshJobDetails);
+                                    final reviewArgsWithAvatar =
+                                        reviewArgs.copyWith(
+                                      avatarUrl: freshJobDetails.familyPhotoUrl,
+                                    );
+
+                                    if (!parentContext.mounted) return;
+                                    parentContext.push(
+                                      Routes.sitterReview,
+                                      extra: reviewArgsWithAvatar,
+                                    );
+                                    return;
+                                  }
+                                  setState(() {
+                                    isSubmitting = false;
+                                  });
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF87C4F2),
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor: Colors.grey.shade300,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: isSubmitting
+                              ? SizedBox(
+                                  width: 18.w,
+                                  height: 18.h,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  ),
+                                )
+                              : Text(
+                                  'Yes',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Inter',
+                                  ),
+                                ),
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48.h,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF1D2939),
+                            side: const BorderSide(color: Color(0xFFD0D5DD)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
                           child: Text(
-                            '“Are You Sure That You Have\nCompleted This Job?”',
+                            'No',
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1D2939),
                               fontFamily: 'Inter',
                             ),
                           ),
                         ),
-                        SizedBox(width: 8.w),
-                        Icon(Icons.info_outline,
-                            color: const Color(0xFF98A2B3), size: 18.w),
-                      ],
-                    ),
-                    SizedBox(height: 20.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: ElevatedButton(
-                        onPressed: isSubmitting
-                            ? null
-                            : () async {
-                                setState(() {
-                                  isSubmitting = true;
-                                });
-                                final success = await _markBookingComplete(
-                                  parentContext,
-                                  applicationId,
-                                  jobDetails,
-                                );
-                                if (!dialogContext.mounted) return;
-                                if (success) {
-                                  Navigator.of(dialogContext).pop();
-
-                                  // Fetch fresh details to ensure we have the latest data (like familyPhotoUrl)
-                                  // preventing stale data from being passed to the review screen
-                                  JobRequestDetailsModel freshJobDetails =
-                                      jobDetails;
-                                  try {
-                                    freshJobDetails = await ref
-                                        .read(jobRequestRepositoryProvider)
-                                        .getJobRequestDetails(applicationId);
-                                    print(
-                                        'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}');
-
-                                    // If still null, try fetching user profile directly using sittersRepository
-                                    if (freshJobDetails.familyPhotoUrl ==
-                                            null &&
-                                        freshJobDetails.parentUserId != null) {
-                                      print(
-                                          'DEBUG: Family photo still null, fetching user profile for ${freshJobDetails.parentUserId}');
-                                      try {
-                                        // Temporarily accessing sitters repo to get generic user profile
-                                        // Ideally this should be in a shared repository
-                                        final userProfile = await ref
-                                            .read(sittersRepositoryProvider)
-                                            .getUserProfile(
-                                                freshJobDetails.parentUserId!);
-                                        final photoUrl =
-                                            userProfile['profilePhotoUrl']
-                                                    as String? ??
-                                                userProfile['photoUrl']
-                                                    as String? ??
-                                                userProfile['avatarUrl']
-                                                    as String?;
-
-                                        if (photoUrl != null) {
-                                          print(
-                                              'DEBUG: Found photo URL from user profile: $photoUrl');
-                                          // Create a new details object with the photo URL
-                                          // Since JobRequestDetailsModel is immutable, we verify if there's a copyWith or create new
-                                          // It doesn't seem to have copyWith exposed widely, so we pass it via ReviewArgs directly?
-                                          // ReviewArgs takes avatarUrl. _buildReviewArgs uses jobDetails.familyPhotoUrl.
-                                          // We can hack it by passing a modified jobDetails if we can copy it, or modified ReviewArgs.
-
-                                          // Let's modify freshJobDetails using JSON reconstruction if copyWith isn't easy
-                                          final json = freshJobDetails.toJson();
-                                          json['familyPhotoUrl'] = photoUrl;
-                                          freshJobDetails =
-                                              JobRequestDetailsModel.fromJson(
-                                                  json);
-                                        }
-                                      } catch (e) {
-                                        print(
-                                            'DEBUG: Failed to fetch user profile fallback: $e');
-                                      }
-                                    }
-                                  } catch (e) {
-                                    print(
-                                        'DEBUG: Failed to fetch fresh details, using cached: $e');
-                                  }
-
-                                  final reviewArgs = _buildReviewArgs(
-                                      applicationId, freshJobDetails);
-
-                                  // Ensure avatarUrl is set from freshJobDetails if fallback succeeded but _buildReviewArgs somehow missed it
-                                  // (though _buildReviewArgs uses freshJobDetails, let's be safe)
-                                  final finalReviewArgs = reviewArgs.copyWith(
-                                    avatarUrl: freshJobDetails.familyPhotoUrl,
-                                  );
-
-                                  if (!parentContext.mounted) return;
-                                  parentContext.push(
-                                    Routes.sitterReview,
-                                    extra: finalReviewArgs,
-                                  );
-                                  return;
-                                }
-                                setState(() {
-                                  isSubmitting = false;
-                                });
-                              },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF87C4F2),
-                          foregroundColor: Colors.white,
-                          disabledBackgroundColor: Colors.grey.shade300,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                        ),
-                        child: isSubmitting
-                            ? SizedBox(
-                                width: 18.w,
-                                height: 18.h,
-                                child: const CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
-                                ),
-                              )
-                            : Text(
-                                'Yes',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Inter',
-                                ),
-                              ),
                       ),
-                    ),
-                    SizedBox(height: 12.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48.h,
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.of(dialogContext).pop(),
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: const Color(0xFF1D2939),
-                          side: const BorderSide(color: Color(0xFFD0D5DD)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                        ),
-                        child: Text(
-                          'No',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -2297,6 +2301,9 @@ class _SitterBookingDetailsScreenState
       ref.invalidate(sitterBookingsProvider('completed'));
       ref.invalidate(sitterBookingsProvider(null));
       if (!mounted) return false;
+      setState(() {
+        _markedComplete = true;
+      });
       AppToast.show(
         context,
         const SnackBar(content: Text('Job marked as complete')),
@@ -2314,6 +2321,9 @@ class _SitterBookingDetailsScreenState
         ref.invalidate(jobRequestDetailsProvider(applicationId));
         ref.invalidate(sitterCurrentBookingsProvider);
         if (!mounted) return false;
+        setState(() {
+          _markedComplete = true;
+        });
         AppToast.show(
           context,
           const SnackBar(content: Text('Job is already completed')),
@@ -2521,94 +2531,110 @@ class _SitterBookingDetailsScreenState
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.r),
           ),
-          child: Padding(
-            padding: EdgeInsets.all(20.w),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(Icons.close,
-                        color: const Color(0xFF667085), size: 20.w),
-                    onPressed: () => context.pop(),
-                  ),
-                ),
-                Text(
-                  'Clocked In\nSuccessfully!',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1D2939),
-                    fontFamily: 'Inter',
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'Start Time:',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1D2939),
-                    fontFamily: 'Inter',
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  'You Clocked in at $time',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF667085),
-                    fontFamily: 'Inter',
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  'Geo-Tracking Notification:',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1D2939),
-                    fontFamily: 'Inter',
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  'Your location is now visible to the family.',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF667085),
-                    fontFamily: 'Inter',
-                  ),
-                ),
-                SizedBox(height: 20.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48.h,
-                  child: ElevatedButton(
-                    onPressed: () => context.pop(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF87C4F2),
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Icon(Icons.close,
+                          color: const Color(0xFF667085), size: 20.w),
+                      onPressed: () => context.pop(),
                     ),
-                    child: Text(
-                      'Confirm',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
+                  ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Clocked In\nSuccessfully!',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFF1D2939),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
+                          Text(
+                            'Start Time:',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1D2939),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            'You Clocked in at $time',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF667085),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                          Text(
+                            'Geo-Tracking Notification:',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF1D2939),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            'Your location is now visible to the family.',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF667085),
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 20.h),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48.h,
+                    child: ElevatedButton(
+                      onPressed: () => context.pop(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF87C4F2),
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Confirm',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                ],
+              ),
             ),
           ),
         );

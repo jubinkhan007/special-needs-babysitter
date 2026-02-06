@@ -161,13 +161,14 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
           ),
         ),
         bottomNavigationBar: Container(
-          padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 16.h + bottomInset),
+          padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 20.h + bottomInset),
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
-          child: SizedBox(
+          child: Container(
             width: double.infinity,
-            height: 52.h,
+            height: 56.h,
+            padding: EdgeInsets.only(bottom: 4.h),
             child: ElevatedButton(
               onPressed: _isSubmitting ? null : _submitReview,
               style: ElevatedButton.styleFrom(
@@ -179,6 +180,7 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                 ),
                 disabledBackgroundColor:
                     const Color(0xFF87C4F2).withOpacity(0.6),
+                padding: EdgeInsets.zero,
               ),
               child: _isSubmitting
                   ? SizedBox(
@@ -197,6 +199,7 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Inter',
+                        height: 1.2,
                       ),
                     ),
             ),

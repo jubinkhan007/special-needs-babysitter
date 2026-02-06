@@ -24,6 +24,7 @@ class BottomPrimaryButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 56.h),
+            padding: EdgeInsets.symmetric(vertical: 16.h),
             backgroundColor: backgroundColor ?? const Color(0xFF89CFF0),
             foregroundColor: Colors.white,
             elevation: 0,
@@ -34,6 +35,7 @@ class BottomPrimaryButton extends StatelessWidget {
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
               fontFamily: 'Inter',
+              height: 1.2,
             ),
           ),
           child: Text(text),

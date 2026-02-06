@@ -112,7 +112,7 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
           },
         ),
         title: Text(
-          'My Wallet',
+          'Payout Setup',
           style: TextStyle(
             fontSize: 17.sp,
             fontWeight: FontWeight.w600,

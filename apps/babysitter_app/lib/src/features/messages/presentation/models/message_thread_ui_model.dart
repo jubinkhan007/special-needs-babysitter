@@ -35,7 +35,8 @@ class MessageThreadUiModel {
 
     String previewText = _formatLocalPreviewText(thread.lastMessage, thread.lastMessageType);
     bool showCallIcon = thread.lastMessageType == local.MessageType.callEnded ||
-                        thread.lastMessageType == local.MessageType.callLog;
+                        thread.lastMessageType == local.MessageType.callLog ||
+                        _isCallInviteJson(thread.lastMessage);
 
     return MessageThreadUiModel(
       id: thread.id,
@@ -56,7 +57,8 @@ class MessageThreadUiModel {
 
     String previewText = _formatDomainPreviewText(conversation.lastMessage, conversation.lastMessageType);
     bool showCallIcon = conversation.lastMessageType == MessageType.callEnded ||
-                        conversation.lastMessageType == MessageType.callLog;
+                        conversation.lastMessageType == MessageType.callLog ||
+                        _isCallInviteJson(conversation.lastMessage);
 
     return MessageThreadUiModel(
       id: conversation.id,
@@ -80,7 +82,7 @@ class MessageThreadUiModel {
       case local.MessageType.callEnded:
         return 'Call Ended';
       case local.MessageType.callLog:
-        return 'Call';
+        return _callPreviewFromJson(lastMessage);
       case local.MessageType.system:
         return lastMessage;
       case local.MessageType.text:
@@ -90,7 +92,7 @@ class MessageThreadUiModel {
 
     // Check if the message is a call_invite JSON (filter out system call invites)
     if (_isCallInviteJson(lastMessage)) {
-      return 'Incoming call';
+      return _callPreviewFromJson(lastMessage);
     }
 
     return lastMessage;
@@ -105,7 +107,7 @@ class MessageThreadUiModel {
       case MessageType.callEnded:
         return 'Call Ended';
       case MessageType.callLog:
-        return 'Call';
+        return _callPreviewFromJson(lastMessage);
       case MessageType.system:
         return lastMessage;
       case MessageType.text:
@@ -115,21 +117,31 @@ class MessageThreadUiModel {
 
     // Check if the message is a call_invite JSON (filter out system call invites)
     if (_isCallInviteJson(lastMessage)) {
-      return 'Incoming call';
+      return _callPreviewFromJson(lastMessage);
     }
 
     return lastMessage;
   }
 
-  /// Check if the message text is a call_invite JSON
+  /// Check if the message text is a call_invite JSON.
+  /// Uses substring check to handle truncated JSON from server.
   static bool _isCallInviteJson(String text) {
     if (text.isEmpty) return false;
-    if (!text.contains('call_invite')) return false;
+    return text.trimLeft().startsWith('{') && text.contains('call_invite');
+  }
+
+  /// Extract a human-readable preview from a call_invite message.
+  static String _callPreviewFromJson(String text) {
     try {
       final decoded = jsonDecode(text);
-      return decoded is Map<String, dynamic> && decoded['type'] == 'call_invite';
+      if (decoded is Map<String, dynamic>) {
+        final callType = (decoded['callType'] as String?)?.toLowerCase();
+        if (callType == 'video') return 'Video Call';
+      }
     } catch (_) {
-      return false;
+      // JSON may be truncated; check for callType in raw text
+      if (text.contains('"video"')) return 'Video Call';
     }
+    return 'Voice Call';
   }
 }

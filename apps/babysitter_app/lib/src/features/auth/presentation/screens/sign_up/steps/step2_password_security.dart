@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart';
+import 'package:core/core.dart';
 
 import '../../../../../../../common/theme/auth_theme.dart';
 import '../../../widgets/auth_input_field.dart';
@@ -8,6 +9,7 @@ import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
 import '../../../controllers/sign_up_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import '../../../controllers/sign_up_providers.dart';
 
 /// Step 2: Password + Security Question (combined per Figma design)
 /// Loads security questions from API, triggers register + sendOtp on Next
@@ -33,6 +35,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
   late final TextEditingController _securityAnswerController;
+  late final TextEditingController _referralCodeController;
 
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
@@ -55,6 +58,8 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     _confirmPasswordController = TextEditingController();
     _securityAnswerController =
         TextEditingController(text: widget.formData['securityAnswer']);
+    _referralCodeController =
+        TextEditingController(text: widget.formData['referralCode']);
     _selectedQuestion = widget.formData['securityQuestion'];
 
     // Load security questions on init
@@ -68,6 +73,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _securityAnswerController.dispose();
+    _referralCodeController.dispose();
     super.dispose();
   }
 
@@ -91,10 +97,24 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
       return;
     }
 
+    final referralCode = _referralCodeController.text.trim();
+    final isSitter = _isSitterRole(widget.formData['role']);
+
+    if (isSitter && referralCode.isNotEmpty) {
+      final isValid = await _validateReferralCode(referralCode);
+      if (!mounted) return;
+      if (!isValid) {
+        return;
+      }
+    }
+
     // Save to form data
     widget.formData['password'] = _passwordController.text;
     widget.formData['securityQuestion'] = _selectedQuestion!;
     widget.formData['securityAnswer'] = _securityAnswerController.text.trim();
+    if (referralCode.isNotEmpty) {
+      widget.formData['referralCode'] = referralCode;
+    }
 
     // Call controller to register and send OTP
     final controller = ref.read(signUpControllerProvider.notifier);
@@ -115,6 +135,49 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
         );
       }
     }
+  }
+
+  Future<bool> _validateReferralCode(String code) async {
+    try {
+      final dio = ref.read(registrationDioProvider);
+      final response = await dio.post(
+        '/referrals/validate',
+        data: {'code': code},
+      );
+      final data = response.data;
+      final map = data is Map<String, dynamic>
+          ? (data['data'] is Map<String, dynamic> ? data['data'] : data)
+          : <String, dynamic>{};
+      final valid = map['valid'] == true;
+      if (valid) {
+        return true;
+      }
+      if (!mounted) return false;
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(map['message'] as String? ?? 'Invalid referral code'),
+          backgroundColor: AuthTheme.errorRed,
+        ),
+      );
+      return false;
+    } catch (e) {
+      if (!mounted) return false;
+      final message = AppErrorHandler.parse(e).message;
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(message),
+          backgroundColor: AuthTheme.errorRed,
+        ),
+      );
+      return false;
+    }
+  }
+  
+  bool _isSitterRole(String? role) {
+    final value = role?.toLowerCase().trim();
+    return value == 'sitter' || value == 'babysitter';
   }
 
   @override
@@ -295,6 +358,14 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                         validator: (v) =>
                             v?.isEmpty == true ? 'Required' : null,
                       ),
+                      if (_isSitterRole(widget.formData['role'])) ...[
+                        const SizedBox(height: 12),
+                        AuthInputField(
+                          controller: _referralCodeController,
+                          hint: 'Referral Code (optional)',
+                          textInputAction: TextInputAction.done,
+                        ),
+                      ],
                       const SizedBox(height: 24),
                     ],
                   ),

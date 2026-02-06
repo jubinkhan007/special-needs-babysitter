@@ -970,8 +970,9 @@ class _SitterActiveBookingScreenState
         children: [
           // Clock Out Button
           Expanded(
-            child: SizedBox(
-              height: 52.h,
+            child: Container(
+              height: 56.h,
+              padding: EdgeInsets.only(bottom: 4.h),
               child: ElevatedButton(
                 onPressed: _isClockingOut ? null : _clockOut,
                 style: ElevatedButton.styleFrom(
@@ -981,6 +982,7 @@ class _SitterActiveBookingScreenState
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
+                  padding: EdgeInsets.zero,
                 ),
                 child: _isClockingOut
                     ? SizedBox(
@@ -997,6 +999,7 @@ class _SitterActiveBookingScreenState
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Inter',
+                          height: 1.2,
                         ),
                       ),
               ),
@@ -1005,8 +1008,9 @@ class _SitterActiveBookingScreenState
           SizedBox(width: 12.w),
           // Copy/Share Button
           Container(
-            width: 52.h,
-            height: 52.h,
+            width: 56.h,
+            height: 56.h,
+            padding: EdgeInsets.only(bottom: 4.h),
             decoration: BoxDecoration(
               color: const Color(0xFFF5F5F5),
               borderRadius: BorderRadius.circular(12.r),
