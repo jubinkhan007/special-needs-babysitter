@@ -42,6 +42,7 @@ class MockJobsRepository implements JobsRepository {
       additionalNotes: 'We Have Two Black Cats',
       hourlyRate: 20.0,
       applicantsCount: 1,
+      parentUserId: 'parent-123',
     );
   }
 

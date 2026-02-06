@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'widgets/chat_thread_app_bar.dart';
 import 'widgets/chat_background.dart';
 import 'widgets/chat_day_separator.dart';
 import 'widgets/message_bubble.dart';
+import 'widgets/call_log_tile.dart';
 import 'widgets/chat_composer_bar.dart';
 import 'models/chat_message_ui_model.dart';
 
@@ -309,7 +311,10 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                             children: [
                               if (item.showDaySeparator)
                                 ChatDaySeparator(text: item.dayLabel),
-                              MessageBubble(uiModel: item),
+                              if (item.isCallLog)
+                                CallLogTile(uiModel: item)
+                              else
+                                MessageBubble(uiModel: item),
                             ],
                           );
                         },
@@ -361,36 +366,118 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       // 2. recipientUserId is the other user (meaning we sent it)
       final isMe = message.senderUserId == currentUserId ||
           message.recipientUserId == widget.args.otherUserId;
-      final messageText = message.textContent?.trim().isNotEmpty == true
-          ? message.textContent!
-          : '';
-      final hasMedia =
-          message.mediaUrl?.isNotEmpty == true &&
-          message.type != ChatMessageType.text;
-      final mediaType = hasMedia ? message.type.name : null;
-      final fileName = hasMedia ? _fileNameFromUrl(message.mediaUrl!) : null;
 
-      uiModels.add(ChatMessageUiModel(
-        id: message.id,
-        isMe: isMe,
-        bubbleText: messageText,
-        mediaUrl: hasMedia ? message.mediaUrl : null,
-        mediaType: mediaType,
-        fileName: fileName,
-        showDaySeparator: showDaySeparator,
-        dayLabel: _getDayLabel(message.createdAt),
-        headerMetaLeft: !isMe
-            ? '${widget.args.otherUserName} • ${_formatTime(message.createdAt)}'
-            : null,
-        headerMetaRight:
-            isMe ? '${_formatTime(message.createdAt)} • You' : null,
-        showAvatar: !isMe,
-        avatarUrl: !isMe ? widget.args.otherUserAvatarUrl : null,
-        isCallLog: false,
-      ));
+      // Check if this is a call log message
+      final isCallLog = _isCallLogMessage(message);
+
+      if (isCallLog) {
+        // Parse call log details
+        final callDetails = _parseCallLogDetails(message, isMe);
+        uiModels.add(ChatMessageUiModel(
+          id: message.id,
+          isMe: isMe,
+          bubbleText: '',
+          showDaySeparator: showDaySeparator,
+          dayLabel: _getDayLabel(message.createdAt),
+          isCallLog: true,
+          callTitle: callDetails['title'],
+          callSubtitle: callDetails['subtitle'],
+          callTime: _formatTime(message.createdAt),
+          isVideoCall: callDetails['isVideo'] ?? false,
+          isMissedCall: callDetails['isMissed'] ?? false,
+        ));
+      } else {
+        // Regular message
+        final messageText = message.textContent?.trim().isNotEmpty == true
+            ? message.textContent!
+            : '';
+        final hasMedia =
+            message.mediaUrl?.isNotEmpty == true &&
+            message.type != ChatMessageType.text;
+        final mediaType = hasMedia ? message.type.name : null;
+        final fileName = hasMedia ? _fileNameFromUrl(message.mediaUrl!) : null;
+
+        uiModels.add(ChatMessageUiModel(
+          id: message.id,
+          isMe: isMe,
+          bubbleText: messageText,
+          mediaUrl: hasMedia ? message.mediaUrl : null,
+          mediaType: mediaType,
+          fileName: fileName,
+          showDaySeparator: showDaySeparator,
+          dayLabel: _getDayLabel(message.createdAt),
+          headerMetaLeft: !isMe
+              ? '${widget.args.otherUserName} • ${_formatTime(message.createdAt)}'
+              : null,
+          headerMetaRight:
+              isMe ? '${_formatTime(message.createdAt)} • You' : null,
+          showAvatar: !isMe,
+          avatarUrl: !isMe ? widget.args.otherUserAvatarUrl : null,
+          isCallLog: false,
+        ));
+      }
     }
 
     return uiModels;
+  }
+
+  /// Check if a message is a call log
+  bool _isCallLogMessage(ChatMessageEntity message) {
+    // Check explicit call log type
+    if (message.type.name == 'callLog' || message.type.name == 'call_log') {
+      return true;
+    }
+
+    // Check for call_invite JSON in text
+    final text = message.textContent?.trim() ?? '';
+    if (text.isEmpty) return false;
+    if (!text.contains('call_invite')) return false;
+    try {
+      final decoded = jsonDecode(text);
+      return decoded is Map<String, dynamic> && decoded['type'] == 'call_invite';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Parse call log details from message
+  Map<String, dynamic> _parseCallLogDetails(ChatMessageEntity message, bool isMe) {
+    final text = message.textContent?.trim() ?? '';
+    bool isVideo = false;
+    bool isMissed = false;
+    String? duration;
+
+    // Try to parse call_invite JSON for additional details
+    if (text.contains('call_invite')) {
+      try {
+        final decoded = jsonDecode(text);
+        if (decoded is Map<String, dynamic>) {
+          // Check for call type in the JSON
+          final callType = decoded['callType'] as String?;
+          isVideo = callType == 'video';
+        }
+      } catch (_) {
+        // Ignore parse errors
+      }
+    }
+
+    // Determine if missed (for incoming calls that weren't answered)
+    // This is a simplified logic - in reality, you'd check call status from backend
+    isMissed = !isMe; // If it's not from me, it's an incoming call
+
+    String title;
+    if (isMissed) {
+      title = isVideo ? 'Missed Video Call' : 'Missed Voice Call';
+    } else {
+      title = isVideo ? 'Video Call' : 'Voice Call';
+    }
+
+    return {
+      'title': title,
+      'subtitle': duration,
+      'isVideo': isVideo,
+      'isMissed': isMissed,
+    };
   }
 
   String _fileNameFromUrl(String url) {

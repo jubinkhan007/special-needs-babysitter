@@ -8,6 +8,9 @@ class BottomActionStack extends StatelessWidget {
   final VoidCallback onPrimary;
   final VoidCallback onSecondary;
   final VoidCallback onOutlined;
+  final String? paymentLabel;
+  final VoidCallback? onPayment;
+  final bool showPaymentButton;
 
   const BottomActionStack({
     super.key,
@@ -17,6 +20,9 @@ class BottomActionStack extends StatelessWidget {
     required this.onPrimary,
     required this.onSecondary,
     required this.onOutlined,
+    this.paymentLabel,
+    this.onPayment,
+    this.showPaymentButton = false,
   });
 
   @override
@@ -32,6 +38,18 @@ class BottomActionStack extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Payment Button (shown when payment is required)
+          if (showPaymentButton && paymentLabel != null) ...[
+            _buildButton(
+              context,
+              label: paymentLabel!,
+              bgColor: const Color(0xFFFFA726), // Orange for payment action
+              textColor: Colors.white,
+              onTap: onPayment ?? () {},
+            ),
+            const SizedBox(height: AppTokens.jobDetailsButtonGap),
+          ],
+          
           // Primary
           _buildButton(
             context,

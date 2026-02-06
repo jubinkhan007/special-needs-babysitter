@@ -66,6 +66,9 @@ class ChatDto {
         return MessageType.system;
       case 'image':
         return MessageType.image;
+      case 'call_log':
+      case 'calllog':
+        return MessageType.callLog;
       default:
         return MessageType.text;
     }

@@ -158,14 +158,8 @@ class _JobPostStep5ReviewScreenState
           },
           onPaymentError: (error) {
             print('DEBUG: Payment error: $error');
-            AppToast.show(context,
-              SnackBar(
-                content: Text('Payment error: $error'),
-                backgroundColor: Colors.red,
-              ),
-            );
-            // Job is created but payment failed - still proceed to success
-            widget.onSubmit();
+            // Show payment failed dialog with option to retry or continue
+            _showPaymentFailedDialog(jobId, amount, paymentIntent.clientSecret);
           },
         );
       }
@@ -181,6 +175,64 @@ class _JobPostStep5ReviewScreenState
         );
       }
     }
+  }
+
+  void _showPaymentFailedDialog(String jobId, double amount, String clientSecret) {
+    if (!mounted) return;
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Payment Not Completed',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Your job has been created but payment was not completed. You can complete payment now or later from the job details.',
+          style: TextStyle(color: Colors.black87),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              widget.onSubmit(); // Continue to job details without payment
+            },
+            child: const Text(
+              'Pay Later',
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              // Retry payment
+              PaymentMethodSelector.show(
+                context: context,
+                amount: amount,
+                paymentIntentClientSecret: clientSecret,
+                onPaymentSuccess: () {
+                  print('DEBUG: Payment completed successfully on retry');
+                  widget.onSubmit();
+                },
+                onPaymentError: (error) {
+                  print('DEBUG: Payment error on retry: $error');
+                  _showPaymentFailedDialog(jobId, amount, clientSecret);
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF8CCFF0),
+            ),
+            child: const Text(
+              'Retry Payment',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   double _calculateTotalAmount(JobPostState state) {

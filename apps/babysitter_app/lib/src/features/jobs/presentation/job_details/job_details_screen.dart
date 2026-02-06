@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:auth/auth.dart';
 import '../../../../theme/app_tokens.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../routing/routes.dart';
 
+import '../../domain/job_details.dart';
 import 'models/job_details_ui_model.dart';
 import 'job_details_provider.dart';
 import '../widgets/jobs_app_bar.dart';
@@ -17,6 +19,8 @@ import '../../data/jobs_data_di.dart'; // For repository
 import '../providers/jobs_providers.dart';
 import '../../domain/job.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/common_widgets/payment_method_selector.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/bookings_di.dart';
 
 class JobDetailsScreen extends ConsumerStatefulWidget {
   final String jobId;
@@ -29,6 +33,7 @@ class JobDetailsScreen extends ConsumerStatefulWidget {
 
 class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
   bool _isDeleting = false;
+  bool _isProcessingPayment = false;
 
   void _showNotEditableToast() {
     AppToast.show(
@@ -91,6 +96,96 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
     }
   }
 
+  Future<void> _handlePayment(JobDetails job) async {
+    final bookingsRepo = ref.read(bookingsRepositoryProvider);
+
+    setState(() => _isProcessingPayment = true);
+
+    try {
+      // Create payment intent for the job
+      print('DEBUG: JobDetails creating payment intent for jobId: ${job.id}');
+      final paymentIntent = await bookingsRepo.createPaymentIntent(job.id);
+      print('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
+
+      // Calculate amount based on job details
+      final amount = _calculateTotalAmount(job);
+      print('DEBUG: JobDetails calculated amount: $amount');
+
+      if (mounted) {
+        setState(() => _isProcessingPayment = false);
+
+        // Show payment method selector
+        await PaymentMethodSelector.show(
+          context: context,
+          amount: amount,
+          paymentIntentClientSecret: paymentIntent.clientSecret,
+          onPaymentSuccess: () {
+            print('DEBUG: Payment completed successfully');
+            // Refresh job details to update payment status
+            ref.invalidate(jobDetailsProvider(widget.jobId));
+            AppToast.show(context,
+              const SnackBar(
+                content: Text('Payment completed successfully!'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          },
+          onPaymentError: (error) {
+            print('DEBUG: Payment error: $error');
+            if (error.contains('cancelled')) {
+              // User cancelled, no need to show error
+              return;
+            }
+            AppToast.show(context,
+              SnackBar(
+                content: Text('Payment failed: $error'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print('DEBUG: JobDetails payment error: $e');
+      if (mounted) {
+        setState(() => _isProcessingPayment = false);
+        AppToast.show(context,
+          SnackBar(
+            content: Text('Error processing payment: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  double _calculateTotalAmount(JobDetails job) {
+    // Calculate total hours
+    final startDateTime = DateTime(
+      job.scheduleStartDate.year,
+      job.scheduleStartDate.month,
+      job.scheduleStartDate.day,
+      job.scheduleStartTime.hour,
+      job.scheduleStartTime.minute,
+    );
+    final endDateTime = DateTime(
+      job.scheduleEndDate.year,
+      job.scheduleEndDate.month,
+      job.scheduleEndDate.day,
+      job.scheduleEndTime.hour,
+      job.scheduleEndTime.minute,
+    );
+
+    final duration = endDateTime.difference(startDateTime);
+    final totalHours = duration.inMinutes / 60.0;
+
+    if (totalHours <= 0) {
+      return job.hourlyRate;
+    }
+
+    return totalHours * job.hourlyRate;
+  }
+
   @override
   Widget build(BuildContext context) {
     final jobAsync = ref.watch(jobDetailsProvider(widget.jobId));
@@ -108,6 +203,9 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
               error: (err, stack) => Center(child: Text('Error: $err')),
               data: (job) {
                 final uiModel = JobDetailsUiModel.fromDomain(job);
+                // Get current user to check if they own this job
+                final currentUser = ref.read(authNotifierProvider).value?.user;
+                final isJobOwner = currentUser != null && job.isOwnedBy(currentUser.id);
                 return MediaQuery(
                   data: MediaQuery.of(context)
                       .copyWith(textScaler: TextScaler.noScaling),
@@ -122,6 +220,36 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                         ),
                         sliver: SliverList(
                           delegate: SliverChildListDelegate([
+                            // Payment Pending Warning (only visible to job owner)
+                            if (job.isDraft && isJobOwner) ...[
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange.shade50,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: Colors.orange.shade200),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.warning_amber_rounded, 
+                                      color: Colors.orange.shade700),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        '⚠️ DRAFT: This job is not yet posted. Complete payment to make it visible to sitters.',
+                                        style: TextStyle(
+                                          color: Colors.orange.shade800,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+
                             // 1. Status Chip
                             Align(
                               alignment: Alignment.centerLeft,
@@ -213,11 +341,15 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
       bottomNavigationBar: jobAsync.maybeWhen(
         data: (job) {
           final isEditable = job.isEditable;
+          final requiresPayment = job.requiresPayment;
+          // Get current user to check if they own this job
+          final currentUser = ref.read(authNotifierProvider).value?.user;
+          final isJobOwner = currentUser != null && job.isOwnedBy(currentUser.id);
           return BottomActionStack(
             primaryLabel: 'Edit job',
             secondaryLabel: 'Manage Applicants',
             outlinedLabel: 'Delete Job',
-            onPrimary: _isDeleting
+            onPrimary: _isDeleting || _isProcessingPayment
                 ? () {}
                 : () async {
                     if (!isEditable) {
@@ -230,8 +362,10 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                     );
                     ref.invalidate(jobDetailsProvider(widget.jobId));
                   },
-            onSecondary: () => context.push(Routes.applications, extra: job.id),
-            onOutlined: _isDeleting
+            onSecondary: _isProcessingPayment
+                ? () {}
+                : () => context.push(Routes.applications, extra: job.id),
+            onOutlined: _isDeleting || _isProcessingPayment
                 ? () {}
                 : () {
                     if (!isEditable) {
@@ -240,6 +374,12 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                     }
                     _deleteJob(job.id);
                   },
+            // Payment button (only visible to job owner)
+            showPaymentButton: requiresPayment && isJobOwner,
+            paymentLabel: _isProcessingPayment ? 'Processing...' : '⚠ Pay Now to Post Job',
+            onPayment: _isProcessingPayment
+                ? () {}
+                : () => _handlePayment(job),
           );
         },
         orElse: () => const SizedBox.shrink(),

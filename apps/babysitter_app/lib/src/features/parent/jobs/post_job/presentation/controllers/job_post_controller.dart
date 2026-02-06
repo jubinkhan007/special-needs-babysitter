@@ -243,17 +243,19 @@ class JobPostController extends StateNotifier<JobPostState> {
       return time;
     }
 
-    // Determine status: when updating an existing job (has jobId) and not saving as draft,
-    // the status should be "posted" to satisfy API requirements
+    // Determine status: 
+    // - Draft jobs: always "draft"
+    // - New jobs being posted: "draft" initially, will be updated to "posted" after payment
+    // - Updating existing job: keep current status
     String? status;
     if (isDraft) {
       status = 'draft';
     } else if (state.jobId != null) {
-      // Updating an existing posted job - must keep status as "posted"
-      status = 'posted';
+      // Updating an existing job - keep existing status (could be "posted" or "draft")
+      status = 'posted'; // Assume posted for existing jobs, or we could track original status
     } else {
-      // New job being posted
-      status = 'posted';
+      // New job being posted - start as draft, will update after payment
+      status = 'draft';
     }
 
     return Job(

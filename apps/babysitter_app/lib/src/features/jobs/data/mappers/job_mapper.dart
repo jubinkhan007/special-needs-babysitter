@@ -33,6 +33,12 @@ extension JobDtoMapper on JobDto {
       }
     }
 
+    // Helper to check if job is in draft status (needs payment)
+    bool isDraftStatus(String statusStr) {
+      final normalized = statusStr.toLowerCase().trim();
+      return normalized == 'draft';
+    }
+
     final childCount = childIds.length;
     final children = childCount > 0
         ? [
@@ -56,6 +62,8 @@ extension JobDtoMapper on JobDto {
       childIds: childIds,
       // Show a count-based placeholder in list views when only IDs are available.
       children: children,
+      isDraft: isDraftStatus(status),
+      parentUserId: parentUserId,
     );
   }
 
@@ -102,6 +110,12 @@ extension JobDtoMapper on JobDto {
         default:
           return JobStatus.pending;
       }
+    }
+
+    // Helper to check if job is in draft status (needs payment)
+    bool isDraftStatus(String statusStr) {
+      final normalized = statusStr.toLowerCase().trim();
+      return normalized == 'draft';
     }
 
     final trimmedEmergencyName = (emergencyContactName ?? '').trim();
@@ -154,6 +168,8 @@ extension JobDtoMapper on JobDto {
       additionalNotes: additionalDetails ?? '',
       hourlyRate: payRate,
       applicantsCount: applicantIds.length,
+      isDraft: isDraftStatus(status),
+      parentUserId: parentUserId,
     );
   }
 }

@@ -18,6 +18,8 @@ class JobDetails {
   final String additionalNotes;
   final double hourlyRate;
   final int applicantsCount;
+  final bool isDraft;
+  final String parentUserId;
 
   const JobDetails({
     required this.id,
@@ -36,10 +38,19 @@ class JobDetails {
     required this.additionalNotes,
     required this.hourlyRate,
     required this.applicantsCount,
+    this.isDraft = false,
+    required this.parentUserId,
   });
 
   /// Returns true if the job can be edited/deleted.
   /// A job is editable only if status is pending (not active/in-progress or closed/completed).
   /// The server will enforce additional validation (e.g., if job has actually started).
   bool get isEditable => status == JobStatus.pending;
+  
+  /// Returns true if payment is required to activate this job
+  /// A job in "draft" status needs payment to be posted
+  bool get requiresPayment => isDraft;
+  
+  /// Returns true if the given userId is the owner of this job
+  bool isOwnedBy(String userId) => parentUserId == userId;
 }

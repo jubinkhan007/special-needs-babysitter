@@ -51,7 +51,10 @@ class PaymentMethodSelector extends StatefulWidget {
           Navigator.of(context).pop();
           onPaymentError(error);
         },
-        onCancel: () => Navigator.of(context).pop(),
+        onCancel: () {
+          Navigator.of(context).pop();
+          onPaymentError('Payment cancelled by user');
+        },
       ),
     );
   }
@@ -236,6 +239,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
       print('DEBUG: Stripe error: ${e.error.localizedMessage}');
       if (e.error.code == FailureCode.Canceled) {
         setState(() => _isProcessing = false);
+        widget.onCancel(); // Notify parent that user cancelled
       } else {
         widget.onPaymentError(e.error.localizedMessage ?? 'Payment failed');
       }

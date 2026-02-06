@@ -77,6 +77,7 @@ class Routes {
   static const String sitterBackgroundCheckComplete =
       '/sitter/background-check/complete';
   static const String sitterWallet = '/sitter/wallet';
+  static const String referralBonuses = '/referrals-bonuses';
 
   /// Check if route is an auth route
   static bool isAuthRoute(String path) {
@@ -90,6 +91,6 @@ class Routes {
 
   /// Check if route is a sitter route
   static bool isSitterRoute(String path) {
-    return path.startsWith('/sitter');
+    return path.startsWith('/sitter') || path == referralBonuses;
   }
 }

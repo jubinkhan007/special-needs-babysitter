@@ -134,12 +134,7 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                     context.push(Routes.sitterWallet);
                   },
                   onTapReferralBonuses: () {
-                    // TODO: Navigate to referral & bonuses
-                    AppToast.show(
-                      context,
-                      const SnackBar(
-                          content: Text('Referral & Bonuses coming soon')),
-                    );
+                    context.push(Routes.referralBonuses);
                   },
                   onTapSettings: () {
                     context.push(Routes.sitterSettings);

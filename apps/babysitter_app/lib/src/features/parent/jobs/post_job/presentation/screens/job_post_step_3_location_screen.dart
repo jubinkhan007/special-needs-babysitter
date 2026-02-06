@@ -73,7 +73,6 @@ class _JobPostStep3LocationScreenState
 
   Future<Map<String, dynamic>?> _geocodeAddress() async {
     final street = _streetAddressController.text.trim();
-    final apt = _unitController.text.trim();
     final city = _cityController.text.trim();
     final state = _stateController.text.trim();
     final zip = _zipCodeController.text.trim();
@@ -91,11 +90,9 @@ class _JobPostStep3LocationScreenState
     setState(() => _isGeocoding = true);
 
     try {
-      // Build address string
-      final parts = [street, apt, city, '$state $zip']
-          .where((p) => p.isNotEmpty)
-          .toList();
-      final fullAddress = parts.join(', ');
+      // Build address string (exclude apt/unit from geocoding - it's often
+      // invalid placeholder text or causes geocoding failures)
+      final fullAddress = '$street, $city, $state $zip';
 
       // Geocode address
       final addresses = await locationFromAddress(fullAddress);
@@ -120,6 +117,23 @@ class _JobPostStep3LocationScreenState
         'latitude': location.latitude,
         'longitude': location.longitude,
       };
+    } on PlatformException catch (e) {
+      // Handle specific geocoding errors
+      if (!mounted) return null;
+      setState(() => _isGeocoding = false);
+      
+      String errorMessage = 'Unable to find location for this address.';
+      if (e.code == 'IO_ERROR' && e.message?.contains('Code=2') == true) {
+        errorMessage = 'Address not found. Please check street, city, state, and zip code.';
+      }
+      
+      AppToast.show(context, 
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return null;
     } catch (e) {
       if (!mounted) return null;
       setState(() => _isGeocoding = false);
@@ -197,10 +211,10 @@ class _JobPostStep3LocationScreenState
 
                     const SizedBox(height: 16), // Gap ~16-18
 
-                    // Apt/Unit/Suite Field
+                    // Apt/Unit/Suite Field (optional)
                     _buildField(
                       controller: _unitController,
-                      hint: 'Apt/Unit/Suite*',
+                      hint: 'Apt/Unit/Suite (optional)',
                     ),
 
                     const SizedBox(height: 16),

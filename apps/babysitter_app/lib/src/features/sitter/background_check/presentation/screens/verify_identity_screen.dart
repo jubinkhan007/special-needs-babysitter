@@ -55,66 +55,85 @@ class VerifyIdentityScreen extends StatelessWidget {
                         height: 1.5,
                       ),
                     ),
-                    SizedBox(height: 48.h),
-                    // Hero Image
-                    Center(
-                      child: Image.asset(
-                        'assets/images/verify_identity_hero.png',
-                        width: 280.w,
-                        fit: BoxFit.contain,
-                      ),
+                    SizedBox(height: 32.h),
+                    // Hero Image - responsive sizing
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final availableHeight =
+                            MediaQuery.of(context).size.height * 0.35;
+                        return Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: 280.w,
+                              maxHeight: availableHeight,
+                            ),
+                            child: Image.asset(
+                              'assets/images/verify_identity_hero.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    SizedBox(height: 48.h),
+                    SizedBox(height: 24.h),
                   ],
                 ),
               ),
             ),
             // Bottom Action Area
-            Padding(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                children: [
-                  // Button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52.h,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.push(Routes.sitterBackgroundCheck);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF89CFF0), // Light blue
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Button - using padding instead of fixed height for responsiveness
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.push(Routes.sitterBackgroundCheck);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF89CFF0), // Light blue
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 16.h,
+                            horizontal: 16.w,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'Begin Identity Verification',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
+                        child: Text(
+                          'Begin Identity Verification',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
-                  // Footer Text
-                  Text(
-                    'We use a secure third-party provider to verify your identity. No ID images are stored in our app.',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFF667085),
-                      fontFamily: 'Inter',
-                      height: 1.4,
+                    SizedBox(height: 16.h),
+                    // Footer Text
+                    Text(
+                      'We use a secure third-party provider to verify your identity. No ID images are stored in our app.',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF667085),
+                        fontFamily: 'Inter',
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 8.h),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

@@ -43,6 +43,7 @@ import '../features/sitter/account/presentation/profile_details/presentation/sit
 import '../features/sitter/account/presentation/screens/sitter_reviews_screen.dart';
 import '../features/sitter/saved_jobs/presentation/screens/sitter_saved_jobs_screen.dart';
 import '../features/sitter/account/presentation/screens/sitter_settings_screen.dart';
+import '../features/referrals/presentation/screens/referral_bonuses_screen.dart';
 import '../features/parent/jobs/post_job/presentation/screens/job_posting_flow.dart';
 import '../features/sitter_profile_setup/presentation/screens/sitter_profile_setup_flow.dart';
 import '../features/parent/sitter_profile/presentation/screens/sitter_profile_page.dart';
@@ -691,6 +692,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.sitterWallet,
         builder: (context, state) => const SitterWalletScreen(),
+      ),
+      GoRoute(
+        path: Routes.referralBonuses,
+        builder: (context, state) => const ReferralBonusesScreen(),
       ),
 
       // Sitter Profile Details (full screen, outside shell)

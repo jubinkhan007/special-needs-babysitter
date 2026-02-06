@@ -67,9 +67,9 @@ class MessageThreadTile extends StatelessWidget {
                         children: [
                           if (uiModel.showCallEndedIcon) ...[
                             Icon(
-                              Icons.call_made_rounded,
+                              _getCallIcon(uiModel.previewText),
                               size: 14,
-                              color: AppTokens.messagePreviewColor,
+                              color: _getCallIconColor(uiModel.previewText),
                             ),
                             SizedBox(width: 4),
                           ],
@@ -123,5 +123,24 @@ class MessageThreadTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  IconData _getCallIcon(String previewText) {
+    final lowerText = previewText.toLowerCase();
+    if (lowerText.contains('missed')) {
+      return Icons.call_missed_outlined;
+    } else if (lowerText.contains('incoming')) {
+      return Icons.call_received_outlined;
+    } else {
+      return Icons.call_made_outlined;
+    }
+  }
+
+  Color _getCallIconColor(String previewText) {
+    final lowerText = previewText.toLowerCase();
+    if (lowerText.contains('missed')) {
+      return Colors.red;
+    }
+    return AppTokens.messagePreviewColor;
   }
 }

@@ -9,14 +9,23 @@ class CallLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Screenshot has:
-    // Icon (diagonal arrow)  Title
-    //                        Subtitle    Time
-
-    // Actually the design is:
-    // Row(Icon, Column(Title, Row(Subtitle, Spacer, Time)))
-
     final isVideo = uiModel.isVideoCall;
+    final isMissed = uiModel.isMissedCall;
+
+    // Choose icon based on call type
+    IconData callIcon;
+    Color iconColor = AppTokens.messageNameColor;
+    
+    if (isMissed) {
+      callIcon = isVideo ? Icons.videocam_off_outlined : Icons.call_missed_outlined;
+      iconColor = Colors.red;
+    } else if (uiModel.isMe) {
+      // Outgoing call
+      callIcon = isVideo ? Icons.videocam_outlined : Icons.call_made_outlined;
+    } else {
+      // Incoming call
+      callIcon = isVideo ? Icons.videocam_outlined : Icons.call_received_outlined;
+    }
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -24,9 +33,7 @@ class CallLogTile extends StatelessWidget {
         vertical: 8,
       ),
       child: Align(
-        alignment: uiModel.isVideoCall
-            ? Alignment.centerRight
-            : Alignment.centerLeft, // Missed video aligned right in screenshot
+        alignment: Alignment.center, // Center align like WhatsApp
         child: Container(
           width: 0.75 * MediaQuery.of(context).size.width, // Max width
           padding: const EdgeInsets.all(12),
@@ -37,66 +44,44 @@ class CallLogTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Row 1: Icon + Title + (Optional Video Icon at end)
+              // Row 1: Icon + Title
               Row(
                 mainAxisSize: MainAxisSize.min, // Hug content
                 children: [
-                  if (!isVideo) ...[
-                    Icon(
-                      uiModel.isMissedCall
-                          ? Icons.call_missed_outlined
-                          : Icons.call_received_outlined,
-                      // Screenshot: Voice Call has arrow down-left (received), Missed has bounced.
-                      // Using outlined variants for lighter weight.
-                      size: 16,
-                      color: AppTokens.messageNameColor,
-                    ),
-                    const SizedBox(width: 8),
-                  ],
+                  Icon(
+                    callIcon,
+                    size: 16,
+                    color: iconColor,
+                  ),
+                  const SizedBox(width: 8),
                   Text(
                     uiModel.callTitle ?? 'Call',
                     style: AppTokens.callTileTitleStyle,
                   ),
-                  if (isVideo) ...[
-                    const SizedBox(width: 8),
-                    // Video icon on the right of title
-                    const Icon(Icons.videocam_outlined,
-                        size: 18, color: AppTokens.messageNameColor),
-                  ]
                 ],
               ),
               const SizedBox(height: 4),
 
-              // Row 2
+              // Row 2: Duration (if available) + Time
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (isVideo) ...[
-                    // Missed Video Call (Right Aligned in Screen)
-                    // Snapshot: Time on Left, Duration on Right
-                    Text(
-                      uiModel.callTime ?? '',
-                      style: AppTokens.chatMetaStyle,
-                    ),
-                    Text(
-                      uiModel.callSubtitle ?? '',
-                      style: AppTokens.callTileSubStyle,
-                    ),
-                  ] else ...[
-                    // Voice Call (Left Aligned in Screen)
-                    // Snapshot: Duration on Left (indented), Time on Right
+                  // Duration or status
+                  if (uiModel.callSubtitle != null && uiModel.callSubtitle!.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(left: 24.0),
                       child: Text(
-                        uiModel.callSubtitle ?? '',
+                        uiModel.callSubtitle!,
                         style: AppTokens.callTileSubStyle,
                       ),
-                    ),
-                    Text(
-                      uiModel.callTime ?? '',
-                      style: AppTokens.chatMetaStyle,
-                    ),
-                  ],
+                    )
+                  else
+                    const Spacer(),
+                  // Time
+                  Text(
+                    uiModel.callTime ?? '',
+                    style: AppTokens.chatMetaStyle,
+                  ),
                 ],
               ),
             ],

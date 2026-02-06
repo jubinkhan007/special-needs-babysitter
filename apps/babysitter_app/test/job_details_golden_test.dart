@@ -36,6 +36,7 @@ void main() {
         'My son is sensitive to loud noises, so please keep a calm and quiet environment.',
     hourlyRate: 20.0,
     applicantsCount: 5,
+    parentUserId: 'parent-1',
   );
 
   Widget createScreen() {

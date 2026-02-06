@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:domain/domain.dart';
 import '../../domain/message_thread.dart' as local; // Keep for backward compatibility if needed, or remove if unused.
@@ -32,13 +33,9 @@ class MessageThreadUiModel {
     final timeFormat = DateFormat('h:mm a'); // "4:27 PM"
     final timeText = timeFormat.format(thread.lastMessageTime);
 
-    String previewText = thread.lastMessage;
-    bool showCallIcon = false;
-
-    if (thread.lastMessageType == local.MessageType.callEnded) {
-      previewText = 'Call Ended';
-      showCallIcon = true;
-    }
+    String previewText = _formatLocalPreviewText(thread.lastMessage, thread.lastMessageType);
+    bool showCallIcon = thread.lastMessageType == local.MessageType.callEnded ||
+                        thread.lastMessageType == local.MessageType.callLog;
 
     return MessageThreadUiModel(
       id: thread.id,
@@ -57,13 +54,9 @@ class MessageThreadUiModel {
     final timeFormat = DateFormat('h:mm a');
     final timeText = timeFormat.format(conversation.lastMessageTime);
 
-    String previewText = conversation.lastMessage;
-    bool showCallIcon = false;
-
-    if (conversation.lastMessageType == MessageType.callEnded) {
-      previewText = 'Call Ended';
-      showCallIcon = true;
-    }
+    String previewText = _formatDomainPreviewText(conversation.lastMessage, conversation.lastMessageType);
+    bool showCallIcon = conversation.lastMessageType == MessageType.callEnded ||
+                        conversation.lastMessageType == MessageType.callLog;
 
     return MessageThreadUiModel(
       id: conversation.id,
@@ -76,5 +69,67 @@ class MessageThreadUiModel {
       isVerified: conversation.isVerified,
       isSystemThread: conversation.isSystem,
     );
+  }
+
+  /// Helper to format preview text for local MessageType
+  static String _formatLocalPreviewText(String lastMessage, local.MessageType messageType) {
+    // Handle different message types
+    switch (messageType) {
+      case local.MessageType.image:
+        return 'Photo';
+      case local.MessageType.callEnded:
+        return 'Call Ended';
+      case local.MessageType.callLog:
+        return 'Call';
+      case local.MessageType.system:
+        return lastMessage;
+      case local.MessageType.text:
+      default:
+        break;
+    }
+
+    // Check if the message is a call_invite JSON (filter out system call invites)
+    if (_isCallInviteJson(lastMessage)) {
+      return 'Incoming call';
+    }
+
+    return lastMessage;
+  }
+
+  /// Helper to format preview text for domain MessageType
+  static String _formatDomainPreviewText(String lastMessage, MessageType messageType) {
+    // Handle different message types
+    switch (messageType) {
+      case MessageType.image:
+        return 'Photo';
+      case MessageType.callEnded:
+        return 'Call Ended';
+      case MessageType.callLog:
+        return 'Call';
+      case MessageType.system:
+        return lastMessage;
+      case MessageType.text:
+      default:
+        break;
+    }
+
+    // Check if the message is a call_invite JSON (filter out system call invites)
+    if (_isCallInviteJson(lastMessage)) {
+      return 'Incoming call';
+    }
+
+    return lastMessage;
+  }
+
+  /// Check if the message text is a call_invite JSON
+  static bool _isCallInviteJson(String text) {
+    if (text.isEmpty) return false;
+    if (!text.contains('call_invite')) return false;
+    try {
+      final decoded = jsonDecode(text);
+      return decoded is Map<String, dynamic> && decoded['type'] == 'call_invite';
+    } catch (_) {
+      return false;
+    }
   }
 }

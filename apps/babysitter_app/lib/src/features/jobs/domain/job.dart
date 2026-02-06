@@ -13,6 +13,8 @@ class Job {
   final String rateText;
   final List<String> childIds;
   final List<ChildDetail> children;
+  final bool isDraft;
+  final String parentUserId;
 
   const Job({
     required this.id,
@@ -23,7 +25,16 @@ class Job {
     required this.rateText,
     this.childIds = const [],
     required this.children,
+    this.isDraft = false,
+    required this.parentUserId,
   });
+  
+  /// Returns true if payment is required to activate this job
+  /// A job in "draft" status needs payment to be posted
+  bool get requiresPayment => isDraft;
+  
+  /// Returns true if the given userId is the owner of this job
+  bool isOwnedBy(String userId) => parentUserId == userId;
 }
 
 class ChildDetail {
