@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/entities/call_enums.dart';
 import '../presentation/controllers/call_state.dart';
 import '../presentation/providers/calls_providers.dart';
-import '../presentation/screens/incoming_call_screen.dart';
+import 'call_navigation_guard.dart';
 
 /// Polls call history to detect incoming ringing calls when FCM is unavailable.
 class IncomingCallPollingHandler {
@@ -96,18 +96,14 @@ class IncomingCallPollingHandler {
 
     final state = _ref.read(callControllerProvider);
     if (state is IncomingRinging && state.callId == callId) {
-      final navigator = navigatorKey.currentState;
-      if (navigator == null) return;
-      navigator.push(
-        MaterialPageRoute(
-          builder: (_) => IncomingCallScreen(
-            callId: callId,
-            callType: callType,
-            callerName: callerName,
-            callerUserId: callerUserId,
-            callerAvatar: callerAvatar,
-          ),
-        ),
+      // Use navigation guard to prevent duplicate screens
+      final guard = _ref.read(callNavigationGuardProvider(navigatorKey));
+      guard.showIncomingCallScreen(
+        callId: callId,
+        callType: callType,
+        callerName: callerName,
+        callerUserId: callerUserId,
+        callerAvatar: callerAvatar,
       );
     }
   }

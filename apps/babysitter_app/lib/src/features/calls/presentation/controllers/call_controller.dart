@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:realtime/realtime.dart';
 import 'package:auth/auth.dart';
 
@@ -33,6 +34,9 @@ class CallController extends Notifier<CallState> {
 
   // Current user ID for UID generation - must be set before calls
   String? _currentUserId;
+
+  // Guard against concurrent join attempts (prevents race condition causing error -17)
+  bool _isJoiningCall = false;
 
   @override
   CallState build() => const CallIdle();
@@ -218,7 +222,10 @@ class CallController extends Notifier<CallState> {
 
     // Fetch full call details in background
     try {
-      final session = await _repository.getCallDetails(callId);
+      var session = await _repository.getCallDetails(callId);
+      if (session.callType != callType) {
+        session = session.copyWith(callType: callType);
+      }
       if (state is IncomingRinging && (state as IncomingRinging).callId == callId) {
         state = (state as IncomingRinging).withSession(session);
       }
@@ -233,6 +240,7 @@ class CallController extends Notifier<CallState> {
 
     _incomingPollingTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
       // Only poll while still in incoming ringing state for this call
+      // Stop polling if we're no longer in IncomingRinging state (user accepted/declined)
       if (state is! IncomingRinging || (state as IncomingRinging).callId != callId) {
         timer.cancel();
         return;
@@ -241,12 +249,19 @@ class CallController extends Notifier<CallState> {
       try {
         final session = await _repository.getCallDetails(callId);
 
-        // Caller cancelled or call ended
-        if (session.status != CallStatus.ringing) {
+        // Only treat as cancelled if status is ended/missed/declined
+        // Status 'accepted' is NOT a cancellation - it means someone accepted
+        if (session.status == CallStatus.ended ||
+            session.status == CallStatus.missed ||
+            session.status == CallStatus.declined) {
           timer.cancel();
           await _endCallKitUI(callId);
           state = CallEnded(callId: callId, reason: CallEndReason.cancelled);
           _cleanup();
+        }
+        // If status is 'accepted', stop polling but don't end - let acceptCall() handle it
+        else if (session.status == CallStatus.accepted) {
+          timer.cancel();
         }
       } catch (e) {
         developer.log('Incoming polling error: $e', name: 'Calls');
@@ -260,10 +275,34 @@ class CallController extends Notifier<CallState> {
     if (currentState is! IncomingRinging) return;
 
     final callId = currentState.callId;
+    final callType = currentState.callType;
+
+    // Cancel incoming polling immediately to prevent race conditions
+    _incomingPollingTimer?.cancel();
+    _incomingPollingTimer = null;
+
+    state = const CallLoading('Checking permissions...');
+
+    // Check permissions BEFORE accepting on backend
+    final permissionsGranted = await _ensureCallPermissions(callType);
+    if (!permissionsGranted) {
+      developer.log('Call permissions denied, declining call $callId', name: 'Calls');
+      try {
+        await _repository.declineCall(callId, reason: 'permissions_denied');
+      } catch (_) {}
+      await _endCallKitUI(callId);
+      state = CallError(message: _permissionErrorMessage(callType));
+      _cleanup();
+      return;
+    }
+
     state = const CallLoading('Connecting...');
 
     try {
-      final session = await _repository.acceptCall(callId);
+      var session = await _repository.acceptCall(callId);
+      if (session.callType != callType) {
+        session = session.copyWith(callType: callType);
+      }
 
       // FIX #9: End CallKit UI after accepting
       await _endCallKitUI(callId);
@@ -284,6 +323,10 @@ class CallController extends Notifier<CallState> {
 
     final callId = currentState.callId;
 
+    // Cancel incoming polling immediately
+    _incomingPollingTimer?.cancel();
+    _incomingPollingTimer = null;
+
     try {
       await _repository.declineCall(callId, reason: reason);
     } catch (e) {
@@ -300,36 +343,94 @@ class CallController extends Notifier<CallState> {
 
   /// Join Agora channel after call is accepted
   Future<void> _joinCall(CallSession session) async {
+    // Guard against double-join (fixes error -17)
+    if (state is InCall) {
+      developer.log(
+        'Already in call, ignoring duplicate _joinCall request',
+        name: 'Calls',
+      );
+      return;
+    }
+    if (_isJoiningCall) {
+      developer.log(
+        'Join already in progress, skipping duplicate _joinCall request',
+        name: 'Calls',
+      );
+      return;
+    }
+
+    _isJoiningCall = true;
+
     try {
+      final permissionsGranted = await _ensureCallPermissions(session.callType);
+      if (!permissionsGranted) {
+        developer.log('Call permissions denied for ${session.callId}', name: 'Calls');
+        try {
+          await _repository.endCall(session.callId);
+        } catch (_) {}
+        await _endCallKitUI(session.callId);
+        state = CallError(message: _permissionErrorMessage(session.callType));
+        _cleanup();
+        return;
+      }
+
       // Get appId from backend config
       final config = await _repository.getCallConfig();
 
-      await _callService.initialize();
-
-      // FIX #5: Generate UID from current user ID
-      final uid = _generateUid();
+      await _callService.initialize(appId: config.appId);
 
       // Subscribe to call events
       _callEventSubscription = _callService.events.listen(_handleCallEvent);
 
-      if (session.callType == CallType.video) {
-        await _callService.enableLocalVideo(true);
+      final isVideoCall = session.callType == CallType.video;
+
+      var effectiveSession = session;
+      int? uidFromBackend = effectiveSession.agoraUid;
+
+      // If token or channel is missing, OR if we don't have a UID, request from backend
+      if (effectiveSession.channelName.isEmpty ||
+          effectiveSession.rtcToken == null ||
+          effectiveSession.rtcToken!.isEmpty ||
+          uidFromBackend == null) {
+        developer.log(
+          'RTC token/uid missing or channel empty, requesting token for callId=${session.callId}',
+          name: 'Calls',
+        );
+        final refresh = await _repository.refreshToken(session.callId);
+        effectiveSession = effectiveSession.copyWith(
+          rtcToken: refresh.rtcToken,
+          channelName: refresh.channelName.isNotEmpty
+              ? refresh.channelName
+              : effectiveSession.channelName,
+          tokenExpiresAt: refresh.expiresAt,
+          agoraUid: refresh.agoraUid ?? effectiveSession.agoraUid,
+        );
+        uidFromBackend = effectiveSession.agoraUid;
       }
 
+      // CRITICAL FIX for error -17: Use UID from backend if available.
+      // Backend currently generates tokens with uid=0 (auto-assign), so default to 0.
+      final uid = uidFromBackend ?? 0;
+
+      developer.log(
+        'Joining channel=${effectiveSession.channelName} uid=$uid video=$isVideoCall tokenLen=${effectiveSession.rtcToken?.length ?? 0}',
+        name: 'Calls',
+      );
       await _callService.joinChannel(
-        channelName: session.channelName,
+        channelName: effectiveSession.channelName,
         uid: uid,
-        token: session.rtcToken,
+        token: effectiveSession.rtcToken,
+        enableVideo: isVideoCall,
       );
 
       state = InCall(
-        session: session,
-        isVideoEnabled: session.callType == CallType.video,
+        session: effectiveSession,
+        isVideoEnabled: effectiveSession.callType == CallType.video,
       );
 
       _startCallTimer();
-      _startInCallPolling(session.callId);
-      _scheduleTokenRefresh(session);
+      _startInCallPolling(effectiveSession.callId);
+      _scheduleTokenRefresh(effectiveSession);
     } catch (e) {
       developer.log('Failed to join call: $e', name: 'Calls');
       // Try to end call on backend
@@ -338,6 +439,8 @@ class CallController extends Notifier<CallState> {
       } catch (_) {}
       state = CallError(message: 'Failed to connect: ${e.toString()}');
       _cleanup();
+    } finally {
+      _isJoiningCall = false;
     }
   }
 
@@ -374,7 +477,11 @@ class CallController extends Notifier<CallState> {
 
     switch (event) {
       case UserJoinedEvent(:final uid):
-        state = current.copyWith(remoteUid: uid, remoteJoined: true);
+        state = current.copyWith(
+          remoteUid: uid,
+          remoteJoined: true,
+          remoteVideoMuted: false,
+        );
         break;
 
       case UserLeftEvent():
@@ -387,6 +494,13 @@ class CallController extends Notifier<CallState> {
 
       case CallErrorEvent(:final message):
         developer.log('Agora error: $message', name: 'Calls');
+        break;
+
+      case UserMuteVideoEvent(:final uid, :final muted):
+        state = current.copyWith(
+          remoteUid: current.remoteUid ?? uid,
+          remoteVideoMuted: muted,
+        );
         break;
 
       default:
@@ -552,6 +666,24 @@ class CallController extends Notifier<CallState> {
     }
   }
 
+  Future<bool> _ensureCallPermissions(CallType callType) async {
+    final permissions = <Permission>[Permission.microphone];
+    if (callType == CallType.video) {
+      permissions.add(Permission.camera);
+    }
+
+    final statuses = await permissions.request();
+    final denied = statuses.values.any((status) => !status.isGranted);
+    return !denied;
+  }
+
+  String _permissionErrorMessage(CallType callType) {
+    if (callType == CallType.video) {
+      return 'Camera and microphone permission are required for video calls.';
+    }
+    return 'Microphone permission is required for audio calls.';
+  }
+
   /// FIX #9: End CallKit UI
   Future<void> _endCallKitUI(String callId) async {
     try {
@@ -597,6 +729,7 @@ class CallController extends Notifier<CallState> {
     _tokenRefreshTimer = null;
     _callEventSubscription?.cancel();
     _callEventSubscription = null;
+    _isJoiningCall = false;
   }
 
   Future<void> _sendChatInvite({

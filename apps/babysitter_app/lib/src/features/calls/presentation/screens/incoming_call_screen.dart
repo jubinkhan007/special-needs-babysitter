@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:auth/auth.dart';
 
 import '../../domain/entities/call_enums.dart';
 import '../controllers/call_state.dart';
@@ -13,7 +14,7 @@ import '../../../../theme/app_tokens.dart';
 import 'in_call_screen.dart';
 
 /// Screen shown when sitter receives an incoming call
-class IncomingCallScreen extends ConsumerWidget {
+class IncomingCallScreen extends ConsumerStatefulWidget {
   final String callId;
   final CallType callType;
   final String callerName;
@@ -30,26 +31,52 @@ class IncomingCallScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<IncomingCallScreen> createState() => _IncomingCallScreenState();
+}
+
+class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
+  bool _hasNavigated = false;
+
+  @override
+  Widget build(BuildContext context) {
     final callState = ref.watch(callControllerProvider);
 
-    // Listen for state changes
+    // Listen for state changes (with guard against duplicate navigation)
     ref.listen<CallState>(callControllerProvider, (previous, next) {
+      if (_hasNavigated || !mounted) return;
+
       if (next is InCall) {
+        _hasNavigated = true;
         // End CallKit UI and navigate to in-call screen
-        CallNotificationService.endCall(callId);
+        CallNotificationService.endCall(widget.callId);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const InCallScreen()),
         );
       } else if (next is CallEnded || next is CallIdle) {
-        CallNotificationService.endCall(callId);
+        _hasNavigated = true;
+        CallNotificationService.endCall(widget.callId);
         Navigator.of(context).pop();
       } else if (next is CallError) {
-        CallNotificationService.endCall(callId);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.message), backgroundColor: Colors.red),
+        _hasNavigated = true;
+        CallNotificationService.endCall(widget.callId);
+        // Show error dialog before popping
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Call Failed'),
+            content: Text(next.message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         );
-        Navigator.of(context).pop();
       }
     });
 
@@ -70,12 +97,12 @@ class IncomingCallScreen extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           CallAvatar(
-                            avatarUrl: callerAvatar,
+                            avatarUrl: widget.callerAvatar,
                             size: AppTokens.callAvatarLargeSize,
                           ),
                           SizedBox(height: AppTokens.callVerticalSpacingMd),
                           Text(
-                            callerName,
+                            widget.callerName,
                             style: AppTokens.callNameLargeStyle,
                             textAlign: TextAlign.center,
                           ),
@@ -97,7 +124,7 @@ class IncomingCallScreen extends ConsumerWidget {
               right: 0,
               bottom: MediaQuery.of(context).padding.bottom + 20.h,
               child: Center(
-                child: _buildActionButtons(context, ref, callState),
+                child: _buildActionButtons(context, callState),
               ),
             ),
           ],
@@ -107,16 +134,12 @@ class IncomingCallScreen extends ConsumerWidget {
   }
 
   String _getCallTypeLabel() {
-    return callType == CallType.video
+    return widget.callType == CallType.video
         ? 'Incoming Video Call'
         : 'Incoming Audio Call';
   }
 
-  Widget _buildActionButtons(
-    BuildContext context,
-    WidgetRef ref,
-    CallState state,
-  ) {
+  Widget _buildActionButtons(BuildContext context, CallState state) {
     final isLoading = state is CallLoading;
 
     return Container(
@@ -140,12 +163,23 @@ class IncomingCallScreen extends ConsumerWidget {
                 : () => ref.read(callControllerProvider.notifier).declineCall(),
           ),
           _buildActionButton(
-            icon:
-                callType == CallType.video ? Icons.videocam_rounded : Icons.call,
+            icon: widget.callType == CallType.video
+                ? Icons.videocam_rounded
+                : Icons.call,
             color: const Color(0xFF22C55E),
             onTap: isLoading
                 ? null
-                : () => ref.read(callControllerProvider.notifier).acceptCall(),
+                : () {
+                    // Ensure user ID is set before accepting
+                    final currentUser =
+                        ref.read(currentUserProvider).valueOrNull;
+                    if (currentUser?.id != null) {
+                      ref
+                          .read(callControllerProvider.notifier)
+                          .setCurrentUserId(currentUser!.id);
+                    }
+                    ref.read(callControllerProvider.notifier).acceptCall();
+                  },
             isLoading: isLoading,
           ),
         ],

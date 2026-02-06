@@ -8,8 +8,7 @@ import '../domain/entities/call_enums.dart';
 import '../presentation/controllers/call_controller.dart';
 import '../presentation/controllers/call_state.dart';
 import '../presentation/providers/calls_providers.dart';
-import '../presentation/screens/incoming_call_screen.dart';
-import '../presentation/screens/in_call_screen.dart';
+import 'call_navigation_guard.dart';
 import 'call_notification_service.dart';
 import 'callkit_event_handler.dart';
 
@@ -76,8 +75,9 @@ class IncomingCallHandler {
     // Check if controller accepted the call (not busy)
     final state = _ref.read(callControllerProvider);
     if (state is IncomingRinging && state.callId == callId) {
-      // Show in-app incoming call screen
-      _showIncomingCallScreen(
+      // Show in-app incoming call screen (guard prevents duplicates)
+      final guard = _ref.read(callNavigationGuardProvider(navigatorKey));
+      final shown = guard.showIncomingCallScreen(
         callId: callId,
         callType: CallType.fromString(callType ?? 'audio'),
         callerName: callerName,
@@ -85,13 +85,15 @@ class IncomingCallHandler {
         callerAvatar: callerAvatar,
       );
 
-      // Also show CallKit UI for system integration
-      CallNotificationService.showIncomingCallUI(
-        callId: callId,
-        callerName: callerName,
-        callerAvatar: callerAvatar,
-        isVideo: callType == 'video',
-      );
+      // Also show CallKit UI for system integration (only if screen was shown)
+      if (shown) {
+        CallNotificationService.showIncomingCallUI(
+          callId: callId,
+          callerName: callerName,
+          callerAvatar: callerAvatar,
+          isVideo: callType == 'video',
+        );
+      }
     }
   }
 
@@ -117,80 +119,39 @@ class IncomingCallHandler {
   /// Handle CallKit action (user tapped accept/decline on notification)
   void _handleCallKitAction(CallKitAction action) {
     final callId = action.callId;
+    final guard = _ref.read(callNavigationGuardProvider(navigatorKey));
 
     switch (action) {
       case CallKitAccepted(:final isVideo):
         developer.log('CallKit: User accepted $callId', name: 'Calls');
         _ref.read(callControllerProvider.notifier).acceptCall();
-        _navigateToInCallScreen();
+        guard.showInCallScreen();
         break;
 
       case CallKitDeclined():
         developer.log('CallKit: User declined $callId', name: 'Calls');
         _ref.read(callControllerProvider.notifier).declineCall();
-        _popToRoot();
+        guard.popToRootAndClear();
         break;
 
       case CallKitEnded():
         developer.log('CallKit: Call ended $callId', name: 'Calls');
         _ref.read(callControllerProvider.notifier).endCall();
-        _popToRoot();
+        guard.popToRootAndClear();
         break;
 
       case CallKitTimedOut():
         developer.log('CallKit: Call timed out $callId', name: 'Calls');
         _ref.read(callControllerProvider.notifier).declineCall(reason: 'No answer');
-        _popToRoot();
+        guard.popToRootAndClear();
         break;
 
       case CallKitMissed():
         developer.log('CallKit: Missed call $callId', name: 'Calls');
         _ref.read(callControllerProvider.notifier).reset();
+        guard.reset();
         break;
     }
-  }
-
-  /// Show incoming call screen
-  void _showIncomingCallScreen({
-    required String callId,
-    required CallType callType,
-    required String callerName,
-    required String callerUserId,
-    String? callerAvatar,
-  }) {
-    final navigator = navigatorKey.currentState;
-    if (navigator == null) return;
-
-    navigator.push(
-      MaterialPageRoute(
-        builder: (_) => IncomingCallScreen(
-          callId: callId,
-          callType: callType,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          callerAvatar: callerAvatar,
-        ),
-      ),
-    );
-  }
-
-  /// Navigate to in-call screen
-  void _navigateToInCallScreen() {
-    final navigator = navigatorKey.currentState;
-    if (navigator == null) return;
-
-    navigator.pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const InCallScreen()),
-      (route) => route.isFirst,
-    );
-  }
-
-  /// Pop back to root
-  void _popToRoot() {
-    final navigator = navigatorKey.currentState;
-    if (navigator == null) return;
-
-    navigator.popUntil((route) => route.isFirst);
   }
 
   /// Dispose resources

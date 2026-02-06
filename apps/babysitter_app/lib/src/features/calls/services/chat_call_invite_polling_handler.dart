@@ -10,7 +10,7 @@ import '../../messages/presentation/providers/chat_providers.dart';
 import '../domain/entities/call_enums.dart';
 import '../presentation/controllers/call_state.dart';
 import '../presentation/providers/calls_providers.dart';
-import '../presentation/screens/incoming_call_screen.dart';
+import 'call_navigation_guard.dart';
 
 class ChatCallInvitePollingHandler {
   final Ref _ref;
@@ -103,19 +103,14 @@ class ChatCallInvitePollingHandler {
             continue;
           }
 
-          final navigator = navigatorKey.currentState;
-          if (navigator == null) return;
-
-          navigator.push(
-            MaterialPageRoute(
-              builder: (_) => IncomingCallScreen(
-                callId: callId,
-                callType: callType,
-                callerName: callerName,
-                callerUserId: callerUserId,
-                callerAvatar: callerAvatar,
-              ),
-            ),
+          // Use navigation guard to prevent duplicate screens
+          final guard = _ref.read(callNavigationGuardProvider(navigatorKey));
+          guard.showIncomingCallScreen(
+            callId: callId,
+            callType: callType,
+            callerName: callerName,
+            callerUserId: callerUserId,
+            callerAvatar: callerAvatar,
           );
 
           return;

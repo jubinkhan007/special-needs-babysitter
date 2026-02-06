@@ -15,6 +15,8 @@ class CallSession {
   final DateTime? startedAt;
   final DateTime? endedAt;
   final int? duration;
+  /// UID to use when joining Agora channel (token is generated for this UID)
+  final int? agoraUid;
 
   const CallSession({
     required this.callId,
@@ -29,6 +31,7 @@ class CallSession {
     this.startedAt,
     this.endedAt,
     this.duration,
+    this.agoraUid,
   });
 
   /// Check if current user is the initiator
@@ -53,6 +56,7 @@ class CallSession {
     DateTime? startedAt,
     DateTime? endedAt,
     int? duration,
+    int? agoraUid,
   }) {
     return CallSession(
       callId: callId ?? this.callId,
@@ -67,6 +71,7 @@ class CallSession {
       startedAt: startedAt ?? this.startedAt,
       endedAt: endedAt ?? this.endedAt,
       duration: duration ?? this.duration,
+      agoraUid: agoraUid ?? this.agoraUid,
     );
   }
 }
@@ -76,10 +81,13 @@ class CallTokenRefresh {
   final String rtcToken;
   final String channelName;
   final DateTime expiresAt;
+  /// UID that the token was generated for (must use this UID when joining)
+  final int? agoraUid;
 
   const CallTokenRefresh({
     required this.rtcToken,
     required this.channelName,
     required this.expiresAt,
+    this.agoraUid,
   });
 }

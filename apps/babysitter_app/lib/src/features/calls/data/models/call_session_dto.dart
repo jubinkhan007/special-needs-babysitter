@@ -15,6 +15,8 @@ class CallSessionDto {
   final String? startedAt;
   final String? endedAt;
   final int? duration;
+  /// UID to use when joining Agora channel (token is generated for this UID)
+  final int? agoraUid;
 
   const CallSessionDto({
     required this.callId,
@@ -30,6 +32,7 @@ class CallSessionDto {
     this.startedAt,
     this.endedAt,
     this.duration,
+    this.agoraUid,
   });
 
   factory CallSessionDto.fromJson(Map<String, dynamic> json) {
@@ -53,6 +56,16 @@ class CallSessionDto {
       startedAt: json['startedAt'] as String?,
       endedAt: json['endedAt'] as String?,
       duration: json['duration'] as int?,
+      // Parse agoraUid - backend may return it as int or string
+      agoraUid: json['agoraUid'] != null
+          ? (json['agoraUid'] is int
+              ? json['agoraUid'] as int
+              : int.tryParse(json['agoraUid'].toString()))
+          : (json['uid'] != null
+              ? (json['uid'] is int
+                  ? json['uid'] as int
+                  : int.tryParse(json['uid'].toString()))
+              : null),
     );
   }
 }

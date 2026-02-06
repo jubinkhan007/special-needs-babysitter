@@ -18,6 +18,10 @@
 # Flutter Stripe (uses reactnativestripesdk namespace internally in some versions)
 -keep class com.reactnativestripesdk.** { *; }
 
+# Agora RTC
+-keep class io.agora.** { *; }
+-dontwarn io.agora.**
+
 # Prevent warning spam
 -dontwarn com.stripe.android.**
 -dontwarn com.google.android.play.core.**

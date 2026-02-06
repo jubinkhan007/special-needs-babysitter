@@ -52,6 +52,19 @@ post_install do |installer|
 
     target.build_configurations.each do |config|
       config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+
+      # permission_handler: enable only the permissions we use
+      definitions = config.build_settings['GCC_PREPROCESSOR_DEFINITIONS']
+      if definitions.nil?
+        definitions = ['$(inherited)']
+      elsif definitions.is_a?(String)
+        definitions = [definitions]
+      end
+      definitions |= [
+        'PERMISSION_CAMERA=1',
+        'PERMISSION_MICROPHONE=1',
+      ]
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] = definitions
     end
     
     # Resolve conflicting frameworks between Agora RTC and RTM

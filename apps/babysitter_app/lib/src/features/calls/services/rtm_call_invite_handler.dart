@@ -9,8 +9,8 @@ import 'package:realtime/realtime.dart';
 import '../domain/entities/call_enums.dart';
 import '../presentation/controllers/call_state.dart';
 import '../presentation/providers/calls_providers.dart';
-import '../presentation/screens/incoming_call_screen.dart';
 import '../../messages/presentation/providers/chat_providers.dart';
+import 'call_navigation_guard.dart';
 import 'rtm_auth_state.dart';
 
 class RtmCallInviteHandler {
@@ -87,19 +87,14 @@ class RtmCallInviteHandler {
       return;
     }
 
-    final navigator = navigatorKey.currentState;
-    if (navigator == null) return;
-
-    navigator.push(
-      MaterialPageRoute(
-        builder: (_) => IncomingCallScreen(
-          callId: callId,
-          callType: callType,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          callerAvatar: callerAvatar,
-        ),
-      ),
+    // Use navigation guard to prevent duplicate screens
+    final guard = _ref.read(callNavigationGuardProvider(navigatorKey));
+    guard.showIncomingCallScreen(
+      callId: callId,
+      callType: callType,
+      callerName: callerName,
+      callerUserId: callerUserId,
+      callerAvatar: callerAvatar,
     );
   }
 

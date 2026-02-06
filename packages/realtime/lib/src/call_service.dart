@@ -9,6 +9,7 @@ abstract interface class CallService {
     required String channelName,
     required int uid,
     String? token,
+    bool enableVideo = false,
   });
 
   /// Leave the current channel

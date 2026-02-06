@@ -95,6 +95,12 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
       );
 
       final data = _extractData(response.data);
+      developer.log(
+        'acceptCall response: channelName=${data['channelName']}, '
+        'rtcToken=${data['rtcToken']?.toString().substring(0, 20) ?? 'null'}..., '
+        'agoraUid=${data['agoraUid'] ?? data['uid'] ?? 'null'}',
+        name: 'Calls',
+      );
       return CallSessionDto.fromJson(data);
     } catch (e, stack) {
       _logError('acceptCall', e, stack);
@@ -151,9 +157,18 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   Future<CallTokenDto> refreshToken(String callId) async {
     try {
       developer.log('CallsRemoteDataSource.refreshToken($callId)', name: 'Calls');
-      final response = await _dio.post('/calls/$callId/token');
+      final response = await _dio.post(
+        '/calls/$callId/token',
+        data: {'callId': callId},
+      );
 
       final data = _extractData(response.data);
+      developer.log(
+        'refreshToken response: channelName=${data['channelName']}, '
+        'rtcToken=${data['rtcToken']?.toString().substring(0, 20) ?? 'null'}..., '
+        'agoraUid=${data['agoraUid'] ?? data['uid'] ?? 'null'}',
+        name: 'Calls',
+      );
       return CallTokenDto.fromJson(data);
     } catch (e, stack) {
       _logError('refreshToken', e, stack);

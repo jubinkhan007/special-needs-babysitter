@@ -59,6 +59,7 @@ class InCall extends CallState {
   final bool isFrontCamera;
   final int? remoteUid;
   final bool remoteJoined;
+  final bool remoteVideoMuted;
   final int elapsedSeconds;
 
   const InCall({
@@ -69,6 +70,7 @@ class InCall extends CallState {
     this.isFrontCamera = true,
     this.remoteUid,
     this.remoteJoined = false,
+    this.remoteVideoMuted = false,
     this.elapsedSeconds = 0,
   });
 
@@ -80,6 +82,7 @@ class InCall extends CallState {
     bool? isFrontCamera,
     int? remoteUid,
     bool? remoteJoined,
+    bool? remoteVideoMuted,
     int? elapsedSeconds,
   }) {
     return InCall(
@@ -90,6 +93,7 @@ class InCall extends CallState {
       isFrontCamera: isFrontCamera ?? this.isFrontCamera,
       remoteUid: remoteUid ?? this.remoteUid,
       remoteJoined: remoteJoined ?? this.remoteJoined,
+      remoteVideoMuted: remoteVideoMuted ?? this.remoteVideoMuted,
       elapsedSeconds: elapsedSeconds ?? this.elapsedSeconds,
     );
   }

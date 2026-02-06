@@ -100,6 +100,12 @@ class AgoraCallService implements CallService {
             UserMuteVideoEvent(uid: remoteUid, muted: muted),
           );
         },
+        onRemoteVideoStateChanged: (connection, remoteUid, state, reason, elapsed) {
+          final muted = state == RemoteVideoState.remoteVideoStateStopped;
+          _eventsController.add(
+            UserMuteVideoEvent(uid: remoteUid, muted: muted),
+          );
+        },
         onTokenPrivilegeWillExpire: (connection, token) {
           developer.log('Token will expire soon', name: 'Realtime');
           _eventsController.add(TokenPrivilegeWillExpireEvent(token: token));
@@ -113,9 +119,22 @@ class AgoraCallService implements CallService {
     required String channelName,
     required int uid,
     String? token,
+    bool enableVideo = false,
   }) async {
     if (!_isInitialized) {
       await initialize();
+    }
+
+    // Fix for error -17: If already in a channel, leave it first
+    if (_currentChannelName != null) {
+      developer.log(
+        'Already in channel $_currentChannelName, leaving before joining $channelName',
+        name: 'Realtime',
+      );
+      await _engine?.leaveChannel();
+      _currentChannelName = null;
+      // Small delay to ensure channel is fully left
+      await Future.delayed(const Duration(milliseconds: 200));
     }
 
     // Get token from provider if not provided
@@ -125,19 +144,27 @@ class AgoraCallService implements CallService {
     await _engine!.enableAudio();
     await _engine!.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
 
+    // Only enable video for video calls
+    if (enableVideo) {
+      await _engine!.enableVideo();
+      await _engine!.startPreview();
+      developer.log('Video enabled for call', name: 'Realtime');
+    }
+
     await _engine!.joinChannel(
       token: effectiveToken ?? '',
       channelId: channelName,
       uid: uid,
-      options: const ChannelMediaOptions(
+      options: ChannelMediaOptions(
         autoSubscribeAudio: true,
-        autoSubscribeVideo: true,
+        autoSubscribeVideo: enableVideo,
         publishMicrophoneTrack: true,
-        publishCameraTrack: true,
+        publishCameraTrack: enableVideo,
       ),
     );
 
     _currentChannelName = channelName;
+    developer.log('Joined channel: $channelName (video: $enableVideo)', name: 'Realtime');
   }
 
   @override
@@ -165,8 +192,12 @@ class AgoraCallService implements CallService {
   Future<void> enableLocalVideo(bool enable) async {
     if (enable) {
       await _engine?.enableVideo();
+      await _engine?.startPreview();
+      developer.log('Video enabled and preview started', name: 'Realtime');
     } else {
+      await _engine?.stopPreview();
       await _engine?.disableVideo();
+      developer.log('Video disabled and preview stopped', name: 'Realtime');
     }
   }
 

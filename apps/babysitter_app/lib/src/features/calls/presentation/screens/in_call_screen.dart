@@ -23,13 +23,18 @@ class InCallScreen extends ConsumerStatefulWidget {
 }
 
 class _InCallScreenState extends ConsumerState<InCallScreen> {
+  bool _hasNavigated = false;
+
   @override
   Widget build(BuildContext context) {
     final callState = ref.watch(callControllerProvider);
 
-    // Handle state changes
+    // Handle state changes (with guard against duplicate navigation)
     ref.listen<CallState>(callControllerProvider, (previous, next) {
+      if (_hasNavigated || !mounted) return;
+
       if (next is CallEnded || next is CallError || next is CallIdle) {
+        _hasNavigated = true;
         // Cleanup CallKit UI
         if (previous is InCall) {
           CallNotificationService.endCall(previous.session.callId);
@@ -101,7 +106,9 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
     return Stack(
       children: [
         // Remote video (full screen)
-        if (callState.remoteJoined && callState.remoteUid != null)
+        if (callState.remoteJoined &&
+            callState.remoteUid != null &&
+            !callState.remoteVideoMuted)
           Positioned.fill(
             child: AgoraVideoView(
               controller: VideoViewController.remote(
@@ -122,13 +129,17 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.videocam_outlined,
+                      callState.remoteVideoMuted
+                          ? Icons.videocam_off_rounded
+                          : Icons.videocam_outlined,
                       size: 64.sp,
                       color: Colors.grey[600],
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      'Waiting for video...',
+                      callState.remoteVideoMuted
+                          ? 'Camera is off'
+                          : 'Waiting for video...',
                       style: TextStyle(color: Colors.grey[400], fontSize: 16.sp),
                     ),
                   ],

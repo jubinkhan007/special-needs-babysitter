@@ -36,9 +36,22 @@ class CallHistoryItemDto {
       createdAt: json['createdAt'] as String?,
       startedAt: json['startedAt'] as String?,
       endedAt: json['endedAt'] as String?,
-      duration: json['duration'] as int?,
+      duration: _parseIntOrNull(json['duration']),
     );
   }
+}
+
+/// Safely parse an int from dynamic value (handles both int and String)
+int? _parseIntOrNull(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is String) return int.tryParse(value);
+  return null;
+}
+
+/// Safely parse an int with a default value
+int _parseIntOrDefault(dynamic value, int defaultValue) {
+  return _parseIntOrNull(value) ?? defaultValue;
 }
 
 /// DTO for paginated call history response
@@ -65,9 +78,9 @@ class CallHistoryResponseDto {
 
     return CallHistoryResponseDto(
       calls: callsList,
-      total: pagination['total'] as int? ?? callsList.length,
-      limit: pagination['limit'] as int? ?? 20,
-      offset: pagination['offset'] as int? ?? 0,
+      total: _parseIntOrDefault(pagination['total'], callsList.length),
+      limit: _parseIntOrDefault(pagination['limit'], 20),
+      offset: _parseIntOrDefault(pagination['offset'], 0),
     );
   }
 }

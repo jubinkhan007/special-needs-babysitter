@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:auth/auth.dart';
 
 import '../../domain/entities/call_enums.dart';
 import '../controllers/call_state.dart';
@@ -35,6 +36,7 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
   late bool _isVideoEnabled;
   bool _isSpeakerOn = false;
   bool _isMicOn = true;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
@@ -42,6 +44,11 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
     _isVideoEnabled = widget.callType == CallType.video;
     // Initiate call on screen load
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Ensure user ID is set before initiating call
+      final currentUser = ref.read(currentUserProvider).valueOrNull;
+      if (currentUser?.id != null) {
+        ref.read(callControllerProvider.notifier).setCurrentUserId(currentUser!.id);
+      }
       ref.read(callControllerProvider.notifier).initiateCall(
         recipientUserId: widget.recipientUserId,
         recipientName: widget.recipientName,
@@ -55,16 +62,21 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
   Widget build(BuildContext context) {
     final callState = ref.watch(callControllerProvider);
 
-    // Listen for state changes
+    // Listen for state changes (with guard against duplicate navigation)
     ref.listen<CallState>(callControllerProvider, (previous, next) {
+      if (_hasNavigated || !mounted) return;
+
       if (next is InCall) {
+        _hasNavigated = true;
         // Navigate to in-call screen
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const InCallScreen()),
         );
       } else if (next is CallEnded) {
+        _hasNavigated = true;
         _showCallEndedAndPop(next.reason);
       } else if (next is CallError) {
+        _hasNavigated = true;
         _showErrorAndPop(next.message);
       }
     });
