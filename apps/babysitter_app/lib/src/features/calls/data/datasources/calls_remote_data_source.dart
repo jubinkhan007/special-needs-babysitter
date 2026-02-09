@@ -111,7 +111,8 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   @override
   Future<void> declineCall(String callId, {String? reason}) async {
     try {
-      developer.log('CallsRemoteDataSource.declineCall($callId)', name: 'Calls');
+      developer.log('CallsRemoteDataSource.declineCall($callId)',
+          name: 'Calls');
       await _dio.post(
         '/calls/$callId/decline',
         data: {
@@ -142,7 +143,8 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   @override
   Future<CallSessionDto> getCallDetails(String callId) async {
     try {
-      developer.log('CallsRemoteDataSource.getCallDetails($callId)', name: 'Calls');
+      developer.log('CallsRemoteDataSource.getCallDetails($callId)',
+          name: 'Calls');
       final response = await _dio.get('/calls/$callId');
 
       final data = _extractData(response.data);
@@ -156,7 +158,8 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   @override
   Future<CallTokenDto> refreshToken(String callId) async {
     try {
-      developer.log('CallsRemoteDataSource.refreshToken($callId)', name: 'Calls');
+      developer.log('CallsRemoteDataSource.refreshToken($callId)',
+          name: 'Calls');
       final response = await _dio.post(
         '/calls/$callId/token',
         data: {'callId': callId},
@@ -197,17 +200,28 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
       final data = _extractData(response.data);
       return CallHistoryResponseDto.fromJson(data);
     } catch (e, stack) {
-      if (e is DioException && e.response?.statusCode == 404) {
+      if (e is DioException) {
+        if (e.response?.statusCode == 404) {
+          developer.log(
+            'Call history not found (404). Returning empty history.',
+            name: 'Calls',
+          );
+          return CallHistoryResponseDto(
+            calls: const [],
+            total: 0,
+            limit: limit,
+            offset: offset,
+          );
+        }
+        // Log detailed error for debugging 400 errors
         developer.log(
-          'Call history not found (404). Returning empty history.',
+          'getCallHistory error: status=${e.response?.statusCode}, '
+          'responseBody=${e.response?.data}',
           name: 'Calls',
         );
-        return CallHistoryResponseDto(
-          calls: const [],
-          total: 0,
-          limit: limit,
-          offset: offset,
-        );
+        print('DEBUG [CallHistory API]: status=${e.response?.statusCode}');
+        print('DEBUG [CallHistory API]: responseBody=${e.response?.data}');
+        print('DEBUG [CallHistory API]: requestUrl=${e.requestOptions.uri}');
       }
       _logError('getCallHistory', e, stack);
       rethrow;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ import 'src/features/sitter/bookings/presentation/providers/session_tracking_pro
 import 'src/features/calls/services/incoming_call_handler.dart';
 import 'src/features/calls/services/incoming_call_polling_handler.dart';
 import 'src/features/calls/services/chat_call_invite_polling_handler.dart';
+import 'src/features/calls/services/call_notification_service.dart';
+import 'src/features/calls/services/call_navigation_guard.dart';
+import 'src/features/calls/domain/entities/call_enums.dart';
 import 'src/features/calls/presentation/providers/calls_providers.dart';
 
 /// Main application widget
@@ -43,10 +47,12 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(sessionTrackingControllerProvider.notifier).restoreSession();
-      _initializeIncomingCallHandler();
       _maybeStartIncomingCallPolling();
       _maybeStartChatInvitePolling();
-      _initializeNotifications();
+      // Initialize notifications first, then call handler.
+      // Order matters: CallNotificationService must register its callback
+      // AFTER NotificationsServiceImpl so it wins the shared method channel.
+      _initializeNotificationsAndCallHandler();
     });
   }
 
@@ -161,7 +167,8 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   }
 
   void _maybeStartChatInvitePolling() {
-    if (!_isForeground) {
+    final firebaseReady = ref.read(firebaseReadyProvider);
+    if (firebaseReady || !_isForeground) {
       _chatCallInvitePollingHandler?.stop();
       return;
     }
@@ -177,7 +184,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     _chatCallInvitePollingHandler?.start();
   }
 
-  Future<void> _initializeNotifications() async {
+  Future<void> _initializeNotificationsAndCallHandler() async {
     if (_notificationsInitialized) return;
     final firebaseReady = ref.read(firebaseReadyProvider);
     if (!firebaseReady) {
@@ -192,6 +199,17 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       final notificationsService = ref.read(notificationsServiceProvider);
       await notificationsService.initialize();
       await notificationsService.requestPermission();
+
+      // Set up fallback handler so CallNotificationService can forward
+      // non-call notification taps to the main notification handler.
+      CallNotificationService.fallbackNotificationTapHandler =
+          _handleNotificationTap;
+
+      // Initialize call notification handler AFTER main notification service.
+      // This ensures CallNotificationService's callback is registered LAST
+      // on the shared FlutterLocalNotificationsPlugin method channel,
+      // so call action buttons (Accept/Decline) are properly handled.
+      _initializeIncomingCallHandler();
 
       // Register token if user is already authenticated
       final session = ref.read(authNotifierProvider).valueOrNull;
@@ -338,6 +356,87 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       return;
     }
 
+    if (_looksLikeCallPayload(cleaned)) {
+      _logFcmFlow(
+          'notification tap detected call payload, routing to call flow');
+      unawaited(_handleCallPayloadTap(cleaned));
+      return;
+    }
+
     _logFcmFlow('notification tap ignored: unsupported payload=$cleaned');
+  }
+
+  bool _looksLikeCallPayload(String payload) {
+    final trimmed = payload.trim();
+    return trimmed.startsWith('{') && trimmed.contains('"callId"');
+  }
+
+  Future<void> _handleCallPayloadTap(String payload) async {
+    try {
+      final decoded = jsonDecode(payload);
+      if (decoded is! Map<String, dynamic>) {
+        _logFcmFlow('call payload ignored: invalid JSON structure');
+        return;
+      }
+
+      final callId = decoded['callId']?.toString().trim() ?? '';
+      if (callId.isEmpty) {
+        _logFcmFlow('call payload ignored: missing callId');
+        return;
+      }
+
+      var callerName = decoded['callerName']?.toString().trim();
+      var callerUserId = decoded['callerUserId']?.toString().trim();
+      final isVideo = decoded['isVideo'] == true ||
+          decoded['callType']?.toString().toLowerCase() == 'video';
+      final callType = isVideo ? CallType.video : CallType.audio;
+
+      // Wait briefly for auth restore if app was cold-started from a notif tap.
+      for (var attempt = 0; attempt < 10; attempt++) {
+        if (ref.read(authNotifierProvider).valueOrNull != null) break;
+        await Future<void>.delayed(const Duration(seconds: 1));
+      }
+
+      if (callerUserId == null || callerUserId.isEmpty) {
+        try {
+          final session =
+              await ref.read(callsRepositoryProvider).getCallDetails(callId);
+          final currentUserId =
+              ref.read(authNotifierProvider).valueOrNull?.user.id;
+          final remote = currentUserId == null
+              ? (session.initiator ?? session.recipient)
+              : session.getRemoteParticipant(currentUserId);
+          if (remote != null) {
+            callerUserId = remote.userId;
+            callerName = remote.name;
+          }
+        } catch (e) {
+          _logFcmFlow(
+              'call payload getCallDetails failed callId=$callId error=$e');
+        }
+      }
+
+      callerUserId = (callerUserId == null || callerUserId.isEmpty)
+          ? '_unknown_$callId'
+          : callerUserId;
+      callerName =
+          (callerName == null || callerName.isEmpty) ? 'Caller' : callerName;
+
+      final controller = ref.read(callControllerProvider.notifier);
+      await controller.handleIncomingCall(
+        callId: callId,
+        callType: callType,
+        callerName: callerName,
+        callerUserId: callerUserId,
+      );
+      await controller.acceptCall();
+
+      ref
+          .read(callNavigationGuardProvider(rootNavigatorKey))
+          .showInCallScreen();
+      _logFcmFlow('call payload handled: accepted callId=$callId');
+    } catch (e) {
+      _logFcmFlow('call payload handling failed: $e');
+    }
   }
 }

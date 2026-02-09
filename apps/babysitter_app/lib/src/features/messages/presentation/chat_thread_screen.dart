@@ -25,20 +25,80 @@ import '../../calls/domain/entities/call_history_item.dart';
 import '../../calls/presentation/providers/calls_providers.dart';
 import '../../../routing/app_router.dart';
 
-/// Fetches call history and indexes by callId for quick lookup.
-/// Watches chatMessagesProvider so it re-fetches when messages refresh
-/// (e.g. after a call ends and the new call_invite message appears).
+class _ConversationCallHistory {
+  final Map<String, CallHistoryItem> byCallId;
+  final List<CallHistoryItem> items;
+
+  const _ConversationCallHistory({
+    required this.byCallId,
+    required this.items,
+  });
+}
+
+class _TimelineEntry {
+  final DateTime timestamp;
+  final ChatMessageEntity? message;
+  final CallHistoryItem? historyItem;
+
+  const _TimelineEntry({
+    required this.timestamp,
+    this.message,
+    this.historyItem,
+  });
+}
+
+DateTime _callHistorySortTime(CallHistoryItem item) {
+  return item.createdAt ??
+      item.startedAt ??
+      item.endedAt ??
+      DateTime.fromMillisecondsSinceEpoch(0);
+}
+
+/// Fetches call history scoped to this conversation, and indexes by callId.
+/// Watches chatMessagesProvider so it re-fetches when messages refresh.
 final _callHistoryLookupProvider = FutureProvider.autoDispose
-    .family<Map<String, CallHistoryItem>, String>((ref, otherUserId) async {
-  // Re-fetch whenever messages change (messages poll every 5s)
+    .family<_ConversationCallHistory, String>((ref, otherUserId) async {
   ref.watch(chatMessagesProvider(otherUserId));
 
   final repo = ref.watch(callsRepositoryProvider);
   try {
     final page = await repo.getCallHistory(limit: 100, offset: 0);
-    return {for (final item in page.items) item.callId: item};
-  } catch (_) {
-    return {};
+
+    // Debug logging to identify filtering issues
+    print(
+        'DEBUG [CallHistory]: Fetched ${page.items.length} total call history items');
+    print('DEBUG [CallHistory]: Looking for otherUserId = "$otherUserId"');
+
+    for (final item in page.items) {
+      final participantId = item.otherParticipant.userId;
+      final matches = participantId == otherUserId;
+      print('DEBUG [CallHistory]: Call ${item.callId} - '
+          'otherParticipant.userId="$participantId", '
+          'callType=${item.callType}, '
+          'createdAt=${item.createdAt}, '
+          'matches=$matches');
+    }
+
+    final filtered = page.items
+        .where((item) => item.otherParticipant.userId == otherUserId)
+        .toList()
+      ..sort(
+          (a, b) => _callHistorySortTime(a).compareTo(_callHistorySortTime(b)));
+
+    print(
+        'DEBUG [CallHistory]: After filtering: ${filtered.length} calls for this conversation');
+
+    return _ConversationCallHistory(
+      byCallId: {for (final item in filtered) item.callId: item},
+      items: filtered,
+    );
+  } catch (e, stack) {
+    print('DEBUG [CallHistory]: Error fetching call history: $e');
+    print('DEBUG [CallHistory]: Stack: $stack');
+    return const _ConversationCallHistory(
+      byCallId: <String, CallHistoryItem>{},
+      items: <CallHistoryItem>[],
+    );
   }
 });
 
@@ -220,14 +280,18 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   Widget build(BuildContext context) {
     final messagesAsync =
         ref.watch(chatMessagesProvider(widget.args.otherUserId));
-    final callHistoryMap =
-        ref.watch(_callHistoryLookupProvider(widget.args.otherUserId)).valueOrNull ?? {};
+    final callHistoryData = ref
+            .watch(_callHistoryLookupProvider(widget.args.otherUserId))
+            .valueOrNull ??
+        const _ConversationCallHistory(byCallId: {}, items: []);
     final sessionUser = ref.watch(authNotifierProvider).valueOrNull?.user;
     final currentUser = ref.watch(currentUserProvider).valueOrNull;
     final currentUserId = sessionUser?.id ?? currentUser?.id ?? '';
 
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+      data: MediaQuery.of(context).copyWith(
+        textScaler: const TextScaler.linear(1.0),
+      ),
       child: Scaffold(
         backgroundColor: AppTokens.chatScreenBg,
         appBar: ChatThreadAppBar(
@@ -302,10 +366,16 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                         );
                       }
 
-                      if (messages.isEmpty) {
+                      final uiModels = _convertToUiModels(
+                        messages,
+                        currentUserId,
+                        callHistoryData,
+                      );
+
+                      if (uiModels.isEmpty) {
                         return const Center(
                           child: Text(
-                            'No messages yet.\nStart the conversation!',
+                            'No messages or calls yet.\nStart the conversation!',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey,
@@ -315,27 +385,30 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                         );
                       }
 
-                      final uiModels =
-                          _convertToUiModels(messages, currentUserId, callHistoryMap);
+                      // Scroll to bottom on initial load by using reverse ListView
+                      // with reversed items list
+                      final reversedModels = uiModels.reversed.toList();
 
                       return ListView.builder(
                         controller: _scrollController,
+                        reverse: true, // Start from bottom (latest messages)
                         padding: EdgeInsets.only(
                           top: AppTokens.listTopPadding,
                           bottom: AppTokens.composerHeight + 16,
                         ),
-                        itemCount: uiModels.length,
+                        itemCount: reversedModels.length,
                         itemBuilder: (context, index) {
-                          final item = uiModels[index];
+                          final item = reversedModels[index];
 
                           return Column(
                             children: [
-                              if (item.showDaySeparator)
-                                ChatDaySeparator(text: item.dayLabel),
+                              // Note: day separator comes AFTER message in reversed list
                               if (item.isCallLog)
                                 CallLogTile(uiModel: item)
                               else
                                 MessageBubble(uiModel: item),
+                              if (item.showDaySeparator)
+                                ChatDaySeparator(text: item.dayLabel),
                             ],
                           );
                         },
@@ -373,15 +446,62 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   List<ChatMessageUiModel> _convertToUiModels(
     List<ChatMessageEntity> messages,
     String currentUserId,
-    Map<String, CallHistoryItem> callHistoryMap,
+    _ConversationCallHistory callHistoryData,
   ) {
+    final callHistoryMap = callHistoryData.byCallId;
     final uiModels = <ChatMessageUiModel>[];
     String? lastDateStr;
 
+    final timeline = <_TimelineEntry>[];
+    final messageCallIds = <String>{};
+
     for (final message in messages) {
-      final dateStr = _formatDate(message.createdAt);
+      timeline
+          .add(_TimelineEntry(timestamp: message.createdAt, message: message));
+      final callId = _extractCallIdFromMessage(message);
+      if (callId != null && callId.isNotEmpty) {
+        messageCallIds.add(callId);
+      }
+    }
+
+    for (final item in callHistoryData.items) {
+      if (messageCallIds.contains(item.callId)) continue;
+      timeline.add(
+        _TimelineEntry(
+          timestamp: _callHistorySortTime(item),
+          historyItem: item,
+        ),
+      );
+    }
+
+    timeline.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+    for (final entry in timeline) {
+      final dateStr = _formatDate(entry.timestamp);
       final showDaySeparator = dateStr != lastDateStr;
       lastDateStr = dateStr;
+
+      final message = entry.message;
+      if (message == null) {
+        final historyItem = entry.historyItem!;
+        final callDetails = _callDetailsFromHistory(historyItem);
+        uiModels.add(
+          ChatMessageUiModel(
+            id: 'call-history-${historyItem.callId}',
+            isMe: historyItem.isInitiator,
+            bubbleText: '',
+            showDaySeparator: showDaySeparator,
+            dayLabel: _getDayLabel(entry.timestamp),
+            isCallLog: true,
+            callTitle: callDetails['title'],
+            callSubtitle: callDetails['subtitle'],
+            callTime: _formatTime(entry.timestamp),
+            isVideoCall: callDetails['isVideo'] ?? false,
+            isMissedCall: callDetails['isMissed'] ?? false,
+          ),
+        );
+        continue;
+      }
 
       // Determine if message is from current user:
       // 1. senderUserId matches currentUserId, OR
@@ -400,11 +520,11 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           isMe: isMe,
           bubbleText: '',
           showDaySeparator: showDaySeparator,
-          dayLabel: _getDayLabel(message.createdAt),
+          dayLabel: _getDayLabel(entry.timestamp),
           isCallLog: true,
           callTitle: callDetails['title'],
           callSubtitle: callDetails['subtitle'],
-          callTime: _formatTime(message.createdAt),
+          callTime: _formatTime(entry.timestamp),
           isVideoCall: callDetails['isVideo'] ?? false,
           isMissedCall: callDetails['isMissed'] ?? false,
         ));
@@ -413,8 +533,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
         final messageText = message.textContent?.trim().isNotEmpty == true
             ? message.textContent!
             : '';
-        final hasMedia =
-            message.mediaUrl?.isNotEmpty == true &&
+        final hasMedia = message.mediaUrl?.isNotEmpty == true &&
             message.type != ChatMessageType.text;
         final mediaType = hasMedia ? message.type.name : null;
         final fileName = hasMedia ? _fileNameFromUrl(message.mediaUrl!) : null;
@@ -427,12 +546,12 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           mediaType: mediaType,
           fileName: fileName,
           showDaySeparator: showDaySeparator,
-          dayLabel: _getDayLabel(message.createdAt),
+          dayLabel: _getDayLabel(entry.timestamp),
           headerMetaLeft: !isMe
-              ? '${widget.args.otherUserName} • ${_formatTime(message.createdAt)}'
+              ? '${widget.args.otherUserName} • ${_formatTime(entry.timestamp)}'
               : null,
           headerMetaRight:
-              isMe ? '${_formatTime(message.createdAt)} • You' : null,
+              isMe ? '${_formatTime(entry.timestamp)} • You' : null,
           showAvatar: !isMe,
           avatarUrl: !isMe ? widget.args.otherUserAvatarUrl : null,
           isCallLog: false,
@@ -489,33 +608,10 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     // Cross-reference with call history for accurate duration/status
     final historyItem = callId != null ? callHistoryMap[callId] : null;
     if (historyItem != null) {
-      isVideo = historyItem.callType == CallType.video;
-      isMissed = historyItem.wasMissed;
-
-      if (historyItem.duration != null && historyItem.duration! > 0) {
-        final minutes = historyItem.duration! ~/ 60;
-        final seconds = historyItem.duration! % 60;
-        duration = '$minutes Min $seconds Sec';
-      }
-
-      // Use isInitiator from history for accurate direction
-      final isOutgoing = historyItem.isInitiator;
-
-      String title;
-      if (isMissed) {
-        title = isVideo ? 'Missed Video Call' : 'Missed Voice Call';
-      } else if (isOutgoing) {
-        title = isVideo ? 'Outgoing Video Call' : 'Outgoing Voice Call';
-      } else {
-        title = isVideo ? 'Incoming Video Call' : 'Incoming Voice Call';
-      }
-
-      return {
-        'title': title,
-        'subtitle': duration,
-        'isVideo': isVideo,
-        'isMissed': isMissed,
-      };
+      return _callDetailsFromHistory(
+        historyItem,
+        fallbackTimestamp: message.createdAt,
+      );
     }
 
     // Fallback when no call history is available
@@ -531,6 +627,66 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       'subtitle': duration,
       'isVideo': isVideo,
       'isMissed': isMissed,
+    };
+  }
+
+  String? _extractCallIdFromMessage(ChatMessageEntity message) {
+    final text = message.textContent?.trim() ?? '';
+    if (text.isEmpty ||
+        !text.startsWith('{') ||
+        !text.contains('call_invite')) {
+      return null;
+    }
+
+    try {
+      final decoded = jsonDecode(text);
+      if (decoded is Map<String, dynamic>) {
+        final callId = decoded['callId'] as String?;
+        if (callId != null && callId.isNotEmpty) {
+          return callId;
+        }
+      }
+    } catch (_) {
+      // Fall through to regex extraction for partially malformed JSON payloads.
+    }
+
+    final match = RegExp(r'"callId"\s*:\s*"([^"]+)"').firstMatch(text);
+    return match?.group(1);
+  }
+
+  Map<String, dynamic> _callDetailsFromHistory(
+    CallHistoryItem item, {
+    DateTime? fallbackTimestamp,
+  }) {
+    final isVideo = item.callType == CallType.video;
+    final isMissed = item.wasMissed;
+    String? duration;
+
+    if (item.duration != null && item.duration! > 0) {
+      final minutes = item.duration! ~/ 60;
+      final seconds = item.duration! % 60;
+      duration = '$minutes Min $seconds Sec';
+    }
+
+    String title;
+    if (isMissed) {
+      title = isVideo ? 'Missed Video Call' : 'Missed Voice Call';
+    } else if (item.isInitiator) {
+      title = isVideo ? 'Outgoing Video Call' : 'Outgoing Voice Call';
+    } else {
+      title = isVideo ? 'Incoming Video Call' : 'Incoming Voice Call';
+    }
+
+    return {
+      'title': title,
+      'subtitle': duration,
+      'isVideo': isVideo,
+      'isMissed': isMissed,
+      'timestamp': item.createdAt ??
+          item.startedAt ??
+          item.endedAt ??
+          fallbackTimestamp ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     };
   }
 

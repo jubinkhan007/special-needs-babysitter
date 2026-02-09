@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as developer;
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -21,26 +24,55 @@ class CallNotificationService {
   static const String _callChannelId = 'incoming_calls_channel';
   static const String _callChannelName = 'Incoming Calls';
   static const String _callChannelDescription = 'Incoming call alerts';
+  static const String _actionAccept = 'accept_call';
+  static const String _actionDecline = 'decline_call';
 
   static final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
+  static final StreamController<CallNotificationActionEvent> _actionController =
+      StreamController<CallNotificationActionEvent>.broadcast();
+
   static bool _localNotificationsInitialized = false;
+  static bool _launchDetailsChecked = false;
+  static final Set<String> _processedActionKeys = <String>{};
+
+  /// Fallback handler for notification taps that are NOT call-related.
+  /// Set this from the app layer so non-call notification taps are forwarded
+  /// to the main notification service.
+  static void Function(String?)? fallbackNotificationTapHandler;
+
+  static Stream<CallNotificationActionEvent> get onCallAction =>
+      _actionController.stream;
+
+  /// Ensure notification action callbacks are wired on the main isolate.
+  static Future<void> initializeActionHandling() async {
+    await _ensureLocalNotificationsInitialized();
+  }
 
   /// Handle incoming call from push payload data
   ///
   /// This is the primary method - accepts raw Map data
   static Future<void> handleIncomingCallPayload(
       Map<String, dynamic> data) async {
-    if (data['type'] != 'incoming_call') return;
+    final type = data['type']?.toString();
+    if (type != 'incoming_call' && type != 'call_invite') return;
 
     final callId = data['callId'] as String?;
     final callType = data['callType'] as String?;
-    final callerName = data['callerName'] as String?;
+    final callerName = (data['callerName'] ?? data['senderName']) as String?;
+    var callerUserId =
+        (data['callerUserId'] ?? data['senderUserId']) as String?;
     final callerAvatar = data['callerAvatar'] as String?;
 
-    if (callId == null || callerName == null) {
+    if ((callerUserId == null || callerUserId.isEmpty) &&
+        callId != null &&
+        callId.isNotEmpty) {
+      callerUserId = '_unknown_$callId';
+    }
+
+    if (callId == null || callerName == null || callerUserId == null) {
       developer.log(
-          'Invalid incoming call payload: missing callId or callerName',
+          'Invalid incoming call payload: missing callId/callerName/callerUserId',
           name: 'Notifications');
       return;
     }
@@ -48,6 +80,7 @@ class CallNotificationService {
     await showIncomingCallUI(
       callId: callId,
       callerName: callerName,
+      callerUserId: callerUserId,
       callerAvatar: callerAvatar,
       isVideo: callType == 'video',
     );
@@ -64,6 +97,7 @@ class CallNotificationService {
   static Future<void> showIncomingCallUI({
     required String callId,
     required String callerName,
+    required String callerUserId,
     String? callerAvatar,
     bool isVideo = false,
   }) async {
@@ -77,6 +111,7 @@ class CallNotificationService {
     await _showFallbackIncomingCallNotification(
       callId: callId,
       callerName: callerName,
+      callerUserId: callerUserId,
       isVideo: isVideo,
     );
 
@@ -129,12 +164,32 @@ class CallNotificationService {
   /// End specific call UI
   static Future<void> endCall(String callId) async {
     developer.log('Ending CallKit UI for $callId', name: 'Notifications');
+    try {
+      await _ensureLocalNotificationsInitialized();
+      await _localNotifications.cancel(callId.hashCode);
+    } catch (e, st) {
+      developer.log(
+        'Failed to cancel call notification for $callId: $e',
+        name: 'Notifications',
+        stackTrace: st,
+      );
+    }
     // await FlutterCallkitIncoming.endCall(callId);
   }
 
   /// End all active call UIs
   static Future<void> endAllCalls() async {
     developer.log('Ending all CallKit UIs', name: 'Notifications');
+    try {
+      await _ensureLocalNotificationsInitialized();
+      await _localNotifications.cancelAll();
+    } catch (e, st) {
+      developer.log(
+        'Failed to cancel all call notifications: $e',
+        name: 'Notifications',
+        stackTrace: st,
+      );
+    }
     // await FlutterCallkitIncoming.endAllCalls();
   }
 
@@ -165,10 +220,17 @@ class CallNotificationService {
   static Future<void> _showFallbackIncomingCallNotification({
     required String callId,
     required String callerName,
+    required String callerUserId,
     required bool isVideo,
   }) async {
     try {
       await _ensureLocalNotificationsInitialized();
+      final payload = _encodePayload(
+        callId: callId,
+        callerName: callerName,
+        callerUserId: callerUserId,
+        isVideo: isVideo,
+      );
 
       final callKind = isVideo ? 'Video' : 'Audio';
       await _localNotifications.show(
@@ -181,11 +243,26 @@ class CallNotificationService {
             _callChannelName,
             channelDescription: _callChannelDescription,
             importance: Importance.max,
-            priority: Priority.high,
+            priority: Priority.max,
             category: AndroidNotificationCategory.call,
             fullScreenIntent: true,
             ongoing: true,
             autoCancel: false,
+            visibility: NotificationVisibility.public,
+            timeoutAfter: 45000,
+            actions: <AndroidNotificationAction>[
+              AndroidNotificationAction(
+                _actionDecline,
+                'Decline',
+                cancelNotification: true,
+              ),
+              AndroidNotificationAction(
+                _actionAccept,
+                'Accept',
+                showsUserInterface: true,
+                cancelNotification: true,
+              ),
+            ],
           ),
           iOS: DarwinNotificationDetails(
             presentAlert: true,
@@ -193,7 +270,7 @@ class CallNotificationService {
             presentSound: true,
           ),
         ),
-        payload: callId,
+        payload: payload,
       );
     } catch (e, st) {
       developer.log(
@@ -216,7 +293,12 @@ class CallNotificationService {
       ),
     );
 
-    await _localNotifications.initialize(initSettings);
+    await _localNotifications.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: _handleNotificationResponse,
+      onDidReceiveBackgroundNotificationResponse:
+          callNotificationResponseBackgroundHandler,
+    );
 
     const channel = AndroidNotificationChannel(
       _callChannelId,
@@ -231,5 +313,243 @@ class CallNotificationService {
         ?.createNotificationChannel(channel);
 
     _localNotificationsInitialized = true;
+    await _dispatchLaunchNotificationActionIfNeeded();
   }
+
+  static Future<void> _dispatchLaunchNotificationActionIfNeeded() async {
+    if (_launchDetailsChecked) return;
+    _launchDetailsChecked = true;
+
+    try {
+      final launchDetails =
+          await _localNotifications.getNotificationAppLaunchDetails();
+      if (launchDetails == null || !launchDetails.didNotificationLaunchApp) {
+        return;
+      }
+      final response = launchDetails.notificationResponse;
+      if (response == null) {
+        developer.log(
+          '[CALL_ACTION] launchDetails had no notificationResponse',
+          name: 'Notifications',
+        );
+        return;
+      }
+      developer.log(
+        '[CALL_ACTION] launchDetails recovered action=${response.actionId ?? 'open'} payload=${response.payload}',
+        name: 'Notifications',
+      );
+      print(
+        '[CALL_ACTION] launchDetails recovered action=${response.actionId ?? 'open'} payload=${response.payload}',
+      );
+      await _handleNotificationResponse(response);
+    } catch (e, st) {
+      developer.log(
+        'Failed to process launch notification action: $e',
+        name: 'Notifications',
+        stackTrace: st,
+      );
+    }
+  }
+
+  static Future<void> _handleNotificationResponse(
+      NotificationResponse response) async {
+    developer.log(
+      '[CALL_ACTION] notification response received action=${response.actionId ?? 'open'} payload=${response.payload}',
+      name: 'Notifications',
+    );
+    print(
+      '[CALL_ACTION] notification response received action=${response.actionId ?? 'open'} payload=${response.payload}',
+    );
+    final payload = _decodePayload(response.payload);
+    if (payload == null) {
+      // Not a call notification — forward to main notification handler
+      if (fallbackNotificationTapHandler != null) {
+        developer.log(
+          '[CALL_ACTION] forwarding non-call notification tap to fallback handler',
+          name: 'Notifications',
+        );
+        fallbackNotificationTapHandler!(response.payload);
+      } else {
+        developer.log(
+          'Ignoring notification response: not a call payload and no fallback handler',
+          name: 'Notifications',
+        );
+      }
+      return;
+    }
+
+    final actionId = response.actionId;
+    final actionKey = '${payload.callId}:${actionId ?? 'open'}';
+    if (!_processedActionKeys.add(actionKey)) {
+      developer.log(
+        'Ignoring duplicate call notification action: $actionKey',
+        name: 'Notifications',
+      );
+      return;
+    }
+
+    if (actionId == _actionAccept) {
+      developer.log(
+        '[CALL_ACTION] emitting accept event callId=${payload.callId}',
+        name: 'Notifications',
+      );
+      await endCall(payload.callId);
+      _actionController.add(
+        CallNotificationActionEvent.accept(
+          callId: payload.callId,
+          callerName: payload.callerName,
+          callerUserId: payload.callerUserId,
+          isVideo: payload.isVideo,
+        ),
+      );
+      return;
+    }
+    if (actionId == _actionDecline) {
+      developer.log(
+        '[CALL_ACTION] emitting decline event callId=${payload.callId}',
+        name: 'Notifications',
+      );
+      await endCall(payload.callId);
+      _actionController.add(
+        CallNotificationActionEvent.decline(
+          callId: payload.callId,
+          callerName: payload.callerName,
+          callerUserId: payload.callerUserId,
+          isVideo: payload.isVideo,
+        ),
+      );
+      return;
+    }
+
+    await endCall(payload.callId);
+    developer.log(
+      '[CALL_ACTION] emitting open event callId=${payload.callId}',
+      name: 'Notifications',
+    );
+    _actionController.add(
+      CallNotificationActionEvent.open(
+        callId: payload.callId,
+        callerName: payload.callerName,
+        callerUserId: payload.callerUserId,
+        isVideo: payload.isVideo,
+      ),
+    );
+  }
+
+  static String _encodePayload({
+    required String callId,
+    required String callerName,
+    required String callerUserId,
+    required bool isVideo,
+  }) {
+    return jsonEncode({
+      'callId': callId,
+      'callerName': callerName,
+      'callerUserId': callerUserId,
+      'isVideo': isVideo,
+    });
+  }
+
+  static _CallPayload? _decodePayload(String? raw) {
+    if (raw == null || raw.trim().isEmpty) {
+      return null;
+    }
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map<String, dynamic>) {
+        // Not a JSON object — not a call payload
+        return null;
+      }
+      final callId = decoded['callId']?.toString() ?? '';
+      if (callId.isEmpty) {
+        // No callId field — not a call payload
+        return null;
+      }
+      return _CallPayload(
+        callId: callId,
+        callerName: decoded['callerName']?.toString() ?? 'Caller',
+        callerUserId: decoded['callerUserId']?.toString() ?? '',
+        isVideo: decoded['isVideo'] == true,
+      );
+    } catch (_) {
+      // JSON parse failed — not a call payload
+      return null;
+    }
+  }
+}
+
+@pragma('vm:entry-point')
+void callNotificationResponseBackgroundHandler(NotificationResponse response) {
+  unawaited(CallNotificationService._handleNotificationResponse(response));
+}
+
+enum CallNotificationActionType { open, accept, decline }
+
+class CallNotificationActionEvent {
+  final CallNotificationActionType type;
+  final String callId;
+  final String callerName;
+  final String callerUserId;
+  final bool isVideo;
+
+  const CallNotificationActionEvent._({
+    required this.type,
+    required this.callId,
+    required this.callerName,
+    required this.callerUserId,
+    required this.isVideo,
+  });
+
+  const CallNotificationActionEvent.open({
+    required String callId,
+    required String callerName,
+    required String callerUserId,
+    required bool isVideo,
+  }) : this._(
+          type: CallNotificationActionType.open,
+          callId: callId,
+          callerName: callerName,
+          callerUserId: callerUserId,
+          isVideo: isVideo,
+        );
+
+  const CallNotificationActionEvent.accept({
+    required String callId,
+    required String callerName,
+    required String callerUserId,
+    required bool isVideo,
+  }) : this._(
+          type: CallNotificationActionType.accept,
+          callId: callId,
+          callerName: callerName,
+          callerUserId: callerUserId,
+          isVideo: isVideo,
+        );
+
+  const CallNotificationActionEvent.decline({
+    required String callId,
+    required String callerName,
+    required String callerUserId,
+    required bool isVideo,
+  }) : this._(
+          type: CallNotificationActionType.decline,
+          callId: callId,
+          callerName: callerName,
+          callerUserId: callerUserId,
+          isVideo: isVideo,
+        );
+}
+
+class _CallPayload {
+  final String callId;
+  final String callerName;
+  final String callerUserId;
+  final bool isVideo;
+
+  const _CallPayload({
+    required this.callId,
+    required this.callerName,
+    required this.callerUserId,
+    required this.isVideo,
+  });
 }

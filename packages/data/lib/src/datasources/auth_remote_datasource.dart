@@ -6,6 +6,8 @@ import '../dtos/user_dto.dart';
 /// Remote data source for authentication API calls
 class AuthRemoteDataSource {
   final Dio _dio;
+  static String? _lastRegisteredToken;
+  static DateTime? _lastRegisteredAt;
 
   AuthRemoteDataSource(this._dio);
 
@@ -169,11 +171,23 @@ class AuthRemoteDataSource {
   }
 
   Future<void> registerDeviceToken(String fcmToken) async {
+    final now = DateTime.now();
+    final shouldSkipDuplicate = _lastRegisteredToken == fcmToken &&
+        _lastRegisteredAt != null &&
+        now.difference(_lastRegisteredAt!) < const Duration(minutes: 10);
+    if (shouldSkipDuplicate) {
+      print(
+          'DEBUG: registerDeviceToken skipped duplicate token within cooldown window');
+      return;
+    }
+
     try {
       final response = await _dio.post(
         '/notifications/register-token',
         data: {'token': fcmToken},
       );
+      _lastRegisteredToken = fcmToken;
+      _lastRegisteredAt = now;
       print(
           'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}');
     } on DioException catch (e) {

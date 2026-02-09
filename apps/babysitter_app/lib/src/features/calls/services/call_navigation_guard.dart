@@ -84,12 +84,20 @@ class CallNavigationGuard {
   /// Show in-call screen (replaces current screens)
   void showInCallScreen() {
     final navigator = navigatorKey.currentState;
-    if (navigator == null) return;
+    if (navigator == null) {
+      developer.log(
+        '[CALL_NAV] showInCallScreen FAILED: navigator is null',
+        name: 'Calls',
+      );
+      print('[CALL_NAV] showInCallScreen FAILED: navigator is null');
+      return;
+    }
 
     _currentIncomingCallId = null;
     _isInCallScreenShowing = true;
 
-    developer.log('Showing InCallScreen', name: 'Calls');
+    developer.log('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil', name: 'Calls');
+    print('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil');
 
     navigator.pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const InCallScreen()),

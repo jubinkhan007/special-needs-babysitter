@@ -179,10 +179,10 @@ class NotificationsServiceImpl implements NotificationsService {
       name: 'Notifications',
     );
 
-    // Skip showing notification for call invites - they're handled by CallNotificationService
-    final type = message.data['type']?.toString();
-    if (type == 'call_invite' || type == 'incoming_call') {
-      developer.log('Skipping notification for call invite type: $type',
+    // Skip showing generic notifications for call-signaling payloads.
+    if (_isCallSignalingMessage(message)) {
+      final type = message.data['type']?.toString().toLowerCase() ?? '';
+      developer.log('Skipping notification for call-related payload type: $type',
           name: 'Notifications');
       return;
     }
@@ -262,6 +262,41 @@ class NotificationsServiceImpl implements NotificationsService {
     final trimmed = text.trim();
     if (!trimmed.startsWith('{')) return false;
     return trimmed.contains('"type"') && trimmed.contains('call_invite');
+  }
+
+  bool _isCallSignalingMessage(RemoteMessage message) {
+    final type = message.data['type']?.toString().toLowerCase() ?? '';
+    if (type == 'incoming_call' ||
+        type == 'call_invite' ||
+        type == 'call_status' ||
+        type == 'call_event' ||
+        type.startsWith('call_')) {
+      return true;
+    }
+
+    final bodyCandidates = <String?>[
+      message.notification?.body,
+      message.data['body']?.toString(),
+      message.data['message']?.toString(),
+      message.data['text']?.toString(),
+      message.data['textContent']?.toString(),
+      message.data['content']?.toString(),
+    ];
+
+    for (final body in bodyCandidates) {
+      if (body == null) continue;
+      final normalized = body.toLowerCase().replaceAll(' ', '');
+      if (!normalized.startsWith('{')) continue;
+      if (normalized.contains('"type":"call_invite"') ||
+          normalized.contains('"type":"incoming_call"') ||
+          normalized.contains('"type":"call_status"') ||
+          normalized.contains('"type":"call_event"') ||
+          normalized.contains('"callid"')) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   String? _buildTapPayload(RemoteMessage message) {

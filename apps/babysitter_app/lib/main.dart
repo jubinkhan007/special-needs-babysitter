@@ -32,7 +32,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   );
 
   // Handle incoming call notifications in background
-  final type = message.data['type'];
+  final type = (message.data['type'] ?? '').toString().toLowerCase();
   if (type == 'incoming_call' || type == 'call_invite') {
     // Extract call details from payload (handle both type names)
     final callId = message.data['callId'] ?? message.data['call_id'];
@@ -43,6 +43,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         message.data['senderName'] ??
         message.data['sender_name'] ??
         'Unknown';
+    final callerUserId = message.data['callerUserId'] ??
+        message.data['caller_user_id'] ??
+        message.data['senderUserId'] ??
+        message.data['sender_user_id'] ??
+        '';
     final callerAvatar =
         message.data['callerAvatar'] ?? message.data['caller_avatar'];
 
@@ -50,10 +55,31 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       await CallNotificationService.showIncomingCallUI(
         callId: callId.toString(),
         callerName: callerName.toString(),
+        callerUserId: callerUserId.toString(),
         callerAvatar: callerAvatar?.toString(),
         isVideo: callType.toString().toLowerCase() == 'video',
       );
     }
+    return;
+  }
+
+  if (type == 'call_status' || type == 'call_event') {
+    final status = (message.data['status'] ?? message.data['event'] ?? '')
+        .toString()
+        .toLowerCase();
+    final callId = (message.data['callId'] ?? message.data['call_id'])?.toString();
+    if (callId != null &&
+        (status == 'accepted' ||
+            status == 'ended' ||
+            status == 'declined' ||
+            status == 'missed')) {
+      await CallNotificationService.endCall(callId);
+    }
+    return;
+  }
+
+  // Never treat call-related payloads as generic message notifications.
+  if (_isCallSignalingPayload(message)) {
     return;
   }
 
@@ -62,7 +88,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     message.data['title']?.toString(),
     message.data['senderName']?.toString(),
     message.data['sender_name']?.toString(),
-    'New Message',
   ]);
   final body = _firstNonEmpty([
     message.notification?.body,
@@ -75,7 +100,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if ((title ?? '').isNotEmpty || (body ?? '').isNotEmpty) {
     final payload = _buildTapPayload(message);
     await _showBackgroundLocalNotification(
-      title: title ?? 'New Message',
+      title: title ?? 'Notification',
       body: body ?? '',
       payload: payload,
     );
@@ -175,6 +200,41 @@ String? _firstNonEmpty(List<String?> values) {
     }
   }
   return null;
+}
+
+bool _isCallSignalingPayload(RemoteMessage message) {
+  final type = (message.data['type'] ?? '').toString().toLowerCase();
+  if (type == 'incoming_call' ||
+      type == 'call_invite' ||
+      type == 'call_status' ||
+      type == 'call_event' ||
+      type.startsWith('call_')) {
+    return true;
+  }
+
+  final bodyCandidates = <String?>[
+    message.notification?.body,
+    message.data['body']?.toString(),
+    message.data['message']?.toString(),
+    message.data['text']?.toString(),
+    message.data['textContent']?.toString(),
+    message.data['content']?.toString(),
+  ];
+
+  for (final body in bodyCandidates) {
+    if (body == null) continue;
+    final normalized = body.toLowerCase().replaceAll(' ', '');
+    if (!normalized.startsWith('{')) continue;
+    if (normalized.contains('"type":"call_invite"') ||
+        normalized.contains('"type":"incoming_call"') ||
+        normalized.contains('"type":"call_status"') ||
+        normalized.contains('"type":"call_event"') ||
+        normalized.contains('"callid"')) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void main() async {
