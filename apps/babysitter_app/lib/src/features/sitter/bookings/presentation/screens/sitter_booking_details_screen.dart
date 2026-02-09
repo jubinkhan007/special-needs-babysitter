@@ -2128,7 +2128,7 @@ class _SitterBookingDetailsScreenState
                       SizedBox(height: 20.h),
                       SizedBox(
                         width: double.infinity,
-                        height: 48.h,
+                        height: 48,
                         child: ElevatedButton(
                           onPressed: isSubmitting
                               ? null
@@ -2227,14 +2227,15 @@ class _SitterBookingDetailsScreenState
                             foregroundColor: Colors.white,
                             disabledBackgroundColor: Colors.grey.shade300,
                             elevation: 0,
+                            padding: EdgeInsets.zero,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                           ),
                           child: isSubmitting
                               ? SizedBox(
-                                  width: 18.w,
-                                  height: 18.h,
+                                  width: 20,
+                                  height: 20,
                                   child: const CircularProgressIndicator(
                                     strokeWidth: 2,
                                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -2243,10 +2244,13 @@ class _SitterBookingDetailsScreenState
                                 )
                               : Text(
                                   'Yes',
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Inter',
+                                    height: 1.1,
                                   ),
                                 ),
                         ),
@@ -2254,11 +2258,12 @@ class _SitterBookingDetailsScreenState
                       SizedBox(height: 12.h),
                       SizedBox(
                         width: double.infinity,
-                        height: 48.h,
+                        height: 48,
                         child: OutlinedButton(
                           onPressed: () => Navigator.of(dialogContext).pop(),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: const Color(0xFF1D2939),
+                            padding: EdgeInsets.zero,
                             side: const BorderSide(color: Color(0xFFD0D5DD)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.r),
@@ -2266,10 +2271,13 @@ class _SitterBookingDetailsScreenState
                           ),
                           child: Text(
                             'No',
+                            maxLines: 1,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Inter',
+                              height: 1.1,
                             ),
                           ),
                         ),
@@ -2526,114 +2534,121 @@ class _SitterBookingDetailsScreenState
     await showDialog<void>(
       context: context,
       builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.7,
+        return MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1)),
+          child: Dialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.r),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(20.w),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: IconButton(
-                      icon: Icon(Icons.close,
-                          color: const Color(0xFF667085), size: 20.w),
-                      onPressed: () => context.pop(),
-                    ),
-                  ),
-                  Flexible(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Clocked In\nSuccessfully!',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFF1D2939),
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                          SizedBox(height: 16.h),
-                          Text(
-                            'Start Time:',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1D2939),
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            'You Clocked in at $time',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF667085),
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
-                          Text(
-                            'Geo-Tracking Notification:',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF1D2939),
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            'Your location is now visible to the family.',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF667085),
-                              fontFamily: 'Inter',
-                            ),
-                          ),
-                        ],
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.7,
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        icon: Icon(Icons.close,
+                            color: const Color(0xFF667085), size: 20.w),
+                        onPressed: () => context.pop(),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20.h),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48.h,
-                    child: ElevatedButton(
-                      onPressed: () => context.pop(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF87C4F2),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                      ),
-                      child: Text(
-                        'Confirm',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Clocked In\nSuccessfully!',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF1D2939),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                            SizedBox(height: 16.h),
+                            Text(
+                              'Start Time:',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF1D2939),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+                            Text(
+                              'You Clocked in at $time',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xFF667085),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                            SizedBox(height: 12.h),
+                            Text(
+                              'Geo-Tracking Notification:',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF1D2939),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+                            Text(
+                              'Your location is now visible to the family.',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xFF667085),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8.h),
-                ],
+                    SizedBox(height: 20.h),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () => context.pop(),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF87C4F2),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                        child: Text(
+                          'Confirm',
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Inter',
+                            height: 1.1,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                  ],
+                ),
               ),
             ),
           ),

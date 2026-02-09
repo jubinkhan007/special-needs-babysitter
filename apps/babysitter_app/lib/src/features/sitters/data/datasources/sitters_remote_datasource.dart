@@ -120,7 +120,8 @@ class SittersRemoteDataSource {
       final response = await _dio.delete(
         '/parents/bookmarked-sitters/$sitterUserId',
       );
-      print('DEBUG removeBookmarkedSitter: Response status=${response.statusCode}');
+      print(
+          'DEBUG removeBookmarkedSitter: Response status=${response.statusCode}');
       print('DEBUG removeBookmarkedSitter: Response data=${response.data}');
       if (response.data['success'] != true) {
         throw Exception('Failed to remove bookmark');
@@ -154,12 +155,23 @@ class SittersRemoteDataSource {
     print('DEBUG _mapBookmarkedSitterToDto: Raw JSON = $json');
     final userIdData = json['userId'] as Map<String, dynamic>? ?? {};
     print('DEBUG _mapBookmarkedSitterToDto: userIdData = $userIdData');
-    print('DEBUG _mapBookmarkedSitterToDto: profile _id (json[_id]) = ${json['_id']}');
-    print('DEBUG _mapBookmarkedSitterToDto: user _id (userIdData[_id]) = ${userIdData['_id']}');
+    print(
+        'DEBUG _mapBookmarkedSitterToDto: profile _id (json[_id]) = ${json['_id']}');
+    print(
+        'DEBUG _mapBookmarkedSitterToDto: user _id (userIdData[_id]) = ${userIdData['_id']}');
 
     // Photo URL can be in userId object or directly on sitter profile
     final photoUrl =
         userIdData['photoUrl'] as String? ?? json['photoUrl'] as String? ?? '';
+    final avgRating = _toDouble(json['avgRating']) ??
+        _toDouble(json['rating']) ??
+        _toDouble(userIdData['avgRating']) ??
+        _toDouble(userIdData['rating']) ??
+        0.0;
+    final reviewCount = _toInt(json['reviewCount']) ??
+        _toInt(json['totalReviews']) ??
+        _toInt(userIdData['reviewCount']) ??
+        0;
 
     return SitterDto(
       id: json['_id'] ?? '',
@@ -173,8 +185,9 @@ class SittersRemoteDataSource {
       ageRanges: List<String>.from(json['ageRanges'] ?? []),
       address: json['address'],
       distance: (json['distance'] as num?)?.toDouble(),
+      avgRating: avgRating,
       reliabilityScore: (json['reliabilityScore'] as num?)?.toDouble() ?? 100.0,
-      reviewCount: (json['totalJobs'] as num?)?.toInt() ?? 0,
+      reviewCount: reviewCount,
       isSaved: true, // Always true since this is from saved list
     );
   }
@@ -243,5 +256,20 @@ class SittersRemoteDataSource {
       print('DEBUG: Error fetching user profile $userId: $e');
       rethrow;
     }
+  }
+
+  double? _toDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    if (value is String) return double.tryParse(value);
+    return null;
+  }
+
+  int? _toInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 }

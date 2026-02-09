@@ -261,7 +261,7 @@ class _SitterProfileViewState extends State<SitterProfileView> {
                         child: ReviewsSection(
                           reviews: widget.sitter.reviews,
                           averageRating: widget.sitter.rating,
-                          totalReviews: widget.sitter.reviews.length,
+                          totalReviews: widget.sitter.reviewCount,
                           onTapSeeAll: () {
                             context.push(
                               Uri(

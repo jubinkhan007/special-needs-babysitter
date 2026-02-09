@@ -23,6 +23,7 @@ class SitterModel {
   final String avatarUrl;
   final bool isVerified;
   final double rating;
+  final int reviewCount;
   final String location;
   final String distance;
   final int responseRate;
@@ -50,6 +51,7 @@ class SitterModel {
     required this.avatarUrl,
     this.isVerified = true,
     required this.rating,
+    this.reviewCount = 0,
     required this.location,
     required this.distance,
     required this.responseRate,

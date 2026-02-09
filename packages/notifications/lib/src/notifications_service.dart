@@ -9,6 +9,9 @@ abstract interface class NotificationsService {
   /// Get the FCM token
   Future<String?> getToken();
 
+  /// Force refresh the FCM token (delete old token and request a new one)
+  Future<String?> forceRefreshToken();
+
   /// Subscribe to a topic
   Future<void> subscribeToTopic(String topic);
 
@@ -24,6 +27,12 @@ abstract interface class NotificationsService {
 
   /// Stream of notification taps (payload)
   Stream<String?> get onNotificationTap;
+
+  /// Stream of FCM token refreshes
+  Stream<String> get onTokenRefresh;
+
+  /// Run diagnostics to check the notification pipeline
+  Future<void> runDiagnostics();
 
   /// Dispose resources
   void dispose();

@@ -150,7 +150,7 @@ class _SitterActiveBookingScreenState
           ),
         );
         if (isFinalDay) {
-          _goToBookingDetails(status: 'completed');
+          _goToBookingDetails(status: 'clockedout');
         } else {
           context.pop();
         }

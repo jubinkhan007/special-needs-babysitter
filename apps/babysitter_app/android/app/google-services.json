@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167197798076",
+    "project_id": "babysitter-rebecca",
+    "storage_bucket": "babysitter-rebecca.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167197798076:android:85203c11e23a554a1a2ab9",
+        "android_client_info": {
+          "package_name": "com.waywise.specialneedssitters"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARrlKar7mrIJsV34FPbuAyg2Y3m1vPMAk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -167,4 +167,19 @@ class AuthRemoteDataSource {
     );
     return AuthSessionDto.fromJson(response.data as Map<String, dynamic>);
   }
+
+  Future<void> registerDeviceToken(String fcmToken) async {
+    try {
+      final response = await _dio.post(
+        '/notifications/register-token',
+        data: {'token': fcmToken},
+      );
+      print(
+          'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}');
+    } on DioException catch (e) {
+      print(
+          'DEBUG: registerDeviceToken failed status=${e.response?.statusCode} body=${e.response?.data} error=${e.message}');
+      rethrow;
+    }
+  }
 }

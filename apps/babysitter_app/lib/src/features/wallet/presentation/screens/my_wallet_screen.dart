@@ -113,7 +113,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
               SizedBox(height: 12.h),
               SizedBox(
                 width: double.infinity,
-                height: 48.h,
+                height: 48,
                 child: ElevatedButton(
                   onPressed: () {
                     context.push(Routes.sitterPayoutHistory);
@@ -122,15 +122,19 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
                     backgroundColor: WalletStyles.primaryBlue,
                     foregroundColor: Colors.white,
                     elevation: 0,
+                    padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                   ),
                   child: Text(
                     'View Payout History',
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
+                      height: 1.1,
                     ),
                   ),
                 ),

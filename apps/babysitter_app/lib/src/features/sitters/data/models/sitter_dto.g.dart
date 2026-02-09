@@ -56,8 +56,11 @@ SitterDto _$SitterDtoFromJson(Map<String, dynamic> json) => SitterDto(
           (json['ageRanges'] as List<dynamic>).map((e) => e as String).toList(),
       address: json['address'] as String?,
       distance: (json['distance'] as num?)?.toDouble(),
+      avgRating: (json['avgRating'] as num?)?.toDouble() ??
+          (json['rating'] as num?)?.toDouble() ??
+          0.0,
       reliabilityScore: (json['reliabilityScore'] as num).toDouble(),
-      reviewCount: (json['reviewCount'] as num).toInt(),
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       isSaved: json['isSaved'] as bool? ?? false,
     );
 
@@ -73,6 +76,7 @@ Map<String, dynamic> _$SitterDtoToJson(SitterDto instance) => <String, dynamic>{
       'ageRanges': instance.ageRanges,
       'address': instance.address,
       'distance': instance.distance,
+      'avgRating': instance.avgRating,
       'reliabilityScore': instance.reliabilityScore,
       'reviewCount': instance.reviewCount,
       'isSaved': instance.isSaved,

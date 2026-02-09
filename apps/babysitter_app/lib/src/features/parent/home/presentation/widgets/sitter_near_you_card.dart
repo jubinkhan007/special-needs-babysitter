@@ -48,8 +48,7 @@ class SitterNearYouCard extends StatelessWidget {
                         width: 44,
                         height: 44,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Container(
+                        errorBuilder: (context, error, stackTrace) => Container(
                           width: 44,
                           height: 44,
                           color: Colors.grey[200],
@@ -60,8 +59,7 @@ class SitterNearYouCard extends StatelessWidget {
                         width: 44,
                         height: 44,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Container(
+                        errorBuilder: (context, error, stackTrace) => Container(
                           width: 44,
                           height: 44,
                           color: Colors.grey[200],
@@ -139,6 +137,17 @@ class SitterNearYouCard extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
                   ),
+                  if (sitter.reviewCount > 0) ...[
+                    const SizedBox(width: 4),
+                    Text(
+                      '(${sitter.reviewCount})',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
                   const SizedBox(width: 10),
                   GestureDetector(
                     onTap: onBookmarkTap,

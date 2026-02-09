@@ -19,6 +19,8 @@ dependencies:
     path: ../data
   core:
     path: ../core
+  notifications:
+    path: ../notifications
   dio: ^5.4.0
 
 dev_dependencies:

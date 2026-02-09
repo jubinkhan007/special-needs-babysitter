@@ -49,6 +49,7 @@ class SitterDto {
   final String?
       address; // Nullable in example? No, string. But assume could be null.
   final double? distance; // Null in example
+  final double avgRating;
   final double reliabilityScore; // 100 in example
   final int reviewCount; // 0
   @JsonKey(defaultValue: false)
@@ -66,6 +67,7 @@ class SitterDto {
     required this.ageRanges,
     this.address,
     this.distance,
+    this.avgRating = 0.0,
     required this.reliabilityScore,
     required this.reviewCount,
     required this.isSaved,

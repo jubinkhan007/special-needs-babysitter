@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // NOTE: To enable full CallKit functionality, run:
 //   flutter pub get
@@ -17,10 +18,19 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 /// NOTE: This is a stub implementation. For full CallKit functionality,
 /// install flutter_callkit_incoming and update this file.
 class CallNotificationService {
+  static const String _callChannelId = 'incoming_calls_channel';
+  static const String _callChannelName = 'Incoming Calls';
+  static const String _callChannelDescription = 'Incoming call alerts';
+
+  static final FlutterLocalNotificationsPlugin _localNotifications =
+      FlutterLocalNotificationsPlugin();
+  static bool _localNotificationsInitialized = false;
+
   /// Handle incoming call from push payload data
   ///
   /// This is the primary method - accepts raw Map data
-  static Future<void> handleIncomingCallPayload(Map<String, dynamic> data) async {
+  static Future<void> handleIncomingCallPayload(
+      Map<String, dynamic> data) async {
     if (data['type'] != 'incoming_call') return;
 
     final callId = data['callId'] as String?;
@@ -29,7 +39,9 @@ class CallNotificationService {
     final callerAvatar = data['callerAvatar'] as String?;
 
     if (callId == null || callerName == null) {
-      developer.log('Invalid incoming call payload: missing callId or callerName', name: 'Notifications');
+      developer.log(
+          'Invalid incoming call payload: missing callId or callerName',
+          name: 'Notifications');
       return;
     }
 
@@ -58,6 +70,14 @@ class CallNotificationService {
     developer.log(
       'showIncomingCallUI: callId=$callId, caller=$callerName, isVideo=$isVideo',
       name: 'Notifications',
+    );
+
+    // Fallback notification so incoming-call pushes are visible even before
+    // flutter_callkit_incoming is integrated.
+    await _showFallbackIncomingCallNotification(
+      callId: callId,
+      callerName: callerName,
+      isVideo: isVideo,
     );
 
     // STUB: Log only until flutter_callkit_incoming is installed
@@ -102,7 +122,8 @@ class CallNotificationService {
     await FlutterCallkitIncoming.showCallkitIncoming(params);
     */
 
-    developer.log('Showing incoming call UI for $callId (stub)', name: 'Notifications');
+    developer.log('Showing incoming call UI for $callId (stub)',
+        name: 'Notifications');
   }
 
   /// End specific call UI
@@ -130,7 +151,8 @@ class CallNotificationService {
     String? calleeAvatar,
     bool isVideo = false,
   }) async {
-    developer.log('Starting outgoing call UI for $callId', name: 'Notifications');
+    developer.log('Starting outgoing call UI for $callId',
+        name: 'Notifications');
     // Implement with flutter_callkit_incoming
   }
 
@@ -138,5 +160,76 @@ class CallNotificationService {
   static Future<void> setCallConnected(String callId) async {
     developer.log('Setting call $callId as connected', name: 'Notifications');
     // await FlutterCallkitIncoming.setCallConnected(callId);
+  }
+
+  static Future<void> _showFallbackIncomingCallNotification({
+    required String callId,
+    required String callerName,
+    required bool isVideo,
+  }) async {
+    try {
+      await _ensureLocalNotificationsInitialized();
+
+      final callKind = isVideo ? 'Video' : 'Audio';
+      await _localNotifications.show(
+        callId.hashCode,
+        'Incoming $callKind Call',
+        '$callerName is calling you',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            _callChannelId,
+            _callChannelName,
+            channelDescription: _callChannelDescription,
+            importance: Importance.max,
+            priority: Priority.high,
+            category: AndroidNotificationCategory.call,
+            fullScreenIntent: true,
+            ongoing: true,
+            autoCancel: false,
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+        payload: callId,
+      );
+    } catch (e, st) {
+      developer.log(
+        'Failed to show fallback incoming call notification: $e',
+        name: 'Notifications',
+        stackTrace: st,
+      );
+    }
+  }
+
+  static Future<void> _ensureLocalNotificationsInitialized() async {
+    if (_localNotificationsInitialized) return;
+
+    const initSettings = InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
+      ),
+    );
+
+    await _localNotifications.initialize(initSettings);
+
+    const channel = AndroidNotificationChannel(
+      _callChannelId,
+      _callChannelName,
+      description: _callChannelDescription,
+      importance: Importance.max,
+    );
+
+    await _localNotifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    _localNotificationsInitialized = true;
   }
 }

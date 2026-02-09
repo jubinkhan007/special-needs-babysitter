@@ -124,10 +124,20 @@ class SavedSitterCard extends StatelessWidget {
                             size: 12, color: AppColors.starYellow),
                         const SizedBox(width: 2),
                         Text(
-                          sitter.rating.toString(),
+                          sitter.rating.toStringAsFixed(1),
                           style: const TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 11),
                         ),
+                        if (sitter.reviewCount > 0) ...[
+                          const SizedBox(width: 2),
+                          Text(
+                            '(${sitter.reviewCount})',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                                color: AppColors.textSecondary),
+                          ),
+                        ],
                       ],
                     ),
                     const SizedBox(height: 4),

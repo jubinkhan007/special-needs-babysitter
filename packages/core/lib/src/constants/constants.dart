@@ -3,8 +3,7 @@ class Constants {
   Constants._();
 
   // API Configuration
-  static const String baseUrl =
-      'https://babysitter-backend.waywisetech.com/api';
+  static const String baseUrl = 'https://sns-apis.tausifk.com/api/';
 
   // App info
   static const String appName = 'Special Needs Sitters';

@@ -30,6 +30,7 @@ dependencies:
   # Firebase
   firebase_core: ^2.27.0
   firebase_messaging: ^14.7.19
+  flutter_local_notifications: ^17.0.0
 
   # Incoming Call UI (CallKit on iOS, Full-screen on Android)
   flutter_callkit_incoming: ^2.0.4
@@ -68,6 +69,7 @@ dependencies:
   shared_preferences: ^2.5.4
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
+  app_links: ^6.3.0  # Deep links for PayPal callbacks
 
 dev_dependencies:
   flutter_test:

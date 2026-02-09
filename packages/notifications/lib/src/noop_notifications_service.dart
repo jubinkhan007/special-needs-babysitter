@@ -30,6 +30,11 @@ class NoopNotificationsService implements NotificationsService {
   }
 
   @override
+  Future<String?> forceRefreshToken() async {
+    return null;
+  }
+
+  @override
   Future<void> subscribeToTopic(String topic) async {
     developer.log(
       'Topic subscription skipped: $topic (Firebase not available)',
@@ -59,6 +64,23 @@ class NoopNotificationsService implements NotificationsService {
 
   @override
   Stream<String?> get onNotificationTap => _notificationTapController.stream;
+
+  @override
+  Stream<String> get onTokenRefresh => const Stream.empty();
+
+  @override
+  Future<void> runDiagnostics() async {
+    developer.log(
+      '=== FCM DIAGNOSTICS: Using NoopNotificationsService ===',
+      name: 'FCM_DIAG',
+    );
+    developer.log(
+      '  >> PROBLEM: Firebase is NOT initialized. '
+      'Check: google-services.json (Android), GoogleService-Info.plist (iOS), '
+      'Firebase.initializeApp() in main.dart logs.',
+      name: 'FCM_DIAG',
+    );
+  }
 
   @override
   void dispose() {

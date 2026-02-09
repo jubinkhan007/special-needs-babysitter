@@ -1,6 +1,9 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart';
 import 'package:data/data.dart';
+import 'package:notifications/notifications.dart';
 
 import '../session_store.dart';
 
@@ -173,6 +176,8 @@ final signOutUseCaseProvider = Provider<SignOutUseCase>((ref) {
 
 /// Auth state notifier for handling auth operations
 class AuthNotifier extends AsyncNotifier<AuthSession?> {
+  bool _isRegisteringFcmToken = false;
+
   @override
   Future<AuthSession?> build() async {
     print('DEBUG: AuthNotifier.build called');
@@ -218,6 +223,9 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     });
     if (state.hasError) {
       print('DEBUG: AuthNotifier.signIn ERROR: ${state.error}');
+    } else {
+      _logFcmFlowAuth('signIn success -> triggering _registerFcmToken');
+      _registerFcmToken();
     }
   }
 
@@ -245,6 +253,9 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     });
     if (state.hasError) {
       print('DEBUG: AuthNotifier.signUp ERROR: ${state.error}');
+    } else {
+      _logFcmFlowAuth('signUp success -> triggering _registerFcmToken');
+      _registerFcmToken();
     }
   }
 
@@ -312,6 +323,9 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
 
     if (state.hasError) {
       print('DEBUG: AuthNotifier.verifyOtp ERROR: ${state.error}');
+    } else {
+      _logFcmFlowAuth('verifyOtp success -> triggering _registerFcmToken');
+      _registerFcmToken();
     }
   }
 
@@ -329,10 +343,59 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       state = AsyncValue.data(updatedSession);
       print(
           'DEBUG: AuthNotifier.refreshProfile success. isProfileComplete=${freshUser.isProfileComplete}');
-    } catch (e, st) {
+    } catch (e) {
       print('DEBUG: AuthNotifier.refreshProfile failed: $e');
       // If we can't refresh, keep the state as is
     }
+  }
+
+  Future<void> _registerFcmToken() async {
+    if (_isRegisteringFcmToken) {
+      _logFcmFlowAuth('_registerFcmToken skipped: already in progress');
+      return;
+    }
+    _isRegisteringFcmToken = true;
+    try {
+      _logFcmFlowAuth('_registerFcmToken started');
+      final notificationsService = ref.read(notificationsServiceProvider);
+      String? token = await notificationsService.getToken();
+      _logFcmFlowAuth(
+        '_registerFcmToken getToken result: ${token == null || token.isEmpty ? "empty" : "len=${token.length}"}',
+      );
+      if (token == null || token.isEmpty) {
+        _logFcmFlowAuth('_registerFcmToken trying forceRefreshToken');
+        token = await notificationsService.forceRefreshToken();
+        _logFcmFlowAuth(
+          '_registerFcmToken forceRefreshToken result: ${token == null || token.isEmpty ? "empty" : "len=${token.length}"}',
+        );
+      }
+      if (token != null && token.isNotEmpty) {
+        final dataSource = ref.read(authRemoteDataSourceProvider);
+        _logFcmFlowAuth('_registerFcmToken calling registerDeviceToken');
+        await dataSource.registerDeviceToken(token);
+        developer.log('FCM token registered with backend', name: 'Auth');
+        _logFcmFlowAuth('_registerFcmToken backend registration success');
+      } else {
+        developer.log(
+          'FCM token unavailable after forced refresh during auth flow',
+          name: 'Auth',
+        );
+        _logFcmFlowAuth(
+          '_registerFcmToken aborted: token unavailable after forced refresh',
+        );
+      }
+    } catch (e, st) {
+      developer.log('Failed to register FCM token: $e',
+          name: 'Auth', stackTrace: st);
+      _logFcmFlowAuth('_registerFcmToken failed with error=$e');
+    } finally {
+      _isRegisteringFcmToken = false;
+    }
+  }
+
+  void _logFcmFlowAuth(String message) {
+    developer.log(message, name: 'FCM_FLOW_AUTH');
+    print('[FCM_FLOW_AUTH] $message');
   }
 }
 

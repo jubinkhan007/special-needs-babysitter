@@ -20,7 +20,7 @@ class SitterProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sitterAsync = ref.watch(sitterProfileProvider(sitterId));
-    
+
     // Check bookmark status
     final savedSittersAsync = ref.watch(savedSittersControllerProvider);
     final savedSitters = savedSittersAsync.valueOrNull ?? [];
@@ -90,6 +90,7 @@ class SitterProfilePage extends ConsumerWidget {
             imageAssetPath: sitter.avatarUrl,
             isVerified: sitter.isVerified,
             rating: sitter.rating,
+            reviewCount: sitter.reviewCount,
             distanceText: sitter.distance,
             responseRate: sitter.responseRate, // assuming int matches
             reliabilityRate: sitter.reliabilityRate,
@@ -98,9 +99,10 @@ class SitterProfilePage extends ConsumerWidget {
             hourlyRate: sitter.hourlyRate,
           );
 
-          ref
-              .read(savedSittersControllerProvider.notifier)
-              .toggleBookmark(sitterId, isCurrentlySaved: isBookmarked, sitterItem: sitterItem);
+          ref.read(savedSittersControllerProvider.notifier).toggleBookmark(
+              sitterId,
+              isCurrentlySaved: isBookmarked,
+              sitterItem: sitterItem);
         },
         onBookPressed: () {
           // Initialize booking flow with sitter data

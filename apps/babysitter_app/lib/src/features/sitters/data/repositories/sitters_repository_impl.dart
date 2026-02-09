@@ -43,19 +43,20 @@ class SittersRepositoryImpl implements SittersRepository {
       maxRate: maxRate,
       location: location,
     );
-    return dtos.map(_mapToSitterListItem).toList();
+    final sitters = dtos.map(_mapToSitterListItem).toList();
+    return _hydrateMissingReviewStats(sitters);
   }
 
   @override
   Future<SitterModel> getSitterDetails(String id) async {
-    // Fetch profile and reviews in parallel
-    final results = await Future.wait([
-      _remoteDataSource.getSitterDetails(id),
-      _remoteDataSource.fetchReviews(id),
-    ]);
-
-    final dto = results[0] as SitterProfileDto;
-    final reviewDtos = results[1] as List<ReviewDto>;
+    final dto = await _remoteDataSource.getSitterDetails(id);
+    List<ReviewDto>? reviewDtos;
+    try {
+      // Reviews endpoint expects the sitter user ID (not profile ID).
+      reviewDtos = await _remoteDataSource.fetchReviews(dto.userId);
+    } catch (e) {
+      debugPrint('Failed to fetch sitter reviews for ${dto.userId}: $e');
+    }
 
     return _mapToSitterModel(dto, reviewDtos: reviewDtos);
   }
@@ -73,7 +74,8 @@ class SittersRepositoryImpl implements SittersRepository {
   @override
   Future<List<SitterListItemModel>> getSavedSitters() async {
     final dtos = await _remoteDataSource.getSavedSitters();
-    return dtos.map(_mapToSitterListItem).toList();
+    final sitters = dtos.map(_mapToSitterListItem).toList();
+    return _hydrateMissingReviewStats(sitters);
   }
 
   SitterListItemModel _mapToSitterListItem(SitterDto dto) {
@@ -85,7 +87,8 @@ class SittersRepositoryImpl implements SittersRepository {
           .photoUrl, // It's a URL, but field name is imageAssetPath. We fixed consumers to handle URLs.
       isVerified:
           true, // Assuming true for now. DTO doesn't have it explicitly yet.
-      rating: 0.0, // Default 0 as reviewCount is 0 in example
+      rating: dto.avgRating,
+      reviewCount: dto.reviewCount,
       distanceText:
           '${dto.distance?.toStringAsFixed(1) ?? "1.2"} Miles Away', // Fallback or real value
       responseRate: 100, // DTO reliabilityScore is 100
@@ -95,6 +98,45 @@ class SittersRepositoryImpl implements SittersRepository {
       tags: dto.skills,
       hourlyRate: dto.hourlyRate,
     );
+  }
+
+  Future<List<SitterListItemModel>> _hydrateMissingReviewStats(
+    List<SitterListItemModel> sitters,
+  ) async {
+    if (sitters.isEmpty) {
+      return sitters;
+    }
+
+    final updated = await Future.wait(
+      sitters.map((sitter) async {
+        final needsRating = sitter.rating <= 0;
+        final needsReviewCount = sitter.reviewCount <= 0;
+        if (!needsRating && !needsReviewCount) {
+          return sitter;
+        }
+
+        try {
+          final reviews = await _remoteDataSource.fetchReviews(sitter.userId);
+          if (reviews.isEmpty) {
+            return sitter;
+          }
+
+          final averageRating =
+              reviews.map((r) => r.rating).reduce((a, b) => a + b) /
+                  reviews.length;
+          return sitter.copyWith(
+            rating: averageRating,
+            reviewCount: reviews.length,
+          );
+        } catch (e) {
+          debugPrint(
+              'Failed to hydrate review stats for sitter ${sitter.userId}: $e');
+          return sitter;
+        }
+      }),
+    );
+
+    return updated;
   }
 
   SitterModel _mapToSitterModel(SitterProfileDto dto,
@@ -125,13 +167,21 @@ class SittersRepositoryImpl implements SittersRepository {
         }).toList() ??
         [];
 
+    final computedRating = reviews.isNotEmpty
+        ? reviews.map((r) => r.rating).reduce((a, b) => a + b) / reviews.length
+        : dto.avgRating;
+    final computedReviewCount = reviewDtos != null
+        ? reviewDtos.length
+        : (dto.reviewCount > 0 ? dto.reviewCount : reviews.length);
+
     return SitterModel(
       id: dto.id,
       userId: dto.userId,
       name: dto.firstName,
       avatarUrl: dto.photoUrl ?? '',
       isVerified: true, // Assuming true
-      rating: dto.avgRating,
+      rating: computedRating,
+      reviewCount: computedReviewCount,
       location: dto.address ??
           '${dto.distance?.toStringAsFixed(1) ?? "1.2"} Miles Away',
       distance: '${dto.distance?.toStringAsFixed(1) ?? "1.2"} Miles',

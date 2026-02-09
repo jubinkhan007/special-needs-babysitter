@@ -81,6 +81,7 @@ class SignUpController extends Notifier<SignUpState> {
         role: formData['role'] ?? 'parent',
         securityQuestion: formData['securityQuestion'] ?? '',
         securityAnswer: formData['securityAnswer'] ?? '',
+        referralCode: formData['referralCode'],
       );
 
       // Debug: print the payload being sent

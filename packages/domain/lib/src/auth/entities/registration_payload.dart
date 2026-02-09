@@ -9,6 +9,7 @@ class RegistrationPayload {
   final String role; // "parent" | "sitter"
   final String securityQuestion;
   final String securityAnswer;
+  final String? referralCode;
 
   const RegistrationPayload({
     required this.email,
@@ -20,17 +21,28 @@ class RegistrationPayload {
     required this.role,
     required this.securityQuestion,
     required this.securityAnswer,
+    this.referralCode,
   });
 
-  Map<String, dynamic> toJson() => {
-        'email': email,
-        'password': password,
-        'firstName': firstName,
-        'middleInitial': middleInitial ?? '',
-        'lastName': lastName,
-        'phone': phone,
-        'role': role,
-        'securityQuestion': securityQuestion,
-        'securityAnswer': securityAnswer,
-      };
+  Map<String, dynamic> toJson() {
+    final payload = <String, dynamic>{
+      'email': email,
+      'password': password,
+      'firstName': firstName,
+      'middleInitial': middleInitial ?? '',
+      'lastName': lastName,
+      'phone': phone,
+      'role': role,
+      'securityQuestion': securityQuestion,
+      'securityAnswer': securityAnswer,
+    };
+
+    final isSitter = role.toLowerCase() == 'sitter';
+    final code = referralCode?.trim();
+    if (isSitter && code != null && code.isNotEmpty) {
+      payload['referralCode'] = code;
+    }
+
+    return payload;
+  }
 }
