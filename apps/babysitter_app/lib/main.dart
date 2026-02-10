@@ -67,7 +67,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final status = (message.data['status'] ?? message.data['event'] ?? '')
         .toString()
         .toLowerCase();
-    final callId = (message.data['callId'] ?? message.data['call_id'])?.toString();
+    final callId =
+        (message.data['callId'] ?? message.data['call_id'])?.toString();
     if (callId != null &&
         (status == 'accepted' ||
             status == 'ended' ||
@@ -78,19 +79,29 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     return;
   }
 
-  // Never treat call-related payloads as generic message notifications.
+  // For notification-type messages (with a `notification` payload), Android
+  // auto-displays them in the system tray. Showing a local notification here
+  // would create a duplicate. Only show a local notification for data-only
+  // messages where Android does NOT auto-display.
+  if (message.notification != null) {
+    developer.log(
+      'Background handler: skipping local notification (FCM auto-displays notification-type messages)',
+      name: 'Notifications',
+    );
+    return;
+  }
+
+  // Safety net: never treat call-related data-only payloads as chat notifications.
   if (_isCallSignalingPayload(message)) {
     return;
   }
 
   final title = _firstNonEmpty([
-    message.notification?.title,
     message.data['title']?.toString(),
     message.data['senderName']?.toString(),
     message.data['sender_name']?.toString(),
   ]);
   final body = _firstNonEmpty([
-    message.notification?.body,
     message.data['body']?.toString(),
     message.data['message']?.toString(),
     message.data['text']?.toString(),

@@ -3,16 +3,10 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_callkit_incoming/entities/entities.dart';
+import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-// NOTE: To enable full CallKit functionality, run:
-//   flutter pub get
-// after adding flutter_callkit_incoming to pubspec.yaml
-//
-// Then uncomment the imports and implementations below.
-
-// import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
-// import 'package:flutter_callkit_incoming/entities/entities.dart';
 
 /// Service for handling call-related push notifications
 ///
@@ -35,6 +29,9 @@ class CallNotificationService {
   static bool _localNotificationsInitialized = false;
   static bool _launchDetailsChecked = false;
   static final Set<String> _processedActionKeys = <String>{};
+
+  static bool get _isIOS =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
   /// Fallback handler for notification taps that are NOT call-related.
   /// Set this from the app layer so non-call notification taps are forwarded
@@ -91,9 +88,9 @@ class CallNotificationService {
     await handleIncomingCallPayload(message.data);
   }
 
-  /// Show CallKit-style incoming call UI
-  ///
-  /// TODO: Implement with flutter_callkit_incoming after running flutter pub get
+  /// Show incoming call UI.
+  /// iOS: native CallKit via flutter_callkit_incoming.
+  /// Android: existing high-priority full-screen notification fallback.
   static Future<void> showIncomingCallUI({
     required String callId,
     required String callerName,
@@ -106,18 +103,40 @@ class CallNotificationService {
       name: 'Notifications',
     );
 
-    // Fallback notification so incoming-call pushes are visible even before
-    // flutter_callkit_incoming is integrated.
+    if (_isIOS) {
+      try {
+        await _showIncomingCallKitUI(
+          callId: callId,
+          callerName: callerName,
+          callerUserId: callerUserId,
+          callerAvatar: callerAvatar,
+          isVideo: isVideo,
+        );
+        return;
+      } catch (e, st) {
+        developer.log(
+          'CallKit incoming UI failed, falling back to local notification: $e',
+          name: 'Notifications',
+          stackTrace: st,
+        );
+      }
+    }
+
     await _showFallbackIncomingCallNotification(
       callId: callId,
       callerName: callerName,
       callerUserId: callerUserId,
       isVideo: isVideo,
     );
+  }
 
-    // STUB: Log only until flutter_callkit_incoming is installed
-    // When ready, uncomment and implement:
-    /*
+  static Future<void> _showIncomingCallKitUI({
+    required String callId,
+    required String callerName,
+    required String callerUserId,
+    required String? callerAvatar,
+    required bool isVideo,
+  }) async {
     final params = CallKitParams(
       id: callId,
       nameCaller: callerName,
@@ -127,43 +146,45 @@ class CallNotificationService {
       type: isVideo ? 1 : 0,
       textAccept: 'Accept',
       textDecline: 'Decline',
-      missedCallNotification: const NotificationParams(
-        showNotification: true,
-        isShowCallback: true,
-        subtitle: 'Missed call',
-      ),
       duration: 45000,
       extra: <String, dynamic>{
         'callId': callId,
+        'callerName': callerName,
+        'callerUserId': callerUserId,
+        'callerAvatar': callerAvatar ?? '',
         'isVideo': isVideo,
       },
-      android: const AndroidParams(
-        isCustomNotification: true,
-        isShowLogo: false,
-        ringtonePath: 'ringtone_default',
-        backgroundColor: '#1E88E5',
-        actionColor: '#4CAF50',
-        incomingCallNotificationChannelName: 'Incoming Calls',
-        isShowFullLockedScreen: true,
-      ),
-      ios: const IOSParams(
-        iconName: 'CallKitLogo',
+      ios: IOSParams(
+        iconName: 'AppIcon',
         handleType: 'generic',
-        supportsVideo: true,
+        supportsVideo: isVideo,
         maximumCallGroups: 1,
         maximumCallsPerCallGroup: 1,
+        supportsDTMF: false,
+        supportsHolding: false,
+        supportsGrouping: false,
+        supportsUngrouping: false,
       ),
     );
     await FlutterCallkitIncoming.showCallkitIncoming(params);
-    */
-
-    developer.log('Showing incoming call UI for $callId (stub)',
+    developer.log('Showing iOS CallKit incoming UI for $callId',
         name: 'Notifications');
   }
 
   /// End specific call UI
   static Future<void> endCall(String callId) async {
     developer.log('Ending CallKit UI for $callId', name: 'Notifications');
+    if (_isIOS) {
+      try {
+        await FlutterCallkitIncoming.endCall(callId);
+      } catch (e, st) {
+        developer.log(
+          'Failed to end iOS CallKit call for $callId: $e',
+          name: 'Notifications',
+          stackTrace: st,
+        );
+      }
+    }
     try {
       await _ensureLocalNotificationsInitialized();
       await _localNotifications.cancel(callId.hashCode);
@@ -180,6 +201,17 @@ class CallNotificationService {
   /// End all active call UIs
   static Future<void> endAllCalls() async {
     developer.log('Ending all CallKit UIs', name: 'Notifications');
+    if (_isIOS) {
+      try {
+        await FlutterCallkitIncoming.endAllCalls();
+      } catch (e, st) {
+        developer.log(
+          'Failed to end all iOS CallKit calls: $e',
+          name: 'Notifications',
+          stackTrace: st,
+        );
+      }
+    }
     try {
       await _ensureLocalNotificationsInitialized();
       await _localNotifications.cancelAll();
@@ -195,7 +227,20 @@ class CallNotificationService {
 
   /// Get active calls
   static Future<List<dynamic>> getActiveCalls() async {
-    // return await FlutterCallkitIncoming.activeCalls();
+    if (_isIOS) {
+      try {
+        final calls = await FlutterCallkitIncoming.activeCalls();
+        if (calls is List<dynamic>) return calls;
+        if (calls == null) return <dynamic>[];
+        return <dynamic>[calls];
+      } catch (e, st) {
+        developer.log(
+          'Failed to fetch active iOS CallKit calls: $e',
+          name: 'Notifications',
+          stackTrace: st,
+        );
+      }
+    }
     return [];
   }
 
@@ -214,7 +259,17 @@ class CallNotificationService {
   /// Set call as connected (for UI purposes)
   static Future<void> setCallConnected(String callId) async {
     developer.log('Setting call $callId as connected', name: 'Notifications');
-    // await FlutterCallkitIncoming.setCallConnected(callId);
+    if (_isIOS) {
+      try {
+        await FlutterCallkitIncoming.setCallConnected(callId);
+      } catch (e, st) {
+        developer.log(
+          'Failed to set iOS CallKit call connected for $callId: $e',
+          name: 'Notifications',
+          stackTrace: st,
+        );
+      }
+    }
   }
 
   static Future<void> _showFallbackIncomingCallNotification({
@@ -254,6 +309,9 @@ class CallNotificationService {
               AndroidNotificationAction(
                 _actionDecline,
                 'Decline',
+                // Launch app for reliable handling when device is locked or app is killed.
+                // Without this, background action callbacks can be dropped on some devices.
+                showsUserInterface: true,
                 cancelNotification: true,
               ),
               AndroidNotificationAction(

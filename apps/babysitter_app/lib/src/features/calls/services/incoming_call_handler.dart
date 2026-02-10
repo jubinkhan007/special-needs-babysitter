@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,13 +62,111 @@ class IncomingCallHandler {
 
   /// Handle foreground push messages
   void _handleForegroundMessage(RemoteMessage message) {
-    final type = (message.data['type'] ?? '').toString().toLowerCase();
-
-    if (type == 'incoming_call' || type == 'call_invite') {
-      _handleIncomingCall(message.data);
-    } else if (type == 'call_status' || type == 'call_event') {
-      _handleCallStatusUpdate(message.data);
+    final incomingPayload = _extractIncomingCallPayload(message);
+    if (incomingPayload != null) {
+      _handleIncomingCall(incomingPayload);
+      return;
     }
+
+    final statusPayload = _extractCallStatusPayload(message);
+    if (statusPayload != null) {
+      _handleCallStatusUpdate(statusPayload);
+      return;
+    }
+
+    final bodyPreview = message.notification?.body;
+    developer.log(
+      'Foreground message ignored (not call-signaling). '
+      'dataKeys=${message.data.keys.toList()} '
+      'bodyPreview=${bodyPreview == null ? "null" : bodyPreview.substring(0, bodyPreview.length > 120 ? 120 : bodyPreview.length)}',
+      name: 'Calls',
+    );
+  }
+
+  Map<String, dynamic>? _extractIncomingCallPayload(RemoteMessage message) {
+    final data = Map<String, dynamic>.from(message.data);
+    final type = (data['type'] ?? '').toString().toLowerCase();
+    if (type == 'incoming_call' || type == 'call_invite') {
+      return data;
+    }
+
+    final parsed = _extractCallJsonFromText(message);
+    if (parsed == null) return null;
+    final parsedType = (parsed['type'] ?? '').toString().toLowerCase();
+    if (parsedType != 'incoming_call' && parsedType != 'call_invite') {
+      return null;
+    }
+
+    return <String, dynamic>{...data, ...parsed};
+  }
+
+  Map<String, dynamic>? _extractCallStatusPayload(RemoteMessage message) {
+    final data = Map<String, dynamic>.from(message.data);
+    final type = (data['type'] ?? '').toString().toLowerCase();
+    if (type == 'call_status' || type == 'call_event') {
+      return data;
+    }
+
+    final parsed = _extractCallJsonFromText(message);
+    if (parsed == null) return null;
+    final parsedType = (parsed['type'] ?? '').toString().toLowerCase();
+    if (parsedType != 'call_status' && parsedType != 'call_event') {
+      return null;
+    }
+
+    return <String, dynamic>{...data, ...parsed};
+  }
+
+  Map<String, dynamic>? _extractCallJsonFromText(RemoteMessage message) {
+    final candidates = <String?>[
+      message.notification?.body,
+      message.data['body']?.toString(),
+      message.data['message']?.toString(),
+      message.data['text']?.toString(),
+      message.data['textContent']?.toString(),
+      message.data['content']?.toString(),
+    ];
+
+    for (final candidate in candidates) {
+      final parsed = _parsePayload(candidate);
+      if (parsed == null) continue;
+      final type = (parsed['type'] ?? '').toString().toLowerCase();
+      if (type.startsWith('call_') ||
+          type == 'incoming_call' ||
+          type == 'call_invite') {
+        return parsed;
+      }
+    }
+
+    return null;
+  }
+
+  Map<String, dynamic>? _parsePayload(String? text) {
+    if (text == null || text.trim().isEmpty) return null;
+    try {
+      final decoded = jsonDecode(text);
+      if (decoded is Map<String, dynamic>) return decoded;
+      if (decoded is Map) {
+        return decoded.map(
+          (key, value) => MapEntry(key.toString(), value),
+        );
+      }
+    } catch (_) {}
+
+    final start = text.indexOf('{');
+    final end = text.lastIndexOf('}');
+    if (start != -1 && end != -1 && end > start) {
+      try {
+        final decoded = jsonDecode(text.substring(start, end + 1));
+        if (decoded is Map<String, dynamic>) return decoded;
+        if (decoded is Map) {
+          return decoded.map(
+            (key, value) => MapEntry(key.toString(), value),
+          );
+        }
+      } catch (_) {}
+    }
+    return null;
   }
 
   /// Handle incoming call notification
@@ -116,15 +215,11 @@ class IncomingCallHandler {
         callerAvatar: callerAvatar,
       );
 
-      // Also show CallKit UI for system integration (only if screen was shown)
+      // Foreground flow shows the in-app incoming call screen directly.
+      // Keep system notification UI for background/locked-device flows only
+      // to avoid duplicate UIs being visible at the same time.
       if (shown) {
-        CallNotificationService.showIncomingCallUI(
-          callId: callId,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          callerAvatar: callerAvatar,
-          isVideo: callType == 'video',
-        );
+        unawaited(CallNotificationService.endCall(callId));
       }
     }
   }
@@ -155,6 +250,28 @@ class IncomingCallHandler {
       '[CALL_ACTION] received action=${event.type.name} callId=${event.callId}',
     );
 
+    // For open/tap actions, present incoming UI immediately to avoid
+    // brief home-screen flash on cold start from lock-screen notifications.
+    if (event.type == CallNotificationActionType.open) {
+      guard.showIncomingCallScreen(
+        callId: event.callId,
+        callType: event.isVideo ? CallType.video : CallType.audio,
+        callerName: event.callerName,
+        callerUserId: event.callerUserId.isEmpty
+            ? '_unknown_${event.callId}'
+            : event.callerUserId,
+      );
+
+      final hydrated = await _ensureIncomingStateForAction(event, controller);
+      if (!hydrated) {
+        developer.log(
+          'Open action shown immediately but state hydration failed for call ${event.callId}',
+          name: 'Calls',
+        );
+      }
+      return;
+    }
+
     var hydrated = await _ensureIncomingStateForAction(event, controller);
     if (!hydrated && _ref.read(authNotifierProvider).valueOrNull == null) {
       developer.log(
@@ -181,95 +298,78 @@ class IncomingCallHandler {
       }
     }
 
-    switch (event.type) {
-      case CallNotificationActionType.open:
-        if (!hydrated) {
-          developer.log(
-            'Ignoring open action for call ${event.callId}: unable to hydrate state',
-            name: 'Calls',
-          );
-          return;
-        }
-        guard.showIncomingCallScreen(
-          callId: event.callId,
-          callType: event.isVideo ? CallType.video : CallType.audio,
-          callerName: event.callerName,
-          callerUserId: event.callerUserId,
+    if (event.type == CallNotificationActionType.accept) {
+      if (!hydrated) {
+        developer.log(
+          'Ignoring accept action for call ${event.callId}: unable to hydrate state',
+          name: 'Calls',
         );
-        break;
-      case CallNotificationActionType.accept:
-        if (!hydrated) {
-          developer.log(
-            'Ignoring accept action for call ${event.callId}: unable to hydrate state',
-            name: 'Calls',
-          );
-          return;
-        }
-        try {
-          final preAcceptState = _ref.read(callControllerProvider);
-          developer.log(
-            '[CALL_ACTION] about to call acceptCall() state=${preAcceptState.runtimeType} callId=${event.callId}',
-            name: 'Calls',
-          );
-          print(
-            '[CALL_ACTION] about to call acceptCall() state=${preAcceptState.runtimeType} callId=${event.callId}',
-          );
-          await controller.acceptCall();
-          final postAcceptState = _ref.read(callControllerProvider);
-          developer.log(
-            '[CALL_ACTION] acceptCall() completed state=${postAcceptState.runtimeType} callId=${event.callId}',
-            name: 'Calls',
-          );
-          print(
-            '[CALL_ACTION] acceptCall() completed state=${postAcceptState.runtimeType} callId=${event.callId}',
-          );
+        return;
+      }
+      try {
+        final preAcceptState = _ref.read(callControllerProvider);
+        developer.log(
+          '[CALL_ACTION] about to call acceptCall() state=${preAcceptState.runtimeType} callId=${event.callId}',
+          name: 'Calls',
+        );
+        print(
+          '[CALL_ACTION] about to call acceptCall() state=${preAcceptState.runtimeType} callId=${event.callId}',
+        );
+        await controller.acceptCall();
+        final postAcceptState = _ref.read(callControllerProvider);
+        developer.log(
+          '[CALL_ACTION] acceptCall() completed state=${postAcceptState.runtimeType} callId=${event.callId}',
+          name: 'Calls',
+        );
+        print(
+          '[CALL_ACTION] acceptCall() completed state=${postAcceptState.runtimeType} callId=${event.callId}',
+        );
 
-          // Only navigate to InCallScreen if accept was successful (state is InCall or Connecting)
-          // If state is CallError or Idle, the call failed - don't show black screen
-          if (postAcceptState is CallError || postAcceptState is CallIdle) {
-            developer.log(
-              '[CALL_ACTION] accept failed, state=$postAcceptState - not navigating to InCallScreen',
-              name: 'Calls',
-            );
-            print(
-              '[CALL_ACTION] accept failed, state=${postAcceptState.runtimeType} - not navigating to InCallScreen',
-            );
-            guard.popToRootAndClear();
-          } else {
-            guard.showInCallScreen();
-            developer.log(
-              '[CALL_ACTION] showInCallScreen() called for callId=${event.callId}',
-              name: 'Calls',
-            );
-            print(
-              '[CALL_ACTION] showInCallScreen() called for callId=${event.callId}',
-            );
-          }
-        } catch (e, st) {
+        // Only navigate to InCallScreen if accept was successful (state is InCall or Connecting)
+        // If state is CallError or Idle, the call failed - don't show black screen
+        if (postAcceptState is CallError || postAcceptState is CallIdle) {
           developer.log(
-            '[CALL_ACTION] accept flow FAILED for callId=${event.callId}: $e',
+            '[CALL_ACTION] accept failed, state=$postAcceptState - not navigating to InCallScreen',
             name: 'Calls',
-            stackTrace: st,
           );
           print(
-            '[CALL_ACTION] accept flow FAILED for callId=${event.callId}: $e',
+            '[CALL_ACTION] accept failed, state=${postAcceptState.runtimeType} - not navigating to InCallScreen',
           );
-          // On error, ensure we don't leave user on black screen
           guard.popToRootAndClear();
-        }
-        break;
-      case CallNotificationActionType.decline:
-        if (!hydrated) {
+        } else {
+          guard.showInCallScreen();
           developer.log(
-            'Ignoring decline action for call ${event.callId}: unable to hydrate state',
+            '[CALL_ACTION] showInCallScreen() called for callId=${event.callId}',
             name: 'Calls',
           );
-          return;
+          print(
+            '[CALL_ACTION] showInCallScreen() called for callId=${event.callId}',
+          );
         }
-        await controller.declineCall(reason: 'declined_from_notification');
+      } catch (e, st) {
+        developer.log(
+          '[CALL_ACTION] accept flow FAILED for callId=${event.callId}: $e',
+          name: 'Calls',
+          stackTrace: st,
+        );
+        print(
+          '[CALL_ACTION] accept flow FAILED for callId=${event.callId}: $e',
+        );
+        // On error, ensure we don't leave user on black screen
         guard.popToRootAndClear();
-        break;
+      }
+      return;
     }
+
+    if (!hydrated) {
+      developer.log(
+        'Ignoring decline action for call ${event.callId}: unable to hydrate state',
+        name: 'Calls',
+      );
+      return;
+    }
+    await controller.declineCall(reason: 'declined_from_notification');
+    guard.popToRootAndClear();
   }
 
   Future<bool> _ensureIncomingStateForAction(
@@ -378,15 +478,34 @@ class IncomingCallHandler {
 
     switch (action) {
       case CallKitAccepted():
-        developer.log('CallKit: User accepted $callId', name: 'Calls');
-        _ref.read(callControllerProvider.notifier).acceptCall();
-        guard.showInCallScreen();
+        developer.log(
+          'CallKit: User accepted $callId',
+          name: 'Calls',
+        );
+        unawaited(
+          _handleNotificationAction(
+            CallNotificationActionEvent.accept(
+              callId: callId,
+              callerName: 'Caller',
+              callerUserId: '',
+              isVideo: action.isVideo,
+            ),
+          ),
+        );
         break;
 
       case CallKitDeclined():
         developer.log('CallKit: User declined $callId', name: 'Calls');
-        _ref.read(callControllerProvider.notifier).declineCall();
-        guard.popToRootAndClear();
+        unawaited(
+          _handleNotificationAction(
+            CallNotificationActionEvent.decline(
+              callId: callId,
+              callerName: 'Caller',
+              callerUserId: '',
+              isVideo: false,
+            ),
+          ),
+        );
         break;
 
       case CallKitEnded():
@@ -397,9 +516,7 @@ class IncomingCallHandler {
 
       case CallKitTimedOut():
         developer.log('CallKit: Call timed out $callId', name: 'Calls');
-        _ref
-            .read(callControllerProvider.notifier)
-            .declineCall(reason: 'No answer');
+        unawaited(CallNotificationService.endCall(callId));
         guard.popToRootAndClear();
         break;
 

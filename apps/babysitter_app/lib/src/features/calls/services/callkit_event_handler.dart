@@ -1,13 +1,8 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-
-// NOTE: To enable full CallKit functionality, run:
-//   flutter pub get
-// after adding flutter_callkit_incoming to pubspec.yaml
-//
-// Then uncomment the import and update the implementation.
-
-// import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_callkit_incoming/entities/call_event.dart';
+import 'package:flutter_callkit_incoming/flutter_callkit_incoming.dart';
 
 /// Represents a CallKit action
 sealed class CallKitAction {
@@ -36,10 +31,7 @@ class CallKitMissed extends CallKitAction {
   const CallKitMissed(super.callId);
 }
 
-/// Service for handling CallKit events
-///
-/// NOTE: This is a stub implementation. For full CallKit functionality,
-/// install flutter_callkit_incoming and update this file.
+/// Service for handling iOS CallKit events.
 class CallKitEventHandler {
   final _actionController = StreamController<CallKitAction>.broadcast();
   StreamSubscription? _eventSubscription;
@@ -47,28 +39,59 @@ class CallKitEventHandler {
   /// Stream of CallKit actions
   Stream<CallKitAction> get actions => _actionController.stream;
 
-  /// Initialize and start listening to CallKit events
-  void initialize() {
-    developer.log('CallKitEventHandler initialized (stub)', name: 'Notifications');
+  static bool get _isIOS =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
 
-    // TODO: Uncomment when flutter_callkit_incoming is installed
-    /*
+  /// Initialize and start listening to iOS CallKit events.
+  void initialize() {
     _eventSubscription?.cancel();
-    _eventSubscription = FlutterCallkitIncoming.onEvent.listen(_handleEvent);
-    */
+    if (!_isIOS) {
+      developer.log(
+        'CallKitEventHandler skipped (non-iOS platform)',
+        name: 'Notifications',
+      );
+      return;
+    }
+
+    developer.log('CallKitEventHandler initialized (iOS)', name: 'Notifications');
+    _eventSubscription = FlutterCallkitIncoming.onEvent.listen(
+      _handleEvent,
+      onError: (Object error, StackTrace stackTrace) {
+        developer.log(
+          'CallKit event stream error: $error',
+          name: 'Notifications',
+          stackTrace: stackTrace,
+        );
+      },
+    );
   }
 
-  // TODO: Uncomment when flutter_callkit_incoming is installed
-  /*
   void _handleEvent(CallEvent? event) {
     if (event == null) return;
 
-    final body = event.body;
-    final callId = body['id'] as String? ?? '';
-    final extra = body['extra'] as Map<String, dynamic>? ?? {};
-    final isVideo = extra['isVideo'] as bool? ?? false;
+    final body = _asMap(event.body);
+    final extra = _asMap(body['extra']);
+    final callId = _readFirstString([
+      body['id'],
+      body['callId'],
+      body['uuid'],
+      extra['callId'],
+      extra['id'],
+      extra['uuid'],
+    ]);
+    final isVideo = _readBool(extra['isVideo']) ||
+        _readBool(body['isVideo']) ||
+        (body['type'] == 1);
 
-    developer.log('CallKit event: ${event.event} for $callId', name: 'Notifications');
+    developer.log('CallKit event: ${event.event} for $callId',
+        name: 'Notifications');
+    if (callId.isEmpty) {
+      developer.log(
+        'Ignoring CallKit event with missing call id: ${event.event}',
+        name: 'Notifications',
+      );
+      return;
+    }
 
     switch (event.event) {
       case Event.actionCallAccept:
@@ -88,18 +111,47 @@ class CallKitEventHandler {
         break;
 
       case Event.actionDidUpdateDevicePushTokenVoip:
-        final token = body['devicePushTokenVoip'] as String?;
-        if (token != null) {
-          developer.log('VoIP token updated: ${token.substring(0, 20)}...', name: 'Notifications');
+        final token = _readFirstString([body['devicePushTokenVoip']]);
+        if (token.isNotEmpty) {
+          final preview = token.length <= 20 ? token : token.substring(0, 20);
+          developer.log('VoIP token updated: $preview...', name: 'Notifications');
         }
         break;
 
       default:
-        developer.log('Unhandled CallKit event: ${event.event}', name: 'Notifications');
+        developer.log('Unhandled CallKit event: ${event.event}',
+            name: 'Notifications');
         break;
     }
   }
-  */
+
+  Map<String, dynamic> _asMap(dynamic value) {
+    if (value is Map<String, dynamic>) return value;
+    if (value is Map) {
+      return value.map(
+        (key, dynamic mapValue) => MapEntry(key.toString(), mapValue),
+      );
+    }
+    return <String, dynamic>{};
+  }
+
+  String _readFirstString(List<dynamic> values) {
+    for (final value in values) {
+      final text = value?.toString().trim() ?? '';
+      if (text.isNotEmpty) return text;
+    }
+    return '';
+  }
+
+  bool _readBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      return normalized == 'true' || normalized == '1';
+    }
+    return false;
+  }
 
   /// Simulate a CallKit action (for testing without the package)
   void simulateAction(CallKitAction action) {

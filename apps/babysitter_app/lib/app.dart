@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,6 +38,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   bool _isForeground = true;
   bool _notificationsInitialized = false;
   bool _isRegisteringFcmToken = false;
+  Timer? _fcmTokenRetryTimer;
+  int _fcmTokenRetryAttempts = 0;
+  static const int _maxFcmTokenRetryAttempts = 5;
+  bool _hasRunFcmDiagnostics = false;
   bool _bootstrappedAuthCheck = false;
   StreamSubscription<String>? _tokenRefreshSubscription;
   StreamSubscription<String?>? _notificationTapSubscription;
@@ -45,14 +50,13 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // Initialize notification/call action handling as early as possible to
+    // avoid showing home briefly before incoming-call UI on cold starts.
+    Future.microtask(_initializeNotificationsAndCallHandler);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(sessionTrackingControllerProvider.notifier).restoreSession();
       _maybeStartIncomingCallPolling();
       _maybeStartChatInvitePolling();
-      // Initialize notifications first, then call handler.
-      // Order matters: CallNotificationService must register its callback
-      // AFTER NotificationsServiceImpl so it wins the shared method channel.
-      _initializeNotificationsAndCallHandler();
     });
   }
 
@@ -60,6 +64,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   void dispose() {
     _tokenRefreshSubscription?.cancel();
     _notificationTapSubscription?.cancel();
+    _fcmTokenRetryTimer?.cancel();
     _incomingCallHandler?.dispose();
     _incomingCallPollingHandler?.dispose();
     _chatCallInvitePollingHandler?.dispose();
@@ -198,7 +203,6 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     try {
       final notificationsService = ref.read(notificationsServiceProvider);
       await notificationsService.initialize();
-      await notificationsService.requestPermission();
 
       // Set up fallback handler so CallNotificationService can forward
       // non-call notification taps to the main notification handler.
@@ -210,6 +214,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       // on the shared FlutterLocalNotificationsPlugin method channel,
       // so call action buttons (Accept/Decline) are properly handled.
       _initializeIncomingCallHandler();
+
+      // Request push permission after call action handling is ready.
+      // This avoids delaying incoming call UI when app is opened from lock-screen.
+      await notificationsService.requestPermission();
 
       // Register token if user is already authenticated
       final session = ref.read(authNotifierProvider).valueOrNull;
@@ -248,8 +256,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
       developer.log('Notifications initialized in app', name: 'Notifications');
 
-      // Run diagnostics to help debug notification issues
-      await notificationsService.runDiagnostics();
+      await _runFcmDiagnosticsOnce(
+        notificationsService,
+        reason: 'notifications_initialized',
+      );
     } catch (e) {
       developer.log('Failed to initialize notifications: $e',
           name: 'Notifications');
@@ -282,6 +292,9 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       }
 
       if (token != null && token.isNotEmpty) {
+        _fcmTokenRetryTimer?.cancel();
+        _fcmTokenRetryTimer = null;
+        _fcmTokenRetryAttempts = 0;
         final dataSource = ref.read(authRemoteDataSourceProvider);
         _logFcmFlow('_registerFcmToken calling backend registerDeviceToken');
         await dataSource.registerDeviceToken(token);
@@ -296,15 +309,65 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
         _logFcmFlow(
           '_registerFcmToken aborted: token unavailable after forced refresh',
         );
-        await notificationsService.runDiagnostics();
+        await _runFcmDiagnosticsOnce(
+          notificationsService,
+          reason: 'token_unavailable',
+        );
+        _scheduleFcmTokenRetry();
       }
     } catch (e, st) {
       developer.log('Failed to register FCM token with backend: $e',
           name: 'Notifications', stackTrace: st);
       _logFcmFlow('_registerFcmToken failed with error=$e');
+      _scheduleFcmTokenRetry();
     } finally {
       _isRegisteringFcmToken = false;
     }
+  }
+
+  void _scheduleFcmTokenRetry() {
+    if (_fcmTokenRetryAttempts >= _maxFcmTokenRetryAttempts) {
+      _logFcmFlow(
+        '_registerFcmToken retry limit reached; giving up for this session',
+      );
+      return;
+    }
+    if (_fcmTokenRetryTimer?.isActive == true) {
+      return;
+    }
+
+    final attempt = _fcmTokenRetryAttempts + 1;
+    final delay = Duration(seconds: 2 * attempt);
+    _fcmTokenRetryAttempts = attempt;
+    _logFcmFlow(
+      '_registerFcmToken scheduling retry attempt=$attempt after ${delay.inSeconds}s',
+    );
+
+    _fcmTokenRetryTimer = Timer(delay, () {
+      final session = ref.read(authNotifierProvider).valueOrNull;
+      if (session == null) {
+        _logFcmFlow('_registerFcmToken retry skipped: no authenticated session');
+        return;
+      }
+      _registerFcmToken();
+    });
+  }
+
+  Future<void> _runFcmDiagnosticsOnce(
+    NotificationsService notificationsService, {
+    required String reason,
+  }) async {
+    if (!kDebugMode) {
+      return;
+    }
+    if (_hasRunFcmDiagnostics) {
+      _logFcmFlow('runDiagnostics skipped: already executed once');
+      return;
+    }
+
+    _hasRunFcmDiagnostics = true;
+    _logFcmFlow('runDiagnostics executing reason=$reason');
+    await notificationsService.runDiagnostics();
   }
 
   String _maskToken(String token) {

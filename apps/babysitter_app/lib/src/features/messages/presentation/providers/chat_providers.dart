@@ -7,6 +7,8 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:realtime/realtime.dart';
 
+import '../../../sitters/domain/sitters_repository.dart';
+import '../../../sitters/data/sitters_data_di.dart';
 import '../../data/chat_media_upload_remote_datasource.dart';
 
 // Remote Data Source
@@ -27,6 +29,12 @@ final chatMediaUploadDataSourceProvider =
 // Use Case
 final getConversationsUseCaseProvider = Provider<GetConversationsUseCase>((ref) {
   return GetConversationsUseCase(ref.watch(chatRepositoryProvider));
+});
+
+// User Profile Provider for Chat Header
+final chatUserProfileProvider = FutureProvider.family.autoDispose<Map<String, dynamic>, String>((ref, userId) async {
+  final repository = ref.watch(sittersRepositoryProvider);
+  return repository.getUserProfile(userId);
 });
 
 // Chat initialization provider - call this when entering chat feature

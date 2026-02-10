@@ -16,6 +16,13 @@ class NotificationsServiceImpl implements NotificationsService {
   final FlutterLocalNotificationsPlugin _localNotifications;
   final _notificationTapController = StreamController<String?>.broadcast();
 
+  /// Dedup: track recently shown notification fingerprints to prevent
+  /// duplicate notifications when the backend sends multiple FCM messages
+  /// for the same chat message.
+  final Map<String, DateTime> _recentNotificationFingerprints = {};
+  static bool get _isIOS =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
   NotificationsServiceImpl({
     FirebaseMessaging? messaging,
     FlutterLocalNotificationsPlugin? localNotifications,
@@ -68,7 +75,7 @@ class NotificationsServiceImpl implements NotificationsService {
   @override
   Future<String?> getToken() async {
     try {
-      final token = await _messaging.getToken();
+      final token = await _getTokenWithRetries();
       final tokenState =
           token == null || token.isEmpty ? 'empty' : 'len=${token.length}';
       developer.log('getToken completed with $tokenState', name: 'FCM_FLOW');
@@ -96,10 +103,28 @@ class NotificationsServiceImpl implements NotificationsService {
   @override
   Future<String?> forceRefreshToken() async {
     try {
-      await _messaging.deleteToken();
-      developer.log('Deleted existing FCM token, requesting new token',
-          name: 'Notifications');
-      final token = await _messaging.getToken();
+      if (_isIOS) {
+        // On iOS, immediate delete+get can intermittently fail with
+        // firebase_messaging unknown errors while token state is converging.
+        // Prefer a retry-based fresh fetch without delete.
+        developer.log(
+          'iOS token refresh requested; skipping deleteToken and retrying getToken',
+          name: 'Notifications',
+        );
+        // On iOS, first wait for APNS token to stabilize before requesting FCM
+        await _waitForAPNSToken(
+          maxAttempts: 5,
+          delay: const Duration(milliseconds: 400),
+        );
+      } else {
+        await _messaging.deleteToken();
+        developer.log('Deleted existing FCM token, requesting new token',
+            name: 'Notifications');
+      }
+      final token = await _getTokenWithRetries(
+        attempts: _isIOS ? 5 : 3,
+        initialDelay: const Duration(milliseconds: 600),
+      );
       final tokenState =
           token == null || token.isEmpty ? 'empty' : 'len=${token.length}';
       developer.log(
@@ -108,23 +133,163 @@ class NotificationsServiceImpl implements NotificationsService {
       );
       print('[FCM_FLOW] forceRefreshToken completed with $tokenState');
       return token;
+    } on FirebaseException catch (e, st) {
+      developer.log(
+        'Failed to force refresh FCM token: '
+        'plugin=${e.plugin}, code=${e.code}, message=${e.message}',
+        name: 'Notifications',
+        stackTrace: st,
+      );
+      return null;
     } catch (e, st) {
-      if (e is FirebaseException) {
+      developer.log(
+        'Failed to force refresh FCM token: $e',
+        name: 'Notifications',
+        stackTrace: st,
+      );
+      return null;
+    }
+  }
+
+  /// Wait for APNS token to be available on iOS.
+  /// Returns true if token is available, false if timed out.
+  Future<bool> _waitForAPNSToken({
+    required int maxAttempts,
+    required Duration delay,
+  }) async {
+    var currentDelay = delay;
+    for (var attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        final apnsToken = await _messaging.getAPNSToken();
+        if (apnsToken != null && apnsToken.isNotEmpty) {
+          developer.log(
+            'APNS token ready after $attempt attempts',
+            name: 'Notifications',
+          );
+          // Give extra time for FCM token negotiation after APNS is ready
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+          return true;
+        }
+      } catch (e) {
         developer.log(
-          'Failed to force refresh FCM token: '
+          'APNS token check attempt $attempt/$maxAttempts failed: $e',
+          name: 'Notifications',
+        );
+      }
+      if (attempt < maxAttempts) {
+        await Future<void>.delayed(currentDelay);
+        currentDelay += currentDelay;
+      }
+    }
+    developer.log(
+      'APNS token not available after $maxAttempts attempts',
+      name: 'Notifications',
+    );
+    return false;
+  }
+
+  Future<String?> _getTokenWithRetries({
+    int attempts = 3,
+    Duration initialDelay = const Duration(milliseconds: 400),
+  }) async {
+    var delay = initialDelay;
+    FirebaseException? lastFirebaseException;
+    Object? lastError;
+    StackTrace? lastStack;
+
+    for (var attempt = 1; attempt <= attempts; attempt++) {
+      try {
+        // On iOS, we need to be more patient - wait for both APNS and FCM
+        // token propagation to complete.
+        if (_isIOS) {
+          // First, ensure APNS token is available
+          var apnsToken = await _messaging.getAPNSToken();
+          if (apnsToken == null || apnsToken.isEmpty) {
+            developer.log(
+              'iOS APNS token not ready on getToken attempt $attempt/$attempts',
+              name: 'Notifications',
+            );
+            if (attempt < attempts) {
+              await Future<void>.delayed(delay);
+              delay += delay;
+            }
+            continue;
+          }
+
+          // APNS token exists, but FCM token may still be negotiating with
+          // Firebase servers. Give it a brief moment to complete.
+          if (attempt == 1) {
+            await Future<void>.delayed(const Duration(milliseconds: 500));
+          }
+        }
+
+        final token = await _messaging.getToken();
+        if (token != null && token.isNotEmpty) {
+          if (attempt > 1) {
+            developer.log(
+              'FCM token succeeded on retry attempt $attempt/$attempts',
+              name: 'Notifications',
+            );
+          }
+          return token;
+        }
+
+        developer.log(
+          'FCM token empty on attempt $attempt/$attempts',
+          name: 'Notifications',
+        );
+      } on FirebaseException catch (e, st) {
+        lastError = e;
+        lastStack = st;
+        lastFirebaseException = e;
+        developer.log(
+          'getToken attempt $attempt/$attempts failed: '
           'plugin=${e.plugin}, code=${e.code}, message=${e.message}',
           name: 'Notifications',
           stackTrace: st,
         );
-      } else {
+
+        // On iOS, "unknown" errors during token retrieval are often transient
+        // and resolve with a retry after a longer delay.
+        if (_isIOS && e.code == 'unknown') {
+          developer.log(
+            'iOS transient error detected; will retry with longer delay',
+            name: 'Notifications',
+          );
+        }
+      } catch (e, st) {
+        lastError = e;
+        lastStack = st;
         developer.log(
-          'Failed to force refresh FCM token: $e',
+          'getToken attempt $attempt/$attempts failed: $e',
           name: 'Notifications',
           stackTrace: st,
         );
       }
-      return null;
+
+      if (attempt < attempts) {
+        await Future<void>.delayed(delay);
+        delay += delay;
+      }
     }
+
+    if (lastFirebaseException != null) {
+      developer.log(
+        'FCM token retries exhausted: '
+        'plugin=${lastFirebaseException.plugin}, '
+        'code=${lastFirebaseException.code}, '
+        'message=${lastFirebaseException.message}',
+        name: 'Notifications',
+        stackTrace: lastStack,
+      );
+    } else if (lastError != null) {
+      developer.log(
+        'FCM token retries exhausted: $lastError',
+        name: 'Notifications',
+        stackTrace: lastStack,
+      );
+    }
+    return null;
   }
 
   @override
@@ -182,32 +347,42 @@ class NotificationsServiceImpl implements NotificationsService {
     // Skip showing generic notifications for call-signaling payloads.
     if (_isCallSignalingMessage(message)) {
       final type = message.data['type']?.toString().toLowerCase() ?? '';
-      developer.log('Skipping notification for call-related payload type: $type',
+      developer.log(
+          'Skipping notification for call-related payload type: $type',
           name: 'Notifications');
       return;
     }
 
     final notification = message.notification;
-    if (notification != null) {
-      // Notification message — show via local notifications on Android.
-      // iOS will auto-display via setForegroundNotificationPresentationOptions.
+    final title = notification?.title ?? _extractTitle(message);
+    final body = notification?.body ?? _extractBody(message);
+
+    // Dedup: build a fingerprint from title+body to detect duplicate FCM
+    // messages sent by the backend for the same chat message.
+    final fingerprint = '$title|$body';
+    _cleanOldFingerprints();
+    if (_recentNotificationFingerprints.containsKey(fingerprint)) {
+      developer.log(
+        'Skipping duplicate notification: $fingerprint',
+        name: 'Notifications',
+      );
+      return;
+    }
+    _recentNotificationFingerprints[fingerprint] = DateTime.now();
+
+    if (title.isNotEmpty || body.isNotEmpty) {
       showNotification(
-        title: notification.title ?? '',
-        body: notification.body ?? '',
+        title: title.isNotEmpty ? title : 'New Notification',
+        body: body,
         payload: _buildTapPayload(message),
       );
-    } else {
-      // Data-only message — extract title/body from common keys used by chat payloads.
-      final title = _extractTitle(message);
-      final body = _extractBody(message);
-      if (title.isNotEmpty || body.isNotEmpty) {
-        showNotification(
-          title: title.isNotEmpty ? title : 'New Notification',
-          body: body,
-          payload: _buildTapPayload(message),
-        );
-      }
     }
+  }
+
+  /// Remove fingerprints older than 5 seconds to prevent unbounded growth.
+  void _cleanOldFingerprints() {
+    final cutoff = DateTime.now().subtract(const Duration(seconds: 5));
+    _recentNotificationFingerprints.removeWhere((_, ts) => ts.isBefore(cutoff));
   }
 
   void _handleMessageOpenedApp(RemoteMessage message) {
@@ -411,9 +586,12 @@ class NotificationsServiceImpl implements NotificationsService {
           step: '[2/6] APNS token check FAILED', error: e, stack: st);
     }
 
-    // 3. Check FCM token
+    // 3. Check FCM token (use retry logic for more accurate diagnostics)
     try {
-      final fcmToken = await _messaging.getToken();
+      final fcmToken = await _getTokenWithRetries(
+        attempts: _isIOS ? 5 : 3,
+        initialDelay: const Duration(milliseconds: 400),
+      );
       if (fcmToken != null && fcmToken.isNotEmpty) {
         developer.log(
           '[3/6] FCM token: ${fcmToken.substring(0, 20)}...${fcmToken.substring(fcmToken.length - 10)}',
@@ -421,11 +599,12 @@ class NotificationsServiceImpl implements NotificationsService {
         );
       } else {
         developer.log(
-          '[3/6] FCM token: NULL or EMPTY',
+          '[3/6] FCM token: NULL or EMPTY (after retries)',
           name: 'FCM_DIAG',
         );
         developer.log(
-          '  >> PROBLEM: No FCM token. On iOS, APNS token must be available first. '
+          '  >> PROBLEM: No FCM token. On iOS, APNS token must be available first '
+          'and there may be a delay for FCM token negotiation. '
           'On Android, check google-services.json is correct and network is available.',
           name: 'FCM_DIAG',
         );
@@ -443,6 +622,17 @@ class NotificationsServiceImpl implements NotificationsService {
           '4) Ensure Firebase Installations API is enabled, '
           '5) Verify API key restrictions allow this app+SHA, '
           '6) Reinstall app after flutter clean.',
+          name: 'FCM_DIAG',
+        );
+      } else if (e is FirebaseException && e.code == 'unknown') {
+        developer.log(
+          '  >> UNKNOWN_ERROR checklist (iOS): '
+          '1) Real device required (not simulator), '
+          '2) Push Notifications capability enabled in Xcode, '
+          '3) Background Modes -> Remote Notifications enabled, '
+          '4) Valid APNs Auth Key (.p8) configured in Firebase Console, '
+          '5) Valid provisioning profile with push enabled, '
+          '6) Delete app and reinstall after flutter clean.',
           name: 'FCM_DIAG',
         );
       }

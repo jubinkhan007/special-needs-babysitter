@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../dtos/auth_session_dto.dart';
 import '../dtos/user_dto.dart';
@@ -182,9 +183,20 @@ class AuthRemoteDataSource {
     }
 
     try {
+      final platform = switch (defaultTargetPlatform) {
+        TargetPlatform.iOS => 'ios',
+        TargetPlatform.android => 'android',
+        TargetPlatform.macOS => 'macos',
+        TargetPlatform.windows => 'windows',
+        TargetPlatform.linux => 'linux',
+        TargetPlatform.fuchsia => 'fuchsia',
+      };
       final response = await _dio.post(
         '/notifications/register-token',
-        data: {'token': fcmToken},
+        data: {
+          'token': fcmToken,
+          'platform': platform,
+        },
       );
       _lastRegisteredToken = fcmToken;
       _lastRegisteredAt = now;

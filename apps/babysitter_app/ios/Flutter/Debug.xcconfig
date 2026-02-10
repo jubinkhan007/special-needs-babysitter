@@ -1,2 +1,9 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
+APS_ENVIRONMENT=development
+// Disable signing for simulator builds
+CODE_SIGNING_ALLOWED[sdk=iphonesimulator*] = NO
+CODE_SIGNING_REQUIRED[sdk=iphonesimulator*] = NO
+
+// Fix “Runner.entitlements was modified during build” (Debug/simulator)
+CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION[sdk=iphonesimulator*] = YES

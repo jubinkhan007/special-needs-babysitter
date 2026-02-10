@@ -278,6 +278,71 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // If the passed username is just "Chat" (default from notification tap),
+    // fetch the actual user profile to get name and avatar.
+    final needsProfileFetch = widget.args.otherUserName == 'Chat' ||
+        widget.args.otherUserName.isEmpty;
+
+    // Only watch if needed to avoid unnecessary API calls
+    final userProfileAsync = needsProfileFetch
+        ? ref.watch(chatUserProfileProvider(widget.args.otherUserId))
+        : null;
+
+    final fetchedProfile = userProfileAsync?.valueOrNull;
+
+    // Debug logging
+    if (needsProfileFetch) {
+      print(
+          'DEBUG: ChatThreadScreen - Needs profile fetch for user: ${widget.args.otherUserId}');
+      print(
+          'DEBUG: ChatThreadScreen - Async state: ${userProfileAsync?.toString()}');
+      if (fetchedProfile != null) {
+        print(
+            'DEBUG: ChatThreadScreen - Fetched profile keys: ${fetchedProfile.keys.toList()}');
+      }
+    }
+
+    String displayUserName = widget.args.otherUserName;
+    String? displayAvatarUrl = widget.args.otherUserAvatarUrl;
+
+    if (fetchedProfile != null) {
+      // Robust name parsing – handle both camelCase and snake_case API responses
+      final firstName =
+          (fetchedProfile['firstName'] ?? fetchedProfile['first_name'])
+                  ?.toString() ??
+              '';
+      final lastName =
+          (fetchedProfile['lastName'] ?? fetchedProfile['last_name'])
+                  ?.toString() ??
+              '';
+      final name = (fetchedProfile['name'] ??
+                  fetchedProfile['fullName'] ??
+                  fetchedProfile['full_name'])
+              ?.toString() ??
+          '';
+
+      if (firstName.isNotEmpty) {
+        displayUserName = '$firstName $lastName'.trim();
+      } else if (name.isNotEmpty) {
+        displayUserName = name;
+      }
+
+      // Robust avatar parsing – check all known key variants
+      displayAvatarUrl = (fetchedProfile['avatarUrl'] ??
+                  fetchedProfile['profilePhoto'] ??
+                  fetchedProfile['profilePhotoUrl'] ??
+                  fetchedProfile['photoUrl'] ??
+                  fetchedProfile['photoURL'] ??
+                  fetchedProfile['photo_url'] ??
+                  fetchedProfile['imageUrl'] ??
+                  fetchedProfile['profileImageUrl'])
+              ?.toString() ??
+          displayAvatarUrl;
+
+      print(
+          'DEBUG: ChatThreadScreen - Resolved name: "$displayUserName", avatar: "$displayAvatarUrl"');
+    }
+
     final messagesAsync =
         ref.watch(chatMessagesProvider(widget.args.otherUserId));
     final callHistoryData = ref
@@ -295,9 +360,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       child: Scaffold(
         backgroundColor: AppTokens.chatScreenBg,
         appBar: ChatThreadAppBar(
-          title: widget.args.otherUserName,
+          title: displayUserName,
           isVerified: widget.args.isVerified,
-          avatarUrl: widget.args.otherUserAvatarUrl,
+          avatarUrl: displayAvatarUrl,
           onVoiceCall: () {
             final navigator = rootNavigatorKey.currentState;
             if (navigator == null) return;
@@ -305,8 +370,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
               MaterialPageRoute(
                 builder: (_) => OutgoingCallScreen(
                   recipientUserId: widget.args.otherUserId,
-                  recipientName: widget.args.otherUserName,
-                  recipientAvatar: widget.args.otherUserAvatarUrl,
+                  recipientName: displayUserName,
+                  recipientAvatar: displayAvatarUrl,
                   callType: CallType.audio,
                 ),
               ),
@@ -319,8 +384,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
               MaterialPageRoute(
                 builder: (_) => OutgoingCallScreen(
                   recipientUserId: widget.args.otherUserId,
-                  recipientName: widget.args.otherUserName,
-                  recipientAvatar: widget.args.otherUserAvatarUrl,
+                  recipientName: displayUserName,
+                  recipientAvatar: displayAvatarUrl,
                   callType: CallType.video,
                 ),
               ),
