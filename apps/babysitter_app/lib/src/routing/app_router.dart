@@ -241,7 +241,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Onboarding route
       GoRoute(
         path: Routes.onboarding,
-        builder: (context, state) => OnboardingScreen(),
+        builder: (context, state) => const OnboardingScreen(),
       ),
 
       // Auth routes

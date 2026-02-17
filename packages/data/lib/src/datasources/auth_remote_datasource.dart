@@ -178,7 +178,7 @@ class AuthRemoteDataSource {
         now.difference(_lastRegisteredAt!) < const Duration(minutes: 10);
     if (shouldSkipDuplicate) {
       print(
-          'DEBUG: registerDeviceToken skipped duplicate token within cooldown window');
+          'DEBUG: registerDeviceToken skipped duplicate token within cooldown window',);
       return;
     }
 
@@ -201,10 +201,10 @@ class AuthRemoteDataSource {
       _lastRegisteredToken = fcmToken;
       _lastRegisteredAt = now;
       print(
-          'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}');
+          'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}',);
     } on DioException catch (e) {
       print(
-          'DEBUG: registerDeviceToken failed status=${e.response?.statusCode} body=${e.response?.data} error=${e.message}');
+          'DEBUG: registerDeviceToken failed status=${e.response?.statusCode} body=${e.response?.data} error=${e.message}',);
       rethrow;
     }
   }

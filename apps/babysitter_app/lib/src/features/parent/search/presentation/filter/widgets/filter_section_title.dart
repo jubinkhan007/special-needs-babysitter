@@ -9,7 +9,7 @@ class FilterSectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8.0), // Gap to field
+      padding: const EdgeInsets.only(bottom: 8.0), // Gap to field
       child: Text(
         title,
         style: AppTokens.sheetSectionTitleStyle,

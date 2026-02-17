@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Parsing logic test', () {
-    final startDateStr = "2026-01-23";
-    final startTimeStr = "02:30";
+    const startDateStr = "2026-01-23";
+    const startTimeStr = "02:30";
     
     // Logic from repository
     DateTime scheduledDate = DateTime.parse(startDateStr);

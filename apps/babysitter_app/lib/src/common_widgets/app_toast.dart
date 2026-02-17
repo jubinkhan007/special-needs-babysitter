@@ -11,9 +11,6 @@ class AppToast {
     _removeEntry();
 
     final overlay = Overlay.of(context, rootOverlay: true);
-    if (overlay == null) {
-      return;
-    }
 
     final media = MediaQuery.of(context);
     final topInset = media.padding.top;

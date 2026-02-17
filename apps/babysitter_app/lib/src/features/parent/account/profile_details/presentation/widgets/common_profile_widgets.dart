@@ -20,9 +20,9 @@ class SectionHeader extends StatelessWidget {
         InkWell(
           onTap: onEdit,
           borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: const Icon(
+          child: const Padding(
+            padding: EdgeInsets.all(4.0),
+            child: Icon(
               Icons.edit_outlined,
               size: 20,
               color: ProfileDetailsUI.secondaryText,

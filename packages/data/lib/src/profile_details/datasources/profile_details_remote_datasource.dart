@@ -6,10 +6,10 @@ class ProfileDetailsPresignedUrlResponse {
   final String publicUrl;
 
   ProfileDetailsPresignedUrlResponse(
-      {required this.uploadUrl, required this.publicUrl});
+      {required this.uploadUrl, required this.publicUrl,});
 
   factory ProfileDetailsPresignedUrlResponse.fromJson(
-      Map<String, dynamic> json) {
+      Map<String, dynamic> json,) {
     return ProfileDetailsPresignedUrlResponse(
       uploadUrl: json['uploadUrl'],
       publicUrl: json['publicUrl'],
@@ -23,10 +23,10 @@ class ProfileDetailsRemoteDataSource {
   ProfileDetailsRemoteDataSource(this._dio);
 
   Future<void> updateProfileDetails(Map<String, dynamic> data,
-      {int step = 1}) async {
+      {int step = 1,}) async {
     try {
       print(
-          'DEBUG: RemoteDataSource updating profile (step $step) with data: $data');
+          'DEBUG: RemoteDataSource updating profile (step $step) with data: $data',);
       await _dio.put(
         '/parents/me',
         data: {
@@ -63,7 +63,7 @@ class ProfileDetailsRemoteDataSource {
 
   /// Uploads binary file to the presigned URL
   Future<void> uploadFileToUrl(
-      String url, File file, String contentType) async {
+      String url, File file, String contentType,) async {
     final len = await file.length();
     await _dio.put(
       url,
@@ -82,15 +82,15 @@ class ProfileDetailsRemoteDataSource {
       print('DEBUG: ProfileDetailsRemoteDataSource requesting /parents/me');
       final response = await _dio.get('/parents/me');
       print(
-          'DEBUG: ProfileDetailsRemoteDataSource response status: ${response.statusCode}');
+          'DEBUG: ProfileDetailsRemoteDataSource response status: ${response.statusCode}',);
       print(
-          'DEBUG: ProfileDetailsRemoteDataSource response data: ${response.data}');
+          'DEBUG: ProfileDetailsRemoteDataSource response data: ${response.data}',);
 
       if (response.data['success'] == true) {
         return response.data['data'] as Map<String, dynamic>;
       } else {
         throw Exception(
-            'Failed to load profile details - Success flag is false');
+            'Failed to load profile details - Success flag is false',);
       }
     } catch (e) {
       rethrow;
@@ -119,7 +119,7 @@ class ProfileDetailsRemoteDataSource {
   }
 
   Future<void> updateChild(
-      String childId, Map<String, dynamic> childData) async {
+      String childId, Map<String, dynamic> childData,) async {
     try {
       print('DEBUG: updateChild payload: $childData');
       final response = await _dio.put(

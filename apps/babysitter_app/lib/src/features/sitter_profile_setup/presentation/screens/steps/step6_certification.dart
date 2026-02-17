@@ -230,9 +230,9 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: const Color(0xFFD0D5DD)),
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text(
                             'Select Certifications',
                             style: TextStyle(
@@ -322,7 +322,7 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
 
                   const SizedBox(height: 8),
 

@@ -5,7 +5,6 @@ import 'package:auth/auth.dart';
 import '../../bookings/domain/booking.dart';
 import '../../bookings/domain/booking_status.dart';
 import '../../../routing/routes.dart';
-import 'presentation/models/home_mock_models.dart';
 import 'presentation/theme/home_design_tokens.dart';
 import 'presentation/widgets/active_booking_card.dart';
 import 'presentation/widgets/complete_profile_card.dart';
@@ -116,9 +115,9 @@ class ParentHomeScreen extends ConsumerWidget {
                 const SizedBox(height: HomeDesignTokens.itemSpacing),
               ],
               sittersAsync.when(
-                loading: () => SizedBox(
+                loading: () => const SizedBox(
                   height: HomeDesignTokens.sitterNearYouHeight,
-                  child: const Center(child: CircularProgressIndicator()),
+                  child: Center(child: CircularProgressIndicator()),
                 ),
                 error: (error, stack) => SizedBox(
                   height: HomeDesignTokens.sitterNearYouHeight,
@@ -131,9 +130,9 @@ class ParentHomeScreen extends ConsumerWidget {
                   final savedSitters = savedSittersAsync.valueOrNull ?? [];
 
                   if (displaySitters.isEmpty) {
-                    return SizedBox(
+                    return const SizedBox(
                       height: HomeDesignTokens.sitterNearYouHeight,
-                      child: const Center(child: Text('No sitters found.')),
+                      child: Center(child: Text('No sitters found.')),
                     );
                   }
                   return SizedBox(
@@ -182,19 +181,19 @@ class ParentHomeScreen extends ConsumerWidget {
               }),
               const SizedBox(height: HomeDesignTokens.itemSpacing),
               savedSittersAsync.when(
-                loading: () => SizedBox(
+                loading: () => const SizedBox(
                   height: HomeDesignTokens.savedSitterHeight,
-                  child: const Center(child: CircularProgressIndicator()),
+                  child: Center(child: CircularProgressIndicator()),
                 ),
-                error: (error, stack) => SizedBox(
+                error: (error, stack) => const SizedBox(
                   height: HomeDesignTokens.savedSitterHeight,
-                  child: const Center(child: Text('Error loading saved sitters')),
+                  child: Center(child: Text('Error loading saved sitters')),
                 ),
                 data: (savedSitters) {
                   if (savedSitters.isEmpty) {
-                    return SizedBox(
+                    return const SizedBox(
                       height: HomeDesignTokens.savedSitterHeight,
-                      child: const Center(child: Text('No saved sitters yet.')),
+                      child: Center(child: Text('No saved sitters yet.')),
                     );
                   }
                   return SizedBox(

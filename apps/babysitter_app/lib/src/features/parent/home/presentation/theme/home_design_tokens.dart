@@ -115,5 +115,5 @@ class HomeDesignTokens {
         color: AppColors.neutral60,
       );
 
-  static const Color? viewProfileButtonBg = Color(0xFF86C9E8);
+  static const Color viewProfileButtonBg = Color(0xFF86C9E8);
 }

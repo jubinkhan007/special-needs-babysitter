@@ -3,7 +3,6 @@ export 'package:realtime/realtime.dart' show callServiceProvider, CallService;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auth/auth.dart';
-import 'package:realtime/realtime.dart';
 
 import '../../data/datasources/calls_remote_data_source.dart';
 import '../../data/repositories/calls_repository_impl.dart';

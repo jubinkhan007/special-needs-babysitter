@@ -103,7 +103,7 @@ class HomeHeader extends StatelessWidget {
                 const SizedBox(height: 2),
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.location_on_outlined,
                       size: 16, // Slightly bigger pin
                       color: AppColors.neutral30, // Lighter grey

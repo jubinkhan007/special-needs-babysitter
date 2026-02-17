@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../routing/routes.dart';
 import '../../messages/presentation/messages_screen.dart';
 import '../../messages/domain/chat_thread_args.dart';
 

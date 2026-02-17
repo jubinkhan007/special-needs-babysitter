@@ -49,7 +49,7 @@ class JobDetailsPreviewCard extends StatelessWidget {
             SizedBox(height: 16.h),
           ],
           // Divider
-          Divider(height: 1, thickness: 1, color: AppTokens.dividerSoft),
+          const Divider(height: 1, thickness: 1, color: AppTokens.dividerSoft),
           SizedBox(height: 16.h),
           // Service details table
           _buildServiceDetailsTable(),
@@ -164,14 +164,14 @@ class JobDetailsPreviewCard extends StatelessWidget {
         children: [
           TextSpan(
             text: jobDetails.familyName,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppTokens.textPrimary,
               fontWeight: FontWeight.w500,
             ),
           ),
           TextSpan(
             text: '  (${jobDetails.childrenCount} Children)',
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.secondary,
               fontWeight: FontWeight.w500,
             ),
@@ -192,23 +192,23 @@ class JobDetailsPreviewCard extends StatelessWidget {
             children: [
               TextSpan(
                 text: child.name,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppTokens.textPrimary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               TextSpan(
                 text: ' (${child.age} Years)',
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.secondary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               if (!isLast)
-                TextSpan(
+                const TextSpan(
                   text: ' | ',
                   style: TextStyle(
-                    color: const Color(0xFFD0D5DD),
+                    color: Color(0xFFD0D5DD),
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -226,7 +226,7 @@ class JobDetailsPreviewCard extends StatelessWidget {
         children: [
           TextSpan(
             text: jobDetails.location,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppTokens.textPrimary,
               fontWeight: FontWeight.w400,
             ),
@@ -234,7 +234,7 @@ class JobDetailsPreviewCard extends StatelessWidget {
           if (jobDetails.distance.isNotEmpty)
             TextSpan(
               text: '  (${jobDetails.distance})',
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.secondary,
                 fontWeight: FontWeight.w400,
               ),

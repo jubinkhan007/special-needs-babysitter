@@ -33,7 +33,7 @@ class FilterAddOtherField extends StatelessWidget {
                   ? AppTokens.sheetFieldTextStyle
                   : AppTokens.sheetFieldHintStyle,
             ),
-            Icon(
+            const Icon(
               Icons.add,
               size: 20,
               color: AppTokens.sheetFieldIconColor,

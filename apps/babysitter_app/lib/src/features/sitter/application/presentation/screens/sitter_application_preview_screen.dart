@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../theme/app_tokens.dart';
-import '../../../../../routing/routes.dart';
 
 import '../providers/application_providers.dart';
 import '../widgets/job_details_preview_card.dart';

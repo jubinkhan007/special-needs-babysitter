@@ -72,7 +72,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: AppTokens.appBarTitleColor,
           ),
@@ -180,15 +180,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: AppTokens.cardBorder),
+                      borderSide: const BorderSide(color: AppTokens.cardBorder),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: AppTokens.cardBorder),
+                      borderSide: const BorderSide(color: AppTokens.cardBorder),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: AppTokens.primaryBlue,
                         width: 1.5,
                       ),
@@ -224,15 +224,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: AppTokens.cardBorder),
+                      borderSide: const BorderSide(color: AppTokens.cardBorder),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(color: AppTokens.cardBorder),
+                      borderSide: const BorderSide(color: AppTokens.cardBorder),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.r),
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: AppTokens.primaryBlue,
                         width: 1.5,
                       ),

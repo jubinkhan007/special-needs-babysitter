@@ -19,7 +19,7 @@ class SessionStore {
   /// Save authentication session
   Future<void> saveSession(AuthSession session) async {
     print(
-        'DEBUG: SessionStore.saveSession called with token: ${session.accessToken}');
+        'DEBUG: SessionStore.saveSession called with token: ${session.accessToken}',);
     try {
       await _storage.write(
         key: Constants.accessTokenKey,

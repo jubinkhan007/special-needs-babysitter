@@ -24,7 +24,7 @@ class CallAppBar extends StatelessWidget {
               onPressed: () {
                 // Minimize or other action - mockup shows diagonal arrows
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons
                     .open_in_full_rounded, // Best match for diagonal expand arrows or similar
                 // Actually screenshot shows "un-fullscreen" or distinct icon?

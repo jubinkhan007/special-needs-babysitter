@@ -27,7 +27,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final menuItems = [
-      AccountMenuItem(
+      const AccountMenuItem(
         icon: Icons.credit_card_outlined,
         title: 'Payment',
       ),
@@ -45,11 +45,11 @@ class AccountScreen extends StatelessWidget {
           ),
         ),
       ),
-      AccountMenuItem(
+      const AccountMenuItem(
         icon: Icons.article_outlined,
         title: 'Terms & Conditions',
       ),
-      AccountMenuItem(
+      const AccountMenuItem(
         icon: Icons.headset_mic_outlined,
         title: 'Help & Support',
       ),
@@ -67,7 +67,7 @@ class AccountScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: AppTokens.appBarTitleColor,
           ),
@@ -84,7 +84,7 @@ class AccountScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications_outlined,
               color: AppTokens.appBarTitleColor,
             ),

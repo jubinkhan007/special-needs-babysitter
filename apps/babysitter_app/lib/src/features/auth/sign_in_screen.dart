@@ -8,7 +8,6 @@ import 'package:core/core.dart';
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
-import 'presentation/widgets/social_login_row.dart';
 import '../../../common/theme/auth_theme.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 

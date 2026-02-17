@@ -331,7 +331,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       ],
                     ),
                     child: _image == null
-                        ? Center(
+                        ? const Center(
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: 40,
@@ -351,7 +351,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   style: const TextStyle(color: _textDark),
                   decoration: InputDecoration(
                     label: RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         text: 'Family Name',
                         style:
                             TextStyle(color: Color(0xFF667085), fontSize: 16),
@@ -381,13 +381,13 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButtonFormField<String>(
                     dropdownColor: Colors.white,
-                    value: _familyMembersCount,
+                    initialValue: _familyMembersCount,
                     icon: const Icon(Icons.keyboard_arrow_down,
                         color: Color(0xFF667085)),
                     style: const TextStyle(fontSize: 16, color: _textDark),
                     decoration: InputDecoration(
                       label: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'Number of Family Members',
                           style:
                               TextStyle(color: Color(0xFF667085), fontSize: 16),
@@ -459,9 +459,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     style: const TextStyle(color: _textDark),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Number of Pets',
-                      hintStyle: const TextStyle(color: Color(0xFF667085)),
+                      hintStyle: TextStyle(color: Color(0xFF667085)),
                       filled: true,
                       fillColor: Colors.white,
                       border: InputBorder.none,
@@ -579,12 +579,12 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const Text('Other',
+                        Text('Other',
                             style: TextStyle(color: Color(0xFF98A2B3))),
-                        const Spacer(),
-                        const Icon(Icons.add, color: Color(0xFF475467)),
+                        Spacer(),
+                        Icon(Icons.add, color: Color(0xFF475467)),
                       ],
                     ),
                   ),
@@ -633,9 +633,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     style: const TextStyle(color: _textDark),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Number of Languages',
-                      hintStyle: const TextStyle(color: Color(0xFF667085)),
+                      hintStyle: TextStyle(color: Color(0xFF667085)),
                       filled: true,
                       fillColor: Colors.white,
                       border: InputBorder.none,
@@ -778,17 +778,17 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                               });
                             });
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 12),
                             child: Row(
                               children: [
-                                const Text('Other',
+                                Text('Other',
                                     style: TextStyle(
                                         color: Color(0xFF667085),
                                         fontSize: 16)),
-                                const Spacer(),
-                                const Icon(Icons.add,
+                                Spacer(),
+                                Icon(Icons.add,
                                     color: Color(0xFF667085), size: 20),
                               ],
                             ),
@@ -822,7 +822,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   style: const TextStyle(color: _textDark),
                   decoration: InputDecoration(
                     label: RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         text: 'Family Bio',
                         style:
                             TextStyle(color: Color(0xFF667085), fontSize: 16),

@@ -62,7 +62,7 @@ class BookingApplicationUiModel {
     final dateFormat = DateFormat('MM/dd/yyyy');
     final timeFormat = DateFormat('h:mm a');
 
-    String _formatTime(DateTime dt) {
+    String formatTime(DateTime dt) {
       return timeFormat.format(dt);
     }
 
@@ -83,7 +83,7 @@ class BookingApplicationUiModel {
       dateRangeText:
           '${dateFormat.format(item.startDate)} - ${dateFormat.format(item.endDate)}',
       timeRangeText:
-          '${_formatTime(item.startTime)} - ${_formatTime(item.endTime)}',
+          '${formatTime(item.startTime)} - ${formatTime(item.endTime)}',
       hourlyRateText: '\$ ${item.hourlyRate.toInt()}/hr',
       numberOfDaysText: item.numberOfDays.toString(),
       additionalNotes: item.additionalNotes,

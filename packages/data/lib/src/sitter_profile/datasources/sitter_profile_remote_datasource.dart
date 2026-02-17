@@ -7,7 +7,7 @@ class SitterPresignedUrlResponse {
   final String publicUrl;
 
   SitterPresignedUrlResponse(
-      {required this.uploadUrl, required this.publicUrl});
+      {required this.uploadUrl, required this.publicUrl,});
 
   factory SitterPresignedUrlResponse.fromJson(Map<String, dynamic> json) {
     return SitterPresignedUrlResponse(
@@ -31,7 +31,7 @@ class SitterProfileRemoteDataSource {
   }) async {
     try {
       print(
-          'DEBUG: SitterProfileRemoteDataSource updating step=$step with data=$data');
+          'DEBUG: SitterProfileRemoteDataSource updating step=$step with data=$data',);
       final response = await _dio.put(
         '/sitters/me',
         data: {
@@ -74,7 +74,7 @@ class SitterProfileRemoteDataSource {
 
   /// Uploads binary file to the presigned URL.
   Future<void> uploadFileToUrl(
-      String url, File file, String contentType) async {
+      String url, File file, String contentType,) async {
     final len = await file.length();
     await _dio.put(
       url,

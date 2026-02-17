@@ -295,7 +295,7 @@ class BookingFlowState {
     final cleanTime = timeStr.trim();
     // Expected format: "10:00 AM"
     final looseParts = cleanTime.split(' ');
-    if (looseParts.length != 2) throw FormatException('Invalid time format');
+    if (looseParts.length != 2) throw const FormatException('Invalid time format');
 
     final timeParts = looseParts[0].split(':');
     final period = looseParts[1].toUpperCase();

@@ -57,7 +57,7 @@ class BookingDetailsVariant {
   });
 
   factory BookingDetailsVariant.upcoming() {
-    return BookingDetailsVariant(
+    return const BookingDetailsVariant(
       appBarTitle: 'Upcoming Booking',
       status: BookingStatus.upcoming,
       showPaymentBlock: false,
@@ -71,7 +71,7 @@ class BookingDetailsVariant {
   }
 
   factory BookingDetailsVariant.pending() {
-    return BookingDetailsVariant(
+    return const BookingDetailsVariant(
       appBarTitle: 'Pending Booking',
       status: BookingStatus.pending,
       showPaymentBlock: false,
@@ -84,7 +84,7 @@ class BookingDetailsVariant {
   }
 
   factory BookingDetailsVariant.completed() {
-    return BookingDetailsVariant(
+    return const BookingDetailsVariant(
       appBarTitle: 'Completed Booking',
       status: BookingStatus.completed,
       showPaymentBlock: true,

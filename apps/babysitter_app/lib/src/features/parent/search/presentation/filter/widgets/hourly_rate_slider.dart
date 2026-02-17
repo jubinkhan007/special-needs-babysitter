@@ -50,7 +50,7 @@ class HourlyRateSlider extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
 
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
@@ -59,10 +59,10 @@ class HourlyRateSlider extends StatelessWidget {
             thumbColor: AppTokens.sliderThumbColor,
             overlayColor: AppTokens.sliderThumbColor.withOpacity(0.12),
             trackHeight: AppTokens.sliderTrackHeight,
-            thumbShape: RoundSliderThumbShape(
+            thumbShape: const RoundSliderThumbShape(
                 enabledThumbRadius: AppTokens.sliderThumbRadius),
             tickMarkShape:
-                RoundSliderTickMarkShape(tickMarkRadius: 2), // Small dots
+                const RoundSliderTickMarkShape(tickMarkRadius: 2), // Small dots
             activeTickMarkColor:
                 Colors.white.withOpacity(0.5), // Subtle ticks on blue
             inactiveTickMarkColor:

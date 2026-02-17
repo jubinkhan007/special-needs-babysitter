@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:domain/domain.dart';
-import 'package:ui_kit/ui_kit.dart';
 import '../profile_details_ui_constants.dart';
 import 'common_profile_widgets.dart';
 

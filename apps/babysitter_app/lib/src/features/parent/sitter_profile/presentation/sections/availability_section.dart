@@ -40,8 +40,8 @@ class AvailabilitySection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFFEAECF0)),
               ),
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   Icon(Icons.calendar_today_rounded,
                       color: AppUiTokens.textSecondary, size: 20),
                   SizedBox(width: 12),
@@ -104,7 +104,7 @@ class AvailabilitySection extends StatelessWidget {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
 
           const SizedBox(height: 32),
@@ -128,7 +128,7 @@ class AvailabilitySection extends StatelessWidget {
           else
             ...jobTypesAccepted!.entries.where((e) => e.value).map((e) {
               return _buildJobTypeItem(_formatJobType(e.key));
-            }).toList(),
+            }),
         ],
       ),
     );

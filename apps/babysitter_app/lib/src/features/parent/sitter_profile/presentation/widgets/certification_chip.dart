@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
 class CertificationChip extends StatelessWidget {
   final String label;

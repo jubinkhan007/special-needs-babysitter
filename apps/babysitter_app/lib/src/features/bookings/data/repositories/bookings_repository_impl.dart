@@ -82,7 +82,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
     BookingStatus status;
     
     final now = DateTime.now();
-    final isPast = jobStartDateTime != null && jobStartDateTime.isBefore(now);
+    final isPast = jobStartDateTime.isBefore(now);
 
     if (rawStatus == 'active' || rawStatus == 'inprogress') {
       status = BookingStatus.active;

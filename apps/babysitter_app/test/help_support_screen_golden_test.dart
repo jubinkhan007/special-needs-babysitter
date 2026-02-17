@@ -9,9 +9,9 @@ void main() {
       designSize: const Size(393, 852), // iPhone 14 / 15 Pro roughly
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, _) => MaterialApp(
+      builder: (context, _) => const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const HelpSupportScreen(),
+        home: HelpSupportScreen(),
       ),
     );
   }

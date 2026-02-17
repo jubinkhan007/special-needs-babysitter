@@ -85,7 +85,7 @@ class ReviewListItem extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16.h),
-          Divider(
+          const Divider(
             height: AppTokens.reviewItemDividerThickness,
             thickness: AppTokens.reviewItemDividerThickness,
             color: AppTokens.reviewItemDividerColor,

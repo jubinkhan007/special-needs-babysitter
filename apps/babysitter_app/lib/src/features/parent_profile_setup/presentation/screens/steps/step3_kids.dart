@@ -248,14 +248,14 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                             style: BorderStyle.solid,
                           ),
                         ),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.add_circle_outline,
                               color: AuthTheme.primaryBlue,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Text(
                               'Add a Child',
                               style: TextStyle(

@@ -239,7 +239,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                         Switch(
                           value: _isActive,
                           onChanged: (v) => setState(() => _isActive = v),
-                          activeColor: Colors.white,
+                          activeThumbColor: Colors.white,
                           activeTrackColor:
                               const Color(0xFF75CFF0), // Match Save button blue
                           inactiveThumbColor: Colors.white,

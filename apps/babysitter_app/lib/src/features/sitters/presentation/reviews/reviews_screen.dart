@@ -31,7 +31,7 @@ class ReviewsScreen extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: AppTokens.appBarTitleColor,
           ),

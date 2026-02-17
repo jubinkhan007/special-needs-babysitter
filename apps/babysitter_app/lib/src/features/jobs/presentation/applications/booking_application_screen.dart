@@ -57,13 +57,13 @@ class BookingApplicationScreen extends ConsumerWidget {
     );
 
     return applicationAsync.when(
-      loading: () => Scaffold(
+      loading: () => const Scaffold(
         backgroundColor: AppTokens.applicationsBg,
-        appBar: const JobsAppBar(
+        appBar: JobsAppBar(
           title: 'Booking Application',
           showSupportIcon: true,
         ),
-        body: const Center(child: CircularProgressIndicator()),
+        body: Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: AppTokens.applicationsBg,

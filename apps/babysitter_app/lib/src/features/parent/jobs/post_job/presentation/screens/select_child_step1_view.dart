@@ -222,7 +222,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
         color: const Color(0xFFD6F0FA), // Soft blue fill
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Center(
+      child: const Center(
         child: Icon(
           Icons.family_restroom_outlined, // Caretaker/child style icon
           size: 36,

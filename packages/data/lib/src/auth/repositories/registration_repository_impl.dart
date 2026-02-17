@@ -59,7 +59,7 @@ class RegistrationRepositoryImpl implements RegistrationRepository {
 
   @override
   Future<UniquenessCheckResult> checkUniqueness(
-      UniquenessCheckPayload payload) async {
+      UniquenessCheckPayload payload,) async {
     try {
       return await _dataSource.checkUniqueness(payload);
     } on DioException catch (e) {

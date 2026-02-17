@@ -40,7 +40,7 @@ class ChatThreadAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Back Button
               IconButton(
                 onPressed: onBack ?? () => Navigator.of(context).maybePop(),
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back,
                   color: AppTokens.iconGrey,
                   size: 24,
@@ -75,7 +75,7 @@ class ChatThreadAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Actions
               IconButton(
                 onPressed: onVideoCall,
-                icon: Icon(
+                icon: const Icon(
                   Icons.videocam_rounded,
                   size: 28,
                   color: Colors.black87, // Color directly on Icon
@@ -83,7 +83,7 @@ class ChatThreadAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               IconButton(
                 onPressed: onVoiceCall,
-                icon: Icon(
+                icon: const Icon(
                   Icons.call_rounded,
                   size: 28,
                   color: Colors.black87, // Color directly on Icon

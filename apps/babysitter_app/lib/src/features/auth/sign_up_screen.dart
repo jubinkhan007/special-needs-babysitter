@@ -43,8 +43,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (!_agreedToTerms) {
       AppToast.show(context, 
-        SnackBar(
-          content: const Text('Please agree to the Terms and Privacy Policy'),
+        const SnackBar(
+          content: Text('Please agree to the Terms and Privacy Policy'),
           backgroundColor: AuthTheme.errorRed,
         ),
       );

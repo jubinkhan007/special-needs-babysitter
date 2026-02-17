@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:domain/domain.dart';
 import '../../../theme/app_tokens.dart';
 import 'models/message_thread_ui_model.dart';
@@ -26,7 +25,7 @@ class MessagesScreen extends ConsumerWidget {
 
     // Lock text scaling for pixel-perfect rendering
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: AppTokens.messagesScreenBg,
         appBar: MessagesAppBar(

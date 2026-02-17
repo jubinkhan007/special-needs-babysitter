@@ -183,7 +183,7 @@ class _SitterJobDetailsScreenState
           // Divider
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Divider(
+            child: const Divider(
               height: 1,
               thickness: 1,
               color: AppTokens.dividerSoft,

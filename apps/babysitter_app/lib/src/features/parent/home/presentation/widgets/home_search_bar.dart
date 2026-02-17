@@ -37,7 +37,7 @@ class HomeSearchBar extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.search,
                   color: AppColors.textSecondary,
                   size: 24,

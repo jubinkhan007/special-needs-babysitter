@@ -234,12 +234,12 @@ class _BubbleTailPainter extends CustomPainter {
       // Bottom Right Tail - Sharper/Cleaner
       final w = size.width;
       final h = size.height;
-      final r = 16.0; // Radius matches bubble radius
+      const r = 16.0; // Radius matches bubble radius
 
       path.moveTo(w - r, h); // Start at bottom edge before corner
       path.arcToPoint(
         Offset(w, h - r),
-        radius: Radius.circular(r),
+        radius: const Radius.circular(r),
         clockwise: false,
       ); // Draw the rounded corner normally first? No, we need to extend it.
 

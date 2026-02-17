@@ -210,7 +210,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                                     color: _textDark)),
                             TextSpan(
                                 text:
-                                    'I have ${(state.yearsExperience ?? "some").toLowerCase()} of experience. ${state.bio.length > 50 ? state.bio.substring(0, 50) + "..." : state.bio}'),
+                                    'I have ${(state.yearsExperience ?? "some").toLowerCase()} of experience. ${state.bio.length > 50 ? "${state.bio.substring(0, 50)}..." : state.bio}'),
                           ],
                         ),
                       ),
@@ -641,7 +641,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                   alignment: Alignment.center,
                   child: Text(
                     text,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: _textDark,
                       fontWeight: FontWeight.w500,
                     ),

@@ -77,7 +77,7 @@ class _Step3EmergencyAndInsuranceState
             isActive: plan['isActive'] == true,
           );
         }
-        return InsurancePlan(
+        return const InsurancePlan(
           planName: '',
           insuranceType: '',
           coverageAmount: 0.0,
@@ -389,9 +389,9 @@ class _Step3EmergencyAndInsuranceState
                       ),
                     ],
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      const Text(
+                      Text(
                         'Add an Insurance Plan',
                         style: TextStyle(
                           fontSize: 14,
@@ -399,11 +399,11 @@ class _Step3EmergencyAndInsuranceState
                           color: Color(0xFF667085),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      const Icon(Icons.info_outline,
+                      SizedBox(width: 8),
+                      Icon(Icons.info_outline,
                           size: 16, color: Color(0xFF98A2B3)),
-                      const Spacer(),
-                      const Icon(Icons.add, color: Color(0xFF667085)),
+                      Spacer(),
+                      Icon(Icons.add, color: Color(0xFF667085)),
                     ],
                   ),
                 ),

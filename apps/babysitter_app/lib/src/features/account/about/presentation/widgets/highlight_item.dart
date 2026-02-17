@@ -29,7 +29,7 @@ class HighlightItem extends StatelessWidget {
           children: [
             TextSpan(
               text: '$titleBold ',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: AppTokens.textPrimary,
               ),

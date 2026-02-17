@@ -51,10 +51,10 @@ class ProfileHeaderCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 GestureDetector(
                   onTap: onTapDetails,
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
+                      Text(
                         'View Profile Details',
                         style: TextStyle(
                           color: AccountUI.accentBlue,
@@ -62,8 +62,8 @@ class ProfileHeaderCard extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(
+                      SizedBox(width: 4),
+                      Icon(
                         Icons.chevron_right,
                         size: 16,
                         color: AccountUI.accentBlue,

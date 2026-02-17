@@ -47,7 +47,7 @@ class ProfileRemoteDataSource {
 
     if (userMap == null) {
       print(
-          'ERROR: ProfileRemoteDataSource failed to find user object. Keys: ${data.keys}');
+          'ERROR: ProfileRemoteDataSource failed to find user object. Keys: ${data.keys}',);
       // Final attempt with the root just to keep old behavior but likely to fail if keys missing
       userMap = data;
     }
@@ -70,7 +70,7 @@ class ProfileRemoteDataSource {
         final photoUrl = profileMap['photoUrl'] ?? profileMap['photo_url'];
         if (photoUrl != null) {
           print(
-              'DEBUG: Found photoUrl in profile object (local), mapping to avatarUrl');
+              'DEBUG: Found photoUrl in profile object (local), mapping to avatarUrl',);
           userMap['avatarUrl'] = photoUrl;
         }
       }
@@ -100,7 +100,7 @@ class ProfileRemoteDataSource {
                     roleProfile['photoUrl'] ?? roleProfile['photo_url'];
                 if (rolePhoto != null) {
                   print(
-                      'DEBUG: Found photoUrl in $endpoint, mapping to avatarUrl');
+                      'DEBUG: Found photoUrl in $endpoint, mapping to avatarUrl',);
                   userMap['avatarUrl'] = rolePhoto;
                 }
               }
@@ -118,9 +118,9 @@ class ProfileRemoteDataSource {
 
     if (userMap['id'] == null || userMap['email'] == null) {
       print(
-          'ERROR: ProfileRemoteDataSource missing id or email in userMap: $userMap');
+          'ERROR: ProfileRemoteDataSource missing id or email in userMap: $userMap',);
       throw const FormatException(
-          'User profile missing required fields (id/email)');
+          'User profile missing required fields (id/email)',);
     }
 
     // AVOID REDIRECT LOOP: Explicitly check for both keys and percentage
@@ -135,15 +135,15 @@ class ProfileRemoteDataSource {
     if (profileCompletion != null) {
       final percentage = profileCompletion['percentage'] as num? ?? 0;
       print(
-          'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage');
+          'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage',);
       if (percentage >= 100) {
         userMap['profileSetupComplete'] = true;
         print(
-            'DEBUG: Overriding profileSetupComplete=true due to 100% completion');
+            'DEBUG: Overriding profileSetupComplete=true due to 100% completion',);
       }
     } else {
       print(
-          'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response');
+          'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response',);
     }
 
     // 2. Handle both snake_case and camelCase from API
@@ -160,7 +160,7 @@ class ProfileRemoteDataSource {
 
       if (e is TypeError) {
         throw const FormatException(
-            'User profile data has invalid types (likely null in required String field)');
+            'User profile data has invalid types (likely null in required String field)',);
       }
       rethrow;
     }
@@ -180,7 +180,7 @@ class ProfileRemoteDataSource {
       },
     );
     print(
-        'DEBUG: ProfileRemoteDataSource update response raw: ${response.data}');
+        'DEBUG: ProfileRemoteDataSource update response raw: ${response.data}',);
 
     final data = response.data;
     if (data is! Map<String, dynamic>) {

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../theme/app_tokens.dart';
 import '../providers/search_filter_provider.dart';
 import '../../utils/location_helper.dart';
 import 'controller/search_filter_controller.dart';
-import 'models/search_filter_ui_model.dart';
 import 'widgets/filter_bottom_primary_bar.dart';
 import 'widgets/filter_checkbox_row.dart';
 import 'widgets/filter_dropdown_field.dart';
@@ -169,18 +167,18 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
               headerForegroundColor: _pickerTitle,
               todayBorder: const BorderSide(color: _pickerAccent, width: 2),
               todayForegroundColor:
-                  const MaterialStatePropertyAll(_pickerAccent),
+                  const WidgetStatePropertyAll(_pickerAccent),
               todayBackgroundColor:
-                  MaterialStatePropertyAll(_pickerAccent.withOpacity(0.15)),
-              dayForegroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+                  WidgetStatePropertyAll(_pickerAccent.withOpacity(0.15)),
+              dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return _pickerTitle;
               }),
               dayOverlayColor:
-                  MaterialStatePropertyAll(_pickerAccent.withOpacity(0.1)),
-              yearForegroundColor: const MaterialStatePropertyAll(_pickerTitle),
+                  WidgetStatePropertyAll(_pickerAccent.withOpacity(0.1)),
+              yearForegroundColor: const WidgetStatePropertyAll(_pickerTitle),
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -303,8 +301,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: _pickerTitle,
-            ),
-            dialogBackgroundColor: Colors.white,
+            ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: AlertDialog(
             shape: RoundedRectangleBorder(
@@ -367,7 +364,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
 
     // 8. Responsive/Lock Text Scaling
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.92,
         decoration: const BoxDecoration(
@@ -467,7 +464,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                                 onChanged: (_) =>
                                     filterController.toggleExpertise(e),
                               ))
-                          .toList(),
+                          ,
                       const SizedBox(height: AppTokens.sheetSectionSpacing),
 
                       // 6. Languages Spoken
@@ -480,7 +477,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                                 onChanged: (_) =>
                                     filterController.toggleLanguage(e),
                               ))
-                          .toList(),
+                          ,
                       // Add Other
                       FilterAddOtherField(
                         onTap: () => _addOtherLanguage(filterController),
@@ -520,7 +517,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           ),
           GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Icon(
+            child: const Icon(
               Icons.close,
               size: 24,
               color: AppTokens.iconGrey,

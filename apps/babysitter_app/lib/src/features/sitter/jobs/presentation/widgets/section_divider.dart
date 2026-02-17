@@ -8,10 +8,10 @@ class SectionDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
-      child: Divider(
+      child: const Divider(
         height: 1,
         thickness: 1,
-        color: const Color(0xFFF2F4F7), // very light grey
+        color: Color(0xFFF2F4F7), // very light grey
       ),
     );
   }

@@ -101,11 +101,11 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
     // I will assume I need to fix Step 1.
     // For now, let's implement the UI assuming data exists.
 
-    final membersCount = '4'; // data['familyMembersCount']
-    final familyBio =
+    const membersCount = '4'; // data['familyMembersCount']
+    const familyBio =
         'In family life, love is the oil that eases friction, the cement that binds closer together, and the music that brings harmony.'; // data['bio']
-    final petsCount = '1'; // data['numPets']
-    final languages = 'English, French and Spanish'; // data['languages']
+    const petsCount = '1'; // data['numPets']
+    const languages = 'English, French and Spanish'; // data['languages']
 
     // Emergency
     final contacts = widget.profileData['emergencyContacts'] as List? ?? [];
@@ -168,7 +168,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
                 color: const Color(0xFFD6F0FA),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.person_search_outlined, // magnifying glass / review
                 size: 40,
                 color: AuthTheme.primaryBlue,
@@ -190,9 +190,9 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             // Profile Photo with edit
             Stack(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 40,
-                  backgroundColor: const Color(0xFFD6F0FA),
+                  backgroundColor: Color(0xFFD6F0FA),
                   child: Icon(
                     Icons.person,
                     size: 40,
@@ -374,7 +374,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
           children: [
             TextSpan(
               text: isQuestion ? '$label ' : '$label ',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 color: _labelColor,
               ),

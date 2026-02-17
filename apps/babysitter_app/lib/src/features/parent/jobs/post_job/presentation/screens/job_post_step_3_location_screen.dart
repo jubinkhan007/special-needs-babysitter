@@ -264,7 +264,7 @@ class _JobPostStep3LocationScreenState
         color: _iconBoxFill,
         borderRadius: BorderRadius.circular(24), // ~22–26
       ),
-      child: Stack(
+      child: const Stack(
         alignment: Alignment.center,
         children: [
           Icon(

@@ -76,7 +76,7 @@ class SitterJobsScreen extends ConsumerWidget {
                   color: const Color(
                       0xFF87C4F2), // Lighter blue matching typical UI
                 ),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
                 labelStyle: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,

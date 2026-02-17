@@ -35,7 +35,7 @@ class FilterDropdownField extends StatelessWidget {
                   ? AppTokens.sheetFieldTextStyle
                   : AppTokens.sheetFieldHintStyle,
             ),
-            Icon(
+            const Icon(
               Icons.keyboard_arrow_down_rounded,
               size: 20,
               color: AppTokens.sheetFieldIconColor,

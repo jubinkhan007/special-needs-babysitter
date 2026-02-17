@@ -7,7 +7,6 @@ import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:realtime/realtime.dart';
 
-import '../../../sitters/domain/sitters_repository.dart';
 import '../../../sitters/data/sitters_data_di.dart';
 import '../../data/chat_media_upload_remote_datasource.dart';
 

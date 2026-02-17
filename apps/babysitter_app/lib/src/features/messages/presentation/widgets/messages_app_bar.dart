@@ -34,7 +34,7 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
               if (showBackButton)
                 IconButton(
                   onPressed: onBack ?? () => Navigator.of(context).maybePop(),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back,
                     color: AppTokens.iconGrey,
                     size: 24,
@@ -56,7 +56,7 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Notification Icon
               IconButton(
                 onPressed: onNotification,
-                icon: Icon(
+                icon: const Icon(
                   Icons.notifications_none_rounded,
                   color: AppTokens.iconGrey,
                   size: 24,

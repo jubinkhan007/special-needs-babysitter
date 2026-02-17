@@ -26,7 +26,7 @@ class FilterBottomPrimaryBar extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
             blurRadius: 10,
-            offset: Offset(0, -4),
+            offset: const Offset(0, -4),
           ),
         ],
       ),
@@ -34,7 +34,7 @@ class FilterBottomPrimaryBar extends StatelessWidget {
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTokens.sliderTrackActive, // Primary Blue
-          minimumSize: Size(double.infinity, AppTokens.sheetFieldHeight),
+          minimumSize: const Size(double.infinity, AppTokens.sheetFieldHeight),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppTokens.sheetFieldRadius),
           ),
@@ -42,7 +42,7 @@ class FilterBottomPrimaryBar extends StatelessWidget {
         ),
         child: Text(
           label, // "Show 6 Results"
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
             color: Colors.white,

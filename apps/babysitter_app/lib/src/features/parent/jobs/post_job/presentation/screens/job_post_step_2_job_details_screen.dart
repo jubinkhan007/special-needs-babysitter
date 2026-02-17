@@ -88,7 +88,6 @@ class _JobPostStep2JobDetailsScreenState
               onSurface: _titleColor, // Body text (Dark Navy)
               secondary: _progressFill, // Range selection color
             ),
-            dialogBackgroundColor: Colors.white,
             scaffoldBackgroundColor: Colors.white,
             datePickerTheme: DatePickerThemeData(
               headerBackgroundColor: Colors.white,
@@ -99,17 +98,17 @@ class _JobPostStep2JobDetailsScreenState
               rangePickerHeaderForegroundColor: _titleColor,
               todayBorder: const BorderSide(color: _progressFill),
               todayForegroundColor:
-                  const MaterialStatePropertyAll(_progressFill),
-              dayForegroundColor: MaterialStateProperty.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
+                  const WidgetStatePropertyAll(_progressFill),
+              dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+                if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return _titleColor;
               }),
               dayOverlayColor:
-                  MaterialStatePropertyAll(_progressFill.withOpacity(0.1)),
-              yearForegroundColor: MaterialStatePropertyAll(_titleColor),
-            ),
+                  WidgetStatePropertyAll(_progressFill.withOpacity(0.1)),
+              yearForegroundColor: const WidgetStatePropertyAll(_titleColor),
+            ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: Center(
             child: ConstrainedBox(
@@ -204,20 +203,20 @@ class _JobPostStep2JobDetailsScreenState
                       color: _progressFill, width: 2), // Active border
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
-                dayPeriodColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? _progressFill.withOpacity(0.3)
                         : Colors.transparent),
-                dayPeriodTextColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? _titleColor
                         : _mutedText),
-                hourMinuteColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? Colors.white
                         : _progressFill.withOpacity(0.1)),
-                hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? _titleColor
                         : _mutedText),
                 inputDecorationTheme: const InputDecorationTheme(
@@ -291,20 +290,20 @@ class _JobPostStep2JobDetailsScreenState
                       color: _progressFill, width: 2), // Active border
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
-                dayPeriodColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? _progressFill.withOpacity(0.3)
                         : Colors.transparent),
-                dayPeriodTextColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? _titleColor
                         : _mutedText),
-                hourMinuteColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? Colors.white
                         : _progressFill.withOpacity(0.1)),
-                hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
-                    states.contains(MaterialState.selected)
+                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
+                    states.contains(WidgetState.selected)
                         ? _titleColor
                         : _mutedText),
                 inputDecorationTheme: const InputDecorationTheme(
@@ -406,7 +405,7 @@ class _JobPostStep2JobDetailsScreenState
     // Handle format like "10:00 AM" or "2:30 PM"
     final cleanTime = timeStr.trim();
     final parts = cleanTime.split(' ');
-    if (parts.length != 2) throw FormatException('Invalid time format');
+    if (parts.length != 2) throw const FormatException('Invalid time format');
     
     final timeParts = parts[0].split(':');
     final period = parts[1].toUpperCase();

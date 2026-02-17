@@ -85,7 +85,7 @@ class JobDetailsMapper {
       transportationModes: transportationModes,
       equipmentSafety: equipmentSafety,
       pickupDropoffDetails: pickupDropoff,
-      requiredSkills: [], // Not in current API
+      requiredSkills: const [], // Not in current API
       hourlyRate: job.payRate,
     );
   }

@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:domain/domain.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ui_kit/ui_kit.dart';
-import '../profile_details_ui_constants.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class EditProfileDetailsDialog extends StatefulWidget {
@@ -273,7 +272,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                             // Members Dropdown
                             _buildInputContainer(
                               child: DropdownButtonFormField<String>(
-                                value: _familyMembersCount,
+                                initialValue: _familyMembersCount,
                                 style: const TextStyle(
                                     fontSize: 16, color: Color(0xFF1F2937)),
                                 dropdownColor: Colors.white,
@@ -337,7 +336,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                     onSelected: (v) =>
                                         setState(() => _petTypes[key] = v),
                                   );
-                                }).toList(),
+                                }),
                                 ActionChip(
                                   label: const Text('+ Other'),
                                   backgroundColor: Colors.white,
@@ -407,7 +406,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                     onSelected: (v) =>
                                         setState(() => _languages[key] = v),
                                   );
-                                }).toList(),
+                                }),
                                 ActionChip(
                                   label: const Text('+ Other'),
                                   backgroundColor: Colors.white,

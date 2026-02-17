@@ -1,4 +1,3 @@
-import 'package:auth/auth.dart';
 import 'package:dio/dio.dart';
 
 class ReviewRemoteDataSource {

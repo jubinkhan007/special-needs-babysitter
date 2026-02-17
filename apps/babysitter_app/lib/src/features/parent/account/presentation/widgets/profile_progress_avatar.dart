@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:ui_kit/ui_kit.dart'; // Assuming UI Kit usage for colors
+// Assuming UI Kit usage for colors
 
 class ProfileProgressAvatar extends StatelessWidget {
   final String? avatarUrl;

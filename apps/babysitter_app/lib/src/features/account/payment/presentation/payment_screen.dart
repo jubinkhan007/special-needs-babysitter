@@ -23,7 +23,7 @@ class PaymentScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: AppTokens.appBarTitleColor,
           ),
@@ -40,7 +40,7 @@ class PaymentScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.notifications_outlined,
               color: AppTokens.appBarTitleColor,
             ),

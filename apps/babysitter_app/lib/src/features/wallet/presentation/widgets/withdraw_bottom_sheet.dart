@@ -49,9 +49,9 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Withdraw',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: WalletStyles.textPrimary,

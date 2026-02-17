@@ -40,7 +40,7 @@ class BookingsTabs extends StatelessWidget {
           padding: EdgeInsets.zero,
 
           splashFactory: NoSplash.splashFactory,
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
           dividerColor: Colors.transparent,
 
           indicatorSize: TabBarIndicatorSize.label,

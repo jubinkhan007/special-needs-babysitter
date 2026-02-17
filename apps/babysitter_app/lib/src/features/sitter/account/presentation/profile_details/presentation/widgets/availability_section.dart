@@ -145,9 +145,9 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
           ),
           const SizedBox(height: 16),
           // Weekday headers
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
+            children: [
               _WeekdayLabel('S'),
               _WeekdayLabel('M'),
               _WeekdayLabel('T'),

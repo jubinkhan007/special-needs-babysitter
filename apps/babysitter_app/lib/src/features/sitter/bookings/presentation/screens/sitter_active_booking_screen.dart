@@ -146,7 +146,7 @@ class _SitterActiveBookingScreenState
             content: Text(result.message.isNotEmpty
                 ? result.message
                 : 'Successfully clocked out!'),
-            backgroundColor: Color(0xFF22C55E),
+            backgroundColor: const Color(0xFF22C55E),
           ),
         );
         if (isFinalDay) {

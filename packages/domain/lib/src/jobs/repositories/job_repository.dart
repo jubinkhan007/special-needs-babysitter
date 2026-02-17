@@ -10,7 +10,7 @@ abstract class JobRepository {
 
   /// Fetches public jobs (e.g. for sitters).
   Future<List<Job>> getPublicJobs(
-      {int limit = 20, int offset = 0, String? status = 'posted'});
+      {int limit = 20, int offset = 0, String? status = 'posted',});
 
   /// Fetches a specific job by its ID.
   Future<Job> getJobById(String id);

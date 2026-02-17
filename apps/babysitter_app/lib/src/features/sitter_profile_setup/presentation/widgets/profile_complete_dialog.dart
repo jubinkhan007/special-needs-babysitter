@@ -149,9 +149,9 @@ class _ProfileCompleteDialogContent extends StatelessWidget {
                       ),
                       elevation: 0,
                     ),
-                    child: Column(
+                    child: const Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Text(
                           'Continue',
                           style: TextStyle(

@@ -12,7 +12,7 @@ class WalletBalance {
   String get formattedBalance {
     final formatted = balanceInDollars?.trim();
     if (formatted != null && formatted.isNotEmpty) {
-      return '\$${formatted}';
+      return '\$$formatted';
     }
     return _formatFromCents(balanceCents);
   }

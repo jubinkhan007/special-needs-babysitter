@@ -159,7 +159,7 @@ class CallController extends Notifier<CallState> {
         developer.log('Outgoing polling error: $e', name: 'Calls');
         if (attempts >= maxAttempts) {
           timer.cancel();
-          state = CallError(message: 'Connection lost');
+          state = const CallError(message: 'Connection lost');
           _cleanup();
         }
       }

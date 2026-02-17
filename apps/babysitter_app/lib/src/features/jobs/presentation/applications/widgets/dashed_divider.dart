@@ -13,8 +13,10 @@ class DashedDivider extends StatelessWidget {
         const dashHeight = AppTokens.dashHeight;
         final dashCount = (boxWidth / (2 * dashWidth)).floor();
         return Flex(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          direction: Axis.horizontal,
           children: List.generate(dashCount, (_) {
-            return SizedBox(
+            return const SizedBox(
               width: dashWidth,
               height: dashHeight,
               child: DecoratedBox(
@@ -22,8 +24,6 @@ class DashedDivider extends StatelessWidget {
               ),
             );
           }),
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          direction: Axis.horizontal,
         );
       },
     );

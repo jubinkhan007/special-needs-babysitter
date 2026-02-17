@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
 class SkillChip extends StatelessWidget {
   final String label;

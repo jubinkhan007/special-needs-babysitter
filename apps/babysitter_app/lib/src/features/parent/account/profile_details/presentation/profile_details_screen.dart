@@ -122,7 +122,7 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       return;
                     }
 
-                    if (photoUrl == null || photoUrl.isEmpty) {
+                    if (photoUrl.isEmpty) {
                       if (context.mounted) {
                         AppToast.show(context,
                             const SnackBar(content: Text('Upload failed.')));

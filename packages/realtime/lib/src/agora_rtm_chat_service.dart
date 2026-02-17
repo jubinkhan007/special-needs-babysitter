@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:agora_rtm/agora_rtm.dart';
@@ -41,7 +40,7 @@ class AgoraRtmChatService implements ChatService {
       final (status, client) = await RTM(
         _appId,
         'special_needs_sitters_user',
-        config: RtmConfig(),
+        config: const RtmConfig(),
       );
       if (status.error) {
         throw Exception(
@@ -63,7 +62,7 @@ class AgoraRtmChatService implements ChatService {
             _eventsController.add(MessageReceivedEvent(
               peerId: publisher,
               text: event.message.toString(),
-            ));
+            ),);
           }
         },
         linkState: (LinkStateEvent event) {

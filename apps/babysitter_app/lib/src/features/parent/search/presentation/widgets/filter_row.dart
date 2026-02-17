@@ -33,8 +33,8 @@ class FilterRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppUiTokens.radiusCircle),
                 border: Border.all(color: AppUiTokens.borderColor),
               ),
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   Text(
                     'Filter By:',
                     style: TextStyle(

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../theme/app_tokens.dart';
 import '../../domain/job_details.dart'; // To use JobDetails and Address
-import '../../domain/job.dart';
 import '../../data/jobs_data_di.dart';
 import '../providers/jobs_providers.dart';
 import 'package:go_router/go_router.dart';

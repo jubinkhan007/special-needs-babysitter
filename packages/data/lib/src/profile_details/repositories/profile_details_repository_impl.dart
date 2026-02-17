@@ -198,7 +198,7 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
 
   @override
   Future<void> updateProfileDetails(String userId, Map<String, dynamic> data,
-      {int step = 1}) async {
+      {int step = 1,}) async {
     await _remoteDataSource.updateProfileDetails(data, step: step);
   }
 
@@ -359,9 +359,9 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
 
   @override
   Future<void> updateChild(
-      String childId, Map<String, dynamic> childData) async {
+      String childId, Map<String, dynamic> childData,) async {
     await _remoteDataSource.updateChild(
-        childId, _prepareChildPayload(childData));
+        childId, _prepareChildPayload(childData),);
   }
 
   @override

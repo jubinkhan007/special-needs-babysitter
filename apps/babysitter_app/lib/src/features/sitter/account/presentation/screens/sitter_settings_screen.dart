@@ -116,7 +116,7 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
                           _locationEnabled = value;
                         });
                       },
-                      activeColor: SitterAccountUI.accentBlue,
+                      activeThumbColor: SitterAccountUI.accentBlue,
                       activeTrackColor:
                           SitterAccountUI.accentBlue.withOpacity(0.2),
                     ),

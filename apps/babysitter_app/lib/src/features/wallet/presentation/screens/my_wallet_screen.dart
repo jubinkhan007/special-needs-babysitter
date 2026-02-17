@@ -9,7 +9,6 @@ import '../../../../routing/routes.dart';
 import '../../../sitter/wallet/presentation/providers/stripe_connect_providers.dart';
 import '../../../sitter/wallet/data/models/stripe_connect_status.dart';
 import '../../domain/entities/wallet_balance.dart';
-import '../controllers/wallet_controller.dart';
 import '../providers/wallet_providers.dart';
 import '../widgets/wallet_styles.dart';
 import '../widgets/withdraw_bottom_sheet.dart';

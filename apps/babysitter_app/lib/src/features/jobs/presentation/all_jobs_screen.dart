@@ -39,7 +39,7 @@ class AllJobsScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.work_off_outlined,
                       size: 64,
                       color: AppTokens.textSecondary,
@@ -94,7 +94,7 @@ class AllJobsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline,
+                  const Icon(Icons.error_outline,
                       size: 48, color: AppTokens.textSecondary),
                   const SizedBox(height: 16),
                   Text(

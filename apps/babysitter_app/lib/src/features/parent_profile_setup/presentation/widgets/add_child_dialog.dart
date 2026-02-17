@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../../../common/theme/auth_theme.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../../auth/presentation/widgets/auth_input_field.dart';
 
 class AddChildDialog extends StatefulWidget {
   final Map<String, dynamic>? existingChild;
@@ -413,7 +412,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
                         )),
                     // Other's Checkbox
                     _buildSquareCheckbox(
-                      "Other\'s",
+                      "Other's",
                       _otherEquipmentSelected,
                       (v) => setState(() => _otherEquipmentSelected = v!),
                     ),
@@ -582,8 +581,9 @@ class _AddChildDialogState extends State<AddChildDialog> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                if (hint.endsWith('*'))
+                if (hint.endsWith('*')) {
                   return 'Required'; // Simple required check
+                }
                 return null;
               }
               if (minLength != null && value.trim().length < minLength) {

@@ -105,14 +105,14 @@ class JobMetaRows extends StatelessWidget {
         children: [
           TextSpan(
             text: familyName,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppTokens.textPrimary,
               fontWeight: FontWeight.w500,
             ),
           ),
           TextSpan(
             text: ' ($childrenCount Children)',
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.secondary,
               fontWeight: FontWeight.w500,
             ),
@@ -136,23 +136,23 @@ class JobMetaRows extends StatelessWidget {
             children: [
               TextSpan(
                 text: child.name,
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppTokens.textPrimary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               TextSpan(
                 text: ' (${child.age} Years)',
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.secondary,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               if (!isLast)
-                TextSpan(
+                const TextSpan(
                   text: ' | ',
                   style: TextStyle(
-                    color: const Color(0xFFD0D5DD),
+                    color: Color(0xFFD0D5DD),
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -173,14 +173,14 @@ class JobMetaRows extends StatelessWidget {
         children: [
           TextSpan(
             text: location,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppTokens.textPrimary,
               fontWeight: FontWeight.w400,
             ),
           ),
           TextSpan(
             text: ' ($distance)',
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.secondary,
               fontWeight: FontWeight.w400,
             ),

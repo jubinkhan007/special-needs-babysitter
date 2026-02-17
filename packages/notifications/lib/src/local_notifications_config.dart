@@ -21,7 +21,7 @@ class LocalNotificationsConfig {
       requestSoundPermission: false,
     );
 
-    final initSettings = InitializationSettings(
+    const initSettings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
     );

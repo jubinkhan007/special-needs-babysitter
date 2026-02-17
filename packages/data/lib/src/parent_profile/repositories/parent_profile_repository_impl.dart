@@ -29,13 +29,13 @@ class ParentProfileRepositoryImpl implements ParentProfileRepository {
 
         // Get Presigned URL
         print(
-            'DEBUG REPO: Getting presigned URL for $fileName, contentType=$contentType');
+            'DEBUG REPO: Getting presigned URL for $fileName, contentType=$contentType',);
         final presignRes = await _remoteDataSource.getPresignedUrl(
           fileName: fileName,
           contentType: contentType,
         );
         print(
-            'DEBUG REPO: Got presigned URL: ${presignRes.uploadUrl}, publicUrl: ${presignRes.publicUrl}');
+            'DEBUG REPO: Got presigned URL: ${presignRes.uploadUrl}, publicUrl: ${presignRes.publicUrl}',);
 
         // Upload File
         print('DEBUG REPO: Uploading file...');
@@ -52,7 +52,7 @@ class ParentProfileRepositoryImpl implements ParentProfileRepository {
 
       // 2. Call API to update profile step
       print(
-          'DEBUG REPO: Calling updateParentProfile with step=$step, data=$data');
+          'DEBUG REPO: Calling updateParentProfile with step=$step, data=$data',);
       await _remoteDataSource.updateParentProfile(step: step, data: data);
       print('DEBUG REPO: updateParentProfile succeeded');
     } catch (e, st) {

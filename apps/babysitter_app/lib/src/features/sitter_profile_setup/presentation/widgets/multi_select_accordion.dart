@@ -67,9 +67,9 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
                 children: [
                   Text(
                     widget.title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
-                      color: const Color(
+                      color: Color(
                           0xFF667085), // Grey text per placeholder look
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w400,
@@ -150,12 +150,12 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
               onTap: widget.onOtherTap,
               borderRadius:
                   const BorderRadius.vertical(bottom: Radius.circular(12)),
-              child: Padding(
+              child: const Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Other',
                         style: TextStyle(
@@ -166,7 +166,7 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
                         ),
                       ),
                     ),
-                    const Icon(Icons.add, color: Color(0xFF344054)),
+                    Icon(Icons.add, color: Color(0xFF344054)),
                   ],
                 ),
               ),

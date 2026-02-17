@@ -192,55 +192,55 @@ class OnboardingStatusCard extends StatelessWidget {
   _StatusConfig _getStatusConfig(StripeConnectStatusType statusType) {
     switch (statusType) {
       case StripeConnectStatusType.notStarted:
-        return _StatusConfig(
+        return const _StatusConfig(
           icon: Icons.account_balance_wallet_outlined,
-          iconColor: const Color(0xFF6B7680),
-          backgroundColor: const Color(0xFFF5F5F5),
+          iconColor: Color(0xFF6B7680),
+          backgroundColor: Color(0xFFF5F5F5),
           title: 'Set Up Payouts',
           subtitle: 'Not started',
           description:
               'Connect your bank account to receive payments for completed jobs. This process is powered by Stripe for secure and fast transfers.',
           buttonText: 'Set Up Payouts',
-          buttonColor: const Color(0xFF89CFF0),
+          buttonColor: Color(0xFF89CFF0),
         );
 
       case StripeConnectStatusType.pending:
-        return _StatusConfig(
+        return const _StatusConfig(
           icon: Icons.hourglass_empty_rounded,
-          iconColor: const Color(0xFFFF9800),
-          backgroundColor: const Color(0xFFFFF3E0),
+          iconColor: Color(0xFFFF9800),
+          backgroundColor: Color(0xFFFFF3E0),
           title: 'Verification Pending',
           subtitle: 'In review',
           description:
               'Your information has been submitted and is being reviewed. This usually takes 1-2 business days. You\'ll be notified once verified.',
           buttonText: 'Continue Setup',
-          buttonColor: const Color(0xFFFF9800),
+          buttonColor: Color(0xFFFF9800),
         );
 
       case StripeConnectStatusType.restricted:
-        return _StatusConfig(
+        return const _StatusConfig(
           icon: Icons.warning_amber_rounded,
-          iconColor: const Color(0xFFFF9800),
-          backgroundColor: const Color(0xFFFFF3E0),
+          iconColor: Color(0xFFFF9800),
+          backgroundColor: Color(0xFFFFF3E0),
           title: 'Action Required',
           subtitle: 'Incomplete setup',
           description:
               'Additional information is needed to complete your payout setup. Please continue where you left off to start receiving payments.',
           buttonText: 'Continue Setup',
-          buttonColor: const Color(0xFFFF9800),
+          buttonColor: Color(0xFFFF9800),
         );
 
       case StripeConnectStatusType.complete:
-        return _StatusConfig(
+        return const _StatusConfig(
           icon: Icons.check_circle_outline_rounded,
-          iconColor: const Color(0xFF4CAF50),
-          backgroundColor: const Color(0xFFE8F5E9),
+          iconColor: Color(0xFF4CAF50),
+          backgroundColor: Color(0xFFE8F5E9),
           title: 'Payouts Active',
           subtitle: 'Ready to receive payments',
           description:
               'Your account is fully set up! Earnings from completed jobs will be automatically transferred to your bank account.',
           buttonText: 'View Dashboard',
-          buttonColor: const Color(0xFF4CAF50),
+          buttonColor: Color(0xFF4CAF50),
         );
     }
   }

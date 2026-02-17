@@ -27,7 +27,7 @@ final authDioProvider = Provider<Dio>((ref) {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     },
-  ));
+  ),);
 
   // Add Auth Interceptor to inject Session ID
   dio.interceptors.add(InterceptorsWrapper(
@@ -59,7 +59,7 @@ final authDioProvider = Provider<Dio>((ref) {
         final path = e.requestOptions.path;
         if (path.startsWith('/auth/')) {
           print(
-              'DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh');
+              'DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh',);
           return handler.next(e);
         }
 
@@ -76,7 +76,7 @@ final authDioProvider = Provider<Dio>((ref) {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
               },
-            ));
+            ),);
 
             print('DEBUG: AuthDio calling refresh endpoint...');
             // Manually recreate AuthRemoteDataSource to use its valid logic including DTO parsing
@@ -117,7 +117,7 @@ final authDioProvider = Provider<Dio>((ref) {
 
       return handler.next(e);
     },
-  ));
+  ),);
 
   return dio;
 });
@@ -137,7 +137,7 @@ final profileRemoteDataSourceProvider =
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   print('>>> BUILD profileRepositoryProvider (REAL)');
   return ProfileRepositoryImpl(
-      remoteDataSource: ref.watch(profileRemoteDataSourceProvider));
+      remoteDataSource: ref.watch(profileRemoteDataSourceProvider),);
 });
 
 /// Provider for AuthRepository (REAL implementation)
@@ -194,7 +194,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         // If user data changed (avatar, name, role, etc.), update session
         if (freshUser != session.user) {
           print(
-              'DEBUG: AuthNotifier detected stale session data. Updating session.');
+              'DEBUG: AuthNotifier detected stale session data. Updating session.',);
           final updatedSession = session.copyWith(user: freshUser);
           await ref.read(sessionStoreProvider).saveSession(updatedSession);
           return updatedSession;
@@ -285,7 +285,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
           );
 
       print(
-          'DEBUG: AuthNotifier.verifyOtp success. Session: ${session.accessToken}');
+          'DEBUG: AuthNotifier.verifyOtp success. Session: ${session.accessToken}',);
 
       // PRE-SAVE SESSION: Save initial session so token is available for API calls
       // This fixes the 401 error when fetching using authDio which relies on sessionStore/headers
@@ -299,7 +299,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         // Only fetch if we have a token (which we should)
         user = await profileRepo.getMe();
         print(
-            'DEBUG: AuthNotifier.verifyOtp Fetched Profile: Role=${user.role}');
+            'DEBUG: AuthNotifier.verifyOtp Fetched Profile: Role=${user.role}',);
       } catch (e) {
         print('DEBUG: Failed to fetch profile after OTP: $e');
         // Fallback to session user
@@ -309,7 +309,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       // force update the user object. This handles backend returning default/wrong role.
       if (role != null && user.role != role) {
         print(
-            'DEBUG: AuthNotifier FORCE PATCHING role from ${user.role} to $role');
+            'DEBUG: AuthNotifier FORCE PATCHING role from ${user.role} to $role',);
         user = user.copyWith(role: role);
       }
 
@@ -342,7 +342,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       await ref.read(sessionStoreProvider).saveSession(updatedSession);
       state = AsyncValue.data(updatedSession);
       print(
-          'DEBUG: AuthNotifier.refreshProfile success. isProfileComplete=${freshUser.isProfileComplete}');
+          'DEBUG: AuthNotifier.refreshProfile success. isProfileComplete=${freshUser.isProfileComplete}',);
     } catch (e) {
       print('DEBUG: AuthNotifier.refreshProfile failed: $e');
       // If we can't refresh, keep the state as is
@@ -386,7 +386,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       }
     } catch (e, st) {
       developer.log('Failed to register FCM token: $e',
-          name: 'Auth', stackTrace: st);
+          name: 'Auth', stackTrace: st,);
       _logFcmFlowAuth('_registerFcmToken failed with error=$e');
     } finally {
       _isRegisteringFcmToken = false;
@@ -408,7 +408,7 @@ final registrationRemoteDataSourceProvider =
 /// Provider for RegistrationRepository
 final registrationRepositoryProvider = Provider<RegistrationRepository>((ref) {
   return RegistrationRepositoryImpl(
-      ref.watch(registrationRemoteDataSourceProvider));
+      ref.watch(registrationRemoteDataSourceProvider),);
 });
 
 /// Provider for VerifyOtpUseCase

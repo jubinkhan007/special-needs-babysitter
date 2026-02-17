@@ -119,7 +119,7 @@ class NotificationsServiceImpl implements NotificationsService {
       } else {
         await _messaging.deleteToken();
         developer.log('Deleted existing FCM token, requesting new token',
-            name: 'Notifications');
+            name: 'Notifications',);
       }
       final token = await _getTokenWithRetries(
         attempts: _isIOS ? 5 : 3,
@@ -203,7 +203,7 @@ class NotificationsServiceImpl implements NotificationsService {
         // token propagation to complete.
         if (_isIOS) {
           // First, ensure APNS token is available
-          var apnsToken = await _messaging.getAPNSToken();
+          final apnsToken = await _messaging.getAPNSToken();
           if (apnsToken == null || apnsToken.isEmpty) {
             developer.log(
               'iOS APNS token not ready on getToken attempt $attempt/$attempts',
@@ -314,7 +314,7 @@ class NotificationsServiceImpl implements NotificationsService {
       DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title,
       body,
-      NotificationDetails(
+      const NotificationDetails(
         android: AndroidNotificationDetails(
           Constants.notificationChannelId,
           Constants.notificationChannelName,
@@ -322,7 +322,7 @@ class NotificationsServiceImpl implements NotificationsService {
           importance: Importance.high,
           priority: Priority.high,
         ),
-        iOS: const DarwinNotificationDetails(
+        iOS: DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
           presentSound: true,
@@ -349,7 +349,7 @@ class NotificationsServiceImpl implements NotificationsService {
       final type = message.data['type']?.toString().toLowerCase() ?? '';
       developer.log(
           'Skipping notification for call-related payload type: $type',
-          name: 'Notifications');
+          name: 'Notifications',);
       return;
     }
 
@@ -414,7 +414,7 @@ class NotificationsServiceImpl implements NotificationsService {
 
   String _extractBody(RemoteMessage message) {
     final data = message.data;
-    String? body = _firstNonEmpty(
+    final String? body = _firstNonEmpty(
       [
         message.notification?.body,
         data['body']?.toString(),
@@ -534,7 +534,7 @@ class NotificationsServiceImpl implements NotificationsService {
           'projectId="${options.projectId}" '
           'appId="${options.appId}" '
           'senderId="${options.messagingSenderId}" '
-          'apiKey=*${apiKeySuffix}',
+          'apiKey=*$apiKeySuffix',
           name: 'FCM_DIAG',
         );
       }
@@ -544,7 +544,7 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[0/6] Firebase preflight FAILED', error: e, stack: st);
+          step: '[0/6] Firebase preflight FAILED', error: e, stack: st,);
     }
 
     // 1. Check notification permission status
@@ -563,7 +563,7 @@ class NotificationsServiceImpl implements NotificationsService {
       }
     } catch (e, st) {
       _logDiagException(
-          step: '[1/6] Permission check FAILED', error: e, stack: st);
+          step: '[1/6] Permission check FAILED', error: e, stack: st,);
     }
 
     // 2. Check APNS token (iOS only — null on Android)
@@ -583,7 +583,7 @@ class NotificationsServiceImpl implements NotificationsService {
       }
     } catch (e, st) {
       _logDiagException(
-          step: '[2/6] APNS token check FAILED', error: e, stack: st);
+          step: '[2/6] APNS token check FAILED', error: e, stack: st,);
     }
 
     // 3. Check FCM token (use retry logic for more accurate diagnostics)
@@ -611,7 +611,7 @@ class NotificationsServiceImpl implements NotificationsService {
       }
     } catch (e, st) {
       _logDiagException(
-          step: '[3/6] FCM token retrieval FAILED', error: e, stack: st);
+          step: '[3/6] FCM token retrieval FAILED', error: e, stack: st,);
       if (e is FirebaseException &&
           (e.message?.contains('AUTHENTICATION_FAILED') ?? false)) {
         developer.log(
@@ -647,7 +647,7 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[4/6] Auto-init check FAILED', error: e, stack: st);
+          step: '[4/6] Auto-init check FAILED', error: e, stack: st,);
     }
 
     // 5. Check current app state tokens from plugin cache
@@ -659,7 +659,7 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[5/6] Token snapshot FAILED', error: e, stack: st);
+          step: '[5/6] Token snapshot FAILED', error: e, stack: st,);
     }
 
     // 6. Fire a test local notification to verify local notifications work
@@ -676,7 +676,7 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[6/6] Test local notification FAILED', error: e, stack: st);
+          step: '[6/6] Test local notification FAILED', error: e, stack: st,);
     }
 
     developer.log('=== FCM DIAGNOSTICS END ===', name: 'FCM_DIAG');

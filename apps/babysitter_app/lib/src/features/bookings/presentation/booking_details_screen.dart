@@ -274,14 +274,14 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                     }
                   },
                   style: OutlinedButton.styleFrom(
-                    minimumSize: Size(double.infinity, AppTokens.buttonHeight),
-                    side: BorderSide(color: AppTokens.primaryBlue),
+                    minimumSize: const Size(double.infinity, AppTokens.buttonHeight),
+                    side: const BorderSide(color: AppTokens.primaryBlue),
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(AppTokens.buttonRadius),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Message',
                     style: TextStyle(
                       color: AppTokens.primaryBlue,
@@ -296,7 +296,7 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
                 child: ElevatedButton(
                   onPressed: () => _cancelBooking(details.id),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, AppTokens.buttonHeight),
+                    minimumSize: const Size(double.infinity, AppTokens.buttonHeight),
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius:

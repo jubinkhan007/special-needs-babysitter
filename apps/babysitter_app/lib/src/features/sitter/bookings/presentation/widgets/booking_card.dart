@@ -188,7 +188,7 @@ class BookingCard extends StatelessWidget {
             // Family name with icon
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.people_outline,
                   size: 18,
                   color: AppColors.textSecondary,
@@ -207,7 +207,7 @@ class BookingCard extends StatelessWidget {
             // Location with icon
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on_outlined,
                   size: 18,
                   color: AppColors.textSecondary,

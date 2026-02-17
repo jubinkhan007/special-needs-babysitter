@@ -290,14 +290,14 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                               .toggleNoBookings(val);
                         },
                         // Active State (ON)
-                        activeColor: Colors.white, // Thumb
+                        activeThumbColor: Colors.white, // Thumb
                         activeTrackColor: _primaryBlue, // Track
                         // Inactive State (OFF)
                         inactiveThumbColor: Colors.white,
                         inactiveTrackColor:
                             const Color(0xFFEAECF0), // Light Grey
                         trackOutlineColor:
-                            MaterialStateProperty.all(Colors.transparent),
+                            WidgetStateProperty.all(Colors.transparent),
                       ),
                     ],
                   ),

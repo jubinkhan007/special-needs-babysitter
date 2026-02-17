@@ -117,7 +117,7 @@ class ActiveBookingDetailsScreen extends ConsumerWidget {
 
                 // 2. Live Tracking Section
             SliverPadding(
-              padding: EdgeInsets.fromLTRB(
+              padding: const EdgeInsets.fromLTRB(
                 AppTokens.detailsHorizontalPadding,
                 AppTokens.detailsSectionTopGap,
                 AppTokens.detailsHorizontalPadding,

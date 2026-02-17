@@ -16,7 +16,7 @@ class FilterCheckboxRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: InkWell(
         onTap: () => onChanged(!isChecked),
         borderRadius: BorderRadius.circular(4),

@@ -42,7 +42,7 @@ class AppRadioRow extends StatelessWidget {
                       child: Container(
                         width: 12.w,
                         height: 12.w,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppTokens.primaryBlue,
                         ),

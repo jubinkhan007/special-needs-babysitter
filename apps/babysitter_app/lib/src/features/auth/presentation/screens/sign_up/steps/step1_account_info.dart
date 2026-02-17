@@ -319,12 +319,12 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                     GestureDetector(
                       onTap: () {},
                       child: RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
+                        text: const TextSpan(
+                          style: TextStyle(
                             fontSize: 13,
                             color: Color(0xFF4A4A4A),
                           ),
-                          children: const [
+                          children: [
                             TextSpan(text: 'Agree with '),
                             TextSpan(
                               text: 'Terms & Conditions',

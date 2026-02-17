@@ -193,9 +193,9 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                             ),
                           ),
                           // Custom Up/Down Chevrons
-                          Column(
+                          const Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
+                            children: [
                               Icon(Icons.expand_less,
                                   size: 16, color: Color(0xFF667085)),
                               Icon(Icons.expand_more,

@@ -42,7 +42,7 @@ class ActiveBottomCtaBar extends StatelessWidget {
     return ElevatedButton(
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, AppTokens.bottomCtaHeight),
+        minimumSize: const Size(double.infinity, AppTokens.bottomCtaHeight),
         backgroundColor: AppTokens.primaryBlue,
         elevation: 0,
         shape: RoundedRectangleBorder(

@@ -84,10 +84,10 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   static List<BoxShadow> get appBarShadow => [
-        BoxShadow(
+        const BoxShadow(
           color: shadowColor,
           blurRadius: 8,
-          offset: const Offset(0, 2),
+          offset: Offset(0, 2),
         ),
       ];
 
@@ -146,7 +146,7 @@ class AppTokens {
   // If you have SF Pro in pubspec, set fontFamily here; else Flutter default is fine.
   static const String? fontFamily = null;
 
-  static TextStyle get appBarTitle => TextStyle(
+  static TextStyle get appBarTitle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 17,
         fontWeight: FontWeight.w500,
@@ -154,7 +154,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get tabSelected => TextStyle(
+  static TextStyle get tabSelected => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w600,
@@ -162,7 +162,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get tabUnselected => TextStyle(
+  static TextStyle get tabUnselected => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w500,
@@ -170,7 +170,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get cardName => TextStyle(
+  static TextStyle get cardName => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w700,
@@ -178,7 +178,7 @@ class AppTokens {
         height: 1.15,
       );
 
-  static TextStyle get cardMeta => TextStyle(
+  static TextStyle get cardMeta => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
@@ -186,7 +186,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get statLabel => TextStyle(
+  static TextStyle get statLabel => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
@@ -194,7 +194,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get statValue => TextStyle(
+  static TextStyle get statValue => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w700,
@@ -202,7 +202,7 @@ class AppTokens {
         height: 1.1,
       );
 
-  static TextStyle get scheduledText => TextStyle(
+  static TextStyle get scheduledText => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
@@ -210,7 +210,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get chipText => TextStyle(
+  static TextStyle get chipText => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -218,7 +218,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get buttonText => TextStyle(
+  static TextStyle get buttonText => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -253,7 +253,7 @@ class AppTokens {
   static const double skillTagVerticalPadding = 6;
   static const double skillTagHorizontalPadding = 12;
 
-  static TextStyle get sectionTitle => TextStyle(
+  static TextStyle get sectionTitle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
@@ -261,7 +261,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get detailKey => TextStyle(
+  static TextStyle get detailKey => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -269,7 +269,7 @@ class AppTokens {
         height: 1.5, // Taller line height for readability
       );
 
-  static TextStyle get detailValue => TextStyle(
+  static TextStyle get detailValue => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w600,
@@ -277,7 +277,7 @@ class AppTokens {
         height: 1.5,
       );
 
-  static TextStyle get totalCostLabel => TextStyle(
+  static TextStyle get totalCostLabel => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w500,
@@ -285,7 +285,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get totalCostValue => TextStyle(
+  static TextStyle get totalCostValue => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 24,
         fontWeight: FontWeight.w700,
@@ -293,7 +293,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get skillTagStyle => TextStyle(
+  static TextStyle get skillTagStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w500,
@@ -325,7 +325,7 @@ class AppTokens {
   static const double bottomBarPadding = 16;
   // bottom action bar often uses screen horizontal padding (24)
 
-  static TextStyle get formHintStyle => TextStyle(
+  static TextStyle get formHintStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -333,7 +333,7 @@ class AppTokens {
         height: 1.4,
       );
 
-  static TextStyle get formTextStyle => TextStyle(
+  static TextStyle get formTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -341,7 +341,7 @@ class AppTokens {
         height: 1.4,
       );
 
-  static TextStyle get subLabelStyle => TextStyle(
+  static TextStyle get subLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -349,7 +349,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get helperTextStyle => TextStyle(
+  static TextStyle get helperTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w400,
@@ -357,7 +357,7 @@ class AppTokens {
         height: 1.4,
       );
 
-  static TextStyle get uploadTileTextStyle => TextStyle(
+  static TextStyle get uploadTileTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 11,
         fontWeight: FontWeight.w500,
@@ -365,7 +365,7 @@ class AppTokens {
         height: 1.2, // Tighter for wrapping
       );
 
-  static TextStyle get outlinedButtonTextStyle => TextStyle(
+  static TextStyle get outlinedButtonTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w600,
@@ -395,7 +395,7 @@ class AppTokens {
   static const double bottomCtaRadius = 12.0;
 
   // Typography
-  static TextStyle get activeSectionTitle => TextStyle(
+  static TextStyle get activeSectionTitle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
@@ -403,7 +403,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get linkTextStyle => TextStyle(
+  static TextStyle get linkTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
@@ -411,7 +411,7 @@ class AppTokens {
         height: 1.2,
       );
 
-  static TextStyle get kvLabel => TextStyle(
+  static TextStyle get kvLabel => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -419,7 +419,7 @@ class AppTokens {
         height: 1.5,
       );
 
-  static TextStyle get kvValue => TextStyle(
+  static TextStyle get kvValue => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight
@@ -428,7 +428,7 @@ class AppTokens {
         height: 1.5,
       );
 
-  static TextStyle get kvValueStrong => TextStyle(
+  static TextStyle get kvValueStrong => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w600,
@@ -464,7 +464,7 @@ class AppTokens {
   static const Color routeDotBorderColor = Color(0xFFE4F4FC);
   static const Color routeConnectorColor = Color(0xFFE4F4FC);
 
-  static TextStyle get routeAddressTextStyle => TextStyle(
+  static TextStyle get routeAddressTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -472,7 +472,7 @@ class AppTokens {
         height: 1.4,
       );
 
-  static TextStyle get routeTimeTextStyle => TextStyle(
+  static TextStyle get routeTimeTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
@@ -490,7 +490,7 @@ class AppTokens {
 
   // App Bar
   static const Color jobsAppBarBg = Color(0xFFF3FAFD);
-  static TextStyle get jobsAppBarTitleStyle => TextStyle(
+  static TextStyle get jobsAppBarTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 17,
         fontWeight: FontWeight.w500,
@@ -517,7 +517,7 @@ class AppTokens {
     ),
   ];
   static const double jobsCardPadding = 16.0;
-  static TextStyle get jobsCardTitleStyle => TextStyle(
+  static TextStyle get jobsCardTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w700,
@@ -528,7 +528,7 @@ class AppTokens {
   static const Color jobChipBgActive =
       Color(0xFFE0F2F1); // Light blue/teal pill
   static const Color jobChipDotActive = Color(0xFF00B0FF); // Vivid blue dot
-  static TextStyle get jobChipTextStyle => TextStyle(
+  static TextStyle get jobChipTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w500,
@@ -541,14 +541,14 @@ class AppTokens {
   // Info Grid
   static const Color jobInfoIconColor = Color(0xFF8A949C);
   static const double jobInfoIconSize = 18.0;
-  static TextStyle get jobInfoLabelStyle => TextStyle(
+  static TextStyle get jobInfoLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w600,
         color: textPrimary,
         height: 1.3,
       );
-  static TextStyle get jobInfoValueStyle => TextStyle(
+  static TextStyle get jobInfoValueStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
@@ -570,7 +570,7 @@ class AppTokens {
   static const double jobButtonRadius = 8.0;
   static const Color jobPrimaryBtnBg = Color(0xFF89CFF0); // Light blue
   static const Color jobSecondaryBtnBg = Color(0xFF1A2B3C); // Dark Navy
-  static TextStyle get jobButtonTextStyle => TextStyle(
+  static TextStyle get jobButtonTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
@@ -589,38 +589,38 @@ class AppTokens {
       120.0; // Space for sticky bottom bar
 
   // Typography
-  static TextStyle get jobDetailsTitleStyle => TextStyle(
+  static TextStyle get jobDetailsTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 22,
         fontWeight: FontWeight.w700,
         color: textPrimary,
         height: 1.2,
       );
-  static TextStyle get jobDetailsSubtitleStyle => TextStyle(
+  static TextStyle get jobDetailsSubtitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: textSecondary,
       );
-  static TextStyle get jobDetailsSectionTitleStyle => TextStyle(
+  static TextStyle get jobDetailsSectionTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w600,
         color: textPrimary,
       );
-  static TextStyle get jobDetailsLabelStyle => TextStyle(
+  static TextStyle get jobDetailsLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: textSecondary, // Grey
       );
-  static TextStyle get jobDetailsValueStyle => TextStyle(
+  static TextStyle get jobDetailsValueStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: textPrimary, // Dark
       );
-  static TextStyle get jobDetailsParagraphStyle => TextStyle(
+  static TextStyle get jobDetailsParagraphStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
@@ -643,14 +643,14 @@ class AppTokens {
   static const Color jobDetailsOutlinedBorderColor = Color(0xFFE0E0E0);
   static const Color jobDetailsOutlinedTextColor = Color(0xFF1A2B3C);
 
-  static TextStyle get jobDetailsButtonTextStyle => TextStyle(
+  static TextStyle get jobDetailsButtonTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: Colors.white,
         height: 1.2,
       );
-  static TextStyle get jobDetailsOutlinedTextStyle => TextStyle(
+  static TextStyle get jobDetailsOutlinedTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
@@ -671,43 +671,43 @@ class AppTokens {
   static const Color applicationsInnerDividerColor = Color(0xFFF0F0F0);
 
   // Typography
-  static TextStyle get applicationsNameStyle => TextStyle(
+  static TextStyle get applicationsNameStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: textPrimary,
       );
-  static TextStyle get applicationsMetaStyle => TextStyle(
+  static TextStyle get applicationsMetaStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: textSecondary, // Grey
       );
-  static TextStyle get applicationsJobTitleStyle => TextStyle(
+  static TextStyle get applicationsJobTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: textPrimary,
       );
-  static TextStyle get applicationsScheduledStyle => TextStyle(
+  static TextStyle get applicationsScheduledStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: textPrimary, // Darker than meta
       );
-  static TextStyle get applicationsStatLabelStyle => TextStyle(
+  static TextStyle get applicationsStatLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: textSecondary, // Grey
       );
-  static TextStyle get applicationsStatValueStyle => TextStyle(
+  static TextStyle get applicationsStatValueStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w700,
         color: textPrimary,
       );
-  static TextStyle get applicationsRatingTextStyle => TextStyle(
+  static TextStyle get applicationsRatingTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
@@ -717,7 +717,7 @@ class AppTokens {
   // Chip (Application specific)
   static const Color applicationChipBg = Color(0xFFFCE4F4); // Pink/Lavender
   static const Color applicationChipDot = Color(0xFFD3009B); // Pink/Magenta
-  static TextStyle get applicationChipTextStyle => TextStyle(
+  static TextStyle get applicationChipTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -741,30 +741,30 @@ class AppTokens {
   static const double dashLength = 4.0;
 
   // Typography
-  static TextStyle get sectionTitleStyle => TextStyle(
+  static TextStyle get sectionTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF111827), // Dark Title
+        color: Color(0xFF111827), // Dark Title
       );
-  static TextStyle get bodyParagraphStyle => TextStyle(
+  static TextStyle get bodyParagraphStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280), // Body/Grey
+        color: Color(0xFF6B7280), // Body/Grey
         height: 1.5,
       );
-  static TextStyle get transportLabelStyle => TextStyle(
+  static TextStyle get transportLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF374151), // Darker Grey/Label
+        color: Color(0xFF374151), // Darker Grey/Label
       );
-  static TextStyle get transportValueStyle => TextStyle(
+  static TextStyle get transportValueStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280), // Body/Grey
+        color: Color(0xFF6B7280), // Body/Grey
         height: 1.5,
       );
 
@@ -777,11 +777,11 @@ class AppTokens {
   static const double rejectSheetHorizontalPadding = 20.0;
   static const Color rejectSheetCloseIconColor = Color(0xFF6B7280);
   static const double rejectSheetCloseIconSize = 24.0;
-  static TextStyle get rejectSheetTitleStyle => TextStyle(
+  static TextStyle get rejectSheetTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF111827),
+        color: Color(0xFF111827),
       );
 
   // Radio Rows
@@ -789,11 +789,11 @@ class AppTokens {
   static const Color rejectRadioSelectedColor = Color(0xFF5EBFC0); // Cyan/Teal
   static const double rejectRadioRowHeight = 52.0;
   static const double rejectRadioGap = 16.0;
-  static TextStyle get rejectRadioTextStyle => TextStyle(
+  static TextStyle get rejectRadioTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF374151),
+        color: Color(0xFF374151),
       );
 
   // Add Other Field
@@ -804,17 +804,17 @@ class AppTokens {
   static const double rejectOtherFieldHeight = 52.0; // Match button height
   static const EdgeInsets rejectOtherFieldPadding =
       EdgeInsets.symmetric(horizontal: 16);
-  static TextStyle get rejectOtherHintStyle => TextStyle(
+  static TextStyle get rejectOtherHintStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF9CA3AF),
+        color: Color(0xFF9CA3AF),
       );
-  static TextStyle get rejectOtherTextStyle => TextStyle(
+  static TextStyle get rejectOtherTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF374151),
+        color: Color(0xFF374151),
       );
   static const Color rejectOtherPlusIconColor = Color(0xFF6B7280);
   static const double rejectOtherPlusIconSize = 20.0;
@@ -824,7 +824,7 @@ class AppTokens {
   static const double rejectSubmitRadius = 12.0;
   static const Color rejectSubmitBg = Color(0xFF89CFF0); // Baby blue
   static const Color rejectSubmitTextColor = Colors.white;
-  static TextStyle get rejectSubmitTextStyle => TextStyle(
+  static TextStyle get rejectSubmitTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18, // Slightly larger for better match
         fontWeight: FontWeight.w600,
@@ -849,41 +849,41 @@ class AppTokens {
       ];
 
   // Typography
-  static TextStyle get accountNameStyle => TextStyle(
+  static TextStyle get accountNameStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get accountEmailStyle => TextStyle(
+  static TextStyle get accountEmailStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
-  static TextStyle get accountLinkStyle => TextStyle(
+  static TextStyle get accountLinkStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF89CFF0),
+        color: Color(0xFF89CFF0),
       );
-  static TextStyle get accountStatNumberStyle => TextStyle(
+  static TextStyle get accountStatNumberStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 32,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get accountStatLabelStyle => TextStyle(
+  static TextStyle get accountStatLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
-  static TextStyle get accountMenuTextStyle => TextStyle(
+  static TextStyle get accountMenuTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
   // Spacing
@@ -926,11 +926,11 @@ class AppTokens {
   static const Color settingsIconColor = Color(0xFF6B7280);
 
   // Typography
-  static TextStyle get settingsTitleStyle => TextStyle(
+  static TextStyle get settingsTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
   // Switch styling
@@ -952,11 +952,11 @@ class AppTokens {
   static const double paymentSectionGapBottom = 12.0;
 
   // Section titles
-  static TextStyle get paymentSectionTitleStyle => TextStyle(
+  static TextStyle get paymentSectionTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
   // Balance card
@@ -970,23 +970,23 @@ class AppTokens {
         ),
       ];
   static const EdgeInsets balanceCardPadding = EdgeInsets.all(20);
-  static TextStyle get balanceLabelStyle => TextStyle(
+  static TextStyle get balanceLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
-  static TextStyle get balanceAmountStyle => TextStyle(
+  static TextStyle get balanceAmountStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 32,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get topUpTextStyle => TextStyle(
+  static TextStyle get topUpTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
   static const Color topUpIconColor = Color(0xFF6B7280);
   static const double topUpIconSize = 20.0;
@@ -995,11 +995,11 @@ class AppTokens {
   static const double methodRowHeight = 56.0;
   static const double methodIconCircleSize = 40.0;
   static const Color methodIconCircleBorder = Color(0xFFE5E7EB);
-  static TextStyle get methodTitleStyle => TextStyle(
+  static TextStyle get methodTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
   static const Color methodPlusColor = Color(0xFF9CA3AF);
   static const double methodPlusSize = 20.0;
@@ -1007,23 +1007,23 @@ class AppTokens {
 
   // Recent activity rows
   static const double activityRowHeight = 64.0;
-  static TextStyle get activityTitleStyle => TextStyle(
+  static TextStyle get activityTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get activityDateStyle => TextStyle(
+  static TextStyle get activityDateStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
-  static TextStyle get activityAmountStyle => TextStyle(
+  static TextStyle get activityAmountStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
   static const double activityLeadingIconSize = 24.0;
   static const Color activityLeadingIconColor = Color(0xFF6B7280);
@@ -1043,25 +1043,25 @@ class AppTokens {
   static const double searchFieldRadius = 12.0;
   static const double searchFieldHeight = 52.0;
   static const Color searchIconColor = Color(0xFF9CA3AF);
-  static TextStyle get searchFieldHintStyle => TextStyle(
+  static TextStyle get searchFieldHintStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF9CA3AF),
+        color: Color(0xFF9CA3AF),
       );
-  static TextStyle get searchFieldTextStyle => TextStyle(
+  static TextStyle get searchFieldTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
   // List header row
-  static TextStyle get listHeaderTextStyle => TextStyle(
+  static TextStyle get listHeaderTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
 
   // Filter pill
@@ -1069,11 +1069,11 @@ class AppTokens {
   static const Color filterPillBorder = Color(0xFFE5E7EB);
   static const double filterPillRadius = 20.0;
   static const double filterPillHeight = 36.0;
-  static TextStyle get filterPillTextStyle => TextStyle(
+  static TextStyle get filterPillTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
   static const Color filterPillIconColor = Color(0xFF6B7280);
 
@@ -1088,59 +1088,59 @@ class AppTokens {
           offset: const Offset(0, 2),
         ),
       ];
-  static TextStyle get savedSitterNameStyle => TextStyle(
+  static TextStyle get savedSitterNameStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get savedSitterLocationStyle => TextStyle(
+  static TextStyle get savedSitterLocationStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
-  static TextStyle get savedStatLabelStyle => TextStyle(
+  static TextStyle get savedStatLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
-  static TextStyle get savedStatValueStyle => TextStyle(
+  static TextStyle get savedStatValueStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get savedPriceBigStyle => TextStyle(
+  static TextStyle get savedPriceBigStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 28,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
-  static TextStyle get savedPriceSuffixStyle => TextStyle(
+  static TextStyle get savedPriceSuffixStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
   static const Color viewProfileButtonBg = Color(0xFF89CFF0);
   static const double viewProfileButtonRadius = 20.0;
-  static TextStyle get viewProfileButtonTextStyle => TextStyle(
+  static TextStyle get viewProfileButtonTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFFFFFFFF),
+        color: Color(0xFFFFFFFF),
       );
   static const Color bookmarkContainerBg = Color(0xFFFFFFFF);
   static const Color bookmarkContainerBorder = Color(0xFFE5E7EB);
   static const Color bookmarkIconColor = Color(0xFF1F2937);
   static const Color ratingStarColor = Color(0xFFFBBF24);
-  static TextStyle get savedRatingTextStyle => TextStyle(
+  static TextStyle get savedRatingTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1156,39 +1156,39 @@ class AppTokens {
   static const double reviewItemDividerThickness = 1.0;
 
   // Typography
-  static TextStyle get reviewsTitleStyle => TextStyle(
+  static TextStyle get reviewsTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 16, // Medium-bold, likely 16 or 18
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
-  static TextStyle get reviewsSummaryStyle => TextStyle(
+  static TextStyle get reviewsSummaryStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
 
-  static TextStyle get reviewerNameStyle => TextStyle(
+  static TextStyle get reviewerNameStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
-  static TextStyle get reviewTimeAgoStyle => TextStyle(
+  static TextStyle get reviewTimeAgoStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 11, // Small grey text
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF9CA3AF),
+        color: Color(0xFF9CA3AF),
       );
 
-  static TextStyle get reviewCommentStyle => TextStyle(
+  static TextStyle get reviewCommentStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF4B5563),
+        color: Color(0xFF4B5563),
         height: 1.5, // Tuned/comfortable line height
       );
 
@@ -1216,40 +1216,40 @@ class AppTokens {
   static const double sheetFieldSpacing = 16.0;
 
   // Typography
-  static TextStyle get sheetTitleStyle => TextStyle(
+  static TextStyle get sheetTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
         height: 1.2,
       );
 
-  static TextStyle get sheetSectionTitleStyle => TextStyle(
+  static TextStyle get sheetSectionTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 15, // Label size
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
-  static TextStyle get sheetFieldHintStyle => TextStyle(
+  static TextStyle get sheetFieldHintStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
 
-  static TextStyle get sheetFieldTextStyle => TextStyle(
+  static TextStyle get sheetFieldTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
-  static TextStyle get sheetCheckboxTextStyle => TextStyle(
+  static TextStyle get sheetCheckboxTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: const Color(0xFF4B5563),
+        color: Color(0xFF4B5563),
       );
 
   // Form Fields (Sheet specific)
@@ -1273,18 +1273,18 @@ class AppTokens {
   static const Color sliderValuePillBg =
       Color(0xFFEAF6FF); // Light blue bg for pill
   static const double sliderValuePillRadius = 12.0;
-  static TextStyle get sheetSliderPillTextStyle => TextStyle(
+  static TextStyle get sheetSliderPillTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       );
 
-  static TextStyle get sheetSliderLabelStyle => TextStyle(
+  static TextStyle get sheetSliderLabelStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 11,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFF6B7280),
+        color: Color(0xFF6B7280),
       );
 
   // Checkbox

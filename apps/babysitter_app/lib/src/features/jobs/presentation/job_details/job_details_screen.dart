@@ -17,7 +17,6 @@ import 'widgets/bottom_action_stack.dart';
 
 import '../../data/jobs_data_di.dart'; // For repository
 import '../providers/jobs_providers.dart';
-import '../../domain/job.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/common_widgets/payment_method_selector.dart';
 import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/bookings_di.dart';

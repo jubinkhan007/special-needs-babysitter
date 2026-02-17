@@ -36,7 +36,7 @@ class MessageThreadTile extends StatelessWidget {
                   imageUrl: uiModel.avatarUrl,
                   isSystem: uiModel.isSystemThread,
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
 
                 // Center Column: Name + Preview
                 Expanded(
@@ -55,7 +55,7 @@ class MessageThreadTile extends StatelessWidget {
                             ),
                           ),
                           if (uiModel.isVerified) ...[
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
                             const VerifiedBadge(),
                           ],
                         ],
@@ -71,7 +71,7 @@ class MessageThreadTile extends StatelessWidget {
                               size: 14,
                               color: _getCallIconColor(uiModel.previewText),
                             ),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
                           ],
                           Expanded(
                             child: Text(
@@ -98,7 +98,7 @@ class MessageThreadTile extends StatelessWidget {
                         style: AppTokens.messageTimeStyle,
                       ),
                       if (uiModel.unreadCount > 0) ...[
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         UnreadBadge(count: uiModel.unreadCount),
                       ],
                     ],

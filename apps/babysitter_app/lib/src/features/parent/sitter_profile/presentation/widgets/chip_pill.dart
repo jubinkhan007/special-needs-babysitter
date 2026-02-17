@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
-import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
 
 class ChipPill extends StatelessWidget {
   final String label;

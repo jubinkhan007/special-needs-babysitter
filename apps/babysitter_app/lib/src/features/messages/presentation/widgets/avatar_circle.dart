@@ -28,7 +28,7 @@ class AvatarCircle extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: isSystem
-          ? Center(
+          ? const Center(
               child: Icon(
                 Icons.chat_bubble_outline_rounded,
                 size: 24,

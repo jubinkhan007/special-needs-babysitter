@@ -19,11 +19,11 @@ class PipPreviewTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTokens.pipBg,
         borderRadius: BorderRadius.circular(AppTokens.pipRadius),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: AppTokens.pipShadowColor,
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: Offset(0, 4),
           ),
         ],
       ),

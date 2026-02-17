@@ -21,7 +21,7 @@ class JobRemoteDataSource {
     } catch (e) {
       if (e is DioException && e.response != null) {
         throw Exception(
-            'Job API Error: ${e.response?.data['message'] ?? e.response?.data.toString() ?? e.message}');
+            'Job API Error: ${e.response?.data['message'] ?? e.response?.data.toString() ?? e.message}',);
       }
       rethrow;
     }
@@ -44,7 +44,7 @@ class JobRemoteDataSource {
         queryParameters: queryParams,
       );
       print(
-          'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}');
+          'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}',);
       if (response.data['success'] == true) {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
         return jobsJson
@@ -127,17 +127,17 @@ class JobRemoteDataSource {
       );
 
       print(
-          'DEBUG: JobRemoteDataSource.inviteSitter response: ${response.data}');
+          'DEBUG: JobRemoteDataSource.inviteSitter response: ${response.data}',);
 
       if (response.data['success'] != true) {
         throw Exception(response.data['message'] ??
             response.data['error'] ??
-            'Failed to invite sitter');
+            'Failed to invite sitter',);
       }
     } catch (e) {
       if (e is DioException) {
         throw Exception(
-            'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}');
+            'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}',);
       }
       rethrow;
     }

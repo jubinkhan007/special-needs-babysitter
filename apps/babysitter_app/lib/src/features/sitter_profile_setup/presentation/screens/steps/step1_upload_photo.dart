@@ -86,10 +86,10 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                         ],
                       ),
                       child: photoPath == null
-                          ? Center(
+                          ? const Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.camera_alt_outlined,
                                     size:
@@ -108,9 +108,9 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                   const SizedBox(height: 48),
 
                   // Title
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'Upload Photo',
                         style: TextStyle(

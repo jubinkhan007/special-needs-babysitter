@@ -66,7 +66,7 @@ class ParentProfileRemoteDataSource {
 
   /// Uploads binary file to the presigned URL
   Future<void> uploadFileToUrl(
-      String url, File file, String contentType) async {
+      String url, File file, String contentType,) async {
     final len = await file.length();
     await _dio.put(
       url,

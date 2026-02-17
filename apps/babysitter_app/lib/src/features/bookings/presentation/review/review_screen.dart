@@ -120,7 +120,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     if (error is DioException) {
       final data = error.response?.data;
       if (data is Map) {
-        final map = Map<String, dynamic>.from(data as Map);
+        final map = Map<String, dynamic>.from(data);
         final message = map['error'] ?? map['message'];
         if (message is String && message.trim().isNotEmpty) {
           return message.trim();
@@ -180,10 +180,10 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
           ),
         ),
         child: _isSubmitting
-            ? SizedBox(
+            ? const SizedBox(
                 width: 20,
                 height: 20,
-                child: const CircularProgressIndicator(
+                child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
@@ -708,9 +708,9 @@ class _UploadTile extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: imageFile == null
-                ? Column(
+                ? const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.cloud_upload_outlined,
                           size: 20, color: Color(0xFF98A2B3)),
                       SizedBox(height: 6),

@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../sitters/data/sitters_data_di.dart';
 import '../../models/sitter_list_item_model.dart';
 import '../filter/models/search_filter_ui_model.dart';
-import 'search_filter_provider.dart';
 
 /// FamilyFutureProvider that fetches sitters based on filter state
 /// Auto-disposes when filters change and refetches automatically

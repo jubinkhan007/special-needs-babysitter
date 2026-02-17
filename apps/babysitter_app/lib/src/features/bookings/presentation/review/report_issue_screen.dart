@@ -48,7 +48,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
           .copyWith(textScaler: const TextScaler.linear(1)),
       child: Scaffold(
         backgroundColor: AppTokens.bg,
-        appBar: BookingDetailsAppBar(
+        appBar: const BookingDetailsAppBar(
           title: 'Report An Issue',
         ),
         bottomNavigationBar: BottomPrimaryBar(
@@ -63,8 +63,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             // 1. Title Header
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
+            const SliverPadding(
+              padding: EdgeInsets.fromLTRB(
                   AppTokens.screenHorizontalPadding,
                   24,
                   AppTokens.screenHorizontalPadding,

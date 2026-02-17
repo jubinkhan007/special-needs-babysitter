@@ -94,7 +94,7 @@ class _ParentBookingStep2ScreenState
   TimeOfDay _parseTimeString(String timeStr) {
     final cleanTime = timeStr.trim();
     final parts = cleanTime.split(' ');
-    if (parts.length != 2) throw FormatException('Invalid time format');
+    if (parts.length != 2) throw const FormatException('Invalid time format');
     
     final timeParts = parts[0].split(':');
     final period = parts[1].toUpperCase();
@@ -126,14 +126,13 @@ class _ParentBookingStep2ScreenState
               onSurface: _titleColor,
               secondary: _progressFill,
             ),
-            dialogBackgroundColor: Colors.white,
             datePickerTheme: DatePickerThemeData(
               headerBackgroundColor: Colors.white,
               headerForegroundColor: _titleColor,
               rangeSelectionBackgroundColor: _progressFill.withOpacity(0.3),
               rangePickerBackgroundColor: Colors.white,
               todayBorder: const BorderSide(color: _progressFill),
-            ),
+            ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: Center(
             child: ConstrainedBox(
