@@ -340,7 +340,7 @@ class _FamilyAvatar extends StatelessWidget {
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       final fullUrl = avatarUrl.startsWith('http')
           ? avatarUrl
-          : '${Constants.baseUrl}${avatarUrl.startsWith('/') ? '' : '/'}$avatarUrl';
+          : '${EnvConfig.apiBaseUrl}${avatarUrl.startsWith('/') ? '' : '/'}$avatarUrl';
 
       return CircleAvatar(
         radius: radius,

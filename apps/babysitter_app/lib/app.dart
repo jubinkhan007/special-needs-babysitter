@@ -15,7 +15,6 @@ import 'src/routing/app_router.dart';
 import 'src/features/sitter/bookings/presentation/providers/session_tracking_providers.dart';
 import 'src/features/calls/services/incoming_call_handler.dart';
 import 'src/features/calls/services/incoming_call_polling_handler.dart';
-import 'src/features/calls/services/chat_call_invite_polling_handler.dart';
 import 'src/features/calls/services/call_notification_service.dart';
 import 'src/features/calls/services/call_navigation_guard.dart';
 import 'src/features/calls/domain/entities/call_enums.dart';
@@ -34,7 +33,6 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   IncomingCallHandler? _incomingCallHandler;
   bool _incomingCallHandlerInitialized = false;
   IncomingCallPollingHandler? _incomingCallPollingHandler;
-  ChatCallInvitePollingHandler? _chatCallInvitePollingHandler;
   bool _isForeground = true;
   bool _notificationsInitialized = false;
   bool _isRegisteringFcmToken = false;
@@ -56,7 +54,6 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(sessionTrackingControllerProvider.notifier).restoreSession();
       _maybeStartIncomingCallPolling();
-      _maybeStartChatInvitePolling();
     });
   }
 
@@ -67,7 +64,6 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     _fcmTokenRetryTimer?.cancel();
     _incomingCallHandler?.dispose();
     _incomingCallPollingHandler?.dispose();
-    _chatCallInvitePollingHandler?.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -77,10 +73,8 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     _isForeground = state == AppLifecycleState.resumed;
     if (!_isForeground) {
       _incomingCallPollingHandler?.stop();
-      _chatCallInvitePollingHandler?.stop();
     } else {
       _maybeStartIncomingCallPolling();
-      _maybeStartChatInvitePolling();
     }
     Future.microtask(() {
       ref
@@ -99,7 +93,6 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
         ref.read(callControllerProvider.notifier).setCurrentUserId(userId);
       }
       _maybeStartIncomingCallPolling();
-      _maybeStartChatInvitePolling();
 
       // Register FCM token when user becomes authenticated
       final wasAuthenticated = previous?.valueOrNull != null;
@@ -171,23 +164,6 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     _incomingCallPollingHandler?.start();
   }
 
-  void _maybeStartChatInvitePolling() {
-    final firebaseReady = ref.read(firebaseReadyProvider);
-    if (firebaseReady || !_isForeground) {
-      _chatCallInvitePollingHandler?.stop();
-      return;
-    }
-
-    final user = ref.read(authNotifierProvider).valueOrNull?.user;
-    if (user == null || !user.isSitter) {
-      _chatCallInvitePollingHandler?.stop();
-      return;
-    }
-
-    _chatCallInvitePollingHandler ??=
-        ref.read(chatCallInvitePollingHandlerProvider(rootNavigatorKey));
-    _chatCallInvitePollingHandler?.start();
-  }
 
   Future<void> _initializeNotificationsAndCallHandler() async {
     if (_notificationsInitialized) return;

@@ -8,7 +8,7 @@ import 'package:notifications/notifications.dart';
 import '../session_store.dart';
 
 import 'package:dio/dio.dart';
-import 'package:core/core.dart'; // For Constants.baseUrl
+import 'package:core/core.dart'; // For EnvConfig.apiBaseUrl
 
 /// Provider for SessionStore
 final sessionStoreProvider = Provider<SessionStore>((ref) {
@@ -20,7 +20,7 @@ final sessionStoreProvider = Provider<SessionStore>((ref) {
 final authDioProvider = Provider<Dio>((ref) {
   // Use centralized base URL from core package
   final dio = Dio(BaseOptions(
-    baseUrl: Constants.baseUrl,
+    baseUrl: EnvConfig.apiBaseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {
@@ -71,7 +71,7 @@ final authDioProvider = Provider<Dio>((ref) {
           try {
             // Create a temporary Dio to avoid circular interceptor issues
             final tempDio = Dio(BaseOptions(
-              baseUrl: Constants.baseUrl,
+              baseUrl: EnvConfig.apiBaseUrl,
               headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:auth/auth.dart'; // For authDioProvider
-import 'package:core/core.dart'; // For Constants.baseUrl
+import 'package:core/core.dart'; // For EnvConfig.apiBaseUrl
 
 import '../services/paypal_payment_service.dart';
 
@@ -9,7 +9,7 @@ import '../services/paypal_payment_service.dart';
 /// Used for GET /payments/paypal/config which doesn't need authentication
 final _publicDioProvider = Provider<Dio>((ref) {
   return Dio(BaseOptions(
-    baseUrl: Constants.baseUrl,
+    baseUrl: EnvConfig.apiBaseUrl,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
     headers: {

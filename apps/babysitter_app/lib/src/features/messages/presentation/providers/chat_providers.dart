@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,8 +35,8 @@ final chatUserProfileProvider = FutureProvider.family.autoDispose<Map<String, dy
   return repository.getUserProfile(userId);
 });
 
-// Chat initialization provider - call this when entering chat feature
-final chatInitProvider = FutureProvider.autoDispose<ChatInitResult>((ref) async {
+// Chat initialization provider - persists for the session (no autoDispose)
+final chatInitProvider = FutureProvider<ChatInitResult>((ref) async {
   print('DEBUG: chatInitProvider initializing...');
   final repository = ref.watch(chatRepositoryProvider);
   final result = await repository.initChat();
@@ -59,11 +58,8 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     final repository = ref.watch(chatRepositoryProvider);
     final chatService = ref.watch(chatServiceProvider);
 
-    try {
-      await repository.initChat();
-    } catch (e) {
-      print('DEBUG: Chat init failed: $e');
-    }
+    // Ensure chat is initialized (cached, won't re-call if already done)
+    await ref.watch(chatInitProvider.future);
 
     // Listen to real-time events for this conversation
     final subscription = chatService.events.listen((event) {
@@ -76,14 +72,9 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
       }
     });
 
-    final poller = Timer.periodic(const Duration(seconds: 5), (_) {
-      ref.invalidateSelf();
-    });
-
     ref.onDispose(() {
       print('DEBUG: ChatMessagesNotifier disposing listener');
       subscription.cancel();
-      poller.cancel();
     });
 
     // Mark conversation as read when viewing
@@ -187,14 +178,14 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
 
 }
 
-// Controller / List Provider
+// Controller / List Provider - persists for session (no autoDispose)
 final chatConversationsProvider =
-    AsyncNotifierProvider.autoDispose<ChatConversationsNotifier, List<Conversation>>(
+    AsyncNotifierProvider<ChatConversationsNotifier, List<Conversation>>(
   ChatConversationsNotifier.new,
 );
 
 class ChatConversationsNotifier
-    extends AutoDisposeAsyncNotifier<List<Conversation>> {
+    extends AsyncNotifier<List<Conversation>> {
   @override
   Future<List<Conversation>> build() async {
     print('DEBUG: ChatConversationsNotifier.build() START');
@@ -214,17 +205,8 @@ class ChatConversationsNotifier
         subscription.cancel();
       });
 
-      final poller = Timer.periodic(const Duration(seconds: 5), (_) {
-        ref.invalidateSelf();
-      });
-      ref.onDispose(poller.cancel);
-
-      final repository = ref.watch(chatRepositoryProvider);
-      try {
-        await repository.initChat();
-      } catch (e) {
-        print('DEBUG: Chat init failed: $e');
-      }
+      // Ensure chat is initialized (cached, won't re-call if already done)
+      await ref.watch(chatInitProvider.future);
 
       print('DEBUG: Reading currentUserProvider...');
       // Ensure chat service is logged in

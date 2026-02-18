@@ -6,13 +6,13 @@ import '../../../search/utils/location_helper.dart';
 import '../../../search/models/sitter_list_item_model.dart';
 
 final parentHomeBookingsProvider =
-    FutureProvider.autoDispose<List<Booking>>((ref) async {
+    FutureProvider<List<Booking>>((ref) async {
   final repository = ref.watch(bookingsRepositoryProvider);
   return repository.getBookings();
 });
 
 final parentHomeSittersProvider =
-    FutureProvider.autoDispose<List<SitterListItemModel>>((ref) async {
+    FutureProvider<List<SitterListItemModel>>((ref) async {
   final repository = ref.watch(sittersRepositoryProvider);
   final (latitude, longitude) =
       await LocationHelper.getLocation(requestPermission: false);

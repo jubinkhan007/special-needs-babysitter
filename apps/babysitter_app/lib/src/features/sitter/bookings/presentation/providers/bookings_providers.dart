@@ -29,8 +29,9 @@ final sitterBookingsProvider =
 });
 
 /// Provider for the sitter's current bookings (active + upcoming).
+/// Persists for session - use ref.invalidate() after mutations.
 final sitterCurrentBookingsProvider =
-    FutureProvider.autoDispose<List<BookingModel>>((ref) async {
+    FutureProvider<List<BookingModel>>((ref) async {
   final repository = ref.watch(bookingsRepositoryProvider);
 
   // Fetch active and upcoming bookings in parallel

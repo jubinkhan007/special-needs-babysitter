@@ -47,6 +47,8 @@ class EnvConfig {
   static Future<bool> tryLoad() async {
     try {
       await dotenv.load(fileName: '.env');
+      print('DEBUG: EnvConfig loaded .env OK. API_BASE_URL=${dotenv.env['API_BASE_URL']}');
+      print('DEBUG: EnvConfig apiBaseUrl getter => $apiBaseUrl');
       return true;
     } catch (e) {
       // .env file not found or invalid

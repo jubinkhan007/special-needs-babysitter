@@ -25,7 +25,7 @@ class IncomingCallPollingHandler {
     if (_isPolling) return;
     _isPolling = true;
     _pollTimer?.cancel();
-    _pollTimer = Timer.periodic(const Duration(seconds: 3), (_) => _poll());
+    _pollTimer = Timer.periodic(const Duration(seconds: 15), (_) => _poll());
     _poll();
     developer.log('IncomingCallPollingHandler started', name: 'Calls');
   }
