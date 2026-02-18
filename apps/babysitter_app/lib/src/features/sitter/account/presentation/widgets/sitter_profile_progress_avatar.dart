@@ -18,9 +18,9 @@ class SitterProfileProgressAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 76,
-      height: 76,
+      height: 86,
       child: Stack(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         children: [
           // Progress Ring
           CustomPaint(
@@ -32,29 +32,32 @@ class SitterProfileProgressAvatar extends StatelessWidget {
             ),
           ),
           // Avatar
-          Container(
-            width: 64,
-            height: 64,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: CircleAvatar(
-                backgroundColor: const Color(0xFFF2F4F7),
-                backgroundImage:
-                    avatarUrl != null ? NetworkImage(avatarUrl!) : null,
-                child: avatarUrl == null
-                    ? Text(
-                        initials,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1D2939),
-                        ),
-                      )
-                    : null,
+          Positioned(
+            top: 6,
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: CircleAvatar(
+                  backgroundColor: const Color(0xFFF2F4F7),
+                  backgroundImage:
+                      avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+                  child: avatarUrl == null
+                      ? Text(
+                          initials,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1D2939),
+                          ),
+                        )
+                      : null,
+                ),
               ),
             ),
           ),

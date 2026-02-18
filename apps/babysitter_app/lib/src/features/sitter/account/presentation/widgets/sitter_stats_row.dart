@@ -55,7 +55,6 @@ class _StatCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 100,
         decoration: SitterAccountUI.cardDecoration,
         padding: const EdgeInsets.all(16),
         child: Column(
