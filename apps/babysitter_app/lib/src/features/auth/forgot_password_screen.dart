@@ -173,7 +173,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
                       // Subtitle
                       Text(
-                        'Enter Your Email Address or Phone Number to Reset Your Password',
+                        'Enter your email or phone number to reset your password. We will send you a reset link using whichever method you provide.',
                         style: TextStyle(
                           fontSize: 14,
                           color: AuthTheme.textDark.withOpacity(0.6),
