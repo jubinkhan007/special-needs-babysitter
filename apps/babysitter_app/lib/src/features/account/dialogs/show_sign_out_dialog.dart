@@ -6,7 +6,7 @@ import 'sign_out_dialog.dart';
 Future<bool?> showSignOutDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withValues(alpha: 0.5),
     builder: (context) => SignOutDialog(
       onConfirm: () => Navigator.of(context).pop(true),
       onCancel: () => Navigator.of(context).pop(false),

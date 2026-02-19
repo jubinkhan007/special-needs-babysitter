@@ -40,10 +40,10 @@ class AuthTextField extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     final labelColor =
-        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withOpacity(0.8);
+        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withValues(alpha: 0.8);
     final textColor = isDark ? colorScheme.onSurface : AppColors.textPrimary;
     final hintColor =
-        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withOpacity(0.4);
+        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withValues(alpha: 0.4);
     final fillColor = isDark ? colorScheme.surface : Colors.white;
     final borderColor = isDark ? colorScheme.outline : AppColors.inputBorder;
     final focusBorderColor =

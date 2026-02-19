@@ -195,7 +195,7 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
         color: const Color(0xFFE8F4FD),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: AppColors.primary.withOpacity(0.3),
+          color: AppColors.primary.withValues(alpha: 0.3),
         ),
       ),
       child: Column(

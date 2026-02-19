@@ -162,7 +162,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                                   border: Border.all(color: _dividerColor),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
+                                      color: Colors.black.withValues(alpha: 0.1),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     )
@@ -373,7 +373,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
             bottom: 0,
             child: Container(
               color: AppColors.surfaceTint
-                  .withOpacity(0.9), // Slight transparency matching bg
+                  .withValues(alpha: 0.9), // Slight transparency matching bg
               padding: const EdgeInsets.all(24.0),
               child: SafeArea(
                 top: false,
@@ -644,7 +644,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                   decoration = BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.green, width: 1.5),
-                    color: Colors.green.withOpacity(0.1),
+                    color: Colors.green.withValues(alpha: 0.1),
                   );
                 }
 

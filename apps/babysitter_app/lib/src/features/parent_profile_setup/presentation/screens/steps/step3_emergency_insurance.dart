@@ -344,7 +344,7 @@ class _Step3EmergencyAndInsuranceState
                     'Want to add Emergency Contact?',
                     style: TextStyle(
                       fontSize: 14,
-                      color: const Color(0xFF1A1A1A).withOpacity(0.8),
+                      color: const Color(0xFF1A1A1A).withValues(alpha: 0.8),
                     ),
                   ),
                 ],
@@ -383,7 +383,7 @@ class _Step3EmergencyAndInsuranceState
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 2,
                         offset: const Offset(0, 1),
                       ),

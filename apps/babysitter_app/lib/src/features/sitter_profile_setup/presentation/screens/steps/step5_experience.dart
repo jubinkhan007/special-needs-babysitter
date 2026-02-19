@@ -135,14 +135,14 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                   OutlinedButton.icon(
                     onPressed: _pickResume,
                     icon: Icon(Icons.note_add_outlined,
-                        color: _textDark.withOpacity(0.8)),
+                        color: _textDark.withValues(alpha: 0.8)),
                     label: Text(
                       state.resumePath != null
                           ? 'Resume Uploaded (${state.resumePath})'
                           : 'Upload Resume',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        color: _textDark.withOpacity(0.8),
+                        color: _textDark.withValues(alpha: 0.8),
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),
@@ -164,7 +164,7 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                     'PDF or Word documents only',
                     style: TextStyle(
                       fontSize: 14,
-                      color: _textDark.withOpacity(0.5),
+                      color: _textDark.withValues(alpha: 0.5),
                       fontFamily: 'Inter',
                     ),
                   ),
@@ -369,7 +369,7 @@ class _ExperienceForm extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 1),
               ),
@@ -423,7 +423,7 @@ class _ExperienceForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 1),
           ),
@@ -471,7 +471,7 @@ class _ExperienceForm extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 1),
           ),

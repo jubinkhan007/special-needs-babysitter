@@ -24,7 +24,7 @@ class ChatBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppTokens.primaryBlue.withOpacity(0.05),
+                    AppTokens.primaryBlue.withValues(alpha: 0.05),
                     Colors.transparent,
                   ],
                 ),
@@ -42,7 +42,7 @@ class ChatBackground extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppTokens.primaryBlue.withOpacity(0.03),
+                    AppTokens.primaryBlue.withValues(alpha: 0.03),
                     Colors.transparent,
                   ],
                 ),

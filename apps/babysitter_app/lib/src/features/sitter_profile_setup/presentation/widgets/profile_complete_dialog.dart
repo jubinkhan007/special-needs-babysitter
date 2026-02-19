@@ -12,7 +12,7 @@ Future<void> showProfileCompleteDialog(BuildContext context) {
   return showGeneralDialog(
     context: context,
     barrierDismissible: false,
-    barrierColor: Colors.black.withOpacity(0.65),
+    barrierColor: Colors.black.withValues(alpha: 0.65),
     barrierLabel: 'Profile Complete Dialog',
     transitionDuration: const Duration(milliseconds: 200),
     pageBuilder: (context, animation, secondaryAnimation) {
@@ -56,7 +56,7 @@ class _ProfileCompleteDialogContent extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),

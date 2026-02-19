@@ -43,7 +43,7 @@ class AppConfirmDialog extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppTokens.dialogRadius),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

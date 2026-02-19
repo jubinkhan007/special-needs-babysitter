@@ -23,7 +23,7 @@ class AvatarCircle extends StatelessWidget {
         color: isSystem ? AppTokens.systemAvatarBg : Colors.grey.shade200,
         border: isSystem
             ? Border.all(
-                color: AppTokens.primaryBlue.withOpacity(0.3), width: 1)
+                color: AppTokens.primaryBlue.withValues(alpha: 0.3), width: 1)
             : null,
       ),
       clipBehavior: Clip.antiAlias,

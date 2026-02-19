@@ -38,7 +38,7 @@ class StepIndicator extends StatelessWidget {
                 child: Icon(
                   Icons.arrow_back_ios_new,
                   size: 20,
-                  color: AppColors.textPrimary.withOpacity(0.6),
+                  color: AppColors.textPrimary.withValues(alpha: 0.6),
                 ),
               )
             else
@@ -52,7 +52,7 @@ class StepIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400, // Regular weight
-                color: AppColors.textPrimary.withOpacity(0.5), // Lighter gray
+                color: AppColors.textPrimary.withValues(alpha: 0.5), // Lighter gray
               ),
             ),
 
@@ -68,7 +68,7 @@ class StepIndicator extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: AppColors.textPrimary.withOpacity(0.25),
+                      color: AppColors.textPrimary.withValues(alpha: 0.25),
                       width: 1,
                     ),
                   ),
@@ -78,7 +78,7 @@ class StepIndicator extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.textPrimary.withOpacity(0.5),
+                        color: AppColors.textPrimary.withValues(alpha: 0.5),
                       ),
                     ),
                   ),
@@ -101,7 +101,7 @@ class StepIndicator extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isCompleted
                       ? AppColors.secondary
-                      : AppColors.secondary.withOpacity(0.25),
+                      : AppColors.secondary.withValues(alpha: 0.25),
                   borderRadius: BorderRadius.circular(1.5), // Rounded pill
                 ),
               ),

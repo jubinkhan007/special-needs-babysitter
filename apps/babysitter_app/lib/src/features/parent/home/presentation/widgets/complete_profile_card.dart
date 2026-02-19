@@ -23,7 +23,7 @@ class CompleteProfileCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(HomeDesignTokens.cardRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.secondary.withOpacity(0.3),
+            color: AppColors.secondary.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -47,7 +47,7 @@ class CompleteProfileCard extends StatelessWidget {
                 Text(
                   "You're $displayPercent% there! Complete your\nprofile to get better sitter matches.",
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 14,
                     height: 1.4,
                     fontWeight: FontWeight.w400,
@@ -68,7 +68,7 @@ class CompleteProfileCard extends StatelessWidget {
                   painter: _ProgressRingPainter(
                     percentage: clampedPercent,
                     strokeWidth: 6,
-                    backgroundColor: Colors.white.withOpacity(0.25),
+                    backgroundColor: Colors.white.withValues(alpha: 0.25),
                     color: Colors.white,
                   ),
                 ),

@@ -116,7 +116,7 @@ class JobPostStepHeader extends StatelessWidget {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: filled ? _progressFill : _progressTrack.withOpacity(0.5),
+        color: filled ? _progressFill : _progressTrack.withValues(alpha: 0.5),
         shape: BoxShape.circle,
         // Optional active/large border styling
         border: (large && filled)
@@ -125,7 +125,7 @@ class JobPostStepHeader extends StatelessWidget {
         boxShadow: (large && filled)
             ? [
                 BoxShadow(
-                  color: _progressFill.withOpacity(0.3),
+                  color: _progressFill.withValues(alpha: 0.3),
                   blurRadius: 4,
                   spreadRadius: 1,
                 )

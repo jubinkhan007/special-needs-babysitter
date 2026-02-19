@@ -31,7 +31,7 @@ class HomeDesignTokens {
   // Shadows
   static List<BoxShadow> get defaultCardShadow => [
         BoxShadow(
-          color: Colors.black.withOpacity(0.06), // Subtle shadow
+          color: Colors.black.withValues(alpha: 0.06), // Subtle shadow
           blurRadius: 16,
           offset: const Offset(0, 4),
           spreadRadius: 0,
@@ -40,7 +40,7 @@ class HomeDesignTokens {
 
   static List<BoxShadow> get bannerShadow => [
         BoxShadow(
-          color: AppColors.secondary.withOpacity(0.25), // Blue-ish shadow
+          color: AppColors.secondary.withValues(alpha: 0.25), // Blue-ish shadow
           blurRadius: 16,
           offset: const Offset(0, 8),
           spreadRadius: -4,

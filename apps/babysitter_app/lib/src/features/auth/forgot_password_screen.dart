@@ -97,7 +97,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.3),
+      barrierColor: Colors.black.withValues(alpha: 0.3),
       builder: (context) => _ResetConfirmationDialog(
         title: title,
         message: message,
@@ -125,7 +125,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 'assets/onboarding_4.jpg',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.secondary.withOpacity(0.3),
+                  color: AppColors.secondary.withValues(alpha: 0.3),
                   child: const Center(
                     child: Icon(
                       Icons.family_restroom,
@@ -176,7 +176,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         'Enter your email or phone number to reset your password. We will send you a reset link using whichever method you provide.',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textPrimary.withOpacity(0.6),
+                          color: AppColors.textPrimary.withValues(alpha: 0.6),
                           height: 1.4,
                         ),
                       ),

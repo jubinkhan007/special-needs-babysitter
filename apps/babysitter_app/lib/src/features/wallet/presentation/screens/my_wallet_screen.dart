@@ -288,7 +288,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
               width: 36.w,
               height: 36.w,
               decoration: BoxDecoration(
-                color: WalletStyles.primaryBlue.withOpacity(0.12),
+                color: WalletStyles.primaryBlue.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: const Icon(

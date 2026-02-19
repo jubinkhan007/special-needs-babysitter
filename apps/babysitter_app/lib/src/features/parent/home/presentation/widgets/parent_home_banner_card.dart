@@ -74,8 +74,8 @@ class ParentHomeBannerCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Colors.black.withOpacity(
-                                    0.2), // Slight darkening for text
+                                Colors.black.withValues(
+                                    alpha: 0.2), // Slight darkening for text
                                 Colors.transparent,
                               ],
                               begin: Alignment.centerLeft,
@@ -128,7 +128,7 @@ class ParentHomeBannerCard extends StatelessWidget {
                                     child: Text(
                                       'All babysitters are background-checked and approved.',
                                       style: TextStyle(
-                                        color: Colors.white.withOpacity(0.95),
+                                        color: Colors.white.withValues(alpha: 0.95),
                                         fontSize: 12,
                                         height: 1.25,
                                         fontFamily: AppTypography.fontFamily,

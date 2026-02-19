@@ -34,7 +34,7 @@ class SocialLoginRow extends StatelessWidget {
                 'Or SignUp with',
                 style: TextStyle(
                   fontSize: 13,
-                  color: AppColors.textPrimary.withOpacity(0.45),
+                  color: AppColors.textPrimary.withValues(alpha: 0.45),
                 ),
               ),
             ),

@@ -90,7 +90,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 'assets/images/login_hero_image.png',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.secondary.withOpacity(0.3),
+                  color: AppColors.secondary.withValues(alpha: 0.3),
                   child: const Center(
                     child: Icon(
                       Icons.family_restroom,
@@ -287,7 +287,7 @@ class _SocialLoginSection extends StatelessWidget {
                 'Or Continue with',
                 style: TextStyle(
                   fontSize: 13,
-                  color: AppColors.textPrimary.withOpacity(0.45),
+                  color: AppColors.textPrimary.withValues(alpha: 0.45),
                 ),
               ),
             ),

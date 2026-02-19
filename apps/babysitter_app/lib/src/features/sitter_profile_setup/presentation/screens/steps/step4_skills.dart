@@ -109,7 +109,7 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                     'Enter Your Skills & Certifications Into This Screen In Order To Create Your New Account.',
                     style: TextStyle(
                       fontSize: 16,
-                      color: _textDark.withOpacity(0.7),
+                      color: _textDark.withValues(alpha: 0.7),
                       height: 1.5,
                       fontFamily: 'Inter',
                     ),

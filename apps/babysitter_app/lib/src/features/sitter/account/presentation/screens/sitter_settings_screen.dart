@@ -118,7 +118,7 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
                       },
                       activeThumbColor: SitterAccountUI.accentBlue,
                       activeTrackColor:
-                          SitterAccountUI.accentBlue.withOpacity(0.2),
+                          SitterAccountUI.accentBlue.withValues(alpha: 0.2),
                     ),
                   ),
                 ],

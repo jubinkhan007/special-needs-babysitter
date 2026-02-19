@@ -164,7 +164,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
                 border: Border.all(color: Colors.white, width: 2),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     blurRadius: 8,
                     spreadRadius: 1,
                   ),
@@ -214,7 +214,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     blurRadius: 24,
                     spreadRadius: 4,
                   ),
@@ -296,7 +296,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.black.withOpacity(0.7),
+            Colors.black.withValues(alpha: 0.7),
             Colors.transparent,
           ],
         ),
@@ -355,7 +355,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
           colors: [
-            Colors.black.withOpacity(0.9),
+            Colors.black.withValues(alpha: 0.9),
             Colors.transparent,
           ],
         ),
@@ -420,7 +420,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
             height: 56.w,
             decoration: BoxDecoration(
               color: backgroundColor ??
-                  (isActive ? Colors.white.withOpacity(0.2) : Colors.grey[700]),
+                  (isActive ? Colors.white.withValues(alpha: 0.2) : Colors.grey[700]),
               shape: BoxShape.circle,
             ),
             child: Icon(

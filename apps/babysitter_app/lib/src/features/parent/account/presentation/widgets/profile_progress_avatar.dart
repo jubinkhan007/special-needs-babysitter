@@ -106,7 +106,7 @@ class _RingPainter extends CustomPainter {
     final radius = (size.width - 4) / 2; // Stroke width 4
 
     final trackPaint = Paint()
-      ..color = backgroundColor.withOpacity(0.3)
+      ..color = backgroundColor.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 4
       ..strokeCap = StrokeCap.round;

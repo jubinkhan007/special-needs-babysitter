@@ -687,7 +687,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                 'Select Languages',
                                 style: TextStyle(
                                   color:
-                                      const Color(0xFF1A1A1A).withOpacity(0.6),
+                                      const Color(0xFF1A1A1A).withValues(alpha: 0.6),
                                   fontSize: 16,
                                 ),
                               ),

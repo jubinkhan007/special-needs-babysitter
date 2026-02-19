@@ -15,7 +15,7 @@ class BottomStickyCta extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: BookingUiTokens.pageBackground
-          .withOpacity(0.95), // Slight blur effect bg
+          .withValues(alpha: 0.95), // Slight blur effect bg
       padding: EdgeInsets.fromLTRB(
         24,
         16,

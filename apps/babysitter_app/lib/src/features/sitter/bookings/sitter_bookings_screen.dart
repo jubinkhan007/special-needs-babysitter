@@ -63,7 +63,7 @@ class SitterBookingsScreen extends ConsumerWidget {
                   Icon(
                     Icons.calendar_today,
                     size: 80,
-                    color: AppColors.secondary.withOpacity(0.3),
+                    color: AppColors.secondary.withValues(alpha: 0.3),
                   ),
                   AppSpacing.verticalMd,
                   Text(
@@ -175,7 +175,7 @@ class SitterBookingsScreen extends ConsumerWidget {
               Icon(
                 Icons.error_outline,
                 size: 64,
-                color: AppColors.error.withOpacity(0.5),
+                color: AppColors.error.withValues(alpha: 0.5),
               ),
               AppSpacing.verticalMd,
               Text(

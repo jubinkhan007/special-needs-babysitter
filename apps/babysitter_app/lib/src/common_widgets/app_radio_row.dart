@@ -33,7 +33,7 @@ class AppRadioRow extends StatelessWidget {
                 border: Border.all(
                   color: selected
                       ? AppTokens.primaryBlue
-                      : AppTokens.iconGrey.withOpacity(0.5),
+                      : AppTokens.iconGrey.withValues(alpha: 0.5),
                   width: 1.5,
                 ),
               ),

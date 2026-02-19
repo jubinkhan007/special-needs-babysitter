@@ -68,7 +68,7 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                 'assets/images/update_password_hero.png',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  color: AppColors.secondary.withOpacity(0.3),
+                  color: AppColors.secondary.withValues(alpha: 0.3),
                   child: const Center(
                     child: Icon(
                       Icons.lock_reset,
@@ -119,7 +119,7 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                         'Please put a minimum 8 characters, one uppercase letter, one special character)',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textPrimary.withOpacity(0.6),
+                          color: AppColors.textPrimary.withValues(alpha: 0.6),
                           height: 1.4,
                         ),
                       ),

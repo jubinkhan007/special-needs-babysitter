@@ -843,7 +843,7 @@ class AppTokens {
   static const double accountCardRadius = 16.0;
   static List<BoxShadow> get accountCardShadow => [
         BoxShadow(
-          color: const Color(0xFF000000).withOpacity(0.04),
+          color: const Color(0xFF000000).withValues(alpha: 0.04),
           blurRadius: 8,
           offset: const Offset(0, 2),
         ),
@@ -965,7 +965,7 @@ class AppTokens {
   static const double balanceCardRadius = 16.0;
   static List<BoxShadow> get balanceCardShadow => [
         BoxShadow(
-          color: const Color(0xFF000000).withOpacity(0.06),
+          color: const Color(0xFF000000).withValues(alpha: 0.06),
           blurRadius: 12,
           offset: const Offset(0, 4),
         ),
@@ -1084,7 +1084,7 @@ class AppTokens {
   static const Color savedCardBorder = Color(0xFFE8F4FA);
   static List<BoxShadow> get savedCardShadow => [
         BoxShadow(
-          color: const Color(0xFF000000).withOpacity(0.04),
+          color: const Color(0xFF000000).withValues(alpha: 0.04),
           blurRadius: 8,
           offset: const Offset(0, 2),
         ),

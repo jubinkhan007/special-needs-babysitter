@@ -106,7 +106,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AppColors.secondary.withOpacity(0.12),
+                        color: AppColors.secondary.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Icon(
@@ -132,7 +132,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                       'This will help you recover your account if you forget your password.',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.textPrimary.withOpacity(0.6),
+                        color: AppColors.textPrimary.withValues(alpha: 0.6),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -209,7 +209,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: const Color(0xFFE5E7EB).withOpacity(0.5),
+                color: const Color(0xFFE5E7EB).withValues(alpha: 0.5),
               ),
             ),
             child: DropdownButtonHideUnderline(
@@ -219,7 +219,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                   'Select Security Question*',
                   style: TextStyle(
                     fontSize: 15,
-                    color: AppColors.textPrimary.withOpacity(0.35),
+                    color: AppColors.textPrimary.withValues(alpha: 0.35),
                   ),
                 ),
                 isExpanded: true,

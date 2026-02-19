@@ -585,7 +585,7 @@ class _SitterActiveBookingScreenState
             Container(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
               decoration: BoxDecoration(
-                color: trackingColor.withOpacity(0.1),
+                color: trackingColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(999),
               ),
               child: Text(
@@ -867,7 +867,7 @@ class _SitterActiveBookingScreenState
       color: Colors.white,
       borderRadius: BorderRadius.circular(8.r),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.15),
+      shadowColor: Colors.black.withValues(alpha: 0.15),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8.r),
@@ -960,7 +960,7 @@ class _SitterActiveBookingScreenState
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

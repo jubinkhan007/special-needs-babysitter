@@ -104,7 +104,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withValues(alpha: 0.05),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -137,7 +137,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     'Sign up to get started',
                     style: TextStyle(
                       fontSize: 15,
-                      color: AppColors.textPrimary.withOpacity(0.6),
+                      color: AppColors.textPrimary.withValues(alpha: 0.6),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -212,7 +212,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         _obscurePassword
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: AppColors.textPrimary.withOpacity(0.5),
+                        color: AppColors.textPrimary.withValues(alpha: 0.5),
                         size: 20,
                       ),
                       onPressed: () {
@@ -248,7 +248,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           side: BorderSide(
-                            color: AppColors.textPrimary.withOpacity(0.3),
+                            color: AppColors.textPrimary.withValues(alpha: 0.3),
                           ),
                         ),
                       ),
@@ -258,7 +258,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           text: TextSpan(
                             style: TextStyle(
                               fontSize: 13,
-                              color: AppColors.textPrimary.withOpacity(0.7),
+                              color: AppColors.textPrimary.withValues(alpha: 0.7),
                               height: 1.4,
                             ),
                             children: [
@@ -308,7 +308,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textPrimary.withOpacity(0.7),
+                          color: AppColors.textPrimary.withValues(alpha: 0.7),
                         ),
                         children: [
                           const TextSpan(text: 'Already have an account? '),
@@ -355,7 +355,7 @@ class _RoleSelectionTabs extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -410,7 +410,7 @@ class _RoleTab extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? Colors.white
-                    : AppColors.textPrimary.withOpacity(0.6),
+                    : AppColors.textPrimary.withValues(alpha: 0.6),
               ),
             ),
           ),

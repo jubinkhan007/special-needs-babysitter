@@ -57,14 +57,14 @@ class HourlyRateSlider extends StatelessWidget {
             activeTrackColor: AppTokens.sliderTrackActive,
             inactiveTrackColor: AppTokens.sliderTrackInactive,
             thumbColor: AppTokens.sliderThumbColor,
-            overlayColor: AppTokens.sliderThumbColor.withOpacity(0.12),
+            overlayColor: AppTokens.sliderThumbColor.withValues(alpha: 0.12),
             trackHeight: AppTokens.sliderTrackHeight,
             thumbShape: const RoundSliderThumbShape(
                 enabledThumbRadius: AppTokens.sliderThumbRadius),
             tickMarkShape:
                 const RoundSliderTickMarkShape(tickMarkRadius: 2), // Small dots
             activeTickMarkColor:
-                Colors.white.withOpacity(0.5), // Subtle ticks on blue
+                Colors.white.withValues(alpha: 0.5), // Subtle ticks on blue
             inactiveTickMarkColor:
                 AppTokens.sliderTrackInactive, // Invisible or matched
           ),

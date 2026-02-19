@@ -30,7 +30,7 @@ class JobPreviewCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14.r), // Softer radius
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03), // Very subtle shadow
+            color: Colors.black.withValues(alpha: 0.03), // Very subtle shadow
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

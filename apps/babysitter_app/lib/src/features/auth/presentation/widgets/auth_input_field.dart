@@ -64,12 +64,12 @@ class AuthInputField extends StatelessWidget {
         helperText: helperText,
         helperStyle: TextStyle(
           fontSize: 12,
-          color: AppColors.textPrimary.withOpacity(0.5),
+          color: AppColors.textPrimary.withValues(alpha: 0.5),
         ),
         hintStyle: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
-          color: AppColors.textPrimary.withOpacity(0.35),
+          color: AppColors.textPrimary.withValues(alpha: 0.35),
         ),
         filled: true,
         fillColor: Colors.white,
@@ -80,13 +80,13 @@ class AuthInputField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8), // Moderate radius, not pill
           borderSide: BorderSide(
-            color: AppColors.inputBorder.withOpacity(0.5),
+            color: AppColors.inputBorder.withValues(alpha: 0.5),
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: AppColors.inputBorder.withOpacity(0.5),
+            color: AppColors.inputBorder.withValues(alpha: 0.5),
           ),
         ),
         focusedBorder: OutlineInputBorder(

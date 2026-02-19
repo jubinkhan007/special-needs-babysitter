@@ -80,7 +80,7 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                             : null,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF101828).withOpacity(0.05),
+                            color: const Color(0xFF101828).withValues(alpha: 0.05),
                             blurRadius: 16,
                             offset: const Offset(0, 4),
                           )

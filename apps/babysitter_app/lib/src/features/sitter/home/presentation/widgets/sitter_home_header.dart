@@ -90,7 +90,7 @@ class SitterHomeHeader extends StatelessWidget {
             icon: Icon(
               Icons.notifications_none_outlined,
               size: 24.w,
-              color: AppColors.textSecondary.withOpacity(0.7),
+              color: AppColors.textSecondary.withValues(alpha: 0.7),
             ),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),

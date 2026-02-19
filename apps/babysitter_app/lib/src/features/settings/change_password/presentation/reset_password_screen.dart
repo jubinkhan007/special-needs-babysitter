@@ -170,7 +170,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     hintText: 'Password*',
                     hintStyle: TextStyle(
                       fontSize: 15.sp,
-                      color: AppColors.textPrimary.withOpacity(0.4),
+                      color: AppColors.textPrimary.withValues(alpha: 0.4),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -214,7 +214,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     hintText: 'Confirm Password*',
                     hintStyle: TextStyle(
                       fontSize: 15.sp,
-                      color: AppColors.textPrimary.withOpacity(0.4),
+                      color: AppColors.textPrimary.withValues(alpha: 0.4),
                     ),
                     filled: true,
                     fillColor: Colors.white,

@@ -130,7 +130,7 @@ class _ParentBookingStep2ScreenState
             datePickerTheme: DatePickerThemeData(
               headerBackgroundColor: Colors.white,
               headerForegroundColor: _titleColor,
-              rangeSelectionBackgroundColor: _progressFill.withOpacity(0.3),
+              rangeSelectionBackgroundColor: _progressFill.withValues(alpha: 0.3),
               rangePickerBackgroundColor: Colors.white,
               todayBorder: const BorderSide(color: _progressFill),
             ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
@@ -225,7 +225,7 @@ class _ParentBookingStep2ScreenState
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
                 dayPeriodColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
-                        ? _progressFill.withOpacity(0.3)
+                        ? _progressFill.withValues(alpha: 0.3)
                         : Colors.transparent),
                 dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
@@ -234,7 +234,7 @@ class _ParentBookingStep2ScreenState
                 hourMinuteColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? Colors.white
-                        : _progressFill.withOpacity(0.1)),
+                        : _progressFill.withValues(alpha: 0.1)),
                 hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? _titleColor
@@ -306,7 +306,7 @@ class _ParentBookingStep2ScreenState
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
                 dayPeriodColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
-                        ? _progressFill.withOpacity(0.3)
+                        ? _progressFill.withValues(alpha: 0.3)
                         : Colors.transparent),
                 dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
@@ -315,7 +315,7 @@ class _ParentBookingStep2ScreenState
                 hourMinuteColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? Colors.white
-                        : _progressFill.withOpacity(0.1)),
+                        : _progressFill.withValues(alpha: 0.1)),
                 hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? _titleColor

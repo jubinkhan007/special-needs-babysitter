@@ -30,7 +30,7 @@ class OnboardingStatusCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 18,
             offset: const Offset(0, 6),
           ),
@@ -107,7 +107,7 @@ class OnboardingStatusCard extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: config.buttonColor,
                   foregroundColor: AppColors.textOnButton,
-                  disabledBackgroundColor: config.buttonColor.withOpacity(0.6),
+                  disabledBackgroundColor: config.buttonColor.withValues(alpha: 0.6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),

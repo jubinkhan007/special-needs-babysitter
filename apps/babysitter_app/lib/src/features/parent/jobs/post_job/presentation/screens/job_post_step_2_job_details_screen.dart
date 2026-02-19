@@ -93,7 +93,7 @@ class _JobPostStep2JobDetailsScreenState
             datePickerTheme: DatePickerThemeData(
               headerBackgroundColor: Colors.white,
               headerForegroundColor: _titleColor,
-              rangeSelectionBackgroundColor: _progressFill.withOpacity(0.3),
+              rangeSelectionBackgroundColor: _progressFill.withValues(alpha: 0.3),
               rangePickerBackgroundColor: Colors.white,
               rangePickerHeaderBackgroundColor: Colors.white,
               rangePickerHeaderForegroundColor: _titleColor,
@@ -107,7 +107,7 @@ class _JobPostStep2JobDetailsScreenState
                 return _titleColor;
               }),
               dayOverlayColor:
-                  WidgetStatePropertyAll(_progressFill.withOpacity(0.1)),
+                  WidgetStatePropertyAll(_progressFill.withValues(alpha: 0.1)),
               yearForegroundColor: const WidgetStatePropertyAll(_titleColor),
             ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
@@ -206,7 +206,7 @@ class _JobPostStep2JobDetailsScreenState
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
                 dayPeriodColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
-                        ? _progressFill.withOpacity(0.3)
+                        ? _progressFill.withValues(alpha: 0.3)
                         : Colors.transparent),
                 dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
@@ -215,7 +215,7 @@ class _JobPostStep2JobDetailsScreenState
                 hourMinuteColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? Colors.white
-                        : _progressFill.withOpacity(0.1)),
+                        : _progressFill.withValues(alpha: 0.1)),
                 hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? _titleColor
@@ -293,7 +293,7 @@ class _JobPostStep2JobDetailsScreenState
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
                 dayPeriodColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
-                        ? _progressFill.withOpacity(0.3)
+                        ? _progressFill.withValues(alpha: 0.3)
                         : Colors.transparent),
                 dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
@@ -302,7 +302,7 @@ class _JobPostStep2JobDetailsScreenState
                 hourMinuteColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? Colors.white
-                        : _progressFill.withOpacity(0.1)),
+                        : _progressFill.withValues(alpha: 0.1)),
                 hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? _titleColor

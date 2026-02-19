@@ -174,7 +174,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
                       'We\'ve sent a verification code to your ${isEmail ? 'email' : 'phone'}.\nPlease complete the following to proceed.',
                       style: TextStyle(
                         fontSize: 15,
-                        color: AppColors.textPrimary.withOpacity(0.6),
+                        color: AppColors.textPrimary.withValues(alpha: 0.6),
                         height: 1.5,
                       ),
                     ),
@@ -193,7 +193,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
                         'Enter the 6-digit code sent to your ${isEmail ? 'email' : 'phone'}',
                         style: TextStyle(
                           fontSize: 13,
-                          color: AppColors.textPrimary.withOpacity(0.5),
+                          color: AppColors.textPrimary.withValues(alpha: 0.5),
                         ),
                       ),
                     ),

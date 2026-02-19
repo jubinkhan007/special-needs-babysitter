@@ -179,7 +179,7 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 disabledBackgroundColor:
-                    AppColors.primary.withOpacity(0.6),
+                    AppColors.primary.withValues(alpha: 0.6),
                 padding: EdgeInsets.zero,
               ),
               child: _isSubmitting
@@ -234,7 +234,7 @@ class _JobFamilyCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

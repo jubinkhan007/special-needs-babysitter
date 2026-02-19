@@ -569,7 +569,7 @@ class _JobPostStep5ReviewScreenState
                 ),
                 height: 60,
                 decoration: BoxDecoration(
-                  color: isLoading ? _primaryBtn.withOpacity(0.5) : _primaryBtn,
+                  color: isLoading ? _primaryBtn.withValues(alpha: 0.5) : _primaryBtn,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(

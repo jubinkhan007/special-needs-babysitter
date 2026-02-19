@@ -15,7 +15,7 @@ Future<void> showBookingMoreOptionsSheet(
     context: context,
     isScrollControlled: false,
     backgroundColor: Colors.transparent,
-    barrierColor: Colors.black.withOpacity(0.45),
+    barrierColor: Colors.black.withValues(alpha: 0.45),
     useSafeArea: true,
     builder: (_) => BookingMoreOptionsSheet(
       scheduledDate: scheduledDate,
@@ -264,7 +264,7 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
                 : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTokens.primaryBlue,
-              disabledBackgroundColor: AppTokens.primaryBlue.withOpacity(0.5),
+              disabledBackgroundColor: AppTokens.primaryBlue.withValues(alpha: 0.5),
               foregroundColor: AppColors.textOnButton,
               elevation: 0,
               shape: RoundedRectangleBorder(

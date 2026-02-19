@@ -92,7 +92,7 @@ class DobDropdownRow extends StatelessWidget {
             border: Border.all(color: Colors.transparent),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 4,
                 offset: const Offset(0, 1),
               ),

@@ -213,7 +213,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                     hintText: 'Email',
                     hintStyle: TextStyle(
                       fontSize: 15.sp,
-                      color: AppColors.textPrimary.withOpacity(0.4),
+                      color: AppColors.textPrimary.withValues(alpha: 0.4),
                     ),
                     filled: true,
                     fillColor: Colors.white,

@@ -5,6 +5,6 @@ Future<bool?> showDeleteAccountDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
     builder: (context) => const DeleteAccountDialog(),
-    barrierColor: Colors.black.withOpacity(0.4), // Standard dim
+    barrierColor: Colors.black.withValues(alpha: 0.4), // Standard dim
   );
 }

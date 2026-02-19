@@ -112,7 +112,7 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
                         width: 72,
                         height: 72,
                         decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.12),
+                          color: AppColors.secondary.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Icon(
@@ -138,7 +138,7 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
                         'Password must be at least 8 characters',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.textPrimary.withOpacity(0.6),
+                          color: AppColors.textPrimary.withValues(alpha: 0.6),
                         ),
                       ),
                       const SizedBox(height: 24),

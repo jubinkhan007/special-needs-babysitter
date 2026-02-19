@@ -59,7 +59,7 @@ class BackgroundCheckBanner extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w400,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           fontFamily: 'Inter',
                           height: 1.35,
                         ),
@@ -137,9 +137,9 @@ class _BannerCta extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
+          color: Colors.white.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: Colors.white.withOpacity(0.5)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

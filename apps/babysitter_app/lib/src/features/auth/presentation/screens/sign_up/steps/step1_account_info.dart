@@ -166,7 +166,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: AppColors.secondary.withOpacity(0.12),
+                    color: AppColors.secondary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Icon(

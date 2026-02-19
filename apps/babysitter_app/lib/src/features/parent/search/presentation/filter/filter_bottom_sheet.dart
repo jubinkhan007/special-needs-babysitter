@@ -170,7 +170,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
               todayForegroundColor:
                   const WidgetStatePropertyAll(_pickerAccent),
               todayBackgroundColor:
-                  WidgetStatePropertyAll(_pickerAccent.withOpacity(0.15)),
+                  WidgetStatePropertyAll(_pickerAccent.withValues(alpha: 0.15)),
               dayForegroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
                   return Colors.white;
@@ -178,7 +178,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                 return _pickerTitle;
               }),
               dayOverlayColor:
-                  WidgetStatePropertyAll(_pickerAccent.withOpacity(0.1)),
+                  WidgetStatePropertyAll(_pickerAccent.withValues(alpha: 0.1)),
               yearForegroundColor: const WidgetStatePropertyAll(_pickerTitle),
             ),
             textButtonTheme: TextButtonThemeData(
@@ -247,7 +247,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                 dayPeriodBorderSide: const BorderSide(color: _pickerMuted),
                 dayPeriodColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
-                        ? _pickerAccent.withOpacity(0.3)
+                        ? _pickerAccent.withValues(alpha: 0.3)
                         : Colors.transparent),
                 dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
@@ -256,7 +256,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                 hourMinuteColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? Colors.white
-                        : _pickerAccent.withOpacity(0.1)),
+                        : _pickerAccent.withValues(alpha: 0.1)),
                 hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
                     states.contains(WidgetState.selected)
                         ? _pickerTitle

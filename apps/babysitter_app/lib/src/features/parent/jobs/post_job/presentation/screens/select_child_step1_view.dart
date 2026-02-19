@@ -345,7 +345,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
             width: 160,
             height: 52,
             decoration: BoxDecoration(
-              color: _primaryBlue.withOpacity(isEnabled ? 1.0 : 0.5),
+              color: _primaryBlue.withValues(alpha: isEnabled ? 1.0 : 0.5),
               borderRadius: BorderRadius.circular(26),
             ),
             child: const Center(

@@ -203,8 +203,8 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
               circleId: const CircleId('radius'),
               center: center,
               radius: 8000, // 8km radius
-              fillColor: _primaryBlue.withOpacity(0.25),
-              strokeColor: _primaryBlue.withOpacity(0.5),
+              fillColor: _primaryBlue.withValues(alpha: 0.25),
+              strokeColor: _primaryBlue.withValues(alpha: 0.5),
               strokeWidth: 2,
             ),
           },
@@ -224,7 +224,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
             child: const Text(
@@ -351,7 +351,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                     'Helps families find you nearby. You can update it anytime.',
                     style: TextStyle(
                       fontSize: 16,
-                      color: _textDark.withOpacity(0.7),
+                      color: _textDark.withValues(alpha: 0.7),
                       height: 1.5,
                       fontFamily: 'Inter',
                     ),
@@ -366,7 +366,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                         border: Border.all(color: Colors.transparent),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 4,
                               offset: const Offset(0, 1))
                         ]),
