@@ -152,18 +152,19 @@ class ActiveBookingCard extends StatelessWidget {
 
               // Stats
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildStat('Response Rate', '${booking.responseRate}%',
-                      Icons.access_time),
-                  _buildStat(
-                      'Reliability Rate',
-                      '${booking.reliabilityRate}%',
-                      Icons.thumb_up_alt_outlined),
-                  _buildStat(
-                      'Experience',
-                      experienceValue,
-                      Icons.verified_outlined),
+                  Expanded(
+                    child: _buildStat('Response Rate',
+                        '${booking.responseRate}%', Icons.access_time),
+                  ),
+                  Expanded(
+                    child: _buildStat('Reliability Rate',
+                        '${booking.reliabilityRate}%', Icons.thumb_up_alt_outlined),
+                  ),
+                  Expanded(
+                    child: _buildStat('Experience',
+                        experienceValue, Icons.verified_outlined),
+                  ),
                 ],
               ),
 
@@ -229,11 +230,17 @@ class ActiveBookingCard extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 14, color: AppColors.neutral30),
             const SizedBox(width: 4),
-            Text(label, style: HomeDesignTokens.statLabel),
+            Flexible(
+              child: Text(
+                label,
+                style: HomeDesignTokens.statLabel,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 4),
