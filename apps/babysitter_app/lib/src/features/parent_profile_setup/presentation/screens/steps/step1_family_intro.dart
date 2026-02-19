@@ -303,6 +303,15 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 6),
+              Text(
+                'Profiles with a photo help build trust and connection.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: _textDark.withAlpha(128),
+                ),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 24),
 
               // Photo Placeholder
