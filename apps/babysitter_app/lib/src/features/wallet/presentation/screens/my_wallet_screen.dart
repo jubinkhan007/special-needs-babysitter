@@ -119,7 +119,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: WalletStyles.primaryBlue,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(

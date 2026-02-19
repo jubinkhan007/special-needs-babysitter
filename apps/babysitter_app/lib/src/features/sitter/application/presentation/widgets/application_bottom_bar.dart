@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -68,7 +69,7 @@ class ApplicationBottomBar extends StatelessWidget {
                   onPressed: isLoading ? null : onSubmit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTokens.primaryBlue,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(

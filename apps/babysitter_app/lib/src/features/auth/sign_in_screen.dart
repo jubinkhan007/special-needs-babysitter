@@ -8,7 +8,6 @@ import 'package:core/core.dart';
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
-import '../../../common/theme/auth_theme.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 String _normalizeRole(String role) {
@@ -62,7 +61,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       AppToast.show(context, 
         SnackBar(
           content: Text(message),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -76,7 +75,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           // Hero image at top
@@ -91,7 +90,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 'assets/images/login_hero_image.png',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  color: AuthTheme.primaryBlue.withOpacity(0.3),
+                  color: AppColors.secondary.withOpacity(0.3),
                   child: const Center(
                     child: Icon(
                       Icons.family_restroom,
@@ -112,7 +111,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             bottom: 0,
             child: Container(
               decoration: const BoxDecoration(
-                color: AuthTheme.backgroundColor,
+                color: AppColors.background,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
@@ -288,7 +287,7 @@ class _SocialLoginSection extends StatelessWidget {
                 'Or Continue with',
                 style: TextStyle(
                   fontSize: 13,
-                  color: AuthTheme.textDark.withOpacity(0.45),
+                  color: AppColors.textPrimary.withOpacity(0.45),
                 ),
               ),
             ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart';
 
-import '../../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
+
 import '../../../widgets/auth_input_field.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
@@ -71,7 +72,7 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
         AppToast.show(context, 
           SnackBar(
             content: Text(state.message),
-            backgroundColor: AuthTheme.errorRed,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -84,7 +85,7 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
     final isSubmitting = state is SignUpSubmitting;
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -111,13 +112,13 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
                         width: 72,
                         height: 72,
                         decoration: BoxDecoration(
-                          color: AuthTheme.primaryBlue.withOpacity(0.12),
+                          color: AppColors.secondary.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Icon(
                           Icons.lock_outline,
                           size: 36,
-                          color: AuthTheme.primaryBlue,
+                          color: AppColors.secondary,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -137,7 +138,7 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
                         'Password must be at least 8 characters',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AuthTheme.textDark.withOpacity(0.6),
+                          color: AppColors.textPrimary.withOpacity(0.6),
                         ),
                       ),
                       const SizedBox(height: 24),

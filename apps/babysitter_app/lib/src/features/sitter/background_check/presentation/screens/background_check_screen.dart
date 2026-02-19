@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -122,7 +123,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
                           : () => _handleSubmit(context, ref),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF89CFF0),
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         disabledBackgroundColor: const Color(0xFF89CFF0).withOpacity(0.5),
                         elevation: 0,
                         shape: RoundedRectangleBorder(

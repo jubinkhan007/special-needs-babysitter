@@ -9,6 +9,7 @@
 //
 // Uses flutter_screenutil for responsive sizing across all devices.
 
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -272,7 +273,7 @@ class _RoleSelectionBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF1A3A4A),
+                color: AppColors.textPrimary,
                 height: 1.2,
               ),
             ),
@@ -307,7 +308,7 @@ class _RoleSelectionBar extends StatelessWidget {
                 Expanded(
                   child: _RoleButton(
                     label: 'Family',
-                    isSelected: selectedRole != 'sitter',
+                    isSelected: selectedRole == 'parent',
                     onTap: onFamilySelected,
                   ),
                 ),
@@ -467,8 +468,8 @@ class _BottomControlBar extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onGetStarted,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF88C6E0),
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
@@ -494,7 +495,7 @@ class _BottomControlBar extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: onLogin,
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF88C6E0),
+                  foregroundColor: AppColors.primary,
                   side: const BorderSide(color: Color(0xFFE5E7EB)),
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
@@ -553,8 +554,8 @@ class _RoleButton extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xFF88C6E0)
-              : const Color(0xFFD1E8F2),
+              ? AppColors.primary
+              : AppColors.primarySoft,
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Text(
@@ -562,7 +563,7 @@ class _RoleButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : const Color(0xFF1A3A4A),
+            color: AppColors.textOnButton,
           ),
         ),
       ),
@@ -584,7 +585,7 @@ class _PageIndicator extends StatelessWidget {
       width: isActive ? 24.w : 8.w,
       height: 8.h,
       decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF88C6E0) : Colors.white24,
+        color: isActive ? AppColors.primary : Colors.white24,
         borderRadius: BorderRadius.circular(4.r),
       ),
     );

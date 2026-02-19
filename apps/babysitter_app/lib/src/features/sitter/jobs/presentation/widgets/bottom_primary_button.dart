@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,7 +27,7 @@ class BottomPrimaryButton extends StatelessWidget {
             minimumSize: Size(double.infinity, 56.h),
             padding: EdgeInsets.symmetric(vertical: 16.h),
             backgroundColor: backgroundColor ?? const Color(0xFF89CFF0),
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.textOnButton,
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.r),

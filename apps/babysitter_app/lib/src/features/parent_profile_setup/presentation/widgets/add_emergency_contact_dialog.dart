@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../auth/presentation/widgets/auth_input_field.dart';
 
@@ -80,12 +80,12 @@ class _AddEmergencyContactDialogState extends State<AddEmergencyContactDialog> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: AuthTheme.coralAccent.withAlpha(30),
+                      color: AppColors.coralAccent.withAlpha(30),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.emergency_outlined,
-                      color: AuthTheme.coralAccent,
+                      color: AppColors.coralAccent,
                       size: 24,
                     ),
                   ),

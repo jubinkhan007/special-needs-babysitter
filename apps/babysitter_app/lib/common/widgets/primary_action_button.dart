@@ -1,6 +1,5 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-
-import '../theme/auth_theme.dart';
 
 /// Pixel-perfect primary action button matching Figma design
 /// - Rounded rectangle (8px radius, not pill)
@@ -22,18 +21,18 @@ class PrimaryActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bg = backgroundColor ?? AppColors.secondary;
     return SizedBox(
       width: double.infinity,
       height: 54, // Slightly taller to prevent clipping
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? AuthTheme.primaryBlue,
-          foregroundColor: Colors.white,
+          backgroundColor: bg,
+          foregroundColor: AppColors.textOnButton,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 14), // Explicit padding
-          disabledBackgroundColor:
-              (backgroundColor ?? AuthTheme.primaryBlue).withOpacity(0.6),
+          disabledBackgroundColor: bg.withOpacity(0.6),
           disabledForegroundColor: Colors.white.withOpacity(0.8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -81,7 +80,7 @@ class SecondaryActionButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: AuthTheme.textDark,
+          foregroundColor: AppColors.textPrimary,
           backgroundColor: Colors.white,
           side: BorderSide.none,
           shape: RoundedRectangleBorder(
@@ -95,7 +94,7 @@ class SecondaryActionButton extends StatelessWidget {
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    AuthTheme.textDark.withOpacity(0.6),
+                    AppColors.textPrimary.withOpacity(0.6),
                   ),
                 ),
               )

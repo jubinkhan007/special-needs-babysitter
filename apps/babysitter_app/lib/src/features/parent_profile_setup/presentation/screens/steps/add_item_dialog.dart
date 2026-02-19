@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 class AddItemDialog extends StatefulWidget {
   final String title;
@@ -87,7 +87,7 @@ class _AddItemDialogState extends State<AddItemDialog> {
           child: Text(
             widget.confirmLabel,
             style: const TextStyle(
-                color: AuthTheme.primaryBlue, fontWeight: FontWeight.w600),
+                color: AppColors.secondary, fontWeight: FontWeight.w600),
           ),
         ),
       ],

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -457,7 +458,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF87C4F2),
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         disabledBackgroundColor:
                             const Color(0xFF87C4F2).withValues(alpha: 0.6),
                         elevation: 0,
@@ -511,7 +512,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF1D2939),
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         disabledBackgroundColor:
                             const Color(0xFF1D2939).withValues(alpha: 0.6),
                         elevation: 0,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
+
 import '../../widgets/otp_input.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../widgets/step_indicator.dart';
@@ -45,7 +46,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please enter the 6-digit code'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -115,7 +116,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
       AppToast.show(context, 
         SnackBar(
           content: Text('Verification failed: ${state.error}'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -125,7 +126,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
     AppToast.show(context, 
       SnackBar(
         content: Text('Code resent to your ${widget.verificationType}'),
-        backgroundColor: AuthTheme.primaryBlue,
+        backgroundColor: AppColors.secondary,
       ),
     );
   }
@@ -135,7 +136,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
     final isEmail = widget.verificationType == 'email';
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -163,7 +164,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w700,
-                        color: AuthTheme.textDark,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -173,7 +174,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
                       'We\'ve sent a verification code to your ${isEmail ? 'email' : 'phone'}.\nPlease complete the following to proceed.',
                       style: TextStyle(
                         fontSize: 15,
-                        color: AuthTheme.textDark.withOpacity(0.6),
+                        color: AppColors.textPrimary.withOpacity(0.6),
                         height: 1.5,
                       ),
                     ),
@@ -192,7 +193,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
                         'Enter the 6-digit code sent to your ${isEmail ? 'email' : 'phone'}',
                         style: TextStyle(
                           fontSize: 13,
-                          color: AuthTheme.textDark.withOpacity(0.5),
+                          color: AppColors.textPrimary.withOpacity(0.5),
                         ),
                       ),
                     ),
@@ -215,7 +216,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             decoration: TextDecoration.underline,
-                            color: AuthTheme.textDark,
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

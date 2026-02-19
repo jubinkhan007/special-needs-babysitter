@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -144,7 +145,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                   onPressed: widget.onResume,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF8EC9F5),
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 
@@ -72,7 +73,7 @@ class RefundOptionsDialog extends StatelessWidget {
                     Navigator.of(context).pop(RefundOption.accountCredit),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTokens.primaryBlue,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -98,7 +99,7 @@ class RefundOptionsDialog extends StatelessWidget {
                     .pop(RefundOption.originalPaymentMethod),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTokens.primaryBlue,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -580,7 +581,7 @@ class _SitterBookingDetailsScreenState
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF87C4F2),
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -655,7 +656,7 @@ class _SitterBookingDetailsScreenState
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: const Color(0xFF87C4F2),
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -773,7 +774,7 @@ class _SitterBookingDetailsScreenState
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 52.h),
                               backgroundColor: const Color(0xFF87C4F2),
-                              foregroundColor: Colors.white,
+                              foregroundColor: AppColors.textOnButton,
                               disabledBackgroundColor: Colors.grey.shade300,
                               disabledForegroundColor: Colors.grey.shade600,
                               elevation: 0,
@@ -2224,7 +2225,7 @@ class _SitterBookingDetailsScreenState
                                 },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF87C4F2),
-                            foregroundColor: Colors.white,
+                            foregroundColor: AppColors.textOnButton,
                             disabledBackgroundColor: Colors.grey.shade300,
                             elevation: 0,
                             padding: EdgeInsets.zero,
@@ -2627,7 +2628,7 @@ class _SitterBookingDetailsScreenState
                         onPressed: () => context.pop(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF87C4F2),
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.textOnButton,
                           elevation: 0,
                           padding: EdgeInsets.zero,
                           shape: RoundedRectangleBorder(

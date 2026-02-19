@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../routing/routes.dart';
@@ -142,7 +143,7 @@ class _ProfileCompleteDialogContent extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _primaryBlue,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.textOnButton,
                       padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

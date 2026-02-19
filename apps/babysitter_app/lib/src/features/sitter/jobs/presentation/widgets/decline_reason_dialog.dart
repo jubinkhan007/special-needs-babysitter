@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
@@ -205,7 +206,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                 onPressed: _handleSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF87C4F2),
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.r),

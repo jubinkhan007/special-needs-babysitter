@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart' as domain;
@@ -115,7 +116,7 @@ class AllJobsScreen extends ConsumerWidget {
                       onPressed: () => ref.refresh(allJobsProvider),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTokens.primaryBlue,
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                       ),
                       child: const Text('Retry'),
                     ),

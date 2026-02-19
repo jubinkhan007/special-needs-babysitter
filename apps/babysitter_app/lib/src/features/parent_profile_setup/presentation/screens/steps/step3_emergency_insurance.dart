@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart';
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../providers/parent_profile_providers.dart';
 import '../../../../parent/account/profile_details/presentation/widgets/edit_insurance_plan_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
@@ -306,7 +306,7 @@ class _Step3EmergencyAndInsuranceState
                 child: const Icon(
                   Icons.person_outline,
                   size: 36,
-                  color: AuthTheme.primaryBlue,
+                  color: AppColors.secondary,
                 ),
               ),
               const SizedBox(height: 24),
@@ -330,7 +330,7 @@ class _Step3EmergencyAndInsuranceState
                     height: 24,
                     child: Checkbox(
                       value: _wantToAddContact,
-                      activeColor: AuthTheme.primaryBlue,
+                      activeColor: AppColors.secondary,
                       side: const BorderSide(
                           color: Color(0xFFD0D5DD), width: 1.5),
                       shape: RoundedRectangleBorder(
@@ -485,7 +485,7 @@ class _Step3EmergencyAndInsuranceState
                             style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   const Color(0xFF75CFF0), // Light blue
-                              foregroundColor: Colors.white,
+                              foregroundColor: AppColors.textOnButton,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
@@ -548,7 +548,7 @@ class _Step3EmergencyAndInsuranceState
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AuthTheme.primaryBlue),
+            borderSide: const BorderSide(color: AppColors.secondary),
           ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -580,7 +580,7 @@ class _Step3EmergencyAndInsuranceState
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
         shape: BoxShape.circle,
         border: (active && large)
             ? Border.all(color: Colors.white, width: 2)
@@ -593,7 +593,7 @@ class _Step3EmergencyAndInsuranceState
     return Expanded(
       child: Container(
         height: 2,
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
       ),
     );
   }

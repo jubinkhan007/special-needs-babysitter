@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -85,7 +86,7 @@ class Step7Complete extends ConsumerWidget {
                       onPressed: onFinish,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF88CBE6), // Light blue
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

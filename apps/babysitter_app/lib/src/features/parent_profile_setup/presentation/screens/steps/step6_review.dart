@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
 
@@ -27,7 +27,7 @@ class Step6Review extends ConsumerWidget {
     final contacts = profileData['emergencyContacts'] as List? ?? [];
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -50,13 +50,13 @@ class Step6Review extends ConsumerWidget {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AuthTheme.primaryBlue.withAlpha(30),
+                        color: AppColors.secondary.withAlpha(30),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Icon(
                         Icons.fact_check_outlined,
                         size: 36,
-                        color: AuthTheme.primaryBlue,
+                        color: AppColors.secondary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -76,7 +76,7 @@ class Step6Review extends ConsumerWidget {
                       'Please review your information before submitting',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AuthTheme.textDark.withAlpha(153),
+                        color: AppColors.textPrimary.withAlpha(153),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -94,7 +94,7 @@ class Step6Review extends ConsumerWidget {
                               'None added',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AuthTheme.textDark.withAlpha(128),
+                                color: AppColors.textPrimary.withAlpha(128),
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
@@ -113,7 +113,7 @@ class Step6Review extends ConsumerWidget {
                                   'None added',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: AuthTheme.textDark.withAlpha(128),
+                                    color: AppColors.textPrimary.withAlpha(128),
                                     fontStyle: FontStyle.italic,
                                   ),
                                 )
@@ -136,7 +136,7 @@ class Step6Review extends ConsumerWidget {
                                         style: TextStyle(
                                           fontSize: 14,
                                           color:
-                                              AuthTheme.textDark.withAlpha(153),
+                                              AppColors.textPrimary.withAlpha(153),
                                         ),
                                       ),
                                     ],
@@ -156,7 +156,7 @@ class Step6Review extends ConsumerWidget {
                               'None selected',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AuthTheme.textDark.withAlpha(128),
+                                color: AppColors.textPrimary.withAlpha(128),
                                 fontStyle: FontStyle.italic,
                               ),
                             )
@@ -168,14 +168,14 @@ class Step6Review extends ConsumerWidget {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: AuthTheme.primaryBlue.withAlpha(25),
+                                    color: AppColors.secondary.withAlpha(25),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
                                     _formatServiceName(s as String),
                                     style: const TextStyle(
                                       fontSize: 12,
-                                      color: AuthTheme.primaryBlue,
+                                      color: AppColors.secondary,
                                     ),
                                   ),
                                 );
@@ -188,7 +188,7 @@ class Step6Review extends ConsumerWidget {
                     _ReviewSection(
                       title: 'Emergency Contacts',
                       icon: Icons.emergency_outlined,
-                      iconColor: AuthTheme.coralAccent,
+                      iconColor: AppColors.coralAccent,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: contacts.isEmpty
@@ -197,7 +197,7 @@ class Step6Review extends ConsumerWidget {
                                   'None added',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: AuthTheme.textDark.withAlpha(128),
+                                    color: AppColors.textPrimary.withAlpha(128),
                                     fontStyle: FontStyle.italic,
                                   ),
                                 )
@@ -221,7 +221,7 @@ class Step6Review extends ConsumerWidget {
                                         c['phone'] as String,
                                         style: const TextStyle(
                                           fontSize: 13,
-                                          color: AuthTheme.primaryBlue,
+                                          color: AppColors.secondary,
                                         ),
                                       ),
                                     ],
@@ -284,7 +284,7 @@ class _ReviewSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, size: 20, color: iconColor ?? AuthTheme.primaryBlue),
+              Icon(icon, size: 20, color: iconColor ?? AppColors.secondary),
               const SizedBox(width: 8),
               Text(
                 title,

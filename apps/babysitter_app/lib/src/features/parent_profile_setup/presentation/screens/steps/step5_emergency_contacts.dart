@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
 import '../../widgets/add_emergency_contact_dialog.dart';
@@ -68,7 +68,7 @@ class _Step5EmergencyContactsState
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please add at least one emergency contact'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -80,7 +80,7 @@ class _Step5EmergencyContactsState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -103,13 +103,13 @@ class _Step5EmergencyContactsState
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AuthTheme.coralAccent.withAlpha(30),
+                        color: AppColors.coralAccent.withAlpha(30),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Icon(
                         Icons.emergency_outlined,
                         size: 36,
-                        color: AuthTheme.coralAccent,
+                        color: AppColors.coralAccent,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -129,7 +129,7 @@ class _Step5EmergencyContactsState
                       'Add contacts who can be reached in case of emergency',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AuthTheme.textDark.withAlpha(153),
+                        color: AppColors.textPrimary.withAlpha(153),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -152,12 +152,12 @@ class _Step5EmergencyContactsState
                               width: 48,
                               height: 48,
                               decoration: BoxDecoration(
-                                color: AuthTheme.coralAccent.withAlpha(30),
+                                color: AppColors.coralAccent.withAlpha(30),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
                                 Icons.person_outline,
-                                color: AuthTheme.coralAccent,
+                                color: AppColors.coralAccent,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -177,14 +177,14 @@ class _Step5EmergencyContactsState
                                     contact['relation'] as String,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: AuthTheme.textDark.withAlpha(153),
+                                      color: AppColors.textPrimary.withAlpha(153),
                                     ),
                                   ),
                                   Text(
                                     contact['phone'] as String,
                                     style: const TextStyle(
                                       fontSize: 13,
-                                      color: AuthTheme.primaryBlue,
+                                      color: AppColors.secondary,
                                     ),
                                   ),
                                 ],
@@ -196,7 +196,7 @@ class _Step5EmergencyContactsState
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete_outline,
-                                  size: 20, color: AuthTheme.errorRed),
+                                  size: 20, color: AppColors.error),
                               onPressed: () => _deleteContact(index),
                             ),
                           ],
@@ -214,7 +214,7 @@ class _Step5EmergencyContactsState
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: AuthTheme.coralAccent,
+                            color: AppColors.coralAccent,
                           ),
                         ),
                         child: const Row(
@@ -222,7 +222,7 @@ class _Step5EmergencyContactsState
                           children: [
                             Icon(
                               Icons.add_circle_outline,
-                              color: AuthTheme.coralAccent,
+                              color: AppColors.coralAccent,
                             ),
                             SizedBox(width: 8),
                             Text(
@@ -230,7 +230,7 @@ class _Step5EmergencyContactsState
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: AuthTheme.coralAccent,
+                                color: AppColors.coralAccent,
                               ),
                             ),
                           ],

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:core/core.dart';
+
 import '../../routing/routes.dart';
-import '../../../common/theme/auth_theme.dart';
 
 /// Password Updated Confirmation screen - Pixel-perfect matching Figma design
 class PasswordUpdatedScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class PasswordUpdatedScreen extends StatelessWidget {
               'assets/images/password_updated_hero.png',
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                color: AuthTheme.primaryBlue.withOpacity(0.3),
+                color: AppColors.secondary.withOpacity(0.3),
                 child: const Center(
                   child: Icon(
                     Icons.check_circle_outline,
@@ -100,8 +101,8 @@ class PasswordUpdatedScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () => context.go(Routes.signIn),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AuthTheme.primaryBlue,
-                          foregroundColor: Colors.white,
+                          backgroundColor: AppColors.secondary,
+                          foregroundColor: AppColors.textOnButton,
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(

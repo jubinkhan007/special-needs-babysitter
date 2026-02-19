@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
+
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
 import '../../../widgets/auth_input_field.dart';
@@ -54,7 +55,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please select a security question'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -64,7 +65,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please enter your answer'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -80,7 +81,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
     final state = ref.watch(signUpControllerProvider);
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -105,13 +106,13 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AuthTheme.primaryBlue.withOpacity(0.12),
+                        color: AppColors.secondary.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Icon(
                         Icons.security_outlined,
                         size: 36,
-                        color: AuthTheme.primaryBlue,
+                        color: AppColors.secondary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -131,7 +132,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                       'This will help you recover your account if you forget your password.',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AuthTheme.textDark.withOpacity(0.6),
+                        color: AppColors.textPrimary.withOpacity(0.6),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -175,12 +176,12 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
           child: Column(
             children: [
               const Icon(Icons.error_outline,
-                  size: 48, color: AuthTheme.errorRed),
+                  size: 48, color: AppColors.error),
               const SizedBox(height: 16),
               Text(
                 state.message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AuthTheme.textDark),
+                style: const TextStyle(color: AppColors.textPrimary),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
@@ -218,7 +219,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                   'Select Security Question*',
                   style: TextStyle(
                     fontSize: 15,
-                    color: AuthTheme.textDark.withOpacity(0.35),
+                    color: AppColors.textPrimary.withOpacity(0.35),
                   ),
                 ),
                 isExpanded: true,

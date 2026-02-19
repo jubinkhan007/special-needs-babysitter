@@ -24,6 +24,7 @@ class AppColors {
   static const Color primary = Color(0xFF89CFEF); // outline/link blue
   static const Color primarySoft = Color(0xFFAAD8ED); // filled CTA blue
   static const Color secondary = Color(0xFF4090B8); // deeper blue accents
+  static const Color coralAccent = Color(0xFFE8896B); // coral/salmon accent
 
   // ---------------------------------------------------------------------------
   // Surfaces / backgrounds (match the light-blue app background + white cards)
@@ -40,6 +41,7 @@ class AppColors {
   static const Color textSecondary = neutral40;
   static const Color textMuted = neutral30;
   static const Color textTertiary = textMuted;
+  static const Color textOnButton = Color(0xFFFFFFFF); // white text on colored buttons
 
   // Inputs
   static const Color inputFill = surface;

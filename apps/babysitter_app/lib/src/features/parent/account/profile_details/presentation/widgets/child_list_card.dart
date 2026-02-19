@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:domain/domain.dart';
 import '../profile_details_ui_constants.dart';
@@ -100,7 +101,7 @@ class ChildListCard extends StatelessWidget {
         onPressed: onAddChild,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF1F2937),
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnButton,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

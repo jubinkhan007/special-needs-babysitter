@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
 import '../../providers/parent_profile_providers.dart';
@@ -67,7 +67,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please add at least one child'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -88,7 +88,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -111,13 +111,13 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AuthTheme.primaryBlue.withAlpha(30),
+                        color: AppColors.secondary.withAlpha(30),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Icon(
                         Icons.child_friendly,
                         size: 36,
-                        color: AuthTheme.primaryBlue,
+                        color: AppColors.secondary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -137,7 +137,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                       'Add your children and their special care needs',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AuthTheme.textDark.withAlpha(153),
+                        color: AppColors.textPrimary.withAlpha(153),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -160,12 +160,12 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                               width: 48,
                               height: 48,
                               decoration: BoxDecoration(
-                                color: AuthTheme.primaryBlue.withAlpha(30),
+                                color: AppColors.secondary.withAlpha(30),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: const Icon(
                                 Icons.child_care,
-                                color: AuthTheme.primaryBlue,
+                                color: AppColors.secondary,
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -185,7 +185,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                                     '${kid['age']} years old',
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: AuthTheme.textDark.withAlpha(153),
+                                      color: AppColors.textPrimary.withAlpha(153),
                                     ),
                                   ),
                                   if ((kid['specialNeeds'] as List?)
@@ -201,7 +201,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 6, vertical: 2),
                                             decoration: BoxDecoration(
-                                              color: AuthTheme.primaryBlue
+                                              color: AppColors.secondary
                                                   .withAlpha(25),
                                               borderRadius:
                                                   BorderRadius.circular(4),
@@ -210,7 +210,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                                               need as String,
                                               style: const TextStyle(
                                                 fontSize: 11,
-                                                color: AuthTheme.primaryBlue,
+                                                color: AppColors.secondary,
                                               ),
                                             ),
                                           );
@@ -226,7 +226,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete_outline,
-                                  size: 20, color: AuthTheme.errorRed),
+                                  size: 20, color: AppColors.error),
                               onPressed: () => _deleteChild(index),
                             ),
                           ],
@@ -244,7 +244,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: AuthTheme.primaryBlue,
+                            color: AppColors.secondary,
                             style: BorderStyle.solid,
                           ),
                         ),
@@ -253,7 +253,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                           children: [
                             Icon(
                               Icons.add_circle_outline,
-                              color: AuthTheme.primaryBlue,
+                              color: AppColors.secondary,
                             ),
                             SizedBox(width: 8),
                             Text(
@@ -261,7 +261,7 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: AuthTheme.primaryBlue,
+                                color: AppColors.secondary,
                               ),
                             ),
                           ],

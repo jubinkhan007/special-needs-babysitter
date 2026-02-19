@@ -153,7 +153,7 @@ class ParentHomeBannerCard extends StatelessWidget {
                               onPressed: () => context.push(Routes.postJob),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.buttonDark,
-                                foregroundColor: Colors.white,
+                                foregroundColor: AppColors.textOnButton,
                                 elevation: 0,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),

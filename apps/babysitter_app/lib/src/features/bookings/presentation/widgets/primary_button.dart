@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 // primary_button.dart
 import 'package:babysitter_app/src/common_widgets/debounced_button.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTokens.primaryBlue,
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.textOnButton,
             elevation: 0,
             shadowColor: Colors.transparent,
             shape: RoundedRectangleBorder(

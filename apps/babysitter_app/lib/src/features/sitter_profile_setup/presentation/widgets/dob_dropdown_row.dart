@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 class DobDropdownRow extends StatelessWidget {
   final DateTime? dob;
@@ -66,14 +66,14 @@ class DobDropdownRow extends StatelessWidget {
               return Theme(
                 data: Theme.of(context).copyWith(
                   colorScheme: const ColorScheme.light(
-                    primary: AuthTheme.primaryBlue, // Header background color
+                    primary: AppColors.secondary, // Header background color
                     onPrimary: Colors.white, // Header text color
                     onSurface: Color(0xFF1A1A1A), // Body text color
                   ),
                   textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
                       foregroundColor:
-                          AuthTheme.primaryBlue, // Button text color
+                          AppColors.secondary, // Button text color
                     ),
                   ),
                 ),

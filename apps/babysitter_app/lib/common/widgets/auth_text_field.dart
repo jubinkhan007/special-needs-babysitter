@@ -1,7 +1,6 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../theme/auth_theme.dart';
 
 /// Reusable text field widget for auth screens
 class AuthTextField extends StatelessWidget {
@@ -41,14 +40,14 @@ class AuthTextField extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
     final labelColor =
-        isDark ? colorScheme.onSurfaceVariant : AuthTheme.textDark.withOpacity(0.8);
-    final textColor = isDark ? colorScheme.onSurface : AuthTheme.textDark;
+        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withOpacity(0.8);
+    final textColor = isDark ? colorScheme.onSurface : AppColors.textPrimary;
     final hintColor =
-        isDark ? colorScheme.onSurfaceVariant : AuthTheme.textDark.withOpacity(0.4);
+        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withOpacity(0.4);
     final fillColor = isDark ? colorScheme.surface : Colors.white;
-    final borderColor = isDark ? colorScheme.outline : AuthTheme.inputBorder;
+    final borderColor = isDark ? colorScheme.outline : AppColors.inputBorder;
     final focusBorderColor =
-        isDark ? colorScheme.primary : AuthTheme.primaryBlue;
+        isDark ? colorScheme.primary : AppColors.secondary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -97,12 +96,12 @@ class AuthTextField extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AuthTheme.errorRed),
+              borderSide: BorderSide(color: colorScheme.error),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AuthTheme.errorRed,
+              borderSide: BorderSide(
+                color: colorScheme.error,
                 width: 1.5,
               ),
             ),

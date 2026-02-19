@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../../auth/presentation/widgets/step_indicator.dart';
 
@@ -103,7 +103,7 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -126,13 +126,13 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                       width: 72,
                       height: 72,
                       decoration: BoxDecoration(
-                        color: AuthTheme.primaryBlue.withAlpha(30),
+                        color: AppColors.secondary.withAlpha(30),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Icon(
                         Icons.health_and_safety_outlined,
                         size: 36,
-                        color: AuthTheme.primaryBlue,
+                        color: AppColors.secondary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -152,7 +152,7 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                       'Select the services your family may need',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AuthTheme.textDark.withAlpha(153),
+                        color: AppColors.textPrimary.withAlpha(153),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -168,12 +168,12 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AuthTheme.primaryBlue.withAlpha(25)
+                                ? AppColors.secondary.withAlpha(25)
                                 : Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: isSelected
-                                  ? AuthTheme.primaryBlue
+                                  ? AppColors.secondary
                                   : const Color(0xFFE5E7EB),
                             ),
                           ),
@@ -184,14 +184,14 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                                 height: 40,
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? AuthTheme.primaryBlue.withAlpha(51)
+                                      ? AppColors.secondary.withAlpha(51)
                                       : const Color(0xFFF5F5F5),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Icon(
                                   service['icon'] as IconData,
                                   color: isSelected
-                                      ? AuthTheme.primaryBlue
+                                      ? AppColors.secondary
                                       : const Color(0xFF6B7280),
                                   size: 22,
                                 ),
@@ -206,7 +206,7 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                                         ? FontWeight.w600
                                         : FontWeight.w400,
                                     color: isSelected
-                                        ? AuthTheme.primaryBlue
+                                        ? AppColors.secondary
                                         : const Color(0xFF1A1A1A),
                                   ),
                                 ),
@@ -217,11 +217,11 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: isSelected
-                                      ? AuthTheme.primaryBlue
+                                      ? AppColors.secondary
                                       : Colors.white,
                                   border: Border.all(
                                     color: isSelected
-                                        ? AuthTheme.primaryBlue
+                                        ? AppColors.secondary
                                         : const Color(0xFFD0D5DD),
                                     width: 2,
                                   ),

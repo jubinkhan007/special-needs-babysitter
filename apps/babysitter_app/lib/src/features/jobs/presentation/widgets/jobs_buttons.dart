@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 
@@ -19,7 +20,7 @@ class JobsPrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTokens.jobPrimaryBtnBg,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnButton,
           elevation: 0,
           shadowColor: Colors.transparent,
           padding: EdgeInsets.zero,
@@ -53,7 +54,7 @@ class JobsSecondaryButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTokens.jobSecondaryBtnBg,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnButton,
           elevation: 0,
           shadowColor: Colors.transparent,
           padding: EdgeInsets.zero,

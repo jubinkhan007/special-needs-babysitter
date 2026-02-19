@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:core/core.dart';
+
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
-import '../../../common/theme/auth_theme.dart';
 
 /// Update Password screen - Pixel-perfect matching Figma design
 class UpdatePasswordScreen extends ConsumerStatefulWidget {
@@ -52,7 +53,7 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           // Hero image at top
@@ -67,7 +68,7 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                 'assets/images/update_password_hero.png',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  color: AuthTheme.primaryBlue.withOpacity(0.3),
+                  color: AppColors.secondary.withOpacity(0.3),
                   child: const Center(
                     child: Icon(
                       Icons.lock_reset,
@@ -88,7 +89,7 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
             bottom: 0,
             child: Container(
               decoration: const BoxDecoration(
-                color: AuthTheme.backgroundColor,
+                color: AppColors.background,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
@@ -118,7 +119,7 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                         'Please put a minimum 8 characters, one uppercase letter, one special character)',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AuthTheme.textDark.withOpacity(0.6),
+                          color: AppColors.textPrimary.withOpacity(0.6),
                           height: 1.4,
                         ),
                       ),

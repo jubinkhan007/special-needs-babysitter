@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -977,7 +978,7 @@ class _SitterActiveBookingScreenState
                 onPressed: _isClockingOut ? null : _clockOut,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF87C4F2),
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
@@ -1106,7 +1107,7 @@ class _SitterActiveBookingScreenState
                     onPressed: () => Navigator.of(context).pop(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF87C4F2),
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.textOnButton,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

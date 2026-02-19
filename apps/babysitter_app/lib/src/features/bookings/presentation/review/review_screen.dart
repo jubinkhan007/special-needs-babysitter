@@ -173,7 +173,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         onPressed: _isSubmitting ? null : _submitReview,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF8CC8F5),
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnButton,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../widgets/add_child_dialog.dart';
 import '../../widgets/add_emergency_contact_dialog.dart';
@@ -171,7 +171,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
               child: const Icon(
                 Icons.person_search_outlined, // magnifying glass / review
                 size: 40,
-                color: AuthTheme.primaryBlue,
+                color: AppColors.secondary,
               ),
             ),
             const SizedBox(height: 16),
@@ -196,7 +196,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
                   child: Icon(
                     Icons.person,
                     size: 40,
-                    color: AuthTheme.primaryBlue,
+                    color: AppColors.secondary,
                   ),
                 ),
                 Positioned(
@@ -423,7 +423,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
         shape: BoxShape.circle,
         border: (active && large)
             ? Border.all(color: Colors.white, width: 2)
@@ -436,7 +436,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
     return Expanded(
       child: Container(
         height: 2,
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
       ),
     );
   }

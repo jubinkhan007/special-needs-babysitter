@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../search/presentation/theme/app_ui_tokens.dart';
 
@@ -20,7 +21,7 @@ class BookingPrimaryBottomButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppUiTokens.primaryBlue, // Light Blue
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnButton,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12), // Match input radius

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class AddChildButton extends StatelessWidget {
@@ -11,7 +12,7 @@ class AddChildButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF1D2939), // Dark Navy
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.textOnButton,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50), // Pill-ish / High rounding

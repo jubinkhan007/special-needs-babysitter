@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 
 class AddChildDialog extends StatefulWidget {
@@ -568,11 +568,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AuthTheme.primaryBlue),
+                borderSide: const BorderSide(color: AppColors.secondary),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AuthTheme.errorRed),
+                borderSide: const BorderSide(color: AppColors.error),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -623,7 +623,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
               height: 20,
               child: Checkbox(
                 value: value,
-                activeColor: AuthTheme.primaryBlue,
+                activeColor: AppColors.secondary,
                 side: const BorderSide(color: Color(0xFFD0D5DD), width: 1.5),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)), // Slightly rounded

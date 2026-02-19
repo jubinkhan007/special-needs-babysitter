@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart';
 import 'package:core/core.dart';
 
-import '../../../../../../../common/theme/auth_theme.dart';
 import '../../../widgets/auth_input_field.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
@@ -91,7 +90,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please select a security question'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -130,7 +129,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
         AppToast.show(context, 
           SnackBar(
             content: Text(state.message),
-            backgroundColor: AuthTheme.errorRed,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -157,7 +156,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
         context,
         SnackBar(
           content: Text(map['message'] as String? ?? 'Invalid referral code'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return false;
@@ -168,7 +167,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
         context,
         SnackBar(
           content: Text(message),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return false;
@@ -188,7 +187,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     final questions = _getQuestions(state);
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -215,13 +214,13 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                         width: 72,
                         height: 72,
                         decoration: BoxDecoration(
-                          color: AuthTheme.primaryBlue.withAlpha(30),
+                          color: AppColors.secondary.withAlpha(30),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Icon(
                           Icons.lock_outline,
                           size: 36,
-                          color: AuthTheme.primaryBlue,
+                          color: AppColors.secondary,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -316,7 +315,7 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                                     'Select Security Question*',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: AuthTheme.textDark.withAlpha(89),
+                                      color: AppColors.textPrimary.withAlpha(89),
                                     ),
                                   ),
                                   isExpanded: true,

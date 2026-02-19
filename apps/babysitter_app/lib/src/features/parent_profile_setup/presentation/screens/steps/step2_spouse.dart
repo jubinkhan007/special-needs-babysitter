@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/parent_profile_providers.dart';
 import '../../widgets/add_child_dialog.dart';
@@ -155,7 +155,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                     child: const Icon(
                       Icons.child_care, // Better baby icon
                       size: 36,
-                      color: AuthTheme.primaryBlue,
+                      color: AppColors.secondary,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -181,7 +181,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color(0xFF1D2939), // Dark button
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.textOnButton,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -247,7 +247,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color(0xFF1D2939), // Dark button
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.textOnButton,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -304,7 +304,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
         shape: BoxShape.circle,
         border: (active && large)
             ? Border.all(color: Colors.white, width: 2)
@@ -317,7 +317,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
     return Expanded(
       child: Container(
         height: 2,
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
       ),
     );
   }

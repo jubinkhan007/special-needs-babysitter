@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 // import 'package:flutter/material.dart';
 // import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 // import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
@@ -130,7 +131,7 @@
 //                     style: ElevatedButton.styleFrom(
 //                       backgroundColor: const Color(
 //                           0xFF1D2939), // Dark Grey/Black matches Figma
-//                       foregroundColor: Colors.white,
+//                       foregroundColor: AppColors.textOnButton,
 //                       elevation: 0,
 //                       padding: const EdgeInsets.symmetric(horizontal: 20),
 //                       fixedSize: const Size.fromHeight(40),

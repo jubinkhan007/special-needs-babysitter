@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:domain/domain.dart';
-import 'package:babysitter_app/common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 /// Formatter that only allows digits and at most one decimal point
 class DecimalInputFormatter extends TextInputFormatter {
@@ -290,7 +290,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(
                           0xFF75CFF0), // Light blue from design screenshot
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.textOnButton,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -367,7 +367,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AuthTheme.primaryBlue),
+                borderSide: const BorderSide(color: AppColors.secondary),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

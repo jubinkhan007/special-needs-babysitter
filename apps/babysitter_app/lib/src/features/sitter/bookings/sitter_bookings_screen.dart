@@ -197,7 +197,7 @@ class SitterBookingsScreen extends ConsumerWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                 ),
                 child: const Text('Retry'),
               ),

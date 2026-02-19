@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
 
@@ -66,7 +67,7 @@ class BottomBookingBar extends StatelessWidget {
                   onPressed: onBookPressed,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppUiTokens.primaryBlue,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius:

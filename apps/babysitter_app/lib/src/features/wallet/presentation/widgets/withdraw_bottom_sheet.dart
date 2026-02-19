@@ -92,7 +92,7 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
                   : () => _submitWithdrawal(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: WalletStyles.primaryBlue,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.textOnButton,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

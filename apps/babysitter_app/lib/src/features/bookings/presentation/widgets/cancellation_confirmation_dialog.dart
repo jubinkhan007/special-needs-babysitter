@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 
@@ -240,7 +241,7 @@ class CancellationConfirmationDialog extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(true),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTokens.primaryBlue,
-            foregroundColor: Colors.white,
+            foregroundColor: AppColors.textOnButton,
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -278,7 +279,7 @@ class CancellationConfirmationDialog extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(true),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTokens.primaryBlue,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.textOnButton,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(

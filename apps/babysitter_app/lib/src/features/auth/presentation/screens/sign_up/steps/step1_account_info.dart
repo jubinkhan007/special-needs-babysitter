@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:domain/domain.dart';
 import 'package:core/core.dart';
 
-import '../../../../../../../common/theme/auth_theme.dart';
 import '../../../widgets/auth_input_field.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../../widgets/step_indicator.dart';
@@ -71,7 +70,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please agree to Terms & Conditions'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -109,7 +108,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   ? result.message
                   : 'Email or phone number already exists',
             ),
-            backgroundColor: AuthTheme.errorRed,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -119,7 +118,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
         context,
         SnackBar(
           content: Text(e.message),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     } catch (_) {
@@ -128,7 +127,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
         context,
         const SnackBar(
           content: Text('Failed to check availability. Please try again.'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     } finally {
@@ -141,7 +140,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -167,13 +166,13 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: AuthTheme.primaryBlue.withOpacity(0.12),
+                    color: AppColors.secondary.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Icon(
                     Icons.person_add_outlined,
                     size: 36,
-                    color: AuthTheme.primaryBlue,
+                    color: AppColors.secondary,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -296,12 +295,12 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                         height: 20,
                         decoration: BoxDecoration(
                           color: _agreedToTerms
-                              ? AuthTheme.primaryBlue
+                              ? AppColors.secondary
                               : Colors.white,
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(
                             color: _agreedToTerms
-                                ? AuthTheme.primaryBlue
+                                ? AppColors.secondary
                                 : const Color(0xFFD0D5DD),
                             width: 1.5,
                           ),

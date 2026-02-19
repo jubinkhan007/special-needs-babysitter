@@ -173,7 +173,7 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
               onPressed: _isSubmitting ? null : _submitReview,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF87C4F2),
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.textOnButton,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 /// Pixel-perfect input field matching Figma design
 /// - Placeholder only (no external label)
@@ -57,19 +57,19 @@ class AuthInputField extends StatelessWidget {
           null, // Hide counter
       style: const TextStyle(
         fontSize: 15,
-        color: AuthTheme.textDark,
+        color: AppColors.textPrimary,
       ),
       decoration: InputDecoration(
         hintText: hint,
         helperText: helperText,
         helperStyle: TextStyle(
           fontSize: 12,
-          color: AuthTheme.textDark.withOpacity(0.5),
+          color: AppColors.textPrimary.withOpacity(0.5),
         ),
         hintStyle: TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w400,
-          color: AuthTheme.textDark.withOpacity(0.35),
+          color: AppColors.textPrimary.withOpacity(0.35),
         ),
         filled: true,
         fillColor: Colors.white,
@@ -80,30 +80,30 @@ class AuthInputField extends StatelessWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8), // Moderate radius, not pill
           borderSide: BorderSide(
-            color: AuthTheme.inputBorder.withOpacity(0.5),
+            color: AppColors.inputBorder.withOpacity(0.5),
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: AuthTheme.inputBorder.withOpacity(0.5),
+            color: AppColors.inputBorder.withOpacity(0.5),
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
-            color: AuthTheme.primaryBlue,
+            color: AppColors.secondary,
             width: 1,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AuthTheme.errorRed),
+          borderSide: const BorderSide(color: AppColors.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(
-            color: AuthTheme.errorRed,
+            color: AppColors.error,
             width: 1,
           ),
         ),

@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
+import 'package:core/core.dart';
 
 import '../../routing/routes.dart';
 import '../../../common/widgets/auth_text_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
-import '../../../common/theme/auth_theme.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sign up screen with role selection tabs
@@ -45,7 +45,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please agree to the Terms and Privacy Policy'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -66,7 +66,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       AppToast.show(context, 
         SnackBar(
           content: Text(authState.error.toString()),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -79,7 +79,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final isLoading = authState.isLoading;
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -113,7 +113,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           child: const Icon(
                             Icons.arrow_back_ios_new,
                             size: 18,
-                            color: AuthTheme.textDark,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ),
@@ -128,7 +128,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
-                      color: AuthTheme.textDark,
+                      color: AppColors.textPrimary,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -137,7 +137,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     'Sign up to get started',
                     style: TextStyle(
                       fontSize: 15,
-                      color: AuthTheme.textDark.withOpacity(0.6),
+                      color: AppColors.textPrimary.withOpacity(0.6),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -212,7 +212,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         _obscurePassword
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
-                        color: AuthTheme.textDark.withOpacity(0.5),
+                        color: AppColors.textPrimary.withOpacity(0.5),
                         size: 20,
                       ),
                       onPressed: () {
@@ -243,12 +243,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           onChanged: (value) {
                             setState(() => _agreedToTerms = value ?? false);
                           },
-                          activeColor: AuthTheme.primaryBlue,
+                          activeColor: AppColors.secondary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
                           side: BorderSide(
-                            color: AuthTheme.textDark.withOpacity(0.3),
+                            color: AppColors.textPrimary.withOpacity(0.3),
                           ),
                         ),
                       ),
@@ -258,7 +258,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           text: TextSpan(
                             style: TextStyle(
                               fontSize: 13,
-                              color: AuthTheme.textDark.withOpacity(0.7),
+                              color: AppColors.textPrimary.withOpacity(0.7),
                               height: 1.4,
                             ),
                             children: [
@@ -266,7 +266,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               TextSpan(
                                 text: 'Terms of Service',
                                 style: const TextStyle(
-                                  color: AuthTheme.primaryBlue,
+                                  color: AppColors.secondary,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 recognizer: TapGestureRecognizer()
@@ -278,7 +278,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               TextSpan(
                                 text: 'Privacy Policy',
                                 style: const TextStyle(
-                                  color: AuthTheme.primaryBlue,
+                                  color: AppColors.secondary,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 recognizer: TapGestureRecognizer()
@@ -308,14 +308,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       text: TextSpan(
                         style: TextStyle(
                           fontSize: 14,
-                          color: AuthTheme.textDark.withOpacity(0.7),
+                          color: AppColors.textPrimary.withOpacity(0.7),
                         ),
                         children: [
                           const TextSpan(text: 'Already have an account? '),
                           TextSpan(
                             text: 'Log In',
                             style: const TextStyle(
-                              color: AuthTheme.primaryBlue,
+                              color: AppColors.secondary,
                               fontWeight: FontWeight.w600,
                             ),
                             recognizer: TapGestureRecognizer()
@@ -399,7 +399,7 @@ class _RoleTab extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: isSelected ? AuthTheme.primaryBlue : Colors.transparent,
+            color: isSelected ? AppColors.secondary : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Center(
@@ -410,7 +410,7 @@ class _RoleTab extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? Colors.white
-                    : AuthTheme.textDark.withOpacity(0.6),
+                    : AppColors.textPrimary.withOpacity(0.6),
               ),
             ),
           ),

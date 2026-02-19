@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 /// 6-digit OTP input widget
 class OtpInput extends StatefulWidget {
@@ -99,30 +99,30 @@ class _OtpInputState extends State<OtpInput> {
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w600,
-                color: AuthTheme.textDark,
+                color: AppColors.textPrimary,
               ),
               decoration: InputDecoration(
                 counterText: '',
                 hintText: '-',
                 hintStyle: TextStyle(
                   fontSize: 20.sp,
-                  color: AuthTheme.textDark.withValues(alpha: 0.3),
+                  color: AppColors.textPrimary.withValues(alpha: 0.3),
                 ),
                 filled: true,
                 fillColor: Colors.white,
                 contentPadding: EdgeInsets.zero,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: AuthTheme.inputBorder),
+                  borderSide: const BorderSide(color: AppColors.inputBorder),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
-                  borderSide: const BorderSide(color: AuthTheme.inputBorder),
+                  borderSide: const BorderSide(color: AppColors.inputBorder),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                   borderSide: BorderSide(
-                    color: AuthTheme.primaryBlue,
+                    color: AppColors.secondary,
                     width: 1.5.w,
                   ),
                 ),

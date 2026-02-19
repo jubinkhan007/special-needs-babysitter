@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -96,7 +97,7 @@ class BackgroundCheckCompleteScreen extends ConsumerWidget {
                     },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF89CFF0), // Light blue
-                        foregroundColor: Colors.white,
+                        foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:auth/auth.dart';
+import 'package:core/core.dart';
 
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';
 import '../../../common/widgets/primary_action_button.dart';
-import '../../../common/theme/auth_theme.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Forgot Password screen - Pixel-perfect matching Figma design
@@ -40,7 +40,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         context,
         const SnackBar(
           content: Text('Please enter email or phone number'),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -85,7 +85,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         context,
         SnackBar(
           content: Text(errorMessage),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -110,7 +110,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: AuthTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
           // Hero image at top
@@ -125,7 +125,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 'assets/onboarding_4.jpg',
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
-                  color: AuthTheme.primaryBlue.withOpacity(0.3),
+                  color: AppColors.secondary.withOpacity(0.3),
                   child: const Center(
                     child: Icon(
                       Icons.family_restroom,
@@ -146,7 +146,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
             bottom: 0,
             child: Container(
               decoration: const BoxDecoration(
-                color: AuthTheme.backgroundColor,
+                color: AppColors.background,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32),
                   topRight: Radius.circular(32),
@@ -176,7 +176,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         'Enter your email or phone number to reset your password. We will send you a reset link using whichever method you provide.',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AuthTheme.textDark.withOpacity(0.6),
+                          color: AppColors.textPrimary.withOpacity(0.6),
                           height: 1.4,
                         ),
                       ),
@@ -341,7 +341,7 @@ class _ResetConfirmationDialog extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF88C6E0),
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 // secondary_button.dart
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
@@ -18,7 +19,7 @@ class SecondaryButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTokens.darkButtonBg,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.textOnButton,
           elevation: 0,
           shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(

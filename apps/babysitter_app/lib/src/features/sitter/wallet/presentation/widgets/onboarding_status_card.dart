@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -105,7 +106,7 @@ class OnboardingStatusCard extends StatelessWidget {
                 onPressed: isLoading ? null : onActionPressed,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: config.buttonColor,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   disabledBackgroundColor: config.buttonColor.withOpacity(0.6),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),

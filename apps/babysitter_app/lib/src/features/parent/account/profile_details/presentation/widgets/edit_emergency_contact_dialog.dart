@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:domain/domain.dart';
-import 'package:babysitter_app/common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 class EditEmergencyContactDialog extends StatefulWidget {
   final EmergencyContact? initialContact;
@@ -128,7 +128,7 @@ class _EditEmergencyContactDialogState
                           height: 24,
                           child: Checkbox(
                             value: _wantToAddContact,
-                            activeColor: AuthTheme.primaryBlue,
+                            activeColor: AppColors.secondary,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4)),
                             onChanged: (v) =>
@@ -176,8 +176,8 @@ class _EditEmergencyContactDialogState
               child: ElevatedButton(
                 onPressed: _submit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AuthTheme.primaryBlue,
-                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.secondary,
+                  foregroundColor: AppColors.textOnButton,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -240,7 +240,7 @@ class _EditEmergencyContactDialogState
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: AuthTheme.primaryBlue),
+                borderSide: const BorderSide(color: AppColors.secondary),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

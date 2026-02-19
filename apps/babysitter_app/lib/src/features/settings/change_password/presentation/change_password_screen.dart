@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
-import 'package:babysitter_app/common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:auth/auth.dart';
@@ -83,7 +83,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         context,
         SnackBar(
           content: Text(errorMessage),
-          backgroundColor: AuthTheme.errorRed,
+          backgroundColor: AppColors.error,
         ),
       );
     }
@@ -207,13 +207,13 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                   onFieldSubmitted: (_) => _sendResetLink(),
                   style: TextStyle(
                     fontSize: 15.sp,
-                    color: AuthTheme.textDark,
+                    color: AppColors.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Email',
                     hintStyle: TextStyle(
                       fontSize: 15.sp,
-                      color: AuthTheme.textDark.withOpacity(0.4),
+                      color: AppColors.textPrimary.withOpacity(0.4),
                     ),
                     filled: true,
                     fillColor: Colors.white,

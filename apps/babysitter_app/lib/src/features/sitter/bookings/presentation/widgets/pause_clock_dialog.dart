@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -136,7 +137,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                   onPressed: widget.onPause,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF8EC9F5),
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(

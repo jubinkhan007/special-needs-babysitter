@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -72,7 +73,7 @@ class ApplicationSubmittedDialog extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       const Color(0xFF8ED1F2), // Light blue from image
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
-import 'package:babysitter_app/common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'reset_password_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
@@ -164,13 +164,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   textInputAction: TextInputAction.next,
                   style: TextStyle(
                     fontSize: 15.sp,
-                    color: AuthTheme.textDark,
+                    color: AppColors.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Password*',
                     hintStyle: TextStyle(
                       fontSize: 15.sp,
-                      color: AuthTheme.textDark.withOpacity(0.4),
+                      color: AppColors.textPrimary.withOpacity(0.4),
                     ),
                     filled: true,
                     fillColor: Colors.white,
@@ -208,13 +208,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   onFieldSubmitted: (_) => _onSavePassword(),
                   style: TextStyle(
                     fontSize: 15.sp,
-                    color: AuthTheme.textDark,
+                    color: AppColors.textPrimary,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Confirm Password*',
                     hintStyle: TextStyle(
                       fontSize: 15.sp,
-                      color: AuthTheme.textDark.withOpacity(0.4),
+                      color: AppColors.textPrimary.withOpacity(0.4),
                     ),
                     filled: true,
                     fillColor: Colors.white,

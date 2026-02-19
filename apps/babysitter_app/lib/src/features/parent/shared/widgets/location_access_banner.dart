@@ -73,7 +73,7 @@ class LocationAccessBanner extends StatelessWidget {
             onPressed: onAction,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.textOnButton,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               minimumSize: const Size(0, 32),
               elevation: 0,

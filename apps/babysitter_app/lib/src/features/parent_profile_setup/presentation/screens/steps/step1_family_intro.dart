@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/parent_profile_providers.dart';
 import 'add_item_dialog.dart';
@@ -335,7 +335,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: 40,
-                              color: AuthTheme.primaryBlue,
+                              color: AppColors.secondary,
                             ),
                           )
                         : null,
@@ -428,7 +428,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                     height: 24,
                     child: Checkbox(
                       value: _hasPets,
-                      activeColor: AuthTheme.primaryBlue,
+                      activeColor: AppColors.secondary,
                       side: const BorderSide(
                           color: Color(0xFFD0D5DD), width: 1.5),
                       shape: RoundedRectangleBorder(
@@ -546,7 +546,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                               height: 24,
                               child: Checkbox(
                                 value: _petTypes[key],
-                                activeColor: AuthTheme.primaryBlue,
+                                activeColor: AppColors.secondary,
                                 side:
                                     const BorderSide(color: Color(0xFFD0D5DD)),
                                 shape: RoundedRectangleBorder(
@@ -600,7 +600,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                     height: 24,
                     child: Checkbox(
                       value: _hasSecondLanguage,
-                      activeColor: AuthTheme.primaryBlue,
+                      activeColor: AppColors.secondary,
                       side: const BorderSide(
                           color: Color(0xFFD0D5DD), width: 1.5),
                       shape: RoundedRectangleBorder(
@@ -754,7 +754,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                   height: 24,
                                   child: Checkbox(
                                     value: _languages[key],
-                                    activeColor: AuthTheme.primaryBlue,
+                                    activeColor: AppColors.secondary,
                                     side: const BorderSide(
                                         color: Color(0xFFD0D5DD)),
                                     shape: RoundedRectangleBorder(
@@ -923,7 +923,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AuthTheme.primaryBlue : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
         shape: BoxShape.circle,
         border: active
             ? Border.all(color: Colors.white, width: 2)

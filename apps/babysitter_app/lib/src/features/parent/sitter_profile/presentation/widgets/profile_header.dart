@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -321,7 +322,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
                         debounceDuration: const Duration(milliseconds: 600),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _messageBg,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.textOnButton,
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           shape: RoundedRectangleBorder(

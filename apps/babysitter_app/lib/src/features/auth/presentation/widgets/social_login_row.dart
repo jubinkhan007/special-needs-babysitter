@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../common/theme/auth_theme.dart';
+import 'package:core/core.dart';
 
 /// Pixel-perfect social login row matching Figma
 class SocialLoginRow extends StatelessWidget {
@@ -34,7 +34,7 @@ class SocialLoginRow extends StatelessWidget {
                 'Or SignUp with',
                 style: TextStyle(
                   fontSize: 13,
-                  color: AuthTheme.textDark.withOpacity(0.45),
+                  color: AppColors.textPrimary.withOpacity(0.45),
                 ),
               ),
             ),

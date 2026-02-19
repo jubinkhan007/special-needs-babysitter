@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -582,7 +583,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                   onPressed: _isLoading || !_isEditable ? null : _updateJob,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTokens.primaryBlue,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.textOnButton,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
