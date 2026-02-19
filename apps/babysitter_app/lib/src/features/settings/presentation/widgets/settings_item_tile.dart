@@ -74,7 +74,7 @@ class SettingsSwitch extends StatelessWidget {
       child: Switch.adaptive(
         value: value,
         onChanged: onChanged,
-        activeColor: AppTokens.settingsSwitchActiveThumb,
+        activeThumbColor: AppTokens.settingsSwitchActiveThumb,
         activeTrackColor: AppTokens.settingsSwitchActiveTrack,
         inactiveThumbColor: AppTokens.settingsSwitchInactiveThumb,
         inactiveTrackColor: AppTokens.settingsSwitchInactiveTrack,

@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:core/src/theme/app_typography.dart';
 
 class BioTextAreaCard extends StatelessWidget {
   final String text;
