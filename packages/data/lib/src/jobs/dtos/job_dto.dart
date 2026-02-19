@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:domain/domain.dart';
 import '../../profile_details/dtos/child_dto.dart';
+import 'package:flutter/foundation.dart';
 
 part 'job_dto.freezed.dart';
 part 'job_dto.g.dart';
@@ -191,16 +192,16 @@ class JobDto with _$JobDto {
       );
 
   Job toDomain() {
-    print('DEBUG: JobDto.toDomain() for job: $id');
-    print('DEBUG:   childIds: $childIds (length: ${childIds.length})');
-    print('DEBUG:   children count: ${children.length}');
-    print('DEBUG:   address: $address');
+    debugPrint('DEBUG: JobDto.toDomain() for job: $id');
+    debugPrint('DEBUG:   childIds: $childIds (length: ${childIds.length})');
+    debugPrint('DEBUG:   children count: ${children.length}');
+    debugPrint('DEBUG:   address: $address');
     if (address != null) {
-      print('DEBUG:   address.city: ${address!.city}');
-      print('DEBUG:   address.state: ${address!.state}');
-      print('DEBUG:   address.zipCode: ${address!.zipCode}');
+      debugPrint('DEBUG:   address.city: ${address!.city}');
+      debugPrint('DEBUG:   address.state: ${address!.state}');
+      debugPrint('DEBUG:   address.zipCode: ${address!.zipCode}');
     } else {
-      print('DEBUG:   address is NULL - will use empty defaults');
+      debugPrint('DEBUG:   address is NULL - will use empty defaults');
     }
 
     return Job(

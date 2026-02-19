@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class ProfileDetailsPresignedUrlResponse {
   final String uploadUrl;
@@ -25,7 +26,7 @@ class ProfileDetailsRemoteDataSource {
   Future<void> updateProfileDetails(Map<String, dynamic> data,
       {int step = 1,}) async {
     try {
-      print(
+      debugPrint(
           'DEBUG: RemoteDataSource updating profile (step $step) with data: $data',);
       await _dio.put(
         '/parents/me',
@@ -35,7 +36,7 @@ class ProfileDetailsRemoteDataSource {
         },
       );
     } catch (e) {
-      print('DEBUG: Error updating profile: $e');
+      debugPrint('DEBUG: Error updating profile: $e');
       rethrow;
     }
   }
@@ -79,11 +80,11 @@ class ProfileDetailsRemoteDataSource {
 
   Future<Map<String, dynamic>> getExtendedProfileDetails(String userId) async {
     try {
-      print('DEBUG: ProfileDetailsRemoteDataSource requesting /parents/me');
+      debugPrint('DEBUG: ProfileDetailsRemoteDataSource requesting /parents/me');
       final response = await _dio.get('/parents/me');
-      print(
+      debugPrint(
           'DEBUG: ProfileDetailsRemoteDataSource response status: ${response.statusCode}',);
-      print(
+      debugPrint(
           'DEBUG: ProfileDetailsRemoteDataSource response data: ${response.data}',);
 
       if (response.data['success'] == true) {
@@ -121,7 +122,7 @@ class ProfileDetailsRemoteDataSource {
   Future<void> updateChild(
       String childId, Map<String, dynamic> childData,) async {
     try {
-      print('DEBUG: updateChild payload: $childData');
+      debugPrint('DEBUG: updateChild payload: $childData');
       final response = await _dio.put(
         '/children/$childId',
         data: childData,
@@ -131,7 +132,7 @@ class ProfileDetailsRemoteDataSource {
       }
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: updateChild DioError: ${e.response?.data}');
+        debugPrint('DEBUG: updateChild DioError: ${e.response?.data}');
       }
       rethrow;
     }
@@ -145,7 +146,7 @@ class ProfileDetailsRemoteDataSource {
       }
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: deleteChild DioError: ${e.response?.data}');
+        debugPrint('DEBUG: deleteChild DioError: ${e.response?.data}');
       }
       rethrow;
     }

@@ -1,5 +1,6 @@
 import 'package:domain/domain.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flutter/foundation.dart';
 
 part 'chat_dto.g.dart';
 
@@ -81,7 +82,7 @@ class ChatDto {
     try {
       return DateTime.parse(date);
     } catch (e) {
-      print('DEBUG: Error parsing date in ChatDto: $date');
+      debugPrint('DEBUG: Error parsing date in ChatDto: $date');
       return DateTime.now();
     }
   }

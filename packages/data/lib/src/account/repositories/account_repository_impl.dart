@@ -1,5 +1,6 @@
 import 'package:domain/domain.dart';
 import '../datasources/account_remote_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 /// Implementation of AccountRepository
 class AccountRepositoryImpl implements AccountRepository {
@@ -12,12 +13,12 @@ class AccountRepositoryImpl implements AccountRepository {
   Future<AccountOverview> getAccountOverview(String userId) async {
     // 1. Fetch fresh user profile
     final user = await _profileRepository.getMe();
-    print(
+    debugPrint(
         'DEBUG: AccountRepo user firstName: ${user.firstName}, lastName: ${user.lastName}',);
 
     // 2. Fetch stats (mocked in datasource)
     final stats = await _remoteDataSource.getAccountStats(userId);
-    print('DEBUG: AccountRepo stats: $stats');
+    debugPrint('DEBUG: AccountRepo stats: $stats');
 
     // 3. Calculate profile completion (logic could be more complex)
     double completion = 0.0;
@@ -36,7 +37,7 @@ class AccountRepositoryImpl implements AccountRepository {
       savedSittersCount: stats['savedSittersCount'] as int? ?? 0,
       profileCompletionPercent: effectiveCompletion,
     );
-    print('DEBUG: AccountRepo mapping overview successful');
+    debugPrint('DEBUG: AccountRepo mapping overview successful');
     return overview;
   }
 }

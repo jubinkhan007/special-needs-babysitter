@@ -30,19 +30,19 @@ class AuthRemoteDataSource {
         data['profileCompletion'] as Map<String, dynamic>?;
     if (profileCompletion != null) {
       final percentage = profileCompletion['percentage'] as num? ?? 0;
-      print('DEBUG: SignIn profileCompletion percentage=$percentage');
+      debugPrint('DEBUG: SignIn profileCompletion percentage=$percentage');
       if (percentage >= 100) {
         // Override profileSetupComplete to true since profile is 100% complete
         userMap['profileSetupComplete'] = true;
-        print('DEBUG: SignIn overriding profileSetupComplete=true');
+        debugPrint('DEBUG: SignIn overriding profileSetupComplete=true');
       }
     }
 
     // Try to extract session_id from Set-Cookie header
     String accessToken = '';
     final cookies = response.headers['set-cookie'];
-    print('DEBUG: Response Headers: ${response.headers}');
-    print('DEBUG: Set-Cookie Header: $cookies');
+    debugPrint('DEBUG: Response Headers: ${response.headers}');
+    debugPrint('DEBUG: Set-Cookie Header: $cookies');
 
     if (cookies != null && cookies.isNotEmpty) {
       for (final cookie in cookies) {
@@ -52,7 +52,7 @@ class AuthRemoteDataSource {
           for (final part in parts) {
             if (part.trim().startsWith('session_id=')) {
               accessToken = part.trim().split('=')[1];
-              print('DEBUG: Found cookie session_id: $accessToken');
+              debugPrint('DEBUG: Found cookie session_id: $accessToken');
               break;
             }
           }
@@ -62,11 +62,11 @@ class AuthRemoteDataSource {
 
     // Fallback to body token if no cookie found
     if (accessToken.isEmpty) {
-      print('DEBUG: No cookie found, falling back to body token');
+      debugPrint('DEBUG: No cookie found, falling back to body token');
       accessToken = data['accessToken'] ?? data['token'] ?? '';
     }
 
-    print('DEBUG: Final Access Token: $accessToken');
+    debugPrint('DEBUG: Final Access Token: $accessToken');
 
     final refreshToken = data['refreshToken'] ?? data['refresh_token'];
 
@@ -98,8 +98,8 @@ class AuthRemoteDataSource {
     final data = response.data['data'] as Map<String, dynamic>;
     String accessToken = '';
     final cookies = response.headers['set-cookie'];
-    print('DEBUG: SignUp Response Headers: ${response.headers}');
-    print('DEBUG: SignUp Set-Cookie Header: $cookies');
+    debugPrint('DEBUG: SignUp Response Headers: ${response.headers}');
+    debugPrint('DEBUG: SignUp Set-Cookie Header: $cookies');
 
     if (cookies != null && cookies.isNotEmpty) {
       for (final cookie in cookies) {
@@ -108,7 +108,7 @@ class AuthRemoteDataSource {
           for (final part in parts) {
             if (part.trim().startsWith('session_id=')) {
               accessToken = part.trim().split('=')[1];
-              print('DEBUG: SignUp Found cookie session_id: $accessToken');
+              debugPrint('DEBUG: SignUp Found cookie session_id: $accessToken');
               break;
             }
           }
@@ -118,12 +118,12 @@ class AuthRemoteDataSource {
 
     // Fallback if no cookie
     if (accessToken.isEmpty) {
-      print('DEBUG: SignUp No cookie found, falling back to body token');
+      debugPrint('DEBUG: SignUp No cookie found, falling back to body token');
       // check body
       accessToken = data['accessToken'] ?? data['token'] ?? '';
     }
 
-    print('DEBUG: SignUp Final Access Token: $accessToken');
+    debugPrint('DEBUG: SignUp Final Access Token: $accessToken');
 
     // We need to return AuthSessionDto, but standard fromJson might miss the cookie token
     // So we manually construct it if we found a cookie
@@ -136,10 +136,10 @@ class AuthRemoteDataSource {
           data['profileCompletion'] as Map<String, dynamic>?;
       if (profileCompletion != null) {
         final percentage = profileCompletion['percentage'] as num? ?? 0;
-        print('DEBUG: SignUp profileCompletion percentage=$percentage');
+        debugPrint('DEBUG: SignUp profileCompletion percentage=$percentage');
         if (percentage >= 100) {
           userMap['profileSetupComplete'] = true;
-          print('DEBUG: SignUp overriding profileSetupComplete=true');
+          debugPrint('DEBUG: SignUp overriding profileSetupComplete=true');
         }
       }
 
@@ -159,7 +159,7 @@ class AuthRemoteDataSource {
       await _dio.post('/auth/logout');
     } catch (e) {
       // Ignore 404 or other errors on logout, just clear local session
-      print('DEBUG: SignOut API failed: $e');
+      debugPrint('DEBUG: SignOut API failed: $e');
     }
   }
 
@@ -177,7 +177,7 @@ class AuthRemoteDataSource {
         _lastRegisteredAt != null &&
         now.difference(_lastRegisteredAt!) < const Duration(minutes: 10);
     if (shouldSkipDuplicate) {
-      print(
+      debugPrint(
           'DEBUG: registerDeviceToken skipped duplicate token within cooldown window',);
       return;
     }
@@ -200,10 +200,10 @@ class AuthRemoteDataSource {
       );
       _lastRegisteredToken = fcmToken;
       _lastRegisteredAt = now;
-      print(
+      debugPrint(
           'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}',);
     } on DioException catch (e) {
-      print(
+      debugPrint(
           'DEBUG: registerDeviceToken failed status=${e.response?.statusCode} body=${e.response?.data} error=${e.message}',);
       rethrow;
     }

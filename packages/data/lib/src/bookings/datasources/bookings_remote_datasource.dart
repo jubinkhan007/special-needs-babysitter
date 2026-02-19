@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for booking operations
 class BookingsRemoteDataSource {
@@ -11,17 +12,17 @@ class BookingsRemoteDataSource {
   /// POST /direct-bookings - Create a direct booking with a sitter
   Future<BookingResult> createDirectBooking(Map<String, dynamic> data) async {
     try {
-      print('DEBUG: BookingsRemoteDataSource.createDirectBooking payload: $data');
-      print('DEBUG: Payload as JSON: ${jsonEncode(data)}');
-      print('DEBUG: Payload keys: ${data.keys.toList()}');
-      print('DEBUG: Address keys: ${(data['address'] as Map?)?.keys.toList()}');
-      print('DEBUG: EmergencyContact keys: ${(data['emergencyContact'] as Map?)?.keys.toList()}');
+      debugPrint('DEBUG: BookingsRemoteDataSource.createDirectBooking payload: $data');
+      debugPrint('DEBUG: Payload as JSON: ${jsonEncode(data)}');
+      debugPrint('DEBUG: Payload keys: ${data.keys.toList()}');
+      debugPrint('DEBUG: Address keys: ${(data['address'] as Map?)?.keys.toList()}');
+      debugPrint('DEBUG: EmergencyContact keys: ${(data['emergencyContact'] as Map?)?.keys.toList()}');
       final response = await _dio.post(
         '/direct-bookings',
         data: data,
       );
 
-      print(
+      debugPrint(
           'DEBUG: BookingsRemoteDataSource.createDirectBooking response: ${response.data}',);
 
       if (response.data['success'] == true) {
@@ -39,7 +40,7 @@ class BookingsRemoteDataSource {
       }
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: BookingsRemoteDataSource DioError: ${e.response?.data}');
+        debugPrint('DEBUG: BookingsRemoteDataSource DioError: ${e.response?.data}');
         final errorData = e.response?.data;
         if (errorData is Map && errorData['error'] != null) {
           throw Exception(errorData['error']);
@@ -90,13 +91,13 @@ class BookingsRemoteDataSource {
   /// POST /direct-bookings/{id}/cancel - Cancel a direct booking
   Future<void> cancelDirectBooking(String bookingId) async {
     try {
-      print(
+      debugPrint(
           'DEBUG: BookingsRemoteDataSource.cancelDirectBooking bookingId: $bookingId',);
       final response = await _dio.post(
         '/direct-bookings/$bookingId/cancel',
       );
 
-      print(
+      debugPrint(
           'DEBUG: BookingsRemoteDataSource.cancelDirectBooking response: ${response.data}',);
 
       if (response.data['success'] != true) {
@@ -104,7 +105,7 @@ class BookingsRemoteDataSource {
       }
     } catch (e) {
       if (e is DioException) {
-        print(
+        debugPrint(
             'DEBUG: BookingsRemoteDataSource cancelDirectBooking DioError: ${e.response?.data}',);
         final errorData = e.response?.data;
         if (errorData is Map && errorData['error'] != null) {

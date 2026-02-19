@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 
 import '../dtos/user_dto.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for profile API calls
 class ProfileRemoteDataSource {
@@ -11,11 +12,11 @@ class ProfileRemoteDataSource {
 
   Future<UserDto> getMe() async {
     final response = await _dio.get('/users/me');
-    print('DEBUG: ProfileRemoteDataSource getMe raw: ${response.data}');
+    debugPrint('DEBUG: ProfileRemoteDataSource getMe raw: ${response.data}');
 
     final data = response.data;
     if (data is! Map<String, dynamic>) {
-      print('ERROR: ProfileRemoteDataSource response is not a Map: $data');
+      debugPrint('ERROR: ProfileRemoteDataSource response is not a Map: $data');
       throw FormatException('Invalid response format: $data');
     }
 
@@ -25,11 +26,11 @@ class ProfileRemoteDataSource {
     if (data['data'] is Map<String, dynamic>) {
       final innerData = data['data'] as Map<String, dynamic>;
       if (innerData['user'] is Map<String, dynamic>) {
-        print('DEBUG: ProfileRemoteDataSource using data.user');
+        debugPrint('DEBUG: ProfileRemoteDataSource using data.user');
         userMap = innerData['user'] as Map<String, dynamic>;
       } else if (innerData.containsKey('id') &&
           innerData.containsKey('email')) {
-        print('DEBUG: ProfileRemoteDataSource using data');
+        debugPrint('DEBUG: ProfileRemoteDataSource using data');
         userMap = innerData;
       }
     }
@@ -37,16 +38,16 @@ class ProfileRemoteDataSource {
     // 2. Try root keys (legacy or different endpoint)
     if (userMap == null) {
       if (data['user'] is Map<String, dynamic>) {
-        print('DEBUG: ProfileRemoteDataSource using root.user');
+        debugPrint('DEBUG: ProfileRemoteDataSource using root.user');
         userMap = data['user'] as Map<String, dynamic>;
       } else if (data.containsKey('id') && data.containsKey('email')) {
-        print('DEBUG: ProfileRemoteDataSource using root');
+        debugPrint('DEBUG: ProfileRemoteDataSource using root');
         userMap = data;
       }
     }
 
     if (userMap == null) {
-      print(
+      debugPrint(
           'ERROR: ProfileRemoteDataSource failed to find user object. Keys: ${data.keys}',);
       // Final attempt with the root just to keep old behavior but likely to fail if keys missing
       userMap = data;
@@ -69,7 +70,7 @@ class ProfileRemoteDataSource {
       if (profileMap != null) {
         final photoUrl = profileMap['photoUrl'] ?? profileMap['photo_url'];
         if (photoUrl != null) {
-          print(
+          debugPrint(
               'DEBUG: Found photoUrl in profile object (local), mapping to avatarUrl',);
           userMap['avatarUrl'] = photoUrl;
         }
@@ -87,7 +88,7 @@ class ProfileRemoteDataSource {
           }
 
           if (endpoint != null) {
-            print('DEBUG: Fetching $endpoint to get missing avatar_url');
+            debugPrint('DEBUG: Fetching $endpoint to get missing avatar_url');
             final roleResponse = await _dio.get(endpoint);
             final roleData = roleResponse.data;
             if (roleData is Map<String, dynamic> &&
@@ -99,7 +100,7 @@ class ProfileRemoteDataSource {
                 final rolePhoto =
                     roleProfile['photoUrl'] ?? roleProfile['photo_url'];
                 if (rolePhoto != null) {
-                  print(
+                  debugPrint(
                       'DEBUG: Found photoUrl in $endpoint, mapping to avatarUrl',);
                   userMap['avatarUrl'] = rolePhoto;
                 }
@@ -107,17 +108,17 @@ class ProfileRemoteDataSource {
             }
           }
         } catch (e) {
-          print('DEBUG: Failed to fetch role-specific profile for avatar: $e');
+          debugPrint('DEBUG: Failed to fetch role-specific profile for avatar: $e');
         }
       }
     }
 
     // Extra safety: ensure id and email are present before calling fromJson if possible
-    print('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
-    print('DEBUG: ProfileRemoteDataSource avatarUrl: ${userMap['avatarUrl']}');
+    debugPrint('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
+    debugPrint('DEBUG: ProfileRemoteDataSource avatarUrl: ${userMap['avatarUrl']}');
 
     if (userMap['id'] == null || userMap['email'] == null) {
-      print(
+      debugPrint(
           'ERROR: ProfileRemoteDataSource missing id or email in userMap: $userMap',);
       throw const FormatException(
           'User profile missing required fields (id/email)',);
@@ -134,15 +135,15 @@ class ProfileRemoteDataSource {
 
     if (profileCompletion != null) {
       final percentage = profileCompletion['percentage'] as num? ?? 0;
-      print(
+      debugPrint(
           'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage',);
       if (percentage >= 100) {
         userMap['profileSetupComplete'] = true;
-        print(
+        debugPrint(
             'DEBUG: Overriding profileSetupComplete=true due to 100% completion',);
       }
     } else {
-      print(
+      debugPrint(
           'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response',);
     }
 
@@ -154,9 +155,9 @@ class ProfileRemoteDataSource {
     try {
       return UserDto.fromJson(userMap);
     } catch (e, stack) {
-      print('ERROR: ProfileRemoteDataSource DTO parsing failed: $e');
-      print('Stack trace: $stack');
-      print('Bad UserMap: $userMap');
+      debugPrint('ERROR: ProfileRemoteDataSource DTO parsing failed: $e');
+      debugPrint('Stack trace: $stack');
+      debugPrint('Bad UserMap: $userMap');
 
       if (e is TypeError) {
         throw const FormatException(
@@ -167,7 +168,7 @@ class ProfileRemoteDataSource {
   }
 
   Future<UserDto> updateProfile(UpdateProfileParams params) async {
-    print('DEBUG: ProfileRemoteDataSource updating with: ${params.firstName}');
+    debugPrint('DEBUG: ProfileRemoteDataSource updating with: ${params.firstName}');
     final response = await _dio.put(
       '/users/me',
       data: {
@@ -179,7 +180,7 @@ class ProfileRemoteDataSource {
           'profile_setup_complete': params.isProfileComplete,
       },
     );
-    print(
+    debugPrint(
         'DEBUG: ProfileRemoteDataSource update response raw: ${response.data}',);
 
     final data = response.data;

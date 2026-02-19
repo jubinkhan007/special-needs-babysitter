@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:domain/domain.dart';
 import 'package:core/core.dart';
+import 'package:flutter/foundation.dart';
 
 /// Secure storage for authentication session data
 class SessionStore {
@@ -18,7 +19,7 @@ class SessionStore {
 
   /// Save authentication session
   Future<void> saveSession(AuthSession session) async {
-    print(
+    debugPrint(
         'DEBUG: SessionStore.saveSession called with token: ${session.accessToken}',);
     try {
       await _storage.write(
@@ -35,9 +36,9 @@ class SessionStore {
         key: Constants.userDataKey,
         value: jsonEncode(_userToJson(session.user)),
       );
-      print('DEBUG: SessionStore.saveSession completed success');
+      debugPrint('DEBUG: SessionStore.saveSession completed success');
     } catch (e) {
-      print('DEBUG: SessionStore.saveSession FAILED: $e');
+      debugPrint('DEBUG: SessionStore.saveSession FAILED: $e');
       rethrow;
     }
   }
@@ -52,29 +53,29 @@ class SessionStore {
 
   /// Load stored session
   Future<AuthSession?> loadSession() async {
-    print('DEBUG: SessionStore.loadSession called');
+    debugPrint('DEBUG: SessionStore.loadSession called');
     final accessToken = await _storage.read(key: Constants.accessTokenKey);
-    print('DEBUG: SessionStore.loadSession accessToken: $accessToken');
+    debugPrint('DEBUG: SessionStore.loadSession accessToken: $accessToken');
     if (accessToken == null) return null;
 
     final refreshToken = await _storage.read(key: Constants.refreshTokenKey);
     final userData = await _storage.read(key: Constants.userDataKey);
 
-    // print('DEBUG: SessionStore.loadSession userData: $userData');
+    // debugPrint('DEBUG: SessionStore.loadSession userData: $userData');
 
     if (userData == null) return null;
 
     try {
       final userJson = jsonDecode(userData) as Map<String, dynamic>;
       final user = _userFromJson(userJson);
-      print('DEBUG: SessionStore.loadSession success for user: ${user.email}');
+      debugPrint('DEBUG: SessionStore.loadSession success for user: ${user.email}');
       return AuthSession(
         user: user,
         accessToken: accessToken,
         refreshToken: refreshToken,
       );
     } catch (e) {
-      print('DEBUG: SessionStore.loadSession FAILED: $e');
+      debugPrint('DEBUG: SessionStore.loadSession FAILED: $e');
       // Corrupted data, clear storage
       await clearSession();
       return null;

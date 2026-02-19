@@ -4,6 +4,7 @@ import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 
 import '../datasources/sitter_profile_remote_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 /// Implementation of [SitterProfileRepository].
 class SitterProfileRepositoryImpl implements SitterProfileRepository {
@@ -22,7 +23,7 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
     try {
       // Handle Step 1: Profile Photo Upload
       if (step == 1 && profilePhoto != null) {
-        print('DEBUG SITTER REPO: Step 1 with photo, starting upload...');
+        debugPrint('DEBUG SITTER REPO: Step 1 with photo, starting upload...');
         final photoUrl = await _uploadFile(
           file: profilePhoto,
           uploadType: 'profile-photo',
@@ -33,7 +34,7 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
 
       // Handle Step 5: Resume Upload
       if (step == 5 && resume != null) {
-        print('DEBUG SITTER REPO: Step 5 with resume, starting upload...');
+        debugPrint('DEBUG SITTER REPO: Step 5 with resume, starting upload...');
         final resumeUrl = await _uploadFile(
           file: resume,
           uploadType: 'resume',
@@ -46,7 +47,7 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
       if (step == 6 &&
           certificationFiles != null &&
           certificationFiles.isNotEmpty) {
-        print(
+        debugPrint(
             'DEBUG SITTER REPO: Step 6 with ${certificationFiles.length} certifications...',);
         final List<Map<String, dynamic>> certDocs = [];
 
@@ -67,14 +68,14 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
       }
 
       // Call API to update sitter profile for this step
-      print(
+      debugPrint(
           'DEBUG SITTER REPO: Calling updateSitterProfile step=$step, data=$data',);
       await _remoteDataSource.updateSitterProfile(step: step, data: data);
-      print('DEBUG SITTER REPO: updateSitterProfile step=$step succeeded');
+      debugPrint('DEBUG SITTER REPO: updateSitterProfile step=$step succeeded');
       return data;
     } catch (e, st) {
-      print('DEBUG SITTER REPO: Error in updateProfile step=$step: $e');
-      print('DEBUG SITTER REPO: Stack trace: $st');
+      debugPrint('DEBUG SITTER REPO: Error in updateProfile step=$step: $e');
+      debugPrint('DEBUG SITTER REPO: Stack trace: $st');
       rethrow;
     }
   }
@@ -90,21 +91,21 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
     final fileName =
         '${filePrefix}_${DateTime.now().millisecondsSinceEpoch}.$extension';
 
-    print(
+    debugPrint(
         'DEBUG SITTER REPO: Getting presigned URL for $fileName ($uploadType)',);
     final presignRes = await _remoteDataSource.getPresignedUrl(
       fileName: fileName,
       contentType: contentType,
       uploadType: uploadType,
     );
-    print('DEBUG SITTER REPO: Got presigned URL, uploading file...');
+    debugPrint('DEBUG SITTER REPO: Got presigned URL, uploading file...');
 
     await _remoteDataSource.uploadFileToUrl(
       presignRes.uploadUrl,
       file,
       contentType,
     );
-    print(
+    debugPrint(
         'DEBUG SITTER REPO: File uploaded successfully: ${presignRes.publicUrl}',);
 
     return presignRes.publicUrl;

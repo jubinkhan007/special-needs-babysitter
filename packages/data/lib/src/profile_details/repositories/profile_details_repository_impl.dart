@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:domain/domain.dart';
 import '../datasources/profile_details_remote_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
   final ProfileDetailsRemoteDataSource _remoteDataSource;
@@ -16,14 +17,14 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
     var user = accountOverview.user;
 
     // Fetch extended details
-    print('DEBUG: RepoImpl fetching extended details...');
+    debugPrint('DEBUG: RepoImpl fetching extended details...');
     final data = await _remoteDataSource.getExtendedProfileDetails(userId);
-    print('DEBUG: RepoImpl raw data received: $data');
+    debugPrint('DEBUG: RepoImpl raw data received: $data');
 
     // Map from "data" root
     // Handle null profile safely
     final profileData = (data['profile'] as Map<String, dynamic>?) ?? {};
-    print('DEBUG: RepoImpl profileData: $profileData');
+    debugPrint('DEBUG: RepoImpl profileData: $profileData');
 
     // Use photoUrl from profile if available (fresher than account repo?)
     final photoUrl = profileData['photoUrl'] as String?;
@@ -35,10 +36,10 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
         data['emergencyContact'] as Map<String, dynamic>?;
     final insurancePlans = data['insurancePlans'] as List<dynamic>? ?? [];
 
-    print('DEBUG: RepoImpl mapping children...');
+    debugPrint('DEBUG: RepoImpl mapping children...');
     // Map children
     final children = childrenList.map((c) {
-      print('DEBUG: Mapping child row: $c');
+      debugPrint('DEBUG: Mapping child row: $c');
       try {
         return Child(
           id: (c['id'] ?? '').toString(),
@@ -109,13 +110,13 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
               '',
         );
       } catch (e, stack) {
-        print('ERROR: Failed mapping child: $e');
-        print('DEBUG: Problematic child data: $c');
-        print('DEBUG: Stack trace: $stack');
+        debugPrint('ERROR: Failed mapping child: $e');
+        debugPrint('DEBUG: Problematic child data: $c');
+        debugPrint('DEBUG: Stack trace: $stack');
         rethrow;
       }
     }).toList();
-    print('DEBUG: RepoImpl children mapped: ${children.length}');
+    debugPrint('DEBUG: RepoImpl children mapped: ${children.length}');
 
     // Map CareApproach (Derived from first child as per UI/Data structure limitation)
     CareApproach? careApproach;

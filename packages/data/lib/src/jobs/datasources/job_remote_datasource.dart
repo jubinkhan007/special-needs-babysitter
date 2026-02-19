@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import '../dtos/job_dto.dart';
+import 'package:flutter/foundation.dart';
 
 class JobRemoteDataSource {
   final Dio _dio;
@@ -38,12 +39,12 @@ class JobRemoteDataSource {
       if (limit != null) queryParams['limit'] = limit;
       if (offset != null) queryParams['offset'] = offset;
 
-      print('DEBUG: JobRemoteDataSource.getJobs called with status=$status');
+      debugPrint('DEBUG: JobRemoteDataSource.getJobs called with status=$status');
       final response = await _dio.get(
         '/jobs',
         queryParameters: queryParams,
       );
-      print(
+      debugPrint(
           'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}',);
       if (response.data['success'] == true) {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
@@ -51,7 +52,7 @@ class JobRemoteDataSource {
             .map((json) => JobDto.fromJson(json as Map<String, dynamic>))
             .toList();
       } else {
-        print('DEBUG: JobRemoteDataSource failed: ${response.data}');
+        debugPrint('DEBUG: JobRemoteDataSource failed: ${response.data}');
         throw Exception('Failed to fetch jobs');
       }
     } catch (e) {
@@ -94,7 +95,7 @@ class JobRemoteDataSource {
         // Intentionally NOT sending: saveAsDraft, status (these are for create/post operations)
       };
 
-      print('DEBUG: Updating job $id with data: $updateData');
+      debugPrint('DEBUG: Updating job $id with data: $updateData');
 
       final response = await _dio.put(
         '/jobs/$id',
@@ -126,7 +127,7 @@ class JobRemoteDataSource {
         data: {'sitterId': sitterId},
       );
 
-      print(
+      debugPrint(
           'DEBUG: JobRemoteDataSource.inviteSitter response: ${response.data}',);
 
       if (response.data['success'] != true) {

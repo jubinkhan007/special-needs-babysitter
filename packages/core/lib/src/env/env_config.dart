@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../constants/constants.dart';
+import 'package:flutter/foundation.dart';
 
 /// Environment configuration loaded from .env file
 class EnvConfig {
@@ -47,12 +48,12 @@ class EnvConfig {
   static Future<bool> tryLoad() async {
     try {
       await dotenv.load(fileName: '.env');
-      print('DEBUG: EnvConfig loaded .env OK. API_BASE_URL=${dotenv.env['API_BASE_URL']}');
-      print('DEBUG: EnvConfig apiBaseUrl getter => $apiBaseUrl');
+      debugPrint('DEBUG: EnvConfig loaded .env OK. API_BASE_URL=${dotenv.env['API_BASE_URL']}');
+      debugPrint('DEBUG: EnvConfig apiBaseUrl getter => $apiBaseUrl');
       return true;
     } catch (e) {
       // .env file not found or invalid
-      print('DEBUG: EnvConfig failed to load .env: $e');
+      debugPrint('DEBUG: EnvConfig failed to load .env: $e');
       return false;
     }
   }

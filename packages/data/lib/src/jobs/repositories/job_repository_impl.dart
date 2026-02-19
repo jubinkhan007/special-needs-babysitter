@@ -2,6 +2,7 @@ import 'package:domain/domain.dart';
 import '../datasources/job_remote_datasource.dart';
 import '../datasources/job_local_datasource.dart';
 import '../dtos/job_dto.dart';
+import 'package:flutter/foundation.dart';
 
 class JobRepositoryImpl implements JobRepository {
   final JobRemoteDataSource _remoteDataSource;
@@ -18,15 +19,15 @@ class JobRepositoryImpl implements JobRepository {
   @override
   Future<List<Job>> getJobs() async {
     final jobDtos = await _remoteDataSource.getJobs();
-    print('DEBUG: JobRepositoryImpl received ${jobDtos.length} jobs');
+    debugPrint('DEBUG: JobRepositoryImpl received ${jobDtos.length} jobs');
     return jobDtos.map((dto) {
       try {
         return dto.toDomain();
       } catch (e, stack) {
-        print('ERROR: Failed to convert JobDto to Domain: ${dto.id}');
-        print('Error details: $e');
-        print('Stack trace: $stack');
-        print('Problematic DTO: $dto');
+        debugPrint('ERROR: Failed to convert JobDto to Domain: ${dto.id}');
+        debugPrint('Error details: $e');
+        debugPrint('Stack trace: $stack');
+        debugPrint('Problematic DTO: $dto');
         rethrow;
       }
     }).toList();

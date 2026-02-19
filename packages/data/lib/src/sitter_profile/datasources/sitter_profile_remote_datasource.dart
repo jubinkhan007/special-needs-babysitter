@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 /// Response from presigned URL endpoint.
 class SitterPresignedUrlResponse {
@@ -30,7 +31,7 @@ class SitterProfileRemoteDataSource {
     required Map<String, dynamic> data,
   }) async {
     try {
-      print(
+      debugPrint(
           'DEBUG: SitterProfileRemoteDataSource updating step=$step with data=$data',);
       final response = await _dio.put(
         '/sitters/me',
@@ -39,13 +40,13 @@ class SitterProfileRemoteDataSource {
           'data': data,
         },
       );
-      print('DEBUG REMOTE: SitterProfileRemoteDataSource step=$step succeeded');
-      print('DEBUG REMOTE: Response status: ${response.statusCode}');
-      print('DEBUG REMOTE: Response data: ${response.data}');
+      debugPrint('DEBUG REMOTE: SitterProfileRemoteDataSource step=$step succeeded');
+      debugPrint('DEBUG REMOTE: Response status: ${response.statusCode}');
+      debugPrint('DEBUG REMOTE: Response data: ${response.data}');
     } catch (e) {
-      print('DEBUG REMOTE: SitterProfileRemoteDataSource error: $e');
+      debugPrint('DEBUG REMOTE: SitterProfileRemoteDataSource error: $e');
       if (e is DioException) {
-        print('DEBUG REMOTE: DioError data: ${e.response?.data}');
+        debugPrint('DEBUG REMOTE: DioError data: ${e.response?.data}');
       }
       rethrow;
     }

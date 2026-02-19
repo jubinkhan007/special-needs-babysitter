@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import '../dtos/chat_dto.dart';
 import '../dtos/chat_message_dto.dart';
 import '../dtos/chat_init_dto.dart';
+import 'package:flutter/foundation.dart';
 
 abstract interface class ChatRemoteDataSource {
   /// POST /chat/init - Initialize Agora Chat
@@ -39,7 +40,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   @override
   Future<ChatInitDto> initChat() async {
     try {
-      print('DEBUG: ChatRemoteDataSource.initChat()');
+      debugPrint('DEBUG: ChatRemoteDataSource.initChat()');
       final response = await _dio.post('/chat/init');
 
       if (response.data == null) {
@@ -51,13 +52,13 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         throw Exception('Chat init response missing "data" field');
       }
 
-      print('DEBUG: Chat init response: $data');
+      debugPrint('DEBUG: Chat init response: $data');
       return ChatInitDto.fromJson(data as Map<String, dynamic>);
     } catch (e, stack) {
-      print('DEBUG: Error initializing chat: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error initializing chat: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       if (e is DioException) {
-        print('DEBUG: Dio Response: ${e.response?.data}');
+        debugPrint('DEBUG: Dio Response: ${e.response?.data}');
       }
       rethrow;
     }
@@ -67,16 +68,16 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   Future<List<ChatDto>> getConversations() async {
     try {
       final response = await _dio.get('/chat/conversations');
-      print('DEBUG: Chat conversations raw response: ${response.data}');
+      debugPrint('DEBUG: Chat conversations raw response: ${response.data}');
 
       if (response.data == null) {
-        print('DEBUG: Chat API returned null data');
+        debugPrint('DEBUG: Chat API returned null data');
         return [];
       }
 
       final data = response.data['data'];
       if (data == null) {
-        print('DEBUG: Chat API response missing "data" field: ${response.data}');
+        debugPrint('DEBUG: Chat API response missing "data" field: ${response.data}');
         return [];
       }
 
@@ -85,7 +86,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           : (data is Map<String, dynamic> ? data['conversations'] as List? : null);
 
       if (rawList == null) {
-        print('DEBUG: Chat API "data" field has no conversations list: $data');
+        debugPrint('DEBUG: Chat API "data" field has no conversations list: $data');
         return [];
       }
 
@@ -94,17 +95,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           final normalized = _normalizeConversationJson(json);
           return ChatDto.fromJson(normalized);
         } catch (e, stack) {
-          print('DEBUG: Error parsing chat item: $json, error: $e, stack: $stack');
+          debugPrint('DEBUG: Error parsing chat item: $json, error: $e, stack: $stack');
           rethrow;
         }
       }).toList();
     } catch (e, stack) {
-      print('DEBUG: Error fetching conversations: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error fetching conversations: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       if (e is DioException) {
-        print('DEBUG: Dio Error Type: ${e.type}');
-        print('DEBUG: Dio Error Message: ${e.message}');
-        print('DEBUG: Dio Response: ${e.response?.data}');
+        debugPrint('DEBUG: Dio Error Type: ${e.type}');
+        debugPrint('DEBUG: Dio Error Message: ${e.message}');
+        debugPrint('DEBUG: Dio Response: ${e.response?.data}');
       }
       rethrow;
     }
@@ -166,39 +167,39 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   @override
   Future<List<ChatMessageDto>> getMessages(String otherUserId) async {
     try {
-      print('DEBUG: ChatRemoteDataSource.getMessages($otherUserId)');
+      debugPrint('DEBUG: ChatRemoteDataSource.getMessages($otherUserId)');
       final response = await _dio.get(
         '/chat/messages',
         queryParameters: {'otherUserId': otherUserId},
       );
 
       if (response.data == null) {
-        print('DEBUG: getMessages returned null data');
+        debugPrint('DEBUG: getMessages returned null data');
         return [];
       }
 
       final data = response.data['data'];
       if (data == null) {
-        print('DEBUG: getMessages response missing "data" field');
+        debugPrint('DEBUG: getMessages response missing "data" field');
         return [];
       }
 
       final messages = data['messages'] as List?;
       if (messages == null) {
-        print('DEBUG: getMessages response missing "messages" field');
+        debugPrint('DEBUG: getMessages response missing "messages" field');
         return [];
       }
 
-      print('DEBUG: Got ${messages.length} messages');
+      debugPrint('DEBUG: Got ${messages.length} messages');
       return messages.map((json) {
         final safeJson = _normalizeMessageJson(json);
         return ChatMessageDto.fromJson(safeJson);
       }).toList();
     } catch (e, stack) {
-      print('DEBUG: Error fetching messages: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error fetching messages: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       if (e is DioException) {
-        print('DEBUG: Dio Response: ${e.response?.data}');
+        debugPrint('DEBUG: Dio Response: ${e.response?.data}');
       }
       rethrow;
     }
@@ -278,7 +279,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required String text,
   }) async {
     try {
-      print('DEBUG: ChatRemoteDataSource.sendMessage to $recipientUserId');
+      debugPrint('DEBUG: ChatRemoteDataSource.sendMessage to $recipientUserId');
       final response = await _dio.post(
         '/chat/messages',
         data: {
@@ -296,14 +297,14 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         throw Exception('sendMessage response missing "data" field');
       }
 
-      print('DEBUG: Message sent successfully');
+      debugPrint('DEBUG: Message sent successfully');
       final safeJson = _normalizeMessageJson(data);
       return ChatMessageDto.fromJson(safeJson);
     } catch (e, stack) {
-      print('DEBUG: Error sending message: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error sending message: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       if (e is DioException) {
-        print('DEBUG: Dio Response: ${e.response?.data}');
+        debugPrint('DEBUG: Dio Response: ${e.response?.data}');
       }
       rethrow;
     }
@@ -317,7 +318,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     String? text,
   }) async {
     try {
-      print('DEBUG: ChatRemoteDataSource.sendMediaMessage to $recipientUserId');
+      debugPrint('DEBUG: ChatRemoteDataSource.sendMediaMessage to $recipientUserId');
       final response = await _dio.post(
         '/chat/messages/media',
         data: {
@@ -337,14 +338,14 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         throw Exception('sendMediaMessage response missing "data" field');
       }
 
-      print('DEBUG: Media message sent successfully');
+      debugPrint('DEBUG: Media message sent successfully');
       final safeJson = _normalizeMessageJson(data);
       return ChatMessageDto.fromJson(safeJson);
     } catch (e, stack) {
-      print('DEBUG: Error sending media message: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error sending media message: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       if (e is DioException) {
-        print('DEBUG: Dio Response: ${e.response?.data}');
+        debugPrint('DEBUG: Dio Response: ${e.response?.data}');
       }
       rethrow;
     }
@@ -353,17 +354,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   @override
   Future<void> markAsRead(String otherUserId) async {
     try {
-      print('DEBUG: ChatRemoteDataSource.markAsRead($otherUserId)');
+      debugPrint('DEBUG: ChatRemoteDataSource.markAsRead($otherUserId)');
       await _dio.post(
         '/chat/read',
         data: {'otherUserId': otherUserId},
       );
-      print('DEBUG: Conversation marked as read');
+      debugPrint('DEBUG: Conversation marked as read');
     } catch (e, stack) {
-      print('DEBUG: Error marking as read: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error marking as read: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       if (e is DioException) {
-        print('DEBUG: Dio Response: ${e.response?.data}');
+        debugPrint('DEBUG: Dio Response: ${e.response?.data}');
       }
       rethrow;
     }

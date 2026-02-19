@@ -79,7 +79,7 @@ class NotificationsServiceImpl implements NotificationsService {
       final tokenState =
           token == null || token.isEmpty ? 'empty' : 'len=${token.length}';
       developer.log('getToken completed with $tokenState', name: 'FCM_FLOW');
-      print('[FCM_FLOW] getToken completed with $tokenState');
+      debugPrint('[FCM_FLOW] getToken completed with $tokenState');
       return token;
     } catch (e, st) {
       if (e is FirebaseException) {
@@ -131,7 +131,7 @@ class NotificationsServiceImpl implements NotificationsService {
         'forceRefreshToken completed with $tokenState',
         name: 'FCM_FLOW',
       );
-      print('[FCM_FLOW] forceRefreshToken completed with $tokenState');
+      debugPrint('[FCM_FLOW] forceRefreshToken completed with $tokenState');
       return token;
     } on FirebaseException catch (e, st) {
       developer.log(

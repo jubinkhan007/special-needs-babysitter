@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import '../../dtos/auth_session_dto.dart';
 import '../../dtos/user_dto.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for registration API calls
 class RegistrationRemoteDataSource {
@@ -44,7 +45,7 @@ class RegistrationRemoteDataSource {
     }
 
     if (userId == null) {
-      print('Registration successful but userId missing/invalid. Data: $data');
+      debugPrint('Registration successful but userId missing/invalid. Data: $data');
       throw FormatException('Missing userId in response: $data');
     }
 
@@ -86,8 +87,8 @@ class RegistrationRemoteDataSource {
     // Cookie Extraction Logic
     String accessToken = '';
     final cookies = response.headers['set-cookie'];
-    print('DEBUG: VerifyOTP Response Headers: ${response.headers}');
-    print('DEBUG: VerifyOTP Set-Cookie Header: $cookies');
+    debugPrint('DEBUG: VerifyOTP Response Headers: ${response.headers}');
+    debugPrint('DEBUG: VerifyOTP Set-Cookie Header: $cookies');
 
     if (cookies != null && cookies.isNotEmpty) {
       for (final cookie in cookies) {
@@ -96,7 +97,7 @@ class RegistrationRemoteDataSource {
           for (final part in parts) {
             if (part.trim().startsWith('session_id=')) {
               accessToken = part.trim().split('=')[1];
-              print('DEBUG: VerifyOTP Found cookie session_id: $accessToken');
+              debugPrint('DEBUG: VerifyOTP Found cookie session_id: $accessToken');
               break;
             }
           }
@@ -106,7 +107,7 @@ class RegistrationRemoteDataSource {
 
     // Fallback if no cookie
     if (accessToken.isEmpty) {
-      print('DEBUG: VerifyOTP No cookie found, falling back to body token');
+      debugPrint('DEBUG: VerifyOTP No cookie found, falling back to body token');
       accessToken = data['accessToken'] ?? data['token'] ?? '';
     }
 
