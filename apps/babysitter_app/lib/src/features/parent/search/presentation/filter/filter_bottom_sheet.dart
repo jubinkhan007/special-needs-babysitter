@@ -455,20 +455,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                       ),
                       const SizedBox(height: AppTokens.sheetSectionSpacing),
 
-                      // 5. Special Needs Expertise (Checkboxes)
-                      const FilterSectionTitle('Special Needs Expertise'),
-                      ...['Infants', 'Toddlers', 'Children', 'Teens']
-                          .map((e) => FilterCheckboxRow(
-                                label: e,
-                                isChecked:
-                                    filterState.selectedExpertise.contains(e),
-                                onChanged: (_) =>
-                                    filterController.toggleExpertise(e),
-                              ))
-                          ,
-                      const SizedBox(height: AppTokens.sheetSectionSpacing),
-
-                      // 6. Languages Spoken
+                      // 5. Languages Spoken
                       const FilterSectionTitle('Languages Spoken'),
                       ...['Spanish', 'English', 'Mandarin', 'French']
                           .map((e) => FilterCheckboxRow(
