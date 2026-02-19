@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
+import 'package:flutter/foundation.dart';
 
 class SavedJobsRemoteDataSource {
   final Dio _dio;
@@ -9,9 +10,9 @@ class SavedJobsRemoteDataSource {
 
   Future<List<Job>> getSavedJobs() async {
     try {
-      print('DEBUG: Saved Jobs Request: GET /sitters/saved-jobs');
+      debugPrint('DEBUG: Saved Jobs Request: GET /sitters/saved-jobs');
       final response = await _dio.get('/sitters/saved-jobs');
-      print('DEBUG: Saved Jobs Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Saved Jobs Response Status: ${response.statusCode}');
 
       final data = response.data;
       _logSavedJobsResponseShape(data);
@@ -61,7 +62,7 @@ class SavedJobsRemoteDataSource {
                  job = detailedJob;
                }
             } catch (e) {
-              print('DEBUG: Failed to hydrate job ${job.id}: $e');
+              debugPrint('DEBUG: Failed to hydrate job ${job.id}: $e');
             }
           }
           jobs.add(job);
@@ -101,7 +102,7 @@ class SavedJobsRemoteDataSource {
         }
       }
     } catch (e) {
-      print('DEBUG: Error fetching details for job $jobId: $e');
+      debugPrint('DEBUG: Error fetching details for job $jobId: $e');
     }
     return null;
   }
@@ -382,22 +383,22 @@ class SavedJobsRemoteDataSource {
   }
 
   void _logSavedJobsResponseShape(dynamic data) {
-    print('DEBUG: Saved Jobs Response Type: ${data.runtimeType}');
+    debugPrint('DEBUG: Saved Jobs Response Type: ${data.runtimeType}');
     if (data is Map<String, dynamic>) {
-      print('DEBUG: Saved Jobs Response Keys: ${data.keys.toList()}');
+      debugPrint('DEBUG: Saved Jobs Response Keys: ${data.keys.toList()}');
       final dataField = data['data'];
-      print(
+      debugPrint(
         'DEBUG: Saved Jobs Response data field type: ${dataField.runtimeType}',
       );
       if (dataField is Map<String, dynamic>) {
-        print(
+        debugPrint(
           'DEBUG: Saved Jobs Response data keys: ${dataField.keys.toList()}',
         );
       }
     } else if (data is List) {
-      print('DEBUG: Saved Jobs Response List length: ${data.length}');
+      debugPrint('DEBUG: Saved Jobs Response List length: ${data.length}');
       if (data.isNotEmpty) {
-        print(
+        debugPrint(
           'DEBUG: Saved Jobs Response First Item Type: ${data.first.runtimeType}',
         );
       }
@@ -405,7 +406,7 @@ class SavedJobsRemoteDataSource {
   }
 
   void _logJobJsonTypeMismatches(Map<String, dynamic> jobJson) {
-    print('DEBUG: Saved Jobs jobJson keys: ${jobJson.keys.toList()}');
+    debugPrint('DEBUG: Saved Jobs jobJson keys: ${jobJson.keys.toList()}');
 
     const stringFields = [
       'id',
@@ -424,7 +425,7 @@ class SavedJobsRemoteDataSource {
     for (final field in stringFields) {
       final value = jobJson[field];
       if (value is Map || value is List) {
-        print(
+        debugPrint(
           'DEBUG: Saved Jobs unexpected type for "$field": ${value.runtimeType} value: $value',
         );
       }
@@ -432,20 +433,20 @@ class SavedJobsRemoteDataSource {
 
     final addressValue = jobJson['address'];
     if (addressValue != null && addressValue is! Map<String, dynamic>) {
-      print(
+      debugPrint(
         'DEBUG: Saved Jobs unexpected type for "address": ${addressValue.runtimeType} value: $addressValue',
       );
     }
 
     final childIdsValue = jobJson['childIds'];
     if (childIdsValue != null && childIdsValue is! List) {
-      print(
+      debugPrint(
         'DEBUG: Saved Jobs unexpected type for "childIds": ${childIdsValue.runtimeType} value: $childIdsValue',
       );
     } else if (childIdsValue is List) {
       final badChildIds = childIdsValue.where((e) => e is Map || e is List);
       if (badChildIds.isNotEmpty) {
-        print(
+        debugPrint(
           'DEBUG: Saved Jobs childIds contains non-String entries: ${badChildIds.map((e) => e.runtimeType).toList()}',
         );
       }
@@ -453,14 +454,14 @@ class SavedJobsRemoteDataSource {
 
     final applicantIdsValue = jobJson['applicantIds'];
     if (applicantIdsValue != null && applicantIdsValue is! List) {
-      print(
+      debugPrint(
         'DEBUG: Saved Jobs unexpected type for "applicantIds": ${applicantIdsValue.runtimeType} value: $applicantIdsValue',
       );
     } else if (applicantIdsValue is List) {
       final badApplicantIds =
           applicantIdsValue.where((e) => e is Map || e is List);
       if (badApplicantIds.isNotEmpty) {
-        print(
+        debugPrint(
           'DEBUG: Saved Jobs applicantIds contains non-String entries: ${badApplicantIds.map((e) => e.runtimeType).toList()}',
         );
       }
@@ -468,14 +469,14 @@ class SavedJobsRemoteDataSource {
 
     final createdAtValue = jobJson['createdAt'];
     if (createdAtValue != null && createdAtValue is! String) {
-      print(
+      debugPrint(
         'DEBUG: Saved Jobs unexpected type for "createdAt": ${createdAtValue.runtimeType} value: $createdAtValue',
       );
     }
 
     final postedAtValue = jobJson['postedAt'];
     if (postedAtValue != null && postedAtValue is! String) {
-      print(
+      debugPrint(
         'DEBUG: Saved Jobs unexpected type for "postedAt": ${postedAtValue.runtimeType} value: $postedAtValue',
       );
     }
@@ -484,13 +485,13 @@ class SavedJobsRemoteDataSource {
   Future<void> saveJob(String jobId) async {
     try {
       final payload = {'jobId': jobId};
-      print('DEBUG: Save Job Request: POST /sitters/saved-jobs $payload');
+      debugPrint('DEBUG: Save Job Request: POST /sitters/saved-jobs $payload');
       final response = await _dio.post('/sitters/saved-jobs', data: payload);
-      print('DEBUG: Save Job Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Save Job Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Save Job Error: ${e.message}');
-        print('DEBUG: Save Job Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Save Job Error: ${e.message}');
+        debugPrint('DEBUG: Save Job Error Response: ${e.response?.data}');
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
           throw Exception(serverMessage);
@@ -503,13 +504,13 @@ class SavedJobsRemoteDataSource {
   Future<void> removeJob(String jobId) async {
     try {
       final endpoint = '/sitters/saved-jobs/$jobId';
-      print('DEBUG: Remove Saved Job Request: DELETE $endpoint');
+      debugPrint('DEBUG: Remove Saved Job Request: DELETE $endpoint');
       final response = await _dio.delete(endpoint);
-      print('DEBUG: Remove Saved Job Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Remove Saved Job Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Remove Saved Job Error: ${e.message}');
-        print('DEBUG: Remove Saved Job Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Remove Saved Job Error: ${e.message}');
+        debugPrint('DEBUG: Remove Saved Job Error Response: ${e.response?.data}');
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
           throw Exception(serverMessage);

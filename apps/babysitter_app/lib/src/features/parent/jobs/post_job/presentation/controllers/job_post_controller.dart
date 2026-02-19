@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 /// State for the job posting flow.
 class JobPostState extends Equatable {
@@ -200,7 +201,7 @@ class JobPostController extends StateNotifier<JobPostState> {
   }
 
   Future<bool> saveJobDraft() async {
-    print('DEBUG: JobPostController saving local job draft');
+    debugPrint('DEBUG: JobPostController saving local job draft');
     state = state.copyWith(isLoading: true, error: null);
 
     try {
@@ -290,7 +291,7 @@ class JobPostController extends StateNotifier<JobPostState> {
   }
 
   Future<bool> _saveJob({required bool isDraft}) async {
-    print(
+    debugPrint(
         'DEBUG: JobPostController submitting job to API. isDraft: $isDraft, isUpdate: ${state.jobId != null}');
     state = state.copyWith(isLoading: true, error: null);
 
@@ -298,19 +299,19 @@ class JobPostController extends StateNotifier<JobPostState> {
       // Get the device timezone in IANA format (e.g., "America/Los_Angeles")
       final timezoneInfo = await FlutterTimezone.getLocalTimezone();
       final timezone = timezoneInfo.identifier;
-      print('DEBUG: Device timezone: $timezone');
+      debugPrint('DEBUG: Device timezone: $timezone');
 
       final job = _buildJobEntity(isDraft: isDraft, timezone: timezone);
-      print('DEBUG: Job entity built with status: ${job.status}, id: ${job.id}');
+      debugPrint('DEBUG: Job entity built with status: ${job.status}, id: ${job.id}');
 
       if (state.jobId != null && !isDraft) {
         // Update existing job
-        print('DEBUG: Calling updateJobUseCase for existing job');
+        debugPrint('DEBUG: Calling updateJobUseCase for existing job');
         await _updateJobUseCase(job);
         // jobId remains same
       } else {
         // Create new job
-        print('DEBUG: Calling createJobUseCase for new job');
+        debugPrint('DEBUG: Calling createJobUseCase for new job');
         final jobId = await _createJobUseCase(job);
         state = state.copyWith(jobId: jobId);
       }
@@ -362,7 +363,7 @@ class JobPostController extends StateNotifier<JobPostState> {
         );
       }
     } catch (e) {
-      print('DEBUG: Failed to load local draft: $e');
+      debugPrint('DEBUG: Failed to load local draft: $e');
     }
   }
 }

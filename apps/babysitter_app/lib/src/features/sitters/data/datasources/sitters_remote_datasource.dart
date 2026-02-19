@@ -115,36 +115,36 @@ class SittersRemoteDataSource {
 
   Future<void> removeBookmarkedSitter(String sitterUserId) async {
     try {
-      print(
+      debugPrint(
           'DEBUG removeBookmarkedSitter: Calling DELETE /parents/bookmarked-sitters/$sitterUserId');
       final response = await _dio.delete(
         '/parents/bookmarked-sitters/$sitterUserId',
       );
-      print(
+      debugPrint(
           'DEBUG removeBookmarkedSitter: Response status=${response.statusCode}');
-      print('DEBUG removeBookmarkedSitter: Response data=${response.data}');
+      debugPrint('DEBUG removeBookmarkedSitter: Response data=${response.data}');
       if (response.data['success'] != true) {
         throw Exception('Failed to remove bookmark');
       }
     } catch (e) {
-      print('DEBUG removeBookmarkedSitter: Error=$e');
+      debugPrint('DEBUG removeBookmarkedSitter: Error=$e');
       rethrow;
     }
   }
 
   Future<List<SitterDto>> getSavedSitters() async {
     try {
-      print('DEBUG getSavedSitters: Calling GET /parents/bookmarked-sitters');
+      debugPrint('DEBUG getSavedSitters: Calling GET /parents/bookmarked-sitters');
       final response = await _dio.get('/parents/bookmarked-sitters');
-      print('DEBUG getSavedSitters: Response data = ${response.data}');
+      debugPrint('DEBUG getSavedSitters: Response data = ${response.data}');
       if (response.data['success'] == true) {
         final List<dynamic> list = response.data['data']['sitters'] ?? [];
-        print('DEBUG getSavedSitters: Found ${list.length} sitters');
+        debugPrint('DEBUG getSavedSitters: Found ${list.length} sitters');
         return list.map((e) => _mapBookmarkedSitterToDto(e)).toList();
       }
       return [];
     } catch (e) {
-      print('DEBUG getSavedSitters: Error = $e');
+      debugPrint('DEBUG getSavedSitters: Error = $e');
       rethrow;
     }
   }
@@ -152,12 +152,12 @@ class SittersRemoteDataSource {
   /// Maps the bookmarked sitter API response to SitterDto.
   /// The API returns sitter data with nested userId object containing user details.
   SitterDto _mapBookmarkedSitterToDto(Map<String, dynamic> json) {
-    print('DEBUG _mapBookmarkedSitterToDto: Raw JSON = $json');
+    debugPrint('DEBUG _mapBookmarkedSitterToDto: Raw JSON = $json');
     final userIdData = json['userId'] as Map<String, dynamic>? ?? {};
-    print('DEBUG _mapBookmarkedSitterToDto: userIdData = $userIdData');
-    print(
+    debugPrint('DEBUG _mapBookmarkedSitterToDto: userIdData = $userIdData');
+    debugPrint(
         'DEBUG _mapBookmarkedSitterToDto: profile _id (json[_id]) = ${json['_id']}');
-    print(
+    debugPrint(
         'DEBUG _mapBookmarkedSitterToDto: user _id (userIdData[_id]) = ${userIdData['_id']}');
 
     // Photo URL can be in userId object or directly on sitter profile
@@ -195,29 +195,29 @@ class SittersRemoteDataSource {
   /// Fetch reviews for a specific sitter by user ID
   Future<List<ReviewDto>> fetchReviews(String sitterUserId) async {
     try {
-      print('DEBUG: Fetching reviews for sitterUserId: $sitterUserId');
+      debugPrint('DEBUG: Fetching reviews for sitterUserId: $sitterUserId');
       final response = await _dio.get(
         '/reviews',
         queryParameters: {'userId': sitterUserId},
       );
 
-      print('DEBUG: Response status: ${response.statusCode}');
-      print('DEBUG: Response data type: ${response.data.runtimeType}');
+      debugPrint('DEBUG: Response status: ${response.statusCode}');
+      debugPrint('DEBUG: Response data type: ${response.data.runtimeType}');
 
       // The API returns a direct array, not wrapped in {success, data}
       if (response.data is List) {
         final data = response.data as List<dynamic>;
-        print('DEBUG: Response is a List with ${data.length} items');
+        debugPrint('DEBUG: Response is a List with ${data.length} items');
 
         final reviews = <ReviewDto>[];
         for (var i = 0; i < data.length; i++) {
           try {
-            print('DEBUG: Parsing review $i');
+            debugPrint('DEBUG: Parsing review $i');
             final review = ReviewDto.fromJson(data[i] as Map<String, dynamic>);
             reviews.add(review);
           } catch (e, stack) {
-            print('DEBUG: Error parsing review $i: $e');
-            print('DEBUG: Stack: $stack');
+            debugPrint('DEBUG: Error parsing review $i: $e');
+            debugPrint('DEBUG: Stack: $stack');
             rethrow;
           }
         }
@@ -228,18 +228,18 @@ class SittersRemoteDataSource {
       if (response.data is Map<String, dynamic>) {
         final data = response.data['data'];
         if (data is List) {
-          print('DEBUG: Response is wrapped Map with ${data.length} reviews');
+          debugPrint('DEBUG: Response is wrapped Map with ${data.length} reviews');
           return data
               .map((json) => ReviewDto.fromJson(json as Map<String, dynamic>))
               .toList();
         }
       }
 
-      print('DEBUG: Unknown response format');
+      debugPrint('DEBUG: Unknown response format');
       return [];
     } catch (e, stack) {
-      print('DEBUG: Error in fetchReviews: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error in fetchReviews: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       rethrow;
     }
   }
@@ -253,7 +253,7 @@ class SittersRemoteDataSource {
       }
       throw Exception('Failed to fetch user profile');
     } catch (e) {
-      print('DEBUG: Error fetching user profile $userId: $e');
+      debugPrint('DEBUG: Error fetching user profile $userId: $e');
       rethrow;
     }
   }

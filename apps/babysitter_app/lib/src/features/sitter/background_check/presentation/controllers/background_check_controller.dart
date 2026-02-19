@@ -4,6 +4,7 @@ import 'package:auth/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import '../../data/background_check_remote_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 /// State for background check submission
 class BackgroundCheckState {
@@ -163,7 +164,7 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
           contentType = 'image/jpeg';
       }
 
-      print('DEBUG: Getting presigned URL for $fileName');
+      debugPrint('DEBUG: Getting presigned URL for $fileName');
 
       // Step 1: Get presigned URL
       final presignedResponse = await _dataSource.getPresignedUrl(
@@ -171,7 +172,7 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
         contentType: contentType,
       );
 
-      print('DEBUG: Uploading file to ${presignedResponse.uploadUrl}');
+      debugPrint('DEBUG: Uploading file to ${presignedResponse.uploadUrl}');
 
       // Step 2: Upload file to presigned URL
       await _dataSource.uploadFileToUrl(
@@ -180,7 +181,7 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
         contentType,
       );
 
-      print('DEBUG: File uploaded, public URL: ${presignedResponse.publicUrl}');
+      debugPrint('DEBUG: File uploaded, public URL: ${presignedResponse.publicUrl}');
 
       // Step 3: Submit identity verification
       await _dataSource.submitIdentityVerification(
@@ -188,12 +189,12 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
         fileUrl: presignedResponse.publicUrl,
       );
 
-      print('DEBUG: Background check submitted successfully');
+      debugPrint('DEBUG: Background check submitted successfully');
 
       state = state.copyWith(isLoading: false);
       return true;
     } catch (e) {
-      print('DEBUG: Background check submission failed: $e');
+      debugPrint('DEBUG: Background check submission failed: $e');
       state = state.copyWith(
         isLoading: false,
         error: 'Failed to submit background check. Please try again.',

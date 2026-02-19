@@ -135,14 +135,14 @@ class _JobPostStep5ReviewScreenState
 
     try {
       // Step 3: Create payment intent
-      print('DEBUG: JobPostStep5 creating payment intent for jobId: $jobId');
+      debugPrint('DEBUG: JobPostStep5 creating payment intent for jobId: $jobId');
       final paymentIntent = await bookingsRepo.createPaymentIntent(jobId);
-      print('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
+      debugPrint('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
 
       // Get pay rate from state
       final state = ref.read(jobPostControllerProvider);
       final amount = _calculateTotalAmount(state);
-      print(
+      debugPrint(
           'DEBUG: JobPostStep5 calculated amount: $amount (rate=${state.payRate}, start=${state.startDate} ${state.startTime}, end=${state.endDate} ${state.endTime})');
 
       if (mounted) {
@@ -154,18 +154,18 @@ class _JobPostStep5ReviewScreenState
           amount: amount,
           paymentIntentClientSecret: paymentIntent.clientSecret,
           onPaymentSuccess: () {
-            print('DEBUG: Payment completed successfully');
+            debugPrint('DEBUG: Payment completed successfully');
             widget.onSubmit();
           },
           onPaymentError: (error) {
-            print('DEBUG: Payment error: $error');
+            debugPrint('DEBUG: Payment error: $error');
             // Show payment failed dialog with option to retry or continue
             _showPaymentFailedDialog(jobId, amount, paymentIntent.clientSecret);
           },
         );
       }
     } catch (e) {
-      print('DEBUG: JobPostStep5 error: $e');
+      debugPrint('DEBUG: JobPostStep5 error: $e');
       if (mounted) {
         setState(() => _isProcessingPayment = false);
         AppToast.show(context,
@@ -214,11 +214,11 @@ class _JobPostStep5ReviewScreenState
                 amount: amount,
                 paymentIntentClientSecret: clientSecret,
                 onPaymentSuccess: () {
-                  print('DEBUG: Payment completed successfully on retry');
+                  debugPrint('DEBUG: Payment completed successfully on retry');
                   widget.onSubmit();
                 },
                 onPaymentError: (error) {
-                  print('DEBUG: Payment error on retry: $error');
+                  debugPrint('DEBUG: Payment error on retry: $error');
                   _showPaymentFailedDialog(jobId, amount, clientSecret);
                 },
               );

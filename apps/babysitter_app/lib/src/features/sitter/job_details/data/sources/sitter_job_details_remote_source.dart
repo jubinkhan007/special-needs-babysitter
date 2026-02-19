@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../dtos/job_details_response_dto.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for fetching job details from API.
 class SitterJobDetailsRemoteSource {
@@ -10,23 +11,23 @@ class SitterJobDetailsRemoteSource {
 
   /// Fetch job details by ID from the API.
   Future<JobDetailsResponseDto> getJobDetails(String jobId) async {
-    print(
+    debugPrint(
         'DEBUG: SitterJobDetailsRemoteSource.getJobDetails called with jobId=$jobId');
-    print('DEBUG: Making GET request to /jobs/$jobId');
+    debugPrint('DEBUG: Making GET request to /jobs/$jobId');
 
     try {
       final response = await _dio.get('/jobs/$jobId');
-      print('DEBUG: Response status: ${response.statusCode}');
-      print('DEBUG: Response data: ${response.data}');
+      debugPrint('DEBUG: Response status: ${response.statusCode}');
+      debugPrint('DEBUG: Response data: ${response.data}');
 
       final dto =
           JobDetailsResponseDto.fromJson(response.data as Map<String, dynamic>);
-      print('DEBUG: Parsed DTO successfully, job title: ${dto.data.job.title}');
+      debugPrint('DEBUG: Parsed DTO successfully, job title: ${dto.data.job.title}');
 
       return dto;
     } catch (e, stack) {
-      print('DEBUG: Error fetching job details: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: Error fetching job details: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       rethrow;
     }
   }

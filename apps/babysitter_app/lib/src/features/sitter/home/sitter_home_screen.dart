@@ -72,7 +72,7 @@ class SitterHomeScreen extends ConsumerWidget {
                   AppSearchField(
                     hintText: 'Search jobs by location, date, or keyword',
                     onTap: () {
-                      print('DEBUG HomeScreen: Search field tapped');
+                      debugPrint('DEBUG HomeScreen: Search field tapped');
                       // Fetch jobs before navigating to ensure data is loaded
                       ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
                       context.push(Routes.sitterJobSearch);
@@ -124,7 +124,7 @@ class SitterHomeScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print('DEBUG HomeScreen: See All tapped, navigating to AllJobsScreen');
+                    debugPrint('DEBUG HomeScreen: See All tapped, navigating to AllJobsScreen');
                     // Reset and fetch to ensure All Jobs screen shows same data
                     ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
                     context.push(Routes.sitterJobSearch);

@@ -32,7 +32,7 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   @override
   void initState() {
     super.initState();
-    print(
+    debugPrint(
         'DEBUG SignUpFlow: Initialized with initialRole=${widget.initialRole}');
     _formData = {'role': widget.initialRole};
   }
@@ -41,7 +41,7 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   void didUpdateWidget(SignUpFlow oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialRole != widget.initialRole) {
-      print('DEBUG SignUpFlow: didUpdateWidget newRole=${widget.initialRole}');
+      debugPrint('DEBUG SignUpFlow: didUpdateWidget newRole=${widget.initialRole}');
       setState(() {
         _formData['role'] = widget.initialRole;
       });

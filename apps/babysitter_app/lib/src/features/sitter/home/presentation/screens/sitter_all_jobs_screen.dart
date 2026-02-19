@@ -29,7 +29,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
   @override
   void initState() {
     super.initState();
-    print('DEBUG AllJobsScreen: initState called');
+    debugPrint('DEBUG AllJobsScreen: initState called');
     
     // Initialize search with current query if any
     final query = ref.read(jobSearchFiltersProvider).searchQuery;
@@ -42,7 +42,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
 
     // Initial fetch immediately (like home screen) - don't wait for location
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print('DEBUG AllJobsScreen: postFrameCallback - calling resetAndFetch');
+      debugPrint('DEBUG AllJobsScreen: postFrameCallback - calling resetAndFetch');
       // Complete reset to match home screen behavior
       // This will fetch jobs without location first
       ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
@@ -69,14 +69,14 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
   }
 
   void _onSearchChanged(String query) {
-    print('DEBUG _onSearchChanged: query="$query"');
+    debugPrint('DEBUG _onSearchChanged: query="$query"');
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       final trimmedQuery = query.trim();
-      print('DEBUG _onSearchChanged debounce fired: trimmedQuery="$trimmedQuery"');
+      debugPrint('DEBUG _onSearchChanged debounce fired: trimmedQuery="$trimmedQuery"');
       if (trimmedQuery.isEmpty) {
         // When search is cleared, reset filters and fetch all jobs
-        print('DEBUG _onSearchChanged: calling resetAndFetch()');
+        debugPrint('DEBUG _onSearchChanged: calling resetAndFetch()');
         ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
       } else {
         ref.read(jobSearchFiltersProvider.notifier).setSearchQuery(trimmedQuery);
@@ -100,11 +100,11 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                 latitude: position.latitude,
                 longitude: position.longitude,
               );
-          print('DEBUG AllJobsScreen: Location updated in background: ${position.latitude}, ${position.longitude}');
+          debugPrint('DEBUG AllJobsScreen: Location updated in background: ${position.latitude}, ${position.longitude}');
         }
       }
     } catch (e) {
-      print('DEBUG AllJobsScreen: Error getting location: $e');
+      debugPrint('DEBUG AllJobsScreen: Error getting location: $e');
     }
   }
 
@@ -116,7 +116,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
     ref.watch(savedJobsListProvider);
 
     // Debug logging
-    print('DEBUG AllJobsScreen: isLoading=${searchState.isLoading}, jobs=${searchState.jobs.length}, error=${searchState.error}');
+    debugPrint('DEBUG AllJobsScreen: isLoading=${searchState.isLoading}, jobs=${searchState.jobs.length}, error=${searchState.error}');
 
     return Scaffold(
       backgroundColor: Colors.white,

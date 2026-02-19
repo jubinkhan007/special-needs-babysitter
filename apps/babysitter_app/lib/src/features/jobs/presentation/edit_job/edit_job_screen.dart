@@ -274,9 +274,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       }
 
       // DEBUG: Print full payload
-      print('=== UPDATE JOB DEBUG ==>');
-      print('Job ID: ${widget.jobId}');
-      print('Update Payload: $updateData');
+      debugPrint('=== UPDATE JOB DEBUG ==>');
+      debugPrint('Job ID: ${widget.jobId}');
+      debugPrint('Update Payload: $updateData');
 
       await repo.updateJob(widget.jobId, updateData);
 
@@ -290,9 +290,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       }
     } catch (e, stackTrace) {
       // DEBUG: Print full error details
-      print('=== UPDATE JOB ERROR ==>');
-      print('Error: $e');
-      print('Stack: $stackTrace');
+      debugPrint('=== UPDATE JOB ERROR ==>');
+      debugPrint('Error: $e');
+      debugPrint('Stack: $stackTrace');
       if (mounted) {
         // Extract user-friendly error message
         String errorMessage = 'Error updating job';

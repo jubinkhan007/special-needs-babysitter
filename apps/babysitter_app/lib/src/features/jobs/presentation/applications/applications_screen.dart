@@ -28,7 +28,7 @@ class ApplicationsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppTokens.applicationsBg,
       appBar: JobsAppBar(
-        title: 'Applications',
+        title: 'Sitter Applications',
         showSupportIcon: false,
         onBack: () => context.pop(),
       ),

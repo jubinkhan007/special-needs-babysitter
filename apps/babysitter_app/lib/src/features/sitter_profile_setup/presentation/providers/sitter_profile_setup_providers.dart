@@ -367,29 +367,29 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
       if (step == 1 && resultData.containsKey('photoUrl')) {
         final photoUrl = resultData['photoUrl'] as String?;
         if (photoUrl != null && photoUrl.isNotEmpty) {
-          print(
+          debugPrint(
               'DEBUG CONTROLLER: Syncing avatarUrl to User profile: $photoUrl');
           try {
             await _profileRepository.updateProfile(
               UpdateProfileParams(avatarUrl: photoUrl),
             );
-            print('DEBUG CONTROLLER: User avatarUrl synced successfully.');
+            debugPrint('DEBUG CONTROLLER: User avatarUrl synced successfully.');
           } catch (e) {
             // Non-critical error - the sitter profile photo is already saved
             // The user profile avatar sync is optional and may fail if endpoint unavailable
-            print('DEBUG CONTROLLER: Failed to sync avatarUrl (non-critical): $e');
+            debugPrint('DEBUG CONTROLLER: Failed to sync avatarUrl (non-critical): $e');
           }
         }
       }
 
       return true;
     } catch (e) {
-      print('DEBUG: saveStep($step) failed: $e');
+      debugPrint('DEBUG: saveStep($step) failed: $e');
 
       // WORKAROUND: Step 7 (Availability) fails with 500 on backend updates
       // "Performing an update on the path '_id' would modify the immutable field '_id'"
       if (step == 7 && e is DioException && e.response?.statusCode == 500) {
-        print(
+        debugPrint(
             'DEBUG: Swallowing Step 7 500 error to allow user to proceed (Backend Bug Workaround)');
         return true;
       }
@@ -400,25 +400,25 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
 
   /// Submits the final profile (Step 9 + Step 10 for confirmation).
   Future<bool> submitSitterProfile(SitterProfileRepository repository) async {
-    print('DEBUG CONTROLLER: submitSitterProfile called');
+    debugPrint('DEBUG CONTROLLER: submitSitterProfile called');
 
     // Step 9 - Review submission
     final step9Success = await saveStep(9, repository);
     if (!step9Success) {
-      print('DEBUG CONTROLLER: Step 9 failed');
+      debugPrint('DEBUG CONTROLLER: Step 9 failed');
       return false;
     }
-    print('DEBUG CONTROLLER: Step 9 succeeded');
+    debugPrint('DEBUG CONTROLLER: Step 9 succeeded');
 
     // Step 10 - Confirm profile completion
-    print('DEBUG CONTROLLER: Calling Step 10 to confirm profile completion...');
+    debugPrint('DEBUG CONTROLLER: Calling Step 10 to confirm profile completion...');
     final step10Success = await saveStep(10, repository);
     if (!step10Success) {
-      print('DEBUG CONTROLLER: Step 10 failed');
+      debugPrint('DEBUG CONTROLLER: Step 10 failed');
       return false;
     }
 
-    print('DEBUG CONTROLLER: Profile submission complete (Steps 9 + 10)');
+    debugPrint('DEBUG CONTROLLER: Profile submission complete (Steps 9 + 10)');
     return true;
   }
 
@@ -551,7 +551,7 @@ final sitterProfileDioProvider = Provider<Dio>((ref) {
         options.headers['Cookie'] = 'session_id=${session.accessToken}';
       }
 
-      print('DEBUG SITTER: ${options.method} ${options.uri}');
+      debugPrint('DEBUG SITTER: ${options.method} ${options.uri}');
       return handler.next(options);
     },
   ));

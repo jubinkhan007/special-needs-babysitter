@@ -26,6 +26,7 @@ class Step6Certification extends ConsumerStatefulWidget {
 class _Step6CertificationState extends ConsumerState<Step6Certification> {
   static const _textDark = Color(0xFF1A1A1A);
   static const _primaryBlue = AppColors.primary;
+  bool _noCprAcknowledged = false;
 
   final List<String> _allCertifications = [
     'CPR Certification',
@@ -327,6 +328,44 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
 
                   const SizedBox(height: 8),
 
+                  // CPR Acknowledgment (shown only if CPR not selected)
+                  Builder(builder: (context) {
+                    final hasCpr = state.certifications.contains('CPR Certification');
+                    if (hasCpr) return const SizedBox.shrink();
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFD0D5DD)),
+                      ),
+                      child: Row(
+                        children: [
+                          Checkbox(
+                            value: _noCprAcknowledged,
+                            onChanged: (val) =>
+                                setState(() => _noCprAcknowledged = val ?? false),
+                            activeColor: _primaryBlue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'I do not currently have CPR certification.',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color(0xFF475467),
+                                fontFamily: 'Inter',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+
                   // Skills Label
                   const Text(
                     'Skills',
@@ -382,7 +421,22 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
           padding: const EdgeInsets.all(24.0),
           child: PrimaryActionButton(
             label: 'Continue',
-            onPressed: widget.onNext,
+            onPressed: () {
+              final hasCpr = state.certifications.contains('CPR Certification');
+              if (!hasCpr && !_noCprAcknowledged) {
+                AppToast.show(
+                  context,
+                  const SnackBar(
+                    content: Text(
+                      'Please select CPR Certification or acknowledge that you do not have it.',
+                    ),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                return;
+              }
+              widget.onNext();
+            },
           ),
         ),
       ),

@@ -110,15 +110,15 @@ class _BookingDetailsScreenState extends ConsumerState<BookingDetailsScreen> {
       ),
       data: (details) {
         // Debug: Log booking details data
-        print('DEBUG BookingDetailsScreen: ======= BookingDetails received =======');
-        print('DEBUG BookingDetailsScreen: id = ${details.id}');
-        print('DEBUG BookingDetailsScreen: sitterId = ${details.sitterId}');
-        print('DEBUG BookingDetailsScreen: sitterName = "${details.sitterName}"');
-        print('DEBUG BookingDetailsScreen: sitterName length = ${details.sitterName.length}');
-        print('DEBUG BookingDetailsScreen: sitterName contains DioException = ${details.sitterName.contains('DioException')}');
-        print('DEBUG BookingDetailsScreen: status = ${details.status}');
-        print('DEBUG BookingDetailsScreen: skills = ${details.skills}');
-        print('DEBUG BookingDetailsScreen: =====================================');
+        debugPrint('DEBUG BookingDetailsScreen: ======= BookingDetails received =======');
+        debugPrint('DEBUG BookingDetailsScreen: id = ${details.id}');
+        debugPrint('DEBUG BookingDetailsScreen: sitterId = ${details.sitterId}');
+        debugPrint('DEBUG BookingDetailsScreen: sitterName = "${details.sitterName}"');
+        debugPrint('DEBUG BookingDetailsScreen: sitterName length = ${details.sitterName.length}');
+        debugPrint('DEBUG BookingDetailsScreen: sitterName contains DioException = ${details.sitterName.contains('DioException')}');
+        debugPrint('DEBUG BookingDetailsScreen: status = ${details.status}');
+        debugPrint('DEBUG BookingDetailsScreen: skills = ${details.skills}');
+        debugPrint('DEBUG BookingDetailsScreen: =====================================');
         final variant = BookingDetailsVariant.fromStatus(details.status);
         final uiModel = BookingDetailsUiModel.fromDomain(details);
         final isPending = details.status == BookingStatus.pending;

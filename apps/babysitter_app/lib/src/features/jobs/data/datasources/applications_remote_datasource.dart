@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import '../models/application_dto.dart';
 import '../models/application_detail_dto.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for fetching job applications.
 class ApplicationsRemoteDataSource {
@@ -10,22 +11,22 @@ class ApplicationsRemoteDataSource {
 
   /// Fetches applications for a specific job.
   Future<List<ApplicationDto>> getApplications(String jobId) async {
-    print('DEBUG: ApplicationsRemoteDataSource.getApplications called');
-    print('DEBUG: jobId = "$jobId"');
-    print('DEBUG: baseUrl = ${_dio.options.baseUrl}');
-    print('DEBUG: Full URL = ${_dio.options.baseUrl}/jobs/$jobId/applications');
+    debugPrint('DEBUG: ApplicationsRemoteDataSource.getApplications called');
+    debugPrint('DEBUG: jobId = "$jobId"');
+    debugPrint('DEBUG: baseUrl = ${_dio.options.baseUrl}');
+    debugPrint('DEBUG: Full URL = ${_dio.options.baseUrl}/jobs/$jobId/applications');
 
     try {
       final response = await _dio.get('/jobs/$jobId/applications');
-      print('DEBUG: Response status: ${response.statusCode}');
-      print('DEBUG: Response data: ${response.data}');
+      debugPrint('DEBUG: Response status: ${response.statusCode}');
+      debugPrint('DEBUG: Response data: ${response.data}');
 
       final responseDto = ApplicationsResponseDto.fromJson(response.data);
-      print(
+      debugPrint(
           'DEBUG: Parsed ${responseDto.data.applications.length} applications');
       return responseDto.data.applications;
     } catch (e) {
-      print('DEBUG: ApplicationsRemoteDataSource error: $e');
+      debugPrint('DEBUG: ApplicationsRemoteDataSource error: $e');
       rethrow;
     }
   }
@@ -35,18 +36,18 @@ class ApplicationsRemoteDataSource {
     required String jobId,
     required String applicationId,
   }) async {
-    print(
+    debugPrint(
         'DEBUG: getApplicationDetail called with jobId: $jobId, applicationId: $applicationId');
 
     try {
       final response =
           await _dio.get('/jobs/$jobId/applications/$applicationId');
-      print('DEBUG: getApplicationDetail response: ${response.data}');
+      debugPrint('DEBUG: getApplicationDetail response: ${response.data}');
 
       final responseDto = ApplicationDetailResponseDto.fromJson(response.data);
       return responseDto.data;
     } catch (e) {
-      print('DEBUG: getApplicationDetail error: $e');
+      debugPrint('DEBUG: getApplicationDetail error: $e');
       rethrow;
     }
   }
@@ -60,8 +61,8 @@ class ApplicationsRemoteDataSource {
     required String action,
     String? declineReason,
   }) async {
-    print('DEBUG: respondToApplication called');
-    print('DEBUG: jobId=$jobId, applicationId=$applicationId, action=$action');
+    debugPrint('DEBUG: respondToApplication called');
+    debugPrint('DEBUG: jobId=$jobId, applicationId=$applicationId, action=$action');
 
     final body = <String, dynamic>{
       'action': action,
@@ -76,9 +77,9 @@ class ApplicationsRemoteDataSource {
         '/jobs/$jobId/applications/$applicationId/respond',
         data: body,
       );
-      print('DEBUG: respondToApplication response: ${response.data}');
+      debugPrint('DEBUG: respondToApplication response: ${response.data}');
     } catch (e) {
-      print('DEBUG: respondToApplication error: $e');
+      debugPrint('DEBUG: respondToApplication error: $e');
       rethrow;
     }
   }

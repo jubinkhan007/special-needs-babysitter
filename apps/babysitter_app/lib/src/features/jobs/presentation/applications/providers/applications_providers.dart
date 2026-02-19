@@ -9,6 +9,7 @@ import '../../../domain/applications/booking_application.dart';
 import '../../../domain/applications/applications_repository.dart';
 import '../../../data/datasources/applications_remote_datasource.dart';
 import '../../../data/repositories/applications_repository_impl.dart';
+import 'package:flutter/foundation.dart';
 
 /// Authenticated Dio provider for Applications API.
 final applicationsDioProvider = Provider<Dio>((ref) {
@@ -40,8 +41,8 @@ final applicationsDioProvider = Provider<Dio>((ref) {
       return handler.next(options);
     },
     onError: (DioException e, handler) {
-      print('DEBUG: Applications API Error: ${e.response?.statusCode}');
-      print('DEBUG: Applications API Error Data: ${e.response?.data}');
+      debugPrint('DEBUG: Applications API Error: ${e.response?.statusCode}');
+      debugPrint('DEBUG: Applications API Error Data: ${e.response?.data}');
       return handler.next(e);
     },
   ));
@@ -64,15 +65,15 @@ final applicationsRepositoryProvider = Provider<ApplicationsRepository>((ref) {
 /// Provider for fetching applications for a specific job.
 final applicationsProvider =
     FutureProvider.family<List<ApplicationItem>, String>((ref, jobId) async {
-  print('DEBUG: applicationsProvider called with jobId: $jobId');
+  debugPrint('DEBUG: applicationsProvider called with jobId: $jobId');
   final repository = ref.watch(applicationsRepositoryProvider);
   try {
     final result = await repository.getApplications(jobId);
-    print('DEBUG: applicationsProvider got ${result.length} applications');
+    debugPrint('DEBUG: applicationsProvider got ${result.length} applications');
     return result;
   } catch (e, stack) {
-    print('DEBUG: applicationsProvider error: $e');
-    print('DEBUG: applicationsProvider stack: $stack');
+    debugPrint('DEBUG: applicationsProvider error: $e');
+    debugPrint('DEBUG: applicationsProvider stack: $stack');
     rethrow;
   }
 });
@@ -103,7 +104,7 @@ class ApplicationDetailArgs {
 /// Provider for fetching a single application's details.
 final applicationDetailProvider = FutureProvider.autoDispose
     .family<BookingApplication, ApplicationDetailArgs>((ref, args) async {
-  print(
+  debugPrint(
       'DEBUG: applicationDetailProvider called with jobId: ${args.jobId}, id: ${args.applicationId}');
 
   final jobsRepo = ref.watch(jobsRepositoryProvider);
@@ -171,7 +172,7 @@ final applicationDetailProvider = FutureProvider.autoDispose
       pickupDropoffDetails: [], // Not available
     );
   } catch (e) {
-    print('DEBUG: applicationDetailProvider error: $e');
+    debugPrint('DEBUG: applicationDetailProvider error: $e');
     rethrow;
   }
 });

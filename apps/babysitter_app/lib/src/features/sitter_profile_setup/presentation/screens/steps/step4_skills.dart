@@ -154,6 +154,17 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
           child: PrimaryActionButton(
             label: 'Continue',
             onPressed: () {
+              final state = ref.read(sitterProfileSetupControllerProvider);
+              if (state.skills.isEmpty) {
+                AppToast.show(
+                  context,
+                  const SnackBar(
+                    content: Text('Please select at least one skill to continue.'),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+                return;
+              }
               widget.onNext();
             },
           ),

@@ -102,13 +102,13 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
 
     try {
       // Create payment intent for the job
-      print('DEBUG: JobDetails creating payment intent for jobId: ${job.id}');
+      debugPrint('DEBUG: JobDetails creating payment intent for jobId: ${job.id}');
       final paymentIntent = await bookingsRepo.createPaymentIntent(job.id);
-      print('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
+      debugPrint('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
 
       // Calculate amount based on job details
       final amount = _calculateTotalAmount(job);
-      print('DEBUG: JobDetails calculated amount: $amount');
+      debugPrint('DEBUG: JobDetails calculated amount: $amount');
 
       if (mounted) {
         setState(() => _isProcessingPayment = false);
@@ -119,7 +119,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           amount: amount,
           paymentIntentClientSecret: paymentIntent.clientSecret,
           onPaymentSuccess: () {
-            print('DEBUG: Payment completed successfully');
+            debugPrint('DEBUG: Payment completed successfully');
             // Refresh job details to update payment status
             ref.invalidate(jobDetailsProvider(widget.jobId));
             AppToast.show(context,
@@ -130,7 +130,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
             );
           },
           onPaymentError: (error) {
-            print('DEBUG: Payment error: $error');
+            debugPrint('DEBUG: Payment error: $error');
             if (error.contains('cancelled')) {
               // User cancelled, no need to show error
               return;
@@ -145,7 +145,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
         );
       }
     } catch (e) {
-      print('DEBUG: JobDetails payment error: $e');
+      debugPrint('DEBUG: JobDetails payment error: $e');
       if (mounted) {
         setState(() => _isProcessingPayment = false);
         AppToast.show(context,

@@ -48,7 +48,7 @@ class IncomingCallHandler {
       '[CALL_ACTION] IncomingCallHandler notification action listener attached',
       name: 'Calls',
     );
-    print(
+    debugPrint(
       '[CALL_ACTION] IncomingCallHandler notification action listener attached',
     );
 
@@ -234,7 +234,7 @@ class IncomingCallHandler {
         name: 'Calls',
         stackTrace: st,
       );
-      print('[CALL_ACTION] UNHANDLED ERROR in notification action handler: $e');
+      debugPrint('[CALL_ACTION] UNHANDLED ERROR in notification action handler: $e');
     }
   }
 
@@ -246,7 +246,7 @@ class IncomingCallHandler {
       '[CALL_ACTION] received action=${event.type.name} callId=${event.callId}',
       name: 'Calls',
     );
-    print(
+    debugPrint(
       '[CALL_ACTION] received action=${event.type.name} callId=${event.callId}',
     );
 
@@ -278,7 +278,7 @@ class IncomingCallHandler {
         '[CALL_ACTION] auth not ready; retrying hydration for callId=${event.callId}',
         name: 'Calls',
       );
-      print(
+      debugPrint(
         '[CALL_ACTION] auth not ready; retrying hydration for callId=${event.callId}',
       );
 
@@ -292,7 +292,7 @@ class IncomingCallHandler {
           '[CALL_ACTION] hydration retry attempt=$attempt success=$hydrated',
           name: 'Calls',
         );
-        print(
+        debugPrint(
           '[CALL_ACTION] hydration retry attempt=$attempt success=$hydrated',
         );
       }
@@ -312,7 +312,7 @@ class IncomingCallHandler {
           '[CALL_ACTION] about to call acceptCall() state=${preAcceptState.runtimeType} callId=${event.callId}',
           name: 'Calls',
         );
-        print(
+        debugPrint(
           '[CALL_ACTION] about to call acceptCall() state=${preAcceptState.runtimeType} callId=${event.callId}',
         );
         await controller.acceptCall();
@@ -321,7 +321,7 @@ class IncomingCallHandler {
           '[CALL_ACTION] acceptCall() completed state=${postAcceptState.runtimeType} callId=${event.callId}',
           name: 'Calls',
         );
-        print(
+        debugPrint(
           '[CALL_ACTION] acceptCall() completed state=${postAcceptState.runtimeType} callId=${event.callId}',
         );
 
@@ -332,7 +332,7 @@ class IncomingCallHandler {
             '[CALL_ACTION] accept failed, state=$postAcceptState - not navigating to InCallScreen',
             name: 'Calls',
           );
-          print(
+          debugPrint(
             '[CALL_ACTION] accept failed, state=${postAcceptState.runtimeType} - not navigating to InCallScreen',
           );
           guard.popToRootAndClear();
@@ -342,7 +342,7 @@ class IncomingCallHandler {
             '[CALL_ACTION] showInCallScreen() called for callId=${event.callId}',
             name: 'Calls',
           );
-          print(
+          debugPrint(
             '[CALL_ACTION] showInCallScreen() called for callId=${event.callId}',
           );
         }
@@ -352,7 +352,7 @@ class IncomingCallHandler {
           name: 'Calls',
           stackTrace: st,
         );
-        print(
+        debugPrint(
           '[CALL_ACTION] accept flow FAILED for callId=${event.callId}: $e',
         );
         // On error, ensure we don't leave user on black screen
@@ -410,7 +410,7 @@ class IncomingCallHandler {
           '[CALL_ACTION] getCallDetails resolved callerUserId=$callerUserId callType=${callType.name}',
           name: 'Calls',
         );
-        print(
+        debugPrint(
           '[CALL_ACTION] getCallDetails resolved callerUserId=$callerUserId callType=${callType.name}',
         );
       } catch (e) {
@@ -418,7 +418,7 @@ class IncomingCallHandler {
           'Failed to resolve caller details for notification action: $e',
           name: 'Calls',
         );
-        print(
+        debugPrint(
           '[CALL_ACTION] getCallDetails failed callId=${event.callId} error=$e',
         );
       }
@@ -430,7 +430,7 @@ class IncomingCallHandler {
         '[CALL_ACTION] callerUserId missing, using fallback=$callerUserId',
         name: 'Calls',
       );
-      print(
+      debugPrint(
         '[CALL_ACTION] callerUserId missing, using fallback=$callerUserId',
       );
     }
@@ -450,7 +450,7 @@ class IncomingCallHandler {
       '[CALL_ACTION] hydration result success=$success callId=${event.callId}',
       name: 'Calls',
     );
-    print(
+    debugPrint(
       '[CALL_ACTION] hydration result success=$success callId=${event.callId}',
     );
     return success;

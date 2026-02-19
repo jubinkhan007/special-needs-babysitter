@@ -151,20 +151,20 @@ class _AddChildDialogState extends State<AddChildDialog> {
       });
 
       // Debug logging for pickup/dropoff fields
-      print('DEBUG AddChildDialog: needsDropoff=$_needsDropoff');
-      print(
+      debugPrint('DEBUG AddChildDialog: needsDropoff=$_needsDropoff');
+      debugPrint(
           'DEBUG AddChildDialog: pickupLocController.text=${_pickupLocController.text}');
-      print(
+      debugPrint(
           'DEBUG AddChildDialog: dropoffLocController.text=${_dropoffLocController.text}');
-      print(
+      debugPrint(
           'DEBUG AddChildDialog: transportInstrController.text=${_transportInstrController.text}');
 
       final pickupValue = _needsDropoff ? _pickupLocController.text : '';
       final dropoffValue = _needsDropoff ? _dropoffLocController.text : '';
       final instrValue = _needsDropoff ? _transportInstrController.text : '';
 
-      print('DEBUG AddChildDialog: Sending pickupLocation=$pickupValue');
-      print('DEBUG AddChildDialog: Sending dropoffLocation=$dropoffValue');
+      debugPrint('DEBUG AddChildDialog: Sending pickupLocation=$pickupValue');
+      debugPrint('DEBUG AddChildDialog: Sending dropoffLocation=$dropoffValue');
 
       widget.onSave({
         'firstName': _firstNameController.text,

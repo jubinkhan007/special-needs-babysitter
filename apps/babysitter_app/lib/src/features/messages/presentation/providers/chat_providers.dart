@@ -8,6 +8,7 @@ import 'package:realtime/realtime.dart';
 
 import '../../../sitters/data/sitters_data_di.dart';
 import '../../data/chat_media_upload_remote_datasource.dart';
+import 'package:flutter/foundation.dart';
 
 // Remote Data Source
 final chatRemoteDataSourceProvider = Provider<ChatRemoteDataSource>((ref) {
@@ -37,10 +38,10 @@ final chatUserProfileProvider = FutureProvider.family.autoDispose<Map<String, dy
 
 // Chat initialization provider - persists for the session (no autoDispose)
 final chatInitProvider = FutureProvider<ChatInitResult>((ref) async {
-  print('DEBUG: chatInitProvider initializing...');
+  debugPrint('DEBUG: chatInitProvider initializing...');
   final repository = ref.watch(chatRepositoryProvider);
   final result = await repository.initChat();
-  print('DEBUG: Chat initialized with Agora username: ${result.agoraUsername}');
+  debugPrint('DEBUG: Chat initialized with Agora username: ${result.agoraUsername}');
   return result;
 });
 
@@ -53,7 +54,7 @@ final chatMessagesProvider = AsyncNotifierProvider.autoDispose
 class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessageEntity>, String> {
   @override
   Future<List<ChatMessageEntity>> build(String otherUserId) async {
-    print('DEBUG: ChatMessagesNotifier.build($otherUserId)');
+    debugPrint('DEBUG: ChatMessagesNotifier.build($otherUserId)');
 
     final repository = ref.watch(chatRepositoryProvider);
     final chatService = ref.watch(chatServiceProvider);
@@ -73,7 +74,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     });
 
     ref.onDispose(() {
-      print('DEBUG: ChatMessagesNotifier disposing listener');
+      debugPrint('DEBUG: ChatMessagesNotifier disposing listener');
       subscription.cancel();
     });
 
@@ -82,11 +83,11 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
       await repository.markAsRead(otherUserId);
       ref.invalidate(chatConversationsProvider);
     } catch (e) {
-      print('DEBUG: Error marking conversation as read: $e');
+      debugPrint('DEBUG: Error marking conversation as read: $e');
     }
 
     final messages = await repository.getMessages(otherUserId);
-    print('DEBUG: Loaded ${messages.length} messages for conversation with $otherUserId');
+    debugPrint('DEBUG: Loaded ${messages.length} messages for conversation with $otherUserId');
     return messages;
   }
 
@@ -95,7 +96,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     final otherUserId = arg;
 
     try {
-      print('DEBUG: Sending message to $otherUserId: $text');
+      debugPrint('DEBUG: Sending message to $otherUserId: $text');
       final sentMessage = await repository.sendMessage(
         recipientUserId: otherUserId,
         text: text,
@@ -108,7 +109,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
       // Also refresh conversations list
       ref.invalidate(chatConversationsProvider);
     } catch (e) {
-      print('DEBUG: Error sending message: $e');
+      debugPrint('DEBUG: Error sending message: $e');
       rethrow;
     }
   }
@@ -122,7 +123,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     final otherUserId = arg;
 
     try {
-      print('DEBUG: Sending media message to $otherUserId');
+      debugPrint('DEBUG: Sending media message to $otherUserId');
       final sentMessage = await repository.sendMediaMessage(
         recipientUserId: otherUserId,
         mediaUrl: mediaUrl,
@@ -137,7 +138,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
       // Also refresh conversations list
       ref.invalidate(chatConversationsProvider);
     } catch (e) {
-      print('DEBUG: Error sending media message: $e');
+      debugPrint('DEBUG: Error sending media message: $e');
       rethrow;
     }
   }
@@ -151,7 +152,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     final otherUserId = arg;
 
     try {
-      print('DEBUG: Uploading chat attachment for $otherUserId');
+      debugPrint('DEBUG: Uploading chat attachment for $otherUserId');
       final uploadResult = await uploader.uploadFile(file);
 
       final sentMessage = await repository.sendMediaMessage(
@@ -166,7 +167,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
 
       ref.invalidate(chatConversationsProvider);
     } catch (e) {
-      print('DEBUG: Error sending attachment: $e');
+      debugPrint('DEBUG: Error sending attachment: $e');
       rethrow;
     }
   }
@@ -188,49 +189,49 @@ class ChatConversationsNotifier
     extends AsyncNotifier<List<Conversation>> {
   @override
   Future<List<Conversation>> build() async {
-    print('DEBUG: ChatConversationsNotifier.build() START');
+    debugPrint('DEBUG: ChatConversationsNotifier.build() START');
 
     try {
-      print('DEBUG: Watching getConversationsUseCaseProvider...');
+      debugPrint('DEBUG: Watching getConversationsUseCaseProvider...');
       final useCase = ref.watch(getConversationsUseCaseProvider);
 
-      print('DEBUG: Watching chatServiceProvider...');
+      debugPrint('DEBUG: Watching chatServiceProvider...');
       final chatService = ref.watch(chatServiceProvider);
 
-      print('DEBUG: Setting up event listener...');
+      debugPrint('DEBUG: Setting up event listener...');
       // Listen to real-time events
       final subscription = chatService.events.listen(_onChatEvent);
       ref.onDispose(() {
-        print('DEBUG: ChatConversationsNotifier disposing listener');
+        debugPrint('DEBUG: ChatConversationsNotifier disposing listener');
         subscription.cancel();
       });
 
       // Ensure chat is initialized (cached, won't re-call if already done)
       await ref.watch(chatInitProvider.future);
 
-      print('DEBUG: Reading currentUserProvider...');
+      debugPrint('DEBUG: Reading currentUserProvider...');
       // Ensure chat service is logged in
       final userAsync = ref.read(currentUserProvider);
-      print('DEBUG: currentUserProvider state: isLoading=${userAsync.isLoading}, hasValue=${userAsync.hasValue}');
+      debugPrint('DEBUG: currentUserProvider state: isLoading=${userAsync.isLoading}, hasValue=${userAsync.hasValue}');
 
       final user = userAsync.value;
-      print('DEBUG: Current User ID: ${user?.id}');
+      debugPrint('DEBUG: Current User ID: ${user?.id}');
 
       if (user == null) {
-        print('DEBUG: User is null, skipping chat login');
+        debugPrint('DEBUG: User is null, skipping chat login');
       }
 
-      print('DEBUG: Calling getConversationsUseCase()...');
+      debugPrint('DEBUG: Calling getConversationsUseCase()...');
       final result = await useCase();
-      print('DEBUG: getConversationsUseCase returned ${result.length} conversations');
+      debugPrint('DEBUG: getConversationsUseCase returned ${result.length} conversations');
 
       return result;
     } catch (e, stack) {
-      print('DEBUG: ChatConversationsNotifier CRITICAL ERROR: $e');
-      print('DEBUG: Stack trace: $stack');
+      debugPrint('DEBUG: ChatConversationsNotifier CRITICAL ERROR: $e');
+      debugPrint('DEBUG: Stack trace: $stack');
       rethrow;
     } finally {
-      print('DEBUG: ChatConversationsNotifier.build() END');
+      debugPrint('DEBUG: ChatConversationsNotifier.build() END');
     }
   }
 

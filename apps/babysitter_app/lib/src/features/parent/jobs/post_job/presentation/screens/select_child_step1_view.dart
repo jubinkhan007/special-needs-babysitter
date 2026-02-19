@@ -206,8 +206,8 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
         body: Center(child: CircularProgressIndicator()),
       ),
       error: (err, stack) {
-        print('ERROR: SelectChildStep1View error: $err');
-        print('DEBUG: Stack trace: $stack');
+        debugPrint('ERROR: SelectChildStep1View error: $err');
+        debugPrint('DEBUG: Stack trace: $stack');
         return Scaffold(
           body: Center(child: Text('Error: $err')),
         );

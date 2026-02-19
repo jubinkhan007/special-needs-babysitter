@@ -34,7 +34,7 @@ class BookingsController extends ChangeNotifier {
     try {
       _bookings = await _repository.getBookings();
     } catch (e) {
-      print('DEBUG: Failed to load bookings: $e');
+      debugPrint('DEBUG: Failed to load bookings: $e');
       // Keep empty list or handle error silently as UI has no error state logic
     } finally {
       _isLoading = false;

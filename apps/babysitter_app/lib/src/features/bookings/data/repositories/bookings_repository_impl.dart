@@ -7,6 +7,7 @@ import '../datasources/bookings_remote_datasource.dart';
 import '../models/parent_booking_dto.dart';
 import '../models/booking_details_dto.dart';
 import '../models/booking_location_dto.dart';
+import 'package:flutter/foundation.dart';
 
 class BookingsRepositoryImpl implements BookingsRepository {
   final BookingsRemoteDataSource _remoteDataSource;
@@ -190,7 +191,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
         // Fallback to startDate if time parsing fails or is missing
         jobStartDateTime ??= scheduledDate;
       } catch (e) {
-        print('DEBUG: Date parsing error for booking ${dto.id}: $e');
+        debugPrint('DEBUG: Date parsing error for booking ${dto.id}: $e');
       }
     }
 

@@ -96,7 +96,7 @@ class SitterBookingsScreen extends ConsumerWidget {
                 final isActive = _isActiveStatus(booking.status);
                 final jobId = booking.id;
                 final isSaved = savedJobsState.savedJobIds.contains(jobId);
-                print(
+                debugPrint(
                     'DEBUG: BookingCard[$index] - applicationId: ${booking.applicationId}, title: ${booking.title}, status: ${booking.status}');
                 return BookingCard(
                   booking: booking,
@@ -132,20 +132,20 @@ class SitterBookingsScreen extends ConsumerWidget {
                     });
                   },
                   onTap: () {
-                    print(
+                    debugPrint(
                         'DEBUG: Tapped booking[$index] - applicationId: ${booking.applicationId}');
                     if (activeSession != null &&
                         activeSession.applicationId == booking.applicationId) {
                       final route =
                           '${Routes.sitterActiveBooking}/${booking.applicationId}';
-                      print('DEBUG: Navigating to active booking: $route');
+                      debugPrint('DEBUG: Navigating to active booking: $route');
                       context.push(route);
                       return;
                     }
                     if (isActive) {
                       final route =
                           '${Routes.sitterActiveBooking}/${booking.applicationId}';
-                      print('DEBUG: Navigating to active booking: $route');
+                      debugPrint('DEBUG: Navigating to active booking: $route');
                       context.push(route);
                       return;
                     }
@@ -155,7 +155,7 @@ class SitterBookingsScreen extends ConsumerWidget {
                         : '';
                     final route =
                         '${Routes.sitterBookingDetails}/${booking.applicationId}$query';
-                    print('DEBUG: Navigating to booking details: $route');
+                    debugPrint('DEBUG: Navigating to booking details: $route');
                     context.push(route);
                   },
                 );

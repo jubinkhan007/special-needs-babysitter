@@ -334,8 +334,8 @@ class _FamilyAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatarUrl = url?.trim();
-    print('DEBUG: _FamilyAvatar input url = "$url"');
-    print('DEBUG: _FamilyAvatar processed avatarUrl = "$avatarUrl"');
+    debugPrint('DEBUG: _FamilyAvatar input url = "$url"');
+    debugPrint('DEBUG: _FamilyAvatar processed avatarUrl = "$avatarUrl"');
 
     if (avatarUrl != null && avatarUrl.isNotEmpty) {
       final fullUrl = avatarUrl.startsWith('http')

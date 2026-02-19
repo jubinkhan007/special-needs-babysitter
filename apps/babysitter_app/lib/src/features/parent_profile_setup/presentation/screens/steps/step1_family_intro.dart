@@ -186,16 +186,16 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
       widget.profileData.addAll(data);
 
       // Call API
-      print('DEBUG: Calling updateProfile with data: $data');
+      debugPrint('DEBUG: Calling updateProfile with data: $data');
       final success = await ref
           .read(parentProfileControllerProvider.notifier)
           .updateProfile(step: 1, data: data, profilePhoto: _image);
-      print('DEBUG: updateProfile result: $success');
+      debugPrint('DEBUG: updateProfile result: $success');
 
       if (success && mounted) {
         widget.onNext();
       } else {
-        print(
+        debugPrint(
             'DEBUG: Not proceeding because success=$success or mounted=$mounted');
       }
     }

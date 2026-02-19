@@ -50,7 +50,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   void _listenToPaypalDeepLinks() {
     _paypalDeepLinkSub =
         PaypalDeepLinkService.instance.events.listen((event) async {
-      print('DEBUG: ServiceDetailsScreen received PayPal event: $event');
+      debugPrint('DEBUG: ServiceDetailsScreen received PayPal event: $event');
 
       if (event is PaypalPaymentSuccess) {
         await _handlePaypalSuccess(event.orderId);
@@ -65,7 +65,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     final jobId = pending.jobId;
 
     if (jobId == null) {
-      print('DEBUG: PayPal success but no pending jobId');
+      debugPrint('DEBUG: PayPal success but no pending jobId');
       if (mounted) {
         AppToast.show(
             context,
@@ -86,7 +86,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
         orderId: orderId,
       );
 
-      print(
+      debugPrint(
           'DEBUG: PayPal capture result: ${result.success} - ${result.message}');
 
       await PaypalPendingState.clear();
@@ -111,7 +111,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             ));
       }
     } on PaypalError catch (e) {
-      print('DEBUG: PayPal capture error: $e');
+      debugPrint('DEBUG: PayPal capture error: $e');
       await PaypalPendingState.clear();
       if (mounted) {
         AppToast.show(
@@ -122,7 +122,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             ));
       }
     } catch (e) {
-      print('DEBUG: PayPal capture unexpected error: $e');
+      debugPrint('DEBUG: PayPal capture unexpected error: $e');
       await PaypalPendingState.clear();
       if (mounted) {
         AppToast.show(
@@ -138,7 +138,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   }
 
   Future<void> _handlePaypalCancel() async {
-    print('DEBUG: PayPal payment cancelled');
+    debugPrint('DEBUG: PayPal payment cancelled');
     await PaypalPendingState.clear();
     if (mounted) {
       AppToast.show(
@@ -157,13 +157,13 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   Future<void> _handlePaypalFlow(
       String jobId, BookingFlowState bookingState) async {
     try {
-      print('DEBUG: Starting PayPal flow for jobId: $jobId');
+      debugPrint('DEBUG: Starting PayPal flow for jobId: $jobId');
 
       final paypalService = ref.read(paypalPaymentServiceProvider);
       final order = await paypalService.createOrder(jobId);
 
-      print('DEBUG: PayPal order created: ${order.orderId}');
-      print('DEBUG: PayPal approval URL: ${order.approvalUrl}');
+      debugPrint('DEBUG: PayPal order created: ${order.orderId}');
+      debugPrint('DEBUG: PayPal approval URL: ${order.approvalUrl}');
 
       // Persist state before opening browser
       await PaypalPendingState.save(
@@ -190,7 +190,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
         throw Exception('Cannot open PayPal');
       }
     } on PaypalError catch (e) {
-      print('DEBUG: PayPal create order error: $e');
+      debugPrint('DEBUG: PayPal create order error: $e');
       if (mounted) {
         String message = 'Payment error: ${e.message}';
         if (e.isJobNotDraft) {
@@ -206,7 +206,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             ));
       }
     } catch (e) {
-      print('DEBUG: PayPal flow unexpected error: $e');
+      debugPrint('DEBUG: PayPal flow unexpected error: $e');
       if (mounted) {
         AppToast.show(
             context,
@@ -331,30 +331,30 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       final payload = bookingState.toDirectBookingPayload();
       payload['timezone'] = timezone;
       payload['timeZone'] = timezone;
-      print('DEBUG: ServiceDetailsScreen submitting booking: $payload');
-      print(
+      debugPrint('DEBUG: ServiceDetailsScreen submitting booking: $payload');
+      debugPrint(
           'DEBUG: Calculated amount - Hours: ${bookingState.totalHours}, Rate: ${bookingState.payRate}, SubTotal: ${bookingState.subTotal}, Fee: ${bookingState.platformFee}, Total: ${bookingState.totalCost}');
 
       final result = await repository.createDirectBooking(payload);
 
-      print('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
-      print('DEBUG: ServiceDetailsScreen jobId: ${result.jobId}');
-      print('DEBUG: ServiceDetailsScreen amount (cents): ${result.amount}');
-      print(
+      debugPrint('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
+      debugPrint('DEBUG: ServiceDetailsScreen jobId: ${result.jobId}');
+      debugPrint('DEBUG: ServiceDetailsScreen amount (cents): ${result.amount}');
+      debugPrint(
           'DEBUG: ServiceDetailsScreen platformFee (cents): ${result.platformFee}');
-      print('DEBUG: ServiceDetailsScreen clientSecret: ${result.clientSecret}');
+      debugPrint('DEBUG: ServiceDetailsScreen clientSecret: ${result.clientSecret}');
 
       // The direct booking API returns clientSecret directly - use it for Stripe payment
       // Check which payment method is selected
       final selectedMethod = bookingState.selectedPaymentMethod.toLowerCase();
-      print('DEBUG: Selected payment method: $selectedMethod');
+      debugPrint('DEBUG: Selected payment method: $selectedMethod');
 
       if (selectedMethod == 'paypal') {
         // PayPal flow
         await _handlePaypalFlow(result.jobId, bookingState);
       } else if (result.clientSecret.isNotEmpty) {
         // Stripe/Card flow
-        print('DEBUG: Showing payment method selector...');
+        debugPrint('DEBUG: Showing payment method selector...');
 
         if (mounted) {
           setState(() => _isLoading = false);
@@ -365,7 +365,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             amount: bookingState.totalCost,
             paymentIntentClientSecret: result.clientSecret,
             onPaymentSuccess: () {
-              print('DEBUG: Payment completed successfully');
+              debugPrint('DEBUG: Payment completed successfully');
               // Reset booking state after successful creation
               ref.read(bookingFlowProvider.notifier).reset();
 
@@ -379,7 +379,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
               );
             },
             onPaymentError: (error) {
-              print('DEBUG: Payment error: $error');
+              debugPrint('DEBUG: Payment error: $error');
               AppToast.show(
                 context,
                 SnackBar(
@@ -392,7 +392,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
           );
         }
       } else {
-        print('DEBUG: No clientSecret in response, skipping payment');
+        debugPrint('DEBUG: No clientSecret in response, skipping payment');
         if (mounted) {
           // Reset booking state after successful creation
           ref.read(bookingFlowProvider.notifier).reset();
@@ -408,12 +408,12 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
         }
       }
     } catch (e) {
-      print('DEBUG: ServiceDetailsScreen booking error: $e');
-      print('DEBUG: Error type: ${e.runtimeType}');
+      debugPrint('DEBUG: ServiceDetailsScreen booking error: $e');
+      debugPrint('DEBUG: Error type: ${e.runtimeType}');
       if (e is StripeException) {
-        print('DEBUG: Stripe error code: ${e.error.code}');
-        print('DEBUG: Stripe error message: ${e.error.localizedMessage}');
-        print('DEBUG: Stripe error decline code: ${e.error.declineCode}');
+        debugPrint('DEBUG: Stripe error code: ${e.error.code}');
+        debugPrint('DEBUG: Stripe error message: ${e.error.localizedMessage}');
+        debugPrint('DEBUG: Stripe error decline code: ${e.error.declineCode}');
       }
 
       if (mounted) {

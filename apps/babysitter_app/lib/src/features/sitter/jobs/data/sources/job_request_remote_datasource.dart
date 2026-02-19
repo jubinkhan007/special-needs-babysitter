@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
 import '../models/job_request_details_model.dart';
+import 'package:flutter/foundation.dart';
 
 class JobRequestPresignedUploadResponse {
   final String uploadUrl;
@@ -32,27 +33,27 @@ class JobRequestRemoteDataSource {
   Future<JobRequestDetailsModel> getJobRequestDetails(
       String applicationId) async {
     try {
-      print(
+      debugPrint(
           'DEBUG: Job Request Details Request: GET /sitters/bookings/$applicationId');
       final response = await _dio.get('/sitters/bookings/$applicationId');
-      print(
+      debugPrint(
           'DEBUG: Job Request Details Response Status: ${response.statusCode}');
-      print('DEBUG: Job Request Details Response Body: ${response.data}');
+      debugPrint('DEBUG: Job Request Details Response Body: ${response.data}');
 
       final data = response.data['data'] as Map<String, dynamic>;
 
       // Debug: Log all ID-related fields from API response
-      print('DEBUG: API response id = ${data['id']}');
-      print('DEBUG: API response applicationId = ${data['applicationId']}');
-      print('DEBUG: API response jobId = ${data['jobId']}');
-      print('DEBUG: All keys in response: ${data.keys.toList()}');
+      debugPrint('DEBUG: API response id = ${data['id']}');
+      debugPrint('DEBUG: API response applicationId = ${data['applicationId']}');
+      debugPrint('DEBUG: API response jobId = ${data['jobId']}');
+      debugPrint('DEBUG: All keys in response: ${data.keys.toList()}');
 
       return JobRequestDetailsModel.fromJson(data);
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Job Request Details Error: ${e.message}');
-        print('DEBUG: Job Request Details Error Response: ${e.response?.data}');
-        print(
+        debugPrint('DEBUG: Job Request Details Error: ${e.message}');
+        debugPrint('DEBUG: Job Request Details Error Response: ${e.response?.data}');
+        debugPrint(
             'DEBUG: Job Request Details Error Headers: ${e.requestOptions.headers}');
 
         final serverMessage = e.response?.data?['error'] as String?;
@@ -76,13 +77,13 @@ class JobRequestRemoteDataSource {
           ? '/applications/$applicationId/accept-booking'
           : '/applications/$applicationId/accept';
 
-      print('DEBUG: Accept Job Request: POST $endpoint');
+      debugPrint('DEBUG: Accept Job Request: POST $endpoint');
       final response = await _dio.post(endpoint);
-      print('DEBUG: Accept Job Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Accept Job Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Accept Job Error: ${e.message}');
-        print('DEBUG: Accept Job Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Accept Job Error: ${e.message}');
+        debugPrint('DEBUG: Accept Job Error Response: ${e.response?.data}');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -108,9 +109,9 @@ class JobRequestRemoteDataSource {
           ? '/applications/$applicationId/decline-booking'
           : '/applications/$applicationId/decline';
 
-      print('DEBUG: Decline Job Request: POST $endpoint');
-      print('DEBUG: Decline Application ID: $applicationId');
-      print('DEBUG: Decline Application Type: $applicationType');
+      debugPrint('DEBUG: Decline Job Request: POST $endpoint');
+      debugPrint('DEBUG: Decline Application ID: $applicationId');
+      debugPrint('DEBUG: Decline Application Type: $applicationType');
 
       final data = {
         'reason': reason,
@@ -118,14 +119,14 @@ class JobRequestRemoteDataSource {
           'otherReason': otherReason,
       };
 
-      print('DEBUG: Decline Job Request Body: $data');
+      debugPrint('DEBUG: Decline Job Request Body: $data');
 
       final response = await _dio.post(endpoint, data: data);
-      print('DEBUG: Decline Job Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Decline Job Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Decline Job Error: ${e.message}');
-        print('DEBUG: Decline Job Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Decline Job Error: ${e.message}');
+        debugPrint('DEBUG: Decline Job Error Response: ${e.response?.data}');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -150,14 +151,14 @@ class JobRequestRemoteDataSource {
         'latitude': latitude,
         'longitude': longitude,
       };
-      print('DEBUG: Clock In Request: POST $endpoint');
-      print('DEBUG: Clock In Request Body: $data');
+      debugPrint('DEBUG: Clock In Request: POST $endpoint');
+      debugPrint('DEBUG: Clock In Request Body: $data');
       final response = await _dio.post(endpoint, data: data);
-      print('DEBUG: Clock In Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Clock In Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Clock In Error: ${e.message}');
-        print('DEBUG: Clock In Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Clock In Error: ${e.message}');
+        debugPrint('DEBUG: Clock In Error Response: ${e.response?.data}');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -248,14 +249,14 @@ class JobRequestRemoteDataSource {
         'reason': reason,
         if (fileUrl != null && fileUrl.isNotEmpty) 'fileUrl': fileUrl,
       };
-      print('DEBUG: Cancel Booking Request: POST $endpoint');
-      print('DEBUG: Cancel Booking Request Body: $data');
+      debugPrint('DEBUG: Cancel Booking Request: POST $endpoint');
+      debugPrint('DEBUG: Cancel Booking Request Body: $data');
       final response = await _dio.post(endpoint, data: data);
-      print('DEBUG: Cancel Booking Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Cancel Booking Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Cancel Booking Error: ${e.message}');
-        print('DEBUG: Cancel Booking Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Cancel Booking Error: ${e.message}');
+        debugPrint('DEBUG: Cancel Booking Error Response: ${e.response?.data}');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -271,13 +272,13 @@ class JobRequestRemoteDataSource {
   Future<void> completeBooking(String applicationId) async {
     try {
       final endpoint = '/sitters/bookings/$applicationId/mark-complete';
-      print('DEBUG: Complete Booking Request: POST $endpoint');
+      debugPrint('DEBUG: Complete Booking Request: POST $endpoint');
       final response = await _dio.post(endpoint);
-      print('DEBUG: Complete Booking Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Complete Booking Response Status: ${response.statusCode}');
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Complete Booking Error: ${e.message}');
-        print('DEBUG: Complete Booking Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Complete Booking Error: ${e.message}');
+        debugPrint('DEBUG: Complete Booking Error Response: ${e.response?.data}');
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
           throw Exception(serverMessage);

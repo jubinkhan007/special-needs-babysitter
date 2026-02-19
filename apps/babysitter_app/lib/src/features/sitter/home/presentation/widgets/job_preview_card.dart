@@ -43,6 +43,10 @@ class JobPreviewCard extends StatelessWidget {
         children: [
           // Title Row
           _buildTitleRow(),
+          if (job.requiredSkills.isNotEmpty) ...[
+            SizedBox(height: 6.h),
+            _buildSpecialNeedsBadge(),
+          ],
           SizedBox(height: 10.h),
           // Family Row
           _buildFamilyRow(),
@@ -92,6 +96,32 @@ class JobPreviewCard extends StatelessWidget {
             job.isBookmarked ? Icons.bookmark : Icons.bookmark_border_rounded,
             size: 22.w,
             color: const Color(0xFF667085), // Grey icon
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSpecialNeedsBadge() {
+    final needs = job.requiredSkills;
+    final display = needs.length > 3
+        ? '${needs.take(3).join(' | ')} + ${needs.length - 3} more'
+        : needs.join(' | ');
+    return Row(
+      children: [
+        Icon(Icons.medical_services_outlined,
+            size: 14.w, color: AppColors.primary),
+        SizedBox(width: 6.w),
+        Expanded(
+          child: Text(
+            'Special Needs Care • $display',
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w500,
+              color: AppColors.primary,
+              fontFamily: 'Inter',
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

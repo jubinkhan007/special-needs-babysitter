@@ -85,9 +85,9 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
           _googlePayAvailable = available;
         });
       }
-      print('DEBUG: Google Pay available (native): $available');
+      debugPrint('DEBUG: Google Pay available (native): $available');
     } catch (e) {
-      print('DEBUG: Error checking Google Pay availability: $e');
+      debugPrint('DEBUG: Error checking Google Pay availability: $e');
     }
   }
 
@@ -99,8 +99,8 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
     });
 
     try {
-      print('DEBUG: Starting native Google Pay flow...');
-      print('DEBUG: Amount: ${widget.amount}');
+      debugPrint('DEBUG: Starting native Google Pay flow...');
+      debugPrint('DEBUG: Amount: ${widget.amount}');
 
       // Create payment items
       final paymentItems = [
@@ -117,8 +117,8 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
         paymentItems,
       );
 
-      print('DEBUG: Google Pay result received');
-      print('DEBUG: Result keys: ${result.keys.toList()}');
+      debugPrint('DEBUG: Google Pay result received');
+      debugPrint('DEBUG: Result keys: ${result.keys.toList()}');
 
       // Extract the token from the result
       final paymentData = result['paymentMethodData'];
@@ -136,13 +136,13 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
         throw Exception('No token received');
       }
 
-      print('DEBUG: Token string received, parsing...');
+      debugPrint('DEBUG: Token string received, parsing...');
 
       // Parse the token JSON to get the Stripe token ID
       final tokenJson = jsonDecode(tokenString);
       final stripeTokenId = tokenJson['id'];
 
-      print('DEBUG: Stripe token ID: $stripeTokenId');
+      debugPrint('DEBUG: Stripe token ID: $stripeTokenId');
 
       // Create a PaymentMethod from the token
       final paymentMethod = await Stripe.instance.createPaymentMethod(
@@ -153,7 +153,7 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
         ),
       );
 
-      print('DEBUG: Payment method created: ${paymentMethod.id}');
+      debugPrint('DEBUG: Payment method created: ${paymentMethod.id}');
 
       // Confirm the PaymentIntent with the payment method
       await Stripe.instance.confirmPayment(
@@ -165,10 +165,10 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
         ),
       );
 
-      print('DEBUG: Payment confirmed successfully via Google Pay');
+      debugPrint('DEBUG: Payment confirmed successfully via Google Pay');
       widget.onPaymentSuccess();
     } catch (e) {
-      print('DEBUG: Google Pay error: $e');
+      debugPrint('DEBUG: Google Pay error: $e');
       if (e.toString().contains('canceled') || e.toString().contains('cancelled')) {
         widget.onPaymentError('Payment cancelled');
       } else {

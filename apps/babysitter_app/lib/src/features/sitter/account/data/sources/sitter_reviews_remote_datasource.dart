@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../models/sitter_review.dart';
+import 'package:flutter/foundation.dart';
 
 class SitterReviewsRemoteDataSource {
   final Dio _dio;
@@ -9,14 +10,14 @@ class SitterReviewsRemoteDataSource {
 
   Future<List<SitterReview>> getMyReviews() async {
     try {
-      print('DEBUG: Reviews Request: GET /reviews/my-reviews');
+      debugPrint('DEBUG: Reviews Request: GET /reviews/my-reviews');
       final response = await _dio.get(
         '/reviews/my-reviews',
         options: Options(
           receiveTimeout: const Duration(seconds: 60),
         ),
       );
-      print('DEBUG: Reviews Response Status: ${response.statusCode}');
+      debugPrint('DEBUG: Reviews Response Status: ${response.statusCode}');
 
       final data = response.data;
       dynamic list = data;
@@ -34,8 +35,8 @@ class SitterReviewsRemoteDataSource {
           .toList();
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Reviews Error: ${e.message}');
-        print('DEBUG: Reviews Error Response: ${e.response?.data}');
+        debugPrint('DEBUG: Reviews Error: ${e.message}');
+        debugPrint('DEBUG: Reviews Error Response: ${e.response?.data}');
         if (e.type == DioExceptionType.receiveTimeout) {
           throw Exception(
             'The reviews request is taking longer than expected. Please try again.',

@@ -65,14 +65,14 @@ final _callHistoryLookupProvider = FutureProvider.autoDispose
     final page = await repo.getCallHistory(limit: 100, offset: 0);
 
     // Debug logging to identify filtering issues
-    print(
+    debugPrint(
         'DEBUG [CallHistory]: Fetched ${page.items.length} total call history items');
-    print('DEBUG [CallHistory]: Looking for otherUserId = "$otherUserId"');
+    debugPrint('DEBUG [CallHistory]: Looking for otherUserId = "$otherUserId"');
 
     for (final item in page.items) {
       final participantId = item.otherParticipant.userId;
       final matches = participantId == otherUserId;
-      print('DEBUG [CallHistory]: Call ${item.callId} - '
+      debugPrint('DEBUG [CallHistory]: Call ${item.callId} - '
           'otherParticipant.userId="$participantId", '
           'callType=${item.callType}, '
           'createdAt=${item.createdAt}, '
@@ -85,7 +85,7 @@ final _callHistoryLookupProvider = FutureProvider.autoDispose
       ..sort(
           (a, b) => _callHistorySortTime(a).compareTo(_callHistorySortTime(b)));
 
-    print(
+    debugPrint(
         'DEBUG [CallHistory]: After filtering: ${filtered.length} calls for this conversation');
 
     return _ConversationCallHistory(
@@ -93,8 +93,8 @@ final _callHistoryLookupProvider = FutureProvider.autoDispose
       items: filtered,
     );
   } catch (e, stack) {
-    print('DEBUG [CallHistory]: Error fetching call history: $e');
-    print('DEBUG [CallHistory]: Stack: $stack');
+    debugPrint('DEBUG [CallHistory]: Error fetching call history: $e');
+    debugPrint('DEBUG [CallHistory]: Stack: $stack');
     return const _ConversationCallHistory(
       byCallId: <String, CallHistoryItem>{},
       items: <CallHistoryItem>[],
@@ -292,12 +292,12 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
 
     // Debug logging
     if (needsProfileFetch) {
-      print(
+      debugPrint(
           'DEBUG: ChatThreadScreen - Needs profile fetch for user: ${widget.args.otherUserId}');
-      print(
+      debugPrint(
           'DEBUG: ChatThreadScreen - Async state: ${userProfileAsync?.toString()}');
       if (fetchedProfile != null) {
-        print(
+        debugPrint(
             'DEBUG: ChatThreadScreen - Fetched profile keys: ${fetchedProfile.keys.toList()}');
       }
     }
@@ -339,7 +339,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
               ?.toString() ??
           displayAvatarUrl;
 
-      print(
+      debugPrint(
           'DEBUG: ChatThreadScreen - Resolved name: "$displayUserName", avatar: "$displayAvatarUrl"');
     }
 

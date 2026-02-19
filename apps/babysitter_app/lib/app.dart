@@ -354,7 +354,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
   void _logFcmFlow(String message) {
     developer.log(message, name: 'FCM_FLOW');
-    print('[FCM_FLOW] $message');
+    debugPrint('[FCM_FLOW] $message');
   }
 
   void _handleNotificationTap(String? payload) {

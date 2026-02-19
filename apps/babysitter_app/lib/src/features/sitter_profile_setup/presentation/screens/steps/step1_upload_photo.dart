@@ -146,7 +146,7 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                         children: [
                           TextSpan(
                             text:
-                                'A warm smile builds trust — upload a\nclear, friendly photo. ',
+                                'A clear profile photo helps families trust you and increases your chances of being selected. ',
                           ),
                           WidgetSpan(
                             alignment: PlaceholderAlignment.middle,

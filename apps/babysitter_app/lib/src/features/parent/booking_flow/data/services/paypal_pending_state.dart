@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 /// Persists pending PayPal payment state to SharedPreferences.
 /// This ensures capture works even if app restarts during PayPal flow.
@@ -14,7 +15,7 @@ class PaypalPendingState {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyJobId, jobId);
     await prefs.setString(_keyOrderId, orderId);
-    print('DEBUG: PayPal pending state saved: jobId=$jobId, orderId=$orderId');
+    debugPrint('DEBUG: PayPal pending state saved: jobId=$jobId, orderId=$orderId');
   }
 
   /// Get pending PayPal payment state
@@ -23,7 +24,7 @@ class PaypalPendingState {
     final prefs = await SharedPreferences.getInstance();
     final jobId = prefs.getString(_keyJobId);
     final orderId = prefs.getString(_keyOrderId);
-    print('DEBUG: PayPal pending state loaded: jobId=$jobId, orderId=$orderId');
+    debugPrint('DEBUG: PayPal pending state loaded: jobId=$jobId, orderId=$orderId');
     return (jobId: jobId, orderId: orderId);
   }
 
@@ -32,7 +33,7 @@ class PaypalPendingState {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_keyJobId);
     await prefs.remove(_keyOrderId);
-    print('DEBUG: PayPal pending state cleared');
+    debugPrint('DEBUG: PayPal pending state cleared');
   }
 
   /// Check if there's pending PayPal payment state

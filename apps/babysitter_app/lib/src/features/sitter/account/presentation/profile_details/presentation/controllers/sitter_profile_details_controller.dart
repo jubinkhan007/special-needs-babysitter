@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:auth/auth.dart';
 import 'package:core/core.dart';
@@ -69,14 +70,14 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
           );
         } catch (syncError) {
           // User profile sync failed, but sitter photo was saved successfully
-          print('DEBUG: User profile avatar sync failed (non-critical): $syncError');
+          debugPrint('DEBUG: User profile avatar sync failed (non-critical): $syncError');
         }
       }
 
       await refresh();
       return true;
     } catch (e) {
-      print('DEBUG: updateProfilePhoto failed: $e');
+      debugPrint('DEBUG: updateProfilePhoto failed: $e');
       return false;
     }
   }

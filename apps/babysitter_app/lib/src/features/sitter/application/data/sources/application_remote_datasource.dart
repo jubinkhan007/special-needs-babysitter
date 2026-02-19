@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../dtos/submit_application_request_dto.dart';
 import '../models/application_model.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for application API calls.
 class ApplicationRemoteDataSource {
@@ -51,7 +52,7 @@ class ApplicationRemoteDataSource {
     if (type != null) queryParams['type'] = type;
 
     try {
-      print('DEBUG: Fetching applications with params: $queryParams');
+      debugPrint('DEBUG: Fetching applications with params: $queryParams');
       final response = await _dio.get(
         '/applications',
         queryParameters: queryParams,
@@ -65,9 +66,9 @@ class ApplicationRemoteDataSource {
           .toList();
     } catch (e) {
       if (e is DioException) {
-        print('DEBUG: Applications API Error - Status: ${e.response?.statusCode}');
-        print('DEBUG: Applications API Error - Data: ${e.response?.data}');
-        print('DEBUG: Applications API Error - Params: $queryParams');
+        debugPrint('DEBUG: Applications API Error - Status: ${e.response?.statusCode}');
+        debugPrint('DEBUG: Applications API Error - Data: ${e.response?.data}');
+        debugPrint('DEBUG: Applications API Error - Params: $queryParams');
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {

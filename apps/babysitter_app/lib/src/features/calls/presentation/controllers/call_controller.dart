@@ -14,6 +14,7 @@ import '../../domain/repositories/calls_repository.dart';
 import '../providers/calls_providers.dart';
 import 'call_state.dart';
 import '../../../messages/presentation/providers/chat_providers.dart';
+import 'package:flutter/foundation.dart';
 
 /// Controller for managing call state and operations
 ///
@@ -294,13 +295,13 @@ class CallController extends Notifier<CallState> {
       '[CALL_ACCEPT] acceptCall() called, current state=${currentState.runtimeType}',
       name: 'Calls',
     );
-    print('[CALL_ACCEPT] acceptCall() called, current state=${currentState.runtimeType}');
+    debugPrint('[CALL_ACCEPT] acceptCall() called, current state=${currentState.runtimeType}');
     if (currentState is! IncomingRinging) {
       developer.log(
         '[CALL_ACCEPT] EARLY RETURN: state is ${currentState.runtimeType}, not IncomingRinging',
         name: 'Calls',
       );
-      print('[CALL_ACCEPT] EARLY RETURN: state is ${currentState.runtimeType}, not IncomingRinging');
+      debugPrint('[CALL_ACCEPT] EARLY RETURN: state is ${currentState.runtimeType}, not IncomingRinging');
       return;
     }
 
@@ -315,10 +316,10 @@ class CallController extends Notifier<CallState> {
 
     // Check permissions BEFORE accepting on backend
     developer.log('[CALL_ACCEPT] checking permissions for callType=${callType.name}', name: 'Calls');
-    print('[CALL_ACCEPT] checking permissions for callType=${callType.name}');
+    debugPrint('[CALL_ACCEPT] checking permissions for callType=${callType.name}');
     final permissionsGranted = await _ensureCallPermissions(callType);
     developer.log('[CALL_ACCEPT] permissions granted=$permissionsGranted', name: 'Calls');
-    print('[CALL_ACCEPT] permissions granted=$permissionsGranted');
+    debugPrint('[CALL_ACCEPT] permissions granted=$permissionsGranted');
     if (!permissionsGranted) {
       developer.log('Call permissions denied, declining call $callId',
           name: 'Calls');
@@ -335,10 +336,10 @@ class CallController extends Notifier<CallState> {
 
     try {
       developer.log('[CALL_ACCEPT] calling backend acceptCall for callId=$callId', name: 'Calls');
-      print('[CALL_ACCEPT] calling backend acceptCall for callId=$callId');
+      debugPrint('[CALL_ACCEPT] calling backend acceptCall for callId=$callId');
       var session = await _repository.acceptCall(callId);
       developer.log('[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}', name: 'Calls');
-      print('[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}');
+      debugPrint('[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}');
       if (session.callType != callType) {
         session = session.copyWith(callType: callType);
       }
@@ -348,13 +349,13 @@ class CallController extends Notifier<CallState> {
 
       // Join Agora channel
       developer.log('[CALL_ACCEPT] joining Agora channel for callId=$callId', name: 'Calls');
-      print('[CALL_ACCEPT] joining Agora channel for callId=$callId');
+      debugPrint('[CALL_ACCEPT] joining Agora channel for callId=$callId');
       await _joinCall(session);
       developer.log('[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}', name: 'Calls');
-      print('[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}');
+      debugPrint('[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}');
     } catch (e, st) {
       developer.log('Failed to accept call: $e', name: 'Calls', stackTrace: st);
-      print('[CALL_ACCEPT] FAILED to accept call: $e');
+      debugPrint('[CALL_ACCEPT] FAILED to accept call: $e');
       await _endCallKitUI(callId);
       state = CallError(message: _extractErrorMessage(e));
     }

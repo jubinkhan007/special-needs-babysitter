@@ -5,6 +5,7 @@ import '../../domain/job_details.dart';
 import '../mappers/job_mapper.dart';
 import '../models/job_dto.dart';
 import '../models/job_response.dart';
+import 'package:flutter/foundation.dart';
 
 class JobsRepositoryImpl implements JobsRepository {
   final Dio _client;
@@ -31,16 +32,16 @@ class JobsRepositoryImpl implements JobsRepository {
   @override
   Future<void> updateJob(String id, Map<String, dynamic> data) async {
     try {
-      print('=== REPO: Calling PUT /jobs/$id ===');
-      print('=== REPO: Request data: $data ===');
+      debugPrint('=== REPO: Calling PUT /jobs/$id ===');
+      debugPrint('=== REPO: Request data: $data ===');
 
       final response = await _client.put(
         '/jobs/$id',
         data: data,
       );
 
-      print('=== REPO: Response status: ${response.statusCode} ===');
-      print('=== REPO: Response data: ${response.data} ===');
+      debugPrint('=== REPO: Response status: ${response.statusCode} ===');
+      debugPrint('=== REPO: Response data: ${response.data} ===');
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         // Success
@@ -49,13 +50,13 @@ class JobsRepositoryImpl implements JobsRepository {
         throw Exception('Failed to update job: Status ${response.statusCode}');
       }
     } on DioException catch (e) {
-      print('=== REPO: DioException ===');
-      print('=== REPO: Status code: ${e.response?.statusCode} ===');
-      print('=== REPO: Response data: ${e.response?.data} ===');
-      print('=== REPO: Request data sent: ${e.requestOptions.data} ===');
+      debugPrint('=== REPO: DioException ===');
+      debugPrint('=== REPO: Status code: ${e.response?.statusCode} ===');
+      debugPrint('=== REPO: Response data: ${e.response?.data} ===');
+      debugPrint('=== REPO: Request data sent: ${e.requestOptions.data} ===');
       rethrow;
     } catch (e) {
-      print('=== REPO: Generic error: $e ===');
+      debugPrint('=== REPO: Generic error: $e ===');
       rethrow;
     }
   }
@@ -96,17 +97,17 @@ class JobsRepositoryImpl implements JobsRepository {
                   (jobMap['children'] as List<dynamic>?);
 
               // DEBUG: Print raw job data for emergency contact
-              print('=== GET JOB DETAILS DEBUG ===');
-              print('Full jobMap keys: ${jobMap.keys.toList()}');
-              print(
+              debugPrint('=== GET JOB DETAILS DEBUG ===');
+              debugPrint('Full jobMap keys: ${jobMap.keys.toList()}');
+              debugPrint(
                   'Raw jobMap emergencyContact: ${jobMap['emergencyContact']}');
-              print(
+              debugPrint(
                   'Raw jobMap emergencyContactName: ${jobMap['emergencyContactName']}');
 
               final dto = JobDto.fromJson(jobMap);
               final emergency = _extractEmergencyContact(jobMap);
 
-              print('Extracted emergency: $emergency');
+              debugPrint('Extracted emergency: $emergency');
 
               return dto.toJobDetails(
                 emergencyContactName: emergency['name'],
@@ -159,7 +160,7 @@ class JobsRepositoryImpl implements JobsRepository {
       });
 
       if (response.statusCode == 200 && response.data != null) {
-        // print('DEBUG: Jobs API Response: ${response.data}'); // Requested debug log
+        // debugPrint('DEBUG: Jobs API Response: ${response.data}'); // Requested debug log
         final jobResponse = JobResponse.fromJson(response.data);
         if (jobResponse.success) {
           return jobResponse.data.jobs.map((dto) => dto.toDomain()).toList();

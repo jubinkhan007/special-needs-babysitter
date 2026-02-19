@@ -6,6 +6,7 @@ import '../../data/repositories/bookings_repository_impl.dart';
 import '../../data/sources/bookings_remote_datasource.dart';
 import '../../data/models/booking_model.dart';
 import '../../data/models/booking_session_model.dart';
+import 'package:flutter/foundation.dart';
 
 /// Provider for the bookings remote data source.
 final bookingsRemoteDataSourceProvider =
@@ -44,14 +45,14 @@ final sitterCurrentBookingsProvider =
   final active = results[0];
   final upcoming = results[1];
 
-  print(
+  debugPrint(
       'DEBUG: Fetched ${active.length} active bookings, ${upcoming.length} upcoming bookings');
 
   final merged = <BookingModel>[];
   final seen = <String>{};
 
   for (final booking in active) {
-    print(
+    debugPrint(
         'DEBUG: Active booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}');
     final normalizedStatus =
         (booking.status != null && booking.status!.trim().isNotEmpty)
@@ -66,13 +67,13 @@ final sitterCurrentBookingsProvider =
     if (seen.contains(booking.applicationId)) {
       continue;
     }
-    print(
+    debugPrint(
         'DEBUG: Upcoming booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}');
     final normalized = booking.copyWith(status: 'upcoming');
     merged.add(normalized);
   }
 
-  print('DEBUG: Total merged bookings: ${merged.length}');
+  debugPrint('DEBUG: Total merged bookings: ${merged.length}');
   return merged;
 });
 

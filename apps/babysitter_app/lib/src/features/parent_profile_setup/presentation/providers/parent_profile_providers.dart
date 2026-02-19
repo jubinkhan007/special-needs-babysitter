@@ -5,6 +5,7 @@ import 'package:data/data.dart';
 import 'package:auth/auth.dart';
 import '../../../../constants/app_constants.dart';
 import '../controllers/parent_profile_controller.dart';
+import 'package:flutter/foundation.dart';
 
 /// Dio provider with auth interceptor for parent profile API calls.
 /// In a real app, import this from core/network/dio_provider.dart
@@ -25,31 +26,31 @@ final parentProfileDioProvider = Provider<Dio>((ref) {
       final authState = ref.read(authNotifierProvider);
       var session = authState.valueOrNull;
 
-      print('DEBUG: Interceptor - Session is null? ${session == null}');
+      debugPrint('DEBUG: Interceptor - Session is null? ${session == null}');
 
       // Fallback: Check SessionStore if AuthNotifier is null
       if (session == null) {
-        print(
+        debugPrint(
             'DEBUG: Interceptor - Session is null, checking storage fallback...');
         final storedToken =
             await ref.read(sessionStoreProvider).getAccessToken();
         if (storedToken != null && storedToken.isNotEmpty) {
-          print(
+          debugPrint(
               'DEBUG: Interceptor - Found valid token in storage: $storedToken');
           options.headers['Cookie'] = 'session_id=$storedToken';
         } else {
-          print('DEBUG: Interceptor - No token in storage either.');
+          debugPrint('DEBUG: Interceptor - No token in storage either.');
         }
       } else {
-        print('DEBUG: Interceptor - AccessToken: ${session.accessToken}');
+        debugPrint('DEBUG: Interceptor - AccessToken: ${session.accessToken}');
         // User reports server sets session_id=...
         options.headers['Cookie'] = 'session_id=${session.accessToken}';
-        print(
+        debugPrint(
             'DEBUG: Interceptor - Setting Cookie Header: ${options.headers['Cookie']}');
       }
 
-      print('DEBUG: Interceptor - Request: ${options.method} ${options.uri}');
-      print('DEBUG: Interceptor - Request Data: ${options.data}');
+      debugPrint('DEBUG: Interceptor - Request: ${options.method} ${options.uri}');
+      debugPrint('DEBUG: Interceptor - Request Data: ${options.data}');
       return handler.next(options);
     },
   ));

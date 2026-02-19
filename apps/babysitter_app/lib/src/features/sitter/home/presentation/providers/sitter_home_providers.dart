@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../data/dtos/sitter_job_preview_dto.dart';
 import '../../domain/entities/job_preview.dart';
 import '../../domain/entities/job_search_filters.dart';
+import 'package:flutter/foundation.dart';
 
 /// User authentificated Dio for Sitter Home
 final sitterHomeDioProvider = Provider<Dio>((ref) {
@@ -40,11 +41,11 @@ final sitterHomeDioProvider = Provider<Dio>((ref) {
       return handler.next(options);
     },
     onError: (DioException e, handler) {
-      print('DEBUG: Sitter Home API Error: ${e.message}');
-      print('DEBUG: Endpoint: ${e.requestOptions.uri}');
+      debugPrint('DEBUG: Sitter Home API Error: ${e.message}');
+      debugPrint('DEBUG: Endpoint: ${e.requestOptions.uri}');
       if (e.response != null) {
-        print('DEBUG: Status Code: ${e.response?.statusCode}');
-        print('DEBUG: Response Data: ${e.response?.data}');
+        debugPrint('DEBUG: Status Code: ${e.response?.statusCode}');
+        debugPrint('DEBUG: Response Data: ${e.response?.data}');
       }
       return handler.next(e);
     },
@@ -92,7 +93,7 @@ final deviceLocationProvider = FutureProvider<Position?>((ref) async {
       timeLimit: const Duration(seconds: 10),
     );
   } catch (e) {
-    print('DEBUG: Error getting device location: $e');
+    debugPrint('DEBUG: Error getting device location: $e');
     return null;
   }
 });
@@ -267,7 +268,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
       final dio = _ref.read(sitterHomeDioProvider);
       final JobSearchFilters filters = filtersOverride ?? _ref.read(jobSearchFiltersProvider);
 
-      print(
+      debugPrint(
           'DEBUG: Fetching jobs with filters: ${filters.toQueryParameters()} (request #$currentRequestId)');
 
       final response = await dio.get(
@@ -277,7 +278,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
 
       // Ignore response if a newer request was made
       if (currentRequestId != _requestId) {
-        print('DEBUG: Ignoring stale response for request #$currentRequestId (current is #$_requestId)');
+        debugPrint('DEBUG: Ignoring stale response for request #$currentRequestId (current is #$_requestId)');
         return;
       }
 
@@ -285,7 +286,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
         final total = response.data['data']['total'] as int? ?? jobsJson.length;
 
-        print('DEBUG: API returned ${jobsJson.length} jobs, total: $total');
+        debugPrint('DEBUG: API returned ${jobsJson.length} jobs, total: $total');
 
         final previews = <JobPreview>[];
         for (final json in jobsJson) {
@@ -294,12 +295,12 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
                 SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
             previews.add(dto.toDomain());
           } catch (e, stack) {
-            print('Warning: Failed to parse job preview: $e');
-            print('Stack: $stack');
+            debugPrint('Warning: Failed to parse job preview: $e');
+            debugPrint('Stack: $stack');
           }
         }
 
-        print('DEBUG: Parsed ${previews.length} job previews');
+        debugPrint('DEBUG: Parsed ${previews.length} job previews');
 
         state = state.copyWith(
           jobs: previews,
@@ -308,7 +309,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
           totalCount: total,
         );
 
-        print('DEBUG: Updated state with ${state.jobs.length} jobs');
+        debugPrint('DEBUG: Updated state with ${state.jobs.length} jobs');
       } else {
         state = state.copyWith(
           isLoading: false,
@@ -319,7 +320,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
       // Ignore errors from stale requests
       if (currentRequestId != _requestId) return;
 
-      print('DEBUG: Error fetching jobs: $e');
+      debugPrint('DEBUG: Error fetching jobs: $e');
       state = state.copyWith(
         isLoading: false,
         error: e.toString(),
@@ -342,7 +343,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
         offset: state.jobs.length,
       );
 
-      print('DEBUG: Loading more jobs with offset: ${paginatedFilters.offset}');
+      debugPrint('DEBUG: Loading more jobs with offset: ${paginatedFilters.offset}');
 
       final response = await dio.get(
         '/jobs',
@@ -360,7 +361,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
                 SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
             newPreviews.add(dto.toDomain());
           } catch (e) {
-            print('Warning: Failed to parse job preview: $e');
+            debugPrint('Warning: Failed to parse job preview: $e');
           }
         }
 
@@ -374,7 +375,7 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
         state = state.copyWith(isLoading: false);
       }
     } catch (e) {
-      print('DEBUG: Error loading more jobs: $e');
+      debugPrint('DEBUG: Error loading more jobs: $e');
       state = state.copyWith(isLoading: false);
     }
   }
@@ -396,9 +397,9 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
   Future<void> resetAndFetch() async {
     // Get current filters and create reset version
     final currentFilters = _ref.read(jobSearchFiltersProvider);
-    print('DEBUG resetAndFetch: currentFilters=${currentFilters.toQueryParameters()}');
+    debugPrint('DEBUG resetAndFetch: currentFilters=${currentFilters.toQueryParameters()}');
     final resetFilters = currentFilters.reset();
-    print('DEBUG resetAndFetch: resetFilters=${resetFilters.toQueryParameters()}');
+    debugPrint('DEBUG resetAndFetch: resetFilters=${resetFilters.toQueryParameters()}');
 
     // Update the provider state
     _ref.read(jobSearchFiltersProvider.notifier).state = resetFilters;
@@ -437,7 +438,7 @@ class JobPreviewsNotifier extends AsyncNotifier<List<JobPreview>> {
           previews.add(dto.toDomain());
         } catch (e) {
           // Skip jobs that fail to parse
-          print('Warning: Failed to parse job preview: $e');
+          debugPrint('Warning: Failed to parse job preview: $e');
         }
       }
 

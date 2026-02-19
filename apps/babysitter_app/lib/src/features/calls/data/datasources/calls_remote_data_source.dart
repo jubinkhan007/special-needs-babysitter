@@ -5,6 +5,7 @@ import '../models/call_config_dto.dart';
 import '../models/call_session_dto.dart';
 import '../models/call_history_dto.dart';
 import '../models/call_token_dto.dart';
+import 'package:flutter/foundation.dart';
 
 /// Interface for calls API operations
 abstract interface class CallsRemoteDataSource {
@@ -219,9 +220,9 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
           'responseBody=${e.response?.data}',
           name: 'Calls',
         );
-        print('DEBUG [CallHistory API]: status=${e.response?.statusCode}');
-        print('DEBUG [CallHistory API]: responseBody=${e.response?.data}');
-        print('DEBUG [CallHistory API]: requestUrl=${e.requestOptions.uri}');
+        debugPrint('DEBUG [CallHistory API]: status=${e.response?.statusCode}');
+        debugPrint('DEBUG [CallHistory API]: responseBody=${e.response?.data}');
+        debugPrint('DEBUG [CallHistory API]: requestUrl=${e.requestOptions.uri}');
       }
       _logError('getCallHistory', e, stack);
       rethrow;

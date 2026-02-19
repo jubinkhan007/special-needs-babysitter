@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class ReviewRemoteDataSource {
   final Dio _dio;
@@ -22,14 +23,14 @@ class ReviewRemoteDataSource {
       if (imageUrl != null && imageUrl.isNotEmpty) {
         payload['imageUrl'] = imageUrl;
       }
-      print('DEBUG: Posting review with payload: $payload');
-      print('DEBUG: jobId being sent = $jobId');
-      print('DEBUG: revieweeId being sent = $revieweeId');
+      debugPrint('DEBUG: Posting review with payload: $payload');
+      debugPrint('DEBUG: jobId being sent = $jobId');
+      debugPrint('DEBUG: revieweeId being sent = $revieweeId');
       await _dio.post('/reviews', data: payload);
     } on DioException catch (e) {
-      print('DEBUG: Review POST error: ${e.message}');
-      print('DEBUG: Review POST response: ${e.response?.data}');
-      print('DEBUG: The jobId "$jobId" was not found by the server');
+      debugPrint('DEBUG: Review POST error: ${e.message}');
+      debugPrint('DEBUG: Review POST response: ${e.response?.data}');
+      debugPrint('DEBUG: The jobId "$jobId" was not found by the server');
       rethrow;
     }
   }

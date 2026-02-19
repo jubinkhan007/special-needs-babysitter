@@ -6,6 +6,7 @@ import 'package:auth/auth.dart';
 import '../../../../../../constants/app_constants.dart';
 import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/providers/profile_details_providers.dart';
 import '../controllers/job_post_controller.dart';
+import 'package:flutter/foundation.dart';
 
 /// Authenticated Dio provider for Job API.
 final jobPostDioProvider = Provider<Dio>((ref) {
@@ -37,9 +38,9 @@ final jobPostDioProvider = Provider<Dio>((ref) {
       return handler.next(options);
     },
     onError: (DioException e, handler) {
-      print('DEBUG: Job API Error Status: ${e.response?.statusCode}');
-      print('DEBUG: Job API Error Message: ${e.message}');
-      print('DEBUG: Job API Error Data: ${e.response?.data}');
+      debugPrint('DEBUG: Job API Error Status: ${e.response?.statusCode}');
+      debugPrint('DEBUG: Job API Error Message: ${e.message}');
+      debugPrint('DEBUG: Job API Error Data: ${e.response?.data}');
       return handler.next(e);
     },
   ));

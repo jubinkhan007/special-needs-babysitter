@@ -54,7 +54,7 @@ class ApplicationSubmittedDialog extends StatelessWidget {
             SizedBox(height: 16.h),
             // Body text
             Text(
-              'Your application has been submitted. Notification: You\'ll be notified once reviewed and if the family reaches out to you.',
+              'Your application has been submitted. The family will review it and may contact you through messaging. You\'ll be notified once they respond.',
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w400,

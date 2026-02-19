@@ -79,24 +79,24 @@ class _SitterBookingDetailsScreenState
     return jobDetailsAsync.when(
       data: (jobDetails) {
         // DEBUG: Log location and clock-in info
-        print('=== CLOCK IN DEBUG ===');
-        print('canClockIn: ${jobDetails.canClockIn}');
-        print('clockInMessage: ${jobDetails.clockInMessage}');
-        print('isToday: ${jobDetails.isToday}');
-        print('Job location: ${jobDetails.location}');
-        print('Job fullAddress: ${jobDetails.fullAddress}');
-        print(
+        debugPrint('=== CLOCK IN DEBUG ===');
+        debugPrint('canClockIn: ${jobDetails.canClockIn}');
+        debugPrint('clockInMessage: ${jobDetails.clockInMessage}');
+        debugPrint('isToday: ${jobDetails.isToday}');
+        debugPrint('Job location: ${jobDetails.location}');
+        debugPrint('Job fullAddress: ${jobDetails.fullAddress}');
+        debugPrint(
             'Job coordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}');
-        print('Geofence radius: ${jobDetails.geofenceRadiusMeters} meters');
-        print('Start time: ${jobDetails.startTime}');
-        print('End time: ${jobDetails.endTime}');
+        debugPrint('Geofence radius: ${jobDetails.geofenceRadiusMeters} meters');
+        debugPrint('Start time: ${jobDetails.startTime}');
+        debugPrint('End time: ${jobDetails.endTime}');
         final localStartDateTime = _parseStartDateTime(jobDetails);
-        print('Local startDateTime: $localStartDateTime');
+        debugPrint('Local startDateTime: $localStartDateTime');
         final now = DateTime.now();
-        print('Now (local): $now');
-        print('Now (UTC): ${now.toUtc()}');
-        print('Timezone offset: ${now.timeZoneOffset}');
-        print(
+        debugPrint('Now (local): $now');
+        debugPrint('Now (UTC): ${now.toUtc()}');
+        debugPrint('Timezone offset: ${now.timeZoneOffset}');
+        debugPrint(
             'Local clock-in window allows: ${_isWithinClockInWindow(jobDetails)}');
 
         // DEBUG: Get and log device location (non-blocking)
@@ -2154,7 +2154,7 @@ class _SitterBookingDetailsScreenState
                                       freshJobDetails = await ref
                                           .read(jobRequestRepositoryProvider)
                                           .getJobRequestDetails(applicationId);
-                                      print(
+                                      debugPrint(
                                           'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}');
 
                                       // If still null, try fetching user profile directly using sittersRepository
@@ -2162,7 +2162,7 @@ class _SitterBookingDetailsScreenState
                                               null &&
                                           freshJobDetails.parentUserId !=
                                               null) {
-                                        print(
+                                        debugPrint(
                                             'DEBUG: Family photo still null, fetching user profile for ${freshJobDetails.parentUserId}');
                                         try {
                                           // Temporarily accessing sitters repo to get generic user profile
@@ -2180,7 +2180,7 @@ class _SitterBookingDetailsScreenState
                                                       as String?;
 
                                           if (photoUrl != null) {
-                                            print(
+                                            debugPrint(
                                                 'DEBUG: Found photo URL from user profile: $photoUrl');
                                             // Create a new details object with the photo URL
                                             // Since JobRequestDetailsModel is immutable, we verify if there's a copyWith or create new
@@ -2196,12 +2196,12 @@ class _SitterBookingDetailsScreenState
                                                     json);
                                           }
                                         } catch (e) {
-                                          print(
+                                          debugPrint(
                                               'DEBUG: Failed to fetch user profile fallback: $e');
                                         }
                                       }
                                     } catch (e) {
-                                      print(
+                                      debugPrint(
                                           'DEBUG: Failed to fetch fresh details, using cached: $e');
                                     }
 
@@ -2325,7 +2325,7 @@ class _SitterBookingDetailsScreenState
       final errorMessage = e.toString();
       if (errorMessage.contains('Cannot complete this job') ||
           errorMessage.contains('400')) {
-        print(
+        debugPrint(
             'DEBUG: Handling 400 error as success (job likely already complete)');
         ref.invalidate(jobRequestDetailsProvider(applicationId));
         ref.invalidate(sitterCurrentBookingsProvider);
@@ -2357,27 +2357,27 @@ class _SitterBookingDetailsScreenState
     final now = DateTime.now();
     final startDateTime = _parseStartDateTime(jobDetails);
     final endDateTime = _parseEndDateTime(jobDetails);
-    print('=== COMPLETE BOOKING DEBUG ===');
-    print('applicationId: $applicationId');
-    print('jobId: ${jobDetails.id}');
-    print('startDate: ${jobDetails.startDate}');
-    print('endDate: ${jobDetails.endDate}');
-    print('startTime: ${jobDetails.startTime}');
-    print('endTime: ${jobDetails.endTime}');
-    print('isToday: ${jobDetails.isToday}');
-    print('canClockIn: ${jobDetails.canClockIn}');
-    print('clockInMessage: ${jobDetails.clockInMessage}');
-    print(
+    debugPrint('=== COMPLETE BOOKING DEBUG ===');
+    debugPrint('applicationId: $applicationId');
+    debugPrint('jobId: ${jobDetails.id}');
+    debugPrint('startDate: ${jobDetails.startDate}');
+    debugPrint('endDate: ${jobDetails.endDate}');
+    debugPrint('startTime: ${jobDetails.startTime}');
+    debugPrint('endTime: ${jobDetails.endTime}');
+    debugPrint('isToday: ${jobDetails.isToday}');
+    debugPrint('canClockIn: ${jobDetails.canClockIn}');
+    debugPrint('clockInMessage: ${jobDetails.clockInMessage}');
+    debugPrint(
         'jobCoordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}');
-    print('geofenceRadiusMeters: ${jobDetails.geofenceRadiusMeters}');
-    print('now (local): $now');
-    print('startDateTime (local): $startDateTime');
-    print('endDateTime (local): $endDateTime');
+    debugPrint('geofenceRadiusMeters: ${jobDetails.geofenceRadiusMeters}');
+    debugPrint('now (local): $now');
+    debugPrint('startDateTime (local): $startDateTime');
+    debugPrint('endDateTime (local): $endDateTime');
     if (startDateTime != null) {
-      print('isAfterStart: ${now.isAfter(startDateTime)}');
+      debugPrint('isAfterStart: ${now.isAfter(startDateTime)}');
     }
     if (endDateTime != null) {
-      print('isAfterEnd: ${now.isAfter(endDateTime)}');
+      debugPrint('isAfterEnd: ${now.isAfter(endDateTime)}');
     }
   }
 
@@ -2485,7 +2485,7 @@ class _SitterBookingDetailsScreenState
       };
     } catch (e) {
       // Log error and show user-friendly message
-      print('DEBUG: Location Error: $e');
+      debugPrint('DEBUG: Location Error: $e');
       if (mounted) {
         AppToast.show(
           context,
@@ -2505,14 +2505,14 @@ class _SitterBookingDetailsScreenState
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        print('DEBUG DEVICE LOCATION: Location services disabled');
+        debugPrint('DEBUG DEVICE LOCATION: Location services disabled');
         return;
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
-        print('DEBUG DEVICE LOCATION: Permission denied');
+        debugPrint('DEBUG DEVICE LOCATION: Permission denied');
         return;
       }
 
@@ -2521,12 +2521,12 @@ class _SitterBookingDetailsScreenState
         desiredAccuracy: LocationAccuracy.best,
       );
 
-      print('=== DEVICE LOCATION DEBUG ===');
-      print('Device latitude: ${position.latitude}');
-      print('Device longitude: ${position.longitude}');
-      print('Device accuracy: ${position.accuracy} meters');
+      debugPrint('=== DEVICE LOCATION DEBUG ===');
+      debugPrint('Device latitude: ${position.latitude}');
+      debugPrint('Device longitude: ${position.longitude}');
+      debugPrint('Device accuracy: ${position.accuracy} meters');
     } catch (e) {
-      print('DEBUG DEVICE LOCATION ERROR: $e');
+      debugPrint('DEBUG DEVICE LOCATION ERROR: $e');
     }
   }
 
@@ -2669,24 +2669,24 @@ class _SitterBookingDetailsScreenState
     String applicationId,
     JobRequestDetailsModel jobDetails,
   ) {
-    print('DEBUG _buildReviewArgs: ======= Building ReviewArgs =======');
-    print('DEBUG _buildReviewArgs: applicationId = $applicationId');
-    print('DEBUG _buildReviewArgs: jobDetails.id = ${jobDetails.id}');
-    print(
+    debugPrint('DEBUG _buildReviewArgs: ======= Building ReviewArgs =======');
+    debugPrint('DEBUG _buildReviewArgs: applicationId = $applicationId');
+    debugPrint('DEBUG _buildReviewArgs: jobDetails.id = ${jobDetails.id}');
+    debugPrint(
         'DEBUG _buildReviewArgs: jobDetails.familyName = "${jobDetails.familyName}"');
-    print(
+    debugPrint(
         'DEBUG _buildReviewArgs: jobDetails.parentUserId = ${jobDetails.parentUserId}');
-    print('DEBUG _buildReviewArgs: jobDetails.title = "${jobDetails.title}"');
-    print(
+    debugPrint('DEBUG _buildReviewArgs: jobDetails.title = "${jobDetails.title}"');
+    debugPrint(
         'DEBUG _buildReviewArgs: jobDetails.location = ${jobDetails.location}');
-    print(
+    debugPrint(
         'DEBUG _buildReviewArgs: jobDetails.familyPhotoUrl = ${jobDetails.familyPhotoUrl}');
-    print('DEBUG _buildReviewArgs: jobDetails.jobId = ${jobDetails.jobId}');
-    print(
+    debugPrint('DEBUG _buildReviewArgs: jobDetails.jobId = ${jobDetails.jobId}');
+    debugPrint(
         'DEBUG _buildReviewArgs: jobDetails.sitterSkills = ${jobDetails.sitterSkills}');
-    print(
+    debugPrint(
         'DEBUG _buildReviewArgs: Using jobId for review: ${jobDetails.jobId ?? jobDetails.id}');
-    print('DEBUG _buildReviewArgs: =====================================');
+    debugPrint('DEBUG _buildReviewArgs: =====================================');
     final hourlyRate = _formatCurrency(jobDetails.payRate);
     final timeRange = [
       _formatTime(jobDetails.startTime),

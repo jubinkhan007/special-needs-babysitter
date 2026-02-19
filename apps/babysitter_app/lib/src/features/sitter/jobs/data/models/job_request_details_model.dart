@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'job_child_model.dart';
 import 'job_coordinates_model.dart';
+import 'package:flutter/foundation.dart';
 
 /// Model representing detailed job request information
 class JobRequestDetailsModel extends Equatable {
@@ -107,14 +108,14 @@ class JobRequestDetailsModel extends Equatable {
         json['clockedInTime'];
 
     // DEBUG: Log all potential avatar keys
-    print('DEBUG: JobRequestDetailsModel parsing JSON for id=${json['id']}');
-    print('DEBUG: json["familyPhotoUrl"] = ${json['familyPhotoUrl']}');
-    print('DEBUG: json["parentPhotoUrl"] = ${json['parentPhotoUrl']}');
-    print('DEBUG: json["parentAvatarUrl"] = ${json['parentAvatarUrl']}');
-    print('DEBUG: json["familyAvatarUrl"] = ${json['familyAvatarUrl']}');
-    print('DEBUG: json["user"] = ${json['user']}');
-    print('DEBUG: json["creator"] = ${json['creator']}');
-    print('DEBUG: json["parent"] = ${json['parent']}');
+    debugPrint('DEBUG: JobRequestDetailsModel parsing JSON for id=${json['id']}');
+    debugPrint('DEBUG: json["familyPhotoUrl"] = ${json['familyPhotoUrl']}');
+    debugPrint('DEBUG: json["parentPhotoUrl"] = ${json['parentPhotoUrl']}');
+    debugPrint('DEBUG: json["parentAvatarUrl"] = ${json['parentAvatarUrl']}');
+    debugPrint('DEBUG: json["familyAvatarUrl"] = ${json['familyAvatarUrl']}');
+    debugPrint('DEBUG: json["user"] = ${json['user']}');
+    debugPrint('DEBUG: json["creator"] = ${json['creator']}');
+    debugPrint('DEBUG: json["parent"] = ${json['parent']}');
 
     return JobRequestDetailsModel(
       id: json['id'] as String,

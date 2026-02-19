@@ -82,7 +82,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
 
     // Convert role string to UserRole enum if present
     UserRole? userRole;
-    print('DEBUG OtpVerificationScreen: widget.role=${widget.role}');
+    debugPrint('DEBUG OtpVerificationScreen: widget.role=${widget.role}');
     if (widget.role != null) {
       if (widget.role!.toLowerCase() == 'sitter') {
         userRole = UserRole.sitter;
@@ -90,7 +90,7 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
         userRole = UserRole.parent;
       }
     }
-    print('DEBUG OtpVerificationScreen: Calculated userRole=$userRole');
+    debugPrint('DEBUG OtpVerificationScreen: Calculated userRole=$userRole');
 
     await notifier.verifyOtp(
       code: _otp,

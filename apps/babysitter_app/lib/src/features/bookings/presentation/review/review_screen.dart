@@ -33,22 +33,22 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     super.initState();
     _notesController = TextEditingController();
     // Debug: Log all ReviewArgs values
-    print('DEBUG ReviewScreen: ======= ReviewArgs received =======');
-    print('DEBUG ReviewScreen: bookingId = ${widget.args.bookingId}');
-    print('DEBUG ReviewScreen: sitterId = ${widget.args.sitterId}');
-    print('DEBUG ReviewScreen: sitterName = "${widget.args.sitterName}"');
-    print('DEBUG ReviewScreen: sitterName length = ${widget.args.sitterName.length}');
-    print('DEBUG ReviewScreen: sitterName contains DioException = ${widget.args.sitterName.contains('DioException')}');
-    print('DEBUG ReviewScreen: avatarUrl = ${widget.args.avatarUrl}');
-    print('DEBUG ReviewScreen: jobTitle = "${widget.args.jobTitle}"');
-    print('DEBUG ReviewScreen: location = ${widget.args.location}');
-    print('DEBUG ReviewScreen: familyName = "${widget.args.familyName}"');
-    print('DEBUG ReviewScreen: status = ${widget.args.status}');
-    print('DEBUG ReviewScreen: sitterData.sitterName = "${widget.args.sitterData.sitterName}"');
-    print('DEBUG ReviewScreen: sitterData.sitterName length = ${widget.args.sitterData.sitterName.length}');
-    print('DEBUG ReviewScreen: sitterData.avatarUrl = ${widget.args.sitterData.avatarUrl}');
-    print('DEBUG ReviewScreen: sitterData.skills = ${widget.args.sitterData.skills}');
-    print('DEBUG ReviewScreen: =====================================');
+    debugPrint('DEBUG ReviewScreen: ======= ReviewArgs received =======');
+    debugPrint('DEBUG ReviewScreen: bookingId = ${widget.args.bookingId}');
+    debugPrint('DEBUG ReviewScreen: sitterId = ${widget.args.sitterId}');
+    debugPrint('DEBUG ReviewScreen: sitterName = "${widget.args.sitterName}"');
+    debugPrint('DEBUG ReviewScreen: sitterName length = ${widget.args.sitterName.length}');
+    debugPrint('DEBUG ReviewScreen: sitterName contains DioException = ${widget.args.sitterName.contains('DioException')}');
+    debugPrint('DEBUG ReviewScreen: avatarUrl = ${widget.args.avatarUrl}');
+    debugPrint('DEBUG ReviewScreen: jobTitle = "${widget.args.jobTitle}"');
+    debugPrint('DEBUG ReviewScreen: location = ${widget.args.location}');
+    debugPrint('DEBUG ReviewScreen: familyName = "${widget.args.familyName}"');
+    debugPrint('DEBUG ReviewScreen: status = ${widget.args.status}');
+    debugPrint('DEBUG ReviewScreen: sitterData.sitterName = "${widget.args.sitterData.sitterName}"');
+    debugPrint('DEBUG ReviewScreen: sitterData.sitterName length = ${widget.args.sitterData.sitterName.length}');
+    debugPrint('DEBUG ReviewScreen: sitterData.avatarUrl = ${widget.args.sitterData.avatarUrl}');
+    debugPrint('DEBUG ReviewScreen: sitterData.skills = ${widget.args.sitterData.skills}');
+    debugPrint('DEBUG ReviewScreen: =====================================');
   }
 
   @override

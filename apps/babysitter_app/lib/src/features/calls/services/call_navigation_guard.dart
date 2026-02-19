@@ -89,7 +89,7 @@ class CallNavigationGuard {
         '[CALL_NAV] showInCallScreen FAILED: navigator is null',
         name: 'Calls',
       );
-      print('[CALL_NAV] showInCallScreen FAILED: navigator is null');
+      debugPrint('[CALL_NAV] showInCallScreen FAILED: navigator is null');
       return;
     }
 
@@ -97,7 +97,7 @@ class CallNavigationGuard {
     _isInCallScreenShowing = true;
 
     developer.log('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil', name: 'Calls');
-    print('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil');
+    debugPrint('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil');
 
     navigator.pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const InCallScreen()),

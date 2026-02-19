@@ -396,7 +396,7 @@ class CallNotificationService {
         '[CALL_ACTION] launchDetails recovered action=${response.actionId ?? 'open'} payload=${response.payload}',
         name: 'Notifications',
       );
-      print(
+      debugPrint(
         '[CALL_ACTION] launchDetails recovered action=${response.actionId ?? 'open'} payload=${response.payload}',
       );
       await _handleNotificationResponse(response);
@@ -415,7 +415,7 @@ class CallNotificationService {
       '[CALL_ACTION] notification response received action=${response.actionId ?? 'open'} payload=${response.payload}',
       name: 'Notifications',
     );
-    print(
+    debugPrint(
       '[CALL_ACTION] notification response received action=${response.actionId ?? 'open'} payload=${response.payload}',
     );
     final payload = _decodePayload(response.payload);

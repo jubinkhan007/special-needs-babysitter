@@ -174,26 +174,8 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                   padding:
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                   children: [
-                    // Distance slider
-                    _buildSectionTitle('Maximum Distance'),
-                    SizedBox(height: 8.h),
-                    _buildDistanceSlider(),
-                    SizedBox(height: 24.h),
-
-                    // Pay rate range
-                    _buildSectionTitle('Hourly Pay Rate'),
-                    SizedBox(height: 8.h),
-                    _buildPayRateInputs(),
-                    SizedBox(height: 24.h),
-
-                    // Availability date
-                    _buildSectionTitle('Availability Date'),
-                    SizedBox(height: 8.h),
-                    _buildDatePicker(),
-                    SizedBox(height: 24.h),
-
-                    // Special needs
-                    _buildSectionTitle('Special Needs'),
+                    // Special needs expertise
+                    _buildSectionTitle('Special Needs Expertise'),
                     SizedBox(height: 8.h),
                     _buildChipSelector(
                       options: SpecialNeedsOptions.all,
@@ -203,15 +185,16 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                     ),
                     SizedBox(height: 24.h),
 
-                    // Age groups
-                    _buildSectionTitle('Age Groups'),
+                    // Availability date
+                    _buildSectionTitle('Availability (Date)'),
                     SizedBox(height: 8.h),
-                    _buildChipSelector(
-                      options: AgeGroupOptions.all,
-                      selected: _ageGroups,
-                      onChanged: (values) =>
-                          setState(() => _ageGroups = values),
-                    ),
+                    _buildDatePicker(),
+                    SizedBox(height: 24.h),
+
+                    // Pay rate range
+                    _buildSectionTitle('Hourly Rate'),
+                    SizedBox(height: 8.h),
+                    _buildPayRateInputs(),
                     SizedBox(height: 32.h),
                   ],
                 ),

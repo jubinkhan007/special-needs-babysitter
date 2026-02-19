@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 /// Remote data source for background check API calls.
 class BackgroundCheckRemoteDataSource {
@@ -14,7 +15,7 @@ class BackgroundCheckRemoteDataSource {
     required String contentType,
   }) async {
     try {
-      print(
+      debugPrint(
           'DEBUG: Requesting presigned URL with fileName=$fileName, contentType=$contentType');
       final response = await _dio.post(
         '/uploads/presign',
@@ -28,10 +29,10 @@ class BackgroundCheckRemoteDataSource {
       final data = response.data['data'];
       return PresignedUrlResponse.fromJson(data);
     } catch (e) {
-      print('DEBUG: getPresignedUrl error: $e');
+      debugPrint('DEBUG: getPresignedUrl error: $e');
       if (e is DioException && e.response != null) {
-        print('DEBUG: Response status: ${e.response?.statusCode}');
-        print('DEBUG: Response data: ${e.response?.data}');
+        debugPrint('DEBUG: Response status: ${e.response?.statusCode}');
+        debugPrint('DEBUG: Response data: ${e.response?.data}');
       }
       rethrow;
     }
@@ -76,21 +77,21 @@ class BackgroundCheckRemoteDataSource {
   /// Gets the current background check status.
   Future<Map<String, dynamic>> getBackgroundCheckStatus() async {
     try {
-      print('DEBUG: Fetching background check status');
+      debugPrint('DEBUG: Fetching background check status');
       final response = await _dio.get('/sitters/me/background-check');
-      print('DEBUG: Background check response: ${response.data}');
+      debugPrint('DEBUG: Background check response: ${response.data}');
 
       // Extract the data object from the response
       final data = response.data['data'] as Map<String, dynamic>?;
 
       if (data == null) {
-        print('DEBUG: No data in response, returning not_started');
+        debugPrint('DEBUG: No data in response, returning not_started');
         return {'status': 'not_started'};
       }
 
       return data;
     } catch (e) {
-      print('DEBUG: Background check error: $e');
+      debugPrint('DEBUG: Background check error: $e');
       // If 404, it might mean no record exists -> not started
       if (e is DioException && e.response?.statusCode == 404) {
         return {'status': 'not_started'};

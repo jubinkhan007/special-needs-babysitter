@@ -54,13 +54,13 @@ class _SitterProfileSetupFlowState
           ref.read(sitterProfileSetupControllerProvider.notifier);
       final repository = ref.read(sitterProfileRepositoryProvider);
 
-      print('DEBUG FLOW: Saving step $currentStepNumber before advancing...');
+      debugPrint('DEBUG FLOW: Saving step $currentStepNumber before advancing...');
       final success = await controller.saveStep(currentStepNumber, repository);
 
       if (!mounted) return;
 
       if (success) {
-        print(
+        debugPrint(
             'DEBUG FLOW: Step $currentStepNumber saved successfully, advancing to step $nextStepNumber');
         _goToStep(nextStepNumber);
       } else {

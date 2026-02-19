@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:equatable/equatable.dart';
 import '../../../application/data/models/application_model.dart';
 import '../../../application/presentation/providers/application_providers.dart';
+import 'package:flutter/foundation.dart';
 
 class ApplicationsFilter extends Equatable {
   final String? status;
@@ -33,7 +34,7 @@ final sitterJobApplicationsProvider = FutureProvider.family
           type: filter.type,
         );
       } catch (e) {
-        print('DEBUG: Failed to fetch clocked_out applications: $e');
+        debugPrint('DEBUG: Failed to fetch clocked_out applications: $e');
         clockedOut = [];
       }
 
@@ -69,7 +70,7 @@ final sitterJobRequestsProvider =
       repository.getApplications(type: 'invited'),
       repository.getApplications(type: 'direct_booking').catchError((error) {
         // If direct_booking fails (e.g., 400 error), log and return empty list
-        print('DEBUG: Failed to fetch direct bookings: $error');
+        debugPrint('DEBUG: Failed to fetch direct bookings: $error');
         return <ApplicationModel>[];
       }),
     ]);
@@ -81,7 +82,7 @@ final sitterJobRequestsProvider =
     return [...invitations, ...directBookings];
   } catch (e) {
     // If fetching invitations fails, just return invitations
-    print('DEBUG: Error in sitterJobRequestsProvider: $e');
+    debugPrint('DEBUG: Error in sitterJobRequestsProvider: $e');
     return repository.getApplications(type: 'invited');
   }
 });

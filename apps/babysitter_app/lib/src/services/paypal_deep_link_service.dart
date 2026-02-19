@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
 
 /// Events emitted by the PayPal deep link service
 sealed class PaypalDeepLinkEvent {}
@@ -44,19 +45,19 @@ class PaypalDeepLinkService {
     try {
       final initialUri = await _appLinks.getInitialLink();
       if (initialUri != null) {
-        print('DEBUG: PaypalDeepLinkService initial link: $initialUri');
+        debugPrint('DEBUG: PaypalDeepLinkService initial link: $initialUri');
         _handleUri(initialUri);
       }
     } catch (e) {
-      print('DEBUG: PaypalDeepLinkService failed to get initial link: $e');
+      debugPrint('DEBUG: PaypalDeepLinkService failed to get initial link: $e');
     }
 
     // Handle links while app is running
     _subscription = _appLinks.uriLinkStream.listen((uri) {
-      print('DEBUG: PaypalDeepLinkService received link: $uri');
+      debugPrint('DEBUG: PaypalDeepLinkService received link: $uri');
       _handleUri(uri);
     }, onError: (e) {
-      print('DEBUG: PaypalDeepLinkService stream error: $e');
+      debugPrint('DEBUG: PaypalDeepLinkService stream error: $e');
     });
   }
 
@@ -66,12 +67,12 @@ class PaypalDeepLinkService {
     // Or: specialsitters://payment/paypal/cancel
 
     if (uri.scheme != 'specialsitters') {
-      print('DEBUG: PaypalDeepLinkService ignoring non-specialsitters scheme');
+      debugPrint('DEBUG: PaypalDeepLinkService ignoring non-specialsitters scheme');
       return;
     }
 
     if (uri.host != 'payment') {
-      print('DEBUG: PaypalDeepLinkService ignoring non-payment host');
+      debugPrint('DEBUG: PaypalDeepLinkService ignoring non-payment host');
       return;
     }
 
@@ -80,19 +81,19 @@ class PaypalDeepLinkService {
     if (path.contains('/paypal/success')) {
       final orderId = uri.queryParameters['orderId'];
       if (orderId != null && orderId.isNotEmpty) {
-        print(
+        debugPrint(
             'DEBUG: PaypalDeepLinkService emitting success with orderId=$orderId');
         _eventController.add(PaypalPaymentSuccess(orderId));
       } else {
-        print(
+        debugPrint(
             'DEBUG: PaypalDeepLinkService success without orderId, treating as cancel');
         _eventController.add(PaypalPaymentCancelled());
       }
     } else if (path.contains('/paypal/cancel')) {
-      print('DEBUG: PaypalDeepLinkService emitting cancel');
+      debugPrint('DEBUG: PaypalDeepLinkService emitting cancel');
       _eventController.add(PaypalPaymentCancelled());
     } else {
-      print('DEBUG: PaypalDeepLinkService ignoring unknown path: $path');
+      debugPrint('DEBUG: PaypalDeepLinkService ignoring unknown path: $path');
     }
   }
 

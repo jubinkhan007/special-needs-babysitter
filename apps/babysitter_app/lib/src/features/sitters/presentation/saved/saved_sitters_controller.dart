@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/sitters_data_di.dart';
 import '../../domain/sitters_repository.dart';
 import '../../../parent/search/models/sitter_list_item_model.dart';
+import 'package:flutter/foundation.dart';
 
 /// Controller for the saved sitters list and bookmark operations.
 class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
@@ -76,25 +77,25 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
   Future<bool> removeBookmark(String sitterUserId) async {
     final currentList = state.valueOrNull ?? [];
 
-    print('DEBUG removeBookmark: sitterUserId=$sitterUserId');
-    print('DEBUG removeBookmark: currentList has ${currentList.length} items');
+    debugPrint('DEBUG removeBookmark: sitterUserId=$sitterUserId');
+    debugPrint('DEBUG removeBookmark: currentList has ${currentList.length} items');
     for (final s in currentList) {
-      print('DEBUG removeBookmark: item id=${s.id}, userId=${s.userId}, name=${s.name}');
+      debugPrint('DEBUG removeBookmark: item id=${s.id}, userId=${s.userId}, name=${s.name}');
     }
 
     // Optimistic update FIRST for responsive UI
     final newList =
         currentList.where((s) => s.userId != sitterUserId).toList();
-    print('DEBUG removeBookmark: newList has ${newList.length} items after filter');
+    debugPrint('DEBUG removeBookmark: newList has ${newList.length} items after filter');
     state = AsyncValue.data(newList);
 
     try {
       await _repository.removeBookmarkedSitter(sitterUserId);
-      print('DEBUG removeBookmark: API call successful');
+      debugPrint('DEBUG removeBookmark: API call successful');
       return true;
     } catch (e) {
       // Revert on error - sitter reappears in the list
-      print('DEBUG removeBookmark: API call failed with error: $e');
+      debugPrint('DEBUG removeBookmark: API call failed with error: $e');
       state = AsyncValue.data(currentList);
       return false;
     }

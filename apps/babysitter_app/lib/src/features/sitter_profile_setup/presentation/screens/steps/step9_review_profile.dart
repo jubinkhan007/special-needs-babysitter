@@ -44,7 +44,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
       final controller =
           ref.read(sitterProfileSetupControllerProvider.notifier);
       final repository = ref.read(sitterProfileRepositoryProvider);
-      print('DEBUG UI: Step 9 Submit Button Tapped');
+      debugPrint('DEBUG UI: Step 9 Submit Button Tapped');
       final success = await controller.submitSitterProfile(repository);
 
       if (!mounted) return;
@@ -346,6 +346,19 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                           ),
                         ),
                       ],
+                      const SizedBox(height: 32),
+                      const Divider(color: _dividerColor, height: 1),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Once submitted, your profile will be reviewed. You can still update your profile later from the Account section.',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: _greyText,
+                          height: 1.5,
+                          fontFamily: 'Inter',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
                 ),

@@ -84,9 +84,9 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
           _applePayAvailable = available;
         });
       }
-      print('DEBUG: Apple Pay available: $available');
+      debugPrint('DEBUG: Apple Pay available: $available');
     } catch (e) {
-      print('DEBUG: Error checking Apple Pay availability: $e');
+      debugPrint('DEBUG: Error checking Apple Pay availability: $e');
     }
   }
 
@@ -136,7 +136,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
           PayProvider.google_pay: PaymentConfiguration.fromJsonString(_getGooglePayConfig()),
         });
       } catch (e) {
-        print('DEBUG: Error initializing Google Pay: $e');
+        debugPrint('DEBUG: Error initializing Google Pay: $e');
         widget.onPaymentError('Google Pay is not available on this device');
         return;
       }
@@ -145,7 +145,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
     setState(() => _isProcessing = true);
 
     try {
-      print('DEBUG: Starting native Google Pay flow...');
+      debugPrint('DEBUG: Starting native Google Pay flow...');
 
       final paymentItems = [
         PaymentItem(
@@ -160,7 +160,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
         paymentItems,
       );
 
-      print('DEBUG: Google Pay result received');
+      debugPrint('DEBUG: Google Pay result received');
 
       // Extract token from result
       final paymentData = result['paymentMethodData'];
@@ -174,7 +174,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
       final tokenJson = jsonDecode(tokenString);
       final stripeTokenId = tokenJson['id'];
 
-      print('DEBUG: Stripe token ID: $stripeTokenId');
+      debugPrint('DEBUG: Stripe token ID: $stripeTokenId');
 
       // Create PaymentMethod from token
       final paymentMethod = await Stripe.instance.createPaymentMethod(
@@ -185,7 +185,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
         ),
       );
 
-      print('DEBUG: Payment method created: ${paymentMethod.id}');
+      debugPrint('DEBUG: Payment method created: ${paymentMethod.id}');
 
       // Confirm the PaymentIntent
       await Stripe.instance.confirmPayment(
@@ -197,10 +197,10 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
         ),
       );
 
-      print('DEBUG: Payment confirmed via Google Pay');
+      debugPrint('DEBUG: Payment confirmed via Google Pay');
       widget.onPaymentSuccess();
     } catch (e) {
-      print('DEBUG: Google Pay error: $e');
+      debugPrint('DEBUG: Google Pay error: $e');
       final errorMsg = e.toString();
       if (errorMsg.contains('canceled') || errorMsg.contains('cancelled')) {
         // User cancelled, don't show error
@@ -217,7 +217,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
     setState(() => _isProcessing = true);
 
     try {
-      print('DEBUG: Starting Stripe Payment Sheet...');
+      debugPrint('DEBUG: Starting Stripe Payment Sheet...');
 
       // Initialize Payment Sheet
       await Stripe.instance.initPaymentSheet(
@@ -234,10 +234,10 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
       // Present Payment Sheet
       await Stripe.instance.presentPaymentSheet();
 
-      print('DEBUG: Payment completed via Stripe Payment Sheet');
+      debugPrint('DEBUG: Payment completed via Stripe Payment Sheet');
       widget.onPaymentSuccess();
     } on StripeException catch (e) {
-      print('DEBUG: Stripe error: ${e.error.localizedMessage}');
+      debugPrint('DEBUG: Stripe error: ${e.error.localizedMessage}');
       if (e.error.code == FailureCode.Canceled) {
         setState(() => _isProcessing = false);
         widget.onCancel(); // Notify parent that user cancelled
@@ -245,7 +245,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
         widget.onPaymentError(e.error.localizedMessage ?? 'Payment failed');
       }
     } catch (e) {
-      print('DEBUG: Payment error: $e');
+      debugPrint('DEBUG: Payment error: $e');
       widget.onPaymentError(e.toString());
     }
   }

@@ -60,17 +60,17 @@ class _SitterJobDetailsScreenState
             Expanded(
               child: jobDetailsAsync.when(
                 data: (job) {
-                  print(
+                  debugPrint(
                       'DEBUG: SitterJobDetailsScreen loaded job: ${job.title}');
                   return _buildContent(context, job);
                 },
                 loading: () {
-                  print(
+                  debugPrint(
                       'DEBUG: SitterJobDetailsScreen loading for jobId=${widget.jobId}');
                   return const Center(child: CircularProgressIndicator());
                 },
                 error: (error, stack) {
-                  print('DEBUG: SitterJobDetailsScreen ERROR: $error');
+                  debugPrint('DEBUG: SitterJobDetailsScreen ERROR: $error');
 
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     final message = error.toString().contains('Job not found')
