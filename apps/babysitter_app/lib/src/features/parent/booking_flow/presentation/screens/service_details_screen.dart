@@ -268,22 +268,26 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     }
 
     if (error is StripeException) {
-      final errorCode = error.error.code;
+      final failureCode = error.error.code;
+      final stripeErrorCode = error.error.stripeErrorCode;
       final errorMessage = error.error.localizedMessage ?? '';
 
-      // Handle specific Stripe error codes
-      if (errorCode == 'Cancelled') {
+      // Handle Stripe FailureCode enum
+      if (failureCode == FailureCode.Canceled) {
         return 'Payment cancelled. Please try again.';
-      } else if (errorCode == 'resource_missing' ||
+      }
+
+      // Handle specific Stripe error codes
+      if (stripeErrorCode == 'resource_missing' ||
           errorMessage.contains('minimum charge')) {
         return 'The booking amount is below the minimum required. Please adjust your hours or rate.';
-      } else if (errorCode == 'card_declined' ||
+      } else if (stripeErrorCode == 'card_declined' ||
           error.error.declineCode != null) {
         return 'Payment declined by your card. Please try a different card or contact your bank.';
-      } else if (errorCode == 'incorrect_cvc') {
+      } else if (stripeErrorCode == 'incorrect_cvc') {
         return 'Invalid security code. Please check your card details.';
-      } else if (errorCode == 'invalid_expiry_month' ||
-          errorCode == 'invalid_expiry_year') {
+      } else if (stripeErrorCode == 'invalid_expiry_month' ||
+          stripeErrorCode == 'invalid_expiry_year') {
         return 'Your card has expired. Please use a different card.';
       } else if (errorMessage.isNotEmpty) {
         return 'Payment error: $errorMessage';
