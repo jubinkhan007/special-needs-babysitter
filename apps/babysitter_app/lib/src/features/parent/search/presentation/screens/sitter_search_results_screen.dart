@@ -186,7 +186,7 @@ class _SitterSearchResultsScreenState
                                               isCurrentlySaved: isCurrentlyBookmarked,
                                               sitterItem: sitter);
                                       
-                                      if (mounted) {
+                                      if (context.mounted) {
                                         AppToast.show(context,
                                           SnackBar(
                                             content: Text(isCurrentlyBookmarked
@@ -197,7 +197,7 @@ class _SitterSearchResultsScreenState
                                         );
                                       }
                                     } catch (e) {
-                                      if (mounted) {
+                                      if (context.mounted) {
                                         AppToast.show(context,
                                           SnackBar(
                                             content: Text('Failed to update bookmark: $e'),

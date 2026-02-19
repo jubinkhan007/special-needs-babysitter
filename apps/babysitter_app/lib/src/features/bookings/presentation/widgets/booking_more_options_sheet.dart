@@ -244,17 +244,18 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
           child: ElevatedButton(
             onPressed: _selectedReason != null
                 ? () async {
-                    final navigator = Navigator.of(context);
-                    navigator.pop();
+                    Navigator.of(context).pop();
                     final tier = getCancellationTier(widget.scheduledDate);
+                    if (!mounted) return;
                     final confirmed = await showCancellationConfirmationDialog(
-                      navigator.context,
+                      context,
                       tier: tier,
                     );
                     if (confirmed == true) {
+                      if (!mounted) return;
                       // Show refund options dialog
                       final refundOption =
-                          await showRefundOptionsDialog(navigator.context);
+                          await showRefundOptionsDialog(context);
                       if (refundOption != null) {
                         widget.onCancel();
                       }

@@ -200,6 +200,7 @@ class SitterHomeScreen extends ConsumerWidget {
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(preview.id)
                               .then((isSaved) {
+                            if (!context.mounted) return;
                             AppToast.show(
                               context,
                               SnackBar(
@@ -210,6 +211,7 @@ class SitterHomeScreen extends ConsumerWidget {
                               ),
                             );
                           }).catchError((error) {
+                            if (!context.mounted) return;
                             AppToast.show(
                               context,
                               SnackBar(

@@ -115,6 +115,7 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(jobId)
                               .then((isNowSaved) {
+                            if (!context.mounted) return;
                             AppToast.show(
                               context,
                               SnackBar(
@@ -128,6 +129,7 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                               ref.invalidate(savedJobsListProvider);
                             }
                           }).catchError((error) {
+                            if (!context.mounted) return;
                             AppToast.show(
                               context,
                               SnackBar(

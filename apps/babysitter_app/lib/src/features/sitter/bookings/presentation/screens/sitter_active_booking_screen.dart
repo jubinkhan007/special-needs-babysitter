@@ -134,27 +134,26 @@ class _SitterActiveBookingScreenState
     setState(() => _isClockingOut = true);
 
     try {
-      if (mounted) {
-        final result = await ref
-            .read(sessionTrackingControllerProvider.notifier)
-            .clockOut(widget.applicationId);
-        final jobDetails =
-            ref.read(jobRequestDetailsProvider(widget.applicationId)).valueOrNull;
-        final isFinalDay = result.isFinalDay || _isFinalDay(jobDetails);
-        AppToast.show(
-          context,
-          SnackBar(
-            content: Text(result.message.isNotEmpty
-                ? result.message
-                : 'Successfully clocked out!'),
-            backgroundColor: AppColors.success,
-          ),
-        );
-        if (isFinalDay) {
-          _goToBookingDetails(status: 'clockedout');
-        } else {
-          context.pop();
-        }
+      final result = await ref
+          .read(sessionTrackingControllerProvider.notifier)
+          .clockOut(widget.applicationId);
+      if (!mounted) return;
+      final jobDetails =
+          ref.read(jobRequestDetailsProvider(widget.applicationId)).valueOrNull;
+      final isFinalDay = result.isFinalDay || _isFinalDay(jobDetails);
+      AppToast.show(
+        context,
+        SnackBar(
+          content: Text(result.message.isNotEmpty
+              ? result.message
+              : 'Successfully clocked out!'),
+          backgroundColor: AppColors.success,
+        ),
+      );
+      if (isFinalDay) {
+        _goToBookingDetails(status: 'clockedout');
+      } else {
+        context.pop();
       }
     } catch (e) {
       if (mounted) {

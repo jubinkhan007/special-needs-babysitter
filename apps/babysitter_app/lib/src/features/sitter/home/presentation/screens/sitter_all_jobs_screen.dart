@@ -290,6 +290,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                   .read(savedJobsControllerProvider.notifier)
                   .toggleSaved(preview.id)
                   .then((isSaved) {
+                if (!context.mounted) return;
                 AppToast.show(
                   context,
                   SnackBar(
@@ -300,6 +301,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                   ),
                 );
               }).catchError((error) {
+                if (!context.mounted) return;
                 AppToast.show(
                   context,
                   SnackBar(

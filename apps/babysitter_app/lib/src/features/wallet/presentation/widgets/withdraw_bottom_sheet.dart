@@ -142,7 +142,7 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
 
     try {
       final result = await ref.read(walletControllerProvider.notifier).withdraw(cents);
-      if (!mounted) return;
+      if (!context.mounted) return;
       Navigator.of(context).pop();
       final arrival = result.estimatedArrival;
       AppToast.show(
@@ -157,7 +157,7 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
       );
       widget.onSuccess();
     } catch (e) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       final message = AppErrorHandler.parse(e).message;
       AppToast.show(context, SnackBar(content: Text(message)));
     }

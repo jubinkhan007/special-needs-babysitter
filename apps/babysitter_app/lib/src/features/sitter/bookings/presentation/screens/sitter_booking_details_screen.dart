@@ -248,6 +248,7 @@ class _SitterBookingDetailsScreenState
                                 .read(savedJobsControllerProvider.notifier)
                                 .toggleSaved(jobId)
                                 .then((isSaved) {
+                              if (!context.mounted) return;
                               AppToast.show(
                                 context,
                                 SnackBar(
@@ -257,6 +258,7 @@ class _SitterBookingDetailsScreenState
                                 ),
                               );
                             }).catchError((error) {
+                              if (!context.mounted) return;
                               AppToast.show(
                                 context,
                                 SnackBar(
@@ -1634,7 +1636,7 @@ class _SitterBookingDetailsScreenState
                   fileUrl = url;
                 });
               } catch (e) {
-                if (mounted) {
+                if (parentContext.mounted) {
                   AppToast.show(
                     parentContext,
                     SnackBar(content: Text('Upload failed: $e')),
@@ -1815,10 +1817,10 @@ class _SitterBookingDetailsScreenState
                                     reason: _emergencyPayloadReason,
                                     fileUrl: fileUrl,
                                   );
-                                  if (!mounted) return;
+                                  if (!dialogContext.mounted) return;
                                   if (success) {
                                     Navigator.of(dialogContext).pop();
-                                    parentContext.pop();
+                                    if (parentContext.mounted) parentContext.pop();
                                     return;
                                   }
                                   setState(() {
@@ -1959,10 +1961,10 @@ class _SitterBookingDetailsScreenState
                                   applicationId,
                                   reason: _standardPayloadReason,
                                 );
-                                if (!mounted) return;
+                                if (!dialogContext.mounted) return;
                                 if (success) {
                                   Navigator.of(dialogContext).pop();
-                                  parentContext.pop();
+                                  if (parentContext.mounted) parentContext.pop();
                                   return;
                                 }
                                 setState(() {
@@ -2055,14 +2057,14 @@ class _SitterBookingDetailsScreenState
       ref.invalidate(sitterCurrentBookingsProvider);
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider(null));
-      if (!mounted) return false;
+      if (!context.mounted) return false;
       AppToast.show(
         context,
         const SnackBar(content: Text('Booking cancelled successfully')),
       );
       return true;
     } catch (e) {
-      if (mounted) {
+      if (context.mounted) {
         AppToast.show(
           context,
           SnackBar(content: Text('Error cancelling booking: $e')),
@@ -2309,7 +2311,7 @@ class _SitterBookingDetailsScreenState
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider('completed'));
       ref.invalidate(sitterBookingsProvider(null));
-      if (!mounted) return false;
+      if (!context.mounted) return false;
       setState(() {
         _markedComplete = true;
       });
@@ -2329,7 +2331,7 @@ class _SitterBookingDetailsScreenState
             'DEBUG: Handling 400 error as success (job likely already complete)');
         ref.invalidate(jobRequestDetailsProvider(applicationId));
         ref.invalidate(sitterCurrentBookingsProvider);
-        if (!mounted) return false;
+        if (!context.mounted) return false;
         setState(() {
           _markedComplete = true;
         });
@@ -2340,7 +2342,7 @@ class _SitterBookingDetailsScreenState
         return true;
       }
 
-      if (mounted) {
+      if (context.mounted) {
         AppToast.show(
           context,
           SnackBar(content: Text('Error completing job: $e')),
@@ -2427,15 +2429,13 @@ class _SitterBookingDetailsScreenState
       ref.invalidate(sitterBookingsProvider('active'));
       ref.invalidate(sitterBookingsProvider('in_progress'));
       ref.invalidate(sitterBookingsProvider('upcoming'));
+      if (!context.mounted) return;
       await _showClockInDialog(context);
-      if (mounted) {
-        context.go('${Routes.sitterActiveBooking}/$applicationId');
-      }
+      if (!context.mounted) return;
+      context.go('${Routes.sitterActiveBooking}/$applicationId');
       ref.invalidate(jobRequestDetailsProvider(applicationId));
     } catch (e) {
-      if (!mounted) {
-        return;
-      }
+      if (!context.mounted) return;
       AppToast.show(
         context,
         SnackBar(

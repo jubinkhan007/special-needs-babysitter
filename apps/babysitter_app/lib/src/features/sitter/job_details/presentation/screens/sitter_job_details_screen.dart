@@ -151,6 +151,7 @@ class _SitterJobDetailsScreenState
                   .read(savedJobsControllerProvider.notifier)
                   .toggleSaved(jobId)
                   .then((isSaved) {
+                if (!context.mounted) return;
                 AppToast.show(
                   context,
                   SnackBar(
@@ -159,6 +160,7 @@ class _SitterJobDetailsScreenState
                   ),
                 );
               }).catchError((error) {
+                if (!context.mounted) return;
                 AppToast.show(
                   context,
                   SnackBar(
