@@ -48,25 +48,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       imagePath: 'assets/onboarding_1.jpg',
       title: 'Welcome to Special\nNeeds Sitters',
       description:
-          "We're here to support children with unique\nneeds — and the families who love them.",
+          'A babysitting platform exclusively for families with special needs children.',
     ),
     OnboardingSlide(
       imagePath: 'assets/onboarding_2.jpg',
-      title: 'Specialized Care',
+      title: 'Safety & Trust',
       description:
-          'All caregivers are trained and experienced in\nworking with special needs children.',
+          'All sitters are carefully screened and reviewed so families feel safe, confident, and supported.',
     ),
     OnboardingSlide(
       imagePath: 'assets/onboarding_3.jpg',
-      title: 'Verified & Trusted',
+      title: 'Simple & Stress-Free',
       description:
-          'Rigorous background checks and caregiver\nreviews ensure your peace of mind.',
-    ),
-    OnboardingSlide(
-      imagePath: 'assets/onboarding_4.jpg',
-      title: 'No Subscriptions.\nJust Sitters.',
-      description:
-          'Book sitters when you need them — with no\ncommitments or monthly fees.',
+          'Book experienced special-needs sitters with no hassle and no confusion — just reliable care when you need it.',
     ),
   ];
 
@@ -181,75 +175,74 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onPageChanged: _onPageChanged,
             itemCount: _slides.length,
             itemBuilder: (context, index) {
-              if (index == 0) {
-                return _WelcomePage(
-                  slide: _slides[index],
-                  selectedRole: _selectedRole,
-                  onFamilySelected: () {
-                    setState(() => _selectedRole = 'parent');
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  onBabysitterSelected: () {
-                    setState(() => _selectedRole = 'sitter');
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                );
-              } else {
-                return _FeaturePage(slide: _slides[index]);
-              }
+              return _FeaturePage(
+                slide: _slides[index],
+                showTextOverlay: index != 0,
+              );
             },
           ),
 
-          // Page indicators (dots)
-          if (_currentPage > 0)
-            Positioned(
-              bottom: 260.h,
-              left: 0,
-              right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _slides.length,
-                  (index) => _PageIndicator(isActive: _currentPage == index),
-                ),
+          // Page indicators
+          Positioned(
+            bottom: 260.h,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                _slides.length,
+                (index) => _PageIndicator(isActive: _currentPage == index),
               ),
             ),
+          ),
 
-          // Bottom control bar
-          if (_currentPage > 0)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _BottomControlBar(
-                onGetStarted: _goToSignUp,
-                onLogin: _goToSignIn,
-                onBottomLinkTapped: _onBottomLinkTapped,
-                bottomLinkText: _selectedRole == 'sitter'
-                    ? "I'm looking for a sitter"
-                    : 'Looking for Jobs as a Sitter',
-              ),
-            ),
+          // Bottom card — always visible, content changes based on page
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _currentPage == 0
+                ? _RoleSelectionBar(
+                    slide: _slides[0],
+                    selectedRole: _selectedRole,
+                    onFamilySelected: () {
+                      setState(() => _selectedRole = 'parent');
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    onBabysitterSelected: () {
+                      setState(() => _selectedRole = 'sitter');
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                  )
+                : _BottomControlBar(
+                    onGetStarted: _goToSignUp,
+                    onLogin: _goToSignIn,
+                    onBottomLinkTapped: _onBottomLinkTapped,
+                    bottomLinkText: _selectedRole == 'sitter'
+                        ? "I'm looking for a sitter"
+                        : 'Looking for Jobs as a Sitter',
+                  ),
+          ),
         ],
       ),
     );
   }
 }
 
-/// Welcome Page (Page 1) with role selection
-class _WelcomePage extends StatelessWidget {
+/// Role selection bottom bar (Page 1) — includes title + description + role buttons
+class _RoleSelectionBar extends StatelessWidget {
   final OnboardingSlide slide;
   final String? selectedRole;
   final VoidCallback onFamilySelected;
   final VoidCallback onBabysitterSelected;
 
-  const _WelcomePage({
+  const _RoleSelectionBar({
     required this.slide,
     required this.selectedRole,
     required this.onFamilySelected,
@@ -258,216 +251,178 @@ class _WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    
-    // Responsive calculations based on screen size
-    final imageHeight = screenHeight * 0.58;
-    final cardHeight = screenHeight * 0.45;
-    
-    return Stack(
-      children: [
-        // Top Image Area
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          height: imageHeight,
-          child: Image.asset(
-            slide.imagePath,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-          ),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(32.r),
+          topRight: Radius.circular(32.r),
         ),
-
-        // Bottom Content Area (White Card)
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            height: cardHeight,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32.r),
-                topRight: Radius.circular(32.r),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Title
+            Text(
+              slide.title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF1A3A4A),
+                height: 1.2,
               ),
             ),
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      physics: const ClampingScrollPhysics(),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight,
-                        ),
-                        child: IntrinsicHeight(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // Title
-                              Text(
-                                slide.title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF1A3A4A),
-                                  height: 1.2,
-                                ),
-                              ),
-                              SizedBox(height: 12.h),
-                              
-                              // Description
-                              Text(
-                                slide.description,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: const Color(0xFF6B7280),
-                                  height: 1.5,
-                                ),
-                              ),
-                              
-                              const Spacer(),
-                              
-                              // Role selection label
-                              Text(
-                                'Select Your Role',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF9CA3AF),
-                                ),
-                              ),
-                              SizedBox(height: 16.h),
-                              
-                              // Role buttons row
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _RoleButton(
-                                      label: 'Family',
-                                      isSelected: selectedRole != 'sitter',
-                                      onTap: onFamilySelected,
-                                    ),
-                                  ),
-                                  SizedBox(width: 16.w),
-                                  Expanded(
-                                    child: _RoleButton(
-                                      label: 'Babysitter',
-                                      isSelected: selectedRole == 'sitter',
-                                      onTap: onBabysitterSelected,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              
-                              SizedBox(height: 16.h),
-                              
-                              // Bottom indicator line
-                              Container(
-                                width: 40.w,
-                                height: 4.h,
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(2.r),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+            SizedBox(height: 12.h),
+
+            // Description
+            Text(
+              slide.description,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16.sp,
+                color: const Color(0xFF6B7280),
+                height: 1.5,
               ),
             ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+            SizedBox(height: 24.h),
 
-/// Feature Pages (Pages 2-5)
-class _FeaturePage extends StatelessWidget {
-  final OnboardingSlide slide;
-
-  const _FeaturePage({required this.slide});
-
-  @override
-  Widget build(BuildContext context) {
-    final bottomSheetHeight = 260.h; // Approximate height of bottom area
-    
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        // Full background image
-        Image.asset(
-          slide.imagePath,
-          fit: BoxFit.cover,
-        ),
-        
-        // Gradient Overlay
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  const Color(0xFF0D1B2A).withValues(alpha: 0.0),
-                  const Color(0xFF0D1B2A).withValues(alpha: 0.8),
-                  const Color(0xFF0D1B2A),
-                ],
-                stops: const [0.0, 0.4, 0.65, 0.9],
+            // Role selection label
+            Text(
+              'Select Your Role',
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF9CA3AF),
               ),
             ),
-          ),
-        ),
-        
-        // Content on Image - positioned above bottom area
-        SafeArea(
-          bottom: false,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 24.w,
-              right: 24.w,
-              bottom: bottomSheetHeight + 20.h,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+            SizedBox(height: 16.h),
+
+            // Role buttons row
+            Row(
               children: [
-                Text(
-                  slide.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    height: 1.2,
+                Expanded(
+                  child: _RoleButton(
+                    label: 'Family',
+                    isSelected: selectedRole != 'sitter',
+                    onTap: onFamilySelected,
                   ),
                 ),
-                SizedBox(height: 12.h),
-                Text(
-                  slide.description,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.white70,
-                    height: 1.5,
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: _RoleButton(
+                    label: 'Babysitter',
+                    isSelected: selectedRole == 'sitter',
+                    onTap: onBabysitterSelected,
                   ),
                 ),
               ],
             ),
-          ),
+
+          ],
         ),
+      ),
+    );
+  }
+}
+
+/// Feature Pages (all slides)
+class _FeaturePage extends StatelessWidget {
+  final OnboardingSlide slide;
+  final bool showTextOverlay;
+
+  const _FeaturePage({required this.slide, this.showTextOverlay = true});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final bottomSheetHeight = 260.h; // Approximate height of bottom area
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        // Background image
+        if (showTextOverlay)
+          // Feature slides: full-screen image
+          Image.asset(
+            slide.imagePath,
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
+          )
+        else
+          // Welcome slide: image fills top portion only
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: screenHeight * 0.62,
+            child: Image.asset(
+              slide.imagePath,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+
+        // Gradient Overlay (only on feature slides, not welcome)
+        if (showTextOverlay)
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    const Color(0xFF0D1B2A).withValues(alpha: 0.0),
+                    const Color(0xFF0D1B2A).withValues(alpha: 0.8),
+                    const Color(0xFF0D1B2A),
+                  ],
+                  stops: const [0.0, 0.4, 0.65, 0.9],
+                ),
+              ),
+            ),
+          ),
+
+        // Content on Image - positioned above bottom area
+        if (showTextOverlay)
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 24.w,
+                right: 24.w,
+                bottom: bottomSheetHeight + 20.h,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    slide.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      height: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Text(
+                    slide.description,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.white70,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -570,17 +525,6 @@ class _BottomControlBar extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 8.h),
-            
-            // Bottom indicator line
-            Container(
-              width: 40.w,
-              height: 4.h,
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(2.r),
-              ),
-            ),
           ],
         ),
       ),
@@ -605,7 +549,7 @@ class _RoleButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 48.h,
+        height: 56.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: isSelected
