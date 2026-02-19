@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class BookingUiTokens {
@@ -7,7 +8,7 @@ class BookingUiTokens {
   static const Color noteCardText = Color(0xFF1B2225);
   static const Color dashedLineColor = Color(0xFFD7E6EE);
 
-  static const Color pageBackground = Color(0xFFE7F5FC); // Main light blue bg
+  static const Color pageBackground = AppColors.surfaceTint; // Main light blue bg
   static const Color primaryText = Color(0xFF08102A); // Big title
   static const Color valueText = Color(0xFF1B2225); // Right column amounts
   static const Color labelText =

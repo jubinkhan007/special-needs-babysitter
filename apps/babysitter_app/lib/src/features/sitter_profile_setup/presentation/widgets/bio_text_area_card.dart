@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:core/src/theme/app_typography.dart';
 
@@ -25,12 +26,12 @@ class BioTextAreaCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: const Color(0xFFE0F2F9), // Light blue bg
+                color: AppColors.surfaceTint, // Light blue bg
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
                 Icons.description_outlined, // Looks like list/doc icon
-                color: Color(0xFF88CBE6),
+                color: AppColors.primary,
                 size: 24,
               ),
             ),

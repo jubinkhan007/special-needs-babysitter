@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,9 +10,9 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
   // COLORS - Core Surfaces
   // ═══════════════════════════════════════════════════════════════════════════
-  static const Color screenBg = Color(0xFFF3FAFD); // Very light blue background
+  static const Color screenBg = AppColors.surfaceTint; // Very light blue background
   static const Color tabsStripBg = Color(0xFFFFFFFF); // White tabs strip
-  static const Color divider = Color(0xFFE4F4FC); // Same as card border
+  static const Color divider = AppColors.surfaceTint; // Same as card border
 
   // ═══════════════════════════════════════════════════════════════════════════
   // COLORS - Primary / Accent
@@ -28,7 +29,7 @@ class AppTokens {
 
   // Status Chip Colors (Pastel, softened)
   // static const Color chipBlueBg = Color(0xFFE1F5FE);
-  // static const Color chipBlueDot = Color(0xFF89CFF0);
+  // static const Color chipBlueDot = AppColors.primary;
   // static const Color chipGreenBg = Color(0xFFE8F5E9);
   // static const Color chipGreenDot = Color(0xFF4CAF50);
   // static const Color chipOrangeBg = Color(0xFFFFF3E0);
@@ -91,14 +92,14 @@ class AppTokens {
         ),
       ];
 
-  static const Color bg = Color(0xFFF3FAFD); // light blue page background
+  static const Color bg = AppColors.surfaceTint; // light blue page background
   static const Color surfaceWhite = Color(0xFFFFFFFF);
 
-  static const Color primaryBlue = Color(0xFF89CFF0); // selected pill + buttons
-  static const Color accentBlue = Color(0xFF89CFF0);
+  static const Color primaryBlue = AppColors.primary; // selected pill + buttons
+  static const Color accentBlue = AppColors.primary;
 
   static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color cardBorder = Color(0xFFE4F4FC);
+  static const Color cardBorder = AppColors.surfaceTint;
 
   static const Color textPrimary = Color(0xFF1B2225);
   static const Color textSecondary = Color(0xFF6B7680);
@@ -109,7 +110,7 @@ class AppTokens {
 
   static const Color darkButtonBg =
       Color(0xFF1F2B35); // dark navy (View Details)
-  static const Color dividerSoft = Color(0xFFE4F4FC);
+  static const Color dividerSoft = AppColors.surfaceTint;
 
   // ========= Layout =========
   static const double screenHorizontalPadding = 24;
@@ -243,11 +244,11 @@ class AppTokens {
   static const Color chipPurpleDot = Color(0xFF9747FF);
 
   // ========= Booking Details Specific =========
-  static const Color bookingDetailsHeaderBg = Color(0xFFF3FAFD);
+  static const Color bookingDetailsHeaderBg = AppColors.surfaceTint;
   static const Color bookingDetailsCardBg = Colors.white;
-  static const Color bookingDetailsDivider = Color(0xFFE4F4FC);
+  static const Color bookingDetailsDivider = AppColors.surfaceTint;
 
-  static const Color skillTagBg = Color(0xFFF3FAFD);
+  static const Color skillTagBg = AppColors.surfaceTint;
   static const Color skillTagText = Color(0xFF54595C);
   static const double skillTagRadius = 8;
   static const double skillTagVerticalPadding = 6;
@@ -305,7 +306,7 @@ class AppTokens {
   // REVIEW & REPORT SCREENS TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   static const Color formFieldBg = Colors.white;
-  static const Color formFieldBorder = Color(0xFFE4F4FC);
+  static const Color formFieldBorder = AppColors.surfaceTint;
   static const Color formFieldHint = Color(0xFF8A949C);
   static const Color formFieldText = textPrimary;
   static const double formFieldRadius = 12;
@@ -318,7 +319,7 @@ class AppTokens {
   static const double uploadTileRadius = 12;
   static const double uploadTileSize = 80;
 
-  static const Color outlinedButtonBorder = Color(0xFFE4F4FC); // Or divider
+  static const Color outlinedButtonBorder = AppColors.surfaceTint; // Or divider
   static const Color outlinedButtonText = textPrimary;
 
   static const double bottomBarHeight = 80;
@@ -375,13 +376,13 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
   // ACTIVE BOOKING DETAILS TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
-  static const Color activeHeaderBg = Color(0xFFF3FAFD);
+  static const Color activeHeaderBg = AppColors.surfaceTint;
   static const Color mapCardBg = Colors.white;
-  static const Color mapRouteBlue = Color(0xFF89CFF0);
+  static const Color mapRouteBlue = AppColors.primary;
   static const Color mapPinDark = Color(0xFF1B2225);
   static const Color linkTextGrey = Color(0xFF8A949C);
   static const Color sectionTitleColor = Color(0xFF1B2225);
-  static const Color dashedDividerColor = Color(0xFFE4F4FC);
+  static const Color dashedDividerColor = AppColors.surfaceTint;
 
   // Layout
   static const double detailsHorizontalPadding = 24.0;
@@ -438,7 +439,7 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
   // MAP ROUTE SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
-  static const Color mapRouteHeaderBg = Color(0xFFF3FAFD);
+  static const Color mapRouteHeaderBg = AppColors.surfaceTint;
   static const double mapRouteHeaderHeight = 56.0;
   static const Color mapRouteIconColor = Color(0xFF8A949C);
 
@@ -459,10 +460,10 @@ class AppTokens {
   static const double routeRowGapVertical = 28.0;
 
   static const double routeDotSize = 12.0;
-  static const Color routeDotActiveFill = Color(0xFF89CFF0);
+  static const Color routeDotActiveFill = AppColors.primary;
   static const Color routeDotInactiveFill = Colors.white;
-  static const Color routeDotBorderColor = Color(0xFFE4F4FC);
-  static const Color routeConnectorColor = Color(0xFFE4F4FC);
+  static const Color routeDotBorderColor = AppColors.surfaceTint;
+  static const Color routeConnectorColor = AppColors.surfaceTint;
 
   static TextStyle get routeAddressTextStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -483,13 +484,13 @@ class AppTokens {
   // JOBS SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   // Screen & List
-  static const Color jobsScreenBg = Color(0xFFF3FAFD); // Matches booking bg
+  static const Color jobsScreenBg = AppColors.surfaceTint; // Matches booking bg
   static const double jobsListHorizontalPadding = 16.0;
   static const double jobsListTopPadding = 24.0;
   static const double jobsCardSpacing = 16.0;
 
   // App Bar
-  static const Color jobsAppBarBg = Color(0xFFF3FAFD);
+  static const Color jobsAppBarBg = AppColors.surfaceTint;
   static TextStyle get jobsAppBarTitleStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 17,
@@ -507,7 +508,7 @@ class AppTokens {
 
   // Card
   static const Color jobsCardBg = Colors.white;
-  static const Color jobsCardBorder = Color(0xFFE4F4FC); // Subtle border
+  static const Color jobsCardBorder = AppColors.surfaceTint; // Subtle border
   static const double jobsCardRadius = 12.0;
   static const List<BoxShadow> jobsCardShadow = [
     BoxShadow(
@@ -568,7 +569,7 @@ class AppTokens {
   static const double jobButtonsTopPadding = 16.0;
   static const double jobButtonHeight = 48.0;
   static const double jobButtonRadius = 8.0;
-  static const Color jobPrimaryBtnBg = Color(0xFF89CFF0); // Light blue
+  static const Color jobPrimaryBtnBg = AppColors.primary; // Light blue
   static const Color jobSecondaryBtnBg = Color(0xFF1A2B3C); // Dark Navy
   static TextStyle get jobButtonTextStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -581,7 +582,7 @@ class AppTokens {
   // JOB DETAILS SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   // Screen
-  static const Color jobDetailsBg = Color(0xFFF3FAFD); // Matches all jobs bg
+  static const Color jobDetailsBg = AppColors.surfaceTint; // Matches all jobs bg
   static const double jobDetailsHorizontalPadding = 16.0;
   static const double jobDetailsTopPadding = 16.0;
   static const double jobDetailsSectionSpacing = 24.0;
@@ -638,7 +639,7 @@ class AppTokens {
   static const double jobDetailsButtonRadius = 8.0;
   static const double jobDetailsButtonGap = 12.0;
 
-  static const Color jobDetailsPrimaryBtnBg = Color(0xFF89CFF0); // Light blue
+  static const Color jobDetailsPrimaryBtnBg = AppColors.primary; // Light blue
   static const Color jobDetailsSecondaryBtnBg = Color(0xFF1A2B3C); // Dark Navy
   static const Color jobDetailsOutlinedBorderColor = Color(0xFFE0E0E0);
   static const Color jobDetailsOutlinedTextColor = Color(0xFF1A2B3C);
@@ -661,7 +662,7 @@ class AppTokens {
   // APPLICATIONS SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   // Screen
-  static const Color applicationsBg = Color(0xFFF3FAFD); // Matches bookings bg
+  static const Color applicationsBg = AppColors.surfaceTint; // Matches bookings bg
   static const double applicationsHorizontalPadding = 16.0;
   static const double applicationsTopPadding = 16.0;
   static const double applicationsCardGap = 16.0;
@@ -822,7 +823,7 @@ class AppTokens {
   // Submit Button
   static const double rejectSubmitHeight = 52.0;
   static const double rejectSubmitRadius = 12.0;
-  static const Color rejectSubmitBg = Color(0xFF89CFF0); // Baby blue
+  static const Color rejectSubmitBg = AppColors.primary; // Baby blue
   static const Color rejectSubmitTextColor = Colors.white;
   static TextStyle get rejectSubmitTextStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -836,7 +837,7 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Background + Surfaces
-  static const Color accountBg = Color(0xFFF3FAFD); // Same pale blue
+  static const Color accountBg = AppColors.surfaceTint; // Same pale blue
   static const Color accountCardBg = Color(0xFFFFFFFF);
   static const Color accountCardBorder = Color(0xFFE8F4FA); // Very light border
   static const double accountCardRadius = 16.0;
@@ -853,7 +854,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get accountEmailStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -865,13 +866,13 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF89CFF0),
+        color: AppColors.primary,
       );
   static TextStyle get accountStatNumberStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 32,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get accountStatLabelStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -883,7 +884,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   // Spacing
@@ -894,14 +895,14 @@ class AppTokens {
   static const double accountMenuTileRadius = 12.0;
 
   // Colors
-  static const Color accountLinkBlue = Color(0xFF89CFF0);
+  static const Color accountLinkBlue = AppColors.primary;
   static const Color accountIconGrey = Color(0xFF6B7280);
   static const Color accountMenuBorder = Color(0xFFE5E7EB);
 
   // Progress Ring
   static const Color progressRingTrack = Color(0xFFE5E7EB);
-  static const Color progressRingValue = Color(0xFF89CFF0);
-  static const Color progressBadgeBg = Color(0xFF89CFF0);
+  static const Color progressRingValue = AppColors.primary;
+  static const Color progressBadgeBg = AppColors.primary;
   static const Color progressBadgeText = Color(0xFFFFFFFF);
   static const double progressAvatarSize = 64.0;
   static const double progressRingStroke = 3.0;
@@ -911,7 +912,7 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Screen layout
-  static const Color settingsBg = Color(0xFFF3FAFD);
+  static const Color settingsBg = AppColors.surfaceTint;
   static const double settingsHPad = 20.0;
   static const double settingsTopPad = 16.0;
   static const double settingsTileGap = 12.0;
@@ -930,11 +931,11 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   // Switch styling
-  static const Color settingsSwitchActiveTrack = Color(0xFF89CFF0);
+  static const Color settingsSwitchActiveTrack = AppColors.primary;
   static const Color settingsSwitchActiveThumb = Color(0xFFFFFFFF);
   static const Color settingsSwitchInactiveTrack = Color(0xFFE5E7EB);
   static const Color settingsSwitchInactiveThumb = Color(0xFFFFFFFF);
@@ -946,7 +947,7 @@ class AppTokens {
 
   // Screen layout
   static const Color paymentBg = Color(0xFFFFFFFF);
-  static const Color paymentHeaderBg = Color(0xFFF3FAFD);
+  static const Color paymentHeaderBg = AppColors.surfaceTint;
   static const double paymentHPad = 24.0;
   static const double paymentSectionGapTop = 24.0;
   static const double paymentSectionGapBottom = 12.0;
@@ -956,7 +957,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   // Balance card
@@ -980,7 +981,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 32,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get topUpTextStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -999,7 +1000,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static const Color methodPlusColor = Color(0xFF9CA3AF);
   static const double methodPlusSize = 20.0;
@@ -1011,7 +1012,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get activityDateStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -1023,7 +1024,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static const double activityLeadingIconSize = 24.0;
   static const Color activityLeadingIconColor = Color(0xFF6B7280);
@@ -1033,7 +1034,7 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Screen layout
-  static const Color savedSittersHeaderBg = Color(0xFFF3FAFD);
+  static const Color savedSittersHeaderBg = AppColors.surfaceTint;
   static const Color savedSittersBodyBg = Color(0xFFFFFFFF);
   static const double savedSittersHPad = 20.0;
 
@@ -1053,7 +1054,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 15,
         fontWeight: FontWeight.w400,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   // List header row
@@ -1092,7 +1093,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get savedSitterLocationStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -1110,13 +1111,13 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get savedPriceBigStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 28,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
   static TextStyle get savedPriceSuffixStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -1124,7 +1125,7 @@ class AppTokens {
         fontWeight: FontWeight.w400,
         color: Color(0xFF6B7280),
       );
-  static const Color viewProfileButtonBg = Color(0xFF89CFF0);
+  static const Color viewProfileButtonBg = AppColors.primary;
   static const double viewProfileButtonRadius = 20.0;
   static TextStyle get viewProfileButtonTextStyle => const TextStyle(
         fontFamily: fontFamily,
@@ -1134,13 +1135,13 @@ class AppTokens {
       );
   static const Color bookmarkContainerBg = Color(0xFFFFFFFF);
   static const Color bookmarkContainerBorder = Color(0xFFE5E7EB);
-  static const Color bookmarkIconColor = Color(0xFF1F2937);
+  static const Color bookmarkIconColor = AppColors.buttonDark;
   static const Color ratingStarColor = Color(0xFFFBBF24);
   static TextStyle get savedRatingTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1148,7 +1149,7 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Layout & Backgrounds
-  static const Color reviewsHeaderBg = Color(0xFFF3FAFD);
+  static const Color reviewsHeaderBg = AppColors.surfaceTint;
   static const double reviewsTopSpacing = 24.0;
   static const double reviewItemVerticalPadding = 16.0;
   static const Color reviewItemDividerColor =
@@ -1160,7 +1161,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 16, // Medium-bold, likely 16 or 18
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   static TextStyle get reviewsSummaryStyle => const TextStyle(
@@ -1174,7 +1175,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   static TextStyle get reviewTimeAgoStyle => const TextStyle(
@@ -1220,7 +1221,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w700,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
         height: 1.2,
       );
 
@@ -1228,7 +1229,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 15, // Label size
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   static TextStyle get sheetFieldHintStyle => const TextStyle(
@@ -1242,7 +1243,7 @@ class AppTokens {
         fontFamily: fontFamily,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   static TextStyle get sheetCheckboxTextStyle => const TextStyle(
@@ -1271,13 +1272,13 @@ class AppTokens {
   static const double sliderThumbRadius = 10.0;
   static const double sliderTrackHeight = 4.0;
   static const Color sliderValuePillBg =
-      Color(0xFFEAF6FF); // Light blue bg for pill
+      AppColors.surfaceTint; // Light blue bg for pill
   static const double sliderValuePillRadius = 12.0;
   static TextStyle get sheetSliderPillTextStyle => const TextStyle(
         fontFamily: fontFamily,
         fontSize: 13,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
+        color: AppColors.buttonDark,
       );
 
   static TextStyle get sheetSliderLabelStyle => const TextStyle(
@@ -1302,16 +1303,16 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Colors
-  static const Color messagesHeaderBg = Color(0xFFF3FAFD); // Same as screenBg
+  static const Color messagesHeaderBg = AppColors.surfaceTint; // Same as screenBg
   static const Color messagesScreenBg = Color(0xFFFFFFFF); // White body
-  static const Color messageRowDivider = Color(0xFFE4F4FC); // Soft divider
+  static const Color messageRowDivider = AppColors.surfaceTint; // Soft divider
   static const Color messageNameColor = Color(0xFF1B2225); // textPrimary
   static const Color messagePreviewColor = Color(0xFF6B7680); // textSecondary
   static const Color messageTimeColor = Color(0xFF8A949C); // iconGrey
   static const Color unreadBadgeBg = Color(0xFF1F2B35); // Dark navy
   static const Color unreadBadgeText = Color(0xFFFFFFFF); // White
   static const Color verifiedBadgeBlue = Color(0xFF4FC3F7); // Light Blue check
-  static const Color systemAvatarBg = Color(0xFFF3FAFD); // Pale blue bg
+  static const Color systemAvatarBg = AppColors.surfaceTint; // Pale blue bg
 
   // Layout
   static double get messageRowHorizontalPadding => 24.w;
@@ -1369,21 +1370,21 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Colors
-  static const Color chatHeaderBg = Color(0xFFF3FAFD); // Pale blue
+  static const Color chatHeaderBg = AppColors.surfaceTint; // Pale blue
   static const Color chatScreenBg = Color(0xFFFFFFFF); // White body/bg
   static const Color chatBubbleIncomingBg =
       Color(0xFFF3F4F6); // Soft grey/white
-  static const Color chatBubbleOutgoingBg = Color(0xFF89CFF0); // Primary blue
+  static const Color chatBubbleOutgoingBg = AppColors.primary; // Primary blue
   static const Color chatBubbleOutgoingText = Colors.white;
   static const Color chatMetaText = Color(0xFF9CA3AF); // Light grey timestamps
   static const Color chatDividerText = Color(0xFF9CA3AF); // "Today"
-  static const Color callTileBg = Color(0xFFF0F9FF); // Very light blue tile
-  static const Color composerBg = Color(0xFFF3FAFD); // Bottom area bg
+  static const Color callTileBg = AppColors.surfaceTint; // Very light blue tile
+  static const Color composerBg = AppColors.surfaceTint; // Bottom area bg
   static const Color composerFieldBg = Colors.white;
   static const Color composerFieldBorder = Color(0xFFE5E7EB);
   static const Color composerPlaceholder = Color(0xFF9CA3AF);
   static const Color composerIconColor = Color(0xFF6B7280);
-  static const Color sendButtonBg = Color(0xFF89CFF0);
+  static const Color sendButtonBg = AppColors.primary;
 
   // Layout
   static double get chatHorizontalPadding => 24.w;
@@ -1450,11 +1451,11 @@ class AppTokens {
   static const Color callBg = Color(0xFFFFFFFF); // Base bg
   static const Color callHeaderText =
       Color(0xFF1B2225); // Dark text for title/name
-  static const Color callControlBarBg = Color(0xFFF3FAFD); // Light pill bg
+  static const Color callControlBarBg = AppColors.surfaceTint; // Light pill bg
   static const Color callControlButtonBg = Color(
       0xFF6B7280); // Grey buttons (from visual) -> Actually screenshot shows grey circles
   static const Color callControlIconColor = Colors.white;
-  static const Color callEndButtonBg = Color(0xFFEF4444); // Red
+  static const Color callEndButtonBg = AppColors.error; // Red
   static const Color callSubText = Color(0xFF6B7280); // Grey status/timer
 
   // Layout
@@ -1579,7 +1580,7 @@ class AppTokens {
   static const Color chatDaySeparatorText = Color(0xFF9CA3AF); // Grey 400
 
   // Composer
-  static const Color supportComposerBg = Color(0xFFF0F9FF); // Pale blue strip
+  static const Color supportComposerBg = AppColors.surfaceTint; // Pale blue strip
   static const Color supportComposerFieldBg = Colors.white;
   static const Color supportComposerIconColor = Color(0xFF6B7280); // Grey
   static const Color supportSendBtnBg = Color(0xFF7DD3FC); // Blue
@@ -1670,7 +1671,7 @@ class AppTokens {
   // HELP & SUPPORT TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   static const Color heroBg = Color(0xFFD9F0FF); // Light pastel blue
-  static const Color heroIconColor = Color(0xFF89CFF0); // Slightly darker blue
+  static const Color heroIconColor = AppColors.primary; // Slightly darker blue
   static double get heroRadius => 24.r; // Rounded square
   static double get heroSize => 100.w; // Large hero size
   static double get heroIconSize => 48.w;

@@ -340,7 +340,7 @@ class _ResetConfirmationDialog extends StatelessWidget {
                   context.push(Routes.updatePassword);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF88C6E0),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(

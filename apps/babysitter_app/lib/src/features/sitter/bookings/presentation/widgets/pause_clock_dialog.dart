@@ -49,7 +49,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                       style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -61,7 +61,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                     child: const Icon(
                       Icons.close_rounded,
                       size: 20,
-                      color: Color(0xFF1D2939),
+                      color: AppColors.buttonDark,
                     ),
                   ),
                 ],
@@ -72,7 +72,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                   fontFamily: 'Inter',
                 ),
               ),
@@ -124,7 +124,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
-                    borderSide: const BorderSide(color: Color(0xFF8EC9F5)),
+                    borderSide: const BorderSide(color: AppColors.primary),
                   ),
                   contentPadding: EdgeInsets.all(12.w),
                 ),
@@ -136,7 +136,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                 child: ElevatedButton(
                   onPressed: widget.onPause,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8EC9F5),
+                    backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     padding: EdgeInsets.zero,
@@ -162,7 +162,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
                 child: OutlinedButton(
                   onPressed: widget.onCancel,
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF8EC9F5)),
+                    side: const BorderSide(color: AppColors.primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
                     ),
@@ -245,7 +245,7 @@ class _ReasonRow extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.r),
             ),
-            activeColor: const Color(0xFF8EC9F5),
+            activeColor: AppColors.primary,
           ),
         ),
       ],

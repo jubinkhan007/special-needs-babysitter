@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -70,7 +71,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             context,
             const SnackBar(
               content: Text('Payment session expired. Please try again.'),
-              backgroundColor: Color(0xFFD92D20),
+              backgroundColor: AppColors.error,
             ));
       }
       return;
@@ -106,7 +107,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             context,
             SnackBar(
               content: Text('Payment failed: ${result.message}'),
-              backgroundColor: const Color(0xFFD92D20),
+              backgroundColor: AppColors.error,
             ));
       }
     } on PaypalError catch (e) {
@@ -117,7 +118,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             context,
             SnackBar(
               content: Text('Payment error: ${e.message}'),
-              backgroundColor: const Color(0xFFD92D20),
+              backgroundColor: AppColors.error,
             ));
       }
     } catch (e) {
@@ -128,7 +129,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             context,
             SnackBar(
               content: Text('Payment error: ${e.toString()}'),
-              backgroundColor: const Color(0xFFD92D20),
+              backgroundColor: AppColors.error,
             ));
       }
     } finally {
@@ -200,7 +201,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             context,
             SnackBar(
               content: Text(message),
-              backgroundColor: const Color(0xFFD92D20),
+              backgroundColor: AppColors.error,
               duration: const Duration(seconds: 5),
             ));
       }
@@ -211,7 +212,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
             context,
             SnackBar(
               content: Text('Could not open PayPal: ${e.toString()}'),
-              backgroundColor: const Color(0xFFD92D20),
+              backgroundColor: AppColors.error,
             ));
       }
     } finally {
@@ -310,7 +311,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
           context,
           SnackBar(
             content: Text(validationError),
-            backgroundColor: const Color(0xFFD92D20),
+            backgroundColor: AppColors.error,
             duration: const Duration(seconds: 5),
           ),
         );
@@ -383,7 +384,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
                 context,
                 SnackBar(
                   content: Text('Payment error: $error'),
-                  backgroundColor: const Color(0xFFD92D20),
+                  backgroundColor: AppColors.error,
                   duration: const Duration(seconds: 5),
                 ),
               );
@@ -422,7 +423,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
           context,
           SnackBar(
             content: Text(errorMessage),
-            backgroundColor: const Color(0xFFD92D20),
+            backgroundColor: AppColors.error,
             duration: const Duration(seconds: 5),
           ),
         );

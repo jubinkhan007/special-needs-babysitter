@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../theme/app_tokens.dart';
@@ -185,7 +186,7 @@ class _RejectReasonSheetContentState extends State<_RejectReasonSheetContent> {
                             width: double.infinity,
                             height: AppTokens.rejectSubmitHeight.h,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF89CFF0), // Baby blue
+                              color: AppColors.primary, // Baby blue
                               borderRadius: BorderRadius.circular(
                                   AppTokens.rejectSubmitRadius.r),
                             ),

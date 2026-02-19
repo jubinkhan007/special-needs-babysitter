@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,9 +20,9 @@ class SitterJobsScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: const Color(0xFFE7F5FC),
+          backgroundColor: AppColors.surfaceTint,
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Color(0xFFE7F5FC),
+            statusBarColor: AppColors.surfaceTint,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
           ),
@@ -39,7 +40,7 @@ class SitterJobsScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1D2939),
+              color: AppColors.buttonDark,
               fontFamily: 'Inter',
             ),
           ),

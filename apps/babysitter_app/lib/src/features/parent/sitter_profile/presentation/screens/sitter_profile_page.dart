@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,9 +33,9 @@ class SitterProfilePage extends ConsumerWidget {
     return sitterAsync.when(
       loading: () => Scaffold(
         key: const Key('sitterProfilePage'),
-        backgroundColor: const Color(0xFFF0F9FF),
+        backgroundColor: AppColors.surfaceTint,
         appBar: AppBar(
-          backgroundColor: const Color(0xFFF0F9FF),
+          backgroundColor: AppColors.surfaceTint,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),

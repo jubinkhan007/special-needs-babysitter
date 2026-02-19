@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -183,7 +184,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
               }
             },
             child:
-                const Text('Add', style: TextStyle(color: Color(0xFF00A3E0))),
+                const Text('Add', style: TextStyle(color: AppColors.secondary)),
           ),
         ],
       ),
@@ -208,7 +209,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1F2937))),
+                            color: AppColors.buttonDark)),
                     IconButton(
                         icon: const Icon(Icons.close, color: Color(0xFF6B7280)),
                         onPressed: () => Navigator.of(context).pop()),
@@ -261,7 +262,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                               child: TextFormField(
                                 controller: _familyNameController,
                                 style:
-                                    const TextStyle(color: Color(0xFF1F2937)),
+                                    const TextStyle(color: AppColors.buttonDark),
                                 decoration: _inputDecoration('Family Name'),
                                 validator: (v) =>
                                     v?.isEmpty == true ? 'Required' : null,
@@ -274,7 +275,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                               child: DropdownButtonFormField<String>(
                                 initialValue: _familyMembersCount,
                                 style: const TextStyle(
-                                    fontSize: 16, color: Color(0xFF1F2937)),
+                                    fontSize: 16, color: AppColors.buttonDark),
                                 dropdownColor: Colors.white,
                                 icon: const Icon(Icons.keyboard_arrow_down,
                                     color: Color(0xFF6B7280)),
@@ -300,7 +301,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                 child: TextFormField(
                                   controller: _numPetsController,
                                   style:
-                                      const TextStyle(color: Color(0xFF1F2937)),
+                                      const TextStyle(color: AppColors.buttonDark),
                                   decoration:
                                       _inputDecoration('Number of Pets'),
                                   keyboardType: TextInputType.number,
@@ -320,8 +321,8 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                     label: Text(key),
                                     selected: _petTypes[key] ?? false,
                                     backgroundColor: Colors.white,
-                                    selectedColor: const Color(0xFFE0F2F9),
-                                    checkmarkColor: const Color(0xFF00A3E0),
+                                    selectedColor: AppColors.surfaceTint,
+                                    checkmarkColor: AppColors.secondary,
                                     labelStyle: TextStyle(
                                         color: _petTypes[key] == true
                                             ? const Color(0xFF0077A3)
@@ -330,7 +331,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                       borderRadius: BorderRadius.circular(20),
                                       side: BorderSide(
                                           color: _petTypes[key] == true
-                                              ? const Color(0xFF00A3E0)
+                                              ? AppColors.secondary
                                               : const Color(0xFFD1D5DB)),
                                     ),
                                     onSelected: (v) =>
@@ -341,11 +342,11 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                   label: const Text('+ Other'),
                                   backgroundColor: Colors.white,
                                   labelStyle:
-                                      const TextStyle(color: Color(0xFF00A3E0)),
+                                      const TextStyle(color: AppColors.secondary),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                     side: const BorderSide(
-                                        color: Color(0xFF00A3E0)),
+                                        color: AppColors.secondary),
                                   ),
                                   onPressed: () =>
                                       _showAddDialog('Pet Type', (val) {
@@ -370,7 +371,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                 child: TextFormField(
                                   controller: _numLanguagesController,
                                   style:
-                                      const TextStyle(color: Color(0xFF1F2937)),
+                                      const TextStyle(color: AppColors.buttonDark),
                                   decoration:
                                       _inputDecoration('Number of Languages'),
                                   keyboardType: TextInputType.number,
@@ -390,8 +391,8 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                     label: Text(key),
                                     selected: _languages[key] ?? false,
                                     backgroundColor: Colors.white,
-                                    selectedColor: const Color(0xFFE0F2F9),
-                                    checkmarkColor: const Color(0xFF00A3E0),
+                                    selectedColor: AppColors.surfaceTint,
+                                    checkmarkColor: AppColors.secondary,
                                     labelStyle: TextStyle(
                                         color: _languages[key] == true
                                             ? const Color(0xFF0077A3)
@@ -400,7 +401,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                       borderRadius: BorderRadius.circular(20),
                                       side: BorderSide(
                                           color: _languages[key] == true
-                                              ? const Color(0xFF00A3E0)
+                                              ? AppColors.secondary
                                               : const Color(0xFFD1D5DB)),
                                     ),
                                     onSelected: (v) =>
@@ -411,11 +412,11 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                                   label: const Text('+ Other'),
                                   backgroundColor: Colors.white,
                                   labelStyle:
-                                      const TextStyle(color: Color(0xFF00A3E0)),
+                                      const TextStyle(color: AppColors.secondary),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                     side: const BorderSide(
-                                        color: Color(0xFF00A3E0)),
+                                        color: AppColors.secondary),
                                   ),
                                   onPressed: () =>
                                       _showAddDialog('Language', (val) {
@@ -433,7 +434,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
                               child: TextFormField(
                                 controller: _bioController,
                                 style:
-                                    const TextStyle(color: Color(0xFF1F2937)),
+                                    const TextStyle(color: AppColors.buttonDark),
                                 decoration: _inputDecoration('Family Bio'),
                                 maxLines: 4,
                                 validator: (v) =>
@@ -502,7 +503,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
             style: const TextStyle(
                 color: Color(0xFF374151), fontWeight: FontWeight.w500)),
         value: value,
-        activeColor: const Color(0xFF00A3E0), // Primary Blue
+        activeColor: AppColors.secondary, // Primary Blue
         onChanged: onChanged,
         contentPadding: EdgeInsets.zero,
         controlAffinity: ListTileControlAffinity.leading,

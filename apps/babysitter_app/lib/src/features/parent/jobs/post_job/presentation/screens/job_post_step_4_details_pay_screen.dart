@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/job_post_providers.dart';
@@ -46,13 +47,13 @@ class _JobPostStep4DetailsPayScreenState
   }
 
   // Design Constants
-  static const _bgColor = Color(0xFFEAF6FF); // Light sky background
+  static const _bgColor = AppColors.surfaceTint; // Light sky background
   static const _titleColor = Color(0xFF0B1736); // Deep navy
   static const _mutedText = Color(0xFF7C8A9A); // Grey
   static const _borderColor = Color(0xFFBFE3F7); // Light blue border
 
   static const _progressFill = Color(0xFF7FC9EE); // Active progress
-  static const _primaryBtn = Color(0xFF8CCFF0); // Continue button
+  static const _primaryBtn = AppColors.primary; // Continue button
   static const _iconBoxFill = Color(0xFFD7F0FF); // Icon box fill
   static const _iconBlue = Color(0xFF74BFEA); // Icon color
 
@@ -238,7 +239,7 @@ class _JobPostStep4DetailsPayScreenState
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: error != null ? const Color(0xFFD92D20) : _borderColor,
+              color: error != null ? AppColors.error : _borderColor,
               width: 1.5,
             ),
           ),
@@ -250,7 +251,7 @@ class _JobPostStep4DetailsPayScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  color: error != null ? const Color(0xFFD92D20) : _titleColor,
+                  color: error != null ? AppColors.error : _titleColor,
                 ),
               ),
               Column(
@@ -284,7 +285,7 @@ class _JobPostStep4DetailsPayScreenState
               error,
               style: const TextStyle(
                 fontSize: 12,
-                color: Color(0xFFD92D20),
+                color: AppColors.error,
               ),
             ),
           )
@@ -309,7 +310,7 @@ class _JobPostStep4DetailsPayScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter additional details'),
-          backgroundColor: Color(0xFFD92D20),
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -322,7 +323,7 @@ class _JobPostStep4DetailsPayScreenState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error),
-            backgroundColor: const Color(0xFFD92D20),
+            backgroundColor: AppColors.error,
           ),
         );
       }

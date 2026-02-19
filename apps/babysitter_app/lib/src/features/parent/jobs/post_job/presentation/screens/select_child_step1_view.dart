@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,8 +40,8 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
   }
 
   // Design Constants
-  static const _bgColor = Color(0xFFF3FAFD); // Very light blue background
-  static const _primaryBlue = Color(0xFF88CBE6); // Light blue for buttons
+  static const _bgColor = AppColors.surfaceTint; // Very light blue background
+  static const _primaryBlue = AppColors.primary; // Light blue for buttons
   static const _darkNavy = Color(0xFF1A1A1A); // Near-black text
   static const _grayText = Color(0xFF667085); // Gray text
 
@@ -219,7 +220,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
       width: 72,
       height: 72,
       decoration: BoxDecoration(
-        color: const Color(0xFFD6F0FA), // Soft blue fill
+        color: AppColors.surfaceTint, // Soft blue fill
         borderRadius: BorderRadius.circular(16),
       ),
       child: const Center(

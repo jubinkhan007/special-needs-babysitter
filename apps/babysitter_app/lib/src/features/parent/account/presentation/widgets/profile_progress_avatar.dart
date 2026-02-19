@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 // Assuming UI Kit usage for colors
@@ -51,7 +52,7 @@ class ProfileProgressAvatar extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1D2939),
+                          color: AppColors.buttonDark,
                         ),
                       )
                     : null,

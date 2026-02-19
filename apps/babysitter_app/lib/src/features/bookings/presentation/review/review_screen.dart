@@ -172,7 +172,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       child: ElevatedButton(
         onPressed: _isSubmitting ? null : _submitReview,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF8CC8F5),
+          backgroundColor: AppColors.primary,
           foregroundColor: AppColors.textOnButton,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -185,7 +185,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                 ),
               )
             : const Text(
@@ -290,7 +290,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                   fontFamily: 'Inter',
                 ),
               ),
@@ -435,7 +435,7 @@ class _SitterReviewHeaderCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1D2939),
+                              color: AppColors.buttonDark,
                               fontFamily: 'Inter',
                             ),
                           ),
@@ -497,7 +497,7 @@ class _SitterReviewHeaderCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1D2939),
+                          color: AppColors.buttonDark,
                           fontFamily: 'Inter',
                         ),
                       ),
@@ -614,7 +614,7 @@ class _StatItem extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1D2939),
+              color: AppColors.buttonDark,
               fontFamily: 'Inter',
             ),
           ),
@@ -668,7 +668,7 @@ class _NotesField extends StatelessWidget {
         maxLines: 6,
         style: const TextStyle(
           fontSize: 14,
-          color: Color(0xFF1D2939),
+          color: AppColors.buttonDark,
           fontFamily: 'Inter',
         ),
         decoration: const InputDecoration(

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../profile_details/data/sitter_me_dto.dart';
 
@@ -87,7 +88,7 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                 ),
               ),
               if (widget.onEditTap != null)
@@ -118,7 +119,7 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                 ),
               ),
               const SizedBox(width: 8),
@@ -129,7 +130,7 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                 ),
               ),
               const SizedBox(width: 8),

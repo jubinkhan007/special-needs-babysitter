@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -154,7 +155,7 @@ class _SitterJobDetailsScreenState
                   context,
                   SnackBar(
                     content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                    backgroundColor: const Color(0xFF22C55E),
+                    backgroundColor: AppColors.success,
                   ),
                 );
               }).catchError((error) {

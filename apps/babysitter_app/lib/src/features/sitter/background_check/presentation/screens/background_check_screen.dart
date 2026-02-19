@@ -39,7 +39,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
           children: [
             // Header with status bar color
             Container(
-              color: const Color(0xFFE7F5FC),
+              color: AppColors.surfaceTint,
               child: SafeArea(
                 bottom: false,
                 child: _buildAppBar(context),
@@ -59,7 +59,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 26.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -83,7 +83,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -97,7 +97,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -122,9 +122,9 @@ class BackgroundCheckScreen extends ConsumerWidget {
                           ? null
                           : () => _handleSubmit(context, ref),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF89CFF0),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.textOnButton,
-                        disabledBackgroundColor: const Color(0xFF89CFF0).withOpacity(0.5),
+                        disabledBackgroundColor: AppColors.primary.withOpacity(0.5),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
@@ -136,7 +136,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
                               height: 24.w,
                               child: const CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                               ),
                             )
                           : Text(
@@ -204,10 +204,10 @@ class BackgroundCheckScreen extends ConsumerWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF89CFF0) : Colors.white,
+              color: isSelected ? AppColors.primary : Colors.white,
               borderRadius: BorderRadius.circular(8.r),
               border: Border.all(
-                color: isSelected ? const Color(0xFF89CFF0) : const Color(0xFFD0D5DD),
+                color: isSelected ? AppColors.primary : const Color(0xFFD0D5DD),
                 width: 1,
               ),
             ),
@@ -298,7 +298,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
           Icon(
             Icons.cloud_upload_outlined,
             size: 48.w,
-            color: const Color(0xFF89CFF0),
+            color: AppColors.primary,
           ),
           SizedBox(height: 16.h),
           Text(
@@ -355,7 +355,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: const Color(0xFF89CFF0)),
+          border: Border.all(color: AppColors.primary),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -363,7 +363,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
             Icon(
               icon,
               size: 20.w,
-              color: const Color(0xFF89CFF0),
+              color: AppColors.primary,
             ),
             SizedBox(width: 8.w),
             Text(
@@ -371,7 +371,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
-                color: const Color(0xFF89CFF0),
+                color: AppColors.primary,
                 fontFamily: 'Inter',
               ),
             ),

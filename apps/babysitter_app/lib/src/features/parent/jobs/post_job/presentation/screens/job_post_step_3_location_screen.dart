@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,7 +57,7 @@ class _JobPostStep3LocationScreenState
   static const _borderColor = Color(0xFFBFE3F7); // Light blue border
   static const _progressFill = Color(0xFF7FC9EE); // Active progress fill
 
-  static const _primaryBtn = Color(0xFF8CCFF0); // Continue button
+  static const _primaryBtn = AppColors.primary; // Continue button
   static const _iconBoxFill =
       Color(0xFFD7F0FF); // Icon box fill (deeper light-blue)
   static const _iconBlue = Color(0xFF74BFEA); // Icon color
@@ -438,7 +439,7 @@ class _JobPostStep3LocationScreenState
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                              AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                         ),
                       )
                     : const Text(

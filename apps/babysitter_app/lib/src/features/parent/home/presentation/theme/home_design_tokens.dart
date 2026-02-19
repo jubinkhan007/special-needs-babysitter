@@ -40,7 +40,7 @@ class HomeDesignTokens {
 
   static List<BoxShadow> get bannerShadow => [
         BoxShadow(
-          color: const Color(0xFF4090B8).withOpacity(0.25), // Blue-ish shadow
+          color: AppColors.secondary.withOpacity(0.25), // Blue-ish shadow
           blurRadius: 16,
           offset: const Offset(0, 8),
           spreadRadius: -4,

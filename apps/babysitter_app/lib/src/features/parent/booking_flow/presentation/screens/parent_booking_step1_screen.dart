@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:domain/domain.dart';
@@ -242,7 +243,7 @@ class _ParentBookingStep1ScreenState
     final profileDetailsAsync = ref.watch(profileDetailsProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F9FF),
+      backgroundColor: AppColors.surfaceTint,
       body: Column(
         children: [
           BookingStepHeader(
@@ -351,7 +352,7 @@ class _ParentBookingStep1ScreenState
             ),
           ),
           Container(
-            color: const Color(0xFFF0F9FF),
+            color: AppColors.surfaceTint,
             padding: EdgeInsets.fromLTRB(
                 24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
             child: BookingPrimaryBottomButton(

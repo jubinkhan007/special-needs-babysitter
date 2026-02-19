@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,7 +48,7 @@ class SitterHomeScreen extends ConsumerWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: const Color(0xFFE7F5FC),
+              color: AppColors.surfaceTint,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(32.r),
               ),
@@ -117,7 +118,7 @@ class SitterHomeScreen extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                     fontFamily: 'Inter',
                   ),
                 ),
@@ -205,7 +206,7 @@ class SitterHomeScreen extends ConsumerWidget {
                                 content: Text(
                                   isSaved ? 'Job saved' : 'Job unsaved',
                                 ),
-                                backgroundColor: const Color(0xFF22C55E),
+                                backgroundColor: AppColors.success,
                               ),
                             );
                           }).catchError((error) {

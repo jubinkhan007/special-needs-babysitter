@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/providers/booking_flow_provider.dart';
@@ -25,12 +26,12 @@ class _ParentBookingStep2ScreenState
   DateTime? _endDate;
 
   // Design Constants (matching job post flow)
-  static const _bgColor = Color(0xFFF0F9FF);
+  static const _bgColor = AppColors.surfaceTint;
   static const _titleColor = Color(0xFF101828);
   static const _mutedText = Color(0xFF667085);
   static const _borderColor = Color(0xFFB2DDFF);
-  static const _progressFill = Color(0xFF88CBE6);
-  static const _errorColor = Color(0xFFD92D20);
+  static const _progressFill = AppColors.primary;
+  static const _errorColor = AppColors.error;
 
   @override
   void initState() {
@@ -203,14 +204,14 @@ class _ParentBookingStep2ScreenState
               colorScheme: const ColorScheme.light(
                 primary: _progressFill,
                 onPrimary: Colors.white,
-                surface: Color(0xFFEAF6FF),
+                surface: AppColors.surfaceTint,
                 onSurface: _titleColor,
                 secondary: _progressFill,
                 onSurfaceVariant: _titleColor,
                 outline: _progressFill,
               ),
               timePickerTheme: TimePickerThemeData(
-                backgroundColor: const Color(0xFFEAF6FF),
+                backgroundColor: AppColors.surfaceTint,
                 helpTextStyle: const TextStyle(
                   color: _titleColor,
                   fontSize: 14,
@@ -284,14 +285,14 @@ class _ParentBookingStep2ScreenState
               colorScheme: const ColorScheme.light(
                 primary: _progressFill,
                 onPrimary: Colors.white,
-                surface: Color(0xFFEAF6FF),
+                surface: AppColors.surfaceTint,
                 onSurface: _titleColor,
                 secondary: _progressFill,
                 onSurfaceVariant: _titleColor,
                 outline: _progressFill,
               ),
               timePickerTheme: TimePickerThemeData(
-                backgroundColor: const Color(0xFFEAF6FF),
+                backgroundColor: AppColors.surfaceTint,
                 helpTextStyle: const TextStyle(
                   color: _titleColor,
                   fontSize: 14,

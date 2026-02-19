@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/providers/booking_flow_provider.dart';
@@ -23,13 +24,13 @@ class _ValidationBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFEF3F2),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFD92D20)),
+        border: Border.all(color: AppColors.error),
       ),
       child: Row(
         children: [
           const Icon(
             Icons.error_outline,
-            color: Color(0xFFD92D20),
+            color: AppColors.error,
             size: 20,
           ),
           const SizedBox(width: 8),
@@ -163,7 +164,7 @@ class PaymentDetailsScreen extends ConsumerWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(validationError),
-                          backgroundColor: const Color(0xFFD92D20),
+                          backgroundColor: AppColors.error,
                         ),
                       );
                     },

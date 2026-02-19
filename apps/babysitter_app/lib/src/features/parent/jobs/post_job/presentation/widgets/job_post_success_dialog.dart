@@ -40,7 +40,7 @@ class JobPostSuccessDialog extends StatelessWidget {
                 const Icon(
                   Icons.celebration,
                   size: 64,
-                  color: Color(0xFF88CBE6), // Light Blue
+                  color: AppColors.primary, // Light Blue
                 ),
                 const SizedBox(height: 24),
 

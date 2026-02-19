@@ -96,9 +96,9 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
     });
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF3FAFD),
+        backgroundColor: AppColors.surfaceTint,
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
@@ -195,7 +195,7 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
         color: const Color(0xFFE8F4FD),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: const Color(0xFF89CFF0).withOpacity(0.3),
+          color: AppColors.primary.withOpacity(0.3),
         ),
       ),
       child: Column(
@@ -206,7 +206,7 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
               Icon(
                 Icons.info_outline,
                 size: 20.sp,
-                color: const Color(0xFF89CFF0),
+                color: AppColors.primary,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -248,7 +248,7 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
           width: 6.w,
           height: 6.w,
           decoration: const BoxDecoration(
-            color: Color(0xFF89CFF0),
+            color: AppColors.primary,
             shape: BoxShape.circle,
           ),
         ),

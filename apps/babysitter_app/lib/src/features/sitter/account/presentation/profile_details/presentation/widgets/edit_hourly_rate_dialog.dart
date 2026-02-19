@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
@@ -21,7 +22,7 @@ class EditHourlyRateDialog extends StatefulWidget {
 class _EditHourlyRateDialogState extends State<EditHourlyRateDialog> {
   static const _textDark = Color(0xFF1A1A1A);
   static const _greyText = Color(0xFF667085);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
 
   late double _rate;
   late bool _openToNegotiating;
@@ -72,7 +73,7 @@ class _EditHourlyRateDialogState extends State<EditHourlyRateDialog> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                   ),
                 ),
                 IconButton(
@@ -132,7 +133,6 @@ class _EditHourlyRateDialogState extends State<EditHourlyRateDialog> {
             child: PrimaryActionButton(
               label: _isSaving ? 'Saving...' : 'Save Changes',
               onPressed: _isSaving ? null : _handleSave,
-              backgroundColor: _primaryBlue,
             ),
           ),
         ],

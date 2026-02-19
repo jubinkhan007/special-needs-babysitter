@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -17,7 +18,7 @@ class OnboardingHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xFFF3FAFD), // Match screen bg
+      backgroundColor: AppColors.surfaceTint, // Match screen bg
       elevation: 0,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Color(0xFF667085)),

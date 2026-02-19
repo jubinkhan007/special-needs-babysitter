@@ -128,7 +128,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Column(
@@ -412,7 +412,7 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                   style: TextStyle(
                     fontSize: 12,
                     color: currentLength >= maxLength
-                        ? const Color(0xFFD92D20) // Red at limit
+                        ? AppColors.error // Red at limit
                         : const Color(0xFF667085), // Gray normally
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
@@ -24,7 +25,7 @@ class Step4Skills extends ConsumerStatefulWidget {
 
 class _Step4SkillsState extends ConsumerState<Step4Skills> {
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
 
   final List<String> _availableCertifications = [
     'CPR Certification',
@@ -61,7 +62,7 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
     final controller = ref.read(sitterProfileSetupControllerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 4,
         totalSteps: kSitterProfileTotalSteps,
@@ -83,7 +84,7 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2F9),
+                      color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.bookmark_border_rounded,

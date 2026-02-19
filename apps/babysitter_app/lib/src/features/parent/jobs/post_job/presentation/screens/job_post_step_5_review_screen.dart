@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -36,11 +37,11 @@ class JobPostStep5ReviewScreen extends ConsumerStatefulWidget {
 class _JobPostStep5ReviewScreenState
     extends ConsumerState<JobPostStep5ReviewScreen> {
   // Design Constants
-  static const _bgColor = Color(0xFFEAF6FF); // Light sky background
+  static const _bgColor = AppColors.surfaceTint; // Light sky background
   static const _titleColor = Color(0xFF0B1736); // Deep navy
   static const _secondaryText = Color(0xFF6F7C8A); // Secondary grey
   static const _lightGrey = Color(0xFF8793A1); // Lighter grey
-  static const _primaryBtn = Color(0xFF8CCFF0); // Submit button
+  static const _primaryBtn = AppColors.primary; // Submit button
   static const _editIconColor = Color(0xFF7C8A9A); // Edit icon grey
 
   bool _isProcessingPayment = false;
@@ -223,7 +224,7 @@ class _JobPostStep5ReviewScreenState
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8CCFF0),
+              backgroundColor: AppColors.primary,
             ),
             child: const Text(
               'Retry Payment',

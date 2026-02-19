@@ -67,7 +67,7 @@ class SitterJobApplicationCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                     fontFamily: 'Inter',
                   ),
                   maxLines: 1,
@@ -232,7 +232,7 @@ class SitterJobApplicationCard extends StatelessWidget {
                 context.push('${Routes.sitterJobDetails}/$jobId');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF89CFF0), // Lighter blue
+                backgroundColor: AppColors.primary, // Lighter blue
                 foregroundColor: AppColors.textOnButton,
                 elevation: 0,
                 padding: EdgeInsets.zero,

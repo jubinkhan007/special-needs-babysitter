@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 /// Centralized UI tokens for the Sitter Search feature to ensure pixel-perfect matching with Figma.
@@ -14,7 +15,7 @@ class AppUiTokens {
   static const Color scaffoldBackground =
       Color(0xFFF9FAFB); // Light Grey/Off-white
   static const Color cardBackground = Colors.white;
-  static const Color topBarBackground = Color(0xFFF0F9FF); // Light Blue
+  static const Color topBarBackground = AppColors.surfaceTint; // Light Blue
 
   // Text
   static const Color textPrimary = Color(0xFF101828); // Darkest Grey/Black

@@ -75,7 +75,7 @@ class _EditEmergencyContactDialogState
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Column(

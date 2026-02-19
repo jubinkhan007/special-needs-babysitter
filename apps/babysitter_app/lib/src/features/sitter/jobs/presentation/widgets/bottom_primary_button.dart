@@ -26,7 +26,7 @@ class BottomPrimaryButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             minimumSize: Size(double.infinity, 56.h),
             padding: EdgeInsets.symmetric(vertical: 16.h),
-            backgroundColor: backgroundColor ?? const Color(0xFF89CFF0),
+            backgroundColor: backgroundColor ?? AppColors.primary,
             foregroundColor: AppColors.textOnButton,
             elevation: 0,
             shape: RoundedRectangleBorder(

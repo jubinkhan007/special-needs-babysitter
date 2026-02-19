@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -11,7 +12,7 @@ class SoftSkillChip extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFF2F9FF), // Very light blue background
+        color: AppColors.surfaceTint, // Very light blue background
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Text(

@@ -361,7 +361,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
               );
             },
           ),
-          Divider(height: 1.h, color: const Color(0xFFE4F4FC)),
+          Divider(height: 1.h, color: AppColors.surfaceTint),
           _buildPaymentRow(
             context,
             title: 'Bank Account',

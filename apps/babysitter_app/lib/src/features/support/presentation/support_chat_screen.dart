@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
@@ -207,7 +208,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
                           end: Alignment.bottomRight,
                           colors: [
                             Colors.white,
-                            Color(0xFFF0F9FF), // Pale blue hint
+                            AppColors.surfaceTint, // Pale blue hint
                             Colors.white,
                           ],
                           stops: [0.0, 0.5, 1.0],

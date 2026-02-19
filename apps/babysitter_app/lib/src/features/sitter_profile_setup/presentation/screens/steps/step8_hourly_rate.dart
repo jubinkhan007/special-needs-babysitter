@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +24,7 @@ class Step8HourlyRate extends ConsumerStatefulWidget {
 
 class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
   static const _greyText = Color(0xFF667085);
   static const _borderGrey = Color(0xFFD0D5DD);
   static const _inputBg = Colors.white;
@@ -118,7 +119,7 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
     final state = ref.watch(sitterProfileSetupControllerProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 8,
         totalSteps: kSitterProfileTotalSteps,
@@ -140,7 +141,7 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2F9),
+                      color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.attach_money,

@@ -20,7 +20,7 @@ class VerifyIdentityScreen extends StatelessWidget {
           children: [
             // Header with status bar color
             Container(
-              color: const Color(0xFFE7F5FC),
+              color: AppColors.surfaceTint,
               child: SafeArea(
                 bottom: false,
                 child: _buildAppBar(context),
@@ -40,7 +40,7 @@ class VerifyIdentityScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 26.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -96,7 +96,7 @@ class VerifyIdentityScreen extends StatelessWidget {
                           context.push(Routes.sitterBackgroundCheck);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF89CFF0), // Light blue
+                          backgroundColor: AppColors.primary, // Light blue
                           foregroundColor: AppColors.textOnButton,
                           elevation: 0,
                           padding: EdgeInsets.symmetric(

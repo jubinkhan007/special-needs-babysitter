@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/job_post_providers.dart';
@@ -51,14 +52,14 @@ class _JobPostStep2JobDetailsScreenState
   }
 
   // Design Constants
-  static const _bgColor = Color(0xFFF3FAFD); // Light sky background
+  static const _bgColor = AppColors.surfaceTint; // Light sky background
   static const _titleColor = Color(0xFF0B1736); // Deep navy
   static const _mutedText = Color(0xFF667085); // Grey
   static const _borderColor = Color(0xFFD0E8F2); // Light blue border
-  static const _progressFill = Color(0xFF88CBE6); // Active progress
+  static const _progressFill = AppColors.primary; // Active progress
 
-  static const _primaryBtn = Color(0xFF88CBE6); // Continue button
-  static const _iconBoxFill = Color(0xFFD6F0FA); // Icon box fill
+  static const _primaryBtn = AppColors.primary; // Continue button
+  static const _iconBoxFill = AppColors.surfaceTint; // Icon box fill
   static const _iconBlue = Color(0xFF74BFEA); // Icon color
 
   @override
@@ -183,14 +184,14 @@ class _JobPostStep2JobDetailsScreenState
               colorScheme: const ColorScheme.light(
                 primary: _progressFill, // Active selection / OK button
                 onPrimary: Colors.white, // Text on primary
-                surface: Color(0xFFEAF6FF), // Dialog background (Light Blue)
+                surface: AppColors.surfaceTint, // Dialog background (Light Blue)
                 onSurface: _titleColor, // Text color
                 secondary: _progressFill, // Cursor/Highlight
                 onSurfaceVariant: _titleColor, // Label colors
                 outline: _progressFill, // Input border color
               ),
               timePickerTheme: TimePickerThemeData(
-                backgroundColor: const Color(0xFFEAF6FF),
+                backgroundColor: AppColors.surfaceTint,
                 helpTextStyle: const TextStyle(
                   color: _titleColor,
                   fontSize: 14,
@@ -270,14 +271,14 @@ class _JobPostStep2JobDetailsScreenState
               colorScheme: const ColorScheme.light(
                 primary: _progressFill,
                 onPrimary: Colors.white,
-                surface: Color(0xFFEAF6FF),
+                surface: AppColors.surfaceTint,
                 onSurface: _titleColor,
                 secondary: _progressFill,
                 onSurfaceVariant: _titleColor,
                 outline: _progressFill,
               ),
               timePickerTheme: TimePickerThemeData(
-                backgroundColor: const Color(0xFFEAF6FF),
+                backgroundColor: AppColors.surfaceTint,
                 helpTextStyle: const TextStyle(
                   color: _titleColor,
                   fontSize: 14,
@@ -424,7 +425,7 @@ class _JobPostStep2JobDetailsScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
-          backgroundColor: const Color(0xFFD92D20),
+          backgroundColor: AppColors.error,
           duration: const Duration(seconds: 3),
         ),
       );
@@ -681,7 +682,7 @@ class _JobPostStep2JobDetailsScreenState
                     error,
                     style: const TextStyle(
                       fontSize: 12,
-                      color: Color(0xFFD92D20),
+                      color: AppColors.error,
                     ),
                   ),
                 );
@@ -694,7 +695,7 @@ class _JobPostStep2JobDetailsScreenState
                     style: TextStyle(
                       fontSize: 12,
                       color: controller.text.length > maxLength
-                          ? const Color(0xFFD92D20)
+                          ? AppColors.error
                           : _mutedText,
                     ),
                   ),

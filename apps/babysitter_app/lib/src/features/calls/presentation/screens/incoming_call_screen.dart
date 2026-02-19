@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -166,7 +167,7 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
             icon: widget.callType == CallType.video
                 ? Icons.videocam_rounded
                 : Icons.call,
-            color: const Color(0xFF22C55E),
+            color: AppColors.success,
             onTap: isLoading
                 ? null
                 : () {

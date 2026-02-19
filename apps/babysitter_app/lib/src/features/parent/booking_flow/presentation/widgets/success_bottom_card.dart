@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../theme/booking_ui_tokens.dart';
 
@@ -146,7 +147,7 @@ class SuccessBottomCard extends StatelessWidget {
         return const Color(0xFF059669); // Green
       case 'declined':
       case 'rejected':
-        return const Color(0xFFD92D20); // Red
+        return AppColors.error; // Red
       case 'cancelled':
         return const Color(0xFF6B7280); // Grey
       case 'completed':

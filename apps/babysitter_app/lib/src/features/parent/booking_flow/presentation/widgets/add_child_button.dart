@@ -11,7 +11,7 @@ class AddChildButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF1D2939), // Dark Navy
+        backgroundColor: AppColors.buttonDark, // Dark Navy
         foregroundColor: AppColors.textOnButton,
         elevation: 0,
         shape: RoundedRectangleBorder(

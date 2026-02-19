@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'booking_progress_indicator.dart';
 
@@ -18,7 +19,7 @@ class BookingStepHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF0F9FF), // Light blue background per Figma
+      color: AppColors.surfaceTint, // Light blue background per Figma
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top,
         bottom: 16,

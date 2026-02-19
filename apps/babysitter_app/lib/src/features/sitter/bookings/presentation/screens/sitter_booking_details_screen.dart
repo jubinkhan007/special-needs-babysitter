@@ -121,14 +121,14 @@ class _SitterBookingDetailsScreenState
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.error_outline,
-                    size: 64.w, color: const Color(0xFFEF4444)),
+                    size: 64.w, color: AppColors.error),
                 SizedBox(height: 16.h),
                 Text(
                   'Error loading booking details',
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                     fontFamily: 'Inter',
                   ),
                 ),
@@ -171,7 +171,7 @@ class _SitterBookingDetailsScreenState
         style: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,
-          color: const Color(0xFF1D2939),
+          color: AppColors.buttonDark,
           fontFamily: 'Inter',
         ),
       ),
@@ -253,7 +253,7 @@ class _SitterBookingDetailsScreenState
                                 SnackBar(
                                   content: Text(
                                       isSaved ? 'Job saved' : 'Job unsaved'),
-                                  backgroundColor: const Color(0xFF22C55E),
+                                  backgroundColor: AppColors.success,
                                 ),
                               );
                             }).catchError((error) {
@@ -580,7 +580,7 @@ class _SitterBookingDetailsScreenState
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
-                        backgroundColor: const Color(0xFF87C4F2),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -608,7 +608,7 @@ class _SitterBookingDetailsScreenState
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
-                        foregroundColor: const Color(0xFF1D2939),
+                        foregroundColor: AppColors.buttonDark,
                         side: const BorderSide(color: Color(0xFFD0D5DD)),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -655,7 +655,7 @@ class _SitterBookingDetailsScreenState
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
-                        backgroundColor: const Color(0xFF87C4F2),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -683,7 +683,7 @@ class _SitterBookingDetailsScreenState
                       },
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
-                        foregroundColor: const Color(0xFF1D2939),
+                        foregroundColor: AppColors.buttonDark,
                         side: const BorderSide(color: Color(0xFFD0D5DD)),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -773,7 +773,7 @@ class _SitterBookingDetailsScreenState
                                     : null,
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 52.h),
-                              backgroundColor: const Color(0xFF87C4F2),
+                              backgroundColor: AppColors.primary,
                               foregroundColor: AppColors.textOnButton,
                               disabledBackgroundColor: Colors.grey.shade300,
                               disabledForegroundColor: Colors.grey.shade600,
@@ -1469,7 +1469,7 @@ class _SitterBookingDetailsScreenState
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: selectedReason == reason
-                                          ? const Color(0xFF87C4F2)
+                                          ? AppColors.primary
                                           : const Color(0xFFD0D5DD),
                                       width: 2,
                                     ),
@@ -1481,7 +1481,7 @@ class _SitterBookingDetailsScreenState
                                             height: 10.w,
                                             decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: Color(0xFF87C4F2),
+                                              color: AppColors.primary,
                                             ),
                                           ),
                                         )
@@ -1539,7 +1539,7 @@ class _SitterBookingDetailsScreenState
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
                             borderSide:
-                                const BorderSide(color: Color(0xFF87C4F2)),
+                                const BorderSide(color: AppColors.primary),
                           ),
                         ),
                       ),
@@ -1565,7 +1565,7 @@ class _SitterBookingDetailsScreenState
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF87C4F2),
+                            backgroundColor: AppColors.primary,
                             disabledBackgroundColor: Colors.grey.shade300,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -1737,7 +1737,7 @@ class _SitterBookingDetailsScreenState
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
                             borderSide:
-                                const BorderSide(color: Color(0xFF87C4F2)),
+                                const BorderSide(color: AppColors.primary),
                           ),
                         ),
                       ),
@@ -1826,7 +1826,7 @@ class _SitterBookingDetailsScreenState
                                   });
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF87C4F2),
+                            backgroundColor: AppColors.primary,
                             disabledBackgroundColor: Colors.grey.shade300,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -1970,7 +1970,7 @@ class _SitterBookingDetailsScreenState
                                 });
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF87C4F2),
+                          backgroundColor: AppColors.primary,
                           disabledBackgroundColor: Colors.grey.shade300,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -2116,7 +2116,7 @@ class _SitterBookingDetailsScreenState
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF1D2939),
+                                color: AppColors.buttonDark,
                                 fontFamily: 'Inter',
                               ),
                             ),
@@ -2224,7 +2224,7 @@ class _SitterBookingDetailsScreenState
                                   });
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF87C4F2),
+                            backgroundColor: AppColors.primary,
                             foregroundColor: AppColors.textOnButton,
                             disabledBackgroundColor: Colors.grey.shade300,
                             elevation: 0,
@@ -2263,7 +2263,7 @@ class _SitterBookingDetailsScreenState
                         child: OutlinedButton(
                           onPressed: () => Navigator.of(dialogContext).pop(),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF1D2939),
+                            foregroundColor: AppColors.buttonDark,
                             padding: EdgeInsets.zero,
                             side: const BorderSide(color: Color(0xFFD0D5DD)),
                             shape: RoundedRectangleBorder(
@@ -2440,7 +2440,7 @@ class _SitterBookingDetailsScreenState
         context,
         SnackBar(
           content: Text(e.toString().replaceFirst('Exception: ', '')),
-          backgroundColor: const Color(0xFFEF4444),
+          backgroundColor: AppColors.error,
         ),
       );
     } finally {
@@ -2491,7 +2491,7 @@ class _SitterBookingDetailsScreenState
           context,
           SnackBar(
             content: Text(e.toString()),
-            backgroundColor: const Color(0xFFEF4444),
+            backgroundColor: AppColors.error,
             duration: const Duration(seconds: 5),
           ),
         );
@@ -2572,7 +2572,7 @@ class _SitterBookingDetailsScreenState
                               style: TextStyle(
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w700,
-                                color: const Color(0xFF1D2939),
+                                color: AppColors.buttonDark,
                                 fontFamily: 'Inter',
                               ),
                             ),
@@ -2582,7 +2582,7 @@ class _SitterBookingDetailsScreenState
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF1D2939),
+                                color: AppColors.buttonDark,
                                 fontFamily: 'Inter',
                               ),
                             ),
@@ -2602,7 +2602,7 @@ class _SitterBookingDetailsScreenState
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xFF1D2939),
+                                color: AppColors.buttonDark,
                                 fontFamily: 'Inter',
                               ),
                             ),
@@ -2627,7 +2627,7 @@ class _SitterBookingDetailsScreenState
                       child: ElevatedButton(
                         onPressed: () => context.pop(),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF87C4F2),
+                          backgroundColor: AppColors.primary,
                           foregroundColor: AppColors.textOnButton,
                           elevation: 0,
                           padding: EdgeInsets.zero,

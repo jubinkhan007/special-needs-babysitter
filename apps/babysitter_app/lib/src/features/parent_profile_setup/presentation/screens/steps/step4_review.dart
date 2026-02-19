@@ -33,7 +33,7 @@ class Step4Review extends ConsumerStatefulWidget {
 }
 
 class _Step4ReviewState extends ConsumerState<Step4Review> {
-  static const _bgBlue = Color(0xFFF3FAFD);
+  static const _bgBlue = AppColors.surfaceTint;
   static const _sectionTitleColor = Color(0xFF1A1A1A);
   static const _labelColor = Color(0xFF1A1A1A); // Darker
   static const _valueColor = Color(0xFF667085); // Greyer
@@ -165,7 +165,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
               height: 80,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFFD6F0FA),
+                color: AppColors.surfaceTint,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Icon(
@@ -192,7 +192,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
               children: [
                 const CircleAvatar(
                   radius: 40,
-                  backgroundColor: Color(0xFFD6F0FA),
+                  backgroundColor: AppColors.surfaceTint,
                   child: Icon(
                     Icons.person,
                     size: 40,
@@ -245,7 +245,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
               child: ElevatedButton(
                 onPressed: () => _editChild(null),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1D2939),
+                  backgroundColor: AppColors.buttonDark,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
@@ -423,7 +423,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
         shape: BoxShape.circle,
         border: (active && large)
             ? Border.all(color: Colors.white, width: 2)
@@ -436,7 +436,7 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
     return Expanded(
       child: Container(
         height: 2,
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
       ),
     );
   }

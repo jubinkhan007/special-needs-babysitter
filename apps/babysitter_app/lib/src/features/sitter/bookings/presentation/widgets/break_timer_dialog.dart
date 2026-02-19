@@ -72,7 +72,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                       style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -82,7 +82,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                     child: const Icon(
                       Icons.close_rounded,
                       size: 20,
-                      color: Color(0xFF1D2939),
+                      color: AppColors.buttonDark,
                     ),
                   ),
                 ],
@@ -97,7 +97,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                       vertical: 12.h,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF0F9FF),
+                      color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(color: const Color(0xFFE0F2FE)),
                     ),
@@ -144,7 +144,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                 child: ElevatedButton(
                   onPressed: widget.onResume,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF8EC9F5),
+                    backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     padding: EdgeInsets.zero,
@@ -170,7 +170,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                 child: OutlinedButton(
                   onPressed: widget.onEndBreak,
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFF8EC9F5)),
+                    side: const BorderSide(color: AppColors.primary),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.r),
                     ),
@@ -237,7 +237,7 @@ class _TimeBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: const Color(0xFF8EC9F5)),
+        border: Border.all(color: AppColors.primary),
       ),
       child: Center(
         child: Text(
@@ -245,7 +245,7 @@ class _TimeBox extends StatelessWidget {
           style: TextStyle(
             fontSize: 28.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF8EC9F5),
+            color: AppColors.primary,
             fontFamily: 'Inter',
           ),
         ),
@@ -266,7 +266,7 @@ class _TimeSeparator extends StatelessWidget {
             style: TextStyle(
               fontSize: 28.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1D2939),
+              color: AppColors.buttonDark,
             ),
           ),
           SizedBox(height: 20.h),
@@ -292,7 +292,7 @@ class _BreakBadge extends StatelessWidget {
             width: 6.w,
             height: 6.w,
             decoration: const BoxDecoration(
-              color: Color(0xFFF59E0B),
+              color: AppColors.warning,
               shape: BoxShape.circle,
             ),
           ),

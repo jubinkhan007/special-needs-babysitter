@@ -39,7 +39,7 @@ class _Step3EmergencyAndInsuranceState
   // Store insurance plans locally for this step
   List<InsurancePlan> _insurancePlans = [];
 
-  static const _bgBlue = Color(0xFFF3FAFD);
+  static const _bgBlue = AppColors.surfaceTint;
 
   @override
   void initState() {
@@ -300,7 +300,7 @@ class _Step3EmergencyAndInsuranceState
                 width: 72,
                 height: 72,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD6F0FA),
+                  color: AppColors.surfaceTint,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(
@@ -580,7 +580,7 @@ class _Step3EmergencyAndInsuranceState
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
         shape: BoxShape.circle,
         border: (active && large)
             ? Border.all(color: Colors.white, width: 2)
@@ -593,7 +593,7 @@ class _Step3EmergencyAndInsuranceState
     return Expanded(
       child: Container(
         height: 2,
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
       ),
     );
   }

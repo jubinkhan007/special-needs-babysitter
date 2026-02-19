@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,8 +31,8 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
   bool _isSubmitting = false;
 
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
-  static const _darkChip = Color(0xFF1D2939); // Dark slate/black
+  static const _primaryBlue = AppColors.primary;
+  static const _darkChip = AppColors.buttonDark; // Dark slate/black
   static const _greyText = Color(0xFF667085);
   static const _dividerColor = Color(0xFFEAECF0);
 
@@ -100,7 +101,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
     final state = ref.watch(sitterProfileSetupControllerProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 9,
         totalSteps: kSitterProfileTotalSteps,
@@ -358,7 +359,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
             right: 0,
             bottom: 0,
             child: Container(
-              color: const Color(0xFFF3FAFD)
+              color: AppColors.surfaceTint
                   .withOpacity(0.9), // Slight transparency matching bg
               padding: const EdgeInsets.all(24.0),
               child: SafeArea(
@@ -368,7 +369,7 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                         height: 56,
                         child: Center(
                           child: CircularProgressIndicator(
-                              color: Color(0xFF88CBE6)),
+                              color: AppColors.primary),
                         ),
                       )
                     : PrimaryActionButton(

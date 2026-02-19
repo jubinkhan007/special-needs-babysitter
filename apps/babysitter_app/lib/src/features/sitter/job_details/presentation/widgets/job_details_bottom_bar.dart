@@ -82,7 +82,7 @@ class JobDetailsBottomBar extends StatelessWidget {
                         child: const CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                              AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                         ),
                       )
                     : Text(

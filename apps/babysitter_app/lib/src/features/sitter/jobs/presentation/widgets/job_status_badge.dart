@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -79,7 +80,7 @@ class JobStatusBadge extends StatelessWidget {
       case JobApplicationStatus.accepted:
         return const Color(0xFF027A48);
       case JobApplicationStatus.declined:
-        return const Color(0xFFD92D20);
+        return AppColors.error;
       case JobApplicationStatus.withdrawn:
         return const Color(0xFF344054);
       case JobApplicationStatus.invited:
@@ -91,7 +92,7 @@ class JobStatusBadge extends StatelessWidget {
       case JobApplicationStatus.completed:
         return const Color(0xFF027A48);
       case JobApplicationStatus.cancelled:
-        return const Color(0xFFD92D20);
+        return AppColors.error;
       case JobApplicationStatus.expired:
         return const Color(0xFF344054);
     }

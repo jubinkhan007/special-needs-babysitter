@@ -32,7 +32,7 @@ class SitterProfileHeaderExact extends StatelessWidget {
   final bool isBookmarked;
 
   // Colors from your current implementation (tweak if your Figma uses slightly different tints)
-  static const _blueBg = Color(0xFFEAF6FF);
+  static const _blueBg = AppColors.surfaceTint;
   static const _iconGrey = Color(0xFF6B7280);
   static const _textPrimary = Color(0xFF111827);
   static const _textSecondary = Color(0xFF6B7280);

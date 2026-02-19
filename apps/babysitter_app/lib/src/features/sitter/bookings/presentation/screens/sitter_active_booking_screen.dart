@@ -147,7 +147,7 @@ class _SitterActiveBookingScreenState
             content: Text(result.message.isNotEmpty
                 ? result.message
                 : 'Successfully clocked out!'),
-            backgroundColor: const Color(0xFF22C55E),
+            backgroundColor: AppColors.success,
           ),
         );
         if (isFinalDay) {
@@ -164,7 +164,7 @@ class _SitterActiveBookingScreenState
             context,
             SnackBar(
               content: Text(message),
-              backgroundColor: const Color(0xFFF59E0B),
+              backgroundColor: AppColors.warning,
             ),
           );
           final jobDetails = ref
@@ -192,7 +192,7 @@ class _SitterActiveBookingScreenState
           SnackBar(
             content: Text(
                 'Failed to clock out: ${e.toString().replaceFirst("Exception: ", "")}'),
-            backgroundColor: const Color(0xFFEF4444),
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -295,7 +295,7 @@ class _SitterActiveBookingScreenState
         style: TextStyle(
           fontSize: 17.sp,
           fontWeight: FontWeight.w500,
-          color: const Color(0xFF1D2939),
+          color: AppColors.buttonDark,
           fontFamily: 'Inter',
         ),
       ),
@@ -351,7 +351,7 @@ class _SitterActiveBookingScreenState
     final seconds = (elapsed.inSeconds % 60).toString().padLeft(2, '0');
     final statusLabel = session.isPaused ? 'Paused' : 'Active';
     final statusColor =
-        session.isPaused ? const Color(0xFFF59E0B) : const Color(0xFF22C55E);
+        session.isPaused ? AppColors.warning : AppColors.success;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,7 +361,7 @@ class _SitterActiveBookingScreenState
           style: TextStyle(
             fontSize: 22.sp,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF1D2939),
+            color: AppColors.buttonDark,
             fontFamily: 'Inter',
           ),
         ),
@@ -385,7 +385,7 @@ class _SitterActiveBookingScreenState
         Container(
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
-            color: const Color(0xFFF0F9FF),
+            color: AppColors.surfaceTint,
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(color: const Color(0xFFE0F2FE)),
           ),
@@ -502,7 +502,7 @@ class _SitterActiveBookingScreenState
           style: TextStyle(
             fontSize: 28.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF1D2939),
+            color: AppColors.buttonDark,
             fontFamily: 'Inter',
           ),
         ),
@@ -520,7 +520,7 @@ class _SitterActiveBookingScreenState
             style: TextStyle(
               fontSize: 28.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1D2939),
+              color: AppColors.buttonDark,
             ),
           ),
           SizedBox(height: 20.h), // Align with time boxes
@@ -560,7 +560,7 @@ class _SitterActiveBookingScreenState
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFF1D2939),
+                color: AppColors.buttonDark,
                 fontFamily: 'Inter',
               ),
             ),
@@ -630,7 +630,7 @@ class _SitterActiveBookingScreenState
                       child: Icon(
                         Icons.map_outlined,
                         size: 64.w,
-                        color: const Color(0xFF87C4F2),
+                        color: AppColors.primary,
                       ),
                     ),
                   )
@@ -778,7 +778,7 @@ class _SitterActiveBookingScreenState
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.w700,
-            color: const Color(0xFF1D2939),
+            color: AppColors.buttonDark,
             fontFamily: 'Inter',
           ),
         ),
@@ -829,7 +829,7 @@ class _SitterActiveBookingScreenState
           Icon(
             icon,
             size: 28.w,
-            color: const Color(0xFF87C4F2),
+            color: AppColors.primary,
           ),
           SizedBox(height: 8.h),
           Text(
@@ -837,7 +837,7 @@ class _SitterActiveBookingScreenState
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF1D2939),
+              color: AppColors.buttonDark,
               fontFamily: 'Inter',
             ),
             textAlign: TextAlign.center,
@@ -910,7 +910,7 @@ class _SitterActiveBookingScreenState
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                   fontFamily: 'Inter',
                 ),
               ),
@@ -977,7 +977,7 @@ class _SitterActiveBookingScreenState
               child: ElevatedButton(
                 onPressed: _isClockingOut ? null : _clockOut,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF87C4F2),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -1106,7 +1106,7 @@ class _SitterActiveBookingScreenState
                   child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF87C4F2),
+                      backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.textOnButton,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

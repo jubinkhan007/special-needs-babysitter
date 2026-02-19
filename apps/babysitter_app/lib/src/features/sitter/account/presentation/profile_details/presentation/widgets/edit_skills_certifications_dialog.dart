@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
@@ -43,7 +44,7 @@ class EditSkillsCertificationsDialog extends StatefulWidget {
 class _EditSkillsCertificationsDialogState
     extends State<EditSkillsCertificationsDialog> {
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
   static const _greyText = Color(0xFF667085);
 
   final List<String> _availableCertifications = const [
@@ -149,7 +150,7 @@ class _EditSkillsCertificationsDialogState
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                   ),
                 ),
                 IconButton(
@@ -238,7 +239,6 @@ class _EditSkillsCertificationsDialogState
             child: PrimaryActionButton(
               label: _isSaving ? 'Saving...' : 'Save Changes',
               onPressed: _isSaving ? null : _handleSave,
-              backgroundColor: _primaryBlue,
             ),
           ),
         ],

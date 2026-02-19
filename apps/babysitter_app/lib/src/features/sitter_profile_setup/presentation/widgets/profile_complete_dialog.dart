@@ -36,8 +36,8 @@ class _ProfileCompleteDialogContent extends StatelessWidget {
   const _ProfileCompleteDialogContent();
 
   // Design tokens
-  static const _primaryBlue = Color(0xFF88CBE6);
-  static const _successGreen = Color(0xFF22C55E);
+  static const _primaryBlue = AppColors.primary;
+  static const _successGreen = AppColors.success;
   static const _textDark = Color(0xFF1A1A1A);
   static const _textGrey = Color(0xFF667085);
   static const _closeIconColor = Color(0xFF98A2B3);

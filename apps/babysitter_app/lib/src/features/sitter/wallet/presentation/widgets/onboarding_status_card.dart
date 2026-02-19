@@ -119,7 +119,7 @@ class OnboardingStatusCard extends StatelessWidget {
                         height: 24.w,
                         child: const CircularProgressIndicator(
                           strokeWidth: 2.5,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                         ),
                       )
                     : Text(
@@ -202,7 +202,7 @@ class OnboardingStatusCard extends StatelessWidget {
           description:
               'Connect your bank account to receive payments for completed jobs. This process is powered by Stripe for secure and fast transfers.',
           buttonText: 'Set Up Payouts',
-          buttonColor: Color(0xFF89CFF0),
+          buttonColor: AppColors.primary,
         );
 
       case StripeConnectStatusType.pending:

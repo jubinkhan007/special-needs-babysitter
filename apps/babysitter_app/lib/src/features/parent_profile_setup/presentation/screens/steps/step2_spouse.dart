@@ -27,7 +27,7 @@ class Step2Children extends ConsumerStatefulWidget {
 
 class _Step2ChildrenState extends ConsumerState<Step2Children> {
   late List<Map<String, dynamic>> _kids;
-  static const _bgBlue = Color(0xFFF3FAFD);
+  static const _bgBlue = AppColors.surfaceTint;
 
   @override
   void initState() {
@@ -149,7 +149,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFD6F0FA), // Light blue
+                      color: AppColors.surfaceTint, // Light blue
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(
@@ -180,7 +180,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                         onPressed: () => _showAddChildDialog(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              const Color(0xFF1D2939), // Dark button
+                              AppColors.buttonDark, // Dark button
                           foregroundColor: AppColors.textOnButton,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           elevation: 0,
@@ -246,7 +246,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                         onPressed: () => _showAddChildDialog(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              const Color(0xFF1D2939), // Dark button
+                              AppColors.buttonDark, // Dark button
                           foregroundColor: AppColors.textOnButton,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           elevation: 0,
@@ -304,7 +304,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
         shape: BoxShape.circle,
         border: (active && large)
             ? Border.all(color: Colors.white, width: 2)
@@ -317,7 +317,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
     return Expanded(
       child: Container(
         height: 2,
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
       ),
     );
   }

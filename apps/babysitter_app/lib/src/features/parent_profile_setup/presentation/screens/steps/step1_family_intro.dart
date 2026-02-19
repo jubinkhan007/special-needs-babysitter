@@ -68,7 +68,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
   };
 
   static const _bgBlue =
-      Color(0xFFF3FAFD); // Light blue background from screenshot
+      AppColors.surfaceTint; // Light blue background from screenshot
   static const _textDark = Color(0xFF1A1A1A);
 
   @override
@@ -923,7 +923,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
       width: large ? 16 : 12,
       height: large ? 16 : 12,
       decoration: BoxDecoration(
-        color: active ? AppColors.secondary : const Color(0xFFE0F2F9),
+        color: active ? AppColors.secondary : AppColors.surfaceTint,
         shape: BoxShape.circle,
         border: active
             ? Border.all(color: Colors.white, width: 2)
@@ -936,7 +936,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     return Expanded(
       child: Container(
         height: 2,
-        color: const Color(0xFFE0F2F9),
+        color: AppColors.surfaceTint,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../theme/app_tokens.dart';
@@ -37,7 +38,7 @@ class ReviewsHeaderRow extends StatelessWidget {
                   text: '$avgRating ',
                   style: AppTokens.reviewsSummaryStyle.copyWith(
                     fontWeight: FontWeight.w600, // Make rating slightly bolder
-                    color: const Color(0xFF1F2937), // Darker for number
+                    color: AppColors.buttonDark, // Darker for number
                   ),
                   children: [
                     TextSpan(

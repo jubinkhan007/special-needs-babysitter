@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +28,7 @@ class SitterReviewsScreen extends ConsumerWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF1D2939),
+            color: AppColors.buttonDark,
             fontFamily: 'Inter',
           ),
         ),
@@ -135,7 +136,7 @@ class _ReviewsHeaderRow extends StatelessWidget {
             fontFamily: 'Inter',
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF1F2937),
+            color: AppColors.buttonDark,
           ),
         ),
         Row(
@@ -153,7 +154,7 @@ class _ReviewsHeaderRow extends StatelessWidget {
                   fontFamily: 'Inter',
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1F2937),
+                  color: AppColors.buttonDark,
                 ),
                 children: [
                   TextSpan(

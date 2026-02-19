@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/providers/booking_flow_provider.dart';
@@ -16,7 +17,7 @@ class ParentBookingStep4Screen extends ConsumerWidget {
     final bookingState = ref.watch(bookingFlowProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F9FF),
+      backgroundColor: AppColors.surfaceTint,
       body: Column(
         children: [
           BookingStepHeader(
@@ -138,7 +139,7 @@ class ParentBookingStep4Screen extends ConsumerWidget {
             ),
           ),
           Container(
-            color: const Color(0xFFF0F9FF),
+            color: AppColors.surfaceTint,
             padding: EdgeInsets.fromLTRB(
                 24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
             child: BookingPrimaryBottomButton(

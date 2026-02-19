@@ -104,7 +104,7 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                       ),
                     )
                   : const Text(

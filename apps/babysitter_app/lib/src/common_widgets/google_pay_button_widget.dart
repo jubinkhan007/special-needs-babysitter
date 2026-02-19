@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -205,7 +206,7 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                   ),
                 ),
               )

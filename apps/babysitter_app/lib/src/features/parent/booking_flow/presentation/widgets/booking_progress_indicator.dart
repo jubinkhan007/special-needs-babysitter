@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class BookingProgressIndicator extends StatelessWidget {
@@ -21,7 +22,7 @@ class BookingProgressIndicator extends StatelessWidget {
       // 1. Add Dot
       final double size = isActive ? 12.0 : 8.0;
       final Color color = (isActive || isCompleted)
-          ? const Color(0xFF89CFF0) // New Lighter Blue match
+          ? AppColors.primary // New Lighter Blue match
           : const Color(0xFFE0F2FE); // Light inactive
 
       children.add(
@@ -45,7 +46,7 @@ class BookingProgressIndicator extends StatelessWidget {
             child: Container(
               height: 2,
               color: isLineActive
-                  ? const Color(0xFF89CFF0) // New Lighter Blue match
+                  ? AppColors.primary // New Lighter Blue match
                   : const Color(0xFFE0F2FE),
             ),
           ),

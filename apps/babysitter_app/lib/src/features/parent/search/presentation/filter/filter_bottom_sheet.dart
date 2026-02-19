@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../theme/app_tokens.dart';
@@ -38,10 +39,10 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
     'Cerebral Palsy',
     'Behavioral',
   ];
-  static const _pickerBackground = Color(0xFFEAF6FF);
+  static const _pickerBackground = AppColors.surfaceTint;
   static const _pickerTitle = Color(0xFF0B1736);
   static const _pickerMuted = Color(0xFF667085);
-  static const _pickerAccent = Color(0xFF88CBE6);
+  static const _pickerAccent = AppColors.primary;
 
   Future<void> _applyFilters() async {
     setState(() {

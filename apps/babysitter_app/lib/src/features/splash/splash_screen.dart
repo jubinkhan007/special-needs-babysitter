@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD6EDF6), // Light blue from design
+      backgroundColor: AppColors.background, // Light blue from design
       body: SafeArea(
         child: Center(
           child: FadeTransition(
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen>
                 style: TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1A3A4A), // Dark navy blue
+                  color: AppColors.textPrimary, // Dark navy blue
                   height: 1.2,
                   letterSpacing: -0.5,
                 ),

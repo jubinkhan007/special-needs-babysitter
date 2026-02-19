@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../theme/booking_ui_tokens.dart';
 
@@ -94,7 +95,7 @@ class NoteCard extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.info_outline,
-                              color: Color(0xFFD92D20),
+                              color: AppColors.error,
                               size: 20,
                             ),
                             SizedBox(width: 12),
@@ -128,13 +129,13 @@ class NoteCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: const Color(0xFFEAF6FF),
+            color: AppColors.surfaceTint,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
             icon,
             size: 24,
-            color: const Color(0xFF88CBE6),
+            color: AppColors.primary,
           ),
         ),
         const SizedBox(width: 16),

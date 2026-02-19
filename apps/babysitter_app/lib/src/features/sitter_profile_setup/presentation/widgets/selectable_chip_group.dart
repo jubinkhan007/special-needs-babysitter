@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class SelectableChipGroup extends StatelessWidget {
@@ -45,7 +46,7 @@ class SelectableChipGroup extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24), // Pill shape
                   border: Border.all(
                     color: isSelected
-                        ? const Color(0xFF88CBE6)
+                        ? AppColors.primary
                         : Colors.transparent,
                     width: 2, // Highlight selected
                   ),
@@ -61,7 +62,7 @@ class SelectableChipGroup extends StatelessWidget {
                   option,
                   style: TextStyle(
                     color: isSelected
-                        ? const Color(0xFF88CBE6)
+                        ? AppColors.primary
                         : const Color(0xFF667085),
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     fontSize: 14,

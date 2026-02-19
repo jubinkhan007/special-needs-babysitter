@@ -1,10 +1,11 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class SitterAccountUI {
   // Colors
   static const Color accentBlue = Color(0xFF62A8FF);
   static const Color backgroundBlue = Color(0xFFF7F9FC); // Light blue tint
-  static const Color textDark = Color(0xFF1D2939);
+  static const Color textDark = AppColors.buttonDark;
   static const Color textGray = Color(0xFF667085);
   static const Color cardShadow = Color(0x0D101828); // Soft shadow
 

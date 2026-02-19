@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class StepProgressDots extends StatelessWidget {
@@ -42,14 +43,14 @@ class StepProgressDots extends StatelessWidget {
       width: isCurrent ? 16 : 12,
       height: isCurrent ? 16 : 12,
       decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF88CBE6) : const Color(0xFFE0F2F9),
+        color: isActive ? AppColors.primary : AppColors.surfaceTint,
         shape: BoxShape.circle,
         // Optional: Border for current?
         border: isCurrent ? Border.all(color: Colors.white, width: 2) : null,
         boxShadow: isCurrent
             ? [
                 BoxShadow(
-                  color: const Color(0xFF88CBE6).withOpacity(0.3),
+                  color: AppColors.primary.withOpacity(0.3),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 )
@@ -71,7 +72,7 @@ class StepProgressDots extends StatelessWidget {
       child: Container(
         height: 4, // Slightly thicker
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF88CBE6) : const Color(0xFFE0F2F9),
+          color: isActive ? AppColors.primary : AppColors.surfaceTint,
           borderRadius: BorderRadius.circular(2),
         ),
       ),

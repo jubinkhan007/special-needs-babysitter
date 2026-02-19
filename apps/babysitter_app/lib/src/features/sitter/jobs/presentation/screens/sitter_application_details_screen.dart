@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,7 +36,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
       loading: () => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: const Color(0xFFF2F9FF),
+          backgroundColor: AppColors.surfaceTint,
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back,
@@ -48,7 +49,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1D2939),
+              color: AppColors.buttonDark,
               fontFamily: 'Inter',
             ),
           ),
@@ -58,7 +59,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
       error: (error, stack) => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: const Color(0xFFF2F9FF),
+          backgroundColor: AppColors.surfaceTint,
           elevation: 0,
           leading: IconButton(
             icon: Icon(Icons.arrow_back,
@@ -71,7 +72,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF1D2939),
+              color: AppColors.buttonDark,
               fontFamily: 'Inter',
             ),
           ),
@@ -97,7 +98,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF2F9FF),
+        backgroundColor: AppColors.surfaceTint,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back,
@@ -110,7 +111,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
-            color: const Color(0xFF1D2939),
+            color: AppColors.buttonDark,
             fontFamily: 'Inter',
           ),
         ),
@@ -160,7 +161,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
                                 context,
                                 SnackBar(
                                   content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                                  backgroundColor: const Color(0xFF22C55E),
+                                  backgroundColor: AppColors.success,
                                 ),
                               );
                             }).catchError((error) {

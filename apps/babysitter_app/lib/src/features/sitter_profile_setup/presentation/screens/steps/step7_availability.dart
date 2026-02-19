@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +24,7 @@ class Step7Availability extends ConsumerStatefulWidget {
 
 class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
   static const _greyText = Color(0xFF667085);
 
   final DateFormat _dateFormat = DateFormat('MM/dd/yyyy');
@@ -96,7 +97,7 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
     final isSingle = state.availabilityMode == AvailabilityMode.singleDay;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 7,
         totalSteps: kSitterProfileTotalSteps,
@@ -118,7 +119,7 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2F9),
+                      color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.calendar_month_outlined,
@@ -170,7 +171,7 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               decoration: BoxDecoration(
                                 color: isSingle
-                                    ? const Color(0xFFE0F2F9)
+                                    ? AppColors.surfaceTint
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -199,7 +200,7 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               decoration: BoxDecoration(
                                 color: !isSingle
-                                    ? const Color(0xFFE0F2F9)
+                                    ? AppColors.surfaceTint
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),

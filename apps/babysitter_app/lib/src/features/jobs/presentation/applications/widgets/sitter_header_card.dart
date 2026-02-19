@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../../../theme/app_tokens.dart';
 import '../models/booking_application_ui_model.dart';
@@ -98,7 +99,7 @@ class SitterHeaderCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF3FAFD), // Light blue bg
+                        color: AppColors.surfaceTint, // Light blue bg
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(

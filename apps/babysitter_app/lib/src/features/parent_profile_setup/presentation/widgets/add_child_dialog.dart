@@ -212,7 +212,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Column(
@@ -465,13 +465,13 @@ class _AddChildDialogState extends State<AddChildDialog> {
               child: Row(
                 children: [
                   const Icon(Icons.error_outline,
-                      color: Color(0xFFD92D20), size: 18),
+                      color: AppColors.error, size: 18),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _validationError!,
                       style: const TextStyle(
-                        color: Color(0xFFD92D20),
+                        color: AppColors.error,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),

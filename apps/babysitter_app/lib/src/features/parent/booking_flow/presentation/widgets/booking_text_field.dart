@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'form_field_card.dart';
@@ -90,7 +91,7 @@ class BookingTextField extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     color: currentLength >= maxLength!
-                        ? const Color(0xFFD92D20) // Red when at limit
+                        ? AppColors.error // Red when at limit
                         : const Color(0xFF667085), // Gray normally
                   ),
                 ),

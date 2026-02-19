@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
@@ -29,7 +30,7 @@ class Step2Bio extends ConsumerWidget {
     final controller = ref.read(sitterProfileSetupControllerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 2,
         totalSteps: kSitterProfileTotalSteps,

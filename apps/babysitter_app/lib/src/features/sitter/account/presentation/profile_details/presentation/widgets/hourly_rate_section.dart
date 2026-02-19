@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class HourlyRateSection extends StatelessWidget {
@@ -39,7 +40,7 @@ class HourlyRateSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                 ),
               ),
               if (onEditTap != null)
@@ -67,7 +68,7 @@ class HourlyRateSection extends StatelessWidget {
               'Open to negotiating',
               style: TextStyle(
                 fontSize: 12,
-                color: Color(0xFF10B981),
+                color: AppColors.success,
                 fontStyle: FontStyle.italic,
               ),
             ),

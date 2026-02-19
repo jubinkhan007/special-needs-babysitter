@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
@@ -241,7 +242,7 @@ class _ParentBookingStep3ScreenState
     });
     
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F9FF), // Light blue background
+      backgroundColor: AppColors.surfaceTint, // Light blue background
       body: Column(
         children: [
           // Header (Includes Progress Indicator)
@@ -314,7 +315,7 @@ class _ParentBookingStep3ScreenState
                     child: ElevatedButton.icon(
                       onPressed: _isGeocoding ? null : _geocodeAddress,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF88CBE6),
+                        backgroundColor: AppColors.primary,
                         disabledBackgroundColor: Colors.grey[300],
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
@@ -328,7 +329,7 @@ class _ParentBookingStep3ScreenState
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                    AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                               ),
                             )
                           : const Icon(Icons.location_on, color: Colors.white),
@@ -426,7 +427,7 @@ class _ParentBookingStep3ScreenState
 
           // Bottom Sticky Button
           Container(
-            color: const Color(0xFFF0F9FF),
+            color: AppColors.surfaceTint,
             padding: EdgeInsets.fromLTRB(
                 24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
             child: BookingPrimaryBottomButton(

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +36,7 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
         title: const Text(
           'Profile Details',
           style: TextStyle(
-            color: Color(0xFF1F2937),
+            color: AppColors.buttonDark,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
@@ -45,7 +46,7 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
         elevation: 0,
         scrolledUnderElevation: 1, // Subtle shadow on scroll
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1F2937)),
+          icon: const Icon(Icons.arrow_back, color: AppColors.buttonDark),
           onPressed: () => context.pop(),
         ),
         actions: [

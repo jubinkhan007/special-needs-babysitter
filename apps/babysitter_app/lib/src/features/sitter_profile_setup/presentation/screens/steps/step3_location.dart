@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,7 +27,7 @@ class Step3Location extends ConsumerStatefulWidget {
 
 class _Step3LocationState extends ConsumerState<Step3Location> {
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
 
   bool _isLocating = false;
   GoogleMapController? _mapController;
@@ -303,7 +304,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
     final controller = ref.read(sitterProfileSetupControllerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 3,
         totalSteps: kSitterProfileTotalSteps,
@@ -325,7 +326,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2F9),
+                      color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.location_on_outlined,

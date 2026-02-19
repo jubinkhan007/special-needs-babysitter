@@ -97,7 +97,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFF87C4F2),
+              primary: AppColors.primary,
             ),
           ),
           child: child!,
@@ -147,7 +147,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                       style: TextStyle(
                         fontSize: 18.sp,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xFF1D2939),
+                        color: AppColors.buttonDark,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -236,7 +236,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                   child: ElevatedButton(
                     onPressed: _applyFilters,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF87C4F2),
+                      backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.textOnButton,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
@@ -296,7 +296,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                   'Clear',
                   style: TextStyle(
                     fontSize: 12.sp,
-                    color: const Color(0xFF87C4F2),
+                    color: AppColors.primary,
                     fontFamily: 'Inter',
                   ),
                 ),
@@ -308,7 +308,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
           min: 5,
           max: 50,
           divisions: 9,
-          activeColor: const Color(0xFF87C4F2),
+          activeColor: AppColors.primary,
           inactiveColor: const Color(0xFFE0E0E0),
           onChanged: (value) {
             setState(() {
@@ -352,7 +352,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: Color(0xFF87C4F2)),
+                borderSide: const BorderSide(color: AppColors.primary),
               ),
             ),
             onChanged: (value) {
@@ -385,7 +385,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
-                borderSide: const BorderSide(color: Color(0xFF87C4F2)),
+                borderSide: const BorderSide(color: AppColors.primary),
               ),
             ),
             onChanged: (value) {
@@ -462,11 +462,11 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF87C4F2) : Colors.white,
+              color: isSelected ? AppColors.primary : Colors.white,
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
                 color: isSelected
-                    ? const Color(0xFF87C4F2)
+                    ? AppColors.primary
                     : const Color(0xFFD0D5DD),
               ),
             ),

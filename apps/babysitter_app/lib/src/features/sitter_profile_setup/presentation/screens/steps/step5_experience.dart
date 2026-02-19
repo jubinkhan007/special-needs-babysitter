@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,7 @@ class Step5Experience extends ConsumerStatefulWidget {
 
 class _Step5ExperienceState extends ConsumerState<Step5Experience> {
   static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = Color(0xFF88CBE6);
+  static const _primaryBlue = AppColors.primary;
 
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
     final controller = ref.read(sitterProfileSetupControllerProvider.notifier);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 5,
         totalSteps: kSitterProfileTotalSteps,
@@ -100,7 +101,7 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                     width: 64,
                     height: 64,
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE0F2F9),
+                      color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.star_border_rounded,
@@ -217,10 +218,10 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                     ),
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 56),
-                      backgroundColor: const Color(0xFFE0F2F9),
+                      backgroundColor: AppColors.surfaceTint,
                       side: const BorderSide(
                           color:
-                              Color(0xFFE0F2F9)), // Matches fill for flat look
+                              AppColors.surfaceTint), // Matches fill for flat look
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

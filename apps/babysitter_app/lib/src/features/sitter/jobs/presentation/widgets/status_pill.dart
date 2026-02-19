@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'job_status_badge.dart'; // To reuse the enum
@@ -49,7 +50,7 @@ class StatusPill extends StatelessWidget {
       case JobApplicationStatus.reviewing:
         return const Color(0xFF175CD3);
       case JobApplicationStatus.declined:
-        return const Color(0xFFD92D20);
+        return AppColors.error;
       case JobApplicationStatus.withdrawn:
         return const Color(0xFF344054);
       default:

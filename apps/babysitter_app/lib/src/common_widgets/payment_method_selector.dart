@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -297,7 +298,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF8CCFF0),
+                  color: AppColors.primary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -343,7 +344,7 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
                   onTap: _handleCardPayment,
                   icon: Icons.credit_card,
                   label: 'Credit / Debit Card',
-                  backgroundColor: const Color(0xFF8CCFF0),
+                  backgroundColor: AppColors.primary,
                   textColor: Colors.white,
                 ),
 

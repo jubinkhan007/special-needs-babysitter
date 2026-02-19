@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
     final photoPath = state.profilePhotoPath;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF3FAFD),
+      backgroundColor: AppColors.surfaceTint,
       appBar: OnboardingHeader(
         currentStep: 1,
         totalSteps: kSitterProfileTotalSteps,
@@ -94,7 +95,7 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                                     Icons.camera_alt_outlined,
                                     size:
                                         56, // Slightly smaller than previous 64 to match delicate Figma outlines
-                                    color: Color(0xFF88CBE6),
+                                    color: AppColors.primary,
                                   ),
                                   // Figma screenshot implies just the camera icon centered.
                                   // If there is a plus, it might be part of the icon or separate.

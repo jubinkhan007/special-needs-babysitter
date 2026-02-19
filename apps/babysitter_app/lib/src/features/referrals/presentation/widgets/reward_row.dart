@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/referral_item.dart';
@@ -24,7 +25,7 @@ class RewardRow extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 18,
-          backgroundColor: const Color(0xFFE4F4FC),
+          backgroundColor: AppColors.surfaceTint,
           backgroundImage: hasAvatar ? NetworkImage(avatarUrl) : null,
           child: hasAvatar
               ? null

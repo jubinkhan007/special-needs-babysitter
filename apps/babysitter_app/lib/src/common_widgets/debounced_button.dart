@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -166,7 +167,7 @@ class _DebouncedElevatedButtonState extends State<DebouncedElevatedButton> {
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
               ),
             )
           : Text(widget.label),

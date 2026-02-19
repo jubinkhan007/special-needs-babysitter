@@ -14,7 +14,7 @@ class Step7Complete extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: const Color(0xFF88CBE6), // Fallback color
+      backgroundColor: AppColors.primary, // Fallback color
       body: Stack(
         children: [
           // 1. Hero Image (Top ~65%)
@@ -28,7 +28,7 @@ class Step7Complete extends ConsumerWidget {
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
               errorBuilder: (_, __, ___) => Container(
-                color: const Color(0xFF88CBE6), // Fallback if image fails
+                color: AppColors.primary, // Fallback if image fails
                 child: const Center(
                   child:
                       Icon(Icons.check_circle, size: 80, color: Colors.white),
@@ -85,7 +85,7 @@ class Step7Complete extends ConsumerWidget {
                     child: ElevatedButton(
                       onPressed: onFinish,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF88CBE6), // Light blue
+                        backgroundColor: AppColors.primary, // Light blue
                         foregroundColor: AppColors.textOnButton,
                         elevation: 0,
                         shape: RoundedRectangleBorder(

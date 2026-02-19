@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class MultiSelectAccordion extends StatefulWidget {
@@ -125,12 +126,12 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
                               color: isSelected
-                                  ? const Color(0xFF88CBE6)
+                                  ? AppColors.primary
                                   : const Color(0xFFD0D5DD),
                               width: isSelected ? 0 : 1,
                             ),
                             color: isSelected
-                                ? const Color(0xFF88CBE6)
+                                ? AppColors.primary
                                 : Colors.white,
                           ),
                           child: isSelected

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../profile_details/data/sitter_me_dto.dart';
 
@@ -42,7 +43,7 @@ class SkillsCertificationsSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D2939),
+                  color: AppColors.buttonDark,
                 ),
               ),
               if (onEditTap != null)
@@ -100,7 +101,7 @@ class SkillsCertificationsSection extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF1D2939),
+                color: AppColors.buttonDark,
               ),
             ),
             const SizedBox(height: 8),
@@ -205,11 +206,11 @@ class _AgeRangeChip extends StatelessWidget {
       case 'infants':
         return const Color(0xFF62A8FF);
       case 'toddlers':
-        return const Color(0xFF10B981);
+        return AppColors.success;
       case 'children':
         return const Color(0xFF8B5CF6);
       case 'teens':
-        return const Color(0xFFF59E0B);
+        return AppColors.warning;
       default:
         return const Color(0xFF62A8FF);
     }

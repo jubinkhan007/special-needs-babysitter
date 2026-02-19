@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 class WillingToTravelSection extends StatelessWidget {
@@ -66,12 +67,12 @@ class WillingToTravelSection extends StatelessWidget {
               color: Colors.white,
               border: Border.all(
                   color:
-                      value ? const Color(0xFF88CBE6) : const Color(0xFF98A2B3),
+                      value ? AppColors.primary : const Color(0xFF98A2B3),
                   width: 2),
               borderRadius: BorderRadius.circular(6),
             ),
             child: value
-                ? const Icon(Icons.check, size: 18, color: Color(0xFF88CBE6))
+                ? const Icon(Icons.check, size: 18, color: AppColors.primary)
                 : null,
           ),
           const SizedBox(width: 12),

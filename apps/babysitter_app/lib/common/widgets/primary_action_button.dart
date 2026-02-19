@@ -4,36 +4,32 @@ import 'package:flutter/material.dart';
 /// Pixel-perfect primary action button matching Figma design
 /// - Rounded rectangle (8px radius, not pill)
 /// - Specific height and padding
-/// - Slightly desaturated blue
 class PrimaryActionButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final bool isLoading;
-  final Color? backgroundColor;
 
   const PrimaryActionButton({
     super.key,
     required this.label,
     this.onPressed,
     this.isLoading = false,
-    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? AppColors.secondary;
     return SizedBox(
       width: double.infinity,
-      height: 54, // Slightly taller to prevent clipping
+      height: 54,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: bg,
+          backgroundColor: AppColors.primary,
           foregroundColor: AppColors.textOnButton,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(vertical: 14), // Explicit padding
-          disabledBackgroundColor: bg.withOpacity(0.6),
-          disabledForegroundColor: Colors.white.withOpacity(0.8),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          disabledBackgroundColor: AppColors.primary.withOpacity(0.6),
+          disabledForegroundColor: AppColors.textOnButton.withOpacity(0.8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),

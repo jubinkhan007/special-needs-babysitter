@@ -31,6 +31,7 @@ class AppColors {
   // ---------------------------------------------------------------------------
   static const Color background = Color(0xFFE6F4FB); // pale blue scaffold bg
   static const Color surface = Color(0xFFFFFFFF); // cards/sheets
+  static const Color surfaceTint = Color(0xFFF3FAFD); // light blue tinted surface
   static const Color border = Color(0xFFDCEAF3); // soft blue-tinted border
   static const Color divider = border;
 

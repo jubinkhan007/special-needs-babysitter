@@ -130,7 +130,7 @@ class ReferralBonusesScreen extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () => _shareReferral(context, ref),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF89CFF0),
+                backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.textOnButton,
                 elevation: 0,
                 shape: RoundedRectangleBorder(

@@ -43,7 +43,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
             AppToast.show(context, 
               const SnackBar(
                 content: Text('Action completed successfully'),
-                backgroundColor: Color(0xFF10B981),
+                backgroundColor: AppColors.success,
               ),
             );
             // Invalidate the job applications lists to refresh
@@ -56,7 +56,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
             AppToast.show(context, 
               SnackBar(
                 content: Text(error.toString().replaceFirst('Exception: ', '')),
-                backgroundColor: const Color(0xFFEF4444),
+                backgroundColor: AppColors.error,
               ),
             );
           },
@@ -82,14 +82,14 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.error_outline,
-                    size: 64.w, color: const Color(0xFFEF4444)),
+                    size: 64.w, color: AppColors.error),
                 SizedBox(height: 16.h),
                 Text(
                   'Error loading job request',
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                     fontFamily: 'Inter',
                   ),
                 ),
@@ -126,7 +126,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
         style: TextStyle(
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,
-          color: const Color(0xFF1D2939),
+          color: AppColors.buttonDark,
           fontFamily: 'Inter',
         ),
       ),
@@ -207,7 +207,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                                 context,
                                 SnackBar(
                                   content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                                  backgroundColor: const Color(0xFF22C55E),
+                                  backgroundColor: AppColors.success,
                                 ),
                               );
                             }).catchError((error) {
@@ -457,10 +457,10 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                             },
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
-                        backgroundColor: const Color(0xFF87C4F2),
+                        backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.textOnButton,
                         disabledBackgroundColor:
-                            const Color(0xFF87C4F2).withValues(alpha: 0.6),
+                            AppColors.primary.withValues(alpha: 0.6),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -473,7 +473,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               child: const CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                    AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                               ),
                             )
                           : Text(
@@ -511,10 +511,10 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                             },
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 48.h),
-                        backgroundColor: const Color(0xFF1D2939),
+                        backgroundColor: AppColors.buttonDark,
                         foregroundColor: AppColors.textOnButton,
                         disabledBackgroundColor:
-                            const Color(0xFF1D2939).withValues(alpha: 0.6),
+                            AppColors.buttonDark.withValues(alpha: 0.6),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -527,7 +527,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               child: const CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                                    AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
                               ),
                             )
                           : Text(

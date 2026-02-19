@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -120,7 +121,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFE7F5FC),
+        backgroundColor: AppColors.surfaceTint,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.w),
@@ -146,7 +147,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
       body: Column(
         children: [
           Container(
-            color: const Color(0xFFE7F5FC),
+            color: AppColors.surfaceTint,
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
             child: AppSearchField(
               hintText: 'Search jobs by location, date, or keyword',
@@ -295,7 +296,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                     content: Text(
                       isSaved ? 'Job saved' : 'Job unsaved',
                     ),
-                    backgroundColor: const Color(0xFF22C55E),
+                    backgroundColor: AppColors.success,
                   ),
                 );
               }).catchError((error) {

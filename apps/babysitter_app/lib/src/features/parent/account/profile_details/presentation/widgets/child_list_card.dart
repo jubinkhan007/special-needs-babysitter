@@ -100,7 +100,7 @@ class ChildListCard extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onAddChild,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF1F2937),
+          backgroundColor: AppColors.buttonDark,
           foregroundColor: AppColors.textOnButton,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

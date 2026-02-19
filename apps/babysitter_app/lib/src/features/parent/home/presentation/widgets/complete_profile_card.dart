@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import '../theme/home_design_tokens.dart';
 
@@ -18,11 +19,11 @@ class CompleteProfileCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF4090B8), // Matching blue
+        color: AppColors.secondary, // Matching blue
         borderRadius: BorderRadius.circular(HomeDesignTokens.cardRadius),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF4090B8).withOpacity(0.3),
+            color: AppColors.secondary.withOpacity(0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

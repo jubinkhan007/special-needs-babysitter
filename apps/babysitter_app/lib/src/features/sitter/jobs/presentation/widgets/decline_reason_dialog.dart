@@ -42,7 +42,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
         AppToast.show(context, 
           const SnackBar(
             content: Text('Please enter a reason'),
-            backgroundColor: Color(0xFFEF4444),
+            backgroundColor: AppColors.error,
           ),
         );
         return;
@@ -53,7 +53,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
       AppToast.show(context, 
         const SnackBar(
           content: Text('Please select a reason'),
-          backgroundColor: Color(0xFFEF4444),
+          backgroundColor: AppColors.error,
         ),
       );
       return;
@@ -163,7 +163,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
-                    borderSide: const BorderSide(color: Color(0xFF87C4F2)),
+                    borderSide: const BorderSide(color: AppColors.primary),
                   ),
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 16.w,
@@ -205,7 +205,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
               child: ElevatedButton(
                 onPressed: _handleSubmit,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF87C4F2),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -250,7 +250,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: isSelected
-                      ? const Color(0xFF87C4F2)
+                      ? AppColors.primary
                       : const Color(0xFFD0D5DD),
                   width: 2,
                 ),
@@ -262,7 +262,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                         height: 10.h,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xFF87C4F2),
+                          color: AppColors.primary,
                         ),
                       ),
                     )

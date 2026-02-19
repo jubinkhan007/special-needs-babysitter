@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
@@ -128,7 +129,7 @@ class _EditProfessionalInfoDialogState
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1D2939),
+                    color: AppColors.buttonDark,
                   ),
                 ),
                 IconButton(
@@ -245,7 +246,6 @@ class _EditProfessionalInfoDialogState
             child: PrimaryActionButton(
               label: _isSaving ? 'Saving...' : 'Save Changes',
               onPressed: _isSaving ? null : _onSave,
-              backgroundColor: const Color(0xFF00A3E0),
             ),
           ),
         ],

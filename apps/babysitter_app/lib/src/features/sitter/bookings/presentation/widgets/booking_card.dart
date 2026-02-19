@@ -304,7 +304,7 @@ class BookingCard extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onTap,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF89CFF0),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.textOnButton,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
