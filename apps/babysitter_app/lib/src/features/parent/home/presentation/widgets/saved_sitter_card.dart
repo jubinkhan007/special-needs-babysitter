@@ -44,7 +44,7 @@ class SavedSitterCard extends StatelessWidget {
                           width: double.infinity,
                           fit: BoxFit.cover,
                           alignment: Alignment.topCenter,
-                          errorBuilder: (_, __, ___) => Container(
+                          errorBuilder: (_, _, _) => Container(
                             height: HomeDesignTokens.savedSitterImageHeight,
                             color: AppColors.neutral10,
                           ),
@@ -55,7 +55,7 @@ class SavedSitterCard extends StatelessWidget {
                           width: double.infinity,
                           fit: BoxFit.cover,
                           alignment: Alignment.topCenter,
-                          errorBuilder: (_, __, ___) => Container(
+                          errorBuilder: (_, _, _) => Container(
                             height: HomeDesignTokens.savedSitterImageHeight,
                             color: AppColors.neutral10,
                           ),

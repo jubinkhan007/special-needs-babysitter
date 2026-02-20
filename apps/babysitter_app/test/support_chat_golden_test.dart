@@ -14,7 +14,7 @@ void main() {
       designSize: const Size(393, 852), // iPhone 14-ish
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, __) => MaterialApp(
+      builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Inter', // Assuming Inter or similar

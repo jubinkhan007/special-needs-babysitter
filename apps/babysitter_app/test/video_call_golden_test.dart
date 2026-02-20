@@ -19,7 +19,7 @@ void main() {
       designSize: const Size(393, 852),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, __) => MaterialApp(
+      builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         home: VideoCallScreen(args: args),
       ),

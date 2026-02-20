@@ -70,13 +70,13 @@ class ActiveBookingCard extends StatelessWidget {
                             ? Image.network(
                                 booking.avatarAssetOrUrl,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) =>
+                                errorBuilder: (_, _, _) =>
                                     const SizedBox(),
                               )
                             : Image.asset(
                                 booking.avatarAssetOrUrl,
                                 fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) =>
+                                errorBuilder: (_, _, _) =>
                                     const SizedBox(),
                               ))
                         : const SizedBox(),

@@ -168,7 +168,7 @@ class ReviewsSection extends StatelessWidget {
               child: Image.asset(
                 imageAsset,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
+                errorBuilder: (_, _, _) =>
                     const Icon(Icons.person, color: Colors.grey),
               ),
             ),

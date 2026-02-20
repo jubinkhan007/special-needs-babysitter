@@ -7,7 +7,6 @@ import '../../../../../../../common/widgets/primary_action_button.dart';
 import '../../widgets/step_indicator.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
 import '../../../../../routing/app_router.dart'; // For signUpInProgressProvider

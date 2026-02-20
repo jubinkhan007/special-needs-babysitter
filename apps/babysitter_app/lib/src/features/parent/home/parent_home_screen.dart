@@ -53,7 +53,7 @@ class ParentHomeScreen extends ConsumerWidget {
         bottom: false,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
-            bottom: 100 + MediaQuery.of(context).padding.bottom,
+            bottom: 24 + MediaQuery.of(context).padding.bottom,
           ), // Space for bottom nav + safe area
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

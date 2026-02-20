@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 
 import '../../data/repositories/wallet_repository_impl.dart';

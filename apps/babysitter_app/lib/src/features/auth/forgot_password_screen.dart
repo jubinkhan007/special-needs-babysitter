@@ -124,7 +124,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               child: Image.asset(
                 'assets/onboarding_4.jpg',
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   color: AppColors.secondary.withValues(alpha: 0.3),
                   child: const Center(
                     child: Icon(

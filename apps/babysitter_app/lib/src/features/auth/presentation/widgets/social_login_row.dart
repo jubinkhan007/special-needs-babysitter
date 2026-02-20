@@ -102,7 +102,7 @@ class _SocialButton extends StatelessWidget {
             iconPath,
             width: 22, // Smaller icons
             height: 22,
-            errorBuilder: (_, error, __) {
+            errorBuilder: (_, error, _) {
               debugPrint('❌ Asset failed: $iconPath -> $error');
               return const Icon(Icons.error_outline,
                   size: 18, color: Colors.grey);

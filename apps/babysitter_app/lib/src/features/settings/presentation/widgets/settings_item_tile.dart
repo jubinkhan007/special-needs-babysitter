@@ -48,7 +48,7 @@ class SettingsItemTile extends StatelessWidget {
                 style: AppTokens.settingsTitleStyle,
               ),
             ),
-            if (trailing != null) trailing!,
+            ?trailing,
           ],
         ),
       ),

@@ -26,7 +26,7 @@ class PasswordUpdatedScreen extends StatelessWidget {
             child: Image.asset(
               'assets/images/password_updated_hero.png',
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 color: AppColors.secondary.withValues(alpha: 0.3),
                 child: const Center(
                   child: Icon(

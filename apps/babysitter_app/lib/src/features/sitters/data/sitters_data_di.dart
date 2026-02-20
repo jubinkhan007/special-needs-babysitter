@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import '../../bookings/data/bookings_data_di.dart'; // Reuse Dio with Auth Interceptor
 import 'datasources/sitters_remote_datasource.dart';
 import 'repositories/sitters_repository_impl.dart';

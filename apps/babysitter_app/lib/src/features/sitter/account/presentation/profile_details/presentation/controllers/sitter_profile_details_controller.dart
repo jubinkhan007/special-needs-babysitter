@@ -104,7 +104,7 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
 
       final step2Data = <String, dynamic>{
         'ageRanges': ageRanges,
-        if (yearsOfExperience != null) 'yearsOfExperience': yearsOfExperience,
+        'yearsOfExperience': ?yearsOfExperience,
         if (profile.bio != null && profile.bio!.isNotEmpty)
           'bio': profile.bio,
         if (profile.dateOfBirth != null && profile.dateOfBirth!.isNotEmpty)

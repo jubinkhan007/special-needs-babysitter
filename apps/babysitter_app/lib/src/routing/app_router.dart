@@ -805,7 +805,7 @@ class RouterRefreshNotifier extends ChangeNotifier {
     debugPrint('>>> RouterRefreshNotifier constructor');
     _sub = ref.listen<AsyncValue<AuthSession?>>(
       authNotifierProvider,
-      (_, __) => Future.microtask(notifyListeners), // async break
+      (_, _) => Future.microtask(notifyListeners), // async break
       fireImmediately: false,
     );
   }

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';

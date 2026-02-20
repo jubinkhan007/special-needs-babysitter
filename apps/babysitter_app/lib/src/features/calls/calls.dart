@@ -16,7 +16,7 @@
 /// - GET /calls/{callId} - Get call details
 /// - POST /calls/{callId}/token - Refresh RTC token
 /// - GET /calls/history - Call history
-library calls;
+library;
 
 // Domain entities
 export 'domain/entities/call_enums.dart';

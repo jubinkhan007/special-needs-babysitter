@@ -14,7 +14,7 @@ void main() {
       designSize: const Size(393, 852), // iPhone 14 Pro
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (_, __) => MaterialApp(
+      builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AudioCallScreen(args: args),
       ),

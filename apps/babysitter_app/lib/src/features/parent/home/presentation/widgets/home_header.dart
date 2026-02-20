@@ -48,7 +48,7 @@ class HomeHeader extends StatelessWidget {
                     ? Image.network(
                         avatarUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Center(
+                        errorBuilder: (_, _, _) => Center(
                           child: Text(
                             initials,
                             style: const TextStyle(
@@ -62,7 +62,7 @@ class HomeHeader extends StatelessWidget {
                     : Image.asset(
                         avatarUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Center(
+                        errorBuilder: (_, _, _) => Center(
                           child: Text(
                             initials,
                             style: const TextStyle(

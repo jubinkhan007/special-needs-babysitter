@@ -92,7 +92,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           child: ListView.separated(
             shrinkWrap: true,
             itemCount: _radiusOptions.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, index) {
               final radius = _radiusOptions[index];
               return ListTile(
@@ -125,7 +125,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           child: ListView.separated(
             shrinkWrap: true,
             itemCount: _expertiseOptions.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
+            separatorBuilder: (_, _) => const Divider(height: 1),
             itemBuilder: (context, index) {
               final option = _expertiseOptions[index];
               return ListTile(

@@ -89,7 +89,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               child: Image.asset(
                 'assets/images/login_hero_image.png',
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   color: AppColors.secondary.withValues(alpha: 0.3),
                   child: const Center(
                     child: Icon(
@@ -355,7 +355,7 @@ class _SocialButton extends StatelessWidget {
             iconPath,
             width: 22,
             height: 22,
-            errorBuilder: (_, __, ___) => const Icon(
+            errorBuilder: (_, _, _) => const Icon(
               Icons.error_outline,
               size: 18,
               color: Colors.grey,

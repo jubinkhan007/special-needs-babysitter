@@ -124,7 +124,7 @@ class _EditProfileDetailsDialogState extends State<EditProfileDetailsDialog> {
           _languages.entries.where((e) => e.value).map((e) => e.key).toList();
 
       final data = {
-        if (photoUrl != null) 'photoUrl': photoUrl,
+        'photoUrl': ?photoUrl,
         'familyName': _familyNameController.text,
         'numberOfFamilyMembers': int.tryParse(_familyMembersCount ?? '0') ?? 0,
         'familyBio': _bioController.text,

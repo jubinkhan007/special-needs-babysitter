@@ -35,7 +35,7 @@ class PipPreviewTile extends StatelessWidget {
             child: Image.network(
               previewUrl,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(color: Colors.grey),
+              errorBuilder: (_, _, _) => Container(color: Colors.grey),
             ),
           ),
 

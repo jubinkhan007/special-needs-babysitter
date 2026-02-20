@@ -27,7 +27,7 @@ class Step7Complete extends ConsumerWidget {
               'assets/images/profile_complete_hero.png', // Using available asset
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 color: AppColors.primary, // Fallback if image fails
                 child: const Center(
                   child:

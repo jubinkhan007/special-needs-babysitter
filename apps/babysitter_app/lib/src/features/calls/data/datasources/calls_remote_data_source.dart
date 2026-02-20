@@ -118,7 +118,7 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
         '/calls/$callId/decline',
         data: {
           'callId': callId,
-          if (reason != null) 'reason': reason,
+          'reason': ?reason,
         },
       );
     } catch (e, stack) {

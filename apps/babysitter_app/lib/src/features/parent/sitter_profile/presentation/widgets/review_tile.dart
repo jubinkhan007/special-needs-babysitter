@@ -30,7 +30,7 @@ class ReviewTile extends StatelessWidget {
                 radius: 20,
                 backgroundColor: AppColors.neutral20,
                 backgroundImage: AssetImage(avatarUrl), // Placeholder
-                onBackgroundImageError: (_, __) {},
+                onBackgroundImageError: (_, _) {},
               ),
               const SizedBox(width: 12),
               Column(

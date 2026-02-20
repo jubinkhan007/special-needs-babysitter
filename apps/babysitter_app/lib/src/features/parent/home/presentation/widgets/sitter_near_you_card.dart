@@ -205,7 +205,7 @@ class SitterNearYouCard extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               itemCount: sitter.tags.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              separatorBuilder: (_, _) => const SizedBox(width: 10),
               itemBuilder: (context, index) => _badge(sitter.tags[index]),
             ),
           ),

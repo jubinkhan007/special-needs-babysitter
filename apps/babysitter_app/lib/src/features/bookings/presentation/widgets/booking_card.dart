@@ -171,7 +171,7 @@ class _Header extends StatelessWidget {
     return Image.asset(
       assetOrUrl,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) =>
+      errorBuilder: (_, _, _) =>
           const Center(child: Icon(Icons.person, color: Colors.grey)),
     );
   }

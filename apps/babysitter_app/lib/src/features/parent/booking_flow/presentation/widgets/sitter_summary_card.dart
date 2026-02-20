@@ -57,7 +57,7 @@ class SitterSummaryCard extends StatelessWidget {
                         ? NetworkImage(avatarUrl)
                         : AssetImage(avatarUrl) as ImageProvider,
                     fit: BoxFit.cover,
-                    onError: (_, __) {
+                    onError: (_, _) {
                       // Error handling is done by the child Icon fallback if image fails to load
                       // But DecorationImage doesn't propagate errors nicely to 'child'
                       // For a robust solution, we might want to use cached_network_image package
