@@ -97,7 +97,9 @@ class ParentHomeScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
-              _buildSectionHeader('Sitters Near You', onSeeAll: () {}),
+              _buildSectionHeader('Sitters Near You', onSeeAll: () {
+                context.push(Routes.sitterSearch);
+              }),
               const SizedBox(height: HomeDesignTokens.itemSpacing),
               if (locationStatus != null &&
                   locationStatus != LocationAccessStatus.available) ...[
