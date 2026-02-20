@@ -94,6 +94,19 @@ post_install do |installer|
     end
   end
 
+  # Ad-hoc sign all Agora xcframework binaries so iOS 26 simulator accepts them.
+  # iOS 26 enforces code-signature validation even on the simulator; the Agora
+  # pods ship unsigned binaries which causes a DYLD "Library missing" crash.
+  Dir.glob(File.join(Dir.pwd, 'Pods', '**', '*.xcframework', '**', '*.framework')).each do |fw|
+    binary = File.join(fw, File.basename(fw, '.framework'))
+    next unless File.exist?(binary)
+    sig = `codesign -dv "#{binary}" 2>&1`
+    if sig.include?('not signed')
+      puts "DEBUG: Ad-hoc signing #{binary}"
+      system("codesign --force --sign - --timestamp=none \"#{binary}\"")
+    end
+  end
+
   firebase_header_paths = [
     File.join(Dir.pwd, '.symlinks', 'plugins', 'firebase_messaging', 'ios',
       'Classes', 'FLTFirebaseMessagingPlugin.h'),
