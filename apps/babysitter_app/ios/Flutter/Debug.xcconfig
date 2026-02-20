@@ -1,9 +1,9 @@
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
 APS_ENVIRONMENT=development
-// Disable signing for simulator builds
-CODE_SIGNING_ALLOWED[sdk=iphonesimulator*] = NO
-CODE_SIGNING_REQUIRED[sdk=iphonesimulator*] = NO
 
-// Fix “Runner.entitlements was modified during build” (Debug/simulator)
+// Ad-hoc sign simulator builds so entitlements are embedded.
+// iOS 26 simulator strictly enforces keychain entitlements; without this,
+// flutter_secure_storage fails with -34018 (errSecMissingEntitlement).
+CODE_SIGN_IDENTITY[sdk=iphonesimulator*] = -
 CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION[sdk=iphonesimulator*] = YES
