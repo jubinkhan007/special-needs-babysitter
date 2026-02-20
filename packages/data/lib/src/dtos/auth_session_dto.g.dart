@@ -6,8 +6,8 @@ part of 'auth_session_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AuthSessionDtoImpl _$$AuthSessionDtoImplFromJson(Map<String, dynamic> json) =>
-    _$AuthSessionDtoImpl(
+_AuthSessionDto _$AuthSessionDtoFromJson(Map<String, dynamic> json) =>
+    _AuthSessionDto(
       user: UserDto.fromJson(json['user'] as Map<String, dynamic>),
       accessToken: json['access_token'] as String,
       refreshToken: json['refresh_token'] as String?,
@@ -16,8 +16,7 @@ _$AuthSessionDtoImpl _$$AuthSessionDtoImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['expires_at'] as String),
     );
 
-Map<String, dynamic> _$$AuthSessionDtoImplToJson(
-        _$AuthSessionDtoImpl instance) =>
+Map<String, dynamic> _$AuthSessionDtoToJson(_AuthSessionDto instance) =>
     <String, dynamic>{
       'user': instance.user,
       'access_token': instance.accessToken,

@@ -88,15 +88,15 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     final router = ref.watch(appRouterProvider);
 
     ref.listen(authNotifierProvider, (previous, next) {
-      final userId = next.valueOrNull?.user.id;
+      final userId = next.value?.user.id;
       if (userId != null && userId.isNotEmpty) {
         ref.read(callControllerProvider.notifier).setCurrentUserId(userId);
       }
       _maybeStartIncomingCallPolling();
 
       // Register FCM token when user becomes authenticated
-      final wasAuthenticated = previous?.valueOrNull != null;
-      final isAuthenticated = next.valueOrNull != null;
+      final wasAuthenticated = previous?.value != null;
+      final isAuthenticated = next.value != null;
       _logFcmFlow(
         'authListener fired wasAuthenticated=$wasAuthenticated isAuthenticated=$isAuthenticated',
       );
@@ -108,7 +108,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
     if (!_bootstrappedAuthCheck) {
       _bootstrappedAuthCheck = true;
-      final currentSession = ref.read(authNotifierProvider).valueOrNull;
+      final currentSession = ref.read(authNotifierProvider).value;
       _logFcmFlow(
         'build bootstrap auth check sessionPresent=${currentSession != null}',
       );
@@ -152,7 +152,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       return;
     }
 
-    final user = ref.read(authNotifierProvider).valueOrNull?.user;
+    final user = ref.read(authNotifierProvider).value?.user;
     if (user == null || !user.isSitter) {
       _incomingCallPollingHandler?.stop();
       return;
@@ -195,7 +195,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       await notificationsService.requestPermission();
 
       // Register token if user is already authenticated
-      final session = ref.read(authNotifierProvider).valueOrNull;
+      final session = ref.read(authNotifierProvider).value;
       if (session != null) {
         _logFcmFlow(
           '_initializeNotifications found existing session userId=${session.user.id}',
@@ -210,7 +210,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       // Listen to token refreshes and re-register with backend
       _tokenRefreshSubscription =
           notificationsService.onTokenRefresh.listen((newToken) async {
-        final currentSession = ref.read(authNotifierProvider).valueOrNull;
+        final currentSession = ref.read(authNotifierProvider).value;
         if (currentSession != null && newToken.isNotEmpty) {
           try {
             final dataSource = ref.read(authRemoteDataSourceProvider);
@@ -319,7 +319,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     );
 
     _fcmTokenRetryTimer = Timer(delay, () {
-      final session = ref.read(authNotifierProvider).valueOrNull;
+      final session = ref.read(authNotifierProvider).value;
       if (session == null) {
         _logFcmFlow('_registerFcmToken retry skipped: no authenticated session');
         return;
@@ -364,7 +364,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     }
 
     final cleaned = payload.trim();
-    final user = ref.read(authNotifierProvider).valueOrNull?.user;
+    final user = ref.read(authNotifierProvider).value?.user;
     final context = rootNavigatorKey.currentContext;
 
     if (context == null) {
@@ -431,7 +431,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
       // Wait briefly for auth restore if app was cold-started from a notif tap.
       for (var attempt = 0; attempt < 10; attempt++) {
-        if (ref.read(authNotifierProvider).valueOrNull != null) break;
+        if (ref.read(authNotifierProvider).value != null) break;
         await Future<void>.delayed(const Duration(seconds: 1));
       }
 
@@ -440,7 +440,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
           final session =
               await ref.read(callsRepositoryProvider).getCallDetails(callId);
           final currentUserId =
-              ref.read(authNotifierProvider).valueOrNull?.user.id;
+              ref.read(authNotifierProvider).value?.user.id;
           final remote = currentUserId == null
               ? (session.initiator ?? session.recipient)
               : session.getRemoteParticipant(currentUserId);

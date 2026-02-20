@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 // Controller uses Repository Interface from Domain only.
 // Providers are defined in `providers/parent_profile_providers.dart`

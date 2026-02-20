@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../models/booking_flow_state.dart';
 
 /// Provider for managing booking flow state across steps 1-4

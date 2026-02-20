@@ -7,29 +7,28 @@ part of 'application_dto.dart';
 // **************************************************************************
 
 SitterDto _$SitterDtoFromJson(Map<String, dynamic> json) => SitterDto(
-      userId: json['userId'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      photoUrl: json['photoUrl'] as String?,
-      bio: json['bio'] as String?,
-      hourlyRate: (json['hourlyRate'] as num?)?.toDouble(),
-      yearsOfExperience: json['yearsOfExperience'] as String?,
-      reliabilityScore: (json['reliabilityScore'] as num?)?.toInt(),
-      skills:
-          (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
-    );
+  userId: json['userId'] as String,
+  firstName: json['firstName'] as String,
+  lastName: json['lastName'] as String,
+  photoUrl: json['photoUrl'] as String?,
+  bio: json['bio'] as String?,
+  hourlyRate: (json['hourlyRate'] as num?)?.toDouble(),
+  yearsOfExperience: json['yearsOfExperience'] as String?,
+  reliabilityScore: (json['reliabilityScore'] as num?)?.toInt(),
+  skills: (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
+);
 
 Map<String, dynamic> _$SitterDtoToJson(SitterDto instance) => <String, dynamic>{
-      'userId': instance.userId,
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
-      'photoUrl': instance.photoUrl,
-      'bio': instance.bio,
-      'hourlyRate': instance.hourlyRate,
-      'yearsOfExperience': instance.yearsOfExperience,
-      'reliabilityScore': instance.reliabilityScore,
-      'skills': instance.skills,
-    };
+  'userId': instance.userId,
+  'firstName': instance.firstName,
+  'lastName': instance.lastName,
+  'photoUrl': instance.photoUrl,
+  'bio': instance.bio,
+  'hourlyRate': instance.hourlyRate,
+  'yearsOfExperience': instance.yearsOfExperience,
+  'reliabilityScore': instance.reliabilityScore,
+  'skills': instance.skills,
+};
 
 ApplicationDto _$ApplicationDtoFromJson(Map<String, dynamic> json) =>
     ApplicationDto(
@@ -58,22 +57,19 @@ ApplicationsDataDto _$ApplicationsDataDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ApplicationsDataDtoToJson(
-        ApplicationsDataDto instance) =>
-    <String, dynamic>{
-      'applications': instance.applications,
-      'total': instance.total,
-    };
+  ApplicationsDataDto instance,
+) => <String, dynamic>{
+  'applications': instance.applications,
+  'total': instance.total,
+};
 
 ApplicationsResponseDto _$ApplicationsResponseDtoFromJson(
-        Map<String, dynamic> json) =>
-    ApplicationsResponseDto(
-      success: json['success'] as bool,
-      data: ApplicationsDataDto.fromJson(json['data'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => ApplicationsResponseDto(
+  success: json['success'] as bool,
+  data: ApplicationsDataDto.fromJson(json['data'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$ApplicationsResponseDtoToJson(
-        ApplicationsResponseDto instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'data': instance.data,
-    };
+  ApplicationsResponseDto instance,
+) => <String, dynamic>{'success': instance.success, 'data': instance.data};

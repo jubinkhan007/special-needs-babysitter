@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
 import 'package:dio/dio.dart';
@@ -24,7 +25,7 @@ final jobPostDioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
       final authState = ref.read(authNotifierProvider);
-      var session = authState.valueOrNull;
+      var session = authState.value;
 
       if (session == null) {
         final storedToken =
@@ -116,7 +117,7 @@ final jobPostControllerProvider =
 /// Provider for User Profile Details (containing children).
 final profileDetailsProvider = FutureProvider<UserProfileDetails>((ref) async {
   final authState = ref.watch(authNotifierProvider);
-  final session = authState.valueOrNull;
+  final session = authState.value;
   if (session == null) throw Exception('User not authenticated');
 
   final useCase = ref.watch(getProfileDetailsUseCaseProvider);

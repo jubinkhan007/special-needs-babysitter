@@ -32,7 +32,7 @@ String _cleanAddressField(dynamic value) {
 }
 
 @freezed
-class JobAddressDto with _$JobAddressDto {
+abstract class JobAddressDto with _$JobAddressDto {
   const factory JobAddressDto({
     required String streetAddress,
     String? aptUnit,
@@ -43,10 +43,10 @@ class JobAddressDto with _$JobAddressDto {
     double? longitude,
   }) = _JobAddressDto;
 
-  const JobAddressDto._();
-
   factory JobAddressDto.fromJson(Map<String, dynamic> json) =>
       _$JobAddressDtoFromJson(json);
+
+  const JobAddressDto._();
 
   factory JobAddressDto.fromDomain(JobAddress address) => JobAddressDto(
         streetAddress: address.streetAddress,
@@ -70,16 +70,16 @@ class JobAddressDto with _$JobAddressDto {
 }
 
 @freezed
-class JobLocationDto with _$JobLocationDto {
+abstract class JobLocationDto with _$JobLocationDto {
   const factory JobLocationDto({
     required double latitude,
     required double longitude,
   }) = _JobLocationDto;
 
-  const JobLocationDto._();
-
   factory JobLocationDto.fromJson(Map<String, dynamic> json) =>
       _$JobLocationDtoFromJson(json);
+
+  const JobLocationDto._();
 
   factory JobLocationDto.fromDomain(JobLocation location) => JobLocationDto(
         latitude: location.latitude,
@@ -134,7 +134,7 @@ class GeoJsonConverter implements JsonConverter<JobLocationDto?, dynamic> {
 }
 
 @freezed
-class JobDto with _$JobDto {
+abstract class JobDto with _$JobDto {
   const factory JobDto({
     String? id,
     @JsonKey(fromJson: _parentIdFromJson) String? parentUserId,
@@ -160,9 +160,9 @@ class JobDto with _$JobDto {
     DateTime? postedAt,
   }) = _JobDto;
 
-  const JobDto._();
-
   factory JobDto.fromJson(Map<String, dynamic> json) => _$JobDtoFromJson(json);
+
+  const JobDto._();
 
   factory JobDto.fromDomain(Job job) => JobDto(
         id: job.id,

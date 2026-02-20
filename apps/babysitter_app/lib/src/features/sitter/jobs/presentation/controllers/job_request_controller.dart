@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/repositories/job_request_repository.dart';
 
 /// Controller for managing job request actions (accept/decline).

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 import '../../../constants/app_constants.dart';
 import '../../bookings/domain/bookings_repository.dart';
@@ -23,7 +24,7 @@ final bookingsDioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
       final authState = ref.read(authNotifierProvider);
-      var session = authState.valueOrNull;
+      var session = authState.value;
 
       if (session == null) {
         final storedToken =

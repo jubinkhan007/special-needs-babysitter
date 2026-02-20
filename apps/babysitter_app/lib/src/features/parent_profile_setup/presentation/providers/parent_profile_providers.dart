@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:data/data.dart';
 import 'package:auth/auth.dart';
 import '../../../../constants/app_constants.dart';
@@ -24,7 +25,7 @@ final parentProfileDioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
       final authState = ref.read(authNotifierProvider);
-      var session = authState.valueOrNull;
+      var session = authState.value;
 
       debugPrint('DEBUG: Interceptor - Session is null? ${session == null}');
 

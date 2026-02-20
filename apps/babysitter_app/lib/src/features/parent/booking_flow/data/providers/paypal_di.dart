@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:dio/dio.dart';
 import 'package:auth/auth.dart'; // For authDioProvider
 import 'package:core/core.dart'; // For EnvConfig.apiBaseUrl

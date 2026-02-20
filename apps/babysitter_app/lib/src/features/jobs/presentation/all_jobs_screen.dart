@@ -19,7 +19,7 @@ class AllJobsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final jobsAsync = ref.watch(allJobsProvider);
     final profileAsync = ref.watch(profileDetailsProvider);
-    final profileDetails = profileAsync.valueOrNull;
+    final profileDetails = profileAsync.value;
     final childrenById = {
       for (final child in profileDetails?.children ?? <domain.Child>[])
         child.id: child,

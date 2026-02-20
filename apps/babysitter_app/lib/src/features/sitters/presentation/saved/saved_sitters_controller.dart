@@ -28,7 +28,7 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
   /// For other screens, we might need a separate method or check existence.
   Future<void> toggleBookmark(String sitterId,
       {bool? isCurrentlySaved, SitterListItemModel? sitterItem}) async {
-    final currentList = state.valueOrNull ?? [];
+    final currentList = state.value ?? [];
     final isSaved =
         isCurrentlySaved ?? currentList.any((s) => s.userId == sitterId);
 
@@ -75,7 +75,7 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
   /// Explicitly remove a bookmark.
   /// Returns true if successful, false if failed (for UI feedback).
   Future<bool> removeBookmark(String sitterUserId) async {
-    final currentList = state.valueOrNull ?? [];
+    final currentList = state.value ?? [];
 
     debugPrint('DEBUG removeBookmark: sitterUserId=$sitterUserId');
     debugPrint('DEBUG removeBookmark: currentList has ${currentList.length} items');
@@ -102,7 +102,7 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
   }
 
   bool isSitterBookmarked(String sitterId) {
-    return state.valueOrNull?.any((s) => s.userId == sitterId) ?? false;
+    return state.value?.any((s) => s.userId == sitterId) ?? false;
   }
 }
 

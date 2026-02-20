@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 import 'package:data/data.dart';
 import 'package:domain/domain.dart';
@@ -46,15 +47,19 @@ final chatInitProvider = FutureProvider<ChatInitResult>((ref) async {
 });
 
 // Messages provider for a specific conversation
-final chatMessagesProvider = AsyncNotifierProvider.autoDispose
+final chatMessagesProvider = AsyncNotifierProvider
     .family<ChatMessagesNotifier, List<ChatMessageEntity>, String>(
-  ChatMessagesNotifier.new,
+  (otherUserId) => ChatMessagesNotifier(otherUserId),
 );
 
-class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessageEntity>, String> {
+class ChatMessagesNotifier extends AsyncNotifier<List<ChatMessageEntity>> {
+  ChatMessagesNotifier(this._otherUserId);
+
+  final String _otherUserId;
+
   @override
-  Future<List<ChatMessageEntity>> build(String otherUserId) async {
-    debugPrint('DEBUG: ChatMessagesNotifier.build($otherUserId)');
+  Future<List<ChatMessageEntity>> build() async {
+    debugPrint('DEBUG: ChatMessagesNotifier.build($_otherUserId)');
 
     final repository = ref.watch(chatRepositoryProvider);
     final chatService = ref.watch(chatServiceProvider);
@@ -64,10 +69,10 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
 
     // Listen to real-time events for this conversation
     final subscription = chatService.events.listen((event) {
-      if (event is MessageReceivedEvent && event.peerId == otherUserId) {
+      if (event is MessageReceivedEvent && event.peerId == _otherUserId) {
         // Refresh messages when we receive a message from this user
         ref.invalidateSelf();
-      } else if (event is MessageSentEvent && event.peerId == otherUserId) {
+      } else if (event is MessageSentEvent && event.peerId == _otherUserId) {
         // Refresh messages when we receive a message from this user
         ref.invalidateSelf();
       }
@@ -80,30 +85,29 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
 
     // Mark conversation as read when viewing
     try {
-      await repository.markAsRead(otherUserId);
+      await repository.markAsRead(_otherUserId);
       ref.invalidate(chatConversationsProvider);
     } catch (e) {
       debugPrint('DEBUG: Error marking conversation as read: $e');
     }
 
-    final messages = await repository.getMessages(otherUserId);
-    debugPrint('DEBUG: Loaded ${messages.length} messages for conversation with $otherUserId');
+    final messages = await repository.getMessages(_otherUserId);
+    debugPrint('DEBUG: Loaded ${messages.length} messages for conversation with $_otherUserId');
     return messages;
   }
 
   Future<void> sendMessage(String text) async {
     final repository = ref.read(chatRepositoryProvider);
-    final otherUserId = arg;
 
     try {
-      debugPrint('DEBUG: Sending message to $otherUserId: $text');
+      debugPrint('DEBUG: Sending message to $_otherUserId: $text');
       final sentMessage = await repository.sendMessage(
-        recipientUserId: otherUserId,
+        recipientUserId: _otherUserId,
         text: text,
       );
 
       // Optimistically add the message to the list
-      final currentMessages = state.valueOrNull ?? [];
+      final currentMessages = state.value ?? [];
       state = AsyncValue.data([...currentMessages, sentMessage]);
 
       // Also refresh conversations list
@@ -120,19 +124,18 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     String? text,
   }) async {
     final repository = ref.read(chatRepositoryProvider);
-    final otherUserId = arg;
 
     try {
-      debugPrint('DEBUG: Sending media message to $otherUserId');
+      debugPrint('DEBUG: Sending media message to $_otherUserId');
       final sentMessage = await repository.sendMediaMessage(
-        recipientUserId: otherUserId,
+        recipientUserId: _otherUserId,
         mediaUrl: mediaUrl,
         mediaType: mediaType,
         text: text,
       );
 
       // Optimistically add the message to the list
-      final currentMessages = state.valueOrNull ?? [];
+      final currentMessages = state.value ?? [];
       state = AsyncValue.data([...currentMessages, sentMessage]);
 
       // Also refresh conversations list
@@ -149,20 +152,19 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
   }) async {
     final repository = ref.read(chatRepositoryProvider);
     final uploader = ref.read(chatMediaUploadDataSourceProvider);
-    final otherUserId = arg;
 
     try {
-      debugPrint('DEBUG: Uploading chat attachment for $otherUserId');
+      debugPrint('DEBUG: Uploading chat attachment for $_otherUserId');
       final uploadResult = await uploader.uploadFile(file);
 
       final sentMessage = await repository.sendMediaMessage(
-        recipientUserId: otherUserId,
+        recipientUserId: _otherUserId,
         mediaUrl: uploadResult.publicUrl,
         mediaType: uploadResult.mediaType,
         text: text,
       );
 
-      final currentMessages = state.valueOrNull ?? [];
+      final currentMessages = state.value ?? [];
       state = AsyncValue.data([...currentMessages, sentMessage]);
 
       ref.invalidate(chatConversationsProvider);
@@ -174,7 +176,7 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
 
   Future<void> refresh() async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => build(arg));
+    state = await AsyncValue.guard(() => build());
   }
 
 }

@@ -273,7 +273,7 @@ class IncomingCallHandler {
     }
 
     var hydrated = await _ensureIncomingStateForAction(event, controller);
-    if (!hydrated && _ref.read(authNotifierProvider).valueOrNull == null) {
+    if (!hydrated && _ref.read(authNotifierProvider).value == null) {
       developer.log(
         '[CALL_ACTION] auth not ready; retrying hydration for callId=${event.callId}',
         name: 'Calls',
@@ -284,7 +284,7 @@ class IncomingCallHandler {
 
       for (var attempt = 1; attempt <= 10 && !hydrated; attempt++) {
         await Future<void>.delayed(const Duration(seconds: 1));
-        if (_ref.read(authNotifierProvider).valueOrNull == null) {
+        if (_ref.read(authNotifierProvider).value == null) {
           continue;
         }
         hydrated = await _ensureIncomingStateForAction(event, controller);
@@ -397,7 +397,7 @@ class IncomingCallHandler {
             .getCallDetails(event.callId);
         callType = session.callType;
         final currentUserId =
-            _ref.read(authNotifierProvider).valueOrNull?.user.id;
+            _ref.read(authNotifierProvider).value?.user.id;
         final remote = currentUserId == null
             ? (session.initiator ?? session.recipient)
             : session.getRemoteParticipant(currentUserId);

@@ -127,7 +127,7 @@ class ParentHomeScreen extends ConsumerWidget {
                 ),
                 data: (sitters) {
                   final displaySitters = sitters.take(6).toList();
-                  final savedSitters = savedSittersAsync.valueOrNull ?? [];
+                  final savedSitters = savedSittersAsync.value ?? [];
 
                   if (displaySitters.isEmpty) {
                     return const SizedBox(

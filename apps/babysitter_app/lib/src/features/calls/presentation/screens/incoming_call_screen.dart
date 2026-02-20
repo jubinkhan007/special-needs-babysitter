@@ -173,7 +173,7 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
                 : () {
                     // Ensure user ID is set before accepting
                     final currentUser =
-                        ref.read(currentUserProvider).valueOrNull;
+                        ref.read(currentUserProvider).value;
                     if (currentUser?.id != null) {
                       ref
                           .read(callControllerProvider.notifier)

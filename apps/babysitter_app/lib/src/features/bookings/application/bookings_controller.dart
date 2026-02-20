@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../domain/booking.dart';
 import '../domain/booking_status.dart';
 import '../../bookings/data/bookings_data_di.dart';

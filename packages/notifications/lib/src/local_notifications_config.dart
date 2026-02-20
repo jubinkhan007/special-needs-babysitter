@@ -27,7 +27,7 @@ class LocalNotificationsConfig {
     );
 
     await plugin.initialize(
-      initSettings,
+      settings: initSettings,
       onDidReceiveNotificationResponse: (response) {
         onNotificationTap(response.payload);
       },

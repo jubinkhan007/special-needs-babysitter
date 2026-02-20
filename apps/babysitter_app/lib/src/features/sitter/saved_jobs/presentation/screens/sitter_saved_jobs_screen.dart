@@ -95,7 +95,7 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                       final preview = JobPreviewMapper.map(
                         job,
                         isBookmarked: isSaved,
-                        userLocation: userLocationAsync.valueOrNull,
+                        userLocation: userLocationAsync.value,
                       );
 
                       return JobPreviewCard(

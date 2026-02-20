@@ -126,7 +126,7 @@ Future<void> _showBackgroundLocalNotification({
   try {
     if (!_backgroundNotificationsInitialized) {
       await _backgroundLocalNotifications.initialize(
-        const InitializationSettings(
+        settings: const InitializationSettings(
           android: AndroidInitializationSettings('@mipmap/ic_launcher'),
           iOS: DarwinInitializationSettings(
             requestAlertPermission: false,
@@ -152,10 +152,10 @@ Future<void> _showBackgroundLocalNotification({
     }
 
     await _backgroundLocalNotifications.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title,
-      body,
-      const NotificationDetails(
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: title,
+      body: body,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           Constants.notificationChannelId,
           Constants.notificationChannelName,

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 
 import '../../domain/entities/job_application_preview.dart';

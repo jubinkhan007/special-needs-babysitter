@@ -787,8 +787,8 @@ class CallController extends Notifier<CallState> {
   }) async {
     if (recipientUserId.isEmpty) return;
 
-    final sessionUser = ref.read(authNotifierProvider).valueOrNull?.user;
-    final profileUser = ref.read(currentUserProvider).valueOrNull;
+    final sessionUser = ref.read(authNotifierProvider).value?.user;
+    final profileUser = ref.read(currentUserProvider).value;
     final user = sessionUser ?? profileUser;
     final callerName = (user?.fullName ?? '').trim().isNotEmpty
         ? user!.fullName

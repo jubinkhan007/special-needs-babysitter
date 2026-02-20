@@ -21,7 +21,7 @@ bool _readProfileComplete(Map json, String key) =>
     false;
 
 @freezed
-class UserDto with _$UserDto {
+abstract class UserDto with _$UserDto {
   const factory UserDto({
     required String id,
     required String email,

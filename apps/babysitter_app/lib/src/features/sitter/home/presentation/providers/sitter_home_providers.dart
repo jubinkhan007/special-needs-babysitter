@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:data/data.dart';
@@ -27,7 +28,7 @@ final sitterHomeDioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
       final authState = ref.read(authNotifierProvider);
-      var session = authState.valueOrNull;
+      var session = authState.value;
 
       if (session == null) {
         final storedToken =

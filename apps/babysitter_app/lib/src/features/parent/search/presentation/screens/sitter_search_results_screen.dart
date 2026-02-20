@@ -99,7 +99,7 @@ class _SitterSearchResultsScreenState
 
     // Watch saved sitters to update UI state
     final savedSittersAsync = ref.watch(savedSittersControllerProvider);
-    final savedSitters = savedSittersAsync.valueOrNull ?? [];
+    final savedSitters = savedSittersAsync.value ?? [];
 
     // Watch the sitters list provider with current filters
     final asyncSitters = ref.watch(sittersListProvider(filterState));

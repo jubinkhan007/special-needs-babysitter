@@ -6,23 +6,57 @@ part of 'sitter_profile_details_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sitterProfileDetailsControllerHash() =>
-    r'ab9aa558ac93b7ef08b03323a7ada44fa534cee2';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [SitterProfileDetailsController].
 @ProviderFor(SitterProfileDetailsController)
-final sitterProfileDetailsControllerProvider = AutoDisposeAsyncNotifierProvider<
-    SitterProfileDetailsController, SitterMeProfileDto>.internal(
-  SitterProfileDetailsController.new,
-  name: r'sitterProfileDetailsControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$sitterProfileDetailsControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final sitterProfileDetailsControllerProvider =
+    SitterProfileDetailsControllerProvider._();
 
-typedef _$SitterProfileDetailsController
-    = AutoDisposeAsyncNotifier<SitterMeProfileDto>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class SitterProfileDetailsControllerProvider
+    extends
+        $AsyncNotifierProvider<
+          SitterProfileDetailsController,
+          SitterMeProfileDto
+        > {
+  SitterProfileDetailsControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sitterProfileDetailsControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sitterProfileDetailsControllerHash();
+
+  @$internal
+  @override
+  SitterProfileDetailsController create() => SitterProfileDetailsController();
+}
+
+String _$sitterProfileDetailsControllerHash() =>
+    r'868a492fccf0dae6d247c982394c4751762b658f';
+
+abstract class _$SitterProfileDetailsController
+    extends $AsyncNotifier<SitterMeProfileDto> {
+  FutureOr<SitterMeProfileDto> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<SitterMeProfileDto>, SitterMeProfileDto>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<SitterMeProfileDto>, SitterMeProfileDto>,
+              AsyncValue<SitterMeProfileDto>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

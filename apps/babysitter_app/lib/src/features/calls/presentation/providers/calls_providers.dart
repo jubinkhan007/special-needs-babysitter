@@ -2,6 +2,7 @@
 export 'package:realtime/realtime.dart' show callServiceProvider, CallService;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 
 import '../../data/datasources/calls_remote_data_source.dart';
@@ -78,7 +79,7 @@ final callConfigProvider = FutureProvider<CallConfig>((ref) async {
 /// Get cached appId (returns null if not loaded yet)
 final agoraAppIdProvider = Provider<String?>((ref) {
   final configAsync = ref.watch(callConfigProvider);
-  return configAsync.valueOrNull?.appId;
+  return configAsync.value?.appId;
 });
 
 // ==================== Main Call Controller ====================

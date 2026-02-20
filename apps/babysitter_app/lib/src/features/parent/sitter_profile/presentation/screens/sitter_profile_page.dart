@@ -24,7 +24,7 @@ class SitterProfilePage extends ConsumerWidget {
 
     // Check bookmark status
     final savedSittersAsync = ref.watch(savedSittersControllerProvider);
-    final savedSitters = savedSittersAsync.valueOrNull ?? [];
+    final savedSitters = savedSittersAsync.value ?? [];
     // We need to match by sitterId. SitterListItemModel uses `userId` as the sitter ID for bookmarks usually.
     // The `sitterId` passed to this page is likely the `userId` (based on routes).
     // Let's assume `sitterId` == `userId` for bookmarking.

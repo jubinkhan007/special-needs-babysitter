@@ -24,14 +24,14 @@ class SitterHomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsync = ref.watch(currentUserProvider);
-    final user = userAsync.valueOrNull;
+    final user = userAsync.value;
 
     final jobsAsync = ref.watch(jobPreviewsNotifierProvider);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     ref.watch(savedJobsListProvider);
 
     final backgroundCheckAsync = ref.watch(backgroundCheckStatusProvider);
-    final status = backgroundCheckAsync.valueOrNull?.status ??
+    final status = backgroundCheckAsync.value?.status ??
         BackgroundCheckStatusType.notStarted;
 
     // Status string for Banner

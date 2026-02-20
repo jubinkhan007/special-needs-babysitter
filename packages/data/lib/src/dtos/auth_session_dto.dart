@@ -6,7 +6,7 @@ part 'auth_session_dto.freezed.dart';
 part 'auth_session_dto.g.dart';
 
 @freezed
-class AuthSessionDto with _$AuthSessionDto {
+abstract class AuthSessionDto with _$AuthSessionDto {
   const factory AuthSessionDto({
     required UserDto user,
     @JsonKey(name: 'access_token') required String accessToken,

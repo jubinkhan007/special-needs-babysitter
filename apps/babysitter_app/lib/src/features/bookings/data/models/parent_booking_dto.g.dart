@@ -7,20 +7,17 @@ part of 'parent_booking_dto.dart';
 // **************************************************************************
 
 ParentBookingsResponseDto _$ParentBookingsResponseDtoFromJson(
-        Map<String, dynamic> json) =>
-    ParentBookingsResponseDto(
-      bookings: (json['bookings'] as List<dynamic>)
-          .map((e) => ParentBookingDto.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      total: (json['total'] as num?)?.toInt(),
-    );
+  Map<String, dynamic> json,
+) => ParentBookingsResponseDto(
+  bookings: (json['bookings'] as List<dynamic>)
+      .map((e) => ParentBookingDto.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  total: (json['total'] as num?)?.toInt(),
+);
 
 Map<String, dynamic> _$ParentBookingsResponseDtoToJson(
-        ParentBookingsResponseDto instance) =>
-    <String, dynamic>{
-      'bookings': instance.bookings,
-      'total': instance.total,
-    };
+  ParentBookingsResponseDto instance,
+) => <String, dynamic>{'bookings': instance.bookings, 'total': instance.total};
 
 ParentBookingDto _$ParentBookingDtoFromJson(Map<String, dynamic> json) =>
     ParentBookingDto(
@@ -35,7 +32,8 @@ ParentBookingDto _$ParentBookingDtoFromJson(Map<String, dynamic> json) =>
       sitter: json['sitter'] == null
           ? null
           : ParentBookingSitterDto.fromJson(
-              json['sitter'] as Map<String, dynamic>),
+              json['sitter'] as Map<String, dynamic>,
+            ),
       job: json['job'] == null
           ? null
           : ParentBookingJobDto.fromJson(json['job'] as Map<String, dynamic>),
@@ -56,37 +54,36 @@ Map<String, dynamic> _$ParentBookingDtoToJson(ParentBookingDto instance) =>
     };
 
 ParentBookingSitterDto _$ParentBookingSitterDtoFromJson(
-        Map<String, dynamic> json) =>
-    ParentBookingSitterDto(
-      userId: json['userId'] as String,
-      firstName: json['firstName'] as String?,
-      lastName: json['lastName'] as String?,
-      photoUrl: json['photoUrl'] as String?,
-      bio: json['bio'] as String?,
-      hourlyRate: (json['hourlyRate'] as num?)?.toDouble(),
-      reliabilityScore: (json['reliabilityScore'] as num?)?.toInt(),
-      skills:
-          (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      address: json['address'] as String?,
-      latitude: (json['latitude'] as num?)?.toDouble(),
-      longitude: (json['longitude'] as num?)?.toDouble(),
-    );
+  Map<String, dynamic> json,
+) => ParentBookingSitterDto(
+  userId: json['userId'] as String,
+  firstName: json['firstName'] as String?,
+  lastName: json['lastName'] as String?,
+  photoUrl: json['photoUrl'] as String?,
+  bio: json['bio'] as String?,
+  hourlyRate: (json['hourlyRate'] as num?)?.toDouble(),
+  reliabilityScore: (json['reliabilityScore'] as num?)?.toInt(),
+  skills: (json['skills'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  address: json['address'] as String?,
+  latitude: (json['latitude'] as num?)?.toDouble(),
+  longitude: (json['longitude'] as num?)?.toDouble(),
+);
 
 Map<String, dynamic> _$ParentBookingSitterDtoToJson(
-        ParentBookingSitterDto instance) =>
-    <String, dynamic>{
-      'userId': instance.userId,
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
-      'photoUrl': instance.photoUrl,
-      'bio': instance.bio,
-      'hourlyRate': instance.hourlyRate,
-      'reliabilityScore': instance.reliabilityScore,
-      'skills': instance.skills,
-      'address': instance.address,
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
-    };
+  ParentBookingSitterDto instance,
+) => <String, dynamic>{
+  'userId': instance.userId,
+  'firstName': instance.firstName,
+  'lastName': instance.lastName,
+  'photoUrl': instance.photoUrl,
+  'bio': instance.bio,
+  'hourlyRate': instance.hourlyRate,
+  'reliabilityScore': instance.reliabilityScore,
+  'skills': instance.skills,
+  'address': instance.address,
+  'latitude': instance.latitude,
+  'longitude': instance.longitude,
+};
 
 ParentBookingJobDto _$ParentBookingJobDtoFromJson(Map<String, dynamic> json) =>
     ParentBookingJobDto(
@@ -104,44 +101,45 @@ ParentBookingJobDto _$ParentBookingJobDtoFromJson(Map<String, dynamic> json) =>
       additionalDetails: json['additionalDetails'] as String?,
       children: (json['children'] as List<dynamic>?)
           ?.map(
-              (e) => ParentBookingChildDto.fromJson(e as Map<String, dynamic>))
+            (e) => ParentBookingChildDto.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
 
 Map<String, dynamic> _$ParentBookingJobDtoToJson(
-        ParentBookingJobDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'startDate': instance.startDate,
-      'endDate': instance.endDate,
-      'startTime': instance.startTime,
-      'endTime': instance.endTime,
-      'payRate': instance.payRate,
-      'status': instance.status,
-      'location': instance.location,
-      'fullAddress': instance.fullAddress,
-      'childrenCount': instance.childrenCount,
-      'additionalDetails': instance.additionalDetails,
-      'children': instance.children,
-    };
+  ParentBookingJobDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'title': instance.title,
+  'startDate': instance.startDate,
+  'endDate': instance.endDate,
+  'startTime': instance.startTime,
+  'endTime': instance.endTime,
+  'payRate': instance.payRate,
+  'status': instance.status,
+  'location': instance.location,
+  'fullAddress': instance.fullAddress,
+  'childrenCount': instance.childrenCount,
+  'additionalDetails': instance.additionalDetails,
+  'children': instance.children,
+};
 
 ParentBookingChildDto _$ParentBookingChildDtoFromJson(
-        Map<String, dynamic> json) =>
-    ParentBookingChildDto(
-      id: json['id'] as String,
-      firstName: json['firstName'] as String?,
-      lastName: json['lastName'] as String?,
-      age: (json['age'] as num?)?.toInt(),
-      specialNeedsDiagnosis: json['specialNeedsDiagnosis'] as String?,
-    );
+  Map<String, dynamic> json,
+) => ParentBookingChildDto(
+  id: json['id'] as String,
+  firstName: json['firstName'] as String?,
+  lastName: json['lastName'] as String?,
+  age: (json['age'] as num?)?.toInt(),
+  specialNeedsDiagnosis: json['specialNeedsDiagnosis'] as String?,
+);
 
 Map<String, dynamic> _$ParentBookingChildDtoToJson(
-        ParentBookingChildDto instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
-      'age': instance.age,
-      'specialNeedsDiagnosis': instance.specialNeedsDiagnosis,
-    };
+  ParentBookingChildDto instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'firstName': instance.firstName,
+  'lastName': instance.lastName,
+  'age': instance.age,
+  'specialNeedsDiagnosis': instance.specialNeedsDiagnosis,
+};

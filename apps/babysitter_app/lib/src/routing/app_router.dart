@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:auth/auth.dart';
 import 'package:domain/domain.dart';
@@ -123,7 +124,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           'DEBUG ROUTER REDIRECT: location=$location, isLoading=${authState.isLoading}, hasValue=${authState.hasValue}, isSignUpInProgress=$isSignUpInProgress');
 
       // Check authentication from session
-      final session = authState.valueOrNull;
+      final session = authState.value;
       final isAuthenticated = session != null;
       final isAuthRoute = Routes.isAuthRoute(location);
       final isSplash = location == Routes.splash;

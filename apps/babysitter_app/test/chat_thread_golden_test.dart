@@ -57,8 +57,10 @@ void main() {
 
 class TestChatMessagesNotifier
     extends ChatMessagesNotifier {
+  TestChatMessagesNotifier() : super('test-user-id');
+
   @override
-  Future<List<ChatMessageEntity>> build(String arg) async {
+  Future<List<ChatMessageEntity>> build() async {
     return [];
   }
 }

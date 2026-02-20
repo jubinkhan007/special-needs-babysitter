@@ -6,23 +6,53 @@ part of 'sitter_account_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(SitterAccountController)
+final sitterAccountControllerProvider = SitterAccountControllerProvider._();
+
+final class SitterAccountControllerProvider
+    extends
+        $AsyncNotifierProvider<SitterAccountController, SitterAccountState> {
+  SitterAccountControllerProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'sitterAccountControllerProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$sitterAccountControllerHash();
+
+  @$internal
+  @override
+  SitterAccountController create() => SitterAccountController();
+}
+
 String _$sitterAccountControllerHash() =>
     r'454365b69ff4604381c0faf1efbdd81580cce0a5';
 
-/// See also [SitterAccountController].
-@ProviderFor(SitterAccountController)
-final sitterAccountControllerProvider = AutoDisposeAsyncNotifierProvider<
-    SitterAccountController, SitterAccountState>.internal(
-  SitterAccountController.new,
-  name: r'sitterAccountControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$sitterAccountControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$SitterAccountController
-    = AutoDisposeAsyncNotifier<SitterAccountState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$SitterAccountController
+    extends $AsyncNotifier<SitterAccountState> {
+  FutureOr<SitterAccountState> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<SitterAccountState>, SitterAccountState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<SitterAccountState>, SitterAccountState>,
+              AsyncValue<SitterAccountState>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

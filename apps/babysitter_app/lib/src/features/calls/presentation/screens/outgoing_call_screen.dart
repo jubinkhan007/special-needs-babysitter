@@ -45,7 +45,7 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
     // Initiate call on screen load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Ensure user ID is set before initiating call
-      final currentUser = ref.read(currentUserProvider).valueOrNull;
+      final currentUser = ref.read(currentUserProvider).value;
       if (currentUser?.id != null) {
         ref.read(callControllerProvider.notifier).setCurrentUserId(currentUser!.id);
       }

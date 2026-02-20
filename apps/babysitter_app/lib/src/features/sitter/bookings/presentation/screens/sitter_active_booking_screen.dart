@@ -139,7 +139,7 @@ class _SitterActiveBookingScreenState
           .clockOut(widget.applicationId);
       if (!mounted) return;
       final jobDetails =
-          ref.read(jobRequestDetailsProvider(widget.applicationId)).valueOrNull;
+          ref.read(jobRequestDetailsProvider(widget.applicationId)).value;
       final isFinalDay = result.isFinalDay || _isFinalDay(jobDetails);
       AppToast.show(
         context,
@@ -168,9 +168,9 @@ class _SitterActiveBookingScreenState
           );
           final jobDetails = ref
               .read(jobRequestDetailsProvider(widget.applicationId))
-              .valueOrNull;
+              .value;
           final bookings =
-              ref.read(sitterCurrentBookingsProvider).valueOrNull;
+              ref.read(sitterCurrentBookingsProvider).value;
           final bookingStatus =
               _findBookingStatus(bookings, widget.applicationId);
           final effectiveStatus =
@@ -233,9 +233,9 @@ class _SitterActiveBookingScreenState
           orElse: () => DateTime.now(),
         );
     final session = trackingState.session;
-    final jobDetails = jobDetailsAsync.valueOrNull;
+    final jobDetails = jobDetailsAsync.value;
     final bookingStatus =
-        _findBookingStatus(bookingsAsync.valueOrNull, widget.applicationId);
+        _findBookingStatus(bookingsAsync.value, widget.applicationId);
     final effectiveStatus =
         _resolveApplicationStatus(jobDetails, bookingStatus);
     _maybeRedirectIfClockedOut(effectiveStatus, jobDetails, session, now);

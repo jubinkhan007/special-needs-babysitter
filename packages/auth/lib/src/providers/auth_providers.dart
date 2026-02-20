@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:domain/domain.dart';
 import 'package:data/data.dart';
 import 'package:notifications/notifications.dart';
@@ -332,7 +333,7 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
   }
 
   Future<void> refreshProfile() async {
-    final session = state.valueOrNull;
+    final session = state.value;
     if (session == null) return;
 
     try {
@@ -431,7 +432,7 @@ final currentUserProvider = FutureProvider<User?>((ref) async {
   final authState = ref.watch(authNotifierProvider);
 
   // Don't fetch if not authenticated
-  if (authState.valueOrNull == null) {
+  if (authState.value == null) {
     return null;
   }
 

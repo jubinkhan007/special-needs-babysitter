@@ -5,7 +5,7 @@ part 'child_dto.freezed.dart';
 part 'child_dto.g.dart';
 
 @freezed
-class ChildDto with _$ChildDto {
+abstract class ChildDto with _$ChildDto {
   const factory ChildDto({
     String? id,
     String? firstName,
@@ -29,10 +29,10 @@ class ChildDto with _$ChildDto {
     String? transportSpecialInstructions,
   }) = _ChildDto;
 
-  const ChildDto._();
-
   factory ChildDto.fromJson(Map<String, dynamic> json) =>
       _$ChildDtoFromJson(json);
+
+  const ChildDto._();
 
   Child toDomain() => Child(
         id: id ?? '',

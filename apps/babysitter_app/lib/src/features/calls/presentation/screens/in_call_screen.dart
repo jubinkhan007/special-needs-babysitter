@@ -50,7 +50,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
       );
     }
 
-    final currentUserId = ref.read(currentUserProvider).valueOrNull?.id ?? '';
+    final currentUserId = ref.read(currentUserProvider).value?.id ?? '';
     final remoteParticipant = callState.session.getRemoteParticipant(currentUserId);
     final isVideoCall = callState.session.callType == CallType.video;
 
@@ -186,7 +186,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
 
   Widget _buildAudioUI(InCall callState, String remoteName) {
     final remoteParticipant = callState.session.getRemoteParticipant(
-      ref.read(currentUserProvider).valueOrNull?.id ?? '',
+      ref.read(currentUserProvider).value?.id ?? '',
     );
     final isConnected = callState.remoteJoined ||
         callState.session.status == CallStatus.accepted;

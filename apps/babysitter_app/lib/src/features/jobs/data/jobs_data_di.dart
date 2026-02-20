@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:auth/auth.dart';
 import '../../../constants/app_constants.dart';
 import '../domain/jobs_repository.dart';
@@ -22,7 +23,7 @@ final jobsDioProvider = Provider<Dio>((ref) {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
       final authState = ref.read(authNotifierProvider);
-      var session = authState.valueOrNull;
+      var session = authState.value;
 
       if (session == null) {
         final storedToken =

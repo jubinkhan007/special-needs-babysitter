@@ -97,7 +97,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
             children: [
               _buildBalanceCard(context, walletState, stripeStatusAsync),
               SizedBox(height: 16.h),
-              _buildPayoutSetupRow(stripeStatusAsync.valueOrNull),
+              _buildPayoutSetupRow(stripeStatusAsync.value),
               SizedBox(height: 20.h),
               _buildSectionHeader(
                 title: 'Add Payment Method',
@@ -250,7 +250,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
               onPressed: () => _handleWithdraw(
                 context,
                 balance,
-                stripeStatusAsync.valueOrNull,
+                stripeStatusAsync.value,
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: WalletStyles.primaryBlue),

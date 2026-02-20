@@ -288,7 +288,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
         ? ref.watch(chatUserProfileProvider(widget.args.otherUserId))
         : null;
 
-    final fetchedProfile = userProfileAsync?.valueOrNull;
+    final fetchedProfile = userProfileAsync?.value;
 
     // Debug logging
     if (needsProfileFetch) {
@@ -347,10 +347,10 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
         ref.watch(chatMessagesProvider(widget.args.otherUserId));
     final callHistoryData = ref
             .watch(_callHistoryLookupProvider(widget.args.otherUserId))
-            .valueOrNull ??
+            .value ??
         const _ConversationCallHistory(byCallId: {}, items: []);
-    final sessionUser = ref.watch(authNotifierProvider).valueOrNull?.user;
-    final currentUser = ref.watch(currentUserProvider).valueOrNull;
+    final sessionUser = ref.watch(authNotifierProvider).value?.user;
+    final currentUser = ref.watch(currentUserProvider).value;
     final currentUserId = sessionUser?.id ?? currentUser?.id ?? '';
 
     return MediaQuery(

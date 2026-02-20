@@ -311,10 +311,10 @@ class NotificationsServiceImpl implements NotificationsService {
     String? payload,
   }) async {
     await _localNotifications.show(
-      DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title,
-      body,
-      const NotificationDetails(
+      id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      title: title,
+      body: body,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           Constants.notificationChannelId,
           Constants.notificationChannelName,

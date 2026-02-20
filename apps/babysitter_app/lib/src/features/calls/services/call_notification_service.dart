@@ -187,7 +187,7 @@ class CallNotificationService {
     }
     try {
       await _ensureLocalNotificationsInitialized();
-      await _localNotifications.cancel(callId.hashCode);
+      await _localNotifications.cancel(id: callId.hashCode);
     } catch (e, st) {
       developer.log(
         'Failed to cancel call notification for $callId: $e',
@@ -289,10 +289,10 @@ class CallNotificationService {
 
       final callKind = isVideo ? 'Video' : 'Audio';
       await _localNotifications.show(
-        callId.hashCode,
-        'Incoming $callKind Call',
-        '$callerName is calling you',
-        const NotificationDetails(
+        id: callId.hashCode,
+        title: 'Incoming $callKind Call',
+        body: '$callerName is calling you',
+        notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             _callChannelId,
             _callChannelName,
@@ -352,7 +352,7 @@ class CallNotificationService {
     );
 
     await _localNotifications.initialize(
-      initSettings,
+      settings: initSettings,
       onDidReceiveNotificationResponse: _handleNotificationResponse,
       onDidReceiveBackgroundNotificationResponse:
           callNotificationResponseBackgroundHandler,
