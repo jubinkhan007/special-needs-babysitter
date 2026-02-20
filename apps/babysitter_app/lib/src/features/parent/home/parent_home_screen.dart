@@ -238,7 +238,7 @@ class ParentHomeScreen extends ConsumerWidget {
                 error: (error, stack) => const SizedBox.shrink(),
                 data: (state) {
                   final percent = state.overview?.profileCompletionPercent;
-                  if (percent == null) {
+                  if (percent == null || percent >= 1.0) {
                     return const SizedBox.shrink();
                   }
                   return CompleteProfileCard(completionPercent: percent);
