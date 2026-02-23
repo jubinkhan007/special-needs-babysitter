@@ -6,20 +6,18 @@ Items from the client's approved UI/UX update list that still need implementatio
 
 ## Sitter Section
 
-### 1. Distinguish Parent vs Support Chats
+### ~~1. Distinguish Parent vs Support Chats~~ DONE
 - **What:** Visually differentiate conversations with parents from conversations with platform support in the messages list.
-- **Why not done:** The `Conversation` model has no `type` or `isSupport` field. All chats render identically in `MessagesScreen`.
-- **Needs:** Backend to add a `chatType` field (e.g. `parent`, `support`) to the conversation API response. Then update `MessageThreadTile` to show a badge or different styling for support chats.
+- **Done:** Added `chatType` field (`parent` | `support`) to `IConversation` type, Mongoose schema, and API response. Frontend normalizer maps `chatType: 'support'` to `isSystem: true`. `MessageThreadTile` now shows a blue "SUPPORT" badge and chat bubble avatar for support conversations.
 
 ### 2. Notification Feed Screen with Grouping & Preview Text
 - **What:** A dedicated notification feed screen that groups notifications by category (Jobs, Messages, Payments, Reminders) and shows preview text under each notification.
 - **Why not done:** No notification feed screen exists. Push notifications are handled by FCM and shown as OS-level notifications only.
 - **Needs:** New `NotificationFeedScreen` with a backend API endpoint to fetch notification history. Group items by category. Add preview/subtitle text for each notification type.
 
-### 3. Warm Notification Messages
+### ~~3. Warm Notification Messages~~ DONE
 - **What:** Replace robotic push notification copy (e.g. "Booking confirmed") with warmer, human-friendly language (e.g. "You're all set! Your booking with the Smith family is confirmed.").
-- **Why not done:** Push notification text is composed on the backend and sent via FCM. The app does not control the wording.
-- **Needs:** Backend team to update all notification templates with friendlier copy. Provide a list of current notification types and proposed new wording for each.
+- **Done:** Updated all 24 notification templates in `NotificationService.ts` with warmer, human-friendly copy (e.g. "Booking Accepted!" → "You're all set!", "Payment Received" → "You got paid!", "Application Update" → "Update on your application" with encouraging follow-up).
 
 ### 4. Rewards & Referral Explanation
 - **What:** Add an explanation sentence on the sitter's Referral & Bonuses screen describing how rewards work (e.g. "Earn $25 for each sitter you refer who completes their first job").
@@ -56,9 +54,9 @@ Items from the client's approved UI/UX update list that still need implementatio
 
 | # | Item | Blocker | Effort |
 |---|------|---------|--------|
-| 1 | Parent vs Support chat distinction | Backend `chatType` field | Medium |
+| ~~1~~ | ~~Parent vs Support chat distinction~~ | ~~Backend `chatType` field~~ | ~~Medium~~ DONE |
 | 2 | Notification feed + grouping | New screen + backend API | Large |
-| 3 | Warm notification messages | Backend notification templates | Small (backend) |
+| ~~3~~ | ~~Warm notification messages~~ | ~~Backend notification templates~~ | ~~Small (backend)~~ DONE |
 | 4 | Rewards/Referral screen | New screen + backend API | Medium |
 | 5 | Notification settings grouped | New screen + backend API | Medium |
 | 6 | Bank Account (ACH) payment | Stripe Financial Connections | Large |
