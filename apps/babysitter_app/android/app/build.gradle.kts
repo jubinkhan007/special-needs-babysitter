@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.waywise.specialneedssitters"
     compileSdk = 36
-    ndkVersion = "29.0.14206865"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
