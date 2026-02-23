@@ -160,7 +160,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           raw['lastMessageAt']?.toString(),
       'unread_count': raw['unread_count'] ?? raw['unreadCount'] ?? 0,
       'is_verified': raw['is_verified'] ?? otherUser['isVerified'] ?? false,
-      'is_system': raw['is_system'] ?? false,
+      'is_system': raw['is_system'] ?? raw['chatType'] == 'support',
     };
   }
 

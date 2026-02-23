@@ -43,18 +43,36 @@ class MessageThreadTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name row with verified badge
+                      // Name row with verified/support badge
                       Row(
                         children: [
                           Flexible(
                             child: Text(
-                              uiModel.title,
+                              uiModel.isSystemThread ? 'Support' : uiModel.title,
                               style: AppTokens.messageNameStyle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          if (uiModel.isVerified) ...[
+                          if (uiModel.isSystemThread) ...[
+                            const SizedBox(width: 6),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppTokens.primaryBlue.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'SUPPORT',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTokens.primaryBlue,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ] else if (uiModel.isVerified) ...[
                             const SizedBox(width: 4),
                             const VerifiedBadge(),
                           ],
