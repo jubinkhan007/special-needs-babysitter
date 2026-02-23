@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 import '../../../../../routing/routes.dart';
 import '../../../../../common_widgets/app_toast.dart';

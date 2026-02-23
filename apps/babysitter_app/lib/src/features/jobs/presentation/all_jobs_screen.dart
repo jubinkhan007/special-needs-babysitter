@@ -1,7 +1,7 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:domain/domain.dart' as domain;
+import 'package:babysitter_app/src/packages/domain/domain.dart' as domain;
 import '../../../theme/app_tokens.dart';
 import '../domain/job.dart';
 import 'models/job_ui_model.dart';

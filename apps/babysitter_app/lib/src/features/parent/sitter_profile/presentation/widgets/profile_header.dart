@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

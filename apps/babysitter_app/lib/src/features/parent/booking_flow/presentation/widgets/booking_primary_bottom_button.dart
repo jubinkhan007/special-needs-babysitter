@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import '../../../search/presentation/theme/app_ui_tokens.dart';
 

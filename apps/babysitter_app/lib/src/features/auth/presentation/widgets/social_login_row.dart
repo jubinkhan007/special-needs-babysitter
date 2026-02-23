@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 /// Pixel-perfect social login row matching Figma
 class SocialLoginRow extends StatelessWidget {

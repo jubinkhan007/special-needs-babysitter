@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 /// Reusable search field widget.
 /// Can be used in two modes:

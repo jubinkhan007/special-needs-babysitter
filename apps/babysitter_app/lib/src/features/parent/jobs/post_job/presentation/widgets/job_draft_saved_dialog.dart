@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ui_kit/ui_kit.dart';
+import 'package:babysitter_app/src/packages/ui_kit/ui_kit.dart';
 
 class JobDraftSavedDialog extends StatelessWidget {
   final VoidCallback onEditJob;

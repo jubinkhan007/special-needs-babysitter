@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 /// App-level constants that re-export from core for convenience
 class AppConstants {

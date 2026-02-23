@@ -1,7 +1,7 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import '../../data/models/child_ui_model.dart';
 import '../../data/providers/booking_flow_provider.dart';
 import '../widgets/booking_step_header.dart';

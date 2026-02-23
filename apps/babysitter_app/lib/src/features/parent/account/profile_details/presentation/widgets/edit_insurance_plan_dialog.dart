@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:domain/domain.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 /// Formatter that only allows digits and at most one decimal point
 class DecimalInputFormatter extends TextInputFormatter {

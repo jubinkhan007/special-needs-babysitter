@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:data/data.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/data/data.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:flutter/foundation.dart';
 
 class SavedJobsRemoteDataSource {

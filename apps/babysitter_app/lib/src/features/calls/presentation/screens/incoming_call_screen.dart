@@ -1,8 +1,8 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 
 import '../../domain/entities/call_enums.dart';
 import '../controllers/call_state.dart';

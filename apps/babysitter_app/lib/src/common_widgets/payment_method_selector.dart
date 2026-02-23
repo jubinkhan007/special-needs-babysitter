@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';

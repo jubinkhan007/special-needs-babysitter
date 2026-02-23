@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:data/data.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/data/data.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 import '../../../../constants/app_constants.dart';
 import '../controllers/parent_profile_controller.dart';
 import 'package:flutter/foundation.dart';

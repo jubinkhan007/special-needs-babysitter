@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:core/core.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 import '../state/sitter_account_state.dart';
 
 part 'sitter_account_controller.g.dart';

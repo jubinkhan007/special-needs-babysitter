@@ -2,8 +2,8 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:auth/auth.dart';
-import 'package:realtime/realtime.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
+import 'package:babysitter_app/src/packages/realtime/realtime.dart';
 
 import '../../domain/entities/call_enums.dart';
 import '../controllers/call_state.dart';

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 

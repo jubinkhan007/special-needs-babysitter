@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 
 class AccountState extends Equatable {
   final AccountOverview? overview;

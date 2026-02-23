@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 
 /// Centralized UI tokens for the Sitter Search feature to ensure pixel-perfect matching with Figma.

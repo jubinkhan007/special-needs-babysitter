@@ -26,7 +26,7 @@ packages:
     source: hosted
     version: "6.5.3"
   agora_rtm:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: agora_rtm
       sha256: "12acd619daca443bd17644328873fab526a47a2c32870e7bfd4511f961aec8fa"
@@ -97,13 +97,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
-  auth:
-    dependency: "direct main"
-    description:
-      path: "../../packages/auth"
-      relative: true
-    source: path
-    version: "0.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -248,13 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  core:
-    dependency: "direct main"
-    description:
-      path: "../../packages/core"
-      relative: true
-    source: path
-    version: "0.0.1"
   coverage:
     dependency: transitive
     description:
@@ -311,13 +297,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
-  data:
-    dependency: "direct main"
-    description:
-      path: "../../packages/data"
-      relative: true
-    source: path
-    version: "0.0.1"
   dbus:
     dependency: transitive
     description:
@@ -342,13 +321,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  domain:
-    dependency: "direct main"
-    description:
-      path: "../../packages/domain"
-      relative: true
-    source: path
-    version: "0.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -584,7 +556,7 @@ packages:
     source: hosted
     version: "5.9.3"
   flutter_secure_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_secure_storage
       sha256: "9cad52d75ebc511adfae3d447d5d13da15a55a92c9410e50f67335b6d21d16ea"
@@ -665,8 +637,16 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed:
+    dependency: "direct dev"
+    description:
+      name: freezed
+      sha256: f23ea33b3863f119b58ed1b586e881a46bd28715ddcc4dbc33104524e3434131
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.5"
   freezed_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: freezed_annotation
       sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
@@ -1114,7 +1094,7 @@ packages:
     source: hosted
     version: "2.0.0"
   mime:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: mime
       sha256: "801fd0b26f14a4a58ccb09d5892c3fbdeff209594300a542492cf13fba9d247a"
@@ -1137,13 +1117,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.4"
-  networking:
-    dependency: "direct main"
-    description:
-      path: "../../packages/networking"
-      relative: true
-    source: path
-    version: "0.0.1"
   node_preamble:
     dependency: transitive
     description:
@@ -1152,13 +1125,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  notifications:
-    dependency: "direct main"
-    description:
-      path: "../../packages/notifications"
-      relative: true
-    source: path
-    version: "0.0.1"
   objective_c:
     dependency: transitive
     description:
@@ -1399,13 +1365,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
-  realtime:
-    dependency: "direct main"
-    description:
-      path: "../../packages/realtime"
-      relative: true
-    source: path
-    version: "0.0.1"
   riverpod:
     dependency: transitive
     description:
@@ -1771,13 +1730,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
-  ui_kit:
-    dependency: "direct main"
-    description:
-      path: "../../packages/ui_kit"
-      relative: true
-    source: path
-    version: "0.0.1"
   unicode:
     dependency: transitive
     description:

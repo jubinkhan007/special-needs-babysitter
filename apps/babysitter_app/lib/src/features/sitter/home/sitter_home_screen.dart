@@ -1,9 +1,9 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 
 import '../../../routing/routes.dart';
 

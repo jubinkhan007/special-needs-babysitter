@@ -1,4 +1,4 @@
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import '../../domain/repositories/saved_jobs_repository.dart';
 import '../sources/saved_jobs_remote_datasource.dart';
 

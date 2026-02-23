@@ -1,10 +1,10 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/job_post_providers.dart';
 import '../controllers/job_post_controller.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import '../../../../../parent_profile_setup/presentation/widgets/add_child_dialog.dart';
 import '../../../../account/profile_details/presentation/providers/profile_details_providers.dart';
 import 'job_post_step_header.dart';

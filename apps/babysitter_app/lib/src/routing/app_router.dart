@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
-import 'package:auth/auth.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 
 import 'routes.dart';
 import '../features/bookings/presentation/review/report_issue_screen.dart';

@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 // primary_button.dart
 import 'package:babysitter_app/src/common_widgets/debounced_button.dart';
 import 'package:flutter/material.dart';

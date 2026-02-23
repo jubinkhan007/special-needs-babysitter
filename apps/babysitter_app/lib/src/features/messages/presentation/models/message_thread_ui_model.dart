@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import '../../domain/message_thread.dart' as local; // Keep for backward compatibility if needed, or remove if unused.
 
 /// UI-ready model for a message thread row.

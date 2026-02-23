@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
-import 'package:domain/domain.dart';
-import 'package:data/data.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
+import 'package:babysitter_app/src/packages/data/data.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import '../../../../constants/app_constants.dart';
 
 /// Dio provider configured for registration API

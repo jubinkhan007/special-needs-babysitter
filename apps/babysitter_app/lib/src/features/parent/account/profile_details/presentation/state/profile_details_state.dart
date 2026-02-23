@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:domain/domain.dart'; // UserProfileDetails
+import 'package:babysitter_app/src/packages/domain/domain.dart'; // UserProfileDetails
 
 class ProfileDetailsState extends Equatable {
   final UserProfileDetails? details;

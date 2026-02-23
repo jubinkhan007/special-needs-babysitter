@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'reset_password_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';

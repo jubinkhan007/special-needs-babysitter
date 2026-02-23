@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../bookings/domain/review/review_args.dart';
 import '../../../../bookings/presentation/providers/review_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 /// Sitter review screen for reviewing a family after completing a job.
 /// Matches the Figma design for sitter_reviews_parents.

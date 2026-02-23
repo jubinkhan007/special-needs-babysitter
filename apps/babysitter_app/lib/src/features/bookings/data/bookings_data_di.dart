@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 import '../../../constants/app_constants.dart';
 import '../../bookings/domain/bookings_repository.dart';
 import 'datasources/bookings_remote_datasource.dart';

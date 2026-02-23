@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:core/core.dart'; // Assuming core handles AppColors/AppTypography
+import 'package:babysitter_app/src/packages/core/core.dart'; // Assuming core handles AppColors/AppTypography
 import '../../../../../routing/routes.dart';
 import '../theme/home_design_tokens.dart';
 

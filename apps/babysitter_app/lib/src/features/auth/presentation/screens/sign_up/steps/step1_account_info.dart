@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:domain/domain.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 import '../../../widgets/auth_input_field.dart';
 import '../../../../../../../common/widgets/primary_action_button.dart';

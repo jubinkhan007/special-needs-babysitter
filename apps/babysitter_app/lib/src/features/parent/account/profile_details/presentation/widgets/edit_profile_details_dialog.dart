@@ -1,10 +1,10 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ui_kit/ui_kit.dart';
+import 'package:babysitter_app/src/packages/ui_kit/ui_kit.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class EditProfileDetailsDialog extends StatefulWidget {

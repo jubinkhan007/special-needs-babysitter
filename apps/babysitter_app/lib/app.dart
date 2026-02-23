@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:core/core.dart';
-import 'package:auth/auth.dart';
-import 'package:notifications/notifications.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
+import 'package:babysitter_app/src/packages/notifications/notifications.dart';
 
 import 'src/routing/app_router.dart';
 import 'src/features/sitter/bookings/presentation/providers/session_tracking_providers.dart';

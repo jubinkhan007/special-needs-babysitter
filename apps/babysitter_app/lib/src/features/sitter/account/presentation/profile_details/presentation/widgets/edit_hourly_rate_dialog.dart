@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';

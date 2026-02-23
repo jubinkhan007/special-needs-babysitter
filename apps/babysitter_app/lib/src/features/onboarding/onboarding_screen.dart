@@ -9,7 +9,7 @@
 //
 // Uses flutter_screenutil for responsive sizing across all devices.
 
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

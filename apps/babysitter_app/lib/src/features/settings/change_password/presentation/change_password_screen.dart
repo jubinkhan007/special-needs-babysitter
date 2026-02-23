@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'reset_password_screen.dart';
 
 /// Change Password / Reset Your Password screen

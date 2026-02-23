@@ -39,7 +39,7 @@ final class SitterProfileDetailsControllerProvider
 }
 
 String _$sitterProfileDetailsControllerHash() =>
-    r'868a492fccf0dae6d247c982394c4751762b658f';
+    r'7d0952275b44737755e289f720bc1d71ae3e3f84';
 
 abstract class _$SitterProfileDetailsController
     extends $AsyncNotifier<SitterMeProfileDto> {

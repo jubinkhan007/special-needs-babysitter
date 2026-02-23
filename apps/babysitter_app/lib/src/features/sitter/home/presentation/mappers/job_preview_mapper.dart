@@ -1,4 +1,4 @@
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:latlong2/latlong.dart';
 import '../../domain/entities/job_preview.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 import '../../../../../theme/app_tokens.dart';
 import '../../../job_details/domain/entities/sitter_job_details.dart';

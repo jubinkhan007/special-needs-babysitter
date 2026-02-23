@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 // secondary_button.dart
 import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';

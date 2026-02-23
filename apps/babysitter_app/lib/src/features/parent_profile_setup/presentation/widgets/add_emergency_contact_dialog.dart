@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../../auth/presentation/widgets/auth_input_field.dart';
 

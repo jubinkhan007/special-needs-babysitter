@@ -1,4 +1,4 @@
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 
 abstract class SavedJobsRepository {
   Future<List<Job>> getSavedJobs();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
 import '../../routing/routes.dart';
 import 'presentation/widgets/auth_input_field.dart';

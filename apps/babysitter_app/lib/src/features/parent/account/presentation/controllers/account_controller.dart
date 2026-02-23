@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 
-import 'package:auth/auth.dart'; // For currentUserProvider if needed, or AuthSession
+import 'package:babysitter_app/src/packages/auth/auth.dart'; // For currentUserProvider if needed, or AuthSession
 import '../providers/account_providers.dart';
 import '../state/account_state.dart';
 

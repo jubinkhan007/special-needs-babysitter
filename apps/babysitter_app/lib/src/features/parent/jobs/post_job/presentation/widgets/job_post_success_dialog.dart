@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:core/core.dart';
-import 'package:ui_kit/ui_kit.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
+import 'package:babysitter_app/src/packages/ui_kit/ui_kit.dart';
 
 class JobPostSuccessDialog extends StatelessWidget {
   final VoidCallback onInviteSitters;

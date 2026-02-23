@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:auth/auth.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 
 /// Step 0: Intro Screen (Hero Image + Bottom Sheet)

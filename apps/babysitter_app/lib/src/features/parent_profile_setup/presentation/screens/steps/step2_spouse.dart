@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
 import '../../providers/parent_profile_providers.dart';
 import '../../widgets/add_child_dialog.dart';

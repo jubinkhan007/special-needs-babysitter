@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:core/core.dart';
+import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 import '../../../search/models/sitter_list_item_model.dart';

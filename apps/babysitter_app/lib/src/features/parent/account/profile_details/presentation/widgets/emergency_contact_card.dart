@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'common_profile_widgets.dart';
 
 class EmergencyContactCard extends StatelessWidget {

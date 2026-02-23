@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
-import 'package:auth/auth.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
 import '../../../../../constants/app_constants.dart';
 import '../../../domain/applications/application_item.dart';
 import '../../../domain/job_details.dart';
