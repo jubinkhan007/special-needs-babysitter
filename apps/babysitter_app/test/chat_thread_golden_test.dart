@@ -5,8 +5,8 @@ import 'package:babysitter_app/src/features/messages/presentation/chat_thread_sc
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 import 'package:babysitter_app/src/features/messages/presentation/providers/chat_providers.dart';
-import 'package:auth/auth.dart';
-import 'package:domain/domain.dart';
+import 'package:babysitter_app/src/packages/auth/auth.dart';
+import 'package:babysitter_app/src/packages/domain/domain.dart';
 
 void main() {
   Widget createScreen() {
