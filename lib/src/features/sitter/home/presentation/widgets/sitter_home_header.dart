@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
+import 'package:babysitter_app/src/features/notifications/presentation/providers/notification_providers.dart';
 
 /// Sitter home header with greeting, location, and notification bell.
-class SitterHomeHeader extends StatelessWidget {
+class SitterHomeHeader extends ConsumerWidget {
   final String userName;
   final String location;
   final String? avatarUrl;
@@ -20,7 +22,10 @@ class SitterHomeHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final unreadCountAsync = ref.watch(unreadNotificationCountProvider);
+    final unreadCount = unreadCountAsync.value ?? 0;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       child: Row(
@@ -84,19 +89,48 @@ class SitterHomeHeader extends StatelessWidget {
               ],
             ),
           ),
-          // Notification Bell
-          IconButton(
-            onPressed: onNotificationTap,
-            icon: Icon(
-              Icons.notifications_none_outlined,
-              size: 24.w,
-              color: AppColors.textSecondary.withValues(alpha: 0.7),
-            ),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            style: IconButton.styleFrom(
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
+          // Notification Bell with Badge
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              IconButton(
+                onPressed: onNotificationTap,
+                icon: Icon(
+                  Icons.notifications_none_outlined,
+                  size: 24.w,
+                  color: AppColors.textSecondary.withValues(alpha: 0.7),
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                style: IconButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+              if (unreadCount > 0)
+                Positioned(
+                  right: -4.w,
+                  top: -4.h,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    constraints: BoxConstraints(minWidth: 16.w, minHeight: 16.h),
+                    child: Center(
+                      child: Text(
+                        unreadCount > 99 ? '99+' : '$unreadCount',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 9.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),

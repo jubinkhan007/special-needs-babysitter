@@ -63,7 +63,7 @@ class SitterHomeScreen extends ConsumerWidget {
                         'Nashville, TN', // specific request or current user loc
                     avatarUrl: user?.avatarUrl,
                     onNotificationTap: () {
-                      // TODO: Navigate to notifications
+                      context.push(Routes.notifications);
                     },
                     // You could pass the 'verified' status to the header here if needed
                     isVerified: status == BackgroundCheckStatusType.approved,

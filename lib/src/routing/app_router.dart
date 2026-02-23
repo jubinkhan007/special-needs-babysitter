@@ -81,6 +81,7 @@ import 'package:babysitter_app/src/features/sitter/background_check/presentation
 import 'package:babysitter_app/src/features/sitter/wallet/presentation/screens/sitter_wallet_screen.dart';
 import 'package:babysitter_app/src/features/wallet/presentation/screens/my_wallet_screen.dart';
 import 'package:babysitter_app/src/features/wallet/presentation/screens/payout_history_screen.dart';
+import 'package:babysitter_app/src/features/notifications/presentation/screens/notification_feed_screen.dart';
 
 /// Global navigator keys
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -708,6 +709,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.referralBonuses,
         builder: (context, state) => const ReferralBonusesScreen(),
+      ),
+      GoRoute(
+        path: Routes.notifications,
+        builder: (context, state) => const NotificationFeedScreen(),
       ),
 
       // Sitter Profile Details (full screen, outside shell)

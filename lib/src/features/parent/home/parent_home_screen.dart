@@ -62,7 +62,9 @@ class ParentHomeScreen extends ConsumerWidget {
                 displayName: displayName,
                 locationText: headerLocation,
                 avatarUrl: user?.avatarUrl,
-                onNotificationTap: () {},
+                onNotificationTap: () {
+                  context.push(Routes.notifications);
+                },
               ),
               const SizedBox(height: HomeDesignTokens.headerBottomSpacing),
               HomeSearchBar(

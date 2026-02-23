@@ -80,6 +80,7 @@ class Routes {
   static const String sitterPayoutSetup = '/sitter/wallet/payout-setup';
   static const String sitterPayoutHistory = '/sitter/wallet/payout-history';
   static const String referralBonuses = '/referrals-bonuses';
+  static const String notifications = '/notifications';
 
   /// Check if route is an auth route
   static bool isAuthRoute(String path) {

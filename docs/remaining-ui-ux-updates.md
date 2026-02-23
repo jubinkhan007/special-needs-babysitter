@@ -10,19 +10,17 @@ Items from the client's approved UI/UX update list that still need implementatio
 - **What:** Visually differentiate conversations with parents from conversations with platform support in the messages list.
 - **Done:** Added `chatType` field (`parent` | `support`) to `IConversation` type, Mongoose schema, and API response. Frontend normalizer maps `chatType: 'support'` to `isSystem: true`. `MessageThreadTile` now shows a blue "SUPPORT" badge and chat bubble avatar for support conversations.
 
-### 2. Notification Feed Screen with Grouping & Preview Text
+### ~~2. Notification Feed Screen with Grouping & Preview Text~~ DONE
 - **What:** A dedicated notification feed screen that groups notifications by category (Jobs, Messages, Payments, Reminders) and shows preview text under each notification.
-- **Why not done:** No notification feed screen exists. Push notifications are handled by FCM and shown as OS-level notifications only.
-- **Needs:** New `NotificationFeedScreen` with a backend API endpoint to fetch notification history. Group items by category. Add preview/subtitle text for each notification type.
+- **Done:** Built `NotificationFeedScreen` with category filter chips (All, Jobs, Payments, Rewards), time-based grouping (Today, Yesterday, Earlier), pull-to-refresh, mark-all-read, and unread badge on bell icons. Connected to existing backend `GET /notification-inbox` API. Files: `notification_item.dart`, `notifications_api_service.dart`, `notification_providers.dart`, `notification_feed_screen.dart`, `notification_tile.dart`.
 
 ### ~~3. Warm Notification Messages~~ DONE
 - **What:** Replace robotic push notification copy (e.g. "Booking confirmed") with warmer, human-friendly language (e.g. "You're all set! Your booking with the Smith family is confirmed.").
 - **Done:** Updated all 24 notification templates in `NotificationService.ts` with warmer, human-friendly copy (e.g. "Booking Accepted!" → "You're all set!", "Payment Received" → "You got paid!", "Application Update" → "Update on your application" with encouraging follow-up).
 
-### 4. Rewards & Referral Explanation
+### ~~4. Rewards & Referral Explanation~~ DONE (already implemented)
 - **What:** Add an explanation sentence on the sitter's Referral & Bonuses screen describing how rewards work (e.g. "Earn $25 for each sitter you refer who completes their first job").
-- **Why not done:** No Referral & Bonuses screen exists for sitters yet. The menu item exists in `SitterAccountMenuList` but the screen is a placeholder.
-- **Needs:** Build a `SitterReferralScreen` with referral code display, referral history, and an explanation of the rewards program. Backend API for referral tracking.
+- **Done:** `ReferralBonusesScreen` is fully built with: referral code display + copy, "How It Works" 3-step explanation, share functionality, rewards list showing earned bonuses, and bonus info cards. Backend has complete referral API (generate, invite, validate, stats, list). $10 bonus credited to both referrer and referred sitter on first job completion.
 
 ### 5. Notification Settings Grouped Logically
 - **What:** The "Manage Notifications" screen should group notification toggles by category: Jobs, Messages, Payments, Reminders.
@@ -55,9 +53,9 @@ Items from the client's approved UI/UX update list that still need implementatio
 | # | Item | Blocker | Effort |
 |---|------|---------|--------|
 | ~~1~~ | ~~Parent vs Support chat distinction~~ | ~~Backend `chatType` field~~ | ~~Medium~~ DONE |
-| 2 | Notification feed + grouping | New screen + backend API | Large |
+| ~~2~~ | ~~Notification feed + grouping~~ | ~~New screen + backend API~~ | ~~Large~~ DONE |
 | ~~3~~ | ~~Warm notification messages~~ | ~~Backend notification templates~~ | ~~Small (backend)~~ DONE |
-| 4 | Rewards/Referral screen | New screen + backend API | Medium |
+| ~~4~~ | ~~Rewards/Referral screen~~ | ~~New screen + backend API~~ | ~~Medium~~ DONE (already existed) |
 | 5 | Notification settings grouped | New screen + backend API | Medium |
 | 6 | Bank Account (ACH) payment | Stripe Financial Connections | Large |
 | 7 | Dispute screen | Design decision needed | Medium |
