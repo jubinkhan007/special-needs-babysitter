@@ -1,13 +1,13 @@
-import '../../domain/entities/call_config.dart';
-import '../../domain/entities/call_session.dart';
-import '../../domain/entities/call_history_item.dart';
-import '../../domain/entities/call_enums.dart';
-import '../../domain/entities/call_participant.dart';
-import '../../domain/repositories/calls_repository.dart';
-import '../datasources/calls_remote_data_source.dart';
-import '../models/call_session_dto.dart';
-import '../models/call_participant_dto.dart';
-import '../models/call_history_dto.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_config.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_session.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_history_item.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_participant.dart';
+import 'package:babysitter_app/src/features/calls/domain/repositories/calls_repository.dart';
+import 'package:babysitter_app/src/features/calls/data/datasources/calls_remote_data_source.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_session_dto.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_participant_dto.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_history_dto.dart';
 
 /// Implementation of CallsRepository
 class CallsRepositoryImpl implements CallsRepository {

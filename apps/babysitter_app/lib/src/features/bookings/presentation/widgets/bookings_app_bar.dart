@@ -1,8 +1,8 @@
 // bookings_app_bar.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../routing/routes.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
 class BookingsAppBar extends StatelessWidget implements PreferredSizeWidget {
   const BookingsAppBar({super.key});

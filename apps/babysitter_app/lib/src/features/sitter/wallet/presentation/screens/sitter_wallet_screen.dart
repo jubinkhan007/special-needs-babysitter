@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../../routing/routes.dart';
-import '../../../../../common_widgets/app_toast.dart';
-import '../../data/models/stripe_connect_status.dart';
-import '../providers/stripe_connect_providers.dart';
-import '../widgets/onboarding_status_card.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/data/models/stripe_connect_status.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/presentation/providers/stripe_connect_providers.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/presentation/widgets/onboarding_status_card.dart';
 
 /// Sitter wallet screen for managing Stripe Connect payouts
 class SitterWalletScreen extends ConsumerStatefulWidget {

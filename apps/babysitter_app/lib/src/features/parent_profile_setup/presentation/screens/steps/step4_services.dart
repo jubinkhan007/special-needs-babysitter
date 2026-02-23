@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../../../auth/presentation/widgets/step_indicator.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/step_indicator.dart';
 
 /// Step 4: Care/Special Services - Checkbox list
 class Step4Services extends ConsumerStatefulWidget {

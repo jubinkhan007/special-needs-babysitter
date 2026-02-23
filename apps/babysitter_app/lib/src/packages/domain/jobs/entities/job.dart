@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../profile_details/entities/child.dart';
+import 'package:babysitter_app/src/packages/domain/profile_details/entities/child.dart';
 
 /// Job Address entity representing the location details of a job.
 class JobAddress extends Equatable {

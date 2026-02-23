@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../models/paypal_models.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/models/paypal_models.dart';
 
 /// Service for PayPal payment operations
 class PaypalPaymentService {

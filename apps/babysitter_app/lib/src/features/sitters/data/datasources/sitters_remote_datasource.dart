@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../models/sitter_dto.dart'; // Adjust path if needed
-import '../models/sitter_profile_dto.dart';
-import '../models/review_dto.dart';
+import 'package:babysitter_app/src/features/sitters/data/models/sitter_dto.dart'; // Adjust path if needed
+import 'package:babysitter_app/src/features/sitters/data/models/sitter_profile_dto.dart';
+import 'package:babysitter_app/src/features/sitters/data/models/review_dto.dart';
 
 // Reusing the dio provider that has AuthInterceptor from BookingsDataDi or similar
 // Actually, let's create a simpler provider setup here or reuse global one.

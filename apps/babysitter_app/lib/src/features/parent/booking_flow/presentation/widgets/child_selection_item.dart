@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/models/child_ui_model.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/models/child_ui_model.dart';
 
 class ChildSelectionItem extends StatelessWidget {
   final ChildUiModel child;

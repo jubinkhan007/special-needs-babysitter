@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../providers/sitter_profile_setup_providers.dart';
-import '../../widgets/onboarding_header.dart';
-import '../../widgets/step_progress_dots.dart';
-import '../../sitter_profile_constants.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/providers/sitter_profile_setup_providers.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/onboarding_header.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/step_progress_dots.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/sitter_profile_constants.dart';
 
 class Step1UploadPhoto extends ConsumerStatefulWidget {
   final VoidCallback onNext;

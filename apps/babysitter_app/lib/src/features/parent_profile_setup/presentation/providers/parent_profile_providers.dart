@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
-import '../../../../constants/app_constants.dart';
-import '../controllers/parent_profile_controller.dart';
+import 'package:babysitter_app/src/constants/app_constants.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/controllers/parent_profile_controller.dart';
 import 'package:flutter/foundation.dart';
 
 /// Dio provider with auth interceptor for parent profile API calls.

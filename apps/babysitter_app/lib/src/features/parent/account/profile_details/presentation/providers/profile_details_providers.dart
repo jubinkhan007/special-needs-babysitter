@@ -3,8 +3,8 @@ import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../controllers/profile_details_controller.dart';
-import '../state/profile_details_state.dart';
+import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/controllers/profile_details_controller.dart';
+import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/state/profile_details_state.dart';
 
 // Authenticated Dio Provider
 // Authenticated Dio Provider - Removed in favor of authDioProvider

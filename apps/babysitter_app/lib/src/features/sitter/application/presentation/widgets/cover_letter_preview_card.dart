@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'application_preview_card.dart';
 
 /// Card 2 - Cover Letter Preview Card.

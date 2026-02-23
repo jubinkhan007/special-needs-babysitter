@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:babysitter_app/src/packages/core/core.dart';
 import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../../auth/presentation/widgets/auth_input_field.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/auth_input_field.dart';
 
 /// Dialog for adding an emergency contact
 class AddEmergencyContactDialog extends StatefulWidget {

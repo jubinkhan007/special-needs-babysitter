@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
 class ChatComposerBar extends StatelessWidget {
   final TextEditingController? controller;

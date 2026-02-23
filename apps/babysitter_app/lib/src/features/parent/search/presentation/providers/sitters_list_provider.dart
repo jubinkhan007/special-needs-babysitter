@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../sitters/data/sitters_data_di.dart';
-import '../../models/sitter_list_item_model.dart';
-import '../filter/models/search_filter_ui_model.dart';
+import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/filter/models/search_filter_ui_model.dart';
 import 'package:flutter/foundation.dart';
 
 /// FamilyFutureProvider that fetches sitters based on filter state

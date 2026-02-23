@@ -1,8 +1,8 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/referral_item.dart';
-import '../../utils/referral_formatters.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_item.dart';
+import 'package:babysitter_app/src/features/referrals/utils/referral_formatters.dart';
 import 'referral_bonuses_styles.dart';
 
 class RewardRow extends StatelessWidget {

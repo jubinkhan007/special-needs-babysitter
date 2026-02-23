@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../domain/entities/sitter_job_details.dart';
-import '../../domain/repositories/sitter_job_details_repository.dart';
-import '../../data/repositories/sitter_job_details_repository_impl.dart';
-import '../../data/sources/sitter_job_details_remote_source.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/repositories/sitter_job_details_repository.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/data/repositories/sitter_job_details_repository_impl.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/data/sources/sitter_job_details_remote_source.dart';
 
 /// Provider for the job details remote source.
 final sitterJobDetailsRemoteSourceProvider =

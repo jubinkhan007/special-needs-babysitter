@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../entities/user.dart';
+import 'package:babysitter_app/src/packages/domain/entities/user.dart';
 import 'child.dart';
 import 'emergency_contact.dart';
 import 'care_approach.dart';

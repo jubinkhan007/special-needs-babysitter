@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../search/models/sitter_list_item_model.dart';
-import '../theme/home_design_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
 
 class SavedSitterCard extends StatelessWidget {
   final SitterListItemModel sitter;

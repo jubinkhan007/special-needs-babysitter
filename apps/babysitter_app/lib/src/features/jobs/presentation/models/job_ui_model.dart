@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import '../../domain/job.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job.dart';
 
 class JobUiModel {
   final String id;

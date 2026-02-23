@@ -2,12 +2,12 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../routing/routes.dart';
-import '../providers/job_post_providers.dart';
-import '../controllers/job_post_controller.dart';
-import '../widgets/job_draft_saved_dialog.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/providers/job_post_providers.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/controllers/job_post_controller.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/widgets/job_draft_saved_dialog.dart';
 import 'job_post_step_header.dart';
-import '../../../../booking_flow/data/providers/bookings_di.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/bookings_di.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/common_widgets/payment_method_selector.dart';
 

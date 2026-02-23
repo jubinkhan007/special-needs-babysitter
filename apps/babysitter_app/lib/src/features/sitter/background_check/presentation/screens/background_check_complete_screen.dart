@@ -5,8 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../routing/routes.dart';
-import '../providers/background_check_status_provider.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/presentation/providers/background_check_status_provider.dart';
 
 /// Final success screen for the background check flow.
 class BackgroundCheckCompleteScreen extends ConsumerWidget {

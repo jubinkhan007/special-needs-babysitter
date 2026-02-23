@@ -1,10 +1,10 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/providers/booking_flow_provider.dart';
-import '../../data/models/booking_flow_state.dart';
-import '../widgets/booking_step_header.dart';
-import '../widgets/booking_primary_bottom_button.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/booking_flow_provider.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/models/booking_flow_state.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/booking_step_header.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/booking_primary_bottom_button.dart';
 import 'parent_booking_step3_screen.dart';
 
 class ParentBookingStep2Screen extends ConsumerStatefulWidget {

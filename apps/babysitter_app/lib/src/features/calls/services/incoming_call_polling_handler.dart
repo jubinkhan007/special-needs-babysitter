@@ -4,9 +4,9 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/entities/call_enums.dart';
-import '../presentation/controllers/call_state.dart';
-import '../presentation/providers/calls_providers.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/presentation/controllers/call_state.dart';
+import 'package:babysitter_app/src/features/calls/presentation/providers/calls_providers.dart';
 import 'call_navigation_guard.dart';
 
 /// Polls call history to detect incoming ringing calls when FCM is unavailable.

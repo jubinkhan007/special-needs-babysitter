@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import '../../domain/chat_message.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_message.dart';
 
 /// UI model for a chat message list item.
 class ChatMessageUiModel {

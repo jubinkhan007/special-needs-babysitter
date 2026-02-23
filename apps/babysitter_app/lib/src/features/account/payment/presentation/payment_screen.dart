@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'widgets/payment_method_row.dart';
 import 'widgets/recent_activity_row.dart';
 

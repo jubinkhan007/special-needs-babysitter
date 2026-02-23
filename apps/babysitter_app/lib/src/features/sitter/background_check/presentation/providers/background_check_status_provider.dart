@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/background_check_status_model.dart';
-import '../controllers/background_check_controller.dart'; // accessing remoteDataSourceProvider from here or move it to DI
+import 'package:babysitter_app/src/features/sitter/background_check/data/models/background_check_status_model.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/presentation/controllers/background_check_controller.dart'; // accessing remoteDataSourceProvider from here or move it to DI
 
 /// Provider for the background check status
 final backgroundCheckStatusProvider =

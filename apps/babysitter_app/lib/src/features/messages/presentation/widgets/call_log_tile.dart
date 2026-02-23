@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../models/chat_message_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/messages/presentation/models/chat_message_ui_model.dart';
 
 class CallLogTile extends StatelessWidget {
   final ChatMessageUiModel uiModel;

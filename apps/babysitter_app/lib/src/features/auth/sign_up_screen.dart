@@ -6,9 +6,9 @@ import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../routing/routes.dart';
-import '../../../common/widgets/auth_text_field.dart';
-import '../../../common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/common/widgets/auth_text_field.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sign up screen with role selection tabs

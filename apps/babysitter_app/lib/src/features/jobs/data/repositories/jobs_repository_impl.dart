@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import '../../domain/job.dart';
-import '../../domain/jobs_repository.dart';
-import '../../domain/job_details.dart';
-import '../mappers/job_mapper.dart';
-import '../models/job_dto.dart';
-import '../models/job_response.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job.dart';
+import 'package:babysitter_app/src/features/jobs/domain/jobs_repository.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job_details.dart';
+import 'package:babysitter_app/src/features/jobs/data/mappers/job_mapper.dart';
+import 'package:babysitter_app/src/features/jobs/data/models/job_dto.dart';
+import 'package:babysitter_app/src/features/jobs/data/models/job_response.dart';
 import 'package:flutter/foundation.dart';
 
 class JobsRepositoryImpl implements JobsRepository {

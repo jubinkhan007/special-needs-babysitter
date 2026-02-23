@@ -1,7 +1,7 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
-import '../datasources/profile_remote_datasource.dart';
-import '../mappers/auth_mappers.dart';
+import 'package:babysitter_app/src/packages/data/datasources/profile_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/mappers/auth_mappers.dart';
 
 /// Implementation of ProfileRepository
 class ProfileRepositoryImpl implements ProfileRepository {

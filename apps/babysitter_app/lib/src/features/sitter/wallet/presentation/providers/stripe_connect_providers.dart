@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../data/models/stripe_connect_status.dart';
-import '../../data/sources/stripe_connect_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/data/models/stripe_connect_status.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/data/sources/stripe_connect_remote_datasource.dart';
 
 /// Provider for the Stripe Connect remote data source
 final stripeConnectRemoteDataSourceProvider =

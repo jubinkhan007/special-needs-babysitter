@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../dtos/job_dto.dart';
+import 'package:babysitter_app/src/packages/data/jobs/dtos/job_dto.dart';
 
 class JobLocalDataSource {
   static const _draftKey = 'job_draft';

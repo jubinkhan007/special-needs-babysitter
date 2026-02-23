@@ -1,6 +1,6 @@
-import '../../data/models/application_model.dart';
-import '../../data/sources/application_remote_datasource.dart';
-import '../../domain/repositories/application_repository.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/models/application_model.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/sources/application_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/application/domain/repositories/application_repository.dart';
 
 class ApplicationRepositoryImpl implements ApplicationRepository {
   final ApplicationRemoteDataSource _remoteDataSource;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/search_filter_ui_model.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/filter/models/search_filter_ui_model.dart';
 
 class SearchFilterController extends ValueNotifier<SearchFilterUiModel> {
   SearchFilterController() : super(const SearchFilterUiModel());

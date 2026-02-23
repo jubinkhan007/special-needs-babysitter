@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
 /// Screen to initiate identity verification for the background check flow.
 class VerifyIdentityScreen extends StatelessWidget {

@@ -1,4 +1,4 @@
-import '../repositories/calls_repository.dart';
+import 'package:babysitter_app/src/features/calls/domain/repositories/calls_repository.dart';
 
 class DeclineCallParams {
   final String callId;

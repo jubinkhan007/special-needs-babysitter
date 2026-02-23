@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/sitters_data_di.dart';
-import '../../domain/sitters_repository.dart';
-import '../../../parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
+import 'package:babysitter_app/src/features/sitters/domain/sitters_repository.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
 import 'package:flutter/foundation.dart';
 
 /// Controller for the saved sitters list and bookmark operations.

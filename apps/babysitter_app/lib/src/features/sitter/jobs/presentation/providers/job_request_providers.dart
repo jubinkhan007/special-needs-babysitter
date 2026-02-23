@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../domain/repositories/job_request_repository.dart';
-import '../../data/repositories/job_request_repository_impl.dart';
-import '../../data/sources/job_request_remote_datasource.dart';
-import '../../data/models/job_request_details_model.dart';
-import '../controllers/job_request_controller.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/domain/repositories/job_request_repository.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/repositories/job_request_repository_impl.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/sources/job_request_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_details_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/controllers/job_request_controller.dart';
 
 /// Provider for the job request remote data source.
 final jobRequestRemoteDataSourceProvider =

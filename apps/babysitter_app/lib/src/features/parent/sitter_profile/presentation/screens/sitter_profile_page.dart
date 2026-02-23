@@ -2,11 +2,11 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../routing/routes.dart';
-import '../../../booking_flow/data/providers/booking_flow_provider.dart';
-import '../../../search/models/sitter_list_item_model.dart';
-import '../../../../sitters/presentation/saved/saved_sitters_controller.dart';
-import '../providers/sitter_profile_providers.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/booking_flow_provider.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/sitters/presentation/saved/saved_sitters_controller.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/providers/sitter_profile_providers.dart';
 import 'sitter_profile_view.dart';
 
 /// Wrapper page that loads sitter data via Riverpod and renders the profile view.

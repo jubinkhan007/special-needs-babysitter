@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import '../../domain/entities/call_session.dart';
-import '../../domain/entities/call_participant.dart';
-import '../../domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_session.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_participant.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
 
 /// Sealed class representing all possible call states
 @immutable

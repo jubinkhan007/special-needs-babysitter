@@ -1,5 +1,5 @@
-import '../../presentation/models/booking_details_ui_model.dart';
-import '../booking_status.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/booking_details_ui_model.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_status.dart';
 
 class ReviewArgs {
   final String bookingId;

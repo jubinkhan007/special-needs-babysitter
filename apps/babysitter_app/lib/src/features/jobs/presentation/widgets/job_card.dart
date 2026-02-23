@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../models/job_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/models/job_ui_model.dart';
 import 'job_status_chip.dart';
 import 'job_info_item.dart';
 import 'job_rich_child_details.dart';

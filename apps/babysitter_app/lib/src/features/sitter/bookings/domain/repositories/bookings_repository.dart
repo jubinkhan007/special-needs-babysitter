@@ -1,6 +1,6 @@
-import '../../data/models/booking_model.dart';
-import '../../data/models/booking_session_model.dart';
-import '../../data/models/clock_out_result_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_session_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/clock_out_result_model.dart';
 
 /// Repository interface for bookings operations.
 abstract class BookingsRepository {

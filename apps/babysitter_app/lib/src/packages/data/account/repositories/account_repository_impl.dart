@@ -1,5 +1,5 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../datasources/account_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/account/datasources/account_remote_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 /// Implementation of AccountRepository

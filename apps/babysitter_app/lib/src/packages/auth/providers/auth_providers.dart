@@ -7,7 +7,7 @@ import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/notifications/notifications.dart';
 
-import '../session_store.dart';
+import 'package:babysitter_app/src/packages/auth/session_store.dart';
 
 import 'package:dio/dio.dart';
 import 'package:babysitter_app/src/packages/core/core.dart'; // For EnvConfig.apiBaseUrl

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../../data/models/job_request_details_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_details_model.dart';
 
 /// Repository interface for job request operations.
 abstract class JobRequestRepository {

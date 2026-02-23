@@ -4,14 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../domain/entities/call_enums.dart';
-import '../controllers/call_state.dart';
-import '../providers/calls_providers.dart';
-import '../widgets/call_app_bar.dart';
-import '../widgets/call_avatar.dart';
-import '../widgets/call_background.dart';
-import '../../services/call_notification_service.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/presentation/controllers/call_state.dart';
+import 'package:babysitter_app/src/features/calls/presentation/providers/calls_providers.dart';
+import 'package:babysitter_app/src/features/calls/presentation/widgets/call_app_bar.dart';
+import 'package:babysitter_app/src/features/calls/presentation/widgets/call_avatar.dart';
+import 'package:babysitter_app/src/features/calls/presentation/widgets/call_background.dart';
+import 'package:babysitter_app/src/features/calls/services/call_notification_service.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'in_call_screen.dart';
 
 /// Screen shown when sitter receives an incoming call

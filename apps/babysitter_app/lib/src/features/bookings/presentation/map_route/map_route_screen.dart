@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/booking_location.dart';
-import '../models/route_stop_ui_model.dart';
-import '../providers/booking_location_provider.dart';
-import '../providers/booking_route_stops_provider.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_location.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/route_stop_ui_model.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/providers/booking_location_provider.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/providers/booking_route_stops_provider.dart';
 import 'widgets/map_route_app_bar.dart';
 import 'widgets/route_stops_card.dart';
 

@@ -1,5 +1,5 @@
-import '../../domain/applications/application_item.dart';
-import '../../domain/applications/booking_application.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/application_item.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/booking_application.dart';
 
 /// Repository interface for job applications.
 abstract class ApplicationsRepository {

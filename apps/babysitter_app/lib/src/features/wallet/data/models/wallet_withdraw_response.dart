@@ -1,4 +1,4 @@
-import '../../domain/entities/wallet_withdraw_result.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_withdraw_result.dart';
 
 class WalletWithdrawResponse extends WalletWithdrawResult {
   const WalletWithdrawResponse({

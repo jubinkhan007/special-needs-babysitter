@@ -1,6 +1,6 @@
 import 'dart:io';
-import '../entities/child.dart';
-import '../entities/user_profile_details.dart';
+import 'package:babysitter_app/src/packages/domain/profile_details/entities/child.dart';
+import 'package:babysitter_app/src/packages/domain/profile_details/entities/user_profile_details.dart';
 
 abstract class ProfileDetailsRepository {
   Future<UserProfileDetails> getProfileDetails(String userId);

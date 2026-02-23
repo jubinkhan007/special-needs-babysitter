@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:flutter/widgets.dart';
-import '../state/profile_details_state.dart';
-import '../providers/profile_details_providers.dart';
-import '../../../presentation/controllers/account_controller.dart';
+import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/state/profile_details_state.dart';
+import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/providers/profile_details_providers.dart';
+import 'package:babysitter_app/src/features/parent/account/presentation/controllers/account_controller.dart';
 
 class ProfileDetailsController extends AsyncNotifier<ProfileDetailsState> {
   @override

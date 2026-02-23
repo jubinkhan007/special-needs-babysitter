@@ -1,4 +1,4 @@
-import '../repositories/job_repository.dart';
+import 'package:babysitter_app/src/packages/domain/jobs/repositories/job_repository.dart';
 
 class ClearLocalDraftUseCase {
   final JobRepository _repository;

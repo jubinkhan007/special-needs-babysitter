@@ -1,5 +1,5 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../datasources/chat_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/datasources/chat_remote_datasource.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   final ChatRemoteDataSource _remoteDataSource;

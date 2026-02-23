@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/booking_status.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_status.dart';
 
 enum ServiceFieldType {
   familyName,

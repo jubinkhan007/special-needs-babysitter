@@ -1,4 +1,4 @@
-import '../../domain/video_call_state.dart';
+import 'package:babysitter_app/src/features/calls/domain/video_call_state.dart';
 import 'video_call_ui_model.dart';
 
 class VideoCallUiMapper {

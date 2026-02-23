@@ -1,10 +1,10 @@
-import '../entities/registered_user.dart';
-import '../entities/registration_payload.dart';
-import '../entities/otp_send_payload.dart';
-import '../entities/otp_verify_payload.dart';
-import '../entities/uniqueness_check_payload.dart';
-import '../entities/uniqueness_check_result.dart';
-import '../../entities/auth_session.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/registered_user.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/registration_payload.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/otp_send_payload.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/otp_verify_payload.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/uniqueness_check_payload.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/uniqueness_check_result.dart';
+import 'package:babysitter_app/src/packages/domain/entities/auth_session.dart';
 
 /// Contract for registration-related auth operations
 /// Separate from main AuthRepository to follow Single Responsibility

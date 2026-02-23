@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../../../../parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
 
 /// Card widget for displaying a saved sitter.
 class SavedSitterCard extends StatelessWidget {

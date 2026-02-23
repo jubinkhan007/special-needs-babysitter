@@ -1,7 +1,7 @@
-import '../entities/uniqueness_check_payload.dart';
-import '../entities/uniqueness_check_result.dart';
-import '../repositories/registration_repository.dart';
-import '../../usecases/usecase.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/uniqueness_check_payload.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/uniqueness_check_result.dart';
+import 'package:babysitter_app/src/packages/domain/auth/repositories/registration_repository.dart';
+import 'package:babysitter_app/src/packages/domain/usecases/usecase.dart';
 
 /// Use case for checking email/phone uniqueness during sign-up
 class CheckUniquenessUseCase

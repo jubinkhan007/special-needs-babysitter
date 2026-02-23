@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../dtos/job_dto.dart';
+import 'package:babysitter_app/src/packages/data/jobs/dtos/job_dto.dart';
 import 'package:flutter/foundation.dart';
 
 class JobRemoteDataSource {

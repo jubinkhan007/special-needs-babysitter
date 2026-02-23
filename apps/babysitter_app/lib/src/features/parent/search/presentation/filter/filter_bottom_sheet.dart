@@ -1,9 +1,9 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../providers/search_filter_provider.dart';
-import '../../utils/location_helper.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/providers/search_filter_provider.dart';
+import 'package:babysitter_app/src/features/parent/search/utils/location_helper.dart';
 import 'controller/search_filter_controller.dart';
 import 'widgets/filter_bottom_primary_bar.dart';
 import 'widgets/filter_checkbox_row.dart';

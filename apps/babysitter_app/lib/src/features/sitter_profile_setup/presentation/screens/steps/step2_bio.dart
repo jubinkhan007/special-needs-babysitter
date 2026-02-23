@@ -1,17 +1,17 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../providers/sitter_profile_setup_providers.dart';
-import '../../widgets/bio_text_area_card.dart';
-import '../../widgets/dob_dropdown_row.dart';
-import '../../widgets/labeled_dropdown_field.dart';
-import '../../widgets/onboarding_header.dart';
-import '../../widgets/selectable_chip_group.dart';
-import '../../widgets/step_progress_dots.dart';
-import '../../sitter_profile_constants.dart';
-import '../../widgets/transportation_section.dart';
-import '../../widgets/willing_to_travel_section.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/providers/sitter_profile_setup_providers.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/bio_text_area_card.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/dob_dropdown_row.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/labeled_dropdown_field.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/onboarding_header.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/selectable_chip_group.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/step_progress_dots.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/sitter_profile_constants.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/transportation_section.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/willing_to_travel_section.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step2Bio extends ConsumerWidget {

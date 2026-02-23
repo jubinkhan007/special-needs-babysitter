@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import '../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'presentation/widgets/sitter_job_application_card.dart';
 import 'presentation/widgets/job_status_badge.dart';
 import 'presentation/providers/sitter_job_applications_provider.dart';

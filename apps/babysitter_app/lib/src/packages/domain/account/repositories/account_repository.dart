@@ -1,4 +1,4 @@
-import '../entities/account_overview.dart';
+import 'package:babysitter_app/src/packages/domain/account/entities/account_overview.dart';
 
 /// Repository interface for account related operations
 abstract class AccountRepository {

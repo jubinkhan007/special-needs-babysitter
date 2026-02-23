@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-import '../notifications_service.dart';
-import '../notifications_service_impl.dart';
-import '../noop_notifications_service.dart';
+import 'package:babysitter_app/src/packages/notifications/notifications_service.dart';
+import 'package:babysitter_app/src/packages/notifications/notifications_service_impl.dart';
+import 'package:babysitter_app/src/packages/notifications/noop_notifications_service.dart';
 
 /// Provider that indicates if Firebase is ready (set by app)
 final firebaseReadyProvider = StateProvider<bool>((ref) => false);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
-import '../widgets/certification_chip.dart';
-import '../widgets/skill_chip.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/widgets/certification_chip.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/widgets/skill_chip.dart';
 
 class SkillsSection extends StatelessWidget {
   final List<String> languages;

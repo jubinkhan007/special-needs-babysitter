@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'package:go_router/go_router.dart';
 
 class JobsAppBar extends StatelessWidget implements PreferredSizeWidget {

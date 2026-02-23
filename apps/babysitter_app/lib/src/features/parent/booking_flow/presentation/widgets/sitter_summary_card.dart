@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../sitter_profile/presentation/widgets/chip_pill.dart';
+import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/widgets/chip_pill.dart';
 
 class SitterSummaryCard extends StatelessWidget {
   final String name;

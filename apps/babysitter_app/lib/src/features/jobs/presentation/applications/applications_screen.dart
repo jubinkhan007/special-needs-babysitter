@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'models/application_item_ui_model.dart';
 import 'widgets/application_card.dart';
-import '../widgets/jobs_app_bar.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/widgets/jobs_app_bar.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../routing/routes.dart';
-import '../widgets/reject_reason_bottom_sheet.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/widgets/reject_reason_bottom_sheet.dart';
 import 'providers/applications_providers.dart';
-import '../../domain/rejection_reason.dart';
-import '../../domain/applications/application_item.dart';
-import '../../../messages/domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/features/jobs/domain/rejection_reason.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/application_item.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ApplicationsScreen extends ConsumerWidget {

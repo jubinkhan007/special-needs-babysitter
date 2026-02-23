@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../account_ui_constants.dart';
+import 'package:babysitter_app/src/features/parent/account/presentation/account_ui_constants.dart';
 import 'profile_progress_avatar.dart';
 
 class ProfileHeaderCard extends StatelessWidget {

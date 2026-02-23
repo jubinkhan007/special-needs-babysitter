@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'select_child_step1_view.dart';
 import 'job_post_step_2_job_details_screen.dart';
 import 'job_post_step_3_location_screen.dart';
 import 'job_post_step_4_details_pay_screen.dart';
 import 'job_post_step_5_review_screen.dart';
-import '../providers/job_post_providers.dart';
-import '../widgets/job_post_success_dialog.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/providers/job_post_providers.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/widgets/job_post_success_dialog.dart';
 
 /// Job Posting Flow Controller
 /// Manages navigation through the 4-step job posting wizard

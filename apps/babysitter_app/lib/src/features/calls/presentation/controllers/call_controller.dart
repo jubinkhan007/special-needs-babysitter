@@ -7,13 +7,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:babysitter_app/src/packages/realtime/realtime.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../domain/entities/call_session.dart';
-import '../../domain/entities/call_enums.dart';
-import '../../domain/entities/call_participant.dart';
-import '../../domain/repositories/calls_repository.dart';
-import '../providers/calls_providers.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_session.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_participant.dart';
+import 'package:babysitter_app/src/features/calls/domain/repositories/calls_repository.dart';
+import 'package:babysitter_app/src/features/calls/presentation/providers/calls_providers.dart';
 import 'call_state.dart';
-import '../../../messages/presentation/providers/chat_providers.dart';
+import 'package:babysitter_app/src/features/messages/presentation/providers/chat_providers.dart';
 import 'package:flutter/foundation.dart';
 
 /// Controller for managing call state and operations

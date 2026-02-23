@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../routing/routes.dart';
-import '../../common_widgets/custom_bottom_nav_bar.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/common_widgets/custom_bottom_nav_bar.dart';
 
 /// Sitter shell widget with bottom navigation
 class SitterShell extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../common_widgets/dialogs/app_confirm_dialog.dart';
+import 'package:babysitter_app/src/common_widgets/dialogs/app_confirm_dialog.dart';
 
 class DeleteAccountDialog extends StatelessWidget {
   const DeleteAccountDialog({super.key});

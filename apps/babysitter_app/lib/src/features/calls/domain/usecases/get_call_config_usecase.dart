@@ -1,5 +1,5 @@
-import '../entities/call_config.dart';
-import '../repositories/calls_repository.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_config.dart';
+import 'package:babysitter_app/src/features/calls/domain/repositories/calls_repository.dart';
 
 class GetCallConfigUseCase {
   final CallsRepository _repository;

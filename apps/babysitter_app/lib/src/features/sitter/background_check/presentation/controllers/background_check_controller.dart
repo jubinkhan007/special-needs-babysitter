@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
-import '../../data/background_check_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/data/background_check_remote_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 /// State for background check submission

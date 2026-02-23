@@ -2,9 +2,9 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
-import '../../../../../../sitter_profile_setup/presentation/widgets/multi_select_accordion.dart';
-import '../../../../../../sitter_profile_setup/presentation/widgets/selectable_chip_group.dart';
-import '../../../../../../sitter_profile_setup/presentation/widgets/labeled_dropdown_field.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/multi_select_accordion.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/selectable_chip_group.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/widgets/labeled_dropdown_field.dart';
 
 class SkillsCertificationsPayload {
   final List<String> skills;

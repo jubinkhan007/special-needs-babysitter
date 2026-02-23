@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
-import '../../../routing/routes.dart';
-import '../../messages/presentation/messages_screen.dart';
-import '../../messages/domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/messages/presentation/messages_screen.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 
 /// Parent messages screen - shows conversation list.
 class ParentMessagesScreen extends StatelessWidget {

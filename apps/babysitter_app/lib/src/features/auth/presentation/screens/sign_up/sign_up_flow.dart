@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
-import '../../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'steps/step1_account_info.dart';
 import 'steps/step2_password_security.dart';
-import '../otp_verification/otp_verification_screen.dart';
+import 'package:babysitter_app/src/features/auth/presentation/screens/otp_verification/otp_verification_screen.dart';
 
 /// Multi-step sign up flow controller (3 steps per Figma)
 /// Step 1: Account Info

@@ -9,8 +9,8 @@ import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/experience_by_age_section.dart';
 import 'package:babysitter_app/src/features/parent/sitter_profile/presentation/sections/calendar_availability_section.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
-import '../../../../../routing/routes.dart';
-import '../../../../messages/domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 
 class SitterProfileView extends StatefulWidget {
   final SitterModel sitter;

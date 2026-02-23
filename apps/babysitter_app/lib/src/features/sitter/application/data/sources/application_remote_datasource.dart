@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../dtos/submit_application_request_dto.dart';
-import '../models/application_model.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/dtos/submit_application_request_dto.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/models/application_model.dart';
 import 'package:flutter/foundation.dart';
 
 /// Remote data source for application API calls.

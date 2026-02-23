@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../messages/presentation/messages_screen.dart';
-import '../../messages/domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/features/messages/presentation/messages_screen.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 
 /// Sitter messages screen
 class SitterMessagesScreen extends StatelessWidget {

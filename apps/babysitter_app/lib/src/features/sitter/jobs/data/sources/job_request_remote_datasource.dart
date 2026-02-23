@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
-import '../models/job_request_details_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_details_model.dart';
 import 'package:flutter/foundation.dart';
 
 class JobRequestPresignedUploadResponse {

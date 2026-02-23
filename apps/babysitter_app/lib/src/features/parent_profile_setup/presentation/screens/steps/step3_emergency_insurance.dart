@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../providers/parent_profile_providers.dart';
-import '../../../../parent/account/profile_details/presentation/widgets/edit_insurance_plan_dialog.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/providers/parent_profile_providers.dart';
+import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/widgets/edit_insurance_plan_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class Step3EmergencyAndInsurance extends ConsumerStatefulWidget {

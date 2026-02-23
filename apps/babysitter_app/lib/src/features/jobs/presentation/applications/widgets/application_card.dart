@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../models/application_item_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/applications/models/application_item_ui_model.dart';
 import 'application_status_chip.dart';
 import 'application_actions.dart';
 

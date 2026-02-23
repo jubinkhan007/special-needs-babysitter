@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../theme/app_tokens.dart';
-import '../../messages/domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 
 import 'models/active_booking_details_ui_model.dart';
 import 'providers/booking_details_provider.dart';

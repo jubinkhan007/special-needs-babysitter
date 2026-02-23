@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../../../../common/widgets/primary_action_button.dart';
-import '../../../widgets/step_indicator.dart';
-import '../../../widgets/auth_input_field.dart';
-import '../../../controllers/sign_up_controller.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/step_indicator.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/auth_input_field.dart';
+import 'package:babysitter_app/src/features/auth/presentation/controllers/sign_up_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Step 2: Security Question - Loads questions from API

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/providers/bookings_di.dart';
-import '../../../../bookings/application/bookings_controller.dart';
-import '../theme/booking_ui_tokens.dart';
-import '../widgets/success_bottom_card.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/bookings_di.dart';
+import 'package:babysitter_app/src/features/bookings/application/bookings_controller.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/theme/booking_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/success_bottom_card.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 

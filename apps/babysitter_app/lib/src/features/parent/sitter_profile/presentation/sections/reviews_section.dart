@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart";
-import '../../../home/presentation/models/home_mock_models.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
 
 class ReviewsSection extends StatelessWidget {
   final VoidCallback? onTapSeeAll;

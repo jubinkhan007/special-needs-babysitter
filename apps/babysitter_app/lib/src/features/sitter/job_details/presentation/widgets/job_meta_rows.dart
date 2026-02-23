@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../../theme/app_tokens.dart';
-import '../../domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
 
 /// Family, children, and location meta rows.
 class JobMetaRows extends StatelessWidget {

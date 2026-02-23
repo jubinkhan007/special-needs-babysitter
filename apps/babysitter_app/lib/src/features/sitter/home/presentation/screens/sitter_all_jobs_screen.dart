@@ -4,14 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../routing/routes.dart';
-import '../providers/sitter_home_providers.dart';
-import '../widgets/job_preview_card.dart';
-import '../widgets/app_search_field.dart';
-import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/providers/sitter_home_providers.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/job_preview_card.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/app_search_field.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'dart:async';
-import '../widgets/job_filter_sheet.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/job_filter_sheet.dart';
 
 class SitterAllJobsScreen extends ConsumerStatefulWidget {
   const SitterAllJobsScreen({super.key});

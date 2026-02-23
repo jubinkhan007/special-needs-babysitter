@@ -4,20 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../theme/app_tokens.dart';
-import '../../../../../routing/routes.dart';
-import '../../../home/presentation/widgets/app_tag_chip.dart';
-import '../providers/job_details_providers.dart';
-import '../widgets/job_details_app_bar.dart';
-import '../widgets/job_header_block.dart';
-import '../widgets/job_meta_rows.dart';
-import '../widgets/service_details_table.dart';
-import '../widgets/transportation_section.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/app_tag_chip.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/providers/job_details_providers.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/job_details_app_bar.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/job_header_block.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/job_meta_rows.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/service_details_table.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/transportation_section.dart';
 
-import '../widgets/cover_letter_box.dart';
-import '../widgets/job_details_bottom_bar.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/cover_letter_box.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/widgets/job_details_bottom_bar.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 
 /// Sitter job details screen.
 class SitterJobDetailsScreen extends ConsumerStatefulWidget {

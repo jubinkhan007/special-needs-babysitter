@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../data/models/sitter_review.dart';
-import '../providers/sitter_reviews_providers.dart';
+import 'package:babysitter_app/src/features/sitter/account/data/models/sitter_review.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/providers/sitter_reviews_providers.dart';
 
 class SitterReviewsScreen extends ConsumerWidget {
   const SitterReviewsScreen({super.key});

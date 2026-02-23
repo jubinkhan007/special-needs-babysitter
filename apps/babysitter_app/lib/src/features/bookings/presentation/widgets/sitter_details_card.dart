@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../models/booking_details_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/booking_details_ui_model.dart';
 import 'booking_surface_card.dart';
 
 class SitterDetailsCard extends StatelessWidget {

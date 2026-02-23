@@ -1,7 +1,7 @@
-import '../entities/call_config.dart';
-import '../entities/call_session.dart';
-import '../entities/call_history_item.dart';
-import '../entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_config.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_session.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_history_item.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
 
 /// Repository interface for call operations
 abstract interface class CallsRepository {

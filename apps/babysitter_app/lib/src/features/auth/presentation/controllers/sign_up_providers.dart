@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../../constants/app_constants.dart';
+import 'package:babysitter_app/src/constants/app_constants.dart';
 
 /// Dio provider configured for registration API
 final registrationDioProvider = Provider<Dio>((ref) {

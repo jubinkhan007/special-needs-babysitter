@@ -2,12 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../domain/entities/job_application_preview.dart';
-import '../../domain/repositories/application_repository.dart';
-import '../../data/repositories/application_repository_impl.dart';
-import '../../data/sources/application_remote_datasource.dart';
-import '../../data/models/application_model.dart';
-import '../../../job_details/presentation/providers/job_details_providers.dart';
+import 'package:babysitter_app/src/features/sitter/application/domain/entities/job_application_preview.dart';
+import 'package:babysitter_app/src/features/sitter/application/domain/repositories/application_repository.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/repositories/application_repository_impl.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/sources/application_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/models/application_model.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/presentation/providers/job_details_providers.dart';
 import 'package:flutter/foundation.dart';
 
 /// Provider for the application remote data source.

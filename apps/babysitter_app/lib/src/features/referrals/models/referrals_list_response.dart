@@ -1,5 +1,5 @@
 import 'referral_item.dart';
-import '../utils/referral_parsers.dart';
+import 'package:babysitter_app/src/features/referrals/utils/referral_parsers.dart';
 
 class ReferralsListResponse {
   final int total;

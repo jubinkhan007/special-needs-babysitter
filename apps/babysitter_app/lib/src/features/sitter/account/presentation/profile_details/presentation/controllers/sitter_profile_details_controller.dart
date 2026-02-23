@@ -8,9 +8,9 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-import '../../../../../../sitter_profile_setup/presentation/providers/sitter_profile_setup_providers.dart';
-import '../../data/sitter_me_dto.dart';
-import '../../data/sitter_me_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/providers/sitter_profile_setup_providers.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/profile_details/data/sitter_me_dto.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/profile_details/data/sitter_me_remote_datasource.dart';
 
 part 'sitter_profile_details_controller.g.dart';
 

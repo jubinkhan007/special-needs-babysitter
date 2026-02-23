@@ -5,15 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:go_router/go_router.dart';
 
-import '../../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
-import '../providers/application_providers.dart';
-import '../widgets/job_details_preview_card.dart';
-import '../widgets/cover_letter_preview_card.dart';
-import '../widgets/application_bottom_bar.dart';
-import '../widgets/application_submitted_dialog.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/providers/application_providers.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/widgets/job_details_preview_card.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/widgets/cover_letter_preview_card.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/widgets/application_bottom_bar.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/widgets/application_submitted_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 
 /// Sitter Application Preview Screen.
 class SitterApplicationPreviewScreen extends ConsumerWidget {

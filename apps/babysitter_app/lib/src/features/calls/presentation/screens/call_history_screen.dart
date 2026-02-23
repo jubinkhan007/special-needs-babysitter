@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/call_history_item.dart';
-import '../../domain/entities/call_enums.dart';
-import '../providers/call_history_provider.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_history_item.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/presentation/providers/call_history_provider.dart';
 
 /// Screen showing call history with pagination
 class CallHistoryScreen extends ConsumerStatefulWidget {

@@ -1,5 +1,5 @@
-import '../entities/wallet_withdraw_result.dart';
-import '../repositories/wallet_repository.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_withdraw_result.dart';
+import 'package:babysitter_app/src/features/wallet/domain/repositories/wallet_repository.dart';
 
 class WithdrawWalletUseCase {
   final WalletRepository _repository;

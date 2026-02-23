@@ -1,4 +1,4 @@
-import '../../../../jobs/domain/applications/application_item.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/application_item.dart';
 import 'package:intl/intl.dart';
 
 class ApplicationItemUiModel {

@@ -4,14 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../common_widgets/app_toast.dart';
-import '../../../../routing/routes.dart';
-import '../../../sitter/wallet/presentation/providers/stripe_connect_providers.dart';
-import '../../../sitter/wallet/data/models/stripe_connect_status.dart';
-import '../../domain/entities/wallet_balance.dart';
-import '../providers/wallet_providers.dart';
-import '../widgets/wallet_styles.dart';
-import '../widgets/withdraw_bottom_sheet.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/presentation/providers/stripe_connect_providers.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/data/models/stripe_connect_status.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_balance.dart';
+import 'package:babysitter_app/src/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:babysitter_app/src/features/wallet/presentation/widgets/wallet_styles.dart';
+import 'package:babysitter_app/src/features/wallet/presentation/widgets/withdraw_bottom_sheet.dart';
 
 class MyWalletScreen extends ConsumerStatefulWidget {
   const MyWalletScreen({super.key});

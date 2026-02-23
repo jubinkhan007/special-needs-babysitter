@@ -2,8 +2,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
 import 'package:babysitter_app/src/packages/auth/auth.dart'; // For currentUserProvider if needed, or AuthSession
-import '../providers/account_providers.dart';
-import '../state/account_state.dart';
+import 'package:babysitter_app/src/features/parent/account/presentation/providers/account_providers.dart';
+import 'package:babysitter_app/src/features/parent/account/presentation/state/account_state.dart';
 
 part 'account_controller.g.dart';
 

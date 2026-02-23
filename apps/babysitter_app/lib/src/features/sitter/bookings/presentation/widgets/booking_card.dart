@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../data/models/booking_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_model.dart';
 
 /// Card widget displaying a single booking.
 class BookingCard extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../widgets/jobs_app_bar.dart'; // Reuse
-import '../job_details/widgets/section_title.dart'; // Reuse
-import '../job_details/widgets/key_value_row.dart'; // Reuse
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/widgets/jobs_app_bar.dart'; // Reuse
+import 'package:babysitter_app/src/features/jobs/presentation/job_details/widgets/section_title.dart'; // Reuse
+import 'package:babysitter_app/src/features/jobs/presentation/job_details/widgets/key_value_row.dart'; // Reuse
 import 'models/booking_application_ui_model.dart';
 import 'widgets/sitter_header_card.dart';
 import 'widgets/dashed_divider.dart';
@@ -11,8 +11,8 @@ import 'widgets/bottom_decision_bar.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'controllers/applications_controller.dart';
-import '../widgets/reject_reason_bottom_sheet.dart';
-import '../../domain/rejection_reason.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/widgets/reject_reason_bottom_sheet.dart';
+import 'package:babysitter_app/src/features/jobs/domain/rejection_reason.dart';
 import 'package:go_router/go_router.dart';
 import 'providers/applications_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';

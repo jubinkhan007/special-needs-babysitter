@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../sitter_account_ui_constants.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/sitter_account_ui_constants.dart';
 
 class SitterStatsRow extends StatelessWidget {
   final int completedJobsCount;

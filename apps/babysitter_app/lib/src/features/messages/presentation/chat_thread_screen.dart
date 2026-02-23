@@ -8,8 +8,8 @@ import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../theme/app_tokens.dart';
-import '../domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 import 'providers/chat_providers.dart';
 import 'widgets/chat_thread_app_bar.dart';
 import 'widgets/chat_background.dart';
@@ -19,11 +19,11 @@ import 'widgets/call_log_tile.dart';
 import 'widgets/chat_composer_bar.dart';
 import 'models/chat_message_ui_model.dart';
 
-import '../../calls/presentation/screens/outgoing_call_screen.dart';
-import '../../calls/domain/entities/call_enums.dart';
-import '../../calls/domain/entities/call_history_item.dart';
-import '../../calls/presentation/providers/calls_providers.dart';
-import '../../../routing/app_router.dart';
+import 'package:babysitter_app/src/features/calls/presentation/screens/outgoing_call_screen.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_history_item.dart';
+import 'package:babysitter_app/src/features/calls/presentation/providers/calls_providers.dart';
+import 'package:babysitter_app/src/routing/app_router.dart';
 
 class _ConversationCallHistory {
   final Map<String, CallHistoryItem> byCallId;

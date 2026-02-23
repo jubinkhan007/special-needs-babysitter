@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
-import '../datasources/auth_remote_datasource.dart';
-import '../mappers/auth_mappers.dart';
+import 'package:babysitter_app/src/packages/data/datasources/auth_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/mappers/auth_mappers.dart';
 
 /// Implementation of AuthRepository
 class AuthRepositoryImpl implements AuthRepository {

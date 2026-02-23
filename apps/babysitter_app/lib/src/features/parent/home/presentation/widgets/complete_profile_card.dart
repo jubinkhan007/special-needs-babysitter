@@ -1,6 +1,6 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
-import '../theme/home_design_tokens.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
 
 class CompleteProfileCard extends StatelessWidget {
   final double completionPercent;

@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../models/referral_generate_response.dart';
-import '../../models/referral_stats.dart';
-import '../../models/referrals_list_response.dart';
-import '../../services/referrals_api_service.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_generate_response.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_stats.dart';
+import 'package:babysitter_app/src/features/referrals/models/referrals_list_response.dart';
+import 'package:babysitter_app/src/features/referrals/services/referrals_api_service.dart';
 
 final referralsApiServiceProvider = Provider<ReferralsApiService>((ref) {
   final dio = ref.watch(authDioProvider);

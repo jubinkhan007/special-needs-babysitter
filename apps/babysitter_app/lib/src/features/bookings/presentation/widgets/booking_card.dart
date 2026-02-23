@@ -2,8 +2,8 @@
 import 'package:babysitter_app/src/features/bookings/presentation/widgets/booking_more_options_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/booking.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking.dart';
 import 'booking_status_chip.dart';
 import 'primary_button.dart';
 import 'rating_row.dart';

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../common_widgets/app_toast.dart';
-import '../providers/wallet_providers.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/features/wallet/presentation/providers/wallet_providers.dart';
 import 'wallet_styles.dart';
 
 class WithdrawBottomSheet extends ConsumerStatefulWidget {

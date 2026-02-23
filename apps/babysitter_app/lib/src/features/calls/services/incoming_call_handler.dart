@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../domain/entities/call_enums.dart';
-import '../presentation/controllers/call_controller.dart';
-import '../presentation/controllers/call_state.dart';
-import '../presentation/providers/calls_providers.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/presentation/controllers/call_controller.dart';
+import 'package:babysitter_app/src/features/calls/presentation/controllers/call_state.dart';
+import 'package:babysitter_app/src/features/calls/presentation/providers/calls_providers.dart';
 import 'call_navigation_guard.dart';
 import 'call_notification_service.dart';
 import 'callkit_event_handler.dart';

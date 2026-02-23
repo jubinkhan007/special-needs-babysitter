@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'package:babysitter_app/src/common_widgets/legal/legal_document_section.dart';
-import '../data/terms_content.dart';
+import 'package:babysitter_app/src/features/account/terms/data/terms_content.dart';
 
 /// Terms and Conditions screen
 class TermsAndConditionsScreen extends StatelessWidget {

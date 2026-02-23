@@ -6,8 +6,8 @@ import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/realtime/realtime.dart';
 
-import '../../../sitters/data/sitters_data_di.dart';
-import '../../data/chat_media_upload_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
+import 'package:babysitter_app/src/features/messages/data/chat_media_upload_remote_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 // Remote Data Source

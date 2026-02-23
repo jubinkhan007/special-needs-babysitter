@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../data/datasources/sitters_remote_datasource.dart';
-import '../../../data/sitters_data_di.dart';
-import '../../../domain/review/review.dart';
+import 'package:babysitter_app/src/features/sitters/data/datasources/sitters_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
+import 'package:babysitter_app/src/features/sitters/domain/review/review.dart';
 
 /// Provider for fetching reviews for a specific sitter
 final sitterReviewsProvider = FutureProvider.family<List<Review>, String>(

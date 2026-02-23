@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../datasources/profile_details_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/profile_details/datasources/profile_details_remote_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/review/report_issue_args.dart';
-import '../widgets/booking_details_app_bar.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/review/report_issue_args.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/widgets/booking_details_app_bar.dart';
 import 'widgets/bottom_primary_bar.dart';
 import 'widgets/form_text_area.dart';
 import 'widgets/issue_type_dropdown.dart';

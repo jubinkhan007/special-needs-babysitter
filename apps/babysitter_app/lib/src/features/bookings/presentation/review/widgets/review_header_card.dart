@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/booking_details_ui_model.dart';
-import '../../widgets/sitter_details_card.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/booking_details_ui_model.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/widgets/sitter_details_card.dart';
 
 /// Reuses the [SitterDetailsCard] to ensure 100% visual consistency
 /// between Booking Details and Review screens.

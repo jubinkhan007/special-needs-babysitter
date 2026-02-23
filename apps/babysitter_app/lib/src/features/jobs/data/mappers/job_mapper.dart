@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/job_details.dart';
-import '../models/job_dto.dart';
-import '../../domain/job.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job_details.dart';
+import 'package:babysitter_app/src/features/jobs/data/models/job_dto.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job.dart';
 
 extension JobDtoMapper on JobDto {
   Job toDomain() {

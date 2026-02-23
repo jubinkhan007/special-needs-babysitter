@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'steps/step0_intro.dart';
 import 'steps/step1_family_intro.dart';
 import 'steps/step2_spouse.dart';

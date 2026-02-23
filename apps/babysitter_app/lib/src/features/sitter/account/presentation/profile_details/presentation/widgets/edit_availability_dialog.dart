@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/common/widgets/primary_action_button.dart';
-import '../../data/sitter_me_dto.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/profile_details/data/sitter_me_dto.dart';
 
 class EditAvailabilityDialog extends StatefulWidget {
   final List<SitterAvailabilityDto>? initialAvailability;

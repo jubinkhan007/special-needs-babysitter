@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../models/sitter_review.dart';
+import 'package:babysitter_app/src/features/sitter/account/data/models/sitter_review.dart';
 import 'package:flutter/foundation.dart';
 
 class SitterReviewsRemoteDataSource {

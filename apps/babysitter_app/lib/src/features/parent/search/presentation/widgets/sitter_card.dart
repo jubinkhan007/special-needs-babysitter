@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/sitter_list_item_model.dart';
-import '../theme/app_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart';
 import 'app_icon_box.dart';
 import 'metric_item.dart';
 import 'tag_chip.dart';

@@ -1,4 +1,4 @@
-import '../../domain/entities/wallet_balance.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_balance.dart';
 
 class WalletBalanceModel extends WalletBalance {
   const WalletBalanceModel({

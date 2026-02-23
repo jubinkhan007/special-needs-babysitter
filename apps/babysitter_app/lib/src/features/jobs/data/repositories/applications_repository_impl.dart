@@ -1,9 +1,9 @@
-import '../../domain/applications/application_item.dart';
-import '../../domain/applications/applications_repository.dart';
-import '../../domain/applications/booking_application.dart';
-import '../datasources/applications_remote_datasource.dart';
-import '../models/application_detail_dto.dart';
-import '../models/application_dto.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/application_item.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/applications_repository.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/booking_application.dart';
+import 'package:babysitter_app/src/features/jobs/data/datasources/applications_remote_datasource.dart';
+import 'package:babysitter_app/src/features/jobs/data/models/application_detail_dto.dart';
+import 'package:babysitter_app/src/features/jobs/data/models/application_dto.dart';
 
 /// Implementation of [ApplicationsRepository].
 class ApplicationsRepositoryImpl implements ApplicationsRepository {

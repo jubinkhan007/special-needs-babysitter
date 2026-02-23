@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
 class StarRatingRow extends StatelessWidget {
   final int rating;

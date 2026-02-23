@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/providers/booking_flow_provider.dart';
-import '../theme/booking_ui_tokens.dart';
-import '../widgets/booking_modal_top_bar.dart';
-import '../widgets/payment_method_tile.dart';
-import '../widgets/inset_divider.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/booking_flow_provider.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/theme/booking_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/booking_modal_top_bar.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/payment_method_tile.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/inset_divider.dart';
 
 class SelectPaymentMethodScreen extends ConsumerWidget {
   const SelectPaymentMethodScreen({super.key});

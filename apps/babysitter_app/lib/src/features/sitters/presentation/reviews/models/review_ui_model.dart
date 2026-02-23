@@ -1,4 +1,4 @@
-import '../../../domain/review/review.dart';
+import 'package:babysitter_app/src/features/sitters/domain/review/review.dart';
 
 /// UI model for review display formatting.
 class ReviewUiModel {

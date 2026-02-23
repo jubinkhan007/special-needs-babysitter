@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../theme/app_tokens.dart';
-import '../models/chat_message_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/messages/presentation/models/chat_message_ui_model.dart';
 
 /// Message bubble with tailored shape and styling matching Figma.
 class MessageBubble extends StatelessWidget {

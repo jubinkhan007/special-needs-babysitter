@@ -1,12 +1,12 @@
-import '../../domain/booking.dart';
-import '../../domain/booking_details.dart';
-import '../../domain/booking_location.dart';
-import '../../domain/booking_status.dart';
-import '../../domain/bookings_repository.dart';
-import '../datasources/bookings_remote_datasource.dart';
-import '../models/parent_booking_dto.dart';
-import '../models/booking_details_dto.dart';
-import '../models/booking_location_dto.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_details.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_location.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_status.dart';
+import 'package:babysitter_app/src/features/bookings/domain/bookings_repository.dart';
+import 'package:babysitter_app/src/features/bookings/data/datasources/bookings_remote_datasource.dart';
+import 'package:babysitter_app/src/features/bookings/data/models/parent_booking_dto.dart';
+import 'package:babysitter_app/src/features/bookings/data/models/booking_details_dto.dart';
+import 'package:babysitter_app/src/features/bookings/data/models/booking_location_dto.dart';
 import 'package:flutter/foundation.dart';
 
 class BookingsRepositoryImpl implements BookingsRepository {

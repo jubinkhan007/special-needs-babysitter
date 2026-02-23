@@ -4,11 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../data/models/booking_session_model.dart';
-import '../../data/models/clock_out_result_model.dart';
-import '../../data/sources/booking_session_local_datasource.dart';
-import '../../domain/repositories/bookings_repository.dart';
-import '../../../jobs/data/models/job_coordinates_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_session_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/clock_out_result_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/sources/booking_session_local_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/domain/repositories/bookings_repository.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_coordinates_model.dart';
 
 class SessionTrackingState {
   final BookingSessionModel? session;

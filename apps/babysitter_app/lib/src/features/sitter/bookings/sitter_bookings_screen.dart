@@ -7,7 +7,7 @@ import 'package:babysitter_app/src/routing/routes.dart';
 import 'presentation/providers/bookings_providers.dart';
 import 'presentation/widgets/booking_card.dart';
 import 'presentation/providers/session_tracking_providers.dart';
-import '../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter bookings screen

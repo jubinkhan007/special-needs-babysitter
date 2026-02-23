@@ -14,7 +14,7 @@ import 'widgets/insurance_plan_card.dart';
 import 'widgets/edit_profile_details_dialog.dart';
 import 'widgets/edit_emergency_contact_dialog.dart';
 import 'widgets/edit_insurance_plan_dialog.dart';
-import '../../../../parent_profile_setup/presentation/widgets/add_child_dialog.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/widgets/add_child_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 class ProfileDetailsScreen extends ConsumerStatefulWidget {

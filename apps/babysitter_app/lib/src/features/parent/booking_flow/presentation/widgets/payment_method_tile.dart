@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/booking_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/theme/booking_ui_tokens.dart';
 import 'pixel_radio.dart';
 
 class PaymentMethodTile extends StatelessWidget {

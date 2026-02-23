@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/entities/call_history_item.dart';
-import '../../domain/usecases/get_call_history_usecase.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_history_item.dart';
+import 'package:babysitter_app/src/features/calls/domain/usecases/get_call_history_usecase.dart';
 import 'calls_providers.dart';
 
 // ==================== State (FIX #1 - Corrected sealed class) ====================

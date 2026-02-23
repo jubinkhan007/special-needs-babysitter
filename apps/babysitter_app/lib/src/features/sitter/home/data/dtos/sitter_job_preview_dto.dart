@@ -1,4 +1,4 @@
-import '../../domain/entities/job_preview.dart';
+import 'package:babysitter_app/src/features/sitter/home/domain/entities/job_preview.dart';
 
 /// DTO for child info in the sitter jobs list API response
 class ChildInfoDto {

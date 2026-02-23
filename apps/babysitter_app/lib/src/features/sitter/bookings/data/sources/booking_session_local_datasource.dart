@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/booking_session_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_session_model.dart';
 
 class BookingSessionLocalDataSource {
   static const _cacheKey = 'sitter_active_booking_session_cache_v1';

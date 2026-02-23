@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../models/message_thread_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/messages/presentation/models/message_thread_ui_model.dart';
 import 'avatar_circle.dart';
 import 'verified_badge.dart';
 import 'unread_badge.dart';

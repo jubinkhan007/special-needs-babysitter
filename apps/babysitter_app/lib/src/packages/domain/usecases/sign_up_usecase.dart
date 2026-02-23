@@ -1,6 +1,6 @@
-import '../entities/auth_session.dart';
-import '../entities/user_role.dart';
-import '../repositories/auth_repository.dart';
+import 'package:babysitter_app/src/packages/domain/entities/auth_session.dart';
+import 'package:babysitter_app/src/packages/domain/entities/user_role.dart';
+import 'package:babysitter_app/src/packages/domain/repositories/auth_repository.dart';
 import 'usecase.dart';
 
 /// Parameters for sign up usecase

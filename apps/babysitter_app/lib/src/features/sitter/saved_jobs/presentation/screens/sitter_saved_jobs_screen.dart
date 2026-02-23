@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../home/presentation/widgets/app_search_field.dart';
-import '../../../home/presentation/widgets/job_preview_card.dart';
-import '../../../home/presentation/mappers/job_preview_mapper.dart';
-import '../providers/saved_jobs_providers.dart';
-import '../providers/location_provider.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/app_search_field.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/job_preview_card.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/mappers/job_preview_mapper.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/location_provider.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 

@@ -1,4 +1,4 @@
-import '../../domain/audio_call_state.dart';
+import 'package:babysitter_app/src/features/calls/domain/audio_call_state.dart';
 import 'audio_call_ui_model.dart';
 
 class AudioCallUiMapper {

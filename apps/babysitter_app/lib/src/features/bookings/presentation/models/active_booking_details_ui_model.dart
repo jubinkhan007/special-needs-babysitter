@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import '../../domain/booking_details.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_details.dart';
 
 class ActiveBookingDetailsUiModel {
   final String sitterId;

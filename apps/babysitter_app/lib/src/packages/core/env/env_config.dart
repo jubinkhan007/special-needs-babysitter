@@ -1,5 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../constants/constants.dart';
+import 'package:babysitter_app/src/packages/core/constants/constants.dart';
 import 'package:flutter/foundation.dart';
 
 /// Environment configuration loaded from .env file

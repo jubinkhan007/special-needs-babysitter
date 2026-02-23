@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
-import '../dtos/user_dto.dart';
+import 'package:babysitter_app/src/packages/data/dtos/user_dto.dart';
 import 'package:flutter/foundation.dart';
 
 /// Remote data source for profile API calls

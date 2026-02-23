@@ -1,6 +1,6 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
-import '../../../profile_details/data/sitter_me_dto.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/profile_details/data/sitter_me_dto.dart';
 
 class SkillsCertificationsSection extends StatelessWidget {
   final List<SitterCertificationDto>? certifications;

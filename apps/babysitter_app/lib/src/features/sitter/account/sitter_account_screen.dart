@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../routing/routes.dart';
-import '../../account/about/presentation/about_special_needs_sitters_screen.dart';
-import '../../account/terms/presentation/terms_and_conditions_screen.dart';
-import '../../account/help_support/presentation/help_support_screen.dart';
-import '../../account/dialogs/show_sign_out_dialog.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/account/about/presentation/about_special_needs_sitters_screen.dart';
+import 'package:babysitter_app/src/features/account/terms/presentation/terms_and_conditions_screen.dart';
+import 'package:babysitter_app/src/features/account/help_support/presentation/help_support_screen.dart';
+import 'package:babysitter_app/src/features/account/dialogs/show_sign_out_dialog.dart';
 import 'presentation/sitter_account_ui_constants.dart';
 import 'presentation/controllers/sitter_account_controller.dart';
 import 'presentation/widgets/sitter_profile_header_card.dart';

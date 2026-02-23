@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../jobs/data/models/job_coordinates_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_coordinates_model.dart';
 
 class BookingSessionChildModel extends Equatable {
   final String firstName;

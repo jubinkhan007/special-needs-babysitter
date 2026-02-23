@@ -1,6 +1,6 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:latlong2/latlong.dart';
-import '../../domain/entities/job_preview.dart';
+import 'package:babysitter_app/src/features/sitter/home/domain/entities/job_preview.dart';
 
 /// Legacy mapper for Job -> JobPreview conversion.
 /// Note: The sitter home screen now uses jobPreviewsNotifierProvider which

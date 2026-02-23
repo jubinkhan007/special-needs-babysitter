@@ -1,7 +1,7 @@
-import '../../entities/auth_session.dart';
-import '../entities/otp_verify_payload.dart';
-import '../repositories/registration_repository.dart';
-import '../../usecases/usecase.dart';
+import 'package:babysitter_app/src/packages/domain/entities/auth_session.dart';
+import 'package:babysitter_app/src/packages/domain/auth/entities/otp_verify_payload.dart';
+import 'package:babysitter_app/src/packages/domain/auth/repositories/registration_repository.dart';
+import 'package:babysitter_app/src/packages/domain/usecases/usecase.dart';
 
 class VerifyOtpUseCase implements UseCase<AuthSession, OtpVerifyPayload> {
   final RegistrationRepository _repository;

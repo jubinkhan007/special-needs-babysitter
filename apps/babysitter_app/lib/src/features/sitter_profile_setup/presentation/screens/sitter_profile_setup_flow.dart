@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../routing/routes.dart';
-import '../../../parent_profile_setup/presentation/screens/steps/step0_intro.dart';
-import '../providers/sitter_profile_setup_providers.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/screens/steps/step0_intro.dart';
+import 'package:babysitter_app/src/features/sitter_profile_setup/presentation/providers/sitter_profile_setup_providers.dart';
 import 'steps/step1_upload_photo.dart';
 import 'steps/step2_bio.dart';
 import 'steps/step3_location.dart';

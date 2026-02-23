@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../jobs/presentation/all_jobs_screen.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/all_jobs_screen.dart';
 
 /// Parent jobs screen wrapper
 class ParentJobsScreen extends StatelessWidget {

@@ -1,8 +1,8 @@
-import '../../domain/repositories/bookings_repository.dart';
-import '../models/booking_model.dart';
-import '../models/booking_session_model.dart';
-import '../models/clock_out_result_model.dart';
-import '../sources/bookings_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/domain/repositories/bookings_repository.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_session_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/clock_out_result_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/sources/bookings_remote_datasource.dart';
 
 class BookingsRepositoryImpl implements BookingsRepository {
   final BookingsRemoteDataSource _remoteDataSource;

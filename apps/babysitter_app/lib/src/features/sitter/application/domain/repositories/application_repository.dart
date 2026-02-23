@@ -1,4 +1,4 @@
-import '../../data/models/application_model.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/models/application_model.dart';
 
 /// Repository interface for job applications.
 abstract class ApplicationRepository {

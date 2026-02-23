@@ -1,4 +1,4 @@
-import '../entities/job.dart';
+import 'package:babysitter_app/src/packages/domain/jobs/entities/job.dart';
 
 /// Repository interface for job related operations.
 abstract class JobRepository {

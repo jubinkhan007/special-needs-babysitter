@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../parent/search/models/sitter_list_item_model.dart';
-import '../../../parent/home/presentation/models/home_mock_models.dart';
-import '../datasources/sitters_remote_datasource.dart';
-import '../../domain/sitters_repository.dart';
-import '../models/sitter_dto.dart';
-import '../models/sitter_profile_dto.dart';
-import '../models/review_dto.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
+import 'package:babysitter_app/src/features/sitters/data/datasources/sitters_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitters/domain/sitters_repository.dart';
+import 'package:babysitter_app/src/features/sitters/data/models/sitter_dto.dart';
+import 'package:babysitter_app/src/features/sitters/data/models/sitter_profile_dto.dart';
+import 'package:babysitter_app/src/features/sitters/data/models/review_dto.dart';
 
 class SittersRepositoryImpl implements SittersRepository {
   final SittersRemoteDataSource _remoteDataSource;

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../domain/entities/job_preview.dart';
+import 'package:babysitter_app/src/features/sitter/home/domain/entities/job_preview.dart';
 import 'app_tag_chip.dart';
 
 /// Job preview card for sitter home screen.

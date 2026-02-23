@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 
-import '../models/booking_model.dart';
-import '../models/booking_session_model.dart';
-import '../models/clock_out_result_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_session_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/clock_out_result_model.dart';
 import 'package:flutter/foundation.dart';
 
 /// Remote data source for bookings API calls.

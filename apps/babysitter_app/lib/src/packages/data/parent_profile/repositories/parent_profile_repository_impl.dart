@@ -4,7 +4,7 @@ import 'package:path/path.dart' as path;
 // ignore: implementation_imports
 import 'package:mime/mime.dart'; // Ensure mime package is available or write helper
 
-import '../datasources/parent_profile_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/parent_profile/datasources/parent_profile_remote_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 class ParentProfileRepositoryImpl implements ParentProfileRepository {

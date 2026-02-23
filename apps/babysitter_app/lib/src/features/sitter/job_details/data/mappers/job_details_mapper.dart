@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/sitter_job_details.dart';
-import '../dtos/job_details_response_dto.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/data/dtos/job_details_response_dto.dart';
 
 /// Mapper to convert API response to domain entity.
 class JobDetailsMapper {

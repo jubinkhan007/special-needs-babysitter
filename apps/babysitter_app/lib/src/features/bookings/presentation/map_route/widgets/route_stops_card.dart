@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../../models/route_stop_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/route_stop_ui_model.dart';
 import 'route_stop_row.dart';
 
 class RouteStopsCard extends StatelessWidget {

@@ -5,17 +5,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../data/models/booking_session_model.dart';
-import '../../data/models/booking_model.dart';
-import '../../../../bookings/data/bookings_data_di.dart';
-import '../../../jobs/data/models/job_coordinates_model.dart';
-import '../../../jobs/data/models/job_request_details_model.dart';
-import '../../../jobs/presentation/providers/job_request_providers.dart';
-import '../controllers/session_tracking_controller.dart';
-import '../providers/bookings_providers.dart';
-import '../providers/session_tracking_providers.dart';
-import '../widgets/break_timer_dialog.dart';
-import '../widgets/pause_clock_dialog.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_session_model.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_model.dart';
+import 'package:babysitter_app/src/features/bookings/data/bookings_data_di.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_coordinates_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_details_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/providers/job_request_providers.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/presentation/controllers/session_tracking_controller.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/presentation/providers/bookings_providers.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/presentation/providers/session_tracking_providers.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/presentation/widgets/break_timer_dialog.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/presentation/widgets/pause_clock_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
 

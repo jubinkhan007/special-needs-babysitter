@@ -1,5 +1,5 @@
-import '../entities/wallet_balance.dart';
-import '../repositories/wallet_repository.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_balance.dart';
+import 'package:babysitter_app/src/features/wallet/domain/repositories/wallet_repository.dart';
 
 class GetWalletBalanceUseCase {
   final WalletRepository _repository;

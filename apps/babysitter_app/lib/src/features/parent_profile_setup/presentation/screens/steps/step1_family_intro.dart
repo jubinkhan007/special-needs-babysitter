@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../providers/parent_profile_providers.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/providers/parent_profile_providers.dart';
 import 'add_item_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 

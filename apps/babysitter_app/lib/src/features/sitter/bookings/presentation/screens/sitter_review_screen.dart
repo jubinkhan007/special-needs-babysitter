@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../bookings/domain/review/review_args.dart';
-import '../../../../bookings/presentation/providers/review_providers.dart';
+import 'package:babysitter_app/src/features/bookings/domain/review/review_args.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/providers/review_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 

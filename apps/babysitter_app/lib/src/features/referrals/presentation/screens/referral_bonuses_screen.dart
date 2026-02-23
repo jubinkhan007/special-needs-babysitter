@@ -5,15 +5,15 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../routing/routes.dart';
-import '../../../../common_widgets/app_toast.dart';
-import '../../models/referral_generate_response.dart';
-import '../../models/referrals_list_response.dart';
-import '../providers/referral_providers.dart';
-import '../widgets/bonus_info_card.dart';
-import '../widgets/invite_sitters_card.dart';
-import '../widgets/referral_bonuses_styles.dart';
-import '../widgets/reward_row.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/common_widgets/app_toast.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_generate_response.dart';
+import 'package:babysitter_app/src/features/referrals/models/referrals_list_response.dart';
+import 'package:babysitter_app/src/features/referrals/presentation/providers/referral_providers.dart';
+import 'package:babysitter_app/src/features/referrals/presentation/widgets/bonus_info_card.dart';
+import 'package:babysitter_app/src/features/referrals/presentation/widgets/invite_sitters_card.dart';
+import 'package:babysitter_app/src/features/referrals/presentation/widgets/referral_bonuses_styles.dart';
+import 'package:babysitter_app/src/features/referrals/presentation/widgets/reward_row.dart';
 
 class ReferralBonusesScreen extends ConsumerWidget {
   const ReferralBonusesScreen({super.key});

@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 
-import '../models/referral_generate_response.dart';
-import '../models/referral_invite_response.dart';
-import '../models/referral_item.dart';
-import '../models/referral_stats.dart';
-import '../models/referral_validate_response.dart';
-import '../models/referrals_list_response.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_generate_response.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_invite_response.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_item.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_stats.dart';
+import 'package:babysitter_app/src/features/referrals/models/referral_validate_response.dart';
+import 'package:babysitter_app/src/features/referrals/models/referrals_list_response.dart';
 
 class ReferralsApiService {
   final Dio _dio;

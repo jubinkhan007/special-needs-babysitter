@@ -2,8 +2,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
-import '../../../constants/app_constants.dart';
-import '../domain/jobs_repository.dart';
+import 'package:babysitter_app/src/constants/app_constants.dart';
+import 'package:babysitter_app/src/features/jobs/domain/jobs_repository.dart';
 import 'repositories/jobs_repository_impl.dart';
 
 // Dio Provider for Jobs

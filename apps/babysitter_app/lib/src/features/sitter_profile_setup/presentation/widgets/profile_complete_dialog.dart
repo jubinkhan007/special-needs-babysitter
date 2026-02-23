@@ -1,7 +1,7 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
 /// Shows the Profile Complete dialog after successful Step 9 submission.
 ///

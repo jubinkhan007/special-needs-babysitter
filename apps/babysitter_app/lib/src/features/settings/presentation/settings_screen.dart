@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../theme/app_tokens.dart';
-import '../domain/settings_item.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/settings/domain/settings_item.dart';
 import 'widgets/settings_item_tile.dart';
 import 'dialogs/show_delete_account_dialog.dart';
-import '../change_password/presentation/change_password_screen.dart';
-import '../manage_notifications/presentation/manage_notifications_screen.dart';
-import '../privacy_settings/presentation/privacy_settings_screen.dart';
+import 'package:babysitter_app/src/features/settings/change_password/presentation/change_password_screen.dart';
+import 'package:babysitter_app/src/features/settings/manage_notifications/presentation/manage_notifications_screen.dart';
+import 'package:babysitter_app/src/features/settings/privacy_settings/presentation/privacy_settings_screen.dart';
 
 /// The Settings screen displaying configurable options.
 class SettingsScreen extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'models/message_thread_ui_model.dart';
 import 'widgets/messages_app_bar.dart';
 import 'widgets/message_thread_tile.dart';

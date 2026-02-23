@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../models/review_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/sitters/presentation/reviews/models/review_ui_model.dart';
 import 'star_row.dart';
 
 /// A single review list item widget.

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../../profile_details/dtos/child_dto.dart';
+import 'package:babysitter_app/src/packages/data/profile_details/dtos/child_dto.dart';
 import 'package:flutter/foundation.dart';
 
 part 'job_dto.freezed.dart';

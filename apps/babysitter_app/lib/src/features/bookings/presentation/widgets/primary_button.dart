@@ -2,7 +2,7 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 // primary_button.dart
 import 'package:babysitter_app/src/common_widgets/debounced_button.dart';
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;

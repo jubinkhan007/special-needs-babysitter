@@ -4,13 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../widgets/auth_input_field.dart';
-import '../../../../../../../common/widgets/primary_action_button.dart';
-import '../../../widgets/step_indicator.dart';
-import '../../../widgets/social_login_row.dart';
-import '../../../../../../routing/routes.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/auth_input_field.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/step_indicator.dart';
+import 'package:babysitter_app/src/features/auth/presentation/widgets/social_login_row.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../../../controllers/sign_up_providers.dart';
+import 'package:babysitter_app/src/features/auth/presentation/controllers/sign_up_providers.dart';
 
 /// Step 1: Account Info - Pixel-perfect matching Figma
 class Step1AccountInfo extends ConsumerStatefulWidget {

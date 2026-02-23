@@ -1,6 +1,6 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../../domain/repositories/saved_jobs_repository.dart';
-import '../sources/saved_jobs_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/domain/repositories/saved_jobs_repository.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/data/sources/saved_jobs_remote_datasource.dart';
 
 class SavedJobsRepositoryImpl implements SavedJobsRepository {
   final SavedJobsRemoteDataSource _remote;

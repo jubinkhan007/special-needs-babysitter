@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
-import '../../../constants/app_constants.dart';
-import '../../bookings/domain/bookings_repository.dart';
+import 'package:babysitter_app/src/constants/app_constants.dart';
+import 'package:babysitter_app/src/features/bookings/domain/bookings_repository.dart';
 import 'datasources/bookings_remote_datasource.dart';
 import 'datasources/google_geocoding_remote_datasource.dart';
 import 'repositories/bookings_repository_impl.dart';

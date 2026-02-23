@@ -2,12 +2,12 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/job_details.dart'; // To use JobDetails and Address
-import '../../data/jobs_data_di.dart';
-import '../providers/jobs_providers.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job_details.dart'; // To use JobDetails and Address
+import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/providers/jobs_providers.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'package:intl/intl.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 

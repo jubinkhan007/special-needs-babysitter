@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../profile_details_ui_constants.dart';
+import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/profile_details_ui_constants.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;

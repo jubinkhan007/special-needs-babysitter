@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../../../../common/widgets/primary_action_button.dart';
-import '../../widgets/add_child_dialog.dart';
-import '../../widgets/add_emergency_contact_dialog.dart';
+import 'package:babysitter_app/common/widgets/primary_action_button.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/widgets/add_child_dialog.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/widgets/add_emergency_contact_dialog.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
-import '../../providers/parent_profile_providers.dart';
+import 'package:babysitter_app/src/features/parent_profile_setup/presentation/providers/parent_profile_providers.dart';
 
 /// Step 4: Review Your Profile
 /// Matches Figma: Icon header, Profile Photo, Edit sections, Confirm button.

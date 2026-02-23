@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../../../../theme/app_tokens.dart';
-import '../../../job_details/domain/entities/sitter_job_details.dart';
-import '../../../home/presentation/widgets/app_tag_chip.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/widgets/app_tag_chip.dart';
 import 'application_preview_card.dart';
 
 /// Card 1 - Job Details Preview Card.

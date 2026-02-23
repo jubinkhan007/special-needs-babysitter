@@ -1,4 +1,4 @@
-import '../../../../jobs/domain/applications/booking_application.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/booking_application.dart';
 import 'package:intl/intl.dart';
 
 class BookingApplicationUiModel {

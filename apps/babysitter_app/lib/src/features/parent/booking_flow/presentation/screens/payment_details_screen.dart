@@ -1,13 +1,13 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/providers/booking_flow_provider.dart';
-import '../theme/booking_ui_tokens.dart';
-import '../widgets/booking_top_bar.dart';
-import '../widgets/payment_detail_row.dart';
-import '../widgets/note_card.dart';
-import '../widgets/payment_method_sheet.dart';
-import '../widgets/dashed_divider.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/booking_flow_provider.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/theme/booking_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/booking_top_bar.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/payment_detail_row.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/note_card.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/payment_method_sheet.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/presentation/widgets/dashed_divider.dart';
 import 'select_payment_method_screen.dart';
 import 'service_details_screen.dart';
 

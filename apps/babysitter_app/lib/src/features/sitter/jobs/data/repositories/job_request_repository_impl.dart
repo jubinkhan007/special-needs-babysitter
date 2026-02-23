@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import '../../domain/repositories/job_request_repository.dart';
-import '../models/job_request_details_model.dart';
-import '../sources/job_request_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/domain/repositories/job_request_repository.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_details_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/sources/job_request_remote_datasource.dart';
 
 class JobRequestRepositoryImpl implements JobRequestRepository {
   final JobRequestRemoteDataSource _remoteDataSource;

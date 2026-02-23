@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
-import '../../data/sources/booking_session_local_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/data/sources/booking_session_local_datasource.dart';
 import 'bookings_providers.dart';
-import '../controllers/session_tracking_controller.dart';
+import 'package:babysitter_app/src/features/sitter/bookings/presentation/controllers/session_tracking_controller.dart';
 
 final bookingSessionLocalDataSourceProvider =
     Provider<BookingSessionLocalDataSource>((ref) {

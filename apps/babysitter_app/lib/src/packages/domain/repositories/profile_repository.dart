@@ -1,4 +1,4 @@
-import '../entities/user.dart';
+import 'package:babysitter_app/src/packages/domain/entities/user.dart';
 
 /// Parameters for updating user profile
 class UpdateProfileParams {

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../job_details/domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
 
 /// Entity representing the application preview data.
 class JobApplicationPreview extends Equatable {

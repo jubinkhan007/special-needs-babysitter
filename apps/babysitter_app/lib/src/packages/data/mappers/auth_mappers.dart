@@ -1,7 +1,7 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
-import '../dtos/auth_session_dto.dart';
-import '../dtos/user_dto.dart';
+import 'package:babysitter_app/src/packages/data/dtos/auth_session_dto.dart';
+import 'package:babysitter_app/src/packages/data/dtos/user_dto.dart';
 
 /// Mappers for authentication-related DTOs to domain entities
 class AuthMappers {

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart'; // For authDioProvider
 import 'package:babysitter_app/src/packages/core/core.dart'; // For EnvConfig.apiBaseUrl
 
-import '../services/paypal_payment_service.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/services/paypal_payment_service.dart';
 
 /// Provider for a public Dio instance (no auth required)
 /// Used for GET /payments/paypal/config which doesn't need authentication

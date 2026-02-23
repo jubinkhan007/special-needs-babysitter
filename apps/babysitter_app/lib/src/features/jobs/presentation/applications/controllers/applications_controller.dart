@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import '../../../domain/applications/applications_repository.dart';
+import 'package:babysitter_app/src/features/jobs/domain/applications/applications_repository.dart';
 
-import '../providers/applications_providers.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/applications/providers/applications_providers.dart';
 
 // Controller for managing application actions (accept/reject)
 class ApplicationsController extends StateNotifier<AsyncValue<void>> {

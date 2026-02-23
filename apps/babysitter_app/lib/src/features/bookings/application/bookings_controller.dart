@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import '../domain/booking.dart';
-import '../domain/booking_status.dart';
-import '../../bookings/data/bookings_data_di.dart';
-import '../../bookings/domain/bookings_repository.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_status.dart';
+import 'package:babysitter_app/src/features/bookings/data/bookings_data_di.dart';
+import 'package:babysitter_app/src/features/bookings/domain/bookings_repository.dart';
 
 class BookingsController extends ChangeNotifier {
   final BookingsRepository _repository;

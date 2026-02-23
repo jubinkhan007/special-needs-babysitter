@@ -1,4 +1,4 @@
-import '../../domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
 
 /// Mock data source for sitter job details.
 class SitterJobDetailsMockSource {

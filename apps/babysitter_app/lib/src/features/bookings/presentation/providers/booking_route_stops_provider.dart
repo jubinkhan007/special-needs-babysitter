@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../data/bookings_data_di.dart';
-import '../../data/datasources/google_geocoding_remote_datasource.dart';
-import '../../domain/booking_location.dart';
-import '../models/route_stop_ui_model.dart';
+import 'package:babysitter_app/src/features/bookings/data/bookings_data_di.dart';
+import 'package:babysitter_app/src/features/bookings/data/datasources/google_geocoding_remote_datasource.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_location.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/route_stop_ui_model.dart';
 import 'booking_location_provider.dart';
 
 final bookingRouteStopsProvider =

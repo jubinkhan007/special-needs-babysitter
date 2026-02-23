@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../routing/routes.dart';
-import '../domain/review/review_args.dart';
-import '../../../theme/app_tokens.dart';
-import '../domain/booking_details.dart';
-import '../domain/booking_status.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/bookings/domain/review/review_args.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_details.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_status.dart';
 import 'models/booking_details_ui_model.dart';
 import 'models/booking_details_variant.dart';
 import 'widgets/booking_details_app_bar.dart';
@@ -15,10 +15,10 @@ import 'widgets/key_value_row.dart';
 import 'widgets/section_header_row.dart';
 import 'widgets/sitter_details_card.dart';
 import 'providers/booking_details_provider.dart';
-import '../../parent/booking_flow/data/providers/bookings_di.dart';
-import '../application/bookings_controller.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/bookings_di.dart';
+import 'package:babysitter_app/src/features/bookings/application/bookings_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../../messages/domain/chat_thread_args.dart';
+import 'package:babysitter_app/src/features/messages/domain/chat_thread_args.dart';
 
 class BookingDetailsScreen extends ConsumerStatefulWidget {
   final BookingDetailsArgs args;

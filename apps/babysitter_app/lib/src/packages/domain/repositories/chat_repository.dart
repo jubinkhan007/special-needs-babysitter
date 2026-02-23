@@ -1,6 +1,6 @@
-import '../entities/conversation.dart';
-import '../entities/chat_message.dart';
-import '../entities/chat_init_result.dart';
+import 'package:babysitter_app/src/packages/domain/entities/conversation.dart';
+import 'package:babysitter_app/src/packages/domain/entities/chat_message.dart';
+import 'package:babysitter_app/src/packages/domain/entities/chat_init_result.dart';
 
 abstract interface class ChatRepository {
   /// Initialize the Agora Chat system for the current user.

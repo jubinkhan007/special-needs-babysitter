@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../../models/route_stop_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/models/route_stop_ui_model.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart'; // Assuming standard sizing, but using tokens mostly
 
 class RouteStopRow extends StatelessWidget {

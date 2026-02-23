@@ -2,7 +2,7 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
 /// Sticky bottom bar with price and Apply Now button.
 class JobDetailsBottomBar extends StatelessWidget {

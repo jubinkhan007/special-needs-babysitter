@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/audio_call_state.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/calls/domain/audio_call_state.dart';
 import 'call_avatar.dart';
 
 class CallStatusBlock extends StatelessWidget {

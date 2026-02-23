@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../bookings/data/bookings_data_di.dart';
-import '../../../../bookings/domain/booking.dart';
-import '../../../../sitters/data/sitters_data_di.dart';
-import '../../../search/utils/location_helper.dart';
-import '../../../search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/bookings/data/bookings_data_di.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking.dart';
+import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
+import 'package:babysitter_app/src/features/parent/search/utils/location_helper.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
 
 final parentHomeBookingsProvider =
     FutureProvider<List<Booking>>((ref) async {

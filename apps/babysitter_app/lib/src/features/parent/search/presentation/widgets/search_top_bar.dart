@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../theme/app_ui_tokens.dart';
-import '../providers/search_filter_provider.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/providers/search_filter_provider.dart';
 
 class SearchTopBar extends ConsumerStatefulWidget {
   const SearchTopBar({super.key});

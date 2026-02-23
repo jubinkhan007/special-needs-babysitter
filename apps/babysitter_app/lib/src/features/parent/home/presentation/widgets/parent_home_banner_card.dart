@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/packages/core/core.dart'; // Assuming core handles AppColors/AppTypography
-import '../../../../../routing/routes.dart';
-import '../theme/home_design_tokens.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
 
 class ParentHomeBannerCard extends StatelessWidget {
   const ParentHomeBannerCard({super.key});

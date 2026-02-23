@@ -1,7 +1,7 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../datasources/job_remote_datasource.dart';
-import '../datasources/job_local_datasource.dart';
-import '../dtos/job_dto.dart';
+import 'package:babysitter_app/src/packages/data/jobs/datasources/job_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/jobs/datasources/job_local_datasource.dart';
+import 'package:babysitter_app/src/packages/data/jobs/dtos/job_dto.dart';
 import 'package:flutter/foundation.dart';
 
 class JobRepositoryImpl implements JobRepository {

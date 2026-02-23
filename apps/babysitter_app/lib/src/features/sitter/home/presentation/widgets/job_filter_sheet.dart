@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/job_search_filters.dart';
-import '../providers/sitter_home_providers.dart';
+import 'package:babysitter_app/src/features/sitter/home/domain/entities/job_search_filters.dart';
+import 'package:babysitter_app/src/features/sitter/home/presentation/providers/sitter_home_providers.dart';
 
 /// Bottom sheet for filtering job listings
 class JobFilterSheet extends ConsumerStatefulWidget {

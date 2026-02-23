@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Reusing same style as dropdown, but with specific layout/icons
-import '../../../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 
 class FilterTextField extends StatelessWidget {
   final String hint;

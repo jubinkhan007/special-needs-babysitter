@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../theme/app_tokens.dart';
-import '../domain/account_menu_item.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/account/domain/account_menu_item.dart';
 import 'widgets/account_profile_card.dart';
 import 'widgets/account_stat_cards_row.dart';
 import 'widgets/account_menu_tile.dart';
-import '../about/presentation/about_special_needs_sitters_screen.dart';
+import 'package:babysitter_app/src/features/account/about/presentation/about_special_needs_sitters_screen.dart';
 
 /// The Account tab screen displaying user profile, stats, and menu options.
 class AccountScreen extends StatelessWidget {

@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/review/review_args.dart';
-import '../providers/review_providers.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/review/review_args.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/providers/review_providers.dart';
 import 'widgets/star_rating_row.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 

@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
 /// Password Updated Confirmation screen - Pixel-perfect matching Figma design
 class PasswordUpdatedScreen extends StatelessWidget {

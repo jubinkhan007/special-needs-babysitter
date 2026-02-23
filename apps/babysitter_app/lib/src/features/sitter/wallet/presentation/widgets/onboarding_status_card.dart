@@ -2,7 +2,7 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../data/models/stripe_connect_status.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/data/models/stripe_connect_status.dart';
 
 /// A card widget that displays the current Stripe Connect onboarding status
 /// and provides an action button based on the current state.

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../bookings/data/bookings_data_di.dart'; // Reuse Dio with Auth Interceptor
+import 'package:babysitter_app/src/features/bookings/data/bookings_data_di.dart'; // Reuse Dio with Auth Interceptor
 import 'datasources/sitters_remote_datasource.dart';
 import 'repositories/sitters_repository_impl.dart';
-import '../domain/sitters_repository.dart';
+import 'package:babysitter_app/src/features/sitters/domain/sitters_repository.dart';
 
 // Reuse the authenticated dio client from bookings if possible,
 // or define a shared one. bookingsDioProvider is available.

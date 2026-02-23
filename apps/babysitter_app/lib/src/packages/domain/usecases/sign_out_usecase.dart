@@ -1,4 +1,4 @@
-import '../repositories/auth_repository.dart';
+import 'package:babysitter_app/src/packages/domain/repositories/auth_repository.dart';
 import 'usecase.dart';
 
 /// Usecase for signing out the current user

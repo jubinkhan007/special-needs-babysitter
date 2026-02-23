@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:equatable/equatable.dart';
-import '../../../application/data/models/application_model.dart';
-import '../../../application/presentation/providers/application_providers.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/models/application_model.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/providers/application_providers.dart';
 import 'package:flutter/foundation.dart';
 
 class ApplicationsFilter extends Equatable {

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
-import '../../../../theme/app_tokens.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
-import '../../domain/job_details.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job_details.dart';
 import 'models/job_details_ui_model.dart';
 import 'job_details_provider.dart';
-import '../widgets/jobs_app_bar.dart';
-import '../widgets/job_status_chip.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/widgets/jobs_app_bar.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/widgets/job_status_chip.dart';
 import 'widgets/section_title.dart';
 import 'widgets/key_value_row.dart';
 import 'widgets/section_divider.dart';
 import 'widgets/bottom_action_stack.dart';
 
-import '../../data/jobs_data_di.dart'; // For repository
-import '../providers/jobs_providers.dart';
+import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart'; // For repository
+import 'package:babysitter_app/src/features/jobs/presentation/providers/jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 import 'package:babysitter_app/src/common_widgets/payment_method_selector.dart';
 import 'package:babysitter_app/src/features/parent/booking_flow/data/providers/bookings_di.dart';

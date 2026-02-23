@@ -1,4 +1,4 @@
-import '../entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
 
 /// Repository interface for sitter job details.
 abstract class SitterJobDetailsRepository {

@@ -1,8 +1,8 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/rejection_reason.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/domain/rejection_reason.dart';
 
 /// Result returned from the rejection bottom sheet.
 class RejectReasonResult {

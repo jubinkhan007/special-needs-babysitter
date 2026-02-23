@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../account_ui_constants.dart';
+import 'package:babysitter_app/src/features/parent/account/presentation/account_ui_constants.dart';
 
 class AccountMenuList extends StatelessWidget {
   final VoidCallback onTapPayment;

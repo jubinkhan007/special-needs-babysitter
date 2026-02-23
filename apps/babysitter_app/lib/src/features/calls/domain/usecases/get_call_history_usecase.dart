@@ -1,5 +1,5 @@
-import '../entities/call_history_item.dart';
-import '../repositories/calls_repository.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_history_item.dart';
+import 'package:babysitter_app/src/features/calls/domain/repositories/calls_repository.dart';
 
 class GetCallHistoryParams {
   final int limit;

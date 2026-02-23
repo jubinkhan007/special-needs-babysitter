@@ -5,15 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../data/models/job_request_details_model.dart';
-import '../providers/job_request_providers.dart';
-import '../providers/sitter_job_applications_provider.dart';
-import '../widgets/job_meta_header.dart';
-import '../widgets/key_value_row.dart';
-import '../widgets/soft_skill_chip.dart';
-import '../widgets/decline_reason_dialog.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_details_model.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/providers/job_request_providers.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/providers/sitter_job_applications_provider.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/job_meta_header.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/key_value_row.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/soft_skill_chip.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/decline_reason_dialog.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 
 /// Screen showing details of a job request (invitation) that a sitter received.
 class SitterJobRequestDetailsScreen extends ConsumerWidget {

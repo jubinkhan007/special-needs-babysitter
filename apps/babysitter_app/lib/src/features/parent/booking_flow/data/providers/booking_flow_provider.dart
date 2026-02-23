@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/legacy.dart';
-import '../models/booking_flow_state.dart';
+import 'package:babysitter_app/src/features/parent/booking_flow/data/models/booking_flow_state.dart';
 
 /// Provider for managing booking flow state across steps 1-4
 final bookingFlowProvider =

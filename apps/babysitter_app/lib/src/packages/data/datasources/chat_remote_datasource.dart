@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import '../dtos/chat_dto.dart';
-import '../dtos/chat_message_dto.dart';
-import '../dtos/chat_init_dto.dart';
+import 'package:babysitter_app/src/packages/data/dtos/chat_dto.dart';
+import 'package:babysitter_app/src/packages/data/dtos/chat_message_dto.dart';
+import 'package:babysitter_app/src/packages/data/dtos/chat_init_dto.dart';
 import 'package:flutter/foundation.dart';
 
 abstract interface class ChatRemoteDataSource {

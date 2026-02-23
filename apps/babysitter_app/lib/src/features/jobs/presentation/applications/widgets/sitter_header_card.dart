@@ -1,7 +1,7 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
-import '../../../../../theme/app_tokens.dart';
-import '../models/booking_application_ui_model.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/presentation/applications/models/booking_application_ui_model.dart';
 
 class SitterHeaderCard extends StatelessWidget {
   final BookingApplicationUiModel ui;

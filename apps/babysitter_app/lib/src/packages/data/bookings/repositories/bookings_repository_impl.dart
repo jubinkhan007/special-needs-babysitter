@@ -1,5 +1,5 @@
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../datasources/bookings_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/bookings/datasources/bookings_remote_datasource.dart';
 
 /// Implementation of [BookingsRepository]
 class BookingsRepositoryImpl implements BookingsRepository {

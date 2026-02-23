@@ -1,10 +1,10 @@
 import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 
-import '../models/call_config_dto.dart';
-import '../models/call_session_dto.dart';
-import '../models/call_history_dto.dart';
-import '../models/call_token_dto.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_config_dto.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_session_dto.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_history_dto.dart';
+import 'package:babysitter_app/src/features/calls/data/models/call_token_dto.dart';
 import 'package:flutter/foundation.dart';
 
 /// Interface for calls API operations

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../routing/routes.dart';
-import '../../../../theme/app_tokens.dart';
-import '../../domain/booking_location.dart';
-import '../providers/booking_location_provider.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking_location.dart';
+import 'package:babysitter_app/src/features/bookings/presentation/providers/booking_location_provider.dart';
 
 class LiveTrackingSection extends ConsumerWidget {
   final String bookingId;

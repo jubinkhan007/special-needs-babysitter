@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
-import '../providers/job_post_providers.dart';
-import '../controllers/job_post_controller.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/providers/job_post_providers.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/controllers/job_post_controller.dart';
 import 'job_post_step_header.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 

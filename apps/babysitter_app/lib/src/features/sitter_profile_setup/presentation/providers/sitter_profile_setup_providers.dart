@@ -7,7 +7,7 @@ import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:intl/intl.dart';
-import '../../../../constants/app_constants.dart';
+import 'package:babysitter_app/src/constants/app_constants.dart';
 
 enum AvailabilityMode { singleDay, multipleDays }
 

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../models/stripe_connect_status.dart';
+import 'package:babysitter_app/src/features/sitter/wallet/data/models/stripe_connect_status.dart';
 import 'package:flutter/foundation.dart';
 
 class StripeConnectRemoteDataSource {

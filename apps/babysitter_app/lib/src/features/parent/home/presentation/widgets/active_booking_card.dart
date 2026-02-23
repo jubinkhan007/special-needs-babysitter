@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:intl/intl.dart';
-import '../../../../bookings/domain/booking.dart';
-import '../theme/home_design_tokens.dart';
+import 'package:babysitter_app/src/features/bookings/domain/booking.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_design_tokens.dart';
 
 class ActiveBookingCard extends StatelessWidget {
   final Booking booking;

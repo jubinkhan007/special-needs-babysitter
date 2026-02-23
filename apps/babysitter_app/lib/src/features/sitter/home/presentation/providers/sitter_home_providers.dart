@@ -7,9 +7,9 @@ import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:babysitter_app/src/constants/app_constants.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../data/dtos/sitter_job_preview_dto.dart';
-import '../../domain/entities/job_preview.dart';
-import '../../domain/entities/job_search_filters.dart';
+import 'package:babysitter_app/src/features/sitter/home/data/dtos/sitter_job_preview_dto.dart';
+import 'package:babysitter_app/src/features/sitter/home/domain/entities/job_preview.dart';
+import 'package:babysitter_app/src/features/sitter/home/domain/entities/job_search_filters.dart';
 import 'package:flutter/foundation.dart';
 
 /// User authentificated Dio for Sitter Home

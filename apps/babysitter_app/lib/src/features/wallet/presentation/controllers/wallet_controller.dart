@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/entities/wallet_balance.dart';
-import '../../domain/entities/wallet_withdraw_result.dart';
-import '../providers/wallet_dependencies.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_balance.dart';
+import 'package:babysitter_app/src/features/wallet/domain/entities/wallet_withdraw_result.dart';
+import 'package:babysitter_app/src/features/wallet/presentation/providers/wallet_dependencies.dart';
 
 class WalletState {
   final bool isLoading;

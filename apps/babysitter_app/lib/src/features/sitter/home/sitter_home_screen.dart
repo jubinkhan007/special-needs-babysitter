@@ -5,16 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
 import 'presentation/widgets/sitter_home_header.dart';
 import 'presentation/widgets/app_search_field.dart';
 import 'presentation/widgets/job_preview_card.dart';
 import 'presentation/widgets/background_check_banner.dart';
 import 'presentation/providers/sitter_home_providers.dart';
-import '../background_check/data/models/background_check_status_model.dart';
-import '../background_check/presentation/providers/background_check_status_provider.dart';
-import '../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/data/models/background_check_status_model.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/presentation/providers/background_check_status_provider.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Sitter home screen - Jobs near you

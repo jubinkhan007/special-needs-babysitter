@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../parent/home/presentation/models/home_mock_models.dart';
-import '../../parent/search/models/sitter_list_item_model.dart';
+import 'package:babysitter_app/src/features/parent/home/presentation/models/home_mock_models.dart';
+import 'package:babysitter_app/src/features/parent/search/models/sitter_list_item_model.dart';
 
 abstract class SittersRepository {
   Future<List<SitterListItemModel>> fetchSitters({

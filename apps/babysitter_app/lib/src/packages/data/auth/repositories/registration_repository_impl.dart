@@ -2,8 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 
-import '../datasources/registration_remote_datasource.dart';
-import '../../mappers/auth_mappers.dart';
+import 'package:babysitter_app/src/packages/data/auth/datasources/registration_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/mappers/auth_mappers.dart';
 
 /// Implementation of RegistrationRepository
 class RegistrationRepositoryImpl implements RegistrationRepository {

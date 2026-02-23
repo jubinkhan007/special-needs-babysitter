@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../dtos/job_details_response_dto.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/data/dtos/job_details_response_dto.dart';
 import 'package:flutter/foundation.dart';
 
 /// Remote data source for fetching job details from API.

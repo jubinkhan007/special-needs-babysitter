@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../models/wallet_balance_model.dart';
-import '../models/wallet_withdraw_response.dart';
+import 'package:babysitter_app/src/features/wallet/data/models/wallet_balance_model.dart';
+import 'package:babysitter_app/src/features/wallet/data/models/wallet_withdraw_response.dart';
 
 class WalletApiService {
   final Dio _dio;

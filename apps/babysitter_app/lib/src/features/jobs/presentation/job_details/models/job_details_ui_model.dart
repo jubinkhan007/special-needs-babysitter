@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../domain/job_details.dart';
-import '../../../domain/job.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job_details.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job.dart';
 import 'package:intl/intl.dart';
 
 class JobDetailsUiModel {

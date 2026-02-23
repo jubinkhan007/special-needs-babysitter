@@ -1,7 +1,7 @@
-import '../../domain/entities/sitter_job_details.dart';
-import '../../domain/repositories/sitter_job_details_repository.dart';
-import '../sources/sitter_job_details_remote_source.dart';
-import '../mappers/job_details_mapper.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/entities/sitter_job_details.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/domain/repositories/sitter_job_details_repository.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/data/sources/sitter_job_details_remote_source.dart';
+import 'package:babysitter_app/src/features/sitter/job_details/data/mappers/job_details_mapper.dart';
 import 'package:flutter/foundation.dart';
 
 /// Repository implementation for sitter job details using remote API.

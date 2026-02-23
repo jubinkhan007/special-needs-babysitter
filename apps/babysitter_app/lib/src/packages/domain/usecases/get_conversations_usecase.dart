@@ -1,5 +1,5 @@
-import '../entities/conversation.dart';
-import '../repositories/chat_repository.dart';
+import 'package:babysitter_app/src/packages/domain/entities/conversation.dart';
+import 'package:babysitter_app/src/packages/domain/repositories/chat_repository.dart';
 
 class GetConversationsUseCase {
   final ChatRepository _repository;

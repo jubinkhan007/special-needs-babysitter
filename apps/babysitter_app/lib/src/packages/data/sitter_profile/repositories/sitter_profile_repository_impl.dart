@@ -3,7 +3,7 @@ import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:path/path.dart' as path;
 import 'package:mime/mime.dart';
 
-import '../datasources/sitter_profile_remote_datasource.dart';
+import 'package:babysitter_app/src/packages/data/sitter_profile/datasources/sitter_profile_remote_datasource.dart';
 import 'package:flutter/foundation.dart';
 
 /// Implementation of [SitterProfileRepository].

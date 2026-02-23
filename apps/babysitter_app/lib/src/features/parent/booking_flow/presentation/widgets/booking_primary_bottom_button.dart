@@ -1,6 +1,6 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
-import '../../../search/presentation/theme/app_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart';
 
 class BookingPrimaryBottomButton extends StatelessWidget {
   final String text;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../routing/routes.dart';
-import '../widgets/wallet_styles.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/wallet/presentation/widgets/wallet_styles.dart';
 
 class PayoutHistoryScreen extends StatelessWidget {
   const PayoutHistoryScreen({super.key});

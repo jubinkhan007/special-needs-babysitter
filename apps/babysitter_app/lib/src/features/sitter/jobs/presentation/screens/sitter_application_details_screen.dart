@@ -5,16 +5,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../../../application/data/models/application_model.dart';
-import '../../../application/presentation/providers/application_providers.dart';
-import '../widgets/job_status_badge.dart';
-import '../widgets/job_meta_header.dart';
-import '../widgets/key_value_row.dart';
-import '../widgets/section_divider.dart';
-import '../widgets/soft_skill_chip.dart';
-import '../widgets/status_pill.dart';
-import '../widgets/bottom_primary_button.dart';
-import '../../../saved_jobs/presentation/providers/saved_jobs_providers.dart';
+import 'package:babysitter_app/src/features/sitter/application/data/models/application_model.dart';
+import 'package:babysitter_app/src/features/sitter/application/presentation/providers/application_providers.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/job_status_badge.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/job_meta_header.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/key_value_row.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/section_divider.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/soft_skill_chip.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/status_pill.dart';
+import 'package:babysitter_app/src/features/sitter/jobs/presentation/widgets/bottom_primary_button.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/providers/saved_jobs_providers.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 
 /// Screen showing details of a job application the sitter has already submitted.

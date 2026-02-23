@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../routing/routes.dart';
-import '../controllers/background_check_controller.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/presentation/controllers/background_check_controller.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../providers/background_check_status_provider.dart';
+import 'package:babysitter_app/src/features/sitter/background_check/presentation/providers/background_check_status_provider.dart';
 
 /// Screen to submit the background check.
 class BackgroundCheckScreen extends ConsumerWidget {

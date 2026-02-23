@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 
-import '../../data/repositories/wallet_repository_impl.dart';
-import '../../data/services/wallet_api_service.dart';
-import '../../domain/repositories/wallet_repository.dart';
-import '../../domain/usecases/get_wallet_balance.dart';
-import '../../domain/usecases/withdraw_wallet.dart';
+import 'package:babysitter_app/src/features/wallet/data/repositories/wallet_repository_impl.dart';
+import 'package:babysitter_app/src/features/wallet/data/services/wallet_api_service.dart';
+import 'package:babysitter_app/src/features/wallet/domain/repositories/wallet_repository.dart';
+import 'package:babysitter_app/src/features/wallet/domain/usecases/get_wallet_balance.dart';
+import 'package:babysitter_app/src/features/wallet/domain/usecases/withdraw_wallet.dart';
 
 final walletApiServiceProvider = Provider<WalletApiService>((ref) {
   final dio = ref.watch(authDioProvider);

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../theme/app_ui_tokens.dart';
-import '../widgets/search_top_bar.dart';
-import '../widgets/filter_row.dart';
-import '../widgets/sitter_card.dart';
-import '../../../../../routing/routes.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/theme/app_ui_tokens.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/widgets/search_top_bar.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/widgets/filter_row.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/widgets/sitter_card.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 
-import '../filter/filter_bottom_sheet.dart';
-import '../providers/sitters_list_provider.dart';
-import '../providers/search_filter_provider.dart';
-import '../../../shared/providers/location_access_provider.dart';
-import '../../../shared/widgets/location_access_banner.dart';
-import '../../utils/location_helper.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/filter/filter_bottom_sheet.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/providers/sitters_list_provider.dart';
+import 'package:babysitter_app/src/features/parent/search/presentation/providers/search_filter_provider.dart';
+import 'package:babysitter_app/src/features/parent/shared/providers/location_access_provider.dart';
+import 'package:babysitter_app/src/features/parent/shared/widgets/location_access_banner.dart';
+import 'package:babysitter_app/src/features/parent/search/utils/location_helper.dart';
 
 import 'package:babysitter_app/src/features/jobs/data/jobs_data_di.dart';
 import 'package:babysitter_app/src/common_widgets/app_toast.dart';
-import '../../../../sitters/presentation/saved/saved_sitters_controller.dart';
+import 'package:babysitter_app/src/features/sitters/presentation/saved/saved_sitters_controller.dart';
 
 class SitterSearchResultsScreen extends ConsumerStatefulWidget {
   const SitterSearchResultsScreen({super.key});

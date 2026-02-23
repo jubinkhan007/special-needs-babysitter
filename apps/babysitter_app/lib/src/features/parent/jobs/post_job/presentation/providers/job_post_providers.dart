@@ -4,9 +4,9 @@ import 'package:babysitter_app/src/packages/data/data.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
-import '../../../../../../constants/app_constants.dart';
+import 'package:babysitter_app/src/constants/app_constants.dart';
 import 'package:babysitter_app/src/features/parent/account/profile_details/presentation/providers/profile_details_providers.dart';
-import '../controllers/job_post_controller.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/controllers/job_post_controller.dart';
 import 'package:flutter/foundation.dart';
 
 /// Authenticated Dio provider for Job API.

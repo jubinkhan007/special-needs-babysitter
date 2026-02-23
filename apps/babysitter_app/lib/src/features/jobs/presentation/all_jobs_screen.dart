@@ -2,15 +2,15 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart' as domain;
-import '../../../theme/app_tokens.dart';
-import '../domain/job.dart';
+import 'package:babysitter_app/src/theme/app_tokens.dart';
+import 'package:babysitter_app/src/features/jobs/domain/job.dart';
 import 'models/job_ui_model.dart';
 import 'widgets/job_card.dart';
 import 'widgets/jobs_app_bar.dart';
 import 'package:go_router/go_router.dart';
-import '../../../routing/routes.dart';
+import 'package:babysitter_app/src/routing/routes.dart';
 import 'providers/jobs_providers.dart';
-import '../../parent/jobs/post_job/presentation/providers/job_post_providers.dart';
+import 'package:babysitter_app/src/features/parent/jobs/post_job/presentation/providers/job_post_providers.dart';
 
 class AllJobsScreen extends ConsumerWidget {
   const AllJobsScreen({super.key});

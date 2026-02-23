@@ -1,7 +1,7 @@
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../sitter_account_ui_constants.dart';
+import 'package:babysitter_app/src/features/sitter/account/presentation/sitter_account_ui_constants.dart';
 
 class SitterProfileProgressAvatar extends StatelessWidget {
   final String? avatarUrl;

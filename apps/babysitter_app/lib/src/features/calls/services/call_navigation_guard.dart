@@ -3,9 +3,9 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/entities/call_enums.dart';
-import '../presentation/screens/incoming_call_screen.dart';
-import '../presentation/screens/in_call_screen.dart';
+import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
+import 'package:babysitter_app/src/features/calls/presentation/screens/incoming_call_screen.dart';
+import 'package:babysitter_app/src/features/calls/presentation/screens/in_call_screen.dart';
 
 /// Centralized navigation guard to prevent duplicate call screens
 ///

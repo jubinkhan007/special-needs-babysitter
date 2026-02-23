@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
-import '../../data/sources/saved_jobs_remote_datasource.dart';
-import '../../data/repositories/saved_jobs_repository_impl.dart';
-import '../../domain/repositories/saved_jobs_repository.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/data/sources/saved_jobs_remote_datasource.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/data/repositories/saved_jobs_repository_impl.dart';
+import 'package:babysitter_app/src/features/sitter/saved_jobs/domain/repositories/saved_jobs_repository.dart';
 
 class SavedJobsState {
   final Set<String> savedJobIds;
