@@ -45,7 +45,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           senderType: ChatMessageSenderType.support,
           isMe: false,
           text:
-              "Hello! I see you’re having trouble accessing your account. Please let me know if you don’t have access to your phone or email, and I’ll help verify your identity another way",
+              "Live Chat is the fastest way to get help. If you can't access phone or email, we'll help verify your identity another way.",
           createdAt: DateTime.now().subtract(const Duration(minutes: 5)),
         ),
         ChatMessage.text(
@@ -66,7 +66,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           senderAvatarUrl: 'https://randomuser.me/api/portraits/women/68.jpg',
           isMe: true,
           text:
-              "My zip code is 079882. The answer to the security question is “Burt the Lhasa Apso.”",
+              'My zip code is 079882. The answer to the security question is "Burt the Lhasa Apso."',
           createdAt: DateTime.now().subtract(const Duration(minutes: 2)),
         ),
         ChatMessage.text(
@@ -100,7 +100,7 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
           senderType: ChatMessageSenderType.support,
           isMe: false,
           text:
-              "Hello! I see you’re having trouble accessing your account. Please let me know if you don’t have access to your phone or email, and I’ll help verify your identity another way",
+              "Hello! I see you're having trouble accessing your account. Please let me know if you don't have access to your phone or email, and I'll help verify your identity another way",
           createdAt: DateTime.now().subtract(const Duration(minutes: 10)),
         ),
         ChatMessage.text(

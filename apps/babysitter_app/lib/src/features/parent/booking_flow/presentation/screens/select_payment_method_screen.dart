@@ -43,38 +43,17 @@ class SelectPaymentMethodScreen extends ConsumerWidget {
 
             // List Items
 
-            // 1. App balance
+            // 1. Credit/Debit Card (Stripe)
             PaymentMethodTile(
-              title: 'App balance',
-              subtitle: '\$ 700.00',
-              icon: Icons.account_balance_wallet_outlined,
-              isSelected: selectedMethod == 'App balance',
-              onTap: () => onSelectMethod('App balance'),
-              isWhiteDisc: false,
-            ),
-            const InsetDivider(),
-
-            // 2. Paypal
-            PaymentMethodTile(
-              title: 'Paypal',
-              icon: Icons.paypal,
-              isSelected: selectedMethod == 'Paypal',
-              onTap: () => onSelectMethod('Paypal'),
-              isWhiteDisc: true,
-            ),
-            const InsetDivider(),
-
-            // 3. Stripe
-            PaymentMethodTile(
-              title: 'Stripe',
+              title: 'Credit/Debit Card',
               icon: Icons.credit_card,
-              isSelected: selectedMethod == 'Stripe',
-              onTap: () => onSelectMethod('Stripe'),
+              isSelected: selectedMethod == 'Credit/Debit Card',
+              onTap: () => onSelectMethod('Credit/Debit Card'),
               isWhiteDisc: false,
             ),
             const InsetDivider(),
 
-            // 4. Apple Pay
+            // 2. Apple Pay
             PaymentMethodTile(
               title: 'Apple Pay',
               icon: Icons.apple,
@@ -84,13 +63,30 @@ class SelectPaymentMethodScreen extends ConsumerWidget {
             ),
             const InsetDivider(),
 
-            // 5. Google Pay
+            // 3. Google Pay
             PaymentMethodTile(
               title: 'Google Pay',
               icon: Icons.g_mobiledata,
               isSelected: selectedMethod == 'Google Pay',
               onTap: () => onSelectMethod('Google Pay'),
               isWhiteDisc: false,
+            ),
+
+            const SizedBox(height: 24),
+
+            // Authorization note
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: BookingUiTokens.screenHorizontalPadding),
+              child: Text(
+                'By saving your card, you authorize Special Needs Sitters to securely charge this card for completed bookings.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF667085),
+                  height: 1.4,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
 
             const SizedBox(height: 40),

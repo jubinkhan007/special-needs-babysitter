@@ -115,35 +115,6 @@ class HelpSupportScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 10.h),
-                  AppActionTile(
-                    leadingIcon: Icon(
-                      Icons.help_outline,
-                      color: AppTokens.iconGrey,
-                      size: 24.sp,
-                    ),
-                    title: 'Faqs',
-                    // Placeholder for FAQ screen if it were real
-                    onTap: () {},
-                  ),
-                  SizedBox(height: 10.h),
-                  AppActionTile(
-                    leadingIcon: Icon(
-                      Icons.description_outlined,
-                      color: AppTokens.iconGrey,
-                      size: 24.sp,
-                    ),
-                    title: 'Terms of Service',
-                    // Navigates to existing Terms screen
-                    onTap: () => context.push('/parent/account/terms'),
-                    // Note: Ideally utilize a named route constant if available,
-                    // or just push the existing TermsAndConditionsScreen.
-                    // The 'Routes.parentAccount' is a base, terms is probably sub-route?
-                    // Or I can push widget directly for now if route not defined?
-                    // I'll check Routes for terms path or push widget.
-                    // Wait, I built TermsAndConditionsScreen but did I add a route for it?
-                    // Previous task said "Connect to Account Screen navigation", which usually implies push widget directly.
-                    // I'll check `account_screen.dart` again to see how it pushed Terms.
-                  ),
                   SizedBox(height: 32.h),
                 ],
               ),

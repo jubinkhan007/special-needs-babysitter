@@ -92,7 +92,7 @@ class BookingFlowState {
     this.pickupLocation,
     this.dropoffLocation,
     this.transportSpecialInstructions,
-    this.selectedPaymentMethod = 'Paypal',
+    this.selectedPaymentMethod = 'Credit/Debit Card',
   });
 
   BookingFlowState copyWith({

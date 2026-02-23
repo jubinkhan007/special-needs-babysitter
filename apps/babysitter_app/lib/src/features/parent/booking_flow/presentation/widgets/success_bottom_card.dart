@@ -90,6 +90,20 @@ class SuccessBottomCard extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
 
+          const SizedBox(height: 12),
+
+          // Payment note
+          Text(
+            "You'll only be charged after the sitter completes the booking.",
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF059669),
+              height: 1.3,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
           const SizedBox(height: 32),
 
           // Primary Button

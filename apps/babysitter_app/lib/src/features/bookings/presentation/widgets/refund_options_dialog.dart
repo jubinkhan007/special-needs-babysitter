@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../theme/app_tokens.dart';
 
 enum RefundOption {
-  accountCredit,
   originalPaymentMethod,
 }
 
@@ -54,7 +53,7 @@ class RefundOptionsDialog extends StatelessWidget {
 
             // Subtitle
             const Text(
-              'Select your preferred refund option',
+              'Your refund will be returned to your original payment method.',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
@@ -64,33 +63,7 @@ class RefundOptionsDialog extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Account Credit button
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                onPressed: () =>
-                    Navigator.of(context).pop(RefundOption.accountCredit),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTokens.primaryBlue,
-                  foregroundColor: AppColors.textOnButton,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'Account Credit (Instant)',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 14),
-
-            // Original Payment Method button
+            // Refund to Original Payment Method button
             SizedBox(
               width: double.infinity,
               height: 52,
@@ -106,11 +79,24 @@ class RefundOptionsDialog extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Original Payment Method(2-3 Days)',
+                  'Refund to Original Payment Method',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Processing time note
+            const Center(
+              child: Text(
+                'Refunds typically take 2-3 business days to process.',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF6B7280),
                 ),
               ),
             ),

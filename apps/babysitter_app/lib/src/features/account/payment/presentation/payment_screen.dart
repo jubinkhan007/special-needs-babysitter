@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../theme/app_tokens.dart';
-import 'widgets/balance_card.dart';
 import 'widgets/payment_method_row.dart';
 import 'widgets/recent_activity_row.dart';
 
 /// The Payment screen displaying balance, payment methods, and recent activities.
 class PaymentScreen extends StatelessWidget {
-  final VoidCallback? onTopUp;
-
   const PaymentScreen({
     super.key,
-    this.onTopUp,
   });
 
   @override
@@ -59,14 +55,6 @@ class PaymentScreen extends StatelessWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   SizedBox(height: 16.h),
-
-                  // Balance Card
-                  BalanceCard(
-                    balanceText: '\$ 700.00',
-                    onTopUp: onTopUp,
-                  ),
-
-                  SizedBox(height: AppTokens.paymentSectionGapTop.h),
 
                   // Payment Method section title
                   Text(

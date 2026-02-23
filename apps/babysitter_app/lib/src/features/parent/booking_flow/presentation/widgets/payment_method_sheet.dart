@@ -23,11 +23,7 @@ class PaymentMethodSheet extends ConsumerWidget {
 
   IconData _getIconForMethod(String method) {
     switch (method) {
-      case 'App balance':
-        return Icons.account_balance_wallet_outlined;
-      case 'Paypal':
-        return Icons.paypal;
-      case 'Stripe':
+      case 'Credit/Debit Card':
         return Icons.credit_card;
       case 'Apple Pay':
         return Icons.apple;
