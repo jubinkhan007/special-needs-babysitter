@@ -86,7 +86,6 @@ class MessageThreadUiModel {
       case local.MessageType.system:
         return lastMessage;
       case local.MessageType.text:
-      default:
         break;
     }
 
@@ -111,7 +110,6 @@ class MessageThreadUiModel {
       case MessageType.system:
         return lastMessage;
       case MessageType.text:
-      default:
         break;
     }
 

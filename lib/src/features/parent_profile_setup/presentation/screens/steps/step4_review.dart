@@ -77,11 +77,6 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
     );
   }
 
-  // Placeholder for insurance edit since no dialog exists yet
-  void _editInsurance() {
-    // TODO: Implement insurance dialog
-  }
-
   @override
   Widget build(BuildContext context) {
     // Extract Data

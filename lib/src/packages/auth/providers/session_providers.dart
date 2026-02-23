@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
 
 import 'auth_providers.dart';

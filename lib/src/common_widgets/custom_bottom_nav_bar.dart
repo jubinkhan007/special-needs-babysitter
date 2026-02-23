@@ -23,11 +23,6 @@ class CustomBottomNavBar extends StatelessWidget {
   final ValueChanged<int> onTap;
   final List<CustomNavItem> items;
 
-  // Design tokens
-  static const Color _selectedColor = Color(0xFF5EB9D3);
-  static const Color _unselectedColor = Color(0xFF6B7280);
-  static const Color _pillColor = Color(0xFFE8F6FA);
-
   const CustomBottomNavBar({
     super.key,
     required this.currentIndex,

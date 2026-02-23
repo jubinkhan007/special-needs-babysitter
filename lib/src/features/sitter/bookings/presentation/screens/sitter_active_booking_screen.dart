@@ -38,7 +38,6 @@ class _SitterActiveBookingScreenState
   bool _isClockingOut = false;
   GoogleMapController? _mapController;
   bool _isMapReady = false;
-  double _mapZoom = 14.0;
   bool _useSatelliteView = false;
   DateTime? _lastShiftEndReminderDate;
   bool _isShiftEndDialogShowing = false;
@@ -649,7 +648,6 @@ class _SitterActiveBookingScreenState
                           }
                         },
                         onCameraMove: (position) {
-                          _mapZoom = position.zoom;
                         },
                         mapType: _useSatelliteView
                             ? MapType.hybrid

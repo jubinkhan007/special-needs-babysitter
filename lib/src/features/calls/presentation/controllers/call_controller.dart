@@ -54,17 +54,6 @@ class CallController extends Notifier<CallState> {
     _currentUserId = userId;
   }
 
-  /// Generate stable Agora UID from user ID (FIX #5)
-  int _generateUid() {
-    if (_currentUserId == null || _currentUserId!.isEmpty) {
-      developer.log('WARNING: No current user ID set for UID generation',
-          name: 'Calls');
-      return DateTime.now().millisecondsSinceEpoch % 2147483647;
-    }
-    // Use user ID hash for stable, unique per-user UID
-    return _currentUserId.hashCode.abs() % 2147483647;
-  }
-
   // ==================== Outgoing Call Flow ====================
 
   /// Parent initiates a call to a sitter

@@ -95,8 +95,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
         final currentFilters = ref.read(jobSearchFiltersProvider);
         if (currentFilters.latitude != position.latitude ||
             currentFilters.longitude != position.longitude) {
-          ref.read(jobSearchFiltersProvider.notifier).state = 
-              currentFilters.copyWith(
+          ref.read(jobSearchFiltersProvider.notifier).setLocation(
                 latitude: position.latitude,
                 longitude: position.longitude,
               );

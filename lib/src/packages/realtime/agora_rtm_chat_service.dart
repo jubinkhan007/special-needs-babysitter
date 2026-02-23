@@ -16,7 +16,7 @@ class AgoraRtmChatService implements ChatService {
   RtmClient? _client;
   final _eventsController = StreamController<ChatEvent>.broadcast();
   bool _isInitialized = false;
-  String? _currentUserId;
+
   ChatConnectionState _connectionState = ChatConnectionState.disconnected;
 
   AgoraRtmChatService({
@@ -106,7 +106,6 @@ class AgoraRtmChatService implements ChatService {
       await init();
     }
 
-    _currentUserId = userId;
 
     // Get token from provider (may be null for dev mode)
     final effectiveToken = token ?? await _tokenProvider.getRtmToken(userId);
@@ -131,7 +130,6 @@ class AgoraRtmChatService implements ChatService {
   Future<void> logout() async {
     try {
       await _client?.logout();
-      _currentUserId = null;
       _eventsController.add(LogoutEvent());
       developer.log('RTM logout success', name: 'Realtime');
     } catch (e) {
@@ -215,7 +213,6 @@ class AgoraRtmChatService implements ChatService {
     await _client?.release();
     _client = null;
     _isInitialized = false;
-    _currentUserId = null;
     await _eventsController.close();
   }
 }

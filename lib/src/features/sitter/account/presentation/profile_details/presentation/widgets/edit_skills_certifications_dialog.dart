@@ -43,8 +43,6 @@ class EditSkillsCertificationsDialog extends StatefulWidget {
 
 class _EditSkillsCertificationsDialogState
     extends State<EditSkillsCertificationsDialog> {
-  static const _textDark = Color(0xFF1A1A1A);
-  static const _primaryBlue = AppColors.primary;
   static const _greyText = Color(0xFF667085);
 
   final List<String> _availableCertifications = const [

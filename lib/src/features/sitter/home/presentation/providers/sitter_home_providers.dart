@@ -128,6 +128,14 @@ class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
     }
   }
 
+  /// Update location without triggering a job refresh
+  void setLocation({required double latitude, required double longitude}) {
+    state = state.copyWith(
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
+
   /// Update search query
   void setSearchQuery(String? query) {
     state = state.copyWith(
