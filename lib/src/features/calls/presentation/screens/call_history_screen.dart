@@ -64,11 +64,7 @@ class _CallHistoryScreenState extends ConsumerState<CallHistoryScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.error_outline,
-                  size: 48.sp,
-                  color: Colors.red[300],
-                ),
+                Icon(Icons.error_outline, size: 48.sp, color: Colors.red[300]),
                 SizedBox(height: 16.h),
                 Text(
                   message,
@@ -100,18 +96,12 @@ class _CallHistoryScreenState extends ConsumerState<CallHistoryScreen> {
                   SizedBox(height: 16.h),
                   Text(
                     'No call history',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 18.sp, color: Colors.grey[600]),
                   ),
                   SizedBox(height: 8.h),
                   Text(
                     'Your calls will appear here',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 14.sp, color: Colors.grey[500]),
                   ),
                 ],
               ),
@@ -160,10 +150,7 @@ class _CallHistoryTile extends StatelessWidget {
   final CallHistoryItem item;
   final VoidCallback? onTap;
 
-  const _CallHistoryTile({
-    required this.item,
-    this.onTap,
-  });
+  const _CallHistoryTile({required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -185,10 +172,7 @@ class _CallHistoryTile extends StatelessWidget {
                 item.otherParticipant.name.isNotEmpty
                     ? item.otherParticipant.name[0].toUpperCase()
                     : '?',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
               )
             : null,
       ),
@@ -308,18 +292,12 @@ class _CallDetailsSheet extends StatelessWidget {
           SizedBox(height: 16.h),
           Text(
             item.otherParticipant.name,
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 8.h),
           Text(
             _getCallDescription(),
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
           ),
           SizedBox(height: 24.h),
 
@@ -360,15 +338,17 @@ class _CallDetailsSheet extends StatelessWidget {
   }
 
   String _getCallDescription() {
-    final typeStr = item.callType == CallType.video ? 'Video call' : 'Audio call';
+    final typeStr = item.callType == CallType.video
+        ? 'Video call'
+        : 'Audio call';
     final directionStr = item.isInitiator ? 'Outgoing' : 'Incoming';
     final statusStr = item.wasMissed
         ? '(Missed)'
         : item.status == CallStatus.declined
-            ? '(Declined)'
-            : item.durationFormatted != '--:--'
-                ? '(${item.durationFormatted})'
-                : '';
+        ? '(Declined)'
+        : item.durationFormatted != '--:--'
+        ? '(${item.durationFormatted})'
+        : '';
 
     return '$directionStr $typeStr $statusStr';
   }
@@ -398,10 +378,7 @@ class _CallDetailsSheet extends StatelessWidget {
             SizedBox(height: 8.h),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.grey[700],
-              ),
+              style: TextStyle(fontSize: 12.sp, color: Colors.grey[700]),
             ),
           ],
         ),

@@ -12,24 +12,31 @@ class ApplicationsController extends StateNotifier<AsyncValue<void>> {
 
   Future<void> acceptApplication(String jobId, String applicationId) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _repository.acceptApplication(
-          jobId: jobId,
-          applicationId: applicationId,
-        ));
+    state = await AsyncValue.guard(
+      () => _repository.acceptApplication(
+        jobId: jobId,
+        applicationId: applicationId,
+      ),
+    );
   }
 
   Future<void> declineApplication(
-      String jobId, String applicationId, String reason) async {
+    String jobId,
+    String applicationId,
+    String reason,
+  ) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _repository.declineApplication(
-          jobId: jobId,
-          applicationId: applicationId,
-          reason: reason,
-        ));
+    state = await AsyncValue.guard(
+      () => _repository.declineApplication(
+        jobId: jobId,
+        applicationId: applicationId,
+        reason: reason,
+      ),
+    );
   }
 }
 
 final applicationsControllerProvider =
     StateNotifierProvider<ApplicationsController, AsyncValue<void>>((ref) {
-  return ApplicationsController(ref.watch(applicationsRepositoryProvider));
-});
+      return ApplicationsController(ref.watch(applicationsRepositoryProvider));
+    });

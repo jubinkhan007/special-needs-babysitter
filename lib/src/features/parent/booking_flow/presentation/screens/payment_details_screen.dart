@@ -28,19 +28,12 @@ class _ValidationBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Icon(
-            Icons.error_outline,
-            color: AppColors.error,
-            size: 20,
-          ),
+          const Icon(Icons.error_outline, color: AppColors.error, size: 20),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               message,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xFFB42318),
-              ),
+              style: const TextStyle(fontSize: 14, color: Color(0xFFB42318)),
             ),
           ),
         ],
@@ -70,19 +63,17 @@ class PaymentDetailsScreen extends ConsumerWidget {
           SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.symmetric(
-                horizontal: BookingUiTokens.screenHorizontalPadding),
+              horizontal: BookingUiTokens.screenHorizontalPadding,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 24),
                 // Main Title
-                const Text(
-                  'Payment Details',
-                  style: BookingUiTokens.pageTitle,
-                ),
+                const Text('Payment Details', style: BookingUiTokens.pageTitle),
 
                 const SizedBox(height: 24),
-                
+
                 // Validation Banner
                 if (validationError != null)
                   _ValidationBanner(message: validationError),
@@ -164,9 +155,7 @@ class PaymentDetailsScreen extends ConsumerWidget {
 
                 // Bottom Spacing to ensure sticky sheet doesn't cover content
                 // Sheet height approx 250
-                SizedBox(
-                  height: 280 + MediaQuery.of(context).padding.bottom,
-                ),
+                SizedBox(height: 280 + MediaQuery.of(context).padding.bottom),
               ],
             ),
           ),

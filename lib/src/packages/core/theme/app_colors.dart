@@ -31,7 +31,9 @@ class AppColors {
   // ---------------------------------------------------------------------------
   static const Color background = Color(0xFFE6F4FB); // pale blue scaffold bg
   static const Color surface = Color(0xFFFFFFFF); // cards/sheets
-  static const Color surfaceTint = Color(0xFFF3FAFD); // light blue tinted surface
+  static const Color surfaceTint = Color(
+    0xFFF3FAFD,
+  ); // light blue tinted surface
   static const Color border = Color(0xFFDCEAF3); // soft blue-tinted border
   static const Color divider = border;
 
@@ -42,7 +44,9 @@ class AppColors {
   static const Color textSecondary = neutral40;
   static const Color textMuted = neutral30;
   static const Color textTertiary = textMuted;
-  static const Color textOnButton = Color(0xFFFFFFFF); // white text on colored buttons
+  static const Color textOnButton = Color(
+    0xFFFFFFFF,
+  ); // white text on colored buttons
 
   // Inputs
   static const Color inputFill = surface;
@@ -54,8 +58,9 @@ class AppColors {
   static const Color success = Color(0xFF44E462);
   static const Color successSoft = Color(0xFFD9F9DF);
 
-  static const Color warning =
-      Color(0xFFF59E0B); // placeholder (update if Figma has it)
+  static const Color warning = Color(
+    0xFFF59E0B,
+  ); // placeholder (update if Figma has it)
   static const Color error = Color(0xFFEF4444); // placeholder
   static const Color info = Color(0xFF3B82F6); // placeholder
 

@@ -20,9 +20,11 @@ class BookingsController extends ChangeNotifier {
   List<Booking> bookingsFor(BookingStatus status) {
     if (status == BookingStatus.active) {
       return _bookings
-          .where((b) =>
-              b.status == BookingStatus.active ||
-              b.status == BookingStatus.clockedOut)
+          .where(
+            (b) =>
+                b.status == BookingStatus.active ||
+                b.status == BookingStatus.clockedOut,
+          )
           .toList();
     }
     return _bookings.where((b) => b.status == status).toList();
@@ -46,7 +48,8 @@ class BookingsController extends ChangeNotifier {
   Future<void> refresh() => _loadBookings();
 }
 
-final bookingsControllerProvider =
-    ChangeNotifierProvider<BookingsController>((ref) {
+final bookingsControllerProvider = ChangeNotifierProvider<BookingsController>((
+  ref,
+) {
   return BookingsController(ref.watch(bookingsRepositoryProvider));
 });

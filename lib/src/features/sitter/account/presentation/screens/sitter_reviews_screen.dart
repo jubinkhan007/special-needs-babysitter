@@ -18,8 +18,11 @@ class SitterReviewsScreen extends ConsumerWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: const Color(0xFF667085), size: 24.w),
+          icon: Icon(
+            Icons.arrow_back,
+            color: const Color(0xFF667085),
+            size: 24.w,
+          ),
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         centerTitle: true,
@@ -47,13 +50,14 @@ class SitterReviewsScreen extends ConsumerWidget {
               ),
             );
           }
-          
+
           // Calculate average rating and total reviews
           final totalReviews = reviews.length;
           final avgRating = reviews.isNotEmpty
-              ? reviews.map((r) => r.rating).reduce((a, b) => a + b) / totalReviews
+              ? reviews.map((r) => r.rating).reduce((a, b) => a + b) /
+                    totalReviews
               : 0.0;
-          
+
           return CustomScrollView(
             slivers: [
               // Header Row with Reviews title and rating summary
@@ -73,29 +77,24 @@ class SitterReviewsScreen extends ConsumerWidget {
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                 sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final review = reviews[index];
-                      return Column(
-                        children: [
-                          _ReviewCard(review: review),
-                          if (index < reviews.length - 1)
-                            Divider(
-                              height: 24.h,
-                              thickness: 1,
-                              color: const Color(0xFFF2F4F7),
-                            ),
-                        ],
-                      );
-                    },
-                    childCount: reviews.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final review = reviews[index];
+                    return Column(
+                      children: [
+                        _ReviewCard(review: review),
+                        if (index < reviews.length - 1)
+                          Divider(
+                            height: 24.h,
+                            thickness: 1,
+                            color: const Color(0xFFF2F4F7),
+                          ),
+                      ],
+                    );
+                  }, childCount: reviews.length),
                 ),
               ),
               // Bottom spacing
-              SliverToBoxAdapter(
-                child: SizedBox(height: 32.h),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 32.h)),
             ],
           );
         },
@@ -183,17 +182,16 @@ class _ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewerName =
-        review.reviewerName.isNotEmpty ? review.reviewerName : _reviewerLabel(review);
+    final reviewerName = review.reviewerName.isNotEmpty
+        ? review.reviewerName
+        : _reviewerLabel(review);
     final timeAgo = _timeAgo(review.createdAt);
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Avatar
-        _ReviewAvatar(
-          imageUrl: _getAvatarUrl(review),
-        ),
+        _ReviewAvatar(imageUrl: _getAvatarUrl(review)),
         SizedBox(width: 12.w),
         // Content
         Expanded(

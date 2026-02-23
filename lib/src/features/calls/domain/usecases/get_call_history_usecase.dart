@@ -5,10 +5,7 @@ class GetCallHistoryParams {
   final int limit;
   final int offset;
 
-  const GetCallHistoryParams({
-    this.limit = 20,
-    this.offset = 0,
-  });
+  const GetCallHistoryParams({this.limit = 20, this.offset = 0});
 }
 
 class GetCallHistoryUseCase {

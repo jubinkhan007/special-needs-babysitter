@@ -7,10 +7,7 @@ import 'package:babysitter_app/src/theme/app_tokens.dart';
 class ApplicationPreviewCard extends StatelessWidget {
   final Widget child;
 
-  const ApplicationPreviewCard({
-    super.key,
-    required this.child,
-  });
+  const ApplicationPreviewCard({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +16,7 @@ class ApplicationPreviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: AppTokens.cardBorder,
-          width: 1,
-        ),
+        border: Border.all(color: AppTokens.cardBorder, width: 1),
       ),
       padding: EdgeInsets.all(16.w),
       child: child,

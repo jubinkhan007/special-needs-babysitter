@@ -24,10 +24,7 @@ class ApplicationStatusChip extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
-            'Application',
-            style: AppTokens.applicationChipTextStyle,
-          ),
+          Text('Application', style: AppTokens.applicationChipTextStyle),
         ],
       ),
     );

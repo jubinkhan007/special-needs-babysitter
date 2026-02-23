@@ -8,5 +8,5 @@ export '../controllers/wallet_controller.dart'
 
 final walletControllerProvider =
     NotifierProvider<WalletController, WalletState>(() {
-  return WalletController();
-});
+      return WalletController();
+    });

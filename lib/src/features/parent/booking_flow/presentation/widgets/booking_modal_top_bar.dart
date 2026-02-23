@@ -30,10 +30,7 @@ class BookingModalTopBar extends StatelessWidget
               ),
             ),
             const SizedBox(width: 16),
-            Text(
-              title,
-              style: BookingUiTokens.modalTopBarTitle,
-            ),
+            Text(title, style: BookingUiTokens.modalTopBarTitle),
           ],
         ),
       ),

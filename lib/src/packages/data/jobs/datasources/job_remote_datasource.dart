@@ -9,10 +9,7 @@ class JobRemoteDataSource {
 
   Future<String> createJob(JobDto jobDto) async {
     try {
-      final response = await _dio.post(
-        '/jobs',
-        data: jobDto.toJson(),
-      );
+      final response = await _dio.post('/jobs', data: jobDto.toJson());
 
       if (response.data['success'] == true) {
         return response.data['data']['jobId'] as String;
@@ -22,7 +19,8 @@ class JobRemoteDataSource {
     } catch (e) {
       if (e is DioException && e.response != null) {
         throw Exception(
-            'Job API Error: ${e.response?.data['message'] ?? e.response?.data.toString() ?? e.message}',);
+          'Job API Error: ${e.response?.data['message'] ?? e.response?.data.toString() ?? e.message}',
+        );
       }
       rethrow;
     }
@@ -39,13 +37,13 @@ class JobRemoteDataSource {
       if (limit != null) queryParams['limit'] = limit;
       if (offset != null) queryParams['offset'] = offset;
 
-      debugPrint('DEBUG: JobRemoteDataSource.getJobs called with status=$status');
-      final response = await _dio.get(
-        '/jobs',
-        queryParameters: queryParams,
-      );
       debugPrint(
-          'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}',);
+        'DEBUG: JobRemoteDataSource.getJobs called with status=$status',
+      );
+      final response = await _dio.get('/jobs', queryParameters: queryParams);
+      debugPrint(
+        'DEBUG: JobRemoteDataSource.getJobs response status: ${response.statusCode}',
+      );
       if (response.data['success'] == true) {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
         return jobsJson
@@ -90,17 +88,15 @@ class JobRemoteDataSource {
         if (jobDto.timezone != null) 'timezone': jobDto.timezone,
         if (jobDto.address != null) 'address': jobDto.address!.toJson(),
         if (jobDto.location != null) 'location': jobDto.location!.toJson(),
-        if (jobDto.additionalDetails != null) 'additionalDetails': jobDto.additionalDetails,
+        if (jobDto.additionalDetails != null)
+          'additionalDetails': jobDto.additionalDetails,
         if (jobDto.payRate != null) 'payRate': jobDto.payRate,
         // Intentionally NOT sending: saveAsDraft, status (these are for create/post operations)
       };
 
       debugPrint('DEBUG: Updating job $id with data: $updateData');
 
-      final response = await _dio.put(
-        '/jobs/$id',
-        data: updateData,
-      );
+      final response = await _dio.put('/jobs/$id', data: updateData);
       if (response.data['success'] != true) {
         throw Exception('Failed to update job');
       }
@@ -128,17 +124,21 @@ class JobRemoteDataSource {
       );
 
       debugPrint(
-          'DEBUG: JobRemoteDataSource.inviteSitter response: ${response.data}',);
+        'DEBUG: JobRemoteDataSource.inviteSitter response: ${response.data}',
+      );
 
       if (response.data['success'] != true) {
-        throw Exception(response.data['message'] ??
-            response.data['error'] ??
-            'Failed to invite sitter',);
+        throw Exception(
+          response.data['message'] ??
+              response.data['error'] ??
+              'Failed to invite sitter',
+        );
       }
     } catch (e) {
       if (e is DioException) {
         throw Exception(
-            'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}',);
+          'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}',
+        );
       }
       rethrow;
     }

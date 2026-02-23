@@ -45,8 +45,9 @@ void main() {
       builder: (context, child) {
         return ProviderScope(
           overrides: [
-            jobDetailsProvider(mockJobDetails.id)
-                .overrideWith((ref) => Future.value(mockJobDetails)),
+            jobDetailsProvider(
+              mockJobDetails.id,
+            ).overrideWith((ref) => Future.value(mockJobDetails)),
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,

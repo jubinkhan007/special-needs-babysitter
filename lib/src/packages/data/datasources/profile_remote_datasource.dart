@@ -48,7 +48,8 @@ class ProfileRemoteDataSource {
 
     if (userMap == null) {
       debugPrint(
-          'ERROR: ProfileRemoteDataSource failed to find user object. Keys: ${data.keys}',);
+        'ERROR: ProfileRemoteDataSource failed to find user object. Keys: ${data.keys}',
+      );
       // Final attempt with the root just to keep old behavior but likely to fail if keys missing
       userMap = data;
     }
@@ -71,7 +72,8 @@ class ProfileRemoteDataSource {
         final photoUrl = profileMap['photoUrl'] ?? profileMap['photo_url'];
         if (photoUrl != null) {
           debugPrint(
-              'DEBUG: Found photoUrl in profile object (local), mapping to avatarUrl',);
+            'DEBUG: Found photoUrl in profile object (local), mapping to avatarUrl',
+          );
           userMap['avatarUrl'] = photoUrl;
         }
       }
@@ -101,27 +103,36 @@ class ProfileRemoteDataSource {
                     roleProfile['photoUrl'] ?? roleProfile['photo_url'];
                 if (rolePhoto != null) {
                   debugPrint(
-                      'DEBUG: Found photoUrl in $endpoint, mapping to avatarUrl',);
+                    'DEBUG: Found photoUrl in $endpoint, mapping to avatarUrl',
+                  );
                   userMap['avatarUrl'] = rolePhoto;
                 }
               }
             }
           }
         } catch (e) {
-          debugPrint('DEBUG: Failed to fetch role-specific profile for avatar: $e');
+          debugPrint(
+            'DEBUG: Failed to fetch role-specific profile for avatar: $e',
+          );
         }
       }
     }
 
     // Extra safety: ensure id and email are present before calling fromJson if possible
-    debugPrint('DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}');
-    debugPrint('DEBUG: ProfileRemoteDataSource avatarUrl: ${userMap['avatarUrl']}');
+    debugPrint(
+      'DEBUG: ProfileRemoteDataSource final userMap keys: ${userMap.keys}',
+    );
+    debugPrint(
+      'DEBUG: ProfileRemoteDataSource avatarUrl: ${userMap['avatarUrl']}',
+    );
 
     if (userMap['id'] == null || userMap['email'] == null) {
       debugPrint(
-          'ERROR: ProfileRemoteDataSource missing id or email in userMap: $userMap',);
+        'ERROR: ProfileRemoteDataSource missing id or email in userMap: $userMap',
+      );
       throw const FormatException(
-          'User profile missing required fields (id/email)',);
+        'User profile missing required fields (id/email)',
+      );
     }
 
     // AVOID REDIRECT LOOP: Explicitly check for both keys and percentage
@@ -136,15 +147,18 @@ class ProfileRemoteDataSource {
     if (profileCompletion != null) {
       final percentage = profileCompletion['percentage'] as num? ?? 0;
       debugPrint(
-          'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage',);
+        'DEBUG: ProfileRemoteDataSource profileCompletion percentage=$percentage',
+      );
       if (percentage >= 100) {
         userMap['profileSetupComplete'] = true;
         debugPrint(
-            'DEBUG: Overriding profileSetupComplete=true due to 100% completion',);
+          'DEBUG: Overriding profileSetupComplete=true due to 100% completion',
+        );
       }
     } else {
       debugPrint(
-          'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response',);
+        'DEBUG: ProfileRemoteDataSource NO profileCompletion found in response',
+      );
     }
 
     // 2. Handle both snake_case and camelCase from API
@@ -161,14 +175,17 @@ class ProfileRemoteDataSource {
 
       if (e is TypeError) {
         throw const FormatException(
-            'User profile data has invalid types (likely null in required String field)',);
+          'User profile data has invalid types (likely null in required String field)',
+        );
       }
       rethrow;
     }
   }
 
   Future<UserDto> updateProfile(UpdateProfileParams params) async {
-    debugPrint('DEBUG: ProfileRemoteDataSource updating with: ${params.firstName}');
+    debugPrint(
+      'DEBUG: ProfileRemoteDataSource updating with: ${params.firstName}',
+    );
     final response = await _dio.put(
       '/users/me',
       data: {
@@ -181,7 +198,8 @@ class ProfileRemoteDataSource {
       },
     );
     debugPrint(
-        'DEBUG: ProfileRemoteDataSource update response raw: ${response.data}',);
+      'DEBUG: ProfileRemoteDataSource update response raw: ${response.data}',
+    );
 
     final data = response.data;
     if (data is! Map<String, dynamic>) {

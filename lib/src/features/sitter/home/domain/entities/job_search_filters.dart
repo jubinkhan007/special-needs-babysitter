@@ -75,8 +75,10 @@ class JobSearchFilters extends Equatable {
       params['languages'] = languages.join(',');
     }
     if (availabilityDate != null) {
-      params['availabilityDate'] =
-          availabilityDate!.toIso8601String().split('T').first;
+      params['availabilityDate'] = availabilityDate!
+          .toIso8601String()
+          .split('T')
+          .first;
     }
 
     return params;
@@ -121,17 +123,17 @@ class JobSearchFilters extends Equatable {
 
   @override
   List<Object?> get props => [
-        searchQuery,
-        latitude,
-        longitude,
-        minPayRate,
-        maxPayRate,
-        specialNeeds,
-        languages,
-        availabilityDate,
-        limit,
-        offset,
-      ];
+    searchQuery,
+    latitude,
+    longitude,
+    minPayRate,
+    maxPayRate,
+    specialNeeds,
+    languages,
+    availabilityDate,
+    limit,
+    offset,
+  ];
 }
 
 /// Predefined special needs options

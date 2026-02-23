@@ -32,7 +32,8 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
   void initState() {
     super.initState();
     _kids = List<Map<String, dynamic>>.from(
-        widget.profileData['kids'] as List? ?? []);
+      widget.profileData['kids'] as List? ?? [],
+    );
   }
 
   void _addChild() {
@@ -64,7 +65,8 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
 
   Future<void> _saveAndNext() async {
     if (_kids.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please add at least one child'),
           backgroundColor: AppColors.error,
@@ -185,7 +187,9 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                                     '${kid['age']} years old',
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: AppColors.textPrimary.withAlpha(153),
+                                      color: AppColors.textPrimary.withAlpha(
+                                        153,
+                                      ),
                                     ),
                                   ),
                                   if ((kid['specialNeeds'] as List?)
@@ -197,24 +201,28 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                                         spacing: 4,
                                         children: (kid['specialNeeds'] as List)
                                             .map((need) {
-                                          return Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 6, vertical: 2),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.secondary
-                                                  .withAlpha(25),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: Text(
-                                              need as String,
-                                              style: const TextStyle(
-                                                fontSize: 11,
-                                                color: AppColors.secondary,
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 6,
+                                                      vertical: 2,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.secondary
+                                                      .withAlpha(25),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                child: Text(
+                                                  need as String,
+                                                  style: const TextStyle(
+                                                    fontSize: 11,
+                                                    color: AppColors.secondary,
+                                                  ),
+                                                ),
+                                              );
+                                            })
+                                            .toList(),
                                       ),
                                     ),
                                 ],
@@ -225,8 +233,11 @@ class _Step3KidsState extends ConsumerState<Step3Kids> {
                               onPressed: () => _editChild(index),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline,
-                                  size: 20, color: AppColors.error),
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                size: 20,
+                                color: AppColors.error,
+                              ),
                               onPressed: () => _deleteChild(index),
                             ),
                           ],

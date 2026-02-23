@@ -24,12 +24,14 @@ class ChildListCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Child',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: ProfileDetailsUI.primaryText,
-              )),
+          const Text(
+            'Child',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: ProfileDetailsUI.primaryText,
+            ),
+          ),
           const SizedBox(height: 12),
           ...children.map((child) => _buildChildItem(child)),
           const SizedBox(height: 16),
@@ -48,7 +50,9 @@ class ChildListCard extends StatelessWidget {
           RichText(
             text: TextSpan(
               style: const TextStyle(
-                  fontSize: 16, color: ProfileDetailsUI.primaryText),
+                fontSize: 16,
+                color: ProfileDetailsUI.primaryText,
+              ),
               children: [
                 TextSpan(
                   text: child.fullName,
@@ -57,8 +61,9 @@ class ChildListCard extends StatelessWidget {
                 TextSpan(
                   text: ' (${child.ageDisplay})',
                   style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: ProfileDetailsUI.secondaryText),
+                    fontWeight: FontWeight.w400,
+                    color: ProfileDetailsUI.secondaryText,
+                  ),
                 ),
               ],
             ),
@@ -102,14 +107,9 @@ class ChildListCard extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.buttonDark,
           foregroundColor: AppColors.textOnButton,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         child: const Text('Add Child'),
       ),

@@ -27,10 +27,7 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final menuItems = [
-      const AccountMenuItem(
-        icon: Icons.credit_card_outlined,
-        title: 'Payment',
-      ),
+      const AccountMenuItem(icon: Icons.credit_card_outlined, title: 'Payment'),
       AccountMenuItem(
         icon: Icons.settings_outlined,
         title: 'Settings',
@@ -67,10 +64,7 @@ class AccountScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -126,14 +120,16 @@ class AccountScreen extends StatelessWidget {
                   SizedBox(height: AppTokens.accountSectionGap.h),
 
                   // Menu Items
-                  ...menuItems.map((item) => Padding(
-                        padding: EdgeInsets.only(bottom: 12.h),
-                        child: AccountMenuTile(
-                          icon: item.icon,
-                          title: item.title,
-                          onTap: item.onTap,
-                        ),
-                      )),
+                  ...menuItems.map(
+                    (item) => Padding(
+                      padding: EdgeInsets.only(bottom: 12.h),
+                      child: AccountMenuTile(
+                        icon: item.icon,
+                        title: item.title,
+                        onTap: item.onTap,
+                      ),
+                    ),
+                  ),
 
                   SizedBox(height: 32.h), // Bottom padding
                 ]),

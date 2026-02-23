@@ -2,10 +2,7 @@ class BookingLocationResponseDto {
   final bool success;
   final BookingLocationDto data;
 
-  BookingLocationResponseDto({
-    required this.success,
-    required this.data,
-  });
+  BookingLocationResponseDto({required this.success, required this.data});
 
   factory BookingLocationResponseDto.fromJson(Map<String, dynamic> json) {
     return BookingLocationResponseDto(
@@ -45,7 +42,8 @@ class BookingLocationDto {
       currentLocation: current is Map<String, dynamic>
           ? BookingLocationPointDto.fromJson(current)
           : null,
-      routeCoordinates: route
+      routeCoordinates:
+          route
               ?.whereType<Map<String, dynamic>>()
               .map(BookingLocationPointDto.fromJson)
               .toList() ??

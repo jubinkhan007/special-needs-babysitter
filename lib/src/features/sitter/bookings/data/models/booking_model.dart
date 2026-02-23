@@ -44,7 +44,9 @@ class BookingModel extends Equatable {
       familyName: json['familyName'] as String,
       childrenCount: json['childrenCount'] as int,
       location: json['location'] as String,
-      distance: json['distance'] != null ? (json['distance'] as num).toDouble() : null,
+      distance: json['distance'] != null
+          ? (json['distance'] as num).toDouble()
+          : null,
       payRate: (json['payRate'] as num).toDouble(),
       startDate: json['startDate'] as String,
       endDate: json['endDate'] as String,
@@ -116,20 +118,20 @@ class BookingModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        applicationId,
-        title,
-        familyName,
-        childrenCount,
-        location,
-        distance,
-        payRate,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        isToday,
-        hoursUntilStart,
-        status,
-      ];
+    id,
+    applicationId,
+    title,
+    familyName,
+    childrenCount,
+    location,
+    distance,
+    payRate,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    isToday,
+    hoursUntilStart,
+    status,
+  ];
 }

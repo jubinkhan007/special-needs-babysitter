@@ -65,11 +65,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       setState(() => _isLoading = false);
 
       // Navigate to reset password screen on success
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => const ResetPasswordScreen(),
-        ),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const ResetPasswordScreen()));
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
@@ -81,10 +79,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
 
       AppToast.show(
         context,
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text(errorMessage), backgroundColor: AppColors.error),
       );
     }
   }
@@ -94,8 +89,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Need Help?'),
-        content:
-            const Text('Contact support at support@specialneedssitters.com'),
+        content: const Text(
+          'Contact support at support@specialneedssitters.com',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -115,10 +111,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -140,10 +133,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
                 height: 28.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppTokens.iconGrey,
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: AppTokens.iconGrey, width: 1.5),
                 ),
                 child: Center(
                   child: Icon(
@@ -158,9 +148,9 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
         ],
       ),
       body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: const TextScaler.linear(1.0),
-        ),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1.0)),
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(

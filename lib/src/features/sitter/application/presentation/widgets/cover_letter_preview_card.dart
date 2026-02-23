@@ -9,10 +9,7 @@ import 'application_preview_card.dart';
 class CoverLetterPreviewCard extends StatelessWidget {
   final String coverLetter;
 
-  const CoverLetterPreviewCard({
-    super.key,
-    required this.coverLetter,
-  });
+  const CoverLetterPreviewCard({super.key, required this.coverLetter});
 
   @override
   Widget build(BuildContext context) {

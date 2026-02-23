@@ -26,10 +26,7 @@ class SavedSitterCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTokens.savedCardBg,
         borderRadius: BorderRadius.circular(AppTokens.savedCardRadius.r),
-        border: Border.all(
-          color: AppTokens.savedCardBorder,
-          width: 1,
-        ),
+        border: Border.all(color: AppTokens.savedCardBorder, width: 1),
         boxShadow: AppTokens.savedCardShadow,
       ),
       child: Column(
@@ -45,7 +42,7 @@ class SavedSitterCard extends StatelessWidget {
                 backgroundImage: sitter.imageAssetPath.isNotEmpty
                     ? NetworkImage(sitter.imageAssetPath)
                     : const AssetImage('assets/images/user1.png')
-                        as ImageProvider,
+                          as ImageProvider,
               ),
               SizedBox(width: 12.w),
               // Name + Location
@@ -79,7 +76,8 @@ class SavedSitterCard extends StatelessWidget {
                         ),
                         SizedBox(width: 2.w),
                         Text(
-                          sitter.distanceText, // Using distanceText as location/distance combo
+                          sitter
+                              .distanceText, // Using distanceText as location/distance combo
                           style: AppTokens.savedSitterLocationStyle,
                         ),
                       ],
@@ -118,9 +116,7 @@ class SavedSitterCard extends StatelessWidget {
                     ),
                   ),
                   child: Icon(
-                    isBookmarked
-                        ? Icons.bookmark
-                        : Icons.bookmark_border,
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                     size: 18.sp,
                     color: AppTokens.bookmarkIconColor,
                   ),
@@ -179,22 +175,22 @@ class SavedSitterCard extends StatelessWidget {
                     '\$${sitter.hourlyRate.toInt()}',
                     style: AppTokens.savedPriceBigStyle,
                   ),
-                  Text(
-                    '/hr',
-                    style: AppTokens.savedPriceSuffixStyle,
-                  ),
+                  Text('/hr', style: AppTokens.savedPriceSuffixStyle),
                 ],
               ),
               // View Profile button
               GestureDetector(
                 onTap: onViewProfile,
                 child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 10.h,
+                  ),
                   decoration: BoxDecoration(
                     color: AppTokens.viewProfileButtonBg,
                     borderRadius: BorderRadius.circular(
-                        AppTokens.viewProfileButtonRadius.r),
+                      AppTokens.viewProfileButtonRadius.r,
+                    ),
                   ),
                   child: Text(
                     'View Profile',
@@ -246,10 +242,7 @@ class _StatItem extends StatelessWidget {
             ],
           ),
           SizedBox(height: 4.h),
-          Text(
-            value,
-            style: AppTokens.savedStatValueStyle,
-          ),
+          Text(value, style: AppTokens.savedStatValueStyle),
         ],
       ),
     );
@@ -273,10 +266,7 @@ class _SkillTag extends StatelessWidget {
         color: AppTokens.skillTagBg,
         borderRadius: BorderRadius.circular(AppTokens.skillTagRadius.r),
       ),
-      child: Text(
-        text,
-        style: AppTokens.skillTagStyle,
-      ),
+      child: Text(text, style: AppTokens.skillTagStyle),
     );
   }
 }

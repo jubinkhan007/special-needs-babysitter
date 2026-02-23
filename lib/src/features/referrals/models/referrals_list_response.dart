@@ -35,8 +35,8 @@ class ReferralsListResponse {
   }
 
   const ReferralsListResponse.empty()
-      : total = 0,
-        limit = 0,
-        offset = 0,
-        referrals = const [];
+    : total = 0,
+      limit = 0,
+      offset = 0,
+      referrals = const [];
 }

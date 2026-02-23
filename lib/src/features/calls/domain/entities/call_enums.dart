@@ -40,8 +40,12 @@ enum CallStatus {
     }
   }
 
-  bool get isActive => this == CallStatus.ringing || this == CallStatus.accepted;
-  bool get isTerminal => this == CallStatus.declined || this == CallStatus.ended || this == CallStatus.missed;
+  bool get isActive =>
+      this == CallStatus.ringing || this == CallStatus.accepted;
+  bool get isTerminal =>
+      this == CallStatus.declined ||
+      this == CallStatus.ended ||
+      this == CallStatus.missed;
 }
 
 /// User role in the app

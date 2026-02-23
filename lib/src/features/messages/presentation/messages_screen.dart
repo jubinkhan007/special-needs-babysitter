@@ -25,15 +25,15 @@ class MessagesScreen extends ConsumerWidget {
 
     // Lock text scaling for pixel-perfect rendering
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: AppTokens.messagesScreenBg,
-        appBar: MessagesAppBar(
-          onBack: onBack,
-          showBackButton: showBackButton,
-        ),
+        appBar: MessagesAppBar(onBack: onBack, showBackButton: showBackButton),
         body: RefreshIndicator(
-          onRefresh: () => ref.read(chatConversationsProvider.notifier).refresh(),
+          onRefresh: () =>
+              ref.read(chatConversationsProvider.notifier).refresh(),
           child: CustomScrollView(
             slivers: [
               conversationsAsync.when(
@@ -49,18 +49,16 @@ class MessagesScreen extends ConsumerWidget {
                     );
                   }
                   return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final conversation = conversations[index];
-                        final uiModel =
-                            MessageThreadUiModel.fromConversation(conversation);
-                        return MessageThreadTile(
-                          uiModel: uiModel,
-                          onTap: () => onThreadSelected(conversation),
-                        );
-                      },
-                      childCount: conversations.length,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final conversation = conversations[index];
+                      final uiModel = MessageThreadUiModel.fromConversation(
+                        conversation,
+                      );
+                      return MessageThreadTile(
+                        uiModel: uiModel,
+                        onTap: () => onThreadSelected(conversation),
+                      );
+                    }, childCount: conversations.length),
                   );
                 },
                 loading: () => const SliverFillRemaining(

@@ -15,16 +15,20 @@ class CallLogTile extends StatelessWidget {
     // Choose icon based on call type
     IconData callIcon;
     Color iconColor = AppTokens.messageNameColor;
-    
+
     if (isMissed) {
-      callIcon = isVideo ? Icons.videocam_off_outlined : Icons.call_missed_outlined;
+      callIcon = isVideo
+          ? Icons.videocam_off_outlined
+          : Icons.call_missed_outlined;
       iconColor = Colors.red;
     } else if (uiModel.isMe) {
       // Outgoing call
       callIcon = isVideo ? Icons.videocam_outlined : Icons.call_made_outlined;
     } else {
       // Incoming call
-      callIcon = isVideo ? Icons.videocam_outlined : Icons.call_received_outlined;
+      callIcon = isVideo
+          ? Icons.videocam_outlined
+          : Icons.call_received_outlined;
     }
 
     return Padding(
@@ -48,11 +52,7 @@ class CallLogTile extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min, // Hug content
                 children: [
-                  Icon(
-                    callIcon,
-                    size: 16,
-                    color: iconColor,
-                  ),
+                  Icon(callIcon, size: 16, color: iconColor),
                   const SizedBox(width: 8),
                   Text(
                     uiModel.callTitle ?? 'Call',
@@ -67,7 +67,8 @@ class CallLogTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Duration or status
-                  if (uiModel.callSubtitle != null && uiModel.callSubtitle!.isNotEmpty)
+                  if (uiModel.callSubtitle != null &&
+                      uiModel.callSubtitle!.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.only(left: 24.0),
                       child: Text(
@@ -78,10 +79,7 @@ class CallLogTile extends StatelessWidget {
                   else
                     const Spacer(),
                   // Time
-                  Text(
-                    uiModel.callTime ?? '',
-                    style: AppTokens.chatMetaStyle,
-                  ),
+                  Text(uiModel.callTime ?? '', style: AppTokens.chatMetaStyle),
                 ],
               ),
             ],

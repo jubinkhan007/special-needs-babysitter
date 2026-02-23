@@ -8,23 +8,22 @@ import 'package:babysitter_app/src/features/parent/booking_flow/data/services/pa
 /// Provider for a public Dio instance (no auth required)
 /// Used for GET /payments/paypal/config which doesn't need authentication
 final _publicDioProvider = Provider<Dio>((ref) {
-  return Dio(BaseOptions(
-    baseUrl: EnvConfig.apiBaseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ));
+  return Dio(
+    BaseOptions(
+      baseUrl: EnvConfig.apiBaseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
 });
 
 /// Provider for PaypalPaymentService
 final paypalPaymentServiceProvider = Provider<PaypalPaymentService>((ref) {
   final authDio = ref.watch(authDioProvider);
   final publicDio = ref.watch(_publicDioProvider);
-  return PaypalPaymentService(
-    authDio: authDio,
-    publicDio: publicDio,
-  );
+  return PaypalPaymentService(authDio: authDio, publicDio: publicDio);
 });

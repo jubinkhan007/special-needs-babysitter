@@ -15,18 +15,23 @@ class MapRouteAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: kToolbarHeight,
           child: NavigationToolbar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back,
-                  color: AppTokens.appBarTitleGrey),
+              icon: const Icon(
+                Icons.arrow_back,
+                color: AppTokens.appBarTitleGrey,
+              ),
               onPressed: () => context.pop(),
             ),
             middle: Text(
               'Map Route',
-              style:
-                  AppTokens.appBarTitle.copyWith(fontWeight: FontWeight.w600),
+              style: AppTokens.appBarTitle.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.headset_mic_outlined,
-                  color: AppTokens.mapRouteIconColor),
+              icon: const Icon(
+                Icons.headset_mic_outlined,
+                color: AppTokens.mapRouteIconColor,
+              ),
               onPressed: () {
                 // Support action
               },

@@ -87,7 +87,8 @@ class SkillsCertificationsSection extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   TextSpan(
-                    text: 'I have $yearsOfExperience of experience babysitting children of various ages, including infants and children with special needs. I\'m trained in CPR and first aid.',
+                    text:
+                        'I have $yearsOfExperience of experience babysitting children of various ages, including infants and children with special needs. I\'m trained in CPR and first aid.',
                   ),
                 ],
               ),
@@ -138,10 +139,7 @@ class _CertificationChip extends StatelessWidget {
   final String label;
   final bool isPending;
 
-  const _CertificationChip({
-    required this.label,
-    this.isPending = false,
-  });
+  const _CertificationChip({required this.label, this.isPending = false});
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +148,9 @@ class _CertificationChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFE8F4FF),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF62A8FF).withValues(alpha: 0.3)),
+        border: Border.all(
+          color: const Color(0xFF62A8FF).withValues(alpha: 0.3),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

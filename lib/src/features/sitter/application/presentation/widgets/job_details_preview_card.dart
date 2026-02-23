@@ -105,10 +105,7 @@ class JobDetailsPreviewCard extends StatelessWidget {
     return Column(
       children: [
         // Family row
-        _buildMetaRow(
-          icon: _buildFamilyAvatar(),
-          child: _buildFamilyText(),
-        ),
+        _buildMetaRow(icon: _buildFamilyAvatar(), child: _buildFamilyText()),
         SizedBox(height: 6.h),
         // Children row
         _buildMetaRow(
@@ -118,8 +115,11 @@ class JobDetailsPreviewCard extends StatelessWidget {
         SizedBox(height: 6.h),
         // Location row
         _buildMetaRow(
-          icon: Icon(Icons.location_on_outlined,
-              size: 14.w, color: AppTokens.iconGrey),
+          icon: Icon(
+            Icons.location_on_outlined,
+            size: 14.w,
+            color: AppTokens.iconGrey,
+          ),
           child: _buildLocationText(),
         ),
       ],
@@ -290,16 +290,22 @@ class JobDetailsPreviewCard extends StatelessWidget {
           SizedBox(height: 12.h),
           if (jobDetails.transportationModes.isNotEmpty)
             _buildMultiValueRow(
-                'Transportation Mode', jobDetails.transportationModes),
+              'Transportation Mode',
+              jobDetails.transportationModes,
+            ),
           if (jobDetails.equipmentSafety.isNotEmpty) ...[
             SizedBox(height: 10.h),
             _buildMultiValueRow(
-                'Equipment & Safety', jobDetails.equipmentSafety),
+              'Equipment & Safety',
+              jobDetails.equipmentSafety,
+            ),
           ],
           if (jobDetails.pickupDropoffDetails.isNotEmpty) ...[
             SizedBox(height: 10.h),
             _buildMultiValueRow(
-                'Pickup / Drop-off Details', jobDetails.pickupDropoffDetails),
+              'Pickup / Drop-off Details',
+              jobDetails.pickupDropoffDetails,
+            ),
           ],
         ],
       ],
@@ -363,20 +369,22 @@ class JobDetailsPreviewCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: values
-                .map((value) => Padding(
-                      padding: EdgeInsets.only(bottom: 4.h),
-                      child: Text(
-                        value,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                          color: AppTokens.textSecondary,
-                          fontFamily: 'Inter',
-                          height: 1.4,
-                        ),
+                .map(
+                  (value) => Padding(
+                    padding: EdgeInsets.only(bottom: 4.h),
+                    child: Text(
+                      value,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: AppTokens.textSecondary,
+                        fontFamily: 'Inter',
+                        height: 1.4,
                       ),
-                    ))
+                    ),
+                  ),
+                )
                 .toList(),
           ),
         ),

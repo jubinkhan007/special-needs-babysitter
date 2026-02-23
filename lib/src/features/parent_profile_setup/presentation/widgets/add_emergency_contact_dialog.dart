@@ -31,13 +31,17 @@ class _AddEmergencyContactDialogState extends State<AddEmergencyContactDialog> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(
-        text: widget.existingContact?['name'] as String? ?? '');
+      text: widget.existingContact?['name'] as String? ?? '',
+    );
     _relationController = TextEditingController(
-        text: widget.existingContact?['relation'] as String? ?? '');
+      text: widget.existingContact?['relation'] as String? ?? '',
+    );
     _phoneController = TextEditingController(
-        text: widget.existingContact?['phone'] as String? ?? '');
+      text: widget.existingContact?['phone'] as String? ?? '',
+    );
     _emailController = TextEditingController(
-        text: widget.existingContact?['email'] as String? ?? '');
+      text: widget.existingContact?['email'] as String? ?? '',
+    );
   }
 
   @override
@@ -92,7 +96,9 @@ class _AddEmergencyContactDialogState extends State<AddEmergencyContactDialog> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      widget.existingContact != null ? 'Edit Emergency Contact' : 'Emergency Contact',
+                      widget.existingContact != null
+                          ? 'Edit Emergency Contact'
+                          : 'Emergency Contact',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -138,8 +144,9 @@ class _AddEmergencyContactDialogState extends State<AddEmergencyContactDialog> {
               ),
               const SizedBox(height: 24),
               PrimaryActionButton(
-                label:
-                    widget.existingContact != null ? 'Update' : 'Add Contact',
+                label: widget.existingContact != null
+                    ? 'Update'
+                    : 'Add Contact',
                 onPressed: _save,
               ),
             ],

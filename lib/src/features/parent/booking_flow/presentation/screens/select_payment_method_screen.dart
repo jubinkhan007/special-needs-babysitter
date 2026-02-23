@@ -12,7 +12,8 @@ class SelectPaymentMethodScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedMethod = ref.watch(
-        bookingFlowProvider.select((state) => state.selectedPaymentMethod));
+      bookingFlowProvider.select((state) => state.selectedPaymentMethod),
+    );
 
     void onSelectMethod(String method) {
       ref.read(bookingFlowProvider.notifier).updatePaymentMethod(method);
@@ -32,7 +33,8 @@ class SelectPaymentMethodScreen extends ConsumerWidget {
             // Main Title
             const Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: BookingUiTokens.screenHorizontalPadding),
+                horizontal: BookingUiTokens.screenHorizontalPadding,
+              ),
               child: Text(
                 'Select Payment Method',
                 style: BookingUiTokens.selectionPageTitle,
@@ -77,7 +79,8 @@ class SelectPaymentMethodScreen extends ConsumerWidget {
             // Authorization note
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: BookingUiTokens.screenHorizontalPadding),
+                horizontal: BookingUiTokens.screenHorizontalPadding,
+              ),
               child: Text(
                 'By saving your card, you authorize Special Needs Sitters to securely charge this card for completed bookings.',
                 style: TextStyle(

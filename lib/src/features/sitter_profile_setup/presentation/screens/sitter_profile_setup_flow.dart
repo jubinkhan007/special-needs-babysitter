@@ -45,36 +45,43 @@ class _SitterProfileSetupFlowState
 
   /// Saves the current step to the API, then advances to the next step.
   Future<void> _saveAndAdvance(
-      int currentStepNumber, int nextStepNumber) async {
+    int currentStepNumber,
+    int nextStepNumber,
+  ) async {
     if (_isSaving) return;
     setState(() => _isSaving = true);
 
     try {
-      final controller =
-          ref.read(sitterProfileSetupControllerProvider.notifier);
+      final controller = ref.read(
+        sitterProfileSetupControllerProvider.notifier,
+      );
       final repository = ref.read(sitterProfileRepositoryProvider);
 
-      debugPrint('DEBUG FLOW: Saving step $currentStepNumber before advancing...');
+      debugPrint(
+        'DEBUG FLOW: Saving step $currentStepNumber before advancing...',
+      );
       final success = await controller.saveStep(currentStepNumber, repository);
 
       if (!mounted) return;
 
       if (success) {
         debugPrint(
-            'DEBUG FLOW: Step $currentStepNumber saved successfully, advancing to step $nextStepNumber');
+          'DEBUG FLOW: Step $currentStepNumber saved successfully, advancing to step $nextStepNumber',
+        );
         _goToStep(nextStepNumber);
       } else {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
-              content: Text(
-                  'Failed to save step $currentStepNumber. Please try again.')),
+            content: Text(
+              'Failed to save step $currentStepNumber. Please try again.',
+            ),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
-          SnackBar(content: Text('Error: $e')),
-        );
+        AppToast.show(context, SnackBar(content: Text('Error: $e')));
       }
     } finally {
       if (mounted) {
@@ -92,9 +99,7 @@ class _SitterProfileSetupFlowState
         if (_isSaving)
           Container(
             color: Colors.black26,
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
+            child: const Center(child: CircularProgressIndicator()),
           ),
       ],
     );
@@ -113,10 +118,7 @@ class _SitterProfileSetupFlowState
           onBack: _goBack,
         );
       case 2:
-        return Step2Bio(
-          onNext: () => _saveAndAdvance(2, 3),
-          onBack: _goBack,
-        );
+        return Step2Bio(onNext: () => _saveAndAdvance(2, 3), onBack: _goBack);
       case 3:
         return Step3Location(
           onNext: () => _saveAndAdvance(3, 4),
@@ -164,7 +166,8 @@ class _SitterProfileSetupFlowState
   void _finishSetup() {
     // Navigate to completion / dashboard / review
     if (context.mounted) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(content: Text('Profile Setup Completed!')),
       );
 

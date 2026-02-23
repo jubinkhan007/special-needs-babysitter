@@ -32,22 +32,18 @@ class TransportPreferencesTable extends StatelessWidget {
       children: [
         SizedBox(
           width: 140, // Fixed width for label column
-          child: Text(
-            label,
-            style: AppTokens.transportLabelStyle,
-          ),
+          child: Text(label, style: AppTokens.transportLabelStyle),
         ),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: items
-                .map((item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        item,
-                        style: AppTokens.transportValueStyle,
-                      ),
-                    ))
+                .map(
+                  (item) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(item, style: AppTokens.transportValueStyle),
+                  ),
+                )
                 .toList(),
           ),
         ),

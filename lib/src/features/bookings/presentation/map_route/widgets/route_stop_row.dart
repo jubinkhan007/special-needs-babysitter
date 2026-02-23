@@ -6,10 +6,7 @@ import 'package:babysitter_app/src/features/bookings/presentation/models/route_s
 class RouteStopRow extends StatelessWidget {
   final RouteStopUiModel stop;
 
-  const RouteStopRow({
-    super.key,
-    required this.stop,
-  });
+  const RouteStopRow({super.key, required this.stop});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +31,9 @@ class RouteStopRow extends StatelessWidget {
                     border: stop.isActive
                         ? null
                         : Border.all(
-                            color: AppTokens.routeDotBorderColor, width: 2),
+                            color: AppTokens.routeDotBorderColor,
+                            width: 2,
+                          ),
                   ),
                 ),
                 // The Line (if not last)
@@ -52,13 +51,12 @@ class RouteStopRow extends StatelessWidget {
           ),
 
           const SizedBox(width: 12), // Gap between dot and text
-
           // 2. Address Text
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
-                  bottom:
-                      AppTokens.routeRowGapVertical), // Spacing to next item
+                bottom: AppTokens.routeRowGapVertical,
+              ), // Spacing to next item
               child: Text(
                 stop.addressLine,
                 style: AppTokens.routeAddressTextStyle,
@@ -71,10 +69,7 @@ class RouteStopRow extends StatelessWidget {
           const SizedBox(width: 8),
 
           // 3. Time Text
-          Text(
-            stop.timeLabel,
-            style: AppTokens.routeTimeTextStyle,
-          ),
+          Text(stop.timeLabel, style: AppTokens.routeTimeTextStyle),
         ],
       ),
     );
@@ -94,11 +89,7 @@ class _DottedLinePainter extends CustomPainter {
     double startY = 4; // Start a bit below the dot
 
     while (startY < size.height) {
-      canvas.drawLine(
-        Offset(0, startY),
-        Offset(0, startY + dashHeight),
-        paint,
-      );
+      canvas.drawLine(Offset(0, startY), Offset(0, startY + dashHeight), paint);
       startY += dashHeight + dashSpace;
     }
   }

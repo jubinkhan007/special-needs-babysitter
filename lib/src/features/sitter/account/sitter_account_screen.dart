@@ -31,10 +31,7 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
 
     ref.listen(sitterAccountControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        AppToast.show(
-          context,
-          SnackBar(content: Text('Error: ${next.error}')),
-        );
+        AppToast.show(context, SnackBar(content: Text('Error: ${next.error}')));
       }
     });
 
@@ -64,8 +61,10 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none,
-                color: SitterAccountUI.textGray),
+            icon: const Icon(
+              Icons.notifications_none,
+              color: SitterAccountUI.textGray,
+            ),
             onPressed: () {
               // TODO: Navigate to notifications
             },
@@ -115,7 +114,8 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                     AppToast.show(
                       context,
                       const SnackBar(
-                          content: Text('Completed jobs coming soon')),
+                        content: Text('Completed jobs coming soon'),
+                      ),
                     );
                   },
                   onTapSavedJobs: () {
@@ -161,10 +161,10 @@ class _SitterAccountScreenState extends ConsumerState<SitterAccountScreen> {
                           .read(sitterAccountControllerProvider.notifier)
                           .signOut()
                           .then((_) {
-                        if (context.mounted) {
-                          context.go(Routes.signIn);
-                        }
-                      });
+                            if (context.mounted) {
+                              context.go(Routes.signIn);
+                            }
+                          });
                     }
                   },
                 ),

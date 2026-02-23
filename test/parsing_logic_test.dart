@@ -4,11 +4,11 @@ void main() {
   test('Parsing logic test', () {
     const startDateStr = "2026-01-23";
     const startTimeStr = "02:30";
-    
+
     // Logic from repository
     DateTime scheduledDate = DateTime.parse(startDateStr);
     DateTime? jobStartDateTime;
-    
+
     final timeParts = startTimeStr.split(':');
     if (timeParts.length == 2) {
       jobStartDateTime = DateTime(
@@ -19,16 +19,16 @@ void main() {
         int.parse(timeParts[1]),
       );
     }
-    
+
     // Simulate "Now" as Jan 27, 2026
     final now = DateTime(2026, 1, 27, 10, 0, 0);
-    
+
     final isPast = jobStartDateTime!.isBefore(now);
-    
+
     print('Start: $jobStartDateTime');
     print('Now: $now');
     print('Is Past: $isPast');
-    
+
     expect(isPast, true);
   });
 }

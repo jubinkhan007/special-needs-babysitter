@@ -4,10 +4,7 @@ class DeclineCallParams {
   final String callId;
   final String? reason;
 
-  const DeclineCallParams({
-    required this.callId,
-    this.reason,
-  });
+  const DeclineCallParams({required this.callId, this.reason});
 }
 
 class DeclineCallUseCase {

@@ -30,9 +30,7 @@ void main() {
         location: 'Manhattan, NY 10001',
         scheduleDate: DateTime(2025, 6, 15),
         rateText: '\$30/hr',
-        children: [
-          const ChildDetail(name: 'Sarah', ageYears: 6),
-        ],
+        children: [const ChildDetail(name: 'Sarah', ageYears: 6)],
         parentUserId: 'parent-2',
       ),
       Job(
@@ -52,9 +50,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          allJobsProvider.overrideWith((ref) => mockJobs),
-        ],
+        overrides: [allJobsProvider.overrideWith((ref) => mockJobs)],
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
           builder: (context, child) {

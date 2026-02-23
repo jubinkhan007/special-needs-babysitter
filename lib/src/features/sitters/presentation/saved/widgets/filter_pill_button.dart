@@ -6,10 +6,7 @@ import 'package:babysitter_app/src/theme/app_tokens.dart';
 class FilterPillButton extends StatelessWidget {
   final VoidCallback? onTap;
 
-  const FilterPillButton({
-    super.key,
-    this.onTap,
-  });
+  const FilterPillButton({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +18,12 @@ class FilterPillButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppTokens.filterPillBg,
           borderRadius: BorderRadius.circular(AppTokens.filterPillRadius.r),
-          border: Border.all(
-            color: AppTokens.filterPillBorder,
-            width: 1,
-          ),
+          border: Border.all(color: AppTokens.filterPillBorder, width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Filter By:',
-              style: AppTokens.filterPillTextStyle,
-            ),
+            Text('Filter By:', style: AppTokens.filterPillTextStyle),
             SizedBox(width: 4.w),
             Icon(
               Icons.keyboard_arrow_down,

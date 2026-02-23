@@ -8,10 +8,7 @@ import 'star_row.dart';
 class ReviewListItem extends StatelessWidget {
   final ReviewUiModel model;
 
-  const ReviewListItem({
-    super.key,
-    required this.model,
-  });
+  const ReviewListItem({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +34,7 @@ class ReviewListItem extends StatelessWidget {
                       : null,
                 ),
                 child: model.reviewerAvatarUrl.isEmpty
-                    ? Icon(
-                        Icons.person,
-                        size: 20.sp,
-                        color: Colors.white,
-                      )
+                    ? Icon(Icons.person, size: 20.sp, color: Colors.white)
                     : null,
               ),
 
@@ -75,10 +68,7 @@ class ReviewListItem extends StatelessWidget {
                     SizedBox(height: 8.h),
 
                     // Comment
-                    Text(
-                      model.comment,
-                      style: AppTokens.reviewCommentStyle,
-                    ),
+                    Text(model.comment, style: AppTokens.reviewCommentStyle),
                   ],
                 ),
               ),

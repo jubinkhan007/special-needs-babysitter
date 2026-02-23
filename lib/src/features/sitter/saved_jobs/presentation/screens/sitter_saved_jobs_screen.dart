@@ -27,8 +27,11 @@ class SitterSavedJobsScreen extends ConsumerWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: const Color(0xFF667085), size: 24.w),
+          icon: Icon(
+            Icons.arrow_back,
+            color: const Color(0xFF667085),
+            size: 24.w,
+          ),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -52,10 +55,7 @@ class SitterSavedJobsScreen extends ConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-            child: AppSearchField(
-              hintText: 'Search saved jobs',
-              onTap: () {},
-            ),
+            child: AppSearchField(hintText: 'Search saved jobs', onTap: () {}),
           ),
           Expanded(
             child: savedJobsAsync.when(
@@ -63,7 +63,9 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                 final savedIds = savedJobsState.savedJobIds;
                 final visibleJobs = savedIds.isEmpty
                     ? jobs
-                    : jobs.where((job) => savedIds.contains(job.id ?? '')).toList();
+                    : jobs
+                          .where((job) => savedIds.contains(job.id ?? ''))
+                          .toList();
 
                 if (visibleJobs.isEmpty) {
                   return Center(
@@ -91,7 +93,9 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final job = visibleJobs[index];
                       final jobId = job.id ?? '';
-                      final isSaved = savedJobsState.savedJobIds.contains(jobId);
+                      final isSaved = savedJobsState.savedJobIds.contains(
+                        jobId,
+                      );
                       final preview = JobPreviewMapper.map(
                         job,
                         isBookmarked: isSaved,
@@ -115,31 +119,35 @@ class SitterSavedJobsScreen extends ConsumerWidget {
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(jobId)
                               .then((isNowSaved) {
-                            if (!context.mounted) return;
-                            AppToast.show(
-                              context,
-                              SnackBar(
-                                content: Text(
-                                  isNowSaved ? 'Job saved' : 'Job unsaved',
-                                ),
-                                backgroundColor: AppColors.success,
-                              ),
-                            );
-                            if (!isNowSaved) {
-                              ref.invalidate(savedJobsListProvider);
-                            }
-                          }).catchError((error) {
-                            if (!context.mounted) return;
-                            AppToast.show(
-                              context,
-                              SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceFirst('Exception: ', '')),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          });
+                                if (!context.mounted) return;
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text(
+                                      isNowSaved ? 'Job saved' : 'Job unsaved',
+                                    ),
+                                    backgroundColor: AppColors.success,
+                                  ),
+                                );
+                                if (!isNowSaved) {
+                                  ref.invalidate(savedJobsListProvider);
+                                }
+                              })
+                              .catchError((error) {
+                                if (!context.mounted) return;
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text(
+                                      error.toString().replaceFirst(
+                                        'Exception: ',
+                                        '',
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              });
                         },
                       );
                     },

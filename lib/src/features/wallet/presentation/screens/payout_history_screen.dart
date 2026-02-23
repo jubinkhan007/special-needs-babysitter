@@ -37,9 +37,7 @@ class PayoutHistoryScreen extends StatelessWidget {
       body: const Center(
         child: Text(
           'No payouts yet',
-          style: TextStyle(
-            color: WalletStyles.textSecondary,
-          ),
+          style: TextStyle(color: WalletStyles.textSecondary),
         ),
       ),
     );

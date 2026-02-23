@@ -26,13 +26,12 @@ class GoogleGeocodingRemoteDataSource {
     try {
       final response = await _dio.get(
         '/geocode/json',
-        queryParameters: {
-          'latlng': '$latitude,$longitude',
-          'key': apiKey,
-        },
+        queryParameters: {'latlng': '$latitude,$longitude', 'key': apiKey},
       );
       final results = response.data['results'] as List?;
-      final first = results != null && results.isNotEmpty ? results.first : null;
+      final first = results != null && results.isNotEmpty
+          ? results.first
+          : null;
       final address = first is Map<String, dynamic>
           ? first['formatted_address'] as String?
           : null;

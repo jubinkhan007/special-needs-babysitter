@@ -58,19 +58,21 @@ class LegalDocumentSection extends StatelessWidget {
 
           if (paragraphs.isNotEmpty) ...[
             SizedBox(height: 4.h),
-            ...paragraphs.map((p) => Padding(
-                  padding: EdgeInsets.only(bottom: 4.h),
-                  child: Text(
-                    p,
-                    style: TextStyle(
-                      fontFamily: AppTokens.fontFamily,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppTokens.textSecondary,
-                      height: 1.5,
-                    ),
+            ...paragraphs.map(
+              (p) => Padding(
+                padding: EdgeInsets.only(bottom: 4.h),
+                child: Text(
+                  p,
+                  style: TextStyle(
+                    fontFamily: AppTokens.fontFamily,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: AppTokens.textSecondary,
+                    height: 1.5,
                   ),
-                )),
+                ),
+              ),
+            ),
           ],
 
           if (bullets.isNotEmpty) ...[

@@ -5,14 +5,18 @@ import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
 
 /// Provider for loading a sitter profile by ID.
 /// Returns AsyncValue<SitterModel> for loading/error/success states.
-final sitterProfileProvider =
-    FutureProvider.family<SitterModel, String>((ref, sitterId) async {
+final sitterProfileProvider = FutureProvider.family<SitterModel, String>((
+  ref,
+  sitterId,
+) async {
   final repository = ref.watch(sittersRepositoryProvider);
   return repository.getSitterDetails(sitterId);
 });
 
 /// Provider for toggling favorite/bookmark state.
-final sitterBookmarkProvider =
-    StateProvider.family<bool, String>((ref, sitterId) {
+final sitterBookmarkProvider = StateProvider.family<bool, String>((
+  ref,
+  sitterId,
+) {
   return false; // Default not bookmarked
 });

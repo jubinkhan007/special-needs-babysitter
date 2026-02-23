@@ -56,8 +56,13 @@ class BookingsRepositoryImpl implements BookingsRepository {
       // Just creating a DateTime with that time
       try {
         final parts = dto.job!.startTime!.split(':');
-        startTime =
-            DateTime(2000, 1, 1, int.parse(parts[0]), int.parse(parts[1]));
+        startTime = DateTime(
+          2000,
+          1,
+          1,
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+        );
         jobStartDateTime = DateTime(
           startDate.year,
           startDate.month,
@@ -71,17 +76,24 @@ class BookingsRepositoryImpl implements BookingsRepository {
     if (dto.job?.endTime != null) {
       try {
         final parts = dto.job!.endTime!.split(':');
-        endTime =
-            DateTime(2000, 1, 1, int.parse(parts[0]), int.parse(parts[1]));
+        endTime = DateTime(
+          2000,
+          1,
+          1,
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+        );
       } catch (_) {}
     }
     jobStartDateTime ??= startDate;
 
     // Map status string to enum (align with list logic)
-    final rawStatus =
-        dto.status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    final rawStatus = dto.status.toLowerCase().replaceAll(
+      RegExp(r'[\s_-]'),
+      '',
+    );
     BookingStatus status;
-    
+
     final now = DateTime.now();
     final isPast = jobStartDateTime.isBefore(now);
 
@@ -89,7 +101,9 @@ class BookingsRepositoryImpl implements BookingsRepository {
       status = BookingStatus.active;
     } else if (rawStatus == 'clockedout') {
       status = BookingStatus.clockedOut;
-    } else if (rawStatus == 'pending' || rawStatus == 'directbooking' || rawStatus == 'invited') {
+    } else if (rawStatus == 'pending' ||
+        rawStatus == 'directbooking' ||
+        rawStatus == 'invited') {
       // "invited" means parent sent invitation to sitter, still pending response
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
@@ -115,7 +129,7 @@ class BookingsRepositoryImpl implements BookingsRepository {
     // Parse payment data if available
     DateTime? clockInTimeActual;
     DateTime? clockOutTimeActual;
-    
+
     if (dto.payment?.clockInTime != null) {
       try {
         clockInTimeActual = DateTime.parse(dto.payment!.clockInTime!);
@@ -131,8 +145,8 @@ class BookingsRepositoryImpl implements BookingsRepository {
       id: dto.id,
       jobId: dto.jobId ?? dto.job?.id ?? dto.id, // prefer explicit jobId
       sitterId: dto.sitter?.userId ?? '',
-      sitterName:
-          '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'.trim(),
+      sitterName: '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'
+          .trim(),
       avatarUrl: dto.sitter?.photoUrl ?? 'https://via.placeholder.com/150',
       isVerified: true,
       rating: 5.0, // Placeholder
@@ -197,7 +211,10 @@ class BookingsRepositoryImpl implements BookingsRepository {
 
     // Map status string to enum with logic
     BookingStatus status;
-    final rawStatus = dto.status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    final rawStatus = dto.status.toLowerCase().replaceAll(
+      RegExp(r'[\s_-]'),
+      '',
+    );
     final now = DateTime.now();
     final isPast = jobStartDateTime != null && jobStartDateTime.isBefore(now);
 
@@ -205,7 +222,9 @@ class BookingsRepositoryImpl implements BookingsRepository {
       status = BookingStatus.active;
     } else if (rawStatus == 'clockedout') {
       status = BookingStatus.clockedOut;
-    } else if (rawStatus == 'pending' || rawStatus == 'directbooking' || rawStatus == 'invited') {
+    } else if (rawStatus == 'pending' ||
+        rawStatus == 'directbooking' ||
+        rawStatus == 'invited') {
       // "invited" means parent sent invitation to sitter, still pending response
       status = BookingStatus.pending;
     } else if (rawStatus == 'declined' || rawStatus == 'cancelled') {
@@ -229,8 +248,8 @@ class BookingsRepositoryImpl implements BookingsRepository {
     return Booking(
       id: dto.id,
       sitterId: dto.sitter?.userId ?? '',
-      sitterName:
-          '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'.trim(),
+      sitterName: '${dto.sitter?.firstName ?? ''} ${dto.sitter?.lastName ?? ''}'
+          .trim(),
       distanceText: dto.job?.location ?? 'Unknown location',
       rating: 5.0, // API doesn't provide rating yet, use placeholder
       responseRate: 100, // Placeholder
@@ -259,11 +278,13 @@ class BookingsRepositoryImpl implements BookingsRepository {
     return BookingLocation(
       currentLocation: mapPoint(dto.currentLocation),
       routeCoordinates: dto.routeCoordinates
-          .map((point) => BookingLocationPoint(
-                latitude: point.latitude,
-                longitude: point.longitude,
-                timestamp: point.timestamp,
-              ))
+          .map(
+            (point) => BookingLocationPoint(
+              latitude: point.latitude,
+              longitude: point.longitude,
+              timestamp: point.timestamp,
+            ),
+          )
           .toList(),
       distance: dto.distance,
       status: dto.status,

@@ -8,16 +8,16 @@ import 'package:babysitter_app/src/features/sitter/wallet/data/sources/stripe_co
 /// Provider for the Stripe Connect remote data source
 final stripeConnectRemoteDataSourceProvider =
     Provider<StripeConnectRemoteDataSource>((ref) {
-  final dio = ref.watch(authDioProvider);
-  return StripeConnectRemoteDataSource(dio);
-});
+      final dio = ref.watch(authDioProvider);
+      return StripeConnectRemoteDataSource(dio);
+    });
 
 /// Provider for fetching the current Stripe Connect status
 final stripeConnectStatusProvider =
     FutureProvider.autoDispose<StripeConnectStatus>((ref) async {
-  final remote = ref.watch(stripeConnectRemoteDataSourceProvider);
-  return remote.getConnectStatus();
-});
+      final remote = ref.watch(stripeConnectRemoteDataSourceProvider);
+      return remote.getConnectStatus();
+    });
 
 /// State for the onboarding controller
 class StripeConnectOnboardingState {
@@ -51,7 +51,7 @@ class StripeConnectOnboardingController
   final Ref _ref;
 
   StripeConnectOnboardingController(this._remote, this._ref)
-      : super(const StripeConnectOnboardingState());
+    : super(const StripeConnectOnboardingState());
 
   /// Start or continue the onboarding process
   Future<String?> startOnboarding() async {
@@ -101,10 +101,11 @@ class StripeConnectOnboardingController
 }
 
 /// Provider for the onboarding controller
-final stripeConnectOnboardingControllerProvider = StateNotifierProvider
-    .autoDispose<StripeConnectOnboardingController, StripeConnectOnboardingState>(
-  (ref) {
-    final remote = ref.watch(stripeConnectRemoteDataSourceProvider);
-    return StripeConnectOnboardingController(remote, ref);
-  },
-);
+final stripeConnectOnboardingControllerProvider =
+    StateNotifierProvider.autoDispose<
+      StripeConnectOnboardingController,
+      StripeConnectOnboardingState
+    >((ref) {
+      final remote = ref.watch(stripeConnectRemoteDataSourceProvider);
+      return StripeConnectOnboardingController(remote, ref);
+    });

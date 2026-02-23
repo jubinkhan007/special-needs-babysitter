@@ -106,11 +106,15 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 7, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 7,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -122,8 +126,11 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                       color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.calendar_month_outlined,
-                        size: 32, color: _primaryBlue),
+                    child: const Icon(
+                      Icons.calendar_month_outlined,
+                      size: 32,
+                      color: _primaryBlue,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -162,10 +169,12 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () => ref
-                                .read(sitterProfileSetupControllerProvider
-                                    .notifier)
+                                .read(
+                                  sitterProfileSetupControllerProvider.notifier,
+                                )
                                 .setAvailabilityMode(
-                                    AvailabilityMode.singleDay),
+                                  AvailabilityMode.singleDay,
+                                ),
                             child: Container(
                               alignment: Alignment.center,
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -191,10 +200,12 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () => ref
-                                .read(sitterProfileSetupControllerProvider
-                                    .notifier)
+                                .read(
+                                  sitterProfileSetupControllerProvider.notifier,
+                                )
                                 .setAvailabilityMode(
-                                    AvailabilityMode.multipleDays),
+                                  AvailabilityMode.multipleDays,
+                                ),
                             child: Container(
                               alignment: Alignment.center,
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -236,9 +247,13 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                     // Date Range
                     Row(
                       children: [
-                        const Text('Date',
-                            style: TextStyle(
-                                color: _greyText, fontWeight: FontWeight.w500)),
+                        const Text(
+                          'Date',
+                          style: TextStyle(
+                            color: _greyText,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: _DateField(
@@ -287,7 +302,8 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                         onChanged: (val) {
                           ref
                               .read(
-                                  sitterProfileSetupControllerProvider.notifier)
+                                sitterProfileSetupControllerProvider.notifier,
+                              )
                               .toggleNoBookings(val);
                         },
                         // Active State (ON)
@@ -295,10 +311,12 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                         activeTrackColor: _primaryBlue, // Track
                         // Inactive State (OFF)
                         inactiveThumbColor: Colors.white,
-                        inactiveTrackColor:
-                            const Color(0xFFEAECF0), // Light Grey
-                        trackOutlineColor:
-                            WidgetStateProperty.all(Colors.transparent),
+                        inactiveTrackColor: const Color(
+                          0xFFEAECF0,
+                        ), // Light Grey
+                        trackOutlineColor: WidgetStateProperty.all(
+                          Colors.transparent,
+                        ),
                       ),
                     ],
                   ),
@@ -313,13 +331,19 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                         children: [
                           const Row(
                             children: [
-                              Text('Time',
-                                  style: TextStyle(
-                                      color: _textDark,
-                                      fontWeight: FontWeight.w500)),
+                              Text(
+                                'Time',
+                                style: TextStyle(
+                                  color: _textDark,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                               SizedBox(width: 4),
-                              Icon(Icons.info_outline,
-                                  size: 16, color: _greyText),
+                              Icon(
+                                Icons.info_outline,
+                                size: 16,
+                                color: _greyText,
+                              ),
                             ],
                           ),
                           const SizedBox(width: 16),
@@ -333,8 +357,10 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                           ),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
-                            child:
-                                Text('to', style: TextStyle(color: _greyText)),
+                            child: Text(
+                              'to',
+                              style: TextStyle(color: _greyText),
+                            ),
                           ),
                           Expanded(
                             child: _TimeField(
@@ -364,8 +390,9 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                 child: OutlinedButton(
                   onPressed: () {
                     // Reset Logic
-                    final notifier =
-                        ref.read(sitterProfileSetupControllerProvider.notifier);
+                    final notifier = ref.read(
+                      sitterProfileSetupControllerProvider.notifier,
+                    );
                     notifier.toggleNoBookings(false);
                     // Add more resets if needed
                   },
@@ -377,12 +404,14 @@ class _Step7AvailabilityState extends ConsumerState<Step7Availability> {
                     ),
                     backgroundColor: Colors.white,
                   ),
-                  child: const Text('Reset',
-                      style: TextStyle(
-                        color: _greyText,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
-                      )),
+                  child: const Text(
+                    'Reset',
+                    style: TextStyle(
+                      color: _greyText,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -435,8 +464,11 @@ class _DateField extends StatelessWidget {
                   color: Color(0xFF1A1A1A),
                 ),
               ),
-              const Icon(Icons.calendar_month_outlined,
-                  size: 18, color: Color(0xFF98A2B3)),
+              const Icon(
+                Icons.calendar_month_outlined,
+                size: 18,
+                color: Color(0xFF98A2B3),
+              ),
             ],
           ),
         ),

@@ -31,20 +31,21 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
     // We can also listen to errors here
     ref.listen(accountControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        AppToast.show(context, 
-          SnackBar(content: Text('Error: ${next.error}')),
-        );
+        AppToast.show(context, SnackBar(content: Text('Error: ${next.error}')));
       }
     });
 
     return Scaffold(
       backgroundColor: AccountUI.backgroundBlue,
       appBar: AppBar(
-        title: const Text('Account',
-            style: TextStyle(
-                color: AccountUI.textGray,
-                fontSize: 17,
-                fontWeight: FontWeight.w600)),
+        title: const Text(
+          'Account',
+          style: TextStyle(
+            color: AccountUI.textGray,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         backgroundColor: AccountUI.backgroundBlue,
         elevation: 0,
         centerTitle: true,
@@ -64,8 +65,10 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
         ),
         actions: [
           IconButton(
-            icon:
-                const Icon(Icons.notifications_none, color: AccountUI.textGray),
+            icon: const Icon(
+              Icons.notifications_none,
+              color: AccountUI.textGray,
+            ),
             onPressed: () {
               // TODO: Notification route
             },
@@ -145,10 +148,10 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                           .read(accountControllerProvider.notifier)
                           .signOut()
                           .then((_) {
-                        if (context.mounted) {
-                          context.go(Routes.signIn);
-                        }
-                      });
+                            if (context.mounted) {
+                              context.go(Routes.signIn);
+                            }
+                          });
                     }
                   },
                 ),

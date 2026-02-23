@@ -71,7 +71,8 @@ class _SitterProfileViewState extends State<SitterProfileView> {
   int _getCurrentSectionIndex() {
     try {
       // Get scroll offset + sticky header height offset
-      final scrollOffset = _scrollController.offset + 150; // Account for header + tabs
+      final scrollOffset =
+          _scrollController.offset + 150; // Account for header + tabs
 
       final positions = <int, double>{};
 
@@ -128,17 +129,20 @@ class _SitterProfileViewState extends State<SitterProfileView> {
         final targetOffset = _scrollController.offset + position.dy - 110;
         _scrollController
             .animateTo(
-          targetOffset.clamp(0.0, _scrollController.position.maxScrollExtent),
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        )
+              targetOffset.clamp(
+                0.0,
+                _scrollController.position.maxScrollExtent,
+              ),
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            )
             .then((_) {
-          if (mounted) {
-            setState(() {
-              _isScrolling = false;
+              if (mounted) {
+                setState(() {
+                  _isScrolling = false;
+                });
+              }
             });
-          }
-        });
       } else {
         setState(() {
           _isScrolling = false;
@@ -230,7 +234,9 @@ class _SitterProfileViewState extends State<SitterProfileView> {
                       ),
 
                       const SizedBox(height: 12),
-                      ExperienceByAgeSection(ageRanges: widget.sitter.ageRanges),
+                      ExperienceByAgeSection(
+                        ageRanges: widget.sitter.ageRanges,
+                      ),
                       const SizedBox(height: 24),
 
                       // Travel Radius & Transport Availability
@@ -342,15 +348,18 @@ class _SitterProfileViewState extends State<SitterProfileView> {
                     Row(
                       children: [
                         if (widget.sitter.hasTransportation)
-                          const Icon(Icons.check,
-                              size: 16, color: AppUiTokens.textSecondary),
+                          const Icon(
+                            Icons.check,
+                            size: 16,
+                            color: AppUiTokens.textSecondary,
+                          ),
                         if (widget.sitter.hasTransportation)
                           const SizedBox(width: 6),
                         Expanded(
                           child: Text(
                             widget.sitter.hasTransportation
                                 ? (widget.sitter.transportationType ??
-                                    "Owns vehicle")
+                                      "Owns vehicle")
                                 : "No transport",
                             style: const TextStyle(
                               fontSize: 15,
@@ -387,7 +396,11 @@ class _StickyTabsDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return Container(
       height: 50 + topPadding,
       padding: EdgeInsets.only(top: topPadding),
@@ -423,7 +436,9 @@ class _StickyTabsDelegate extends SliverPersistentHeaderDelegate {
                     label,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       color: isSelected
                           ? AppUiTokens.textPrimary
                           : AppUiTokens.textSecondary,

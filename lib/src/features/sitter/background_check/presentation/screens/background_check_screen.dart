@@ -22,11 +22,9 @@ class BackgroundCheckScreen extends ConsumerWidget {
     // Listen for errors
     ref.listen(backgroundCheckControllerProvider, (previous, next) {
       if (next.error != null && previous?.error != next.error) {
-        AppToast.show(context, 
-          SnackBar(
-            content: Text(next.error!),
-            backgroundColor: Colors.red,
-          ),
+        AppToast.show(
+          context,
+          SnackBar(content: Text(next.error!), backgroundColor: Colors.red),
         );
       }
     });
@@ -40,10 +38,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
             // Header with status bar color
             Container(
               color: AppColors.surfaceTint,
-              child: SafeArea(
-                bottom: false,
-                child: _buildAppBar(context),
-              ),
+              child: SafeArea(bottom: false, child: _buildAppBar(context)),
             ),
             // Rest of the content
             Expanded(
@@ -124,7 +119,9 @@ class BackgroundCheckScreen extends ConsumerWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.textOnButton,
-                        disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+                        disabledBackgroundColor: AppColors.primary.withValues(
+                          alpha: 0.5,
+                        ),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
@@ -136,7 +133,9 @@ class BackgroundCheckScreen extends ConsumerWidget {
                               height: 24.w,
                               child: const CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.textOnButton,
+                                ),
                               ),
                             )
                           : Text(
@@ -360,11 +359,7 @@ class BackgroundCheckScreen extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 20.w,
-              color: AppColors.primary,
-            ),
+            Icon(icon, size: 20.w, color: AppColors.primary),
             SizedBox(width: 8.w),
             Text(
               label,

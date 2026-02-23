@@ -26,13 +26,12 @@ class AllJobsScreen extends ConsumerWidget {
     };
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: AppTokens.jobsScreenBg,
-        appBar: JobsAppBar(
-          onBack: () => context.go(Routes.parentHome),
-        ),
+        appBar: JobsAppBar(onBack: () => context.go(Routes.parentHome)),
         body: jobsAsync.when(
           data: (jobs) {
             if (jobs.isEmpty) {
@@ -69,8 +68,7 @@ class AllJobsScreen extends ConsumerWidget {
                   const SizedBox(height: AppTokens.jobsCardSpacing),
               itemBuilder: (context, index) {
                 final job = jobs[index];
-                final resolvedChildren =
-                    _resolveChildren(job, childrenById);
+                final resolvedChildren = _resolveChildren(job, childrenById);
                 final uiModel = JobUiModel.fromDomain(
                   job,
                   childrenOverride: resolvedChildren,
@@ -95,13 +93,13 @@ class AllJobsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline,
-                      size: 48, color: AppTokens.textSecondary),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Error loading jobs',
-                    style: AppTokens.sectionTitle,
+                  const Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: AppTokens.textSecondary,
                   ),
+                  const SizedBox(height: 16),
+                  Text('Error loading jobs', style: AppTokens.sectionTitle),
                   const SizedBox(height: 8),
                   Text(
                     error.toString(),
@@ -142,7 +140,9 @@ class AllJobsScreen extends ConsumerWidget {
     for (final childId in job.childIds) {
       final child = childrenById[childId];
       if (child != null) {
-        final name = child.firstName.isNotEmpty ? child.firstName : child.fullName;
+        final name = child.firstName.isNotEmpty
+            ? child.firstName
+            : child.fullName;
         resolved.add(
           ChildDetail(
             name: name.isNotEmpty ? name : 'Child',

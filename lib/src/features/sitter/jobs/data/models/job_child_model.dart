@@ -5,10 +5,7 @@ class JobChildModel extends Equatable {
   final String firstName;
   final int age;
 
-  const JobChildModel({
-    required this.firstName,
-    required this.age,
-  });
+  const JobChildModel({required this.firstName, required this.age});
 
   factory JobChildModel.fromJson(Map<String, dynamic> json) {
     return JobChildModel(
@@ -18,10 +15,7 @@ class JobChildModel extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'firstName': firstName,
-      'age': age,
-    };
+    return {'firstName': firstName, 'age': age};
   }
 
   @override

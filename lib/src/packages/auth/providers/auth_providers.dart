@@ -21,105 +21,118 @@ final sessionStoreProvider = Provider<SessionStore>((ref) {
 /// Provider for Auth Dio
 final authDioProvider = Provider<Dio>((ref) {
   // Use centralized base URL from core package
-  final dio = Dio(BaseOptions(
-    baseUrl: EnvConfig.apiBaseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ),);
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: EnvConfig.apiBaseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
 
   // Add Auth Interceptor to inject Session ID
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-      // Avoid circular dependency by reading session store directly if needed,
-      // or handling async reading carefully.
-      // BUT: authNotifierProvider depends on authRepositoryProvider -> authRemoteDataSourceProvider -> authDioProvider.
-      // CIRCULAR DEPENDENCY ALERT!
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        // Avoid circular dependency by reading session store directly if needed,
+        // or handling async reading carefully.
+        // BUT: authNotifierProvider depends on authRepositoryProvider -> authRemoteDataSourceProvider -> authDioProvider.
+        // CIRCULAR DEPENDENCY ALERT!
 
-      // We cannot read authNotifierProvider here because it depends on this provider.
-      // We must read backing storage (SessionStore).
+        // We cannot read authNotifierProvider here because it depends on this provider.
+        // We must read backing storage (SessionStore).
 
-      final sessionStore = ref.read(sessionStoreProvider);
-      final storedToken = await sessionStore.getAccessToken();
+        final sessionStore = ref.read(sessionStoreProvider);
+        final storedToken = await sessionStore.getAccessToken();
 
-      if (storedToken != null && storedToken.isNotEmpty) {
-        options.headers['Cookie'] = 'session_id=$storedToken';
-      }
-
-      return handler.next(options);
-    },
-    onError: (DioException e, handler) async {
-      debugPrint('DEBUG: AuthDio API Error: ${e.message} ${e.response?.statusCode}');
-
-      // Handle 401 Unauthorized (Token Expired)
-      if (e.response?.statusCode == 401) {
-        // Skip token refresh for auth endpoints (login, register, etc.)
-        // These 401s are for invalid credentials, not expired sessions
-        final path = e.requestOptions.path;
-        if (path.startsWith('/auth/')) {
-          debugPrint(
-              'DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh',);
-          return handler.next(e);
+        if (storedToken != null && storedToken.isNotEmpty) {
+          options.headers['Cookie'] = 'session_id=$storedToken';
         }
 
-        debugPrint('DEBUG: AuthDio encountered 401. Attempting token refresh...');
-        final sessionStore = ref.read(sessionStoreProvider);
-        final refreshToken = await sessionStore.getRefreshToken();
+        return handler.next(options);
+      },
+      onError: (DioException e, handler) async {
+        debugPrint(
+          'DEBUG: AuthDio API Error: ${e.message} ${e.response?.statusCode}',
+        );
 
-        if (refreshToken != null && refreshToken.isNotEmpty) {
-          try {
-            // Create a temporary Dio to avoid circular interceptor issues
-            final tempDio = Dio(BaseOptions(
-              baseUrl: EnvConfig.apiBaseUrl,
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-              },
-            ),);
+        // Handle 401 Unauthorized (Token Expired)
+        if (e.response?.statusCode == 401) {
+          // Skip token refresh for auth endpoints (login, register, etc.)
+          // These 401s are for invalid credentials, not expired sessions
+          final path = e.requestOptions.path;
+          if (path.startsWith('/auth/')) {
+            debugPrint(
+              'DEBUG: AuthDio 401 on auth endpoint ($path), skipping refresh',
+            );
+            return handler.next(e);
+          }
 
-            debugPrint('DEBUG: AuthDio calling refresh endpoint...');
-            // Manually recreate AuthRemoteDataSource to use its valid logic including DTO parsing
-            final tempDataSource = AuthRemoteDataSource(tempDio);
-            final newSessionDto =
-                await tempDataSource.refreshToken(refreshToken);
+          debugPrint(
+            'DEBUG: AuthDio encountered 401. Attempting token refresh...',
+          );
+          final sessionStore = ref.read(sessionStoreProvider);
+          final refreshToken = await sessionStore.getRefreshToken();
 
-            debugPrint('DEBUG: AuthDio token refresh SUCCESS.');
+          if (refreshToken != null && refreshToken.isNotEmpty) {
+            try {
+              // Create a temporary Dio to avoid circular interceptor issues
+              final tempDio = Dio(
+                BaseOptions(
+                  baseUrl: EnvConfig.apiBaseUrl,
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                  },
+                ),
+              );
 
-            // Map to domain entity
-            final newSession = AuthMappers.authSessionFromDto(newSessionDto);
+              debugPrint('DEBUG: AuthDio calling refresh endpoint...');
+              // Manually recreate AuthRemoteDataSource to use its valid logic including DTO parsing
+              final tempDataSource = AuthRemoteDataSource(tempDio);
+              final newSessionDto = await tempDataSource.refreshToken(
+                refreshToken,
+              );
 
-            // Update session store
-            await sessionStore.saveSession(newSession);
+              debugPrint('DEBUG: AuthDio token refresh SUCCESS.');
 
-            // Retry original request with new token
-            final options = e.requestOptions;
-            // Update cookie header
-            options.headers['Cookie'] = 'session_id=${newSession.accessToken}';
+              // Map to domain entity
+              final newSession = AuthMappers.authSessionFromDto(newSessionDto);
 
-            // Retry request using the main dio instance
-            final cloneReq = await dio.fetch(options);
-            return handler.resolve(cloneReq);
-          } catch (refreshError) {
-            debugPrint('DEBUG: AuthDio token refresh FAILED: $refreshError');
-            // If refresh fails, clear session and let the 401 propagate
+              // Update session store
+              await sessionStore.saveSession(newSession);
+
+              // Retry original request with new token
+              final options = e.requestOptions;
+              // Update cookie header
+              options.headers['Cookie'] =
+                  'session_id=${newSession.accessToken}';
+
+              // Retry request using the main dio instance
+              final cloneReq = await dio.fetch(options);
+              return handler.resolve(cloneReq);
+            } catch (refreshError) {
+              debugPrint('DEBUG: AuthDio token refresh FAILED: $refreshError');
+              // If refresh fails, clear session and let the 401 propagate
+              await sessionStore.clearSession();
+              // Invalidate auth state to trigger router redirect to login
+              ref.invalidate(authNotifierProvider);
+            }
+          } else {
+            debugPrint('DEBUG: AuthDio No refresh token available.');
             await sessionStore.clearSession();
             // Invalidate auth state to trigger router redirect to login
             ref.invalidate(authNotifierProvider);
           }
-        } else {
-          debugPrint('DEBUG: AuthDio No refresh token available.');
-          await sessionStore.clearSession();
-          // Invalidate auth state to trigger router redirect to login
-          ref.invalidate(authNotifierProvider);
         }
-      }
 
-      return handler.next(e);
-    },
-  ),);
+        return handler.next(e);
+      },
+    ),
+  );
 
   return dio;
 });
@@ -130,8 +143,9 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
 });
 
 /// Provider for ProfileRemoteDataSource
-final profileRemoteDataSourceProvider =
-    Provider<ProfileRemoteDataSource>((ref) {
+final profileRemoteDataSourceProvider = Provider<ProfileRemoteDataSource>((
+  ref,
+) {
   return ProfileRemoteDataSource(ref.watch(authDioProvider));
 });
 
@@ -139,7 +153,8 @@ final profileRemoteDataSourceProvider =
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   debugPrint('>>> BUILD profileRepositoryProvider (REAL)');
   return ProfileRepositoryImpl(
-      remoteDataSource: ref.watch(profileRemoteDataSourceProvider),);
+    remoteDataSource: ref.watch(profileRemoteDataSourceProvider),
+  );
 });
 
 /// Provider for AuthRepository (REAL implementation)
@@ -196,7 +211,8 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         // If user data changed (avatar, name, role, etc.), update session
         if (freshUser != session.user) {
           debugPrint(
-              'DEBUG: AuthNotifier detected stale session data. Updating session.',);
+            'DEBUG: AuthNotifier detected stale session data. Updating session.',
+          );
           final updatedSession = session.copyWith(user: freshUser);
           await ref.read(sessionStoreProvider).saveSession(updatedSession);
           return updatedSession;
@@ -210,16 +226,13 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     return session;
   }
 
-  Future<void> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signIn({required String email, required String password}) async {
     debugPrint('DEBUG: AuthNotifier.signIn called');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final res = await ref.read(signInUseCaseProvider).call(
-            SignInParams(email: email, password: password),
-          );
+      final res = await ref
+          .read(signInUseCaseProvider)
+          .call(SignInParams(email: email, password: password));
       debugPrint('DEBUG: AuthNotifier.signIn success. Res: $res');
       return res;
     });
@@ -241,7 +254,9 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     debugPrint('DEBUG: AuthNotifier.signUp called');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final res = await ref.read(signUpUseCaseProvider).call(
+      final res = await ref
+          .read(signUpUseCaseProvider)
+          .call(
             SignUpParams(
               email: email,
               password: password,
@@ -277,7 +292,9 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
     debugPrint('DEBUG: AuthNotifier.verifyOtp called with role=$role');
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      final session = await ref.read(verifyOtpUseCaseProvider).call(
+      final session = await ref
+          .read(verifyOtpUseCaseProvider)
+          .call(
             OtpVerifyPayload(
               code: code,
               email: email,
@@ -287,7 +304,8 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
           );
 
       debugPrint(
-          'DEBUG: AuthNotifier.verifyOtp success. Session: ${session.accessToken}',);
+        'DEBUG: AuthNotifier.verifyOtp success. Session: ${session.accessToken}',
+      );
 
       // PRE-SAVE SESSION: Save initial session so token is available for API calls
       // This fixes the 401 error when fetching using authDio which relies on sessionStore/headers
@@ -301,7 +319,8 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         // Only fetch if we have a token (which we should)
         user = await profileRepo.getMe();
         debugPrint(
-            'DEBUG: AuthNotifier.verifyOtp Fetched Profile: Role=${user.role}',);
+          'DEBUG: AuthNotifier.verifyOtp Fetched Profile: Role=${user.role}',
+        );
       } catch (e) {
         debugPrint('DEBUG: Failed to fetch profile after OTP: $e');
         // Fallback to session user
@@ -311,7 +330,8 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       // force update the user object. This handles backend returning default/wrong role.
       if (role != null && user.role != role) {
         debugPrint(
-            'DEBUG: AuthNotifier FORCE PATCHING role from ${user.role} to $role',);
+          'DEBUG: AuthNotifier FORCE PATCHING role from ${user.role} to $role',
+        );
         user = user.copyWith(role: role);
       }
 
@@ -344,7 +364,8 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
       await ref.read(sessionStoreProvider).saveSession(updatedSession);
       state = AsyncValue.data(updatedSession);
       debugPrint(
-          'DEBUG: AuthNotifier.refreshProfile success. isProfileComplete=${freshUser.isProfileComplete}',);
+        'DEBUG: AuthNotifier.refreshProfile success. isProfileComplete=${freshUser.isProfileComplete}',
+      );
     } catch (e) {
       debugPrint('DEBUG: AuthNotifier.refreshProfile failed: $e');
       // If we can't refresh, keep the state as is
@@ -387,8 +408,11 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
         );
       }
     } catch (e, st) {
-      developer.log('Failed to register FCM token: $e',
-          name: 'Auth', stackTrace: st,);
+      developer.log(
+        'Failed to register FCM token: $e',
+        name: 'Auth',
+        stackTrace: st,
+      );
       _logFcmFlowAuth('_registerFcmToken failed with error=$e');
     } finally {
       _isRegisteringFcmToken = false;
@@ -404,13 +428,14 @@ class AuthNotifier extends AsyncNotifier<AuthSession?> {
 /// Provider for RegistrationRemoteDataSource
 final registrationRemoteDataSourceProvider =
     Provider<RegistrationRemoteDataSource>((ref) {
-  return RegistrationRemoteDataSource(ref.watch(authDioProvider));
-});
+      return RegistrationRemoteDataSource(ref.watch(authDioProvider));
+    });
 
 /// Provider for RegistrationRepository
 final registrationRepositoryProvider = Provider<RegistrationRepository>((ref) {
   return RegistrationRepositoryImpl(
-      ref.watch(registrationRemoteDataSourceProvider),);
+    ref.watch(registrationRemoteDataSourceProvider),
+  );
 });
 
 /// Provider for VerifyOtpUseCase
@@ -419,10 +444,11 @@ final verifyOtpUseCaseProvider = Provider<VerifyOtpUseCase>((ref) {
 });
 
 /// Provider for AuthNotifier
-final authNotifierProvider =
-    AsyncNotifierProvider<AuthNotifier, AuthSession?>(() {
-  return AuthNotifier();
-});
+final authNotifierProvider = AsyncNotifierProvider<AuthNotifier, AuthSession?>(
+  () {
+    return AuthNotifier();
+  },
+);
 
 /// Provider for current authenticated user (fetched from profile)
 /// Only attempts fetch when there's an active session

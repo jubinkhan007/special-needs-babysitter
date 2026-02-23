@@ -54,7 +54,7 @@ class _ParentBookingStep2ScreenState
     _endTimeController.dispose();
     super.dispose();
   }
-  
+
   void _showError(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -66,46 +66,46 @@ class _ParentBookingStep2ScreenState
       );
     }
   }
-  
+
   bool _isEndTimeAfterStartTime() {
     if (_startTimeController.text.isEmpty || _endTimeController.text.isEmpty) {
       return false;
     }
-    
+
     try {
       final startTime = _parseTimeString(_startTimeController.text);
       final endTime = _parseTimeString(_endTimeController.text);
-      
+
       final startMinutes = startTime.hour * 60 + startTime.minute;
       final endMinutes = endTime.hour * 60 + endTime.minute;
-      
+
       // Same day booking validation
-      if (_startDate != null && 
-          _endDate != null && 
+      if (_startDate != null &&
+          _endDate != null &&
           _startDate!.isAtSameMomentAs(_endDate!)) {
         return endMinutes > startMinutes;
       }
-      
+
       return true; // Multi-day booking allows any times
     } catch (e) {
       return true;
     }
   }
-  
+
   TimeOfDay _parseTimeString(String timeStr) {
     final cleanTime = timeStr.trim();
     final parts = cleanTime.split(' ');
     if (parts.length != 2) throw const FormatException('Invalid time format');
-    
+
     final timeParts = parts[0].split(':');
     final period = parts[1].toUpperCase();
-    
+
     int hour = int.parse(timeParts[0]);
     final int minute = int.parse(timeParts[1]);
-    
+
     if (period == 'PM' && hour != 12) hour += 12;
     if (period == 'AM' && hour == 12) hour = 0;
-    
+
     return TimeOfDay(hour: hour, minute: minute);
   }
 
@@ -130,10 +130,13 @@ class _ParentBookingStep2ScreenState
             datePickerTheme: DatePickerThemeData(
               headerBackgroundColor: Colors.white,
               headerForegroundColor: _titleColor,
-              rangeSelectionBackgroundColor: _progressFill.withValues(alpha: 0.3),
+              rangeSelectionBackgroundColor: _progressFill.withValues(
+                alpha: 0.3,
+              ),
               rangePickerBackgroundColor: Colors.white,
               todayBorder: const BorderSide(color: _progressFill),
-            ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: Center(
             child: ConstrainedBox(
@@ -161,7 +164,7 @@ class _ParentBookingStep2ScreenState
         'Sep',
         'Oct',
         'Nov',
-        'Dec'
+        'Dec',
       ];
       final startStr =
           '${months[pickedRange.start.month - 1]} ${pickedRange.start.day}';
@@ -193,14 +196,14 @@ class _ParentBookingStep2ScreenState
           child: Theme(
             data: Theme.of(context).copyWith(
               textTheme: Theme.of(context).textTheme.copyWith(
-                    bodySmall: const TextStyle(color: _titleColor),
-                    bodyMedium: const TextStyle(color: _titleColor),
-                    displayLarge: const TextStyle(color: _titleColor),
-                    displayMedium: const TextStyle(color: _titleColor),
-                    displaySmall: const TextStyle(color: _titleColor),
-                    titleMedium: const TextStyle(color: _titleColor),
-                    labelSmall: const TextStyle(color: _titleColor),
-                  ),
+                bodySmall: const TextStyle(color: _titleColor),
+                bodyMedium: const TextStyle(color: _titleColor),
+                displayLarge: const TextStyle(color: _titleColor),
+                displayMedium: const TextStyle(color: _titleColor),
+                displaySmall: const TextStyle(color: _titleColor),
+                titleMedium: const TextStyle(color: _titleColor),
+                labelSmall: const TextStyle(color: _titleColor),
+              ),
               colorScheme: const ColorScheme.light(
                 primary: _progressFill,
                 onPrimary: Colors.white,
@@ -223,22 +226,26 @@ class _ParentBookingStep2ScreenState
                   side: const BorderSide(color: _progressFill, width: 2),
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
-                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _progressFill.withValues(alpha: 0.3)
-                        : Colors.transparent),
-                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
-                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? Colors.white
-                        : _progressFill.withValues(alpha: 0.1)),
-                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _progressFill.withValues(alpha: 0.3)
+                      : Colors.transparent,
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? Colors.white
+                      : _progressFill.withValues(alpha: 0.1),
+                ),
+                hourMinuteTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
                 inputDecorationTheme: const InputDecorationTheme(
                   labelStyle: TextStyle(color: _titleColor),
                   helperStyle: TextStyle(color: _titleColor),
@@ -274,14 +281,14 @@ class _ParentBookingStep2ScreenState
           child: Theme(
             data: Theme.of(context).copyWith(
               textTheme: Theme.of(context).textTheme.copyWith(
-                    bodySmall: const TextStyle(color: _titleColor),
-                    bodyMedium: const TextStyle(color: _titleColor),
-                    displayLarge: const TextStyle(color: _titleColor),
-                    displayMedium: const TextStyle(color: _titleColor),
-                    displaySmall: const TextStyle(color: _titleColor),
-                    titleMedium: const TextStyle(color: _titleColor),
-                    labelSmall: const TextStyle(color: _titleColor),
-                  ),
+                bodySmall: const TextStyle(color: _titleColor),
+                bodyMedium: const TextStyle(color: _titleColor),
+                displayLarge: const TextStyle(color: _titleColor),
+                displayMedium: const TextStyle(color: _titleColor),
+                displaySmall: const TextStyle(color: _titleColor),
+                titleMedium: const TextStyle(color: _titleColor),
+                labelSmall: const TextStyle(color: _titleColor),
+              ),
               colorScheme: const ColorScheme.light(
                 primary: _progressFill,
                 onPrimary: Colors.white,
@@ -304,22 +311,26 @@ class _ParentBookingStep2ScreenState
                   side: const BorderSide(color: _progressFill, width: 2),
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
-                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _progressFill.withValues(alpha: 0.3)
-                        : Colors.transparent),
-                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
-                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? Colors.white
-                        : _progressFill.withValues(alpha: 0.1)),
-                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _progressFill.withValues(alpha: 0.3)
+                      : Colors.transparent,
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? Colors.white
+                      : _progressFill.withValues(alpha: 0.1),
+                ),
+                hourMinuteTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
                 inputDecorationTheme: const InputDecorationTheme(
                   labelStyle: TextStyle(color: _titleColor),
                   helperStyle: TextStyle(color: _titleColor),
@@ -364,14 +375,22 @@ class _ParentBookingStep2ScreenState
         onTap: onTap,
         cursorColor: _progressFill,
         style: const TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500, color: _titleColor),
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: _titleColor,
+        ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(
-              fontSize: 16, fontWeight: FontWeight.w400, color: _mutedText),
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: _mutedText,
+          ),
           filled: false,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
           border: InputBorder.none,
           suffixIcon: suffixIcon != null
               ? Padding(
@@ -407,7 +426,7 @@ class _ParentBookingStep2ScreenState
         _endDate = next.endDate;
       }
     });
-    
+
     return Scaffold(
       backgroundColor: _bgColor,
       body: Column(
@@ -437,7 +456,9 @@ class _ParentBookingStep2ScreenState
                   ),
                   const SizedBox(height: 24),
                   _buildField(
-                      controller: _jobTitleController, hint: 'Job Title*'),
+                    controller: _jobTitleController,
+                    hint: 'Job Title*',
+                  ),
                   const SizedBox(height: 16),
                   _buildField(
                     controller: _dateController,
@@ -471,7 +492,8 @@ class _ParentBookingStep2ScreenState
                     ],
                   ),
                   SizedBox(
-                      height: 24 + MediaQuery.of(context).padding.bottom + 60),
+                    height: 24 + MediaQuery.of(context).padding.bottom + 60,
+                  ),
                 ],
               ),
             ),
@@ -479,7 +501,11 @@ class _ParentBookingStep2ScreenState
           Container(
             color: _bgColor,
             padding: EdgeInsets.fromLTRB(
-                24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
+              24,
+              0,
+              24,
+              MediaQuery.of(context).padding.bottom + 16,
+            ),
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {
@@ -488,35 +514,37 @@ class _ParentBookingStep2ScreenState
                   _showError('Please enter a job title');
                   return;
                 }
-                
+
                 if (_jobTitleController.text.trim().length < 3) {
                   _showError('Job title must be at least 3 characters');
                   return;
                 }
-                
+
                 if (_dateController.text.isEmpty) {
                   _showError('Please select dates for the booking');
                   return;
                 }
-                
+
                 if (_startTimeController.text.isEmpty) {
                   _showError('Please select a start time');
                   return;
                 }
-                
+
                 if (_endTimeController.text.isEmpty) {
                   _showError('Please select an end time');
                   return;
                 }
-                
+
                 // Validate time order for same-day bookings
                 if (!_isEndTimeAfterStartTime()) {
                   _showError('End time must be after start time');
                   return;
                 }
-                
+
                 // Save to provider
-                ref.read(bookingFlowProvider.notifier).updateStep2(
+                ref
+                    .read(bookingFlowProvider.notifier)
+                    .updateStep2(
                       jobTitle: _jobTitleController.text.trim(),
                       dateRange: _dateController.text,
                       startDate: _startDate,
@@ -527,7 +555,8 @@ class _ParentBookingStep2ScreenState
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => const ParentBookingStep3Screen()),
+                    builder: (context) => const ParentBookingStep3Screen(),
+                  ),
                 );
               },
             ),

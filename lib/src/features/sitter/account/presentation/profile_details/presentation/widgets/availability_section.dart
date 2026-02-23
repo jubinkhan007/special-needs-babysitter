@@ -6,11 +6,7 @@ class AvailabilitySection extends StatefulWidget {
   final List<SitterAvailabilityDto>? availability;
   final VoidCallback? onEditTap;
 
-  const AvailabilitySection({
-    super.key,
-    this.availability,
-    this.onEditTap,
-  });
+  const AvailabilitySection({super.key, this.availability, this.onEditTap});
 
   @override
   State<AvailabilitySection> createState() => _AvailabilitySectionState();
@@ -123,7 +119,11 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.keyboard_arrow_down, size: 16, color: Color(0xFF667085)),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                size: 16,
+                color: Color(0xFF667085),
+              ),
               const SizedBox(width: 16),
               Text(
                 _currentMonth.year.toString(),
@@ -134,7 +134,11 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.keyboard_arrow_down, size: 16, color: Color(0xFF667085)),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                size: 16,
+                color: Color(0xFF667085),
+              ),
               const SizedBox(width: 16),
               IconButton(
                 icon: const Icon(Icons.chevron_right, color: Color(0xFF667085)),
@@ -167,8 +171,16 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
   }
 
   Widget _buildCalendarGrid() {
-    final firstDayOfMonth = DateTime(_currentMonth.year, _currentMonth.month, 1);
-    final lastDayOfMonth = DateTime(_currentMonth.year, _currentMonth.month + 1, 0);
+    final firstDayOfMonth = DateTime(
+      _currentMonth.year,
+      _currentMonth.month,
+      1,
+    );
+    final lastDayOfMonth = DateTime(
+      _currentMonth.year,
+      _currentMonth.month + 1,
+      0,
+    );
     final firstWeekday = firstDayOfMonth.weekday % 7; // Sunday = 0
     final daysInMonth = lastDayOfMonth.day;
 
@@ -177,12 +189,16 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
 
     // Add empty cells for days before the first of the month
     for (int i = 0; i < firstWeekday; i++) {
-      final prevMonthDay = firstDayOfMonth.subtract(Duration(days: firstWeekday - i));
-      currentRow.add(_CalendarDay(
-        day: prevMonthDay.day,
-        isCurrentMonth: false,
-        isAvailable: false,
-      ));
+      final prevMonthDay = firstDayOfMonth.subtract(
+        Duration(days: firstWeekday - i),
+      );
+      currentRow.add(
+        _CalendarDay(
+          day: prevMonthDay.day,
+          isCurrentMonth: false,
+          isAvailable: false,
+        ),
+      );
     }
 
     // Add days of the current month
@@ -190,18 +206,22 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
       final date = DateTime(_currentMonth.year, _currentMonth.month, day);
       final isAvailable = _availableDates.contains(date);
 
-      currentRow.add(_CalendarDay(
-        day: day,
-        isCurrentMonth: true,
-        isAvailable: isAvailable,
-        isToday: _isToday(date),
-      ));
+      currentRow.add(
+        _CalendarDay(
+          day: day,
+          isCurrentMonth: true,
+          isAvailable: isAvailable,
+          isToday: _isToday(date),
+        ),
+      );
 
       if (currentRow.length == 7) {
-        rows.add(Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: currentRow,
-        ));
+        rows.add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: currentRow,
+          ),
+        );
         currentRow = [];
       }
     }
@@ -210,22 +230,32 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
     if (currentRow.isNotEmpty) {
       int nextMonthDay = 1;
       while (currentRow.length < 7) {
-        currentRow.add(_CalendarDay(
-          day: nextMonthDay++,
-          isCurrentMonth: false,
-          isAvailable: false,
-        ));
+        currentRow.add(
+          _CalendarDay(
+            day: nextMonthDay++,
+            isCurrentMonth: false,
+            isAvailable: false,
+          ),
+        );
       }
-      rows.add(Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: currentRow,
-      ));
+      rows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: currentRow,
+        ),
+      );
     }
 
-    return Column(children: rows.map((row) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: row,
-    )).toList());
+    return Column(
+      children: rows
+          .map(
+            (row) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: row,
+            ),
+          )
+          .toList(),
+    );
   }
 
   bool _isToday(DateTime date) {
@@ -237,8 +267,18 @@ class _AvailabilitySectionState extends State<AvailabilitySection> {
 
   String _getMonthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return months[month - 1];
   }
@@ -298,16 +338,15 @@ class _CalendarDay extends StatelessWidget {
     return Container(
       width: 36,
       height: 36,
-      decoration: BoxDecoration(
-        color: bgColor,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
       child: Center(
         child: Text(
           day.toString(),
           style: TextStyle(
             fontSize: 14,
-            fontWeight: isAvailable || isToday ? FontWeight.w600 : FontWeight.w400,
+            fontWeight: isAvailable || isToday
+                ? FontWeight.w600
+                : FontWeight.w400,
             color: textColor,
           ),
         ),

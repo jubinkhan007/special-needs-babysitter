@@ -100,8 +100,9 @@ class CallController extends Notifier<CallState> {
     int attempts = 0;
     const maxAttempts = 45; // ~45 seconds timeout
 
-    _outgoingPollingTimer =
-        Timer.periodic(const Duration(seconds: 1), (timer) async {
+    _outgoingPollingTimer = Timer.periodic(const Duration(seconds: 1), (
+      timer,
+    ) async {
       attempts++;
 
       try {
@@ -124,8 +125,10 @@ class CallController extends Notifier<CallState> {
           case CallStatus.missed:
             timer.cancel();
             await _endCallKitUI(callId);
-            state =
-                CallEnded(callId: callId, reason: CallEndReason.remoteEnded);
+            state = CallEnded(
+              callId: callId,
+              reason: CallEndReason.remoteEnded,
+            );
             _cleanup();
             break;
 
@@ -186,8 +189,10 @@ class CallController extends Notifier<CallState> {
   }) async {
     // FIX #10: If already in a call, auto-decline with "busy"
     if (state is InCall || state is OutgoingRinging) {
-      developer.log('Already in a call, declining incoming call as busy',
-          name: 'Calls');
+      developer.log(
+        'Already in a call, declining incoming call as busy',
+        name: 'Calls',
+      );
       try {
         await _repository.declineCall(callId, reason: 'busy');
         await _endCallKitUI(callId);
@@ -216,11 +221,7 @@ class CallController extends Notifier<CallState> {
       role: UserRole.parent,
     );
 
-    state = IncomingRinging(
-      callId: callId,
-      callType: callType,
-      caller: caller,
-    );
+    state = IncomingRinging(callId: callId, callType: callType, caller: caller);
 
     // FIX #8: Start polling to detect caller cancellation
     _startIncomingPolling(callId);
@@ -244,8 +245,9 @@ class CallController extends Notifier<CallState> {
   void _startIncomingPolling(String callId) {
     _incomingPollingTimer?.cancel();
 
-    _incomingPollingTimer =
-        Timer.periodic(const Duration(seconds: 2), (timer) async {
+    _incomingPollingTimer = Timer.periodic(const Duration(seconds: 2), (
+      timer,
+    ) async {
       // Only poll while still in incoming ringing state for this call
       // Stop polling if we're no longer in IncomingRinging state (user accepted/declined)
       if (state is! IncomingRinging ||
@@ -284,13 +286,17 @@ class CallController extends Notifier<CallState> {
       '[CALL_ACCEPT] acceptCall() called, current state=${currentState.runtimeType}',
       name: 'Calls',
     );
-    debugPrint('[CALL_ACCEPT] acceptCall() called, current state=${currentState.runtimeType}');
+    debugPrint(
+      '[CALL_ACCEPT] acceptCall() called, current state=${currentState.runtimeType}',
+    );
     if (currentState is! IncomingRinging) {
       developer.log(
         '[CALL_ACCEPT] EARLY RETURN: state is ${currentState.runtimeType}, not IncomingRinging',
         name: 'Calls',
       );
-      debugPrint('[CALL_ACCEPT] EARLY RETURN: state is ${currentState.runtimeType}, not IncomingRinging');
+      debugPrint(
+        '[CALL_ACCEPT] EARLY RETURN: state is ${currentState.runtimeType}, not IncomingRinging',
+      );
       return;
     }
 
@@ -304,14 +310,24 @@ class CallController extends Notifier<CallState> {
     state = const CallLoading('Checking permissions...');
 
     // Check permissions BEFORE accepting on backend
-    developer.log('[CALL_ACCEPT] checking permissions for callType=${callType.name}', name: 'Calls');
-    debugPrint('[CALL_ACCEPT] checking permissions for callType=${callType.name}');
+    developer.log(
+      '[CALL_ACCEPT] checking permissions for callType=${callType.name}',
+      name: 'Calls',
+    );
+    debugPrint(
+      '[CALL_ACCEPT] checking permissions for callType=${callType.name}',
+    );
     final permissionsGranted = await _ensureCallPermissions(callType);
-    developer.log('[CALL_ACCEPT] permissions granted=$permissionsGranted', name: 'Calls');
+    developer.log(
+      '[CALL_ACCEPT] permissions granted=$permissionsGranted',
+      name: 'Calls',
+    );
     debugPrint('[CALL_ACCEPT] permissions granted=$permissionsGranted');
     if (!permissionsGranted) {
-      developer.log('Call permissions denied, declining call $callId',
-          name: 'Calls');
+      developer.log(
+        'Call permissions denied, declining call $callId',
+        name: 'Calls',
+      );
       try {
         await _repository.declineCall(callId, reason: 'permissions_denied');
       } catch (_) {}
@@ -324,11 +340,19 @@ class CallController extends Notifier<CallState> {
     state = const CallLoading('Connecting...');
 
     try {
-      developer.log('[CALL_ACCEPT] calling backend acceptCall for callId=$callId', name: 'Calls');
+      developer.log(
+        '[CALL_ACCEPT] calling backend acceptCall for callId=$callId',
+        name: 'Calls',
+      );
       debugPrint('[CALL_ACCEPT] calling backend acceptCall for callId=$callId');
       var session = await _repository.acceptCall(callId);
-      developer.log('[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}', name: 'Calls');
-      debugPrint('[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}');
+      developer.log(
+        '[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}',
+        name: 'Calls',
+      );
+      debugPrint(
+        '[CALL_ACCEPT] backend acceptCall success, channelName=${session.channelName}',
+      );
       if (session.callType != callType) {
         session = session.copyWith(callType: callType);
       }
@@ -337,11 +361,19 @@ class CallController extends Notifier<CallState> {
       await _endCallKitUI(callId);
 
       // Join Agora channel
-      developer.log('[CALL_ACCEPT] joining Agora channel for callId=$callId', name: 'Calls');
+      developer.log(
+        '[CALL_ACCEPT] joining Agora channel for callId=$callId',
+        name: 'Calls',
+      );
       debugPrint('[CALL_ACCEPT] joining Agora channel for callId=$callId');
       await _joinCall(session);
-      developer.log('[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}', name: 'Calls');
-      debugPrint('[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}');
+      developer.log(
+        '[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}',
+        name: 'Calls',
+      );
+      debugPrint(
+        '[CALL_ACCEPT] joinCall completed, state=${state.runtimeType}',
+      );
     } catch (e, st) {
       developer.log('Failed to accept call: $e', name: 'Calls', stackTrace: st);
       debugPrint('[CALL_ACCEPT] FAILED to accept call: $e');
@@ -398,8 +430,10 @@ class CallController extends Notifier<CallState> {
     try {
       final permissionsGranted = await _ensureCallPermissions(session.callType);
       if (!permissionsGranted) {
-        developer.log('Call permissions denied for ${session.callId}',
-            name: 'Calls');
+        developer.log(
+          'Call permissions denied for ${session.callId}',
+          name: 'Calls',
+        );
         try {
           await _repository.endCall(session.callId);
         } catch (_) {}
@@ -629,8 +663,10 @@ class CallController extends Notifier<CallState> {
       // FIX #6: Actually renew the token in Agora engine
       await _callService.renewToken(refresh.rtcToken);
 
-      developer.log('Token refreshed and renewed for call: $callId',
-          name: 'Calls');
+      developer.log(
+        'Token refreshed and renewed for call: $callId',
+        name: 'Calls',
+      );
 
       // Update session and schedule next refresh
       if (state is InCall) {
@@ -669,8 +705,9 @@ class CallController extends Notifier<CallState> {
 
   void _startInCallPolling(String callId) {
     _inCallPollingTimer?.cancel();
-    _inCallPollingTimer =
-        Timer.periodic(const Duration(seconds: 3), (timer) async {
+    _inCallPollingTimer = Timer.periodic(const Duration(seconds: 3), (
+      timer,
+    ) async {
       final currentState = state;
       if (currentState is! InCall || currentState.session.callId != callId) {
         timer.cancel();
@@ -795,14 +832,13 @@ class CallController extends Notifier<CallState> {
     };
 
     try {
-      await ref.read(chatRepositoryProvider).sendMessage(
+      await ref
+          .read(chatRepositoryProvider)
+          .sendMessage(
             recipientUserId: recipientUserId,
             text: jsonEncode(payload),
           );
-      developer.log(
-        'Chat call invite sent to $recipientUserId',
-        name: 'Calls',
-      );
+      developer.log('Chat call invite sent to $recipientUserId', name: 'Calls');
     } catch (e) {
       developer.log('Failed to send chat call invite: $e', name: 'Calls');
     }

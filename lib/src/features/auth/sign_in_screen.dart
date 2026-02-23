@@ -44,7 +44,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   Future<void> _signIn() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await ref.read(authNotifierProvider.notifier).signIn(
+    await ref
+        .read(authNotifierProvider.notifier)
+        .signIn(
           email: _emailController.text.trim(),
           password: _passwordController.text,
         );
@@ -58,11 +60,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       final message = appError.type == AppExceptionType.unauthorized
           ? 'Invalid email or password. Please try again.'
           : appError.message;
-      AppToast.show(context, 
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.error,
-        ),
+      AppToast.show(
+        context,
+        SnackBar(content: Text(message), backgroundColor: AppColors.error),
       );
     }
     // Navigation handled by router redirect
@@ -171,7 +171,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                           ),
                           onPressed: () {
                             setState(
-                                () => _obscurePassword = !_obscurePassword);
+                              () => _obscurePassword = !_obscurePassword,
+                            );
                           },
                         ),
                         validator: (value) {
@@ -230,10 +231,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    final role =
-                                        _normalizeRole(widget.initialRole);
-                                    
-                                    final from = GoRouterState.of(context).uri.queryParameters['from'];
+                                    final role = _normalizeRole(
+                                      widget.initialRole,
+                                    );
+
+                                    final from = GoRouterState.of(
+                                      context,
+                                    ).uri.queryParameters['from'];
                                     final params = {'role': role};
                                     if (from != null) {
                                       params['from'] = from;
@@ -276,10 +280,7 @@ class _SocialLoginSection extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Container(
-                height: 1,
-                color: const Color(0xFFB8D4E3),
-              ),
+              child: Container(height: 1, color: const Color(0xFFB8D4E3)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -292,10 +293,7 @@ class _SocialLoginSection extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Container(
-                height: 1,
-                color: const Color(0xFFB8D4E3),
-              ),
+              child: Container(height: 1, color: const Color(0xFFB8D4E3)),
             ),
           ],
         ),
@@ -330,10 +328,7 @@ class _SocialButton extends StatelessWidget {
   final String iconPath;
   final VoidCallback? onTap;
 
-  const _SocialButton({
-    required this.iconPath,
-    this.onTap,
-  });
+  const _SocialButton({required this.iconPath, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -345,21 +340,15 @@ class _SocialButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.transparent,
           shape: BoxShape.circle,
-          border: Border.all(
-            color: const Color(0xFFB8D4E3),
-            width: 1,
-          ),
+          border: Border.all(color: const Color(0xFFB8D4E3), width: 1),
         ),
         child: Center(
           child: Image.asset(
             iconPath,
             width: 22,
             height: 22,
-            errorBuilder: (_, _, _) => const Icon(
-              Icons.error_outline,
-              size: 18,
-              color: Colors.grey,
-            ),
+            errorBuilder: (_, _, _) =>
+                const Icon(Icons.error_outline, size: 18, color: Colors.grey),
           ),
         ),
       ),

@@ -10,11 +10,7 @@ class Step0Intro extends ConsumerWidget {
   final VoidCallback onNext;
   final bool? isSitter;
 
-  const Step0Intro({
-    super.key,
-    required this.onNext,
-    this.isSitter,
-  });
+  const Step0Intro({super.key, required this.onNext, this.isSitter});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

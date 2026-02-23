@@ -30,18 +30,18 @@ class JobsAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: NavigationToolbar(
             leading: showBackButton
                 ? IconButton(
-                    icon: const Icon(Icons.arrow_back,
-                        color: AppTokens.jobsAppBarIconColor),
-                    onPressed: onBack ??
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: AppTokens.jobsAppBarIconColor,
+                    ),
+                    onPressed:
+                        onBack ??
                         () => context.canPop()
                             ? context.pop()
                             : null, // Safer pop
                   )
                 : null,
-            middle: Text(
-              title,
-              style: AppTokens.jobsAppBarTitleStyle,
-            ),
+            middle: Text(title, style: AppTokens.jobsAppBarTitleStyle),
             trailing: IconButton(
               icon: Icon(
                 showSupportIcon

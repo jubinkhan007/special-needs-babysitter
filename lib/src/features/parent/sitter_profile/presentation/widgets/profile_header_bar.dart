@@ -18,8 +18,11 @@ class ProfileHeaderBar extends StatelessWidget {
       // No color, transparent
       child: NavigationToolbar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back,
-              color: AppUiTokens.textPrimary, size: 24),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: AppUiTokens.textPrimary,
+            size: 24,
+          ),
           onPressed: () => context.pop(),
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(), // minimize padding
@@ -36,16 +39,22 @@ class ProfileHeaderBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.bookmark_border,
-                  color: AppUiTokens.textPrimary, size: 24),
+              icon: const Icon(
+                Icons.bookmark_border,
+                color: AppUiTokens.textPrimary,
+                size: 24,
+              ),
               onPressed: () {},
               constraints: const BoxConstraints(),
               padding: EdgeInsets.zero,
             ),
             const SizedBox(width: 20), // Spacing between icons
             IconButton(
-              icon: const Icon(Icons.share_outlined,
-                  color: AppUiTokens.textPrimary, size: 24),
+              icon: const Icon(
+                Icons.share_outlined,
+                color: AppUiTokens.textPrimary,
+                size: 24,
+              ),
               onPressed: () {},
               constraints: const BoxConstraints(),
               padding: EdgeInsets.zero,

@@ -6,11 +6,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pay/pay.dart';
 
 /// Payment method types available
-enum PaymentMethodType {
-  googlePay,
-  applePay,
-  card,
-}
+enum PaymentMethodType { googlePay, applePay, card }
 
 /// A bottom sheet that lets the user select a payment method
 class PaymentMethodSelector extends StatefulWidget {
@@ -106,34 +102,31 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
                 "gateway": "stripe",
                 "stripe:version": "2020-08-27",
                 "stripe:publishableKey": Stripe.publishableKey,
-              }
+              },
             },
             "parameters": {
               "allowedCardNetworks": ["VISA", "MASTERCARD", "AMEX", "DISCOVER"],
               "allowedAuthMethods": ["PAN_ONLY", "CRYPTOGRAM_3DS"],
-              "billingAddressRequired": false
-            }
-          }
+              "billingAddressRequired": false,
+            },
+          },
         ],
-        "merchantInfo": {
-          "merchantName": "Special Needs Sitters"
-        },
-        "transactionInfo": {
-          "countryCode": "US",
-          "currencyCode": "USD"
-        }
-      }
+        "merchantInfo": {"merchantName": "Special Needs Sitters"},
+        "transactionInfo": {"countryCode": "US", "currencyCode": "USD"},
+      },
     });
   }
 
   Future<void> _handleGooglePay() async {
     if (_isProcessing) return;
-    
+
     // Initialize pay client if not already done
     if (_payClient == null) {
       try {
         _payClient = Pay({
-          PayProvider.google_pay: PaymentConfiguration.fromJsonString(_getGooglePayConfig()),
+          PayProvider.google_pay: PaymentConfiguration.fromJsonString(
+            _getGooglePayConfig(),
+          ),
         });
       } catch (e) {
         debugPrint('DEBUG: Error initializing Google Pay: $e');
@@ -323,13 +316,13 @@ class _PaymentMethodSelectorState extends State<PaymentMethodSelector> {
                     textColor: Colors.white,
                   ),
 
-                if (Platform.isAndroid)
-                  const SizedBox(height: 12),
+                if (Platform.isAndroid) const SizedBox(height: 12),
 
                 // Apple Pay button (iOS only)
                 if (Platform.isIOS && _applePayAvailable)
                   _buildPaymentButton(
-                    onTap: _handleCardPayment, // Apple Pay is handled within Stripe Payment Sheet
+                    onTap:
+                        _handleCardPayment, // Apple Pay is handled within Stripe Payment Sheet
                     icon: Icons.apple,
                     label: 'Apple Pay',
                     backgroundColor: Colors.black,

@@ -40,7 +40,8 @@ extension CallHistoryStateX on CallHistoryState {
       List<CallHistoryItem> items,
       bool hasMore,
       bool isLoadingMore,
-    ) loaded,
+    )
+    loaded,
   }) {
     final self = this;
     if (self is CallHistoryLoading) return loading();
@@ -54,11 +55,8 @@ extension CallHistoryStateX on CallHistoryState {
   R maybeWhen<R>({
     R Function()? loading,
     R Function(String message)? error,
-    R Function(
-      List<CallHistoryItem> items,
-      bool hasMore,
-      bool isLoadingMore,
-    )? loaded,
+    R Function(List<CallHistoryItem> items, bool hasMore, bool isLoadingMore)?
+    loaded,
     required R Function() orElse,
   }) {
     final self = this;
@@ -103,11 +101,7 @@ class CallHistoryController extends Notifier<CallHistoryState> {
     if (currentState.isLoadingMore || !currentState.hasMore) return;
 
     // Set loading more state
-    state = CallHistoryLoaded(
-      currentState.items,
-      currentState.hasMore,
-      true,
-    );
+    state = CallHistoryLoaded(currentState.items, currentState.hasMore, true);
 
     try {
       final page = await _useCase.call(
@@ -139,5 +133,5 @@ class CallHistoryController extends Notifier<CallHistoryState> {
 /// Provider for call history controller
 final callHistoryControllerProvider =
     NotifierProvider<CallHistoryController, CallHistoryState>(() {
-  return CallHistoryController();
-});
+      return CallHistoryController();
+    });

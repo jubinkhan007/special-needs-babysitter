@@ -46,11 +46,11 @@ class JobDetails {
   /// A job is editable only if status is pending (not active/in-progress or closed/completed).
   /// The server will enforce additional validation (e.g., if job has actually started).
   bool get isEditable => status == JobStatus.pending;
-  
+
   /// Returns true if payment is required to activate this job
   /// A job in "draft" status needs payment to be posted
   bool get requiresPayment => isDraft;
-  
+
   /// Returns true if the given userId is the owner of this job
   bool isOwnedBy(String userId) => parentUserId == userId;
 }

@@ -21,8 +21,9 @@ void main() {
     );
   }
 
-  testWidgets('Audio Call Screen - Calling State matches golden',
-      (tester) async {
+  testWidgets('Audio Call Screen - Calling State matches golden', (
+    tester,
+  ) async {
     const args = AudioCallArgs(
       remoteName: 'Krystina',
       remoteAvatarUrl:
@@ -46,8 +47,9 @@ void main() {
     );
   });
 
-  testWidgets('Audio Call Screen - Connected State matches golden',
-      (tester) async {
+  testWidgets('Audio Call Screen - Connected State matches golden', (
+    tester,
+  ) async {
     const args = AudioCallArgs(
       remoteName: 'Krystina',
       remoteAvatarUrl: 'https://example.com/avatar.png',

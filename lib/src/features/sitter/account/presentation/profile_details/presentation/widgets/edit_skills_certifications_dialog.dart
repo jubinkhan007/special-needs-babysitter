@@ -175,7 +175,8 @@ class _EditSkillsCertificationsDialogState
                       AppToast.show(
                         context,
                         const SnackBar(
-                            content: Text('Add other certification coming soon')),
+                          content: Text('Add other certification coming soon'),
+                        ),
                       );
                     },
                   ),
@@ -189,7 +190,8 @@ class _EditSkillsCertificationsDialogState
                       AppToast.show(
                         context,
                         const SnackBar(
-                            content: Text('Add other skill coming soon')),
+                          content: Text('Add other skill coming soon'),
+                        ),
                       );
                     },
                   ),
@@ -217,7 +219,7 @@ class _EditSkillsCertificationsDialogState
                       '< 1 year',
                       '1-3 years',
                       '3-5 years',
-                      '5+ years'
+                      '5+ years',
                     ],
                     onChanged: (val) =>
                         setState(() => _yearsOfExperience = val),

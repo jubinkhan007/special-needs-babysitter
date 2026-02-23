@@ -25,8 +25,8 @@ class ApplicationActions extends StatelessWidget {
           onTap: onAccept,
         ),
         const SizedBox(
-            height: AppTokens.jobDetailsButtonGap), // Reusing 12.0 gap
-
+          height: AppTokens.jobDetailsButtonGap,
+        ), // Reusing 12.0 gap
         // View Application
         _buildButton(
           label: 'View Application',
@@ -44,12 +44,13 @@ class ApplicationActions extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: AppTokens.jobDetailsOutlinedTextColor,
               side: const BorderSide(
-                  color: AppTokens
-                      .jobDetailsPrimaryBtnBg), // Blue border per screenshot
+                color: AppTokens.jobDetailsPrimaryBtnBg,
+              ), // Blue border per screenshot
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(AppTokens.jobDetailsButtonRadius),
+                borderRadius: BorderRadius.circular(
+                  AppTokens.jobDetailsButtonRadius,
+                ),
               ),
               textStyle: AppTokens.jobDetailsOutlinedTextStyle,
             ),
@@ -77,8 +78,9 @@ class ApplicationActions extends StatelessWidget {
           elevation: 0,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(AppTokens.jobDetailsButtonRadius),
+            borderRadius: BorderRadius.circular(
+              AppTokens.jobDetailsButtonRadius,
+            ),
           ),
           textStyle: AppTokens.jobDetailsButtonTextStyle,
         ),

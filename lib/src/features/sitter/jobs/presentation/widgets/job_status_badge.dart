@@ -19,10 +19,7 @@ enum JobApplicationStatus {
 class JobStatusBadge extends StatelessWidget {
   final JobApplicationStatus status;
 
-  const JobStatusBadge({
-    super.key,
-    required this.status,
-  });
+  const JobStatusBadge({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {

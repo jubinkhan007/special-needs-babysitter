@@ -16,9 +16,7 @@ class ApplicationSubmittedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       elevation: 0,
       backgroundColor: Colors.white,
       child: Container(
@@ -71,8 +69,9 @@ class ApplicationSubmittedDialog extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onViewApplications,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color(0xFF8ED1F2), // Light blue from image
+                  backgroundColor: const Color(
+                    0xFF8ED1F2,
+                  ), // Light blue from image
                   foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   padding: EdgeInsets.zero,

@@ -23,10 +23,4 @@ class MessageThread {
   });
 }
 
-enum MessageType {
-  text,
-  callEnded,
-  system,
-  image,
-  callLog,
-}
+enum MessageType { text, callEnded, system, image, callLog }

@@ -27,8 +27,9 @@ class AppActionTile extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppTokens.cardBg,
-        borderRadius: BorderRadius.circular(AppTokens
-            .cardRadius), // Reuse card radius if specific token not needed
+        borderRadius: BorderRadius.circular(
+          AppTokens.cardRadius,
+        ), // Reuse card radius if specific token not needed
         border: Border.all(color: AppTokens.cardBorder),
         // No shadow per requirements
       ),
@@ -38,11 +39,9 @@ class AppActionTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(AppTokens.cardRadius),
           child: Padding(
-            padding: padding ??
-                EdgeInsets.symmetric(
-                  horizontal: 16.w,
-                  vertical: 16.h,
-                ),
+            padding:
+                padding ??
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             child: Row(
               children: [
                 // Icon wrapper to ensure consistent sizing/alignment if needed,
@@ -66,7 +65,8 @@ class AppActionTile extends StatelessWidget {
                         SizedBox(height: 4.h),
                         Text(
                           subtitle!,
-                          style: subtitleStyle ??
+                          style:
+                              subtitleStyle ??
                               TextStyle(
                                 fontSize: 14.sp,
                                 color: AppTokens.textSecondary,

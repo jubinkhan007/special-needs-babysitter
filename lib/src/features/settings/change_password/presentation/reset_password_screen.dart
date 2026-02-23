@@ -41,8 +41,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Need Help?'),
-        content:
-            const Text('Contact support at support@specialneedssitters.com'),
+        content: const Text(
+          'Contact support at support@specialneedssitters.com',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -56,7 +57,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Future<void> _onSavePassword() async {
     final success = await _controller.savePassword();
     if (success && mounted) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(content: Text('Password updated successfully!')),
       );
       Navigator.of(context).popUntil((route) => route.isFirst);
@@ -72,10 +74,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -97,10 +96,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 height: 28.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppTokens.iconGrey,
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: AppTokens.iconGrey, width: 1.5),
                 ),
                 child: Center(
                   child: Icon(
@@ -115,9 +111,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ],
       ),
       body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: const TextScaler.linear(1.0),
-        ),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1.0)),
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(

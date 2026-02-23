@@ -11,11 +11,7 @@ class MessageThreadTile extends StatelessWidget {
   final MessageThreadUiModel uiModel;
   final VoidCallback? onTap;
 
-  const MessageThreadTile({
-    super.key,
-    required this.uiModel,
-    this.onTap,
-  });
+  const MessageThreadTile({super.key, required this.uiModel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +44,9 @@ class MessageThreadTile extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              uiModel.isSystemThread ? 'Support' : uiModel.title,
+                              uiModel.isSystemThread
+                                  ? 'Support'
+                                  : uiModel.title,
                               style: AppTokens.messageNameStyle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -57,9 +55,14 @@ class MessageThreadTile extends StatelessWidget {
                           if (uiModel.isSystemThread) ...[
                             const SizedBox(width: 6),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
-                                color: AppTokens.primaryBlue.withValues(alpha: 0.1),
+                                color: AppTokens.primaryBlue.withValues(
+                                  alpha: 0.1,
+                                ),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
@@ -111,10 +114,7 @@ class MessageThreadTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        uiModel.timeText,
-                        style: AppTokens.messageTimeStyle,
-                      ),
+                      Text(uiModel.timeText, style: AppTokens.messageTimeStyle),
                       if (uiModel.unreadCount > 0) ...[
                         const SizedBox(height: 8),
                         UnreadBadge(count: uiModel.unreadCount),
@@ -129,7 +129,8 @@ class MessageThreadTile extends StatelessWidget {
           // Divider
           Padding(
             padding: EdgeInsets.only(
-              left: AppTokens.messageRowHorizontalPadding +
+              left:
+                  AppTokens.messageRowHorizontalPadding +
                   AppTokens.messageAvatarSize +
                   12,
             ),

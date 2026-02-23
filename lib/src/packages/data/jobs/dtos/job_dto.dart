@@ -49,24 +49,24 @@ abstract class JobAddressDto with _$JobAddressDto {
   const JobAddressDto._();
 
   factory JobAddressDto.fromDomain(JobAddress address) => JobAddressDto(
-        streetAddress: address.streetAddress,
-        aptUnit: address.aptUnit,
-        city: address.city,
-        state: address.state,
-        zipCode: address.zipCode,
-        latitude: address.latitude,
-        longitude: address.longitude,
-      );
+    streetAddress: address.streetAddress,
+    aptUnit: address.aptUnit,
+    city: address.city,
+    state: address.state,
+    zipCode: address.zipCode,
+    latitude: address.latitude,
+    longitude: address.longitude,
+  );
 
   JobAddress toDomain() => JobAddress(
-        streetAddress: streetAddress,
-        aptUnit: aptUnit,
-        city: city,
-        state: state,
-        zipCode: zipCode,
-        latitude: latitude,
-        longitude: longitude,
-      );
+    streetAddress: streetAddress,
+    aptUnit: aptUnit,
+    city: city,
+    state: state,
+    zipCode: zipCode,
+    latitude: latitude,
+    longitude: longitude,
+  );
 }
 
 @freezed
@@ -82,14 +82,12 @@ abstract class JobLocationDto with _$JobLocationDto {
   const JobLocationDto._();
 
   factory JobLocationDto.fromDomain(JobLocation location) => JobLocationDto(
-        latitude: location.latitude,
-        longitude: location.longitude,
-      );
+    latitude: location.latitude,
+    longitude: location.longitude,
+  );
 
-  JobLocation toDomain() => JobLocation(
-        latitude: latitude,
-        longitude: longitude,
-      );
+  JobLocation toDomain() =>
+      JobLocation(latitude: latitude, longitude: longitude);
 }
 
 class GeoJsonConverter implements JsonConverter<JobLocationDto?, dynamic> {
@@ -165,31 +163,31 @@ abstract class JobDto with _$JobDto {
   const JobDto._();
 
   factory JobDto.fromDomain(Job job) => JobDto(
-        id: job.id,
-        parentUserId: job.parentUserId,
-        childIds: job.childIds,
-        children: [], // Typically not mapped back to DTO for saving jobs
-        title: job.title,
-        startDate: job.startDate,
-        endDate: job.endDate,
-        startTime: job.startTime,
-        endTime: job.endTime,
-        timezone: job.timezone,
-        address: JobAddressDto.fromDomain(job.address),
-        location: job.location != null
-            ? JobLocationDto.fromDomain(job.location!)
-            : null,
-        additionalDetails: job.additionalDetails,
-        payRate: job.payRate,
-        saveAsDraft: job.saveAsDraft,
-        status: job.status,
-        estimatedDuration: job.estimatedDuration,
-        estimatedTotal: job.estimatedTotal,
-        applicantIds: job.applicantIds,
-        acceptedSitterId: job.acceptedSitterId,
-        createdAt: job.createdAt,
-        postedAt: job.postedAt,
-      );
+    id: job.id,
+    parentUserId: job.parentUserId,
+    childIds: job.childIds,
+    children: [], // Typically not mapped back to DTO for saving jobs
+    title: job.title,
+    startDate: job.startDate,
+    endDate: job.endDate,
+    startTime: job.startTime,
+    endTime: job.endTime,
+    timezone: job.timezone,
+    address: JobAddressDto.fromDomain(job.address),
+    location: job.location != null
+        ? JobLocationDto.fromDomain(job.location!)
+        : null,
+    additionalDetails: job.additionalDetails,
+    payRate: job.payRate,
+    saveAsDraft: job.saveAsDraft,
+    status: job.status,
+    estimatedDuration: job.estimatedDuration,
+    estimatedTotal: job.estimatedTotal,
+    applicantIds: job.applicantIds,
+    acceptedSitterId: job.acceptedSitterId,
+    createdAt: job.createdAt,
+    postedAt: job.postedAt,
+  );
 
   Job toDomain() {
     debugPrint('DEBUG: JobDto.toDomain() for job: $id');
@@ -205,34 +203,30 @@ abstract class JobDto with _$JobDto {
     }
 
     return Job(
-        id: id,
-        parentUserId: parentUserId,
-        childIds: childIds,
-        children: children.map((e) => e.toDomain()).toList(),
-        title: title ?? '',
-        startDate: startDate ?? '',
-        endDate: endDate ?? '',
-        startTime: startTime ?? '',
-        endTime: endTime ?? '',
-        timezone: timezone,
-        address: address?.toDomain() ??
-            const JobAddress(
-              streetAddress: '',
-              city: '',
-              state: '',
-              zipCode: '',
-            ),
-        location: location?.toDomain(),
-        additionalDetails: additionalDetails ?? '',
-        payRate: payRate ?? 0.0,
-        saveAsDraft: saveAsDraft,
-        status: status,
-        estimatedDuration: estimatedDuration,
-        estimatedTotal: estimatedTotal,
-        applicantIds: applicantIds,
-        acceptedSitterId: acceptedSitterId,
-        createdAt: createdAt,
-        postedAt: postedAt,
-      );
+      id: id,
+      parentUserId: parentUserId,
+      childIds: childIds,
+      children: children.map((e) => e.toDomain()).toList(),
+      title: title ?? '',
+      startDate: startDate ?? '',
+      endDate: endDate ?? '',
+      startTime: startTime ?? '',
+      endTime: endTime ?? '',
+      timezone: timezone,
+      address:
+          address?.toDomain() ??
+          const JobAddress(streetAddress: '', city: '', state: '', zipCode: ''),
+      location: location?.toDomain(),
+      additionalDetails: additionalDetails ?? '',
+      payRate: payRate ?? 0.0,
+      saveAsDraft: saveAsDraft,
+      status: status,
+      estimatedDuration: estimatedDuration,
+      estimatedTotal: estimatedTotal,
+      applicantIds: applicantIds,
+      acceptedSitterId: acceptedSitterId,
+      createdAt: createdAt,
+      postedAt: postedAt,
+    );
   }
 }

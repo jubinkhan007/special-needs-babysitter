@@ -9,8 +9,11 @@ class AvailabilitySection extends StatelessWidget {
   final List<dynamic>? availability;
   final Map<String, bool>? jobTypesAccepted;
 
-  const AvailabilitySection(
-      {super.key, this.availability, this.jobTypesAccepted});
+  const AvailabilitySection({
+    super.key,
+    this.availability,
+    this.jobTypesAccepted,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +46,19 @@ class AvailabilitySection extends StatelessWidget {
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.calendar_today_rounded,
-                      color: AppUiTokens.textSecondary, size: 20),
+                  Icon(
+                    Icons.calendar_today_rounded,
+                    color: AppUiTokens.textSecondary,
+                    size: 20,
+                  ),
                   SizedBox(width: 12),
                   Text(
                     "No specific availability listed",
                     style: TextStyle(
-                        fontSize: 15,
-                        color: AppUiTokens.textSecondary,
-                        fontWeight: FontWeight.w500),
+                      fontSize: 15,
+                      color: AppUiTokens.textSecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ],
               ),
@@ -82,8 +89,11 @@ class AvailabilitySection extends StatelessWidget {
                         color: AppColors.surfaceTint,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(Icons.access_time_rounded,
-                          size: 18, color: AppUiTokens.verifiedBlue),
+                      child: const Icon(
+                        Icons.access_time_rounded,
+                        size: 18,
+                        color: AppUiTokens.verifiedBlue,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Text(
@@ -158,9 +168,13 @@ class AvailabilitySection extends StatelessWidget {
         children: [
           const Icon(Icons.check, size: 18, color: AppUiTokens.textPrimary),
           const SizedBox(width: 12),
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 15, color: AppUiTokens.textSecondary)),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 15,
+              color: AppUiTokens.textSecondary,
+            ),
+          ),
         ],
       ),
     );

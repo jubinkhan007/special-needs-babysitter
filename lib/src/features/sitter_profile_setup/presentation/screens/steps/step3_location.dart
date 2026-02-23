@@ -15,11 +15,7 @@ class Step3Location extends ConsumerStatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
 
-  const Step3Location({
-    super.key,
-    required this.onNext,
-    required this.onBack,
-  });
+  const Step3Location({super.key, required this.onNext, required this.onBack});
 
   @override
   ConsumerState<Step3Location> createState() => _Step3LocationState();
@@ -48,10 +44,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
     return Stack(
       children: [
         GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: center,
-            zoom: 11.0,
-          ),
+          initialCameraPosition: CameraPosition(target: center, zoom: 11.0),
           onMapCreated: (controller) {
             _mapController = controller;
           },
@@ -95,10 +88,7 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
             ),
             child: const Text(
               'Map data \u00a9 Google',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 8,
-              ),
+              style: TextStyle(color: Colors.white70, fontSize: 8),
             ),
           ),
         ),
@@ -130,8 +120,10 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
       final position = await Geolocator.getCurrentPosition();
 
       // Reverse geocoding
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
 
       if (placemarks.isNotEmpty && mounted) {
         final place = placemarks.first;
@@ -140,23 +132,24 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
         final state = place.administrativeArea ?? '';
         final address = '$city, $state';
 
-        ref.read(sitterProfileSetupControllerProvider.notifier).updateLocation(
-            address: address, lat: position.latitude, lng: position.longitude);
+        ref
+            .read(sitterProfileSetupControllerProvider.notifier)
+            .updateLocation(
+              address: address,
+              lat: position.latitude,
+              lng: position.longitude,
+            );
 
         // Animate map to new location
         _mapController?.animateCamera(
-          CameraUpdate.newLatLng(
-            LatLng(position.latitude, position.longitude),
-          ),
+          CameraUpdate.newLatLng(LatLng(position.latitude, position.longitude)),
         );
       }
     } catch (e) {
       if (!mounted) return;
-      AppToast.show(context, 
-        SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: Colors.red,
-        ),
+      AppToast.show(
+        context,
+        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );
     } finally {
       if (mounted) setState(() => _isLocating = false);
@@ -179,11 +172,15 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 3, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 3,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -195,8 +192,11 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                       color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.location_on_outlined,
-                        size: 32, color: _primaryBlue),
+                    child: const Icon(
+                      Icons.location_on_outlined,
+                      size: 32,
+                      color: _primaryBlue,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -227,21 +227,24 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.transparent),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 4,
-                              offset: const Offset(0, 1))
-                        ]),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.transparent),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
                     child: TextField(
                       onChanged: (val) =>
                           controller.updateLocation(address: val),
                       controller: TextEditingController(text: state.address)
                         ..selection = TextSelection.fromPosition(
-                            TextPosition(offset: state.address?.length ?? 0)),
+                          TextPosition(offset: state.address?.length ?? 0),
+                        ),
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 16,
@@ -252,16 +255,21 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                         fillColor: Colors.transparent,
                         hintText: 'Enter your address or city',
                         hintStyle: TextStyle(
-                            color: Color(0xFF98A2B3),
-                            fontSize: 16,
-                            fontFamily: 'Inter'),
-                        prefixIcon:
-                            Icon(Icons.search, color: Color(0xFF98A2B3)),
+                          color: Color(0xFF98A2B3),
+                          fontSize: 16,
+                          fontFamily: 'Inter',
+                        ),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Color(0xFF98A2B3),
+                        ),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -275,19 +283,25 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(
-                                strokeWidth: 2, color: _primaryBlue))
+                              strokeWidth: 2,
+                              color: _primaryBlue,
+                            ),
+                          )
                         : const Icon(Icons.my_location, color: _primaryBlue),
                     label: Text(
-                        _isLocating ? 'Locating...' : 'Use my Current Location',
-                        style: const TextStyle(
-                            color: _primaryBlue,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Inter',
-                            fontSize: 16)),
+                      _isLocating ? 'Locating...' : 'Use my Current Location',
+                      style: const TextStyle(
+                        color: _primaryBlue,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                        fontSize: 16,
+                      ),
+                    ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: _primaryBlue),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       minimumSize: const Size(double.infinity, 56),
                       backgroundColor: Colors.transparent,
@@ -321,8 +335,10 @@ class _Step3LocationState extends ConsumerState<Step3Location> {
             label: 'Save Location & Continue',
             onPressed: () {
               if (state.address == null || state.address!.isEmpty) {
-                AppToast.show(context, 
-                    const SnackBar(content: Text('Please set a location')));
+                AppToast.show(
+                  context,
+                  const SnackBar(content: Text('Please set a location')),
+                );
                 return;
               }
               widget.onNext();

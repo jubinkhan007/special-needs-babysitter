@@ -36,8 +36,9 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
   );
 
   void _showRatePicker() {
-    final currentRate =
-        ref.read(sitterProfileSetupControllerProvider).hourlyRate;
+    final currentRate = ref
+        .read(sitterProfileSetupControllerProvider)
+        .hourlyRate;
     final initialIndex = _rates.indexOf(currentRate);
     final safeIndex = initialIndex != -1 ? initialIndex : _rates.indexOf(15.0);
 
@@ -54,8 +55,10 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
             children: [
               // Picker Toolbar
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: const BoxDecoration(
                   border: Border(bottom: BorderSide(color: Color(0xFFEAECF0))),
                 ),
@@ -64,8 +67,10 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel',
-                          style: TextStyle(color: _greyText)),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: _greyText),
+                      ),
                     ),
                     const Text(
                       'Select Hourly Rate',
@@ -77,10 +82,13 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Done',
-                          style: TextStyle(
-                              color: _primaryBlue,
-                              fontWeight: FontWeight.w600)),
+                      child: const Text(
+                        'Done',
+                        style: TextStyle(
+                          color: _primaryBlue,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -90,20 +98,25 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                 child: CupertinoPicker(
                   itemExtent: 40,
                   scrollController: FixedExtentScrollController(
-                      initialItem: safeIndex != -1 ? safeIndex : 0),
+                    initialItem: safeIndex != -1 ? safeIndex : 0,
+                  ),
                   onSelectedItemChanged: (index) {
                     ref
                         .read(sitterProfileSetupControllerProvider.notifier)
                         .updateHourlyRate(_rates[index]);
                   },
                   children: _rates
-                      .map((rate) => Center(
-                            child: Text(
-                              '\$${rate.toStringAsFixed(2)}/hr',
-                              style: const TextStyle(
-                                  fontSize: 18, color: _textDark),
+                      .map(
+                        (rate) => Center(
+                          child: Text(
+                            '\$${rate.toStringAsFixed(2)}/hr',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: _textDark,
                             ),
-                          ))
+                          ),
+                        ),
+                      )
                       .toList(),
                 ),
               ),
@@ -128,11 +141,15 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 8, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 8,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -144,8 +161,11 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                       color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.attach_money,
-                        size: 32, color: _primaryBlue),
+                    child: const Icon(
+                      Icons.attach_money,
+                      size: 32,
+                      color: _primaryBlue,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -176,7 +196,9 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                     onTap: _showRatePicker,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       decoration: BoxDecoration(
                         color: _inputBg,
                         borderRadius: BorderRadius.circular(8),
@@ -197,10 +219,16 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                           const Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.expand_less,
-                                  size: 16, color: Color(0xFF667085)),
-                              Icon(Icons.expand_more,
-                                  size: 16, color: Color(0xFF667085)),
+                              Icon(
+                                Icons.expand_less,
+                                size: 16,
+                                color: Color(0xFF667085),
+                              ),
+                              Icon(
+                                Icons.expand_more,
+                                size: 16,
+                                color: Color(0xFF667085),
+                              ),
                             ],
                           ),
                         ],
@@ -219,15 +247,18 @@ class _Step8HourlyRateState extends ConsumerState<Step8HourlyRate> {
                           value: state.isRateNegotiable,
                           onChanged: (val) {
                             ref
-                                .read(sitterProfileSetupControllerProvider
-                                    .notifier)
+                                .read(
+                                  sitterProfileSetupControllerProvider.notifier,
+                                )
                                 .toggleRateNegotiable(val ?? false);
                           },
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  4)), // Square with radius
+                            borderRadius: BorderRadius.circular(4),
+                          ), // Square with radius
                           side: const BorderSide(
-                              color: Color(0xFF667085), width: 1.5),
+                            color: Color(0xFF667085),
+                            width: 1.5,
+                          ),
                           activeColor: _primaryBlue,
                         ),
                       ),

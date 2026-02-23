@@ -55,8 +55,9 @@ class WalletController extends Notifier<WalletState> {
   Future<WalletWithdrawResult> withdraw(int amountCents) async {
     state = state.copyWith(isWithdrawing: true, clearError: true);
     try {
-      final result =
-          await ref.read(withdrawWalletUseCaseProvider).call(amountCents);
+      final result = await ref
+          .read(withdrawWalletUseCaseProvider)
+          .call(amountCents);
       state = state.copyWith(isWithdrawing: false);
       await loadBalance();
       return result;

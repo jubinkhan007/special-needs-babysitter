@@ -6,8 +6,9 @@ import 'package:babysitter_app/src/features/sitters/domain/sitters_repository.da
 
 // Reuse the authenticated dio client from bookings if possible,
 // or define a shared one. bookingsDioProvider is available.
-final sittersRemoteDataSourceProvider =
-    Provider<SittersRemoteDataSource>((ref) {
+final sittersRemoteDataSourceProvider = Provider<SittersRemoteDataSource>((
+  ref,
+) {
   final dio = ref.watch(bookingsDioProvider);
   return SittersRemoteDataSource(dio);
 });

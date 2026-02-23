@@ -20,12 +20,10 @@ class SurfaceCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppTokens.accountCardBg,
-        borderRadius:
-            BorderRadius.circular((radius ?? AppTokens.accountCardRadius).r),
-        border: Border.all(
-          color: AppTokens.accountCardBorder,
-          width: 1,
+        borderRadius: BorderRadius.circular(
+          (radius ?? AppTokens.accountCardRadius).r,
         ),
+        border: Border.all(color: AppTokens.accountCardBorder, width: 1),
         boxShadow: AppTokens.accountCardShadow,
       ),
       child: Padding(

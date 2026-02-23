@@ -1,10 +1,5 @@
 /// Enum for background check status
-enum BackgroundCheckStatusType {
-  notStarted,
-  pending,
-  approved,
-  rejected,
-}
+enum BackgroundCheckStatusType { notStarted, pending, approved, rejected }
 
 class BackgroundCheckStatus {
   final BackgroundCheckStatusType status;

@@ -15,7 +15,9 @@ class PaypalPendingState {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_keyJobId, jobId);
     await prefs.setString(_keyOrderId, orderId);
-    debugPrint('DEBUG: PayPal pending state saved: jobId=$jobId, orderId=$orderId');
+    debugPrint(
+      'DEBUG: PayPal pending state saved: jobId=$jobId, orderId=$orderId',
+    );
   }
 
   /// Get pending PayPal payment state
@@ -24,7 +26,9 @@ class PaypalPendingState {
     final prefs = await SharedPreferences.getInstance();
     final jobId = prefs.getString(_keyJobId);
     final orderId = prefs.getString(_keyOrderId);
-    debugPrint('DEBUG: PayPal pending state loaded: jobId=$jobId, orderId=$orderId');
+    debugPrint(
+      'DEBUG: PayPal pending state loaded: jobId=$jobId, orderId=$orderId',
+    );
     return (jobId: jobId, orderId: orderId);
   }
 

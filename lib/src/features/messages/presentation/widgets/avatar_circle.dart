@@ -7,11 +7,7 @@ class AvatarCircle extends StatelessWidget {
   final String? imageUrl;
   final bool isSystem;
 
-  const AvatarCircle({
-    super.key,
-    this.imageUrl,
-    this.isSystem = false,
-  });
+  const AvatarCircle({super.key, this.imageUrl, this.isSystem = false});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +19,9 @@ class AvatarCircle extends StatelessWidget {
         color: isSystem ? AppTokens.systemAvatarBg : Colors.grey.shade200,
         border: isSystem
             ? Border.all(
-                color: AppTokens.primaryBlue.withValues(alpha: 0.3), width: 1)
+                color: AppTokens.primaryBlue.withValues(alpha: 0.3),
+                width: 1,
+              )
             : null,
       ),
       clipBehavior: Clip.antiAlias,
@@ -36,23 +34,19 @@ class AvatarCircle extends StatelessWidget {
               ),
             )
           : (imageUrl != null && imageUrl!.isNotEmpty)
-              ? Image.network(
-                  imageUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => _placeholder(),
-                )
-              : _placeholder(),
+          ? Image.network(
+              imageUrl!,
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) => _placeholder(),
+            )
+          : _placeholder(),
     );
   }
 
   Widget _placeholder() {
     return Container(
       color: Colors.grey.shade300,
-      child: Icon(
-        Icons.person,
-        size: 28,
-        color: Colors.grey.shade500,
-      ),
+      child: Icon(Icons.person, size: 28, color: Colors.grey.shade500),
     );
   }
 }

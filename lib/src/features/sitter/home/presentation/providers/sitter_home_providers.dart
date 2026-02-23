@@ -14,43 +14,48 @@ import 'package:flutter/foundation.dart';
 
 /// User authentificated Dio for Sitter Home
 final sitterHomeDioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(
-    baseUrl: AppConstants.baseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: AppConstants.baseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
 
   // Add Auth Interceptor
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-      final authState = ref.read(authNotifierProvider);
-      var session = authState.value;
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final authState = ref.read(authNotifierProvider);
+        var session = authState.value;
 
-      if (session == null) {
-        final storedToken =
-            await ref.read(sessionStoreProvider).getAccessToken();
-        if (storedToken != null && storedToken.isNotEmpty) {
-          options.headers['Cookie'] = 'session_id=$storedToken';
+        if (session == null) {
+          final storedToken = await ref
+              .read(sessionStoreProvider)
+              .getAccessToken();
+          if (storedToken != null && storedToken.isNotEmpty) {
+            options.headers['Cookie'] = 'session_id=$storedToken';
+          }
+        } else {
+          options.headers['Cookie'] = 'session_id=${session.accessToken}';
         }
-      } else {
-        options.headers['Cookie'] = 'session_id=${session.accessToken}';
-      }
-      return handler.next(options);
-    },
-    onError: (DioException e, handler) {
-      debugPrint('DEBUG: Sitter Home API Error: ${e.message}');
-      debugPrint('DEBUG: Endpoint: ${e.requestOptions.uri}');
-      if (e.response != null) {
-        debugPrint('DEBUG: Status Code: ${e.response?.statusCode}');
-        debugPrint('DEBUG: Response Data: ${e.response?.data}');
-      }
-      return handler.next(e);
-    },
-  ));
+        return handler.next(options);
+      },
+      onError: (DioException e, handler) {
+        debugPrint('DEBUG: Sitter Home API Error: ${e.message}');
+        debugPrint('DEBUG: Endpoint: ${e.requestOptions.uri}');
+        if (e.response != null) {
+          debugPrint('DEBUG: Status Code: ${e.response?.statusCode}');
+          debugPrint('DEBUG: Response Data: ${e.response?.data}');
+        }
+        return handler.next(e);
+      },
+    ),
+  );
 
   return dio;
 });
@@ -102,8 +107,8 @@ final deviceLocationProvider = FutureProvider<Position?>((ref) async {
 /// Provider for job search filters state
 final jobSearchFiltersProvider =
     StateNotifierProvider<JobSearchFiltersNotifier, JobSearchFilters>((ref) {
-  return JobSearchFiltersNotifier(ref);
-});
+      return JobSearchFiltersNotifier(ref);
+    });
 
 /// Notifier for managing job search filters
 class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
@@ -116,7 +121,7 @@ class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
     final position = await _ref.read(deviceLocationProvider.future);
     if (position != null) {
       // Only update if location actually changed
-      if (state.latitude != position.latitude || 
+      if (state.latitude != position.latitude ||
           state.longitude != position.longitude) {
         state = state.copyWith(
           latitude: position.latitude,
@@ -130,10 +135,7 @@ class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
 
   /// Update location without triggering a job refresh
   void setLocation({required double latitude, required double longitude}) {
-    state = state.copyWith(
-      latitude: latitude,
-      longitude: longitude,
-    );
+    state = state.copyWith(latitude: latitude, longitude: longitude);
   }
 
   /// Update search query
@@ -263,10 +265,12 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
 
     try {
       final dio = _ref.read(sitterHomeDioProvider);
-      final JobSearchFilters filters = filtersOverride ?? _ref.read(jobSearchFiltersProvider);
+      final JobSearchFilters filters =
+          filtersOverride ?? _ref.read(jobSearchFiltersProvider);
 
       debugPrint(
-          'DEBUG: Fetching jobs with filters: ${filters.toQueryParameters()} (request #$currentRequestId)');
+        'DEBUG: Fetching jobs with filters: ${filters.toQueryParameters()} (request #$currentRequestId)',
+      );
 
       final response = await dio.get(
         '/jobs',
@@ -275,7 +279,9 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
 
       // Ignore response if a newer request was made
       if (currentRequestId != _requestId) {
-        debugPrint('DEBUG: Ignoring stale response for request #$currentRequestId (current is #$_requestId)');
+        debugPrint(
+          'DEBUG: Ignoring stale response for request #$currentRequestId (current is #$_requestId)',
+        );
         return;
       }
 
@@ -283,13 +289,16 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
         final List<dynamic> jobsJson = response.data['data']['jobs'];
         final total = response.data['data']['total'] as int? ?? jobsJson.length;
 
-        debugPrint('DEBUG: API returned ${jobsJson.length} jobs, total: $total');
+        debugPrint(
+          'DEBUG: API returned ${jobsJson.length} jobs, total: $total',
+        );
 
         final previews = <JobPreview>[];
         for (final json in jobsJson) {
           try {
-            final dto =
-                SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
+            final dto = SitterJobPreviewDto.fromJson(
+              json as Map<String, dynamic>,
+            );
             previews.add(dto.toDomain());
           } catch (e, stack) {
             debugPrint('Warning: Failed to parse job preview: $e');
@@ -308,20 +317,14 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
 
         debugPrint('DEBUG: Updated state with ${state.jobs.length} jobs');
       } else {
-        state = state.copyWith(
-          isLoading: false,
-          error: 'Failed to fetch jobs',
-        );
+        state = state.copyWith(isLoading: false, error: 'Failed to fetch jobs');
       }
     } catch (e) {
       // Ignore errors from stale requests
       if (currentRequestId != _requestId) return;
 
       debugPrint('DEBUG: Error fetching jobs: $e');
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -336,11 +339,11 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
       final filters = _ref.read(jobSearchFiltersProvider);
 
       // Create new filters with incremented offset
-      final paginatedFilters = filters.copyWith(
-        offset: state.jobs.length,
-      );
+      final paginatedFilters = filters.copyWith(offset: state.jobs.length);
 
-      debugPrint('DEBUG: Loading more jobs with offset: ${paginatedFilters.offset}');
+      debugPrint(
+        'DEBUG: Loading more jobs with offset: ${paginatedFilters.offset}',
+      );
 
       final response = await dio.get(
         '/jobs',
@@ -354,8 +357,9 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
         final newPreviews = <JobPreview>[];
         for (final json in jobsJson) {
           try {
-            final dto =
-                SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
+            final dto = SitterJobPreviewDto.fromJson(
+              json as Map<String, dynamic>,
+            );
             newPreviews.add(dto.toDomain());
           } catch (e) {
             debugPrint('Warning: Failed to parse job preview: $e');
@@ -394,9 +398,13 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
   Future<void> resetAndFetch() async {
     // Get current filters and create reset version
     final currentFilters = _ref.read(jobSearchFiltersProvider);
-    debugPrint('DEBUG resetAndFetch: currentFilters=${currentFilters.toQueryParameters()}');
+    debugPrint(
+      'DEBUG resetAndFetch: currentFilters=${currentFilters.toQueryParameters()}',
+    );
     final resetFilters = currentFilters.reset();
-    debugPrint('DEBUG resetAndFetch: resetFilters=${resetFilters.toQueryParameters()}');
+    debugPrint(
+      'DEBUG resetAndFetch: resetFilters=${resetFilters.toQueryParameters()}',
+    );
 
     // Update the provider state
     _ref.read(jobSearchFiltersProvider.notifier).state = resetFilters;
@@ -409,8 +417,8 @@ class JobSearchNotifier extends StateNotifier<JobSearchState> {
 /// Provider for job search with filters and pagination
 final jobSearchNotifierProvider =
     StateNotifierProvider<JobSearchNotifier, JobSearchState>((ref) {
-  return JobSearchNotifier(ref);
-});
+      return JobSearchNotifier(ref);
+    });
 
 /// Notifier for job previews - fetches from API and parses with correct DTO
 /// (Keep for backwards compatibility with home screen)
@@ -430,8 +438,9 @@ class JobPreviewsNotifier extends AsyncNotifier<List<JobPreview>> {
       final previews = <JobPreview>[];
       for (final json in jobsJson) {
         try {
-          final dto =
-              SitterJobPreviewDto.fromJson(json as Map<String, dynamic>);
+          final dto = SitterJobPreviewDto.fromJson(
+            json as Map<String, dynamic>,
+          );
           previews.add(dto.toDomain());
         } catch (e) {
           // Skip jobs that fail to parse
@@ -454,7 +463,8 @@ class JobPreviewsNotifier extends AsyncNotifier<List<JobPreview>> {
 /// Provider for job previews - use this in the UI
 final jobPreviewsNotifierProvider =
     AsyncNotifierProvider<JobPreviewsNotifier, List<JobPreview>>(
-        JobPreviewsNotifier.new);
+      JobPreviewsNotifier.new,
+    );
 
 // Keep the old provider for backwards compatibility with other screens
 class JobsNotifier extends AsyncNotifier<List<Job>> {
@@ -473,5 +483,6 @@ class JobsNotifier extends AsyncNotifier<List<Job>> {
   }
 }
 
-final jobsNotifierProvider =
-    AsyncNotifierProvider<JobsNotifier, List<Job>>(JobsNotifier.new);
+final jobsNotifierProvider = AsyncNotifierProvider<JobsNotifier, List<Job>>(
+  JobsNotifier.new,
+);

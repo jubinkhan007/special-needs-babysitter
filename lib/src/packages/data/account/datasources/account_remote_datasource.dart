@@ -13,10 +13,7 @@ class AccountRemoteDataSource {
     final dio = _dio;
     // START MOCK - Simulate API delay
     await Future.delayed(const Duration(milliseconds: 500));
-    return {
-      'bookingHistoryCount': 4,
-      'savedSittersCount': 4,
-    };
+    return {'bookingHistoryCount': 4, 'savedSittersCount': 4};
     // END MOCK
   }
 }

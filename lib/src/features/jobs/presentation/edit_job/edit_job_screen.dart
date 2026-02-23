@@ -90,8 +90,10 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
 
         _selectedDateStart = details.scheduleStartDate;
         _selectedDateEnd = details.scheduleEndDate;
-        _dateController.text =
-            _formatDateRange(_selectedDateStart, _selectedDateEnd);
+        _dateController.text = _formatDateRange(
+          _selectedDateStart,
+          _selectedDateEnd,
+        );
 
         _selectedTimeStart = details.scheduleStartTime;
         _selectedTimeEnd = details.scheduleEndTime;
@@ -105,15 +107,16 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
         _zipController.text = details.address.zipCode;
         _emergencyNameController.text =
             details.emergencyContactName == 'Not Provided'
-                ? ''
-                : details.emergencyContactName;
+            ? ''
+            : details.emergencyContactName;
         _emergencyPhoneController.text = details.emergencyContactPhone;
         _emergencyRelationController.text = details.emergencyContactRelation;
       });
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Failed to load job details: $e')),
         );
       }
@@ -284,7 +287,8 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
 
       if (mounted) {
         context.pop(true);
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           const SnackBar(content: Text('Job updated successfully')),
         );
       }
@@ -297,13 +301,12 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
         // Extract user-friendly error message
         String errorMessage = 'Error updating job';
         if (e.toString().contains('in progress or completed')) {
-          errorMessage = 'This job can\'t be updated because it is in progress or completed.';
+          errorMessage =
+              'This job can\'t be updated because it is in progress or completed.';
         } else if (e.toString().contains('400')) {
           errorMessage = 'Unable to update job. Please try again.';
         }
-        AppToast.show(context,
-          SnackBar(content: Text(errorMessage)),
-        );
+        AppToast.show(context, SnackBar(content: Text(errorMessage)));
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -348,8 +351,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
         // Pop twice to go back to AllJobsScreen (Edit -> Details -> List)
         // OR better: use GoRouter to go to list directly.
         // Assuming we want to go back to "My Jobs" list.
-        context.go(Routes
-            .parentJobs); // Use go to clear stack if needed, or pop twice?
+        context.go(
+          Routes.parentJobs,
+        ); // Use go to clear stack if needed, or pop twice?
         // Let's use pushReplacement or pop.
         // If we pop, we go to details. But details will try to load deleted job.
         // So we should go to list.
@@ -369,7 +373,8 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error deleting job: $e')),
         );
       }
@@ -381,9 +386,7 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading && _jobDetails == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -397,7 +400,10 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           onPressed: () => context.pop(),
         ),
         titleTextStyle: const TextStyle(
-            color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+          color: Colors.black,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -430,8 +436,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                 readOnly: true,
                 onTap: _pickDateRange,
                 style: const TextStyle(color: AppTokens.textPrimary),
-                decoration: _inputDecoration('Select Date')
-                    .copyWith(suffixIcon: const Icon(Icons.calendar_today)),
+                decoration: _inputDecoration(
+                  'Select Date',
+                ).copyWith(suffixIcon: const Icon(Icons.calendar_today)),
                 validator: (v) => v!.isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 16),
@@ -447,8 +454,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                           readOnly: true,
                           onTap: () => _pickTime(true),
                           style: const TextStyle(color: AppTokens.textPrimary),
-                          decoration: _inputDecoration('Start').copyWith(
-                              suffixIcon: const Icon(Icons.access_time)),
+                          decoration: _inputDecoration(
+                            'Start',
+                          ).copyWith(suffixIcon: const Icon(Icons.access_time)),
                           validator: (v) => v!.isEmpty ? 'Required' : null,
                         ),
                       ],
@@ -465,8 +473,9 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                           readOnly: true,
                           onTap: () => _pickTime(false),
                           style: const TextStyle(color: AppTokens.textPrimary),
-                          decoration: _inputDecoration('End').copyWith(
-                              suffixIcon: const Icon(Icons.access_time)),
+                          decoration: _inputDecoration(
+                            'End',
+                          ).copyWith(suffixIcon: const Icon(Icons.access_time)),
                           validator: (v) => v!.isEmpty ? 'Required' : null,
                         ),
                       ],
@@ -486,39 +495,45 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
               Row(
                 children: [
                   Expanded(
-                      child: TextFormField(
-                          controller: _unitController,
-                          style: const TextStyle(color: AppTokens.textPrimary),
-                          decoration: _inputDecoration('Unit (Opt)'))),
+                    child: TextFormField(
+                      controller: _unitController,
+                      style: const TextStyle(color: AppTokens.textPrimary),
+                      decoration: _inputDecoration('Unit (Opt)'),
+                    ),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
-                      child: TextFormField(
-                          controller: _zipController,
-                          style: const TextStyle(color: AppTokens.textPrimary),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: _inputDecoration('Zip Code'),
-                          validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    child: TextFormField(
+                      controller: _zipController,
+                      style: const TextStyle(color: AppTokens.textPrimary),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: _inputDecoration('Zip Code'),
+                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
-                      child: TextFormField(
-                          controller: _cityController,
-                          style: const TextStyle(color: AppTokens.textPrimary),
-                          decoration: _inputDecoration('City'),
-                          validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    child: TextFormField(
+                      controller: _cityController,
+                      style: const TextStyle(color: AppTokens.textPrimary),
+                      decoration: _inputDecoration('City'),
+                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                    ),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
-                      child: TextFormField(
-                          controller: _stateController,
-                          style: const TextStyle(color: AppTokens.textPrimary),
-                          decoration: _inputDecoration('State'),
-                          validator: (v) => v!.isEmpty ? 'Required' : null)),
+                    child: TextFormField(
+                      controller: _stateController,
+                      style: const TextStyle(color: AppTokens.textPrimary),
+                      decoration: _inputDecoration('State'),
+                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -546,11 +561,14 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
               _buildLabel('Hourly Rate (\$/hr)'),
               Row(
                 children: [
-                  Text('\$${_payRate.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppTokens.textPrimary)),
+                  Text(
+                    '\$${_payRate.toStringAsFixed(0)}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTokens.textPrimary,
+                    ),
+                  ),
                   const Spacer(),
                   IconButton(
                     icon: const Icon(Icons.remove_circle_outline),
@@ -585,13 +603,18 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                     backgroundColor: AppTokens.primaryBlue,
                     foregroundColor: AppColors.textOnButton,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text('Update Job',
+                      : const Text(
+                          'Update Job',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -604,11 +627,13 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
                     side: const BorderSide(color: Colors.red),
                     foregroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text('Delete Job',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  child: const Text(
+                    'Delete Job',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
             ],
@@ -621,9 +646,13 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
   Widget _buildLabel(String label) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(label,
-          style: const TextStyle(
-              fontWeight: FontWeight.w600, color: AppTokens.textPrimary)),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontWeight: FontWeight.w600,
+          color: AppTokens.textPrimary,
+        ),
+      ),
     );
   }
 

@@ -47,7 +47,6 @@ class SocialLoginRow extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20), // More breathing room
-
         // Social buttons - transparent with blue-tinted border
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -77,10 +76,7 @@ class _SocialButton extends StatelessWidget {
   final String iconPath;
   final VoidCallback? onTap;
 
-  const _SocialButton({
-    required this.iconPath,
-    this.onTap,
-  });
+  const _SocialButton({required this.iconPath, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +100,11 @@ class _SocialButton extends StatelessWidget {
             height: 22,
             errorBuilder: (_, error, _) {
               debugPrint('❌ Asset failed: $iconPath -> $error');
-              return const Icon(Icons.error_outline,
-                  size: 18, color: Colors.grey);
+              return const Icon(
+                Icons.error_outline,
+                size: 18,
+                color: Colors.grey,
+              );
             },
           ),
         ),

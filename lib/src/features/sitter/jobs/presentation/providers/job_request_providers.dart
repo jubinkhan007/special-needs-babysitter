@@ -9,11 +9,12 @@ import 'package:babysitter_app/src/features/sitter/jobs/data/models/job_request_
 import 'package:babysitter_app/src/features/sitter/jobs/presentation/controllers/job_request_controller.dart';
 
 /// Provider for the job request remote data source.
-final jobRequestRemoteDataSourceProvider =
-    Provider<JobRequestRemoteDataSource>((ref) {
-  final dio = ref.watch(authDioProvider);
-  return JobRequestRemoteDataSource(dio);
-});
+final jobRequestRemoteDataSourceProvider = Provider<JobRequestRemoteDataSource>(
+  (ref) {
+    final dio = ref.watch(authDioProvider);
+    return JobRequestRemoteDataSource(dio);
+  },
+);
 
 /// Provider for the job request repository.
 final jobRequestRepositoryProvider = Provider<JobRequestRepository>((ref) {
@@ -23,16 +24,15 @@ final jobRequestRepositoryProvider = Provider<JobRequestRepository>((ref) {
 
 /// Provider for fetching job request details.
 /// Pass the applicationId to fetch specific job request details.
-final jobRequestDetailsProvider =
-    FutureProvider.autoDispose.family<JobRequestDetailsModel, String>(
-        (ref, applicationId) async {
-  final repository = ref.watch(jobRequestRepositoryProvider);
-  return repository.getJobRequestDetails(applicationId);
-});
+final jobRequestDetailsProvider = FutureProvider.autoDispose
+    .family<JobRequestDetailsModel, String>((ref, applicationId) async {
+      final repository = ref.watch(jobRequestRepositoryProvider);
+      return repository.getJobRequestDetails(applicationId);
+    });
 
 /// Provider for the job request controller (accept/decline actions).
 final jobRequestControllerProvider =
     StateNotifierProvider<JobRequestController, AsyncValue<void>>((ref) {
-  final repository = ref.watch(jobRequestRepositoryProvider);
-  return JobRequestController(repository);
-});
+      final repository = ref.watch(jobRequestRepositoryProvider);
+      return JobRequestController(repository);
+    });

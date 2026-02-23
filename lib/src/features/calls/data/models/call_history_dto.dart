@@ -69,7 +69,8 @@ class CallHistoryResponseDto {
   });
 
   factory CallHistoryResponseDto.fromJson(Map<String, dynamic> json) {
-    final callsList = (json['calls'] as List<dynamic>?)
+    final callsList =
+        (json['calls'] as List<dynamic>?)
             ?.map((e) => CallHistoryItemDto.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [];

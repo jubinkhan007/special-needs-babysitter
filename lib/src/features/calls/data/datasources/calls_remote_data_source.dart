@@ -72,10 +72,7 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
       );
       final response = await _dio.post(
         '/calls/initiate',
-        data: {
-          'recipientUserId': recipientUserId,
-          'callType': callType,
-        },
+        data: {'recipientUserId': recipientUserId, 'callType': callType},
       );
 
       final data = _extractData(response.data);
@@ -112,14 +109,13 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   @override
   Future<void> declineCall(String callId, {String? reason}) async {
     try {
-      developer.log('CallsRemoteDataSource.declineCall($callId)',
-          name: 'Calls');
+      developer.log(
+        'CallsRemoteDataSource.declineCall($callId)',
+        name: 'Calls',
+      );
       await _dio.post(
         '/calls/$callId/decline',
-        data: {
-          'callId': callId,
-          'reason': ?reason,
-        },
+        data: {'callId': callId, 'reason': ?reason},
       );
     } catch (e, stack) {
       _logError('declineCall', e, stack);
@@ -131,10 +127,7 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   Future<void> endCall(String callId) async {
     try {
       developer.log('CallsRemoteDataSource.endCall($callId)', name: 'Calls');
-      await _dio.post(
-        '/calls/$callId/end',
-        data: {'callId': callId},
-      );
+      await _dio.post('/calls/$callId/end', data: {'callId': callId});
     } catch (e, stack) {
       _logError('endCall', e, stack);
       rethrow;
@@ -144,8 +137,10 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   @override
   Future<CallSessionDto> getCallDetails(String callId) async {
     try {
-      developer.log('CallsRemoteDataSource.getCallDetails($callId)',
-          name: 'Calls');
+      developer.log(
+        'CallsRemoteDataSource.getCallDetails($callId)',
+        name: 'Calls',
+      );
       final response = await _dio.get('/calls/$callId');
 
       final data = _extractData(response.data);
@@ -159,8 +154,10 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
   @override
   Future<CallTokenDto> refreshToken(String callId) async {
     try {
-      developer.log('CallsRemoteDataSource.refreshToken($callId)',
-          name: 'Calls');
+      developer.log(
+        'CallsRemoteDataSource.refreshToken($callId)',
+        name: 'Calls',
+      );
       final response = await _dio.post(
         '/calls/$callId/token',
         data: {'callId': callId},
@@ -192,10 +189,7 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
       );
       final response = await _dio.get(
         '/calls/history',
-        queryParameters: {
-          'limit': limit,
-          'offset': offset,
-        },
+        queryParameters: {'limit': limit, 'offset': offset},
       );
 
       final data = _extractData(response.data);
@@ -222,7 +216,9 @@ class CallsRemoteDataSourceImpl implements CallsRemoteDataSource {
         );
         debugPrint('DEBUG [CallHistory API]: status=${e.response?.statusCode}');
         debugPrint('DEBUG [CallHistory API]: responseBody=${e.response?.data}');
-        debugPrint('DEBUG [CallHistory API]: requestUrl=${e.requestOptions.uri}');
+        debugPrint(
+          'DEBUG [CallHistory API]: requestUrl=${e.requestOptions.uri}',
+        );
       }
       _logError('getCallHistory', e, stack);
       rethrow;

@@ -86,7 +86,9 @@ class IncomingCallPollingHandler {
     required String callerUserId,
     String? callerAvatar,
   }) async {
-    _ref.read(callControllerProvider.notifier).handleIncomingCall(
+    _ref
+        .read(callControllerProvider.notifier)
+        .handleIncomingCall(
           callId: callId,
           callType: callType,
           callerName: callerName,
@@ -114,9 +116,14 @@ class IncomingCallPollingHandler {
 }
 
 final incomingCallPollingHandlerProvider =
-    Provider.family<IncomingCallPollingHandler, GlobalKey<NavigatorState>>(
-        (ref, navigatorKey) {
-  final handler = IncomingCallPollingHandler(ref, navigatorKey: navigatorKey);
-  ref.onDispose(() => handler.dispose());
-  return handler;
-});
+    Provider.family<IncomingCallPollingHandler, GlobalKey<NavigatorState>>((
+      ref,
+      navigatorKey,
+    ) {
+      final handler = IncomingCallPollingHandler(
+        ref,
+        navigatorKey: navigatorKey,
+      );
+      ref.onDispose(() => handler.dispose());
+      return handler;
+    });

@@ -27,11 +27,11 @@ class JobPreviewMapper {
 
     final childrenList = job.children.isNotEmpty
         ? job.children
-            .map((c) => ChildInfo(name: c.firstName, age: c.age))
-            .toList()
+              .map((c) => ChildInfo(name: c.firstName, age: c.age))
+              .toList()
         : job.childIds
-            .map((id) => const ChildInfo(name: 'Child', age: 0))
-            .toList();
+              .map((id) => const ChildInfo(name: 'Child', age: 0))
+              .toList();
 
     return JobPreview(
       id: job.id ?? '',

@@ -13,10 +13,7 @@ class NotificationsApiService {
   }) async {
     final response = await _dio.get(
       '/notification-inbox',
-      queryParameters: {
-        'limit': limit,
-        'offset': offset,
-      },
+      queryParameters: {'limit': limit, 'offset': offset},
     );
     final data = _unwrapMap(response.data);
     final items = data['notifications'] ?? data['items'] ?? data['data'];

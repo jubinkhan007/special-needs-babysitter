@@ -64,11 +64,9 @@ class _JobPostStep5ReviewScreenState
         if (mounted) {
           final latestError = ref.read(jobPostControllerProvider).error;
           if (latestError != null) {
-            AppToast.show(context,
-              SnackBar(
-                content: Text(latestError),
-                backgroundColor: Colors.red,
-              ),
+            AppToast.show(
+              context,
+              SnackBar(content: Text(latestError), backgroundColor: Colors.red),
             );
           }
         }
@@ -76,7 +74,8 @@ class _JobPostStep5ReviewScreenState
       }
 
       if (mounted) {
-        AppToast.show(context,
+        AppToast.show(
+          context,
           const SnackBar(
             content: Text('Job updated successfully!'),
             backgroundColor: Colors.green,
@@ -86,7 +85,8 @@ class _JobPostStep5ReviewScreenState
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context,
+        AppToast.show(
+          context,
           SnackBar(
             content: Text('Error updating job: $e'),
             backgroundColor: Colors.red,
@@ -110,9 +110,7 @@ class _JobPostStep5ReviewScreenState
       if (mounted) {
         final latestError = ref.read(jobPostControllerProvider).error;
         if (latestError != null) {
-          AppToast.show(context,
-            SnackBar(content: Text(latestError)),
-          );
+          AppToast.show(context, SnackBar(content: Text(latestError)));
         }
       }
       return;
@@ -122,7 +120,8 @@ class _JobPostStep5ReviewScreenState
     final jobId = ref.read(jobPostControllerProvider).jobId;
     if (jobId == null || jobId.isEmpty) {
       if (mounted) {
-        AppToast.show(context,
+        AppToast.show(
+          context,
           const SnackBar(content: Text('Job created but no ID returned')),
         );
       }
@@ -135,15 +134,20 @@ class _JobPostStep5ReviewScreenState
 
     try {
       // Step 3: Create payment intent
-      debugPrint('DEBUG: JobPostStep5 creating payment intent for jobId: $jobId');
+      debugPrint(
+        'DEBUG: JobPostStep5 creating payment intent for jobId: $jobId',
+      );
       final paymentIntent = await bookingsRepo.createPaymentIntent(jobId);
-      debugPrint('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
+      debugPrint(
+        'DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}',
+      );
 
       // Get pay rate from state
       final state = ref.read(jobPostControllerProvider);
       final amount = _calculateTotalAmount(state);
       debugPrint(
-          'DEBUG: JobPostStep5 calculated amount: $amount (rate=${state.payRate}, start=${state.startDate} ${state.startTime}, end=${state.endDate} ${state.endTime})');
+        'DEBUG: JobPostStep5 calculated amount: $amount (rate=${state.payRate}, start=${state.startDate} ${state.startTime}, end=${state.endDate} ${state.endTime})',
+      );
 
       if (mounted) {
         setState(() => _isProcessingPayment = false);
@@ -168,19 +172,21 @@ class _JobPostStep5ReviewScreenState
       debugPrint('DEBUG: JobPostStep5 error: $e');
       if (mounted) {
         setState(() => _isProcessingPayment = false);
-        AppToast.show(context,
-          SnackBar(
-            content: Text('Error: $e'),
-            backgroundColor: Colors.red,
-          ),
+        AppToast.show(
+          context,
+          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
         );
       }
     }
   }
 
-  void _showPaymentFailedDialog(String jobId, double amount, String clientSecret) {
+  void _showPaymentFailedDialog(
+    String jobId,
+    double amount,
+    String clientSecret,
+  ) {
     if (!mounted) return;
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -223,9 +229,7 @@ class _JobPostStep5ReviewScreenState
                 },
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-            ),
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
             child: const Text(
               'Retry Payment',
               style: TextStyle(color: Colors.white),
@@ -365,8 +369,9 @@ class _JobPostStep5ReviewScreenState
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: _buildChildRow(
-                                  '${child.firstName} ${child.lastName}',
-                                  child.ageDisplay),
+                                '${child.firstName} ${child.lastName}',
+                                child.ageDisplay,
+                              ),
                             );
                           }).toList(),
                         );
@@ -379,8 +384,10 @@ class _JobPostStep5ReviewScreenState
                     const SizedBox(height: 32),
 
                     // Section C: Additional Details & Pay Rate
-                    _buildSectionHeader('Additional Details & Pay Rate',
-                        widget.onEditAdditional),
+                    _buildSectionHeader(
+                      'Additional Details & Pay Rate',
+                      widget.onEditAdditional,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       state.additionalDetails,
@@ -530,17 +537,22 @@ class _JobPostStep5ReviewScreenState
                           ),
                         );
                       } else if (context.mounted) {
-                        final latestError =
-                            ref.read(jobPostControllerProvider).error;
+                        final latestError = ref
+                            .read(jobPostControllerProvider)
+                            .error;
                         if (latestError != null) {
-                          AppToast.show(context,
+                          AppToast.show(
+                            context,
                             SnackBar(content: Text(latestError)),
                           );
                         }
                       }
                     },
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 12,
+                ),
                 minimumSize: Size.zero,
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
@@ -555,7 +567,6 @@ class _JobPostStep5ReviewScreenState
             )
           else
             const SizedBox.shrink(), // Placeholder when hidden
-
           // Submit/Update Button
           Flexible(
             child: GestureDetector(
@@ -564,12 +575,16 @@ class _JobPostStep5ReviewScreenState
                   : (isExisting ? _updateExistingJob : _submitWithPayment),
               child: Container(
                 constraints: BoxConstraints(
-                  maxWidth: isExisting ? 160 : 200, // Adjust width for "Update Job"
+                  maxWidth: isExisting
+                      ? 160
+                      : 200, // Adjust width for "Update Job"
                   minWidth: isExisting ? 140 : 160,
                 ),
                 height: 60,
                 decoration: BoxDecoration(
-                  color: isLoading ? _primaryBtn.withValues(alpha: 0.5) : _primaryBtn,
+                  color: isLoading
+                      ? _primaryBtn.withValues(alpha: 0.5)
+                      : _primaryBtn,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Center(

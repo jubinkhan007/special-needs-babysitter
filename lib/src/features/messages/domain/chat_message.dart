@@ -1,27 +1,14 @@
 /// Type of chat message content.
-enum ChatMessageType {
-  text,
-  callLog,
-}
+enum ChatMessageType { text, callLog }
 
 /// Type of call for log messages.
-enum CallType {
-  voice,
-  video,
-}
+enum CallType { voice, video }
 
 /// Status of the call.
-enum CallStatus {
-  completed,
-  missed,
-}
+enum CallStatus { completed, missed }
 
 /// Type of sender (user vs support vs system)
-enum ChatMessageSenderType {
-  user,
-  support,
-  system,
-}
+enum ChatMessageSenderType { user, support, system }
 
 /// Domain model for a single chat message.
 class ChatMessage {

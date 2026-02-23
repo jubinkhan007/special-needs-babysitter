@@ -26,22 +26,13 @@ class ParentProfileRemoteDataSource {
     required int step,
     required Map<String, dynamic> data,
   }) async {
-    await _dio.put(
-      '/parents/me',
-      data: {
-        'step': step,
-        'data': data,
-      },
-    );
+    await _dio.put('/parents/me', data: {'step': step, 'data': data});
   }
 
   /// POST /children
   /// Used for adding a new child
   Future<void> addChild(Map<String, dynamic> childData) async {
-    await _dio.post(
-      '/children',
-      data: childData,
-    );
+    await _dio.post('/children', data: childData);
   }
 
   /// POST /uploads/presign
@@ -66,7 +57,10 @@ class ParentProfileRemoteDataSource {
 
   /// Uploads binary file to the presigned URL
   Future<void> uploadFileToUrl(
-      String url, File file, String contentType,) async {
+    String url,
+    File file,
+    String contentType,
+  ) async {
     final len = await file.length();
     await _dio.put(
       url,
@@ -85,10 +79,7 @@ class ParentProfileRemoteDataSource {
   Future<void> markProfileComplete() async {
     await _dio.patch(
       '/users/me',
-      data: {
-        'profileSetupComplete': true,
-        'profile_setup_complete': true,
-      },
+      data: {'profileSetupComplete': true, 'profile_setup_complete': true},
     );
   }
 }

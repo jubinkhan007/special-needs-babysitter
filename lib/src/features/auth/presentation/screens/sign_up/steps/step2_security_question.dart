@@ -34,8 +34,9 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
   @override
   void initState() {
     super.initState();
-    _answerController =
-        TextEditingController(text: widget.formData['securityAnswer']);
+    _answerController = TextEditingController(
+      text: widget.formData['securityAnswer'],
+    );
     _selectedQuestion = widget.formData['securityQuestion'];
 
     // Load security questions on init
@@ -52,7 +53,8 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
 
   void _saveAndNext() {
     if (_selectedQuestion == null || _selectedQuestion!.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please select a security question'),
           backgroundColor: AppColors.error,
@@ -62,7 +64,8 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
     }
 
     if (_answerController.text.trim().isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please enter your answer'),
           backgroundColor: AppColors.error,
@@ -175,8 +178,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
           padding: const EdgeInsets.all(40),
           child: Column(
             children: [
-              const Icon(Icons.error_outline,
-                  size: 48, color: AppColors.error),
+              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
               const SizedBox(height: 16),
               Text(
                 state.message,
@@ -229,10 +231,7 @@ class _Step2SecurityQuestionState extends ConsumerState<Step2SecurityQuestion> {
                 ),
                 dropdownColor: Colors.white,
                 borderRadius: BorderRadius.circular(8),
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Color(0xFF1A1A1A),
-                ),
+                style: const TextStyle(fontSize: 15, color: Color(0xFF1A1A1A)),
                 items: state.questions.map((q) {
                   return DropdownMenuItem(
                     value: q,

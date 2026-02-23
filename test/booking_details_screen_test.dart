@@ -8,24 +8,24 @@ import 'package:babysitter_app/src/features/bookings/presentation/booking_detail
 void main() {
   Widget createScreen(BookingStatus status) {
     return ScreenUtilInit(
-      designSize:
-          const Size(375, 812), // iPhone X/11 format often used in Figma
+      designSize: const Size(
+        375,
+        812,
+      ), // iPhone X/11 format often used in Figma
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: BookingDetailsScreen(
-            args: BookingDetailsArgs(
-              bookingId: 'test-id',
-              status: status,
-            ),
+            args: BookingDetailsArgs(bookingId: 'test-id', status: status),
           ),
         );
       },
     );
   }
 
-  testWidgets('Booking Details Screen - Upcoming Variant Golden Test',
-      (tester) async {
+  testWidgets('Booking Details Screen - Upcoming Variant Golden Test', (
+    tester,
+  ) async {
     await tester.pumpWidget(createScreen(BookingStatus.upcoming));
     await tester.pumpAndSettle();
 
@@ -36,8 +36,9 @@ void main() {
     );
   });
 
-  testWidgets('Booking Details Screen - Pending Variant Golden Test',
-      (tester) async {
+  testWidgets('Booking Details Screen - Pending Variant Golden Test', (
+    tester,
+  ) async {
     await tester.pumpWidget(createScreen(BookingStatus.pending));
     await tester.pumpAndSettle();
 
@@ -47,8 +48,9 @@ void main() {
     );
   });
 
-  testWidgets('Booking Details Screen - Completed Variant Golden Test',
-      (tester) async {
+  testWidgets('Booking Details Screen - Completed Variant Golden Test', (
+    tester,
+  ) async {
     await tester.pumpWidget(createScreen(BookingStatus.completed));
     await tester.pumpAndSettle();
 

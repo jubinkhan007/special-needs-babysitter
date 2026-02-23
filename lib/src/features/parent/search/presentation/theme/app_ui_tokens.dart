@@ -12,16 +12,18 @@ class AppUiTokens {
   // ===========================================================================
 
   // Backgrounds
-  static const Color scaffoldBackground =
-      Color(0xFFF9FAFB); // Light Grey/Off-white
+  static const Color scaffoldBackground = Color(
+    0xFFF9FAFB,
+  ); // Light Grey/Off-white
   static const Color cardBackground = Colors.white;
   static const Color topBarBackground = AppColors.surfaceTint; // Light Blue
 
   // Text
   static const Color textPrimary = Color(0xFF101828); // Darkest Grey/Black
   static const Color textSecondary = Color(0xFF667085); // Medium Grey
-  static const Color textPrice =
-      Color(0xFF101828); // Same as primary but explicitly for price
+  static const Color textPrice = Color(
+    0xFF101828,
+  ); // Same as primary but explicitly for price
 
   // Brand/Accents
   static const Color primaryBlue = Color(0xFF7CD4FD); // Light Blue Button
@@ -162,17 +164,17 @@ class AppUiTokens {
   // ===========================================================================
 
   static List<BoxShadow> get cardShadow => [
-        BoxShadow(
-          color: const Color(0xFF101828).withValues(alpha: 0.06),
-          offset: const Offset(0, 4),
-          blurRadius: 12,
-          spreadRadius: -2,
-        ),
-        BoxShadow(
-          color: const Color(0xFF101828).withValues(alpha: 0.03),
-          offset: const Offset(0, 2),
-          blurRadius: 4,
-          spreadRadius: -2,
-        ),
-      ];
+    BoxShadow(
+      color: const Color(0xFF101828).withValues(alpha: 0.06),
+      offset: const Offset(0, 4),
+      blurRadius: 12,
+      spreadRadius: -2,
+    ),
+    BoxShadow(
+      color: const Color(0xFF101828).withValues(alpha: 0.03),
+      offset: const Offset(0, 2),
+      blurRadius: 4,
+      spreadRadius: -2,
+    ),
+  ];
 }

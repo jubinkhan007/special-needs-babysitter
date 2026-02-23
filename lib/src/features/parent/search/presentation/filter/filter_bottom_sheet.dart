@@ -51,8 +51,9 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
 
     try {
       // Get device location (uses cache if available)
-      final (latitude, longitude) =
-          await LocationHelper.getLocation(requestPermission: true);
+      final (latitude, longitude) = await LocationHelper.getLocation(
+        requestPermission: true,
+      );
 
       if (mounted) {
         // Update filter provider with location
@@ -167,18 +168,19 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
               headerBackgroundColor: Colors.white,
               headerForegroundColor: _pickerTitle,
               todayBorder: const BorderSide(color: _pickerAccent, width: 2),
-              todayForegroundColor:
-                  const WidgetStatePropertyAll(_pickerAccent),
-              todayBackgroundColor:
-                  WidgetStatePropertyAll(_pickerAccent.withValues(alpha: 0.15)),
+              todayForegroundColor: const WidgetStatePropertyAll(_pickerAccent),
+              todayBackgroundColor: WidgetStatePropertyAll(
+                _pickerAccent.withValues(alpha: 0.15),
+              ),
               dayForegroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return _pickerTitle;
               }),
-              dayOverlayColor:
-                  WidgetStatePropertyAll(_pickerAccent.withValues(alpha: 0.1)),
+              dayOverlayColor: WidgetStatePropertyAll(
+                _pickerAccent.withValues(alpha: 0.1),
+              ),
               yearForegroundColor: const WidgetStatePropertyAll(_pickerTitle),
             ),
             textButtonTheme: TextButtonThemeData(
@@ -215,14 +217,14 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
           child: Theme(
             data: Theme.of(context).copyWith(
               textTheme: Theme.of(context).textTheme.copyWith(
-                    bodySmall: const TextStyle(color: _pickerTitle),
-                    bodyMedium: const TextStyle(color: _pickerTitle),
-                    displayLarge: const TextStyle(color: _pickerTitle),
-                    displayMedium: const TextStyle(color: _pickerTitle),
-                    displaySmall: const TextStyle(color: _pickerTitle),
-                    titleMedium: const TextStyle(color: _pickerTitle),
-                    labelSmall: const TextStyle(color: _pickerTitle),
-                  ),
+                bodySmall: const TextStyle(color: _pickerTitle),
+                bodyMedium: const TextStyle(color: _pickerTitle),
+                displayLarge: const TextStyle(color: _pickerTitle),
+                displayMedium: const TextStyle(color: _pickerTitle),
+                displaySmall: const TextStyle(color: _pickerTitle),
+                titleMedium: const TextStyle(color: _pickerTitle),
+                labelSmall: const TextStyle(color: _pickerTitle),
+              ),
               colorScheme: const ColorScheme.light(
                 primary: _pickerAccent,
                 onPrimary: Colors.white,
@@ -245,22 +247,26 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                   side: const BorderSide(color: _pickerAccent, width: 2),
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _pickerMuted),
-                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _pickerAccent.withValues(alpha: 0.3)
-                        : Colors.transparent),
-                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _pickerTitle
-                        : _pickerMuted),
-                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? Colors.white
-                        : _pickerAccent.withValues(alpha: 0.1)),
-                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _pickerTitle
-                        : _pickerMuted),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _pickerAccent.withValues(alpha: 0.3)
+                      : Colors.transparent,
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _pickerTitle
+                      : _pickerMuted,
+                ),
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? Colors.white
+                      : _pickerAccent.withValues(alpha: 0.1),
+                ),
+                hourMinuteTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _pickerTitle
+                      : _pickerMuted,
+                ),
                 inputDecorationTheme: const InputDecorationTheme(
                   labelStyle: TextStyle(color: _pickerTitle),
                   helperStyle: TextStyle(color: _pickerTitle),
@@ -302,7 +308,8 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: _pickerTitle,
-            ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: AlertDialog(
             shape: RoundedRectangleBorder(
@@ -324,8 +331,10 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                 hintStyle: const TextStyle(color: _pickerMuted),
                 filled: true,
                 fillColor: _pickerBackground,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: _pickerAccent),
@@ -352,9 +361,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
     );
 
     if (result != null) {
-      controller.setOtherLanguage(
-        result.trim().isEmpty ? null : result.trim(),
-      );
+      controller.setOtherLanguage(result.trim().isEmpty ? null : result.trim());
     }
   }
 
@@ -365,7 +372,9 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
 
     // 8. Responsive/Lock Text Scaling
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.92,
         decoration: const BoxDecoration(
@@ -434,8 +443,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                           Expanded(
                             child: FilterTextField(
                               hint: 'Start Time*',
-                              value:
-                                  filterState.startTime?.format(context),
+                              value: filterState.startTime?.format(context),
                               icon: Icons.access_time,
                               onTap: () =>
                                   _pickTime(filterController, isStart: true),
@@ -457,15 +465,13 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
 
                       // 5. Languages Spoken
                       const FilterSectionTitle('Languages Spoken'),
-                      ...['Spanish', 'English', 'Mandarin', 'French']
-                          .map((e) => FilterCheckboxRow(
-                                label: e,
-                                isChecked:
-                                    filterState.selectedLanguages.contains(e),
-                                onChanged: (_) =>
-                                    filterController.toggleLanguage(e),
-                              ))
-                          ,
+                      ...['Spanish', 'English', 'Mandarin', 'French'].map(
+                        (e) => FilterCheckboxRow(
+                          label: e,
+                          isChecked: filterState.selectedLanguages.contains(e),
+                          onChanged: (_) => filterController.toggleLanguage(e),
+                        ),
+                      ),
                       // Add Other
                       FilterAddOtherField(
                         onTap: () => _addOtherLanguage(filterController),
@@ -499,17 +505,10 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Filter By',
-            style: AppTokens.sheetTitleStyle,
-          ),
+          Text('Filter By', style: AppTokens.sheetTitleStyle),
           GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: const Icon(
-              Icons.close,
-              size: 24,
-              color: AppTokens.iconGrey,
-            ),
+            child: const Icon(Icons.close, size: 24, color: AppTokens.iconGrey),
           ),
         ],
       ),

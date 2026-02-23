@@ -6,10 +6,7 @@ import 'booking_surface_card.dart';
 class SitterSummaryCard extends StatelessWidget {
   final ActiveBookingDetailsUiModel uiModel;
 
-  const SitterSummaryCard({
-    super.key,
-    required this.uiModel,
-  });
+  const SitterSummaryCard({super.key, required this.uiModel});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +15,8 @@ class SitterSummaryCard extends StatelessWidget {
     final isNetworkAvatar = avatarUrl.startsWith('http');
     final ImageProvider? avatarProvider = hasAvatar
         ? (isNetworkAvatar
-            ? NetworkImage(avatarUrl)
-            : AssetImage(avatarUrl) as ImageProvider)
+              ? NetworkImage(avatarUrl)
+              : AssetImage(avatarUrl) as ImageProvider)
         : null;
 
     return BookingSurfaceCard(
@@ -67,15 +64,21 @@ class SitterSummaryCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         if (uiModel.isVerified)
-                          const Icon(Icons.verified,
-                              size: 16, color: AppTokens.primaryBlue),
+                          const Icon(
+                            Icons.verified,
+                            size: 16,
+                            color: AppTokens.primaryBlue,
+                          ),
                       ],
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.location_on,
-                            size: 14, color: AppTokens.primaryBlue),
+                        const Icon(
+                          Icons.location_on,
+                          size: 14,
+                          color: AppTokens.primaryBlue,
+                        ),
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
@@ -98,13 +101,19 @@ class SitterSummaryCard extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.star_rounded,
-                          size: 20, color: AppTokens.starYellow),
+                      const Icon(
+                        Icons.star_rounded,
+                        size: 20,
+                        color: AppTokens.starYellow,
+                      ),
                       const SizedBox(width: 4),
                       Text(uiModel.rating, style: AppTokens.ratingText),
                       const SizedBox(width: 12),
-                      const Icon(Icons.bookmark_border,
-                          size: 24, color: AppTokens.iconGrey),
+                      const Icon(
+                        Icons.bookmark_border,
+                        size: 24,
+                        color: AppTokens.iconGrey,
+                      ),
                     ],
                   ),
                 ],
@@ -160,9 +169,13 @@ class SitterSummaryCard extends StatelessWidget {
           children: [
             Icon(icon, size: 14, color: AppTokens.textSecondary),
             const SizedBox(width: 4),
-            Text(label,
-                style: const TextStyle(
-                    fontSize: 12, color: AppTokens.textSecondary)),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppTokens.textSecondary,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 4),
@@ -173,10 +186,7 @@ class SitterSummaryCard extends StatelessWidget {
 
   Widget _buildAvatarFallback() {
     return const Center(
-      child: Icon(
-        Icons.person,
-        color: AppTokens.primaryBlue,
-      ),
+      child: Icon(Icons.person, color: AppTokens.primaryBlue),
     );
   }
 

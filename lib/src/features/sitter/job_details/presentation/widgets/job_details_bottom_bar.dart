@@ -23,96 +23,90 @@ class JobDetailsBottomBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: AppTokens.dividerSoft,
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: AppTokens.dividerSoft, width: 1)),
       ),
       child: Row(
-          children: [
-            // Price
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
+        children: [
+          // Price
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    style: const TextStyle(fontFamily: 'Inter'),
+                    children: [
+                      TextSpan(
+                        text: '\$${hourlyRate.toInt()}',
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w700,
+                          color: AppTokens.textPrimary,
+                        ),
                       ),
-                      children: [
-                        TextSpan(
-                          text: '\$${hourlyRate.toInt()}',
-                          style: TextStyle(
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w700,
-                            color: AppTokens.textPrimary,
-                          ),
+                      TextSpan(
+                        text: '/hr',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppTokens.textSecondary,
                         ),
-                        TextSpan(
-                          text: '/hr',
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w500,
-                            color: AppTokens.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    'Rate set by the family',
-                    style: TextStyle(
-                      fontSize: 11.sp,
-                      color: AppTokens.textSecondary,
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Apply Now button
-            SizedBox(
-              width: 140.w,
-              height: 48.h,
-              child: ElevatedButton(
-                onPressed: isLoading ? null : onApply,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTokens.primaryBlue,
-                  foregroundColor: AppColors.textOnButton,
-                  elevation: 0,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.r),
+                      ),
+                    ],
                   ),
                 ),
-                child: isLoading
-                    ? SizedBox(
-                        width: 20.w,
-                        height: 20.w,
-                        child: const CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
-                        ),
-                      )
-                    : Text(
-                        'Apply Now',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          height: 1.0,
+                SizedBox(height: 2.h),
+                Text(
+                  'Rate set by the family',
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    color: AppTokens.textSecondary,
+                    fontFamily: 'Inter',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Apply Now button
+          SizedBox(
+            width: 140.w,
+            height: 48.h,
+            child: ElevatedButton(
+              onPressed: isLoading ? null : onApply,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTokens.primaryBlue,
+                foregroundColor: AppColors.textOnButton,
+                elevation: 0,
+                padding: EdgeInsets.zero,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+              ),
+              child: isLoading
+                  ? SizedBox(
+                      width: 20.w,
+                      height: 20.w,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.textOnButton,
                         ),
                       ),
-              ),
+                    )
+                  : Text(
+                      'Apply Now',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter',
+                        height: 1.0,
+                      ),
+                    ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 }

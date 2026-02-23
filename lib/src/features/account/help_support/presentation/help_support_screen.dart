@@ -18,10 +18,7 @@ class HelpSupportScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -44,21 +41,20 @@ class HelpSupportScreen extends StatelessWidget {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: AppTokens.dividerSoft,
-            height: 1.0,
-          ),
+          child: Container(color: AppTokens.dividerSoft, height: 1.0),
         ),
       ),
       body: MediaQuery(
-        data: MediaQuery.of(context)
-            .copyWith(textScaler: const TextScaler.linear(1.0)),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1.0)),
         child: SafeArea(
           bottom: false,
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: AppTokens.screenHorizontalPadding.w),
+                horizontal: AppTokens.screenHorizontalPadding.w,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -203,11 +203,14 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
                       color: Colors.white,
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(color: Colors.black12, blurRadius: 4)
+                        BoxShadow(color: Colors.black12, blurRadius: 4),
                       ],
                     ),
-                    child: const Icon(Icons.edit,
-                        size: 14, color: Color(0xFF667085)),
+                    child: const Icon(
+                      Icons.edit,
+                      size: 14,
+                      color: Color(0xFF667085),
+                    ),
                   ),
                 ),
               ],
@@ -225,13 +228,14 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             // CHILD
             _buildSectionHeader('Child', null), // Edit is per child
             if (kids.isEmpty)
-              const Text('No children added.',
-                  style: TextStyle(color: Colors.grey))
+              const Text(
+                'No children added.',
+                style: TextStyle(color: Colors.grey),
+              )
             else
-              ...kids
-                  .asMap()
-                  .entries
-                  .map((e) => _buildChildRow(e.value, e.key)),
+              ...kids.asMap().entries.map(
+                (e) => _buildChildRow(e.value, e.key),
+              ),
 
             const SizedBox(height: 12),
             SizedBox(
@@ -243,10 +247,13 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
                   backgroundColor: AppColors.buttonDark,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-                child: const Text('Add Child',
-                    style: TextStyle(fontSize: 14, color: Colors.white)),
+                child: const Text(
+                  'Add Child',
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
               ),
             ),
             const Divider(height: 32, color: Color(0xFFE4E7EC)),
@@ -257,18 +264,36 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
             // EMERGENCY CONTACT
             _buildSectionHeader('Emergency Contact', _editEmergencyContact),
             if (hasEmergencyContact) ...[
-              _buildDetailRow('Full Name:', emergencyContact!['name'] ?? 'Not provided'),
               _buildDetailRow(
-                  'Relationship to Child:', emergencyContact['relationship'] ?? 'Not provided'),
-              _buildDetailRow('Primary Phone Number:', emergencyContact['phone'] ?? 'Not provided'),
-              _buildDetailRow('Email Address:', emergencyContact['email'] ?? 'Not provided'),
-              _buildDetailRow('Address:', emergencyContact['address'] ?? 'Not provided'),
+                'Full Name:',
+                emergencyContact!['name'] ?? 'Not provided',
+              ),
               _buildDetailRow(
-                  'Special Instruction:', emergencyContact['specialInstructions'] ?? 'None',
-                  isLong: true),
+                'Relationship to Child:',
+                emergencyContact['relationship'] ?? 'Not provided',
+              ),
+              _buildDetailRow(
+                'Primary Phone Number:',
+                emergencyContact['phone'] ?? 'Not provided',
+              ),
+              _buildDetailRow(
+                'Email Address:',
+                emergencyContact['email'] ?? 'Not provided',
+              ),
+              _buildDetailRow(
+                'Address:',
+                emergencyContact['address'] ?? 'Not provided',
+              ),
+              _buildDetailRow(
+                'Special Instruction:',
+                emergencyContact['specialInstructions'] ?? 'None',
+                isLong: true,
+              ),
             ] else
-              const Text('No emergency contact added.',
-                  style: TextStyle(color: Colors.grey)),
+              const Text(
+                'No emergency contact added.',
+                style: TextStyle(color: Colors.grey),
+              ),
             const Divider(height: 32, color: Color(0xFFE4E7EC)),
 
             // INSURANCE PLAN
@@ -297,8 +322,10 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
                 );
               })
             else
-              const Text('No insurance plan added.',
-                  style: TextStyle(color: Colors.grey)),
+              const Text(
+                'No insurance plan added.',
+                style: TextStyle(color: Colors.grey),
+              ),
 
             const SizedBox(height: 48),
 
@@ -351,16 +378,23 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
           if (onEdit != null)
             GestureDetector(
               onTap: onEdit,
-              child: const Icon(Icons.mode_edit_outlined,
-                  size: 20, color: Color(0xFF667085)),
+              child: const Icon(
+                Icons.mode_edit_outlined,
+                size: 20,
+                color: Color(0xFF667085),
+              ),
             ),
         ],
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value,
-      {bool isLong = false, bool isQuestion = false}) {
+  Widget _buildDetailRow(
+    String label,
+    String value, {
+    bool isLong = false,
+    bool isQuestion = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: RichText(
@@ -397,16 +431,16 @@ class _Step4ReviewState extends ConsumerState<Step4Review> {
           const SizedBox(width: 4),
           Text(
             '(${child['age']} Years old)',
-            style: const TextStyle(
-              fontSize: 14,
-              color: _valueColor,
-            ),
+            style: const TextStyle(fontSize: 14, color: _valueColor),
           ),
           const Spacer(),
           GestureDetector(
             onTap: () => _editChild(child, index),
-            child: const Icon(Icons.mode_edit_outlined,
-                size: 18, color: Color(0xFF667085)),
+            child: const Icon(
+              Icons.mode_edit_outlined,
+              size: 18,
+              color: Color(0xFF667085),
+            ),
           ),
         ],
       ),

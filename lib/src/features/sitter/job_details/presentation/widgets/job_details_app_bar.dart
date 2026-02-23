@@ -9,11 +9,7 @@ class JobDetailsAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBack;
   final VoidCallback? onSupport;
 
-  const JobDetailsAppBar({
-    super.key,
-    this.onBack,
-    this.onSupport,
-  });
+  const JobDetailsAppBar({super.key, this.onBack, this.onSupport});
 
   @override
   Size get preferredSize => Size.fromHeight(56.h);
@@ -23,9 +19,7 @@ class JobDetailsAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       height: preferredSize.height + MediaQuery.of(context).padding.top,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      decoration: const BoxDecoration(
-        color: AppTokens.bg,
-      ),
+      decoration: const BoxDecoration(color: AppTokens.bg),
       child: Row(
         children: [
           // Back button

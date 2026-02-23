@@ -21,9 +21,7 @@ class ReferralsApiService {
   Future<ReferralInviteResponse> inviteByEmail(String email) async {
     final response = await _dio.post(
       '/referrals/invite',
-      data: {
-        'email': email,
-      },
+      data: {'email': email},
     );
     final data = _unwrapMap(response.data);
     return ReferralInviteResponse.fromJson(data);
@@ -34,10 +32,7 @@ class ReferralsApiService {
     int limit = 20,
     int offset = 0,
   }) async {
-    final queryParameters = <String, dynamic>{
-      'limit': limit,
-      'offset': offset,
-    };
+    final queryParameters = <String, dynamic>{'limit': limit, 'offset': offset};
     if (status != null && status.isNotEmpty) {
       queryParameters['status'] = status;
     }
@@ -62,9 +57,7 @@ class ReferralsApiService {
   Future<ReferralValidateResponse> validateReferralCode(String code) async {
     final response = await _dio.post(
       '/referrals/validate',
-      data: {
-        'code': code,
-      },
+      data: {'code': code},
     );
     final data = _unwrapMap(response.data);
     return ReferralValidateResponse.fromJson(data);

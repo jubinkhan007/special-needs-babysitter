@@ -5,10 +5,7 @@ import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_
 class HomeSearchBar extends StatelessWidget {
   final VoidCallback? onTap;
 
-  const HomeSearchBar({
-    super.key,
-    this.onTap,
-  });
+  const HomeSearchBar({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +19,7 @@ class HomeSearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: const Color(0xFFECECEC),
-          width: 1,
-        ),
+        border: Border.all(color: const Color(0xFFECECEC), width: 1),
         boxShadow: HomeDesignTokens.defaultCardShadow, // Use common shadow
       ),
       child: Material(

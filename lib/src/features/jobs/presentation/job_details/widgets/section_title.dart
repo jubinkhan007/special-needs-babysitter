@@ -10,11 +10,9 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-          bottom: 12.0), // Space between title and content
-      child: Text(
-        title,
-        style: AppTokens.jobDetailsSectionTitleStyle,
-      ),
+        bottom: 12.0,
+      ), // Space between title and content
+      child: Text(title, style: AppTokens.jobDetailsSectionTitleStyle),
     );
   }
 }

@@ -10,10 +10,7 @@ import 'package:babysitter_app/src/features/bookings/presentation/providers/book
 class LiveTrackingSection extends ConsumerWidget {
   final String bookingId;
 
-  const LiveTrackingSection({
-    super.key,
-    required this.bookingId,
-  });
+  const LiveTrackingSection({super.key, required this.bookingId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,18 +24,12 @@ class LiveTrackingSection extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Live Tracking',
-                style: AppTokens.activeSectionTitle,
-              ),
+              Text('Live Tracking', style: AppTokens.activeSectionTitle),
               GestureDetector(
                 onTap: () {
                   context.push(Routes.mapRoute, extra: bookingId);
                 },
-                child: Text(
-                  'Open in Maps',
-                  style: AppTokens.linkTextStyle,
-                ),
+                child: Text('Open in Maps', style: AppTokens.linkTextStyle),
               ),
             ],
           ),
@@ -55,9 +46,7 @@ class LiveTrackingSection extends ConsumerWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(AppTokens.mapCardRadius),
             child: locationAsync.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) => _buildPlaceholder(),
               data: (location) => _buildMap(location),
             ),
@@ -116,9 +105,7 @@ class LiveTrackingSection extends ConsumerWidget {
   Widget _buildPlaceholder() {
     return Container(
       color: const Color(0xFFE5E5E5),
-      child: Center(
-        child: Icon(Icons.map, size: 48, color: Colors.grey[400]),
-      ),
+      child: Center(child: Icon(Icons.map, size: 48, color: Colors.grey[400])),
     );
   }
 }

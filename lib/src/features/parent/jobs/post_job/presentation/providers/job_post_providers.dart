@@ -11,40 +11,45 @@ import 'package:flutter/foundation.dart';
 
 /// Authenticated Dio provider for Job API.
 final jobPostDioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(
-    baseUrl: AppConstants.baseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: AppConstants.baseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
 
   // Add Auth Interceptor
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-      final authState = ref.read(authNotifierProvider);
-      var session = authState.value;
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final authState = ref.read(authNotifierProvider);
+        var session = authState.value;
 
-      if (session == null) {
-        final storedToken =
-            await ref.read(sessionStoreProvider).getAccessToken();
-        if (storedToken != null && storedToken.isNotEmpty) {
-          options.headers['Cookie'] = 'session_id=$storedToken';
+        if (session == null) {
+          final storedToken = await ref
+              .read(sessionStoreProvider)
+              .getAccessToken();
+          if (storedToken != null && storedToken.isNotEmpty) {
+            options.headers['Cookie'] = 'session_id=$storedToken';
+          }
+        } else {
+          options.headers['Cookie'] = 'session_id=${session.accessToken}';
         }
-      } else {
-        options.headers['Cookie'] = 'session_id=${session.accessToken}';
-      }
-      return handler.next(options);
-    },
-    onError: (DioException e, handler) {
-      debugPrint('DEBUG: Job API Error Status: ${e.response?.statusCode}');
-      debugPrint('DEBUG: Job API Error Message: ${e.message}');
-      debugPrint('DEBUG: Job API Error Data: ${e.response?.data}');
-      return handler.next(e);
-    },
-  ));
+        return handler.next(options);
+      },
+      onError: (DioException e, handler) {
+        debugPrint('DEBUG: Job API Error Status: ${e.response?.statusCode}');
+        debugPrint('DEBUG: Job API Error Message: ${e.message}');
+        debugPrint('DEBUG: Job API Error Data: ${e.response?.data}');
+        return handler.next(e);
+      },
+    ),
+  );
 
   return dio;
 });
@@ -99,20 +104,20 @@ final clearLocalDraftUseCaseProvider = Provider<ClearLocalDraftUseCase>((ref) {
 /// Provider for the JobPostController.
 final jobPostControllerProvider =
     StateNotifierProvider<JobPostController, JobPostState>((ref) {
-  final createJobUseCase = ref.watch(createJobUseCaseProvider);
-  final updateJobUseCase = ref.watch(updateJobUseCaseProvider);
-  final saveLocalDraftUseCase = ref.watch(saveLocalDraftUseCaseProvider);
-  final getLocalDraftUseCase = ref.watch(getLocalDraftUseCaseProvider);
-  final clearLocalDraftUseCase = ref.watch(clearLocalDraftUseCaseProvider);
+      final createJobUseCase = ref.watch(createJobUseCaseProvider);
+      final updateJobUseCase = ref.watch(updateJobUseCaseProvider);
+      final saveLocalDraftUseCase = ref.watch(saveLocalDraftUseCaseProvider);
+      final getLocalDraftUseCase = ref.watch(getLocalDraftUseCaseProvider);
+      final clearLocalDraftUseCase = ref.watch(clearLocalDraftUseCaseProvider);
 
-  return JobPostController(
-    createJobUseCase,
-    updateJobUseCase,
-    saveLocalDraftUseCase,
-    getLocalDraftUseCase,
-    clearLocalDraftUseCase,
-  );
-});
+      return JobPostController(
+        createJobUseCase,
+        updateJobUseCase,
+        saveLocalDraftUseCase,
+        getLocalDraftUseCase,
+        clearLocalDraftUseCase,
+      );
+    });
 
 /// Provider for User Profile Details (containing children).
 final profileDetailsProvider = FutureProvider<UserProfileDetails>((ref) async {

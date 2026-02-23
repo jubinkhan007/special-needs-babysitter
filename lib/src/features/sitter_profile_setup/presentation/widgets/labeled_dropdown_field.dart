@@ -48,28 +48,34 @@ class LabeledDropdownField extends StatelessWidget {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               isExpanded: true,
-              hint:
-                  Text(hint, style: const TextStyle(color: Color(0xFF98A2B3))),
+              hint: Text(
+                hint,
+                style: const TextStyle(color: Color(0xFF98A2B3)),
+              ),
               value: value,
               dropdownColor: Colors.white,
               borderRadius: BorderRadius.circular(12),
               items: items
-                  .map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(
-                          e,
-                          style: const TextStyle(
-                            color: Color(0xFF1A1A1A),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Inter',
-                          ),
+                  .map(
+                    (e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(
+                        e,
+                        style: const TextStyle(
+                          color: Color(0xFF1A1A1A),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Inter',
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
               onChanged: onChanged,
-              icon: const Icon(Icons.keyboard_arrow_down,
-                  color: Color(0xFF98A2B3)),
+              icon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: Color(0xFF98A2B3),
+              ),
               style: const TextStyle(
                 color: Color(0xFF1A1A1A),
                 fontSize: 16,
@@ -77,18 +83,20 @@ class LabeledDropdownField extends StatelessWidget {
                 fontFamily: 'Inter',
               ),
               selectedItemBuilder: (context) => items
-                  .map((e) => Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          e,
-                          style: const TextStyle(
-                            color: Color(0xFF1A1A1A),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Inter',
-                          ),
+                  .map(
+                    (e) => Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        e,
+                        style: const TextStyle(
+                          color: Color(0xFF1A1A1A),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Inter',
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           ),

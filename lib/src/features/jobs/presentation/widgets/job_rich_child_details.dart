@@ -5,10 +5,7 @@ import 'package:babysitter_app/src/features/jobs/presentation/models/job_ui_mode
 class JobRichChildDetails extends StatelessWidget {
   final List<ChildPart> parts;
 
-  const JobRichChildDetails({
-    super.key,
-    required this.parts,
-  });
+  const JobRichChildDetails({super.key, required this.parts});
 
   @override
   Widget build(BuildContext context) {

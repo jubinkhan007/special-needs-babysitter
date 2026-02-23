@@ -35,10 +35,7 @@ class JobCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                job.title,
-                style: AppTokens.jobsCardTitleStyle,
-              ),
+              Text(job.title, style: AppTokens.jobsCardTitleStyle),
               JobStatusChip(isActive: job.isActive),
             ],
           ),

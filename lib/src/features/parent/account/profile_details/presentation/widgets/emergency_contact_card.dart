@@ -6,11 +6,7 @@ class EmergencyContactCard extends StatelessWidget {
   final EmergencyContact? contact;
   final VoidCallback onEdit;
 
-  const EmergencyContactCard({
-    super.key,
-    this.contact,
-    required this.onEdit,
-  });
+  const EmergencyContactCard({super.key, this.contact, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {

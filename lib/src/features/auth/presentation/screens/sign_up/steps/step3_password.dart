@@ -38,8 +38,9 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
   @override
   void initState() {
     super.initState();
-    _passwordController =
-        TextEditingController(text: widget.formData['password']);
+    _passwordController = TextEditingController(
+      text: widget.formData['password'],
+    );
     _confirmPasswordController = TextEditingController();
   }
 
@@ -69,7 +70,8 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
       // Error occurred - state already has error message
       final state = ref.read(signUpControllerProvider);
       if (state is SignUpError) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
             content: Text(state.message),
             backgroundColor: AppColors.error,
@@ -158,7 +160,8 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
                             size: 20,
                           ),
                           onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword),
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                         ),
                         validator: (v) {
                           if (v?.isEmpty == true) return 'Required';
@@ -183,7 +186,8 @@ class _Step3PasswordState extends ConsumerState<Step3Password> {
                             size: 20,
                           ),
                           onPressed: () => setState(
-                              () => _obscureConfirm = !_obscureConfirm),
+                            () => _obscureConfirm = !_obscureConfirm,
+                          ),
                         ),
                         validator: (v) {
                           if (v?.isEmpty == true) return 'Required';

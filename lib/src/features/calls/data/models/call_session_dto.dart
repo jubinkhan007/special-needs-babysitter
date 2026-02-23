@@ -15,6 +15,7 @@ class CallSessionDto {
   final String? startedAt;
   final String? endedAt;
   final int? duration;
+
   /// UID to use when joining Agora channel (token is generated for this UID)
   final int? agoraUid;
 
@@ -44,10 +45,14 @@ class CallSessionDto {
       status: json['status'] as String? ?? 'unknown',
       callType: json['callType'] as String? ?? 'audio',
       initiator: json['initiator'] != null
-          ? CallParticipantDto.fromJson(json['initiator'] as Map<String, dynamic>)
+          ? CallParticipantDto.fromJson(
+              json['initiator'] as Map<String, dynamic>,
+            )
           : null,
       recipient: json['recipient'] != null
-          ? CallParticipantDto.fromJson(json['recipient'] as Map<String, dynamic>)
+          ? CallParticipantDto.fromJson(
+              json['recipient'] as Map<String, dynamic>,
+            )
           : null,
       user: json['user'] != null
           ? CallParticipantDto.fromJson(json['user'] as Map<String, dynamic>)
@@ -59,13 +64,13 @@ class CallSessionDto {
       // Parse agoraUid - backend may return it as int or string
       agoraUid: json['agoraUid'] != null
           ? (json['agoraUid'] is int
-              ? json['agoraUid'] as int
-              : int.tryParse(json['agoraUid'].toString()))
+                ? json['agoraUid'] as int
+                : int.tryParse(json['agoraUid'].toString()))
           : (json['uid'] != null
-              ? (json['uid'] is int
-                  ? json['uid'] as int
-                  : int.tryParse(json['uid'].toString()))
-              : null),
+                ? (json['uid'] is int
+                      ? json['uid'] as int
+                      : int.tryParse(json['uid'].toString()))
+                : null),
     );
   }
 }

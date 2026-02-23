@@ -1,4 +1,5 @@
 #!/usr/bin/env dart
+
 /// Converts relative imports to absolute `package:babysitter_app/` imports
 /// across all .dart files in lib/ and test/.
 ///
@@ -36,7 +37,8 @@ void main(List<String> args) {
       if (entity is! File || !entity.path.endsWith('.dart')) continue;
       // Skip generated files
       if (entity.path.endsWith('.g.dart') ||
-          entity.path.endsWith('.freezed.dart')) continue;
+          entity.path.endsWith('.freezed.dart'))
+        continue;
 
       final originalContent = entity.readAsStringSync();
       final fileDir = p.dirname(entity.path);
@@ -80,7 +82,9 @@ void main(List<String> args) {
 
   print('');
   if (dryRun) {
-    print('[DRY RUN] Would rewrite $totalRewrites imports in $totalFiles files.');
+    print(
+      '[DRY RUN] Would rewrite $totalRewrites imports in $totalFiles files.',
+    );
   } else {
     print('Rewrote $totalRewrites imports in $totalFiles files.');
   }

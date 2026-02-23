@@ -29,10 +29,10 @@ class PrimaryActionButton extends StatelessWidget {
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 14),
           disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.6),
-          disabledForegroundColor: AppColors.textOnButton.withValues(alpha: 0.8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+          disabledForegroundColor: AppColors.textOnButton.withValues(
+            alpha: 0.8,
           ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: isLoading
             ? const SizedBox(
@@ -79,9 +79,7 @@ class SecondaryActionButton extends StatelessWidget {
           foregroundColor: AppColors.textPrimary,
           backgroundColor: Colors.white,
           side: BorderSide.none,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: isLoading
             ? SizedBox(

@@ -133,17 +133,20 @@ class ApplicationsRepositoryImpl implements ApplicationsRepository {
       address: job.fullAddress ?? job.location ?? '',
 
       // Preferences - mapping from job children requirements or defaults
-      transportationModes: job.children
+      transportationModes:
+          job.children
               ?.expand((c) => c.transportationModes ?? <String>[])
               .toSet()
               .toList() ??
           [],
-      equipmentAndSafety: job.children
+      equipmentAndSafety:
+          job.children
               ?.expand((c) => c.equipmentSafety ?? <String>[])
               .toSet()
               .toList() ??
           [],
-      pickupDropoffDetails: job.children
+      pickupDropoffDetails:
+          job.children
               ?.map((c) {
                 final pickup = c.pickupLocation;
                 final dropoff = c.dropoffLocation;

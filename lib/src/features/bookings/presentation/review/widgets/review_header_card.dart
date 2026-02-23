@@ -7,10 +7,7 @@ import 'package:babysitter_app/src/features/bookings/presentation/widgets/sitter
 class ReviewHeaderCard extends StatelessWidget {
   final BookingDetailsUiModel uiModel;
 
-  const ReviewHeaderCard({
-    super.key,
-    required this.uiModel,
-  });
+  const ReviewHeaderCard({super.key, required this.uiModel});
 
   @override
   Widget build(BuildContext context) {

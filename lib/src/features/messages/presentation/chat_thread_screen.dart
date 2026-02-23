@@ -29,10 +29,7 @@ class _ConversationCallHistory {
   final Map<String, CallHistoryItem> byCallId;
   final List<CallHistoryItem> items;
 
-  const _ConversationCallHistory({
-    required this.byCallId,
-    required this.items,
-  });
+  const _ConversationCallHistory({required this.byCallId, required this.items});
 }
 
 class _TimelineEntry {
@@ -58,57 +55,63 @@ DateTime _callHistorySortTime(CallHistoryItem item) {
 /// Watches chatMessagesProvider so it re-fetches when messages refresh.
 final _callHistoryLookupProvider = FutureProvider.autoDispose
     .family<_ConversationCallHistory, String>((ref, otherUserId) async {
-  ref.watch(chatMessagesProvider(otherUserId));
+      ref.watch(chatMessagesProvider(otherUserId));
 
-  final repo = ref.watch(callsRepositoryProvider);
-  try {
-    final page = await repo.getCallHistory(limit: 100, offset: 0);
+      final repo = ref.watch(callsRepositoryProvider);
+      try {
+        final page = await repo.getCallHistory(limit: 100, offset: 0);
 
-    // Debug logging to identify filtering issues
-    debugPrint(
-        'DEBUG [CallHistory]: Fetched ${page.items.length} total call history items');
-    debugPrint('DEBUG [CallHistory]: Looking for otherUserId = "$otherUserId"');
+        // Debug logging to identify filtering issues
+        debugPrint(
+          'DEBUG [CallHistory]: Fetched ${page.items.length} total call history items',
+        );
+        debugPrint(
+          'DEBUG [CallHistory]: Looking for otherUserId = "$otherUserId"',
+        );
 
-    for (final item in page.items) {
-      final participantId = item.otherParticipant.userId;
-      final matches = participantId == otherUserId;
-      debugPrint('DEBUG [CallHistory]: Call ${item.callId} - '
-          'otherParticipant.userId="$participantId", '
-          'callType=${item.callType}, '
-          'createdAt=${item.createdAt}, '
-          'matches=$matches');
-    }
+        for (final item in page.items) {
+          final participantId = item.otherParticipant.userId;
+          final matches = participantId == otherUserId;
+          debugPrint(
+            'DEBUG [CallHistory]: Call ${item.callId} - '
+            'otherParticipant.userId="$participantId", '
+            'callType=${item.callType}, '
+            'createdAt=${item.createdAt}, '
+            'matches=$matches',
+          );
+        }
 
-    final filtered = page.items
-        .where((item) => item.otherParticipant.userId == otherUserId)
-        .toList()
-      ..sort(
-          (a, b) => _callHistorySortTime(a).compareTo(_callHistorySortTime(b)));
+        final filtered =
+            page.items
+                .where((item) => item.otherParticipant.userId == otherUserId)
+                .toList()
+              ..sort(
+                (a, b) =>
+                    _callHistorySortTime(a).compareTo(_callHistorySortTime(b)),
+              );
 
-    debugPrint(
-        'DEBUG [CallHistory]: After filtering: ${filtered.length} calls for this conversation');
+        debugPrint(
+          'DEBUG [CallHistory]: After filtering: ${filtered.length} calls for this conversation',
+        );
 
-    return _ConversationCallHistory(
-      byCallId: {for (final item in filtered) item.callId: item},
-      items: filtered,
-    );
-  } catch (e, stack) {
-    debugPrint('DEBUG [CallHistory]: Error fetching call history: $e');
-    debugPrint('DEBUG [CallHistory]: Stack: $stack');
-    return const _ConversationCallHistory(
-      byCallId: <String, CallHistoryItem>{},
-      items: <CallHistoryItem>[],
-    );
-  }
-});
+        return _ConversationCallHistory(
+          byCallId: {for (final item in filtered) item.callId: item},
+          items: filtered,
+        );
+      } catch (e, stack) {
+        debugPrint('DEBUG [CallHistory]: Error fetching call history: $e');
+        debugPrint('DEBUG [CallHistory]: Stack: $stack');
+        return const _ConversationCallHistory(
+          byCallId: <String, CallHistoryItem>{},
+          items: <CallHistoryItem>[],
+        );
+      }
+    });
 
 class ChatThreadScreen extends ConsumerStatefulWidget {
   final ChatThreadArgs args;
 
-  const ChatThreadScreen({
-    super.key,
-    required this.args,
-  });
+  const ChatThreadScreen({super.key, required this.args});
 
   @override
   ConsumerState<ChatThreadScreen> createState() => _ChatThreadScreenState();
@@ -155,9 +158,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       _scrollToBottom();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send message: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to send message: $e')));
       }
     } finally {
       if (mounted) {
@@ -280,7 +283,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   Widget build(BuildContext context) {
     // If the passed username is just "Chat" (default from notification tap),
     // fetch the actual user profile to get name and avatar.
-    final needsProfileFetch = widget.args.otherUserName == 'Chat' ||
+    final needsProfileFetch =
+        widget.args.otherUserName == 'Chat' ||
         widget.args.otherUserName.isEmpty;
 
     // Only watch if needed to avoid unnecessary API calls
@@ -293,12 +297,15 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     // Debug logging
     if (needsProfileFetch) {
       debugPrint(
-          'DEBUG: ChatThreadScreen - Needs profile fetch for user: ${widget.args.otherUserId}');
+        'DEBUG: ChatThreadScreen - Needs profile fetch for user: ${widget.args.otherUserId}',
+      );
       debugPrint(
-          'DEBUG: ChatThreadScreen - Async state: ${userProfileAsync?.toString()}');
+        'DEBUG: ChatThreadScreen - Async state: ${userProfileAsync?.toString()}',
+      );
       if (fetchedProfile != null) {
         debugPrint(
-            'DEBUG: ChatThreadScreen - Fetched profile keys: ${fetchedProfile.keys.toList()}');
+          'DEBUG: ChatThreadScreen - Fetched profile keys: ${fetchedProfile.keys.toList()}',
+        );
       }
     }
 
@@ -309,13 +316,14 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       // Robust name parsing – handle both camelCase and snake_case API responses
       final firstName =
           (fetchedProfile['firstName'] ?? fetchedProfile['first_name'])
-                  ?.toString() ??
-              '';
+              ?.toString() ??
+          '';
       final lastName =
           (fetchedProfile['lastName'] ?? fetchedProfile['last_name'])
-                  ?.toString() ??
-              '';
-      final name = (fetchedProfile['name'] ??
+              ?.toString() ??
+          '';
+      final name =
+          (fetchedProfile['name'] ??
                   fetchedProfile['fullName'] ??
                   fetchedProfile['full_name'])
               ?.toString() ??
@@ -328,7 +336,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       }
 
       // Robust avatar parsing – check all known key variants
-      displayAvatarUrl = (fetchedProfile['avatarUrl'] ??
+      displayAvatarUrl =
+          (fetchedProfile['avatarUrl'] ??
                   fetchedProfile['profilePhoto'] ??
                   fetchedProfile['profilePhotoUrl'] ??
                   fetchedProfile['photoUrl'] ??
@@ -340,23 +349,24 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
           displayAvatarUrl;
 
       debugPrint(
-          'DEBUG: ChatThreadScreen - Resolved name: "$displayUserName", avatar: "$displayAvatarUrl"');
+        'DEBUG: ChatThreadScreen - Resolved name: "$displayUserName", avatar: "$displayAvatarUrl"',
+      );
     }
 
-    final messagesAsync =
-        ref.watch(chatMessagesProvider(widget.args.otherUserId));
-    final callHistoryData = ref
-            .watch(_callHistoryLookupProvider(widget.args.otherUserId))
-            .value ??
+    final messagesAsync = ref.watch(
+      chatMessagesProvider(widget.args.otherUserId),
+    );
+    final callHistoryData =
+        ref.watch(_callHistoryLookupProvider(widget.args.otherUserId)).value ??
         const _ConversationCallHistory(byCallId: {}, items: []);
     final sessionUser = ref.watch(authNotifierProvider).value?.user;
     final currentUser = ref.watch(currentUserProvider).value;
     final currentUserId = sessionUser?.id ?? currentUser?.id ?? '';
 
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaler: const TextScaler.linear(1.0),
-      ),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: AppTokens.chatScreenBg,
         appBar: ChatThreadAppBar(
@@ -395,18 +405,15 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
         body: Stack(
           children: [
             // Fixed Background
-            const Positioned.fill(
-              child: ChatBackground(),
-            ),
+            const Positioned.fill(child: ChatBackground()),
 
             // Scrollable Content
             Column(
               children: [
                 Expanded(
                   child: messagesAsync.when(
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     error: (error, stack) => Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -426,9 +433,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                       // Wait for currentUserId to be available to avoid
                       // messages briefly showing on wrong side
                       if (currentUserId.isEmpty) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       final uiModels = _convertToUiModels(
@@ -442,10 +447,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                           child: Text(
                             'No messages or calls yet.\nStart the conversation!',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                            ),
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
                           ),
                         );
                       }
@@ -497,9 +499,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
               Positioned.fill(
                 child: Container(
                   color: Colors.black12,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
               ),
           ],
@@ -521,8 +521,9 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     final messageCallIds = <String>{};
 
     for (final message in messages) {
-      timeline
-          .add(_TimelineEntry(timestamp: message.createdAt, message: message));
+      timeline.add(
+        _TimelineEntry(timestamp: message.createdAt, message: message),
+      );
       final callId = _extractCallIdFromMessage(message);
       if (callId != null && callId.isNotEmpty) {
         messageCallIds.add(callId);
@@ -571,7 +572,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       // Determine if message is from current user:
       // 1. senderUserId matches currentUserId, OR
       // 2. recipientUserId is the other user (meaning we sent it)
-      final isMe = message.senderUserId == currentUserId ||
+      final isMe =
+          message.senderUserId == currentUserId ||
           message.recipientUserId == widget.args.otherUserId;
 
       // Check if this is a call log message
@@ -580,47 +582,53 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       if (isCallLog) {
         // Parse call log details, cross-referencing with call history
         final callDetails = _parseCallLogDetails(message, isMe, callHistoryMap);
-        uiModels.add(ChatMessageUiModel(
-          id: message.id,
-          isMe: isMe,
-          bubbleText: '',
-          showDaySeparator: showDaySeparator,
-          dayLabel: _getDayLabel(entry.timestamp),
-          isCallLog: true,
-          callTitle: callDetails['title'],
-          callSubtitle: callDetails['subtitle'],
-          callTime: _formatTime(entry.timestamp),
-          isVideoCall: callDetails['isVideo'] ?? false,
-          isMissedCall: callDetails['isMissed'] ?? false,
-        ));
+        uiModels.add(
+          ChatMessageUiModel(
+            id: message.id,
+            isMe: isMe,
+            bubbleText: '',
+            showDaySeparator: showDaySeparator,
+            dayLabel: _getDayLabel(entry.timestamp),
+            isCallLog: true,
+            callTitle: callDetails['title'],
+            callSubtitle: callDetails['subtitle'],
+            callTime: _formatTime(entry.timestamp),
+            isVideoCall: callDetails['isVideo'] ?? false,
+            isMissedCall: callDetails['isMissed'] ?? false,
+          ),
+        );
       } else {
         // Regular message
         final messageText = message.textContent?.trim().isNotEmpty == true
             ? message.textContent!
             : '';
-        final hasMedia = message.mediaUrl?.isNotEmpty == true &&
+        final hasMedia =
+            message.mediaUrl?.isNotEmpty == true &&
             message.type != ChatMessageType.text;
         final mediaType = hasMedia ? message.type.name : null;
         final fileName = hasMedia ? _fileNameFromUrl(message.mediaUrl!) : null;
 
-        uiModels.add(ChatMessageUiModel(
-          id: message.id,
-          isMe: isMe,
-          bubbleText: messageText,
-          mediaUrl: hasMedia ? message.mediaUrl : null,
-          mediaType: mediaType,
-          fileName: fileName,
-          showDaySeparator: showDaySeparator,
-          dayLabel: _getDayLabel(entry.timestamp),
-          headerMetaLeft: !isMe
-              ? '${widget.args.otherUserName} • ${_formatTime(entry.timestamp)}'
-              : null,
-          headerMetaRight:
-              isMe ? '${_formatTime(entry.timestamp)} • You' : null,
-          showAvatar: !isMe,
-          avatarUrl: !isMe ? widget.args.otherUserAvatarUrl : null,
-          isCallLog: false,
-        ));
+        uiModels.add(
+          ChatMessageUiModel(
+            id: message.id,
+            isMe: isMe,
+            bubbleText: messageText,
+            mediaUrl: hasMedia ? message.mediaUrl : null,
+            mediaType: mediaType,
+            fileName: fileName,
+            showDaySeparator: showDaySeparator,
+            dayLabel: _getDayLabel(entry.timestamp),
+            headerMetaLeft: !isMe
+                ? '${widget.args.otherUserName} • ${_formatTime(entry.timestamp)}'
+                : null,
+            headerMetaRight: isMe
+                ? '${_formatTime(entry.timestamp)} • You'
+                : null,
+            showAvatar: !isMe,
+            avatarUrl: !isMe ? widget.args.otherUserAvatarUrl : null,
+            isCallLog: false,
+          ),
+        );
       }
     }
 
@@ -747,7 +755,8 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       'subtitle': duration,
       'isVideo': isVideo,
       'isMissed': isMissed,
-      'timestamp': item.createdAt ??
+      'timestamp':
+          item.createdAt ??
           item.startedAt ??
           item.endedAt ??
           fallbackTimestamp ??

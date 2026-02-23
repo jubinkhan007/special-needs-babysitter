@@ -54,8 +54,9 @@ class _SitterBookingDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final jobDetailsAsync =
-        ref.watch(jobRequestDetailsProvider(widget.applicationId));
+    final jobDetailsAsync = ref.watch(
+      jobRequestDetailsProvider(widget.applicationId),
+    );
     final trackingState = ref.watch(sessionTrackingControllerProvider);
     final session = trackingState.session;
 
@@ -86,8 +87,11 @@ class _SitterBookingDetailsScreenState
         debugPrint('Job location: ${jobDetails.location}');
         debugPrint('Job fullAddress: ${jobDetails.fullAddress}');
         debugPrint(
-            'Job coordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}');
-        debugPrint('Geofence radius: ${jobDetails.geofenceRadiusMeters} meters');
+          'Job coordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}',
+        );
+        debugPrint(
+          'Geofence radius: ${jobDetails.geofenceRadiusMeters} meters',
+        );
         debugPrint('Start time: ${jobDetails.startTime}');
         debugPrint('End time: ${jobDetails.endTime}');
         final localStartDateTime = _parseStartDateTime(jobDetails);
@@ -97,7 +101,8 @@ class _SitterBookingDetailsScreenState
         debugPrint('Now (UTC): ${now.toUtc()}');
         debugPrint('Timezone offset: ${now.timeZoneOffset}');
         debugPrint(
-            'Local clock-in window allows: ${_isWithinClockInWindow(jobDetails)}');
+          'Local clock-in window allows: ${_isWithinClockInWindow(jobDetails)}',
+        );
 
         // DEBUG: Get and log device location (non-blocking)
         _logDeviceLocation();
@@ -106,22 +111,25 @@ class _SitterBookingDetailsScreenState
       },
       loading: () => Scaffold(
         backgroundColor: Colors.white,
-        appBar:
-            _buildAppBar(context, title: _getAppBarTitle(widget.initialStatus)),
+        appBar: _buildAppBar(
+          context,
+          title: _getAppBarTitle(widget.initialStatus),
+        ),
         body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
         backgroundColor: Colors.white,
-        appBar:
-            _buildAppBar(context, title: _getAppBarTitle(widget.initialStatus)),
+        appBar: _buildAppBar(
+          context,
+          title: _getAppBarTitle(widget.initialStatus),
+        ),
         body: Center(
           child: Padding(
             padding: EdgeInsets.all(20.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error_outline,
-                    size: 64.w, color: AppColors.error),
+                Icon(Icons.error_outline, size: 64.w, color: AppColors.error),
                 SizedBox(height: 16.h),
                 Text(
                   'Error loading booking details',
@@ -155,8 +163,11 @@ class _SitterBookingDetailsScreenState
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon:
-            Icon(Icons.arrow_back, color: const Color(0xFF667085), size: 24.w),
+        icon: Icon(
+          Icons.arrow_back,
+          color: const Color(0xFF667085),
+          size: 24.w,
+        ),
         onPressed: () {
           if (context.canPop()) {
             context.pop();
@@ -177,8 +188,11 @@ class _SitterBookingDetailsScreenState
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.headset_mic_outlined,
-              color: const Color(0xFF667085), size: 24.w),
+          icon: Icon(
+            Icons.headset_mic_outlined,
+            color: const Color(0xFF667085),
+            size: 24.w,
+          ),
           onPressed: () {
             // TODO: Open support chat
           },
@@ -188,7 +202,10 @@ class _SitterBookingDetailsScreenState
   }
 
   Widget _buildContent(
-      BuildContext context, WidgetRef ref, JobRequestDetailsModel jobDetails) {
+    BuildContext context,
+    WidgetRef ref,
+    JobRequestDetailsModel jobDetails,
+  ) {
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     final jobId = jobDetails.id;
     final isSaved = savedJobsState.savedJobIds.contains(jobId);
@@ -196,9 +213,12 @@ class _SitterBookingDetailsScreenState
     final statusValue = (widget.initialStatus?.trim().isNotEmpty == true)
         ? widget.initialStatus!.trim()
         : fallbackStatus;
-    final statusLower =
-        statusValue.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
-    final isCompleted = statusLower == 'completed' ||
+    final statusLower = statusValue.toLowerCase().replaceAll(
+      RegExp(r'[\s_-]'),
+      '',
+    );
+    final isCompleted =
+        statusLower == 'completed' ||
         (statusLower == 'clockedout' && _hasFinalEndPassed(jobDetails));
     final isActuallyCompleted = statusLower == 'completed' || _markedComplete;
     final statusLabel = _formatStatusLabel(statusValue);
@@ -214,8 +234,10 @@ class _SitterBookingDetailsScreenState
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:
-          _buildAppBar(context, title: _getAppBarTitle(widget.initialStatus)),
+      appBar: _buildAppBar(
+        context,
+        title: _getAppBarTitle(widget.initialStatus),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -248,27 +270,32 @@ class _SitterBookingDetailsScreenState
                                 .read(savedJobsControllerProvider.notifier)
                                 .toggleSaved(jobId)
                                 .then((isSaved) {
-                              if (!context.mounted) return;
-                              AppToast.show(
-                                context,
-                                SnackBar(
-                                  content: Text(
-                                      isSaved ? 'Job saved' : 'Job unsaved'),
-                                  backgroundColor: AppColors.success,
-                                ),
-                              );
-                            }).catchError((error) {
-                              if (!context.mounted) return;
-                              AppToast.show(
-                                context,
-                                SnackBar(
-                                  content: Text(error
-                                      .toString()
-                                      .replaceFirst('Exception: ', '')),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            });
+                                  if (!context.mounted) return;
+                                  AppToast.show(
+                                    context,
+                                    SnackBar(
+                                      content: Text(
+                                        isSaved ? 'Job saved' : 'Job unsaved',
+                                      ),
+                                      backgroundColor: AppColors.success,
+                                    ),
+                                  );
+                                })
+                                .catchError((error) {
+                                  if (!context.mounted) return;
+                                  AppToast.show(
+                                    context,
+                                    SnackBar(
+                                      content: Text(
+                                        error.toString().replaceFirst(
+                                          'Exception: ',
+                                          '',
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                });
                           },
                           child: Icon(
                             isSaved ? Icons.bookmark : Icons.bookmark_border,
@@ -310,51 +337,55 @@ class _SitterBookingDetailsScreenState
                             ),
                           ),
                           SizedBox(height: 12.h),
-                          ...jobDetails.children.map((child) => Padding(
-                                padding: EdgeInsets.only(bottom: 12.h),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(10.w),
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFF2F4F7),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(Icons.person_outline,
-                                          size: 20.w,
-                                          color: const Color(0xFF667085)),
+                          ...jobDetails.children.map(
+                            (child) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10.w),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFFF2F4F7),
+                                      shape: BoxShape.circle,
                                     ),
-                                    SizedBox(width: 12.w),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            child.firstName,
-                                            style: TextStyle(
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: const Color(0xFF344054),
-                                              fontFamily: 'Inter',
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            '${child.age} years old',
-                                            style: TextStyle(
-                                              fontSize: 12.sp,
-                                              color: const Color(0xFF667085),
-                                              fontFamily: 'Inter',
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
+                                    child: Icon(
+                                      Icons.person_outline,
+                                      size: 20.w,
+                                      color: const Color(0xFF667085),
                                     ),
-                                  ],
-                                ),
-                              )),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          child.firstName,
+                                          style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w600,
+                                            color: const Color(0xFF344054),
+                                            fontFamily: 'Inter',
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                          '${child.age} years old',
+                                          style: TextStyle(
+                                            fontSize: 12.sp,
+                                            color: const Color(0xFF667085),
+                                            fontFamily: 'Inter',
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -382,7 +413,9 @@ class _SitterBookingDetailsScreenState
                         KeyValueRow(
                           label: 'Date',
                           value: _formatDateRange(
-                              jobDetails.startDate, jobDetails.endDate),
+                            jobDetails.startDate,
+                            jobDetails.endDate,
+                          ),
                         ),
                         KeyValueRow(
                           label: 'Time',
@@ -415,14 +448,20 @@ class _SitterBookingDetailsScreenState
                           ),
                           SizedBox(height: 12.h),
                           if (jobDetails.transportationModes.isNotEmpty)
-                            _buildListValueRow('Transportation Mode',
-                                jobDetails.transportationModes),
+                            _buildListValueRow(
+                              'Transportation Mode',
+                              jobDetails.transportationModes,
+                            ),
                           if (jobDetails.equipmentSafety.isNotEmpty)
-                            _buildListValueRow('Equipment & Safety',
-                                jobDetails.equipmentSafety),
+                            _buildListValueRow(
+                              'Equipment & Safety',
+                              jobDetails.equipmentSafety,
+                            ),
                           if (_hasPickupDropoffDetails(jobDetails))
-                            _buildDetailedValueRow('Pickup / Drop-off\nDetails',
-                                _getPickupDropoffDetails(jobDetails)),
+                            _buildDetailedValueRow(
+                              'Pickup / Drop-off\nDetails',
+                              _getPickupDropoffDetails(jobDetails),
+                            ),
                         ],
 
                         // Skills
@@ -481,7 +520,9 @@ class _SitterBookingDetailsScreenState
                             ] else if (jobDetails.isToday)
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w, vertical: 4.h),
+                                  horizontal: 10.w,
+                                  vertical: 4.h,
+                                ),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFD1FADF),
                                   borderRadius: BorderRadius.circular(16.r),
@@ -557,9 +598,11 @@ class _SitterBookingDetailsScreenState
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(Icons.verified_user_outlined,
-                                  size: 16.sp,
-                                  color: AppColors.primary),
+                              Icon(
+                                Icons.verified_user_outlined,
+                                size: 16.sp,
+                                color: AppColors.primary,
+                              ),
                               SizedBox(width: 8.w),
                               Expanded(
                                 child: Text(
@@ -757,7 +800,9 @@ class _SitterBookingDetailsScreenState
                       Container(
                         width: double.infinity,
                         padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 8.h),
+                          horizontal: 12.w,
+                          vertical: 8.h,
+                        ),
                         margin: EdgeInsets.only(bottom: 12.h),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFEF3F2),
@@ -766,8 +811,11 @@ class _SitterBookingDetailsScreenState
                         ),
                         child: Row(
                           children: [
-                            Icon(Icons.info_outline,
-                                size: 16.sp, color: const Color(0xFFB42318)),
+                            Icon(
+                              Icons.info_outline,
+                              size: 16.sp,
+                              color: const Color(0xFFB42318),
+                            ),
                             SizedBox(width: 8.w),
                             Expanded(
                               child: Text(
@@ -790,18 +838,18 @@ class _SitterBookingDetailsScreenState
                           child: ElevatedButton(
                             onPressed:
                                 (clockInState.canClockIn && !_isClockingIn)
-                                    ? () async {
-                                        final actionApplicationId =
-                                            jobDetails.applicationId.isNotEmpty
-                                                ? jobDetails.applicationId
-                                                : widget.applicationId;
-                                        await _clockIn(
-                                          context,
-                                          ref,
-                                          actionApplicationId,
-                                        );
-                                      }
-                                    : null,
+                                ? () async {
+                                    final actionApplicationId =
+                                        jobDetails.applicationId.isNotEmpty
+                                        ? jobDetails.applicationId
+                                        : widget.applicationId;
+                                    await _clockIn(
+                                      context,
+                                      ref,
+                                      actionApplicationId,
+                                    );
+                                  }
+                                : null,
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 52.h),
                               backgroundColor: AppColors.primary,
@@ -821,7 +869,8 @@ class _SitterBookingDetailsScreenState
                                     child: const CircularProgressIndicator(
                                       strokeWidth: 2,
                                       valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white),
+                                        Colors.white,
+                                      ),
                                     ),
                                   )
                                 : Text(
@@ -845,8 +894,11 @@ class _SitterBookingDetailsScreenState
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: IconButton(
-                            icon: Icon(Icons.more_vert,
-                                color: const Color(0xFF667085), size: 20.w),
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: const Color(0xFF667085),
+                              size: 20.w,
+                            ),
                             onPressed: () {
                               // TODO: Show more options menu
                               _showMoreOptionsMenu(context, jobDetails);
@@ -880,17 +932,19 @@ class _SitterBookingDetailsScreenState
             ),
           ),
           SizedBox(height: 8.h),
-          ...values.map((value) => Padding(
-                padding: EdgeInsets.only(bottom: 4.h, left: 16.w),
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: const Color(0xFF667085),
-                    fontFamily: 'Inter',
-                  ),
+          ...values.map(
+            (value) => Padding(
+              padding: EdgeInsets.only(bottom: 4.h, left: 16.w),
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: const Color(0xFF667085),
+                  fontFamily: 'Inter',
                 ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -993,7 +1047,7 @@ class _SitterBookingDetailsScreenState
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return months[month - 1];
   }
@@ -1049,9 +1103,10 @@ class _SitterBookingDetailsScreenState
   }
 
   _ClockInState _resolveClockInState(JobRequestDetailsModel jobDetails) {
-    final statusLower = (widget.initialStatus ?? '')
-        .toLowerCase()
-        .replaceAll(RegExp(r'[\s_-]'), '');
+    final statusLower = (widget.initialStatus ?? '').toLowerCase().replaceAll(
+      RegExp(r'[\s_-]'),
+      '',
+    );
     final isClockedOut = statusLower == 'clockedout';
     final isMultiDay = _isMultiDay(jobDetails);
     final isLastDay = _isLastDay(jobDetails);
@@ -1071,14 +1126,11 @@ class _SitterBookingDetailsScreenState
 
     final fallbackMessage = _buildClockInMessage(jobDetails);
     if (localWindowAllows) {
-      final mismatchMessage = (serverMessage != null &&
-              serverMessage.isNotEmpty)
+      final mismatchMessage =
+          (serverMessage != null && serverMessage.isNotEmpty)
           ? '$serverMessage (Server clock-in window mismatch detected. Please contact support.)'
           : 'Clock-in is blocked by the server despite being within the window. Please contact support.';
-      return _ClockInState(
-        canClockIn: false,
-        message: mismatchMessage,
-      );
+      return _ClockInState(canClockIn: false, message: mismatchMessage);
     }
     return _ClockInState(
       canClockIn: false,
@@ -1095,8 +1147,9 @@ class _SitterBookingDetailsScreenState
       return false;
     }
     final now = DateTime.now();
-    final windowStart =
-        startDateTime.subtract(const Duration(minutes: windowMinutes));
+    final windowStart = startDateTime.subtract(
+      const Duration(minutes: windowMinutes),
+    );
     final windowEnd = startDateTime;
     final afterStart =
         now.isAfter(windowStart) || now.isAtSameMomentAs(windowStart);
@@ -1331,7 +1384,9 @@ class _SitterBookingDetailsScreenState
   }
 
   void _showMoreOptionsMenu(
-      BuildContext context, JobRequestDetailsModel jobDetails) {
+    BuildContext context,
+    JobRequestDetailsModel jobDetails,
+  ) {
     final parentContext = context;
     showModalBottomSheet(
       context: parentContext,
@@ -1344,8 +1399,10 @@ class _SitterBookingDetailsScreenState
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading:
-                  const Icon(Icons.message_outlined, color: Color(0xFF344054)),
+              leading: const Icon(
+                Icons.message_outlined,
+                color: Color(0xFF344054),
+              ),
               title: Text(
                 'Message Family',
                 style: TextStyle(
@@ -1361,9 +1418,7 @@ class _SitterBookingDetailsScreenState
                 if (parentUserId == null || parentUserId.isEmpty) {
                   AppToast.show(
                     parentContext,
-                    const SnackBar(
-                      content: Text('Family info unavailable.'),
-                    ),
+                    const SnackBar(content: Text('Family info unavailable.')),
                   );
                   return;
                 }
@@ -1380,8 +1435,10 @@ class _SitterBookingDetailsScreenState
               },
             ),
             ListTile(
-              leading:
-                  const Icon(Icons.cancel_outlined, color: Color(0xFF344054)),
+              leading: const Icon(
+                Icons.cancel_outlined,
+                color: Color(0xFF344054),
+              ),
               title: Text(
                 'Cancel Booking',
                 style: TextStyle(
@@ -1446,7 +1503,8 @@ class _SitterBookingDetailsScreenState
             final bottomInset = media.viewInsets.bottom;
             final maxHeight = media.size.height * 0.75;
             final requiresOther = selectedReason == 'Other';
-            final canProceed = selectedReason != null &&
+            final canProceed =
+                selectedReason != null &&
                 (!requiresOther || otherReason.trim().isNotEmpty);
             return Padding(
               padding: EdgeInsets.fromLTRB(
@@ -1475,8 +1533,10 @@ class _SitterBookingDetailsScreenState
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.close,
-                                color: Color(0xFF101828)),
+                            icon: const Icon(
+                              Icons.close,
+                              color: Color(0xFF101828),
+                            ),
                             onPressed: () => Navigator.of(sheetContext).pop(),
                           ),
                         ],
@@ -1559,18 +1619,21 @@ class _SitterBookingDetailsScreenState
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide:
-                                const BorderSide(color: Color(0xFFD0D5DD)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD0D5DD),
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide:
-                                const BorderSide(color: Color(0xFFD0D5DD)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD0D5DD),
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide:
-                                const BorderSide(color: AppColors.primary),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       ),
@@ -1702,8 +1765,10 @@ class _SitterBookingDetailsScreenState
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon:
-                              const Icon(Icons.close, color: Color(0xFF101828)),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Color(0xFF101828),
+                          ),
                           onPressed: () => Navigator.of(dialogContext).pop(),
                         ),
                       ),
@@ -1757,18 +1822,21 @@ class _SitterBookingDetailsScreenState
                           fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide:
-                                const BorderSide(color: Color(0xFFD0D5DD)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD0D5DD),
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide:
-                                const BorderSide(color: Color(0xFFD0D5DD)),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD0D5DD),
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.r),
-                            borderSide:
-                                const BorderSide(color: AppColors.primary),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       ),
@@ -1849,7 +1917,8 @@ class _SitterBookingDetailsScreenState
                                   if (!dialogContext.mounted) return;
                                   if (success) {
                                     Navigator.of(dialogContext).pop();
-                                    if (parentContext.mounted) parentContext.pop();
+                                    if (parentContext.mounted)
+                                      parentContext.pop();
                                     return;
                                   }
                                   setState(() {
@@ -1871,7 +1940,8 @@ class _SitterBookingDetailsScreenState
                                   child: const CircularProgressIndicator(
                                     strokeWidth: 2,
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white),
+                                      Colors.white,
+                                    ),
                                   ),
                                 )
                               : Text(
@@ -1959,9 +2029,7 @@ class _SitterBookingDetailsScreenState
                     _buildImpactRow(
                       'A note will be added to your profile for transparency.',
                     ),
-                    _buildImpactRow(
-                      'Future job visibility may be adjusted.',
-                    ),
+                    _buildImpactRow('Future job visibility may be adjusted.'),
                     _buildImpactRow(
                       'Repeated cancellations may lead to a temporary pause on new bookings.',
                     ),
@@ -1993,7 +2061,8 @@ class _SitterBookingDetailsScreenState
                                 if (!dialogContext.mounted) return;
                                 if (success) {
                                   Navigator.of(dialogContext).pop();
-                                  if (parentContext.mounted) parentContext.pop();
+                                  if (parentContext.mounted)
+                                    parentContext.pop();
                                   return;
                                 }
                                 setState(() {
@@ -2015,7 +2084,8 @@ class _SitterBookingDetailsScreenState
                                 child: const CircularProgressIndicator(
                                   strokeWidth: 2,
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
+                                    Colors.white,
+                                  ),
                                 ),
                               )
                             : Text(
@@ -2078,11 +2148,9 @@ class _SitterBookingDetailsScreenState
     String? fileUrl,
   }) async {
     try {
-      await ref.read(jobRequestRepositoryProvider).cancelBooking(
-            applicationId,
-            reason: reason,
-            fileUrl: fileUrl,
-          );
+      await ref
+          .read(jobRequestRepositoryProvider)
+          .cancelBooking(applicationId, reason: reason, fileUrl: fileUrl);
       ref.invalidate(sitterCurrentBookingsProvider);
       ref.invalidate(sitterBookingsProvider('upcoming'));
       ref.invalidate(sitterBookingsProvider(null));
@@ -2117,8 +2185,9 @@ class _SitterBookingDetailsScreenState
         return StatefulBuilder(
           builder: (context, setState) {
             return MediaQuery(
-              data: MediaQuery.of(dialogContext)
-                  .copyWith(textScaler: const TextScaler.linear(1)),
+              data: MediaQuery.of(
+                dialogContext,
+              ).copyWith(textScaler: const TextScaler.linear(1)),
               child: Dialog(
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -2133,8 +2202,11 @@ class _SitterBookingDetailsScreenState
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon: Icon(Icons.close,
-                              color: const Color(0xFF667085), size: 20.w),
+                          icon: Icon(
+                            Icons.close,
+                            color: const Color(0xFF667085),
+                            size: 20.w,
+                          ),
                           onPressed: () => Navigator.of(dialogContext).pop(),
                         ),
                       ),
@@ -2153,8 +2225,11 @@ class _SitterBookingDetailsScreenState
                             ),
                           ),
                           SizedBox(width: 8.w),
-                          Icon(Icons.info_outline,
-                              color: const Color(0xFF98A2B3), size: 18.w),
+                          Icon(
+                            Icons.info_outline,
+                            color: const Color(0xFF98A2B3),
+                            size: 18.w,
+                          ),
                         ],
                       ),
                       SizedBox(height: 20.h),
@@ -2186,7 +2261,8 @@ class _SitterBookingDetailsScreenState
                                           .read(jobRequestRepositoryProvider)
                                           .getJobRequestDetails(applicationId);
                                       debugPrint(
-                                          'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}');
+                                        'DEBUG: Fresh job details fetched. Photo URL: ${freshJobDetails.familyPhotoUrl}',
+                                      );
 
                                       // If still null, try fetching user profile directly using sittersRepository
                                       if (freshJobDetails.familyPhotoUrl ==
@@ -2194,25 +2270,28 @@ class _SitterBookingDetailsScreenState
                                           freshJobDetails.parentUserId !=
                                               null) {
                                         debugPrint(
-                                            'DEBUG: Family photo still null, fetching user profile for ${freshJobDetails.parentUserId}');
+                                          'DEBUG: Family photo still null, fetching user profile for ${freshJobDetails.parentUserId}',
+                                        );
                                         try {
                                           // Temporarily accessing sitters repo to get generic user profile
                                           // Ideally this should be in a shared repository
                                           final userProfile = await ref
                                               .read(sittersRepositoryProvider)
                                               .getUserProfile(
-                                                  freshJobDetails.parentUserId!);
+                                                freshJobDetails.parentUserId!,
+                                              );
                                           final photoUrl =
                                               userProfile['profilePhotoUrl']
-                                                      as String? ??
-                                                  userProfile['photoUrl']
-                                                      as String? ??
-                                                  userProfile['avatarUrl']
-                                                      as String?;
+                                                  as String? ??
+                                              userProfile['photoUrl']
+                                                  as String? ??
+                                              userProfile['avatarUrl']
+                                                  as String?;
 
                                           if (photoUrl != null) {
                                             debugPrint(
-                                                'DEBUG: Found photo URL from user profile: $photoUrl');
+                                              'DEBUG: Found photo URL from user profile: $photoUrl',
+                                            );
                                             // Create a new details object with the photo URL
                                             // Since JobRequestDetailsModel is immutable, we verify if there's a copyWith or create new
                                             // It doesn't seem to have copyWith exposed widely, so we pass it via ReviewArgs directly?
@@ -2220,28 +2299,35 @@ class _SitterBookingDetailsScreenState
                                             // We can hack it by passing a modified jobDetails if we can copy it, or modified ReviewArgs.
 
                                             // Let's modify freshJobDetails using JSON reconstruction if copyWith isn't easy
-                                            final json = freshJobDetails.toJson();
+                                            final json = freshJobDetails
+                                                .toJson();
                                             json['familyPhotoUrl'] = photoUrl;
                                             freshJobDetails =
                                                 JobRequestDetailsModel.fromJson(
-                                                    json);
+                                                  json,
+                                                );
                                           }
                                         } catch (e) {
                                           debugPrint(
-                                              'DEBUG: Failed to fetch user profile fallback: $e');
+                                            'DEBUG: Failed to fetch user profile fallback: $e',
+                                          );
                                         }
                                       }
                                     } catch (e) {
                                       debugPrint(
-                                          'DEBUG: Failed to fetch fresh details, using cached: $e');
+                                        'DEBUG: Failed to fetch fresh details, using cached: $e',
+                                      );
                                     }
 
                                     final reviewArgs = _buildReviewArgs(
-                                        applicationId, freshJobDetails);
-                                    final reviewArgsWithAvatar =
-                                        reviewArgs.copyWith(
-                                      avatarUrl: freshJobDetails.familyPhotoUrl,
+                                      applicationId,
+                                      freshJobDetails,
                                     );
+                                    final reviewArgsWithAvatar = reviewArgs
+                                        .copyWith(
+                                          avatarUrl:
+                                              freshJobDetails.familyPhotoUrl,
+                                        );
 
                                     if (!parentContext.mounted) return;
                                     parentContext.push(
@@ -2271,7 +2357,8 @@ class _SitterBookingDetailsScreenState
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white),
+                                      Colors.white,
+                                    ),
                                   ),
                                 )
                               : Text(
@@ -2332,9 +2419,9 @@ class _SitterBookingDetailsScreenState
   ) async {
     try {
       _logCompleteBookingDebug(applicationId, jobDetails);
-      await ref.read(jobRequestRepositoryProvider).completeBooking(
-            applicationId,
-          );
+      await ref
+          .read(jobRequestRepositoryProvider)
+          .completeBooking(applicationId);
       ref.invalidate(jobRequestDetailsProvider(applicationId));
       ref.invalidate(sitterCurrentBookingsProvider);
       ref.invalidate(sitterBookingsProvider('upcoming'));
@@ -2357,7 +2444,8 @@ class _SitterBookingDetailsScreenState
       if (errorMessage.contains('Cannot complete this job') ||
           errorMessage.contains('400')) {
         debugPrint(
-            'DEBUG: Handling 400 error as success (job likely already complete)');
+          'DEBUG: Handling 400 error as success (job likely already complete)',
+        );
         ref.invalidate(jobRequestDetailsProvider(applicationId));
         ref.invalidate(sitterCurrentBookingsProvider);
         if (!context.mounted) return false;
@@ -2399,7 +2487,8 @@ class _SitterBookingDetailsScreenState
     debugPrint('canClockIn: ${jobDetails.canClockIn}');
     debugPrint('clockInMessage: ${jobDetails.clockInMessage}');
     debugPrint(
-        'jobCoordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}');
+      'jobCoordinates: ${jobDetails.jobCoordinates?.latitude}, ${jobDetails.jobCoordinates?.longitude}',
+    );
     debugPrint('geofenceRadiusMeters: ${jobDetails.geofenceRadiusMeters}');
     debugPrint('now (local): $now');
     debugPrint('startDateTime (local): $startDateTime');
@@ -2453,8 +2542,7 @@ class _SitterBookingDetailsScreenState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.shield_outlined,
-                  size: 40.w, color: AppColors.primary),
+              Icon(Icons.shield_outlined, size: 40.w, color: AppColors.primary),
               SizedBox(height: 12.h),
               Text(
                 'Safety Check',
@@ -2527,7 +2615,9 @@ class _SitterBookingDetailsScreenState
       // Get device location for clock-in
       final position = await _getDeviceLocation();
 
-      await ref.read(jobRequestRepositoryProvider).clockInBooking(
+      await ref
+          .read(jobRequestRepositoryProvider)
+          .clockInBooking(
             applicationId,
             latitude: position['latitude'] as double,
             longitude: position['longitude'] as double,
@@ -2569,7 +2659,8 @@ class _SitterBookingDetailsScreenState
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         throw Exception(
-            'Location services are disabled. Please enable them to clock in.');
+          'Location services are disabled. Please enable them to clock in.',
+        );
       }
 
       // Request location permission
@@ -2583,7 +2674,8 @@ class _SitterBookingDetailsScreenState
 
       if (permission == LocationPermission.deniedForever) {
         throw Exception(
-            'Location permission is permanently denied. Please enable it in app settings.');
+          'Location permission is permanently denied. Please enable it in app settings.',
+        );
       }
 
       // Get current position with 30 second timeout
@@ -2592,10 +2684,7 @@ class _SitterBookingDetailsScreenState
         desiredAccuracy: LocationAccuracy.best,
       );
 
-      return {
-        'latitude': position.latitude,
-        'longitude': position.longitude,
-      };
+      return {'latitude': position.latitude, 'longitude': position.longitude};
     } catch (e) {
       // Log error and show user-friendly message
       debugPrint('DEBUG: Location Error: $e');
@@ -2649,8 +2738,9 @@ class _SitterBookingDetailsScreenState
       context: context,
       builder: (context) {
         return MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: const TextScaler.linear(1)),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: const TextScaler.linear(1)),
           child: Dialog(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
@@ -2669,8 +2759,11 @@ class _SitterBookingDetailsScreenState
                     Align(
                       alignment: Alignment.topRight,
                       child: IconButton(
-                        icon: Icon(Icons.close,
-                            color: const Color(0xFF667085), size: 20.w),
+                        icon: Icon(
+                          Icons.close,
+                          color: const Color(0xFF667085),
+                          size: 20.w,
+                        ),
                         onPressed: () => context.pop(),
                       ),
                     ),
@@ -2786,19 +2879,29 @@ class _SitterBookingDetailsScreenState
     debugPrint('DEBUG _buildReviewArgs: applicationId = $applicationId');
     debugPrint('DEBUG _buildReviewArgs: jobDetails.id = ${jobDetails.id}');
     debugPrint(
-        'DEBUG _buildReviewArgs: jobDetails.familyName = "${jobDetails.familyName}"');
+      'DEBUG _buildReviewArgs: jobDetails.familyName = "${jobDetails.familyName}"',
+    );
     debugPrint(
-        'DEBUG _buildReviewArgs: jobDetails.parentUserId = ${jobDetails.parentUserId}');
-    debugPrint('DEBUG _buildReviewArgs: jobDetails.title = "${jobDetails.title}"');
+      'DEBUG _buildReviewArgs: jobDetails.parentUserId = ${jobDetails.parentUserId}',
+    );
     debugPrint(
-        'DEBUG _buildReviewArgs: jobDetails.location = ${jobDetails.location}');
+      'DEBUG _buildReviewArgs: jobDetails.title = "${jobDetails.title}"',
+    );
     debugPrint(
-        'DEBUG _buildReviewArgs: jobDetails.familyPhotoUrl = ${jobDetails.familyPhotoUrl}');
-    debugPrint('DEBUG _buildReviewArgs: jobDetails.jobId = ${jobDetails.jobId}');
+      'DEBUG _buildReviewArgs: jobDetails.location = ${jobDetails.location}',
+    );
     debugPrint(
-        'DEBUG _buildReviewArgs: jobDetails.sitterSkills = ${jobDetails.sitterSkills}');
+      'DEBUG _buildReviewArgs: jobDetails.familyPhotoUrl = ${jobDetails.familyPhotoUrl}',
+    );
     debugPrint(
-        'DEBUG _buildReviewArgs: Using jobId for review: ${jobDetails.jobId ?? jobDetails.id}');
+      'DEBUG _buildReviewArgs: jobDetails.jobId = ${jobDetails.jobId}',
+    );
+    debugPrint(
+      'DEBUG _buildReviewArgs: jobDetails.sitterSkills = ${jobDetails.sitterSkills}',
+    );
+    debugPrint(
+      'DEBUG _buildReviewArgs: Using jobId for review: ${jobDetails.jobId ?? jobDetails.id}',
+    );
     debugPrint('DEBUG _buildReviewArgs: =====================================');
     final hourlyRate = _formatCurrency(jobDetails.payRate);
     final timeRange = [
@@ -2846,7 +2949,8 @@ class _SitterBookingDetailsScreenState
       paymentLabel: '$hourlyRate/hour',
       avatarUrl: jobDetails.familyPhotoUrl,
       reviewPrompt: 'Rate Your Experience With This Family\n(Private).',
-      jobId: jobDetails.jobId ??
+      jobId:
+          jobDetails.jobId ??
           jobDetails.id, // Use jobId if available, fallback to id
     );
   }

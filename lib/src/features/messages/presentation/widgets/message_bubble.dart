@@ -20,16 +20,18 @@ class MessageBubble extends StatelessWidget {
         vertical: 6, // Vertical gap between messages
       ),
       child: Column(
-        crossAxisAlignment:
-            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           // Meta Header (Name • Time)
           if (uiModel.headerMetaLeft != null || uiModel.headerMetaRight != null)
             Padding(
               padding: EdgeInsets.only(
-                  bottom: 4,
-                  left: isMe ? 0 : 48,
-                  right: isMe ? 48 : 0), // Align with bubble content
+                bottom: 4,
+                left: isMe ? 0 : 48,
+                right: isMe ? 48 : 0,
+              ), // Align with bubble content
               child: Text(
                 isMe ? uiModel.headerMetaRight! : uiModel.headerMetaLeft!,
                 style: AppTokens.chatMetaStyle,
@@ -37,8 +39,9 @@ class MessageBubble extends StatelessWidget {
             ),
 
           Row(
-            mainAxisAlignment:
-                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: isMe
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // Avatar for sender (Left side)
@@ -88,10 +91,7 @@ class MessageBubble extends StatelessWidget {
                             : Radius.circular(AppTokens.chatBubbleRadius),
                       ),
                     ),
-                    child: _MessageBubbleContent(
-                      uiModel: uiModel,
-                      isMe: isMe,
-                    ),
+                    child: _MessageBubbleContent(uiModel: uiModel, isMe: isMe),
                   ),
                 ),
               ),
@@ -122,10 +122,7 @@ class _MessageBubbleContent extends StatelessWidget {
   final ChatMessageUiModel uiModel;
   final bool isMe;
 
-  const _MessageBubbleContent({
-    required this.uiModel,
-    required this.isMe,
-  });
+  const _MessageBubbleContent({required this.uiModel, required this.isMe});
 
   bool get _hasMedia =>
       uiModel.mediaUrl != null &&
@@ -157,8 +154,9 @@ class _MessageBubbleContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        isMe ? AppTokens.chatBubbleOutgoingText : AppTokens.textPrimary;
+    final textColor = isMe
+        ? AppTokens.chatBubbleOutgoingText
+        : AppTokens.textPrimary;
     final textStyle = AppTokens.chatMessageTextStyle.copyWith(color: textColor);
 
     if (!_hasMedia) {
@@ -196,7 +194,8 @@ class _MessageBubbleContent extends StatelessWidget {
       );
     }
 
-    final fileLabel = uiModel.fileName ??
+    final fileLabel =
+        uiModel.fileName ??
         (uiModel.mediaUrl?.split('/').last.split('?').first ?? 'Attachment');
 
     return GestureDetector(

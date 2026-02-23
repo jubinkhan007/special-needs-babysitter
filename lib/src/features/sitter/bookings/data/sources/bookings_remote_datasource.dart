@@ -20,12 +20,15 @@ class BookingsRemoteDataSource {
       }
 
       debugPrint(
-          'DEBUG: Sitter Bookings Request: GET /sitters/bookings${queryParams.isNotEmpty ? '?${queryParams.entries.map((e) => '${e.key}=${e.value}').join('&')}' : ''}');
+        'DEBUG: Sitter Bookings Request: GET /sitters/bookings${queryParams.isNotEmpty ? '?${queryParams.entries.map((e) => '${e.key}=${e.value}').join('&')}' : ''}',
+      );
       final response = await _dio.get(
         '/sitters/bookings',
         queryParameters: queryParams,
       );
-      debugPrint('DEBUG: Sitter Bookings Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Sitter Bookings Response Status: ${response.statusCode}',
+      );
       debugPrint('DEBUG: Sitter Bookings Raw Response: ${response.data}');
 
       final data = response.data['data'] as Map<String, dynamic>;
@@ -38,16 +41,20 @@ class BookingsRemoteDataSource {
 
       for (var i = 0; i < result.length; i++) {
         debugPrint(
-            'DEBUG: Parsed booking[$i]: id=${result[i].id}, applicationId=${result[i].applicationId}, title=${result[i].title}');
+          'DEBUG: Parsed booking[$i]: id=${result[i].id}, applicationId=${result[i].applicationId}, title=${result[i].title}',
+        );
       }
 
       return result;
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Sitter Bookings Error: ${e.message}');
-        debugPrint('DEBUG: Sitter Bookings Error Response: ${e.response?.data}');
         debugPrint(
-            'DEBUG: Sitter Bookings Error Headers: ${e.requestOptions.headers}');
+          'DEBUG: Sitter Bookings Error Response: ${e.response?.data}',
+        );
+        debugPrint(
+          'DEBUG: Sitter Bookings Error Headers: ${e.requestOptions.headers}',
+        );
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -62,19 +69,26 @@ class BookingsRemoteDataSource {
   Future<BookingSessionModel> getBookingSession(String applicationId) async {
     try {
       debugPrint(
-          'DEBUG: Booking Session Request: GET /sitters/bookings/$applicationId/session');
-      final response =
-          await _dio.get('/sitters/bookings/$applicationId/session');
-      debugPrint('DEBUG: Booking Session Response Status: ${response.statusCode}');
+        'DEBUG: Booking Session Request: GET /sitters/bookings/$applicationId/session',
+      );
+      final response = await _dio.get(
+        '/sitters/bookings/$applicationId/session',
+      );
+      debugPrint(
+        'DEBUG: Booking Session Response Status: ${response.statusCode}',
+      );
 
       final data = response.data['data'] as Map<String, dynamic>;
       return BookingSessionModel.fromJson(data);
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Booking Session Error: ${e.message}');
-        debugPrint('DEBUG: Booking Session Error Response: ${e.response?.data}');
         debugPrint(
-            'DEBUG: Booking Session Error Headers: ${e.requestOptions.headers}');
+          'DEBUG: Booking Session Error Response: ${e.response?.data}',
+        );
+        debugPrint(
+          'DEBUG: Booking Session Error Headers: ${e.requestOptions.headers}',
+        );
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -92,23 +106,26 @@ class BookingsRemoteDataSource {
     required double longitude,
   }) async {
     try {
-      final payload = {
-        'latitude': latitude,
-        'longitude': longitude,
-      };
+      final payload = {'latitude': latitude, 'longitude': longitude};
       debugPrint(
-          'DEBUG: Booking Location Request: POST /sitters/bookings/$applicationId/location $payload');
+        'DEBUG: Booking Location Request: POST /sitters/bookings/$applicationId/location $payload',
+      );
       final response = await _dio.post(
         '/sitters/bookings/$applicationId/location',
         data: payload,
       );
-      debugPrint('DEBUG: Booking Location Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Booking Location Response Status: ${response.statusCode}',
+      );
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Booking Location Error: ${e.message}');
-        debugPrint('DEBUG: Booking Location Error Response: ${e.response?.data}');
         debugPrint(
-            'DEBUG: Booking Location Error Headers: ${e.requestOptions.headers}');
+          'DEBUG: Booking Location Error Response: ${e.response?.data}',
+        );
+        debugPrint(
+          'DEBUG: Booking Location Error Headers: ${e.requestOptions.headers}',
+        );
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -120,17 +137,22 @@ class BookingsRemoteDataSource {
   }
 
   /// Pause the current booking session via POST /sitters/bookings/{id}/pause.
-  Future<DateTime> pauseBooking(String applicationId,
-      {required String reason}) async {
+  Future<DateTime> pauseBooking(
+    String applicationId, {
+    required String reason,
+  }) async {
     try {
       final payload = {'reason': reason};
       debugPrint(
-          'DEBUG: Pause Booking Request: POST /sitters/bookings/$applicationId/pause $payload');
+        'DEBUG: Pause Booking Request: POST /sitters/bookings/$applicationId/pause $payload',
+      );
       final response = await _dio.post(
         '/sitters/bookings/$applicationId/pause',
         data: payload,
       );
-      debugPrint('DEBUG: Pause Booking Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Pause Booking Response Status: ${response.statusCode}',
+      );
 
       final data = response.data['data'] as Map<String, dynamic>;
       final pausedAtStr = data['pausedAt'] as String;
@@ -153,11 +175,14 @@ class BookingsRemoteDataSource {
   Future<void> resumeBooking(String applicationId) async {
     try {
       debugPrint(
-          'DEBUG: Resume Booking Request: POST /sitters/bookings/$applicationId/resume');
+        'DEBUG: Resume Booking Request: POST /sitters/bookings/$applicationId/resume',
+      );
       final response = await _dio.post(
         '/sitters/bookings/$applicationId/resume',
       );
-      debugPrint('DEBUG: Resume Booking Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Resume Booking Response Status: ${response.statusCode}',
+      );
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Resume Booking Error: ${e.message}');
@@ -176,7 +201,8 @@ class BookingsRemoteDataSource {
   Future<ClockOutResultModel> clockOutBooking(String applicationId) async {
     try {
       debugPrint(
-          'DEBUG: Clock Out Request: POST /sitters/bookings/$applicationId/clock-out');
+        'DEBUG: Clock Out Request: POST /sitters/bookings/$applicationId/clock-out',
+      );
       final response = await _dio.post(
         '/sitters/bookings/$applicationId/clock-out',
       );

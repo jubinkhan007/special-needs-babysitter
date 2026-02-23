@@ -10,9 +10,7 @@ void main() {
       builder: (context, child) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: ActiveBookingDetailsScreen(
-            bookingId: 'test-active-id',
-          ),
+          home: ActiveBookingDetailsScreen(bookingId: 'test-active-id'),
         );
       },
     );

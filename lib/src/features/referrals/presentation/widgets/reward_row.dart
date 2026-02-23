@@ -8,10 +8,7 @@ import 'referral_bonuses_styles.dart';
 class RewardRow extends StatelessWidget {
   final ReferralItem referral;
 
-  const RewardRow({
-    super.key,
-    required this.referral,
-  });
+  const RewardRow({super.key, required this.referral});
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +44,11 @@ class RewardRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 2),
-              Text(
-                'Joined: $joinedDate',
-                style: ReferralBonusesStyles.label,
-              ),
+              Text('Joined: $joinedDate', style: ReferralBonusesStyles.label),
             ],
           ),
         ),
-        Text(
-          amountText,
-          style: ReferralBonusesStyles.value,
-        ),
+        Text(amountText, style: ReferralBonusesStyles.value),
       ],
     );
   }

@@ -44,7 +44,7 @@ class CircularProgressAvatar extends StatelessWidget {
                   backgroundImage: imageUrl != null && imageUrl!.isNotEmpty
                       ? NetworkImage(imageUrl!)
                       : const AssetImage('assets/images/user1.png')
-                          as ImageProvider,
+                            as ImageProvider,
                 ),
               ),
             ),

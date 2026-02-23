@@ -70,7 +70,9 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
             controller: _controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*\.?[0-9]{0,2}')),
+              FilteringTextInputFormatter.allow(
+                RegExp(r'^[0-9]*\.?[0-9]{0,2}'),
+              ),
             ],
             decoration: InputDecoration(
               prefixText: '\$ ',
@@ -104,7 +106,9 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2.5,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.textOnButton,
+                        ),
                       ),
                     )
                   : const Text(
@@ -141,7 +145,9 @@ class _WithdrawBottomSheetState extends ConsumerState<WithdrawBottomSheet> {
     final cents = (amount * 100).round();
 
     try {
-      final result = await ref.read(walletControllerProvider.notifier).withdraw(cents);
+      final result = await ref
+          .read(walletControllerProvider.notifier)
+          .withdraw(cents);
       if (!context.mounted) return;
       Navigator.of(context).pop();
       final arrival = result.estimatedArrival;

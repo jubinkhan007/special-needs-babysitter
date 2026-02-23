@@ -13,10 +13,7 @@ void main() {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           body: Center(
-            child: SignOutDialog(
-              onConfirm: () {},
-              onCancel: () {},
-            ),
+            child: SignOutDialog(onConfirm: () {}, onCancel: () {}),
           ),
         ),
       ),

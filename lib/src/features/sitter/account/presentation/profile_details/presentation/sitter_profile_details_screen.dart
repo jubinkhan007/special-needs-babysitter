@@ -58,7 +58,9 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
         data: (profile) {
           return RefreshIndicator(
             onRefresh: () async {
-              await ref.read(sitterProfileDetailsControllerProvider.notifier).refresh();
+              await ref
+                  .read(sitterProfileDetailsControllerProvider.notifier)
+                  .refresh();
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -84,7 +86,8 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                         context: context,
                         builder: (context) => EditSkillsCertificationsDialog(
                           initialSkills: profile.skills ?? [],
-                          initialCertifications: profile.certifications
+                          initialCertifications:
+                              profile.certifications
                                   ?.map((cert) => cert.type)
                                   .toList() ??
                               [],
@@ -93,7 +96,9 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                           onSave: (payload) async {
                             final success = await ref
                                 .read(
-                                    sitterProfileDetailsControllerProvider.notifier)
+                                  sitterProfileDetailsControllerProvider
+                                      .notifier,
+                                )
                                 .updateSkillsAndCertifications(
                                   profile: profile,
                                   skills: payload.skills,
@@ -105,9 +110,11 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                               AppToast.show(
                                 context,
                                 SnackBar(
-                                  content: Text(success
-                                      ? 'Profile updated successfully'
-                                      : 'Failed to update profile'),
+                                  content: Text(
+                                    success
+                                        ? 'Profile updated successfully'
+                                        : 'Failed to update profile',
+                                  ),
                                 ),
                               );
                             }
@@ -130,15 +137,19 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                           onSave: (availability) async {
                             final success = await ref
                                 .read(
-                                    sitterProfileDetailsControllerProvider.notifier)
+                                  sitterProfileDetailsControllerProvider
+                                      .notifier,
+                                )
                                 .updateAvailability(availability);
                             if (context.mounted) {
                               AppToast.show(
                                 context,
                                 SnackBar(
-                                  content: Text(success
-                                      ? 'Availability updated successfully'
-                                      : 'Failed to update availability'),
+                                  content: Text(
+                                    success
+                                        ? 'Availability updated successfully'
+                                        : 'Failed to update availability',
+                                  ),
                                 ),
                               );
                             }
@@ -164,7 +175,9 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                           onSave: (rate, openToNegotiating) async {
                             final success = await ref
                                 .read(
-                                    sitterProfileDetailsControllerProvider.notifier)
+                                  sitterProfileDetailsControllerProvider
+                                      .notifier,
+                                )
                                 .updateHourlyRate(
                                   hourlyRate: rate,
                                   openToNegotiating: openToNegotiating,
@@ -173,9 +186,11 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                               AppToast.show(
                                 context,
                                 SnackBar(
-                                  content: Text(success
-                                      ? 'Hourly rate updated successfully'
-                                      : 'Failed to update hourly rate'),
+                                  content: Text(
+                                    success
+                                        ? 'Hourly rate updated successfully'
+                                        : 'Failed to update hourly rate',
+                                  ),
                                 ),
                               );
                             }
@@ -202,14 +217,20 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
                           profile: profile,
                           onSave: (payload) async {
                             final success = await ref
-                                .read(sitterProfileDetailsControllerProvider.notifier)
+                                .read(
+                                  sitterProfileDetailsControllerProvider
+                                      .notifier,
+                                )
                                 .updateProfessionalInfo(payload);
                             if (context.mounted) {
-                              AppToast.show(context, 
+                              AppToast.show(
+                                context,
                                 SnackBar(
-                                  content: Text(success
-                                      ? 'Profile updated successfully'
-                                      : 'Failed to update profile'),
+                                  content: Text(
+                                    success
+                                        ? 'Profile updated successfully'
+                                        : 'Failed to update profile',
+                                  ),
                                 ),
                               );
                             }
@@ -253,9 +274,11 @@ class SitterProfileDetailsScreen extends ConsumerWidget {
       AppToast.show(
         context,
         SnackBar(
-          content: Text(success
-              ? 'Profile photo updated successfully'
-              : 'Failed to update profile photo'),
+          content: Text(
+            success
+                ? 'Profile photo updated successfully'
+                : 'Failed to update profile photo',
+          ),
         ),
       );
     }

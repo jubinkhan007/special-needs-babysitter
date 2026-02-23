@@ -28,8 +28,9 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final applicationAsync =
-        ref.watch(sitterApplicationDetailsProvider(applicationId));
+    final applicationAsync = ref.watch(
+      sitterApplicationDetailsProvider(applicationId),
+    );
 
     return applicationAsync.when(
       data: (application) => _buildContent(context, ref, application),
@@ -39,8 +40,11 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
           backgroundColor: AppColors.surfaceTint,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: const Color(0xFF667085), size: 24.w),
+            icon: Icon(
+              Icons.arrow_back,
+              color: const Color(0xFF667085),
+              size: 24.w,
+            ),
             onPressed: () => context.pop(),
           ),
           centerTitle: true,
@@ -62,8 +66,11 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
           backgroundColor: AppColors.surfaceTint,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: const Color(0xFF667085), size: 24.w),
+            icon: Icon(
+              Icons.arrow_back,
+              color: const Color(0xFF667085),
+              size: 24.w,
+            ),
             onPressed: () => context.pop(),
           ),
           centerTitle: true,
@@ -88,7 +95,10 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildContent(
-      BuildContext context, WidgetRef ref, ApplicationModel application) {
+    BuildContext context,
+    WidgetRef ref,
+    ApplicationModel application,
+  ) {
     final job = application.job;
     final timeAgo = timeago.format(application.createdAt);
     final savedJobsState = ref.watch(savedJobsControllerProvider);
@@ -101,8 +111,11 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
         backgroundColor: AppColors.surfaceTint,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: const Color(0xFF667085), size: 24.w),
+          icon: Icon(
+            Icons.arrow_back,
+            color: const Color(0xFF667085),
+            size: 24.w,
+          ),
           onPressed: () => context.pop(),
         ),
         centerTitle: true,
@@ -117,8 +130,11 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.headset_mic_outlined,
-                color: const Color(0xFF667085), size: 24.w),
+            icon: Icon(
+              Icons.headset_mic_outlined,
+              color: const Color(0xFF667085),
+              size: 24.w,
+            ),
             onPressed: () {
               // TODO: Open support chat
             },
@@ -157,33 +173,37 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
                                 .read(savedJobsControllerProvider.notifier)
                                 .toggleSaved(jobId)
                                 .then((isSaved) {
-                              if (!context.mounted) return;
-                              AppToast.show(
-                                context,
-                                SnackBar(
-                                  content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                                  backgroundColor: AppColors.success,
-                                ),
-                              );
-                            }).catchError((error) {
-                              if (!context.mounted) return;
-                              AppToast.show(
-                                context,
-                                SnackBar(
-                                  content: Text(error
-                                      .toString()
-                                      .replaceFirst('Exception: ', '')),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            });
+                                  if (!context.mounted) return;
+                                  AppToast.show(
+                                    context,
+                                    SnackBar(
+                                      content: Text(
+                                        isSaved ? 'Job saved' : 'Job unsaved',
+                                      ),
+                                      backgroundColor: AppColors.success,
+                                    ),
+                                  );
+                                })
+                                .catchError((error) {
+                                  if (!context.mounted) return;
+                                  AppToast.show(
+                                    context,
+                                    SnackBar(
+                                      content: Text(
+                                        error.toString().replaceFirst(
+                                          'Exception: ',
+                                          '',
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                });
                           },
                           child: Padding(
                             padding: EdgeInsets.only(top: 4.h),
                             child: Icon(
-                              isSaved
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_outline,
+                              isSaved ? Icons.bookmark : Icons.bookmark_outline,
                               color: const Color(0xFF667085),
                               size: 24.w,
                             ),
@@ -225,22 +245,25 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
                         SizedBox(height: 16.h),
 
                         KeyValueRow(
-                            label: 'Date',
-                            value:
-                                _formatDateRange(job.startDate, job.endDate)),
+                          label: 'Date',
+                          value: _formatDateRange(job.startDate, job.endDate),
+                        ),
                         KeyValueRow(
-                            label: 'Time',
-                            value: '${job.startTime} - ${job.endTime}'),
+                          label: 'Time',
+                          value: '${job.startTime} - ${job.endTime}',
+                        ),
                         KeyValueRow(
-                            label: 'No of Days',
-                            value:
-                                '${_calculateDays(job.startDate, job.endDate)}'),
+                          label: 'No of Days',
+                          value:
+                              '${_calculateDays(job.startDate, job.endDate)}',
+                        ),
 
                         if (job.additionalDetails != null &&
                             job.additionalDetails!.isNotEmpty) ...[
                           KeyValueRow(
-                              label: 'Additional Notes',
-                              value: job.additionalDetails!),
+                            label: 'Additional Notes',
+                            value: job.additionalDetails!,
+                          ),
                         ],
 
                         // Transportation Preferences
@@ -257,11 +280,15 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
                           ),
                           SizedBox(height: 12.h),
                           if (_getTransportationModes(job.children).isNotEmpty)
-                            _buildListValueRow('Transportation Mode',
-                                _getTransportationModes(job.children)),
+                            _buildListValueRow(
+                              'Transportation Mode',
+                              _getTransportationModes(job.children),
+                            ),
                           if (_getEquipmentSafety(job.children).isNotEmpty)
-                            _buildListValueRow('Equipment & Safety',
-                                _getEquipmentSafety(job.children)),
+                            _buildListValueRow(
+                              'Equipment & Safety',
+                              _getEquipmentSafety(job.children),
+                            ),
                           if (_getPickupDropoffDetails(job.children) != null)
                             KeyValueRow(
                               label: 'Pickup / Drop-off\nDetails',
@@ -348,7 +375,8 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
                             SizedBox(width: 12.w),
                             StatusPill(
                               status: _mapApplicationStatusToJobStatus(
-                                  application.status),
+                                application.status,
+                              ),
                             ),
                           ],
                         ),
@@ -390,16 +418,18 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: values
-                  .map((v) => Text(
-                        v,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF101828),
-                          fontFamily: 'Inter',
-                        ),
-                      ))
+                  .map(
+                    (v) => Text(
+                      v,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF101828),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -447,7 +477,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return months[month - 1];
   }

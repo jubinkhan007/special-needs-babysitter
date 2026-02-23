@@ -52,15 +52,16 @@ class ProfileDetailsInfoCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(4),
                       decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
-                            )
-                          ]),
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
                       child: const Icon(
                         Icons.edit,
                         size: 14,
@@ -81,17 +82,22 @@ class ProfileDetailsInfoCard extends StatelessWidget {
           LabelValueRow(label: 'Phone', value: user.phoneNumber ?? ''),
           LabelValueRow(label: 'Email', value: user.email),
           LabelValueRow(
-              label: 'No. of Family Members',
-              value: details.numberOfFamilyMembers.toString()),
+            label: 'No. of Family Members',
+            value: details.numberOfFamilyMembers.toString(),
+          ),
           LabelValueRow(
             label: 'Family Bio',
             value: details.familyBio,
             isMultiLine: true,
           ),
           LabelValueRow(
-              label: 'No. of Pets', value: details.numberOfPets.toString()),
+            label: 'No. of Pets',
+            value: details.numberOfPets.toString(),
+          ),
           LabelValueRow(
-              label: 'Languages', value: _formatLanguages(details.languages)),
+            label: 'Languages',
+            value: _formatLanguages(details.languages),
+          ),
         ],
       ),
     );

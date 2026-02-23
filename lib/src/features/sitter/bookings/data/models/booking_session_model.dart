@@ -105,11 +105,13 @@ class BookingSessionModel extends Equatable {
   }
 
   factory BookingSessionModel.fromJson(Map<String, dynamic> json) {
-    final clockInRaw = json['clockInTime'] ??
+    final clockInRaw =
+        json['clockInTime'] ??
         json['clockInAt'] ??
         json['clockedInAt'] ??
         json['clockedInTime'];
-    final scheduledEndRaw = json['scheduledEndTime'] ??
+    final scheduledEndRaw =
+        json['scheduledEndTime'] ??
         json['scheduledEndAt'] ??
         json['scheduledEnd'] ??
         json['endTime'];
@@ -119,28 +121,36 @@ class BookingSessionModel extends Equatable {
       applicationId: json['applicationId'] as String? ?? '',
       jobTitle: json['jobTitle'] as String? ?? json['title'] as String? ?? '',
       familyName: json['familyName'] as String? ?? '',
-      children: (json['children'] as List?)
-              ?.map((e) =>
-                  BookingSessionChildModel.fromJson(e as Map<String, dynamic>))
+      children:
+          (json['children'] as List?)
+              ?.map(
+                (e) => BookingSessionChildModel.fromJson(
+                  e as Map<String, dynamic>,
+                ),
+              )
               .toList() ??
           [],
       location: json['location'] as String? ?? '',
       fullAddress: json['fullAddress'] as String? ?? '',
       coordinates: json['coordinates'] != null
           ? JobCoordinatesModel.fromJson(
-              json['coordinates'] as Map<String, dynamic>)
+              json['coordinates'] as Map<String, dynamic>,
+            )
           : null,
       payRate: (json['payRate'] as num?)?.toDouble() ?? 0,
       clockInTime: _parseDateTime(clockInRaw),
       scheduledEndTime: _parseDateTime(scheduledEndRaw),
       isPaused: json['isPaused'] as bool? ?? false,
       pausedAt: _parseDateTime(json['pausedAt']),
-      totalPausedDurationSeconds:
-          _parseDurationSeconds(json['totalPausedDuration']),
+      totalPausedDurationSeconds: _parseDurationSeconds(
+        json['totalPausedDuration'],
+      ),
       currentBreakReason: json['currentBreakReason'] as String?,
-      routeCoordinates: (json['routeCoordinates'] as List?)
-              ?.map((e) =>
-                  JobCoordinatesModel.fromJson(e as Map<String, dynamic>))
+      routeCoordinates:
+          (json['routeCoordinates'] as List?)
+              ?.map(
+                (e) => JobCoordinatesModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
     );
@@ -171,8 +181,7 @@ class BookingSessionModel extends Equatable {
     if (clockInTime == null) {
       return Duration.zero;
     }
-    final reference =
-        isPaused && pausedAt != null ? pausedAt! : now;
+    final reference = isPaused && pausedAt != null ? pausedAt! : now;
     final rawElapsed = reference.difference(clockInTime!);
     if (rawElapsed.isNegative) {
       return Duration.zero;
@@ -222,21 +231,21 @@ class BookingSessionModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        applicationId,
-        jobTitle,
-        familyName,
-        children,
-        location,
-        fullAddress,
-        coordinates,
-        payRate,
-        clockInTime,
-        scheduledEndTime,
-        isPaused,
-        pausedAt,
-        totalPausedDurationSeconds,
-        currentBreakReason,
-        routeCoordinates,
-      ];
+    id,
+    applicationId,
+    jobTitle,
+    familyName,
+    children,
+    location,
+    fullAddress,
+    coordinates,
+    payRate,
+    clockInTime,
+    scheduledEndTime,
+    isPaused,
+    pausedAt,
+    totalPausedDurationSeconds,
+    currentBreakReason,
+    routeCoordinates,
+  ];
 }

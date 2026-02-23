@@ -11,7 +11,7 @@ class AppConfirmDialog extends StatelessWidget {
   final VoidCallback onSecondary;
   final VoidCallback? onClose; // Optional close callback
   final bool
-      primaryIsDestructive; // To style primary differently if needed, though specific req is cancel=blue
+  primaryIsDestructive; // To style primary differently if needed, though specific req is cancel=blue
 
   const AppConfirmDialog({
     super.key,
@@ -29,13 +29,15 @@ class AppConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // Lock text scaling as per requirement
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Dialog(
         backgroundColor: Colors.transparent, // Handle bg in container
         elevation: 0,
-        insetPadding:
-            EdgeInsets.symmetric(horizontal: 24.w), // Margins from screen edge
+        insetPadding: EdgeInsets.symmetric(
+          horizontal: 24.w,
+        ), // Margins from screen edge
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -59,26 +61,20 @@ class AppConfirmDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                        height: 8
-                            .h), // Space for close icon visual balance? Or just standard padding. Close icon is top right.
-
+                      height: 8.h,
+                    ), // Space for close icon visual balance? Or just standard padding. Close icon is top right.
                     // Title
                     Padding(
                       padding: EdgeInsets.only(
-                          right: 24.w), // Avoid overlap with close icon
-                      child: Text(
-                        title,
-                        style: AppTokens.dialogTitleStyle,
-                      ),
+                        right: 24.w,
+                      ), // Avoid overlap with close icon
+                      child: Text(title, style: AppTokens.dialogTitleStyle),
                     ),
 
                     SizedBox(height: 16.h),
 
                     // Body
-                    Text(
-                      message,
-                      style: AppTokens.dialogBodyStyle,
-                    ),
+                    Text(message, style: AppTokens.dialogBodyStyle),
 
                     SizedBox(height: 32.h),
 
@@ -110,17 +106,17 @@ class AppConfirmDialog extends StatelessWidget {
                         // Primary Action (Right - Filled Pill)
                         // Using ConstrainedBox to ensure it doesn't grow infinitely and has a reasonable minimum.
                         ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: 100.w,
-                          ),
+                          constraints: BoxConstraints(minWidth: 100.w),
                           child: ElevatedButton(
                             onPressed: onPrimary,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTokens.dialogPrimaryBtnBg,
                               foregroundColor: AppTokens.dialogPrimaryBtnText,
                               elevation: 0,
-                              minimumSize:
-                                  Size(100.w, AppTokens.dialogPrimaryBtnHeight),
+                              minimumSize: Size(
+                                100.w,
+                                AppTokens.dialogPrimaryBtnHeight,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.r),
                               ),

@@ -93,7 +93,8 @@ class SkillsSection extends StatelessWidget {
   Widget _buildLanguageItem(String label) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: 12), // Figma shows wide spacing
+        horizontal: 12,
+      ), // Figma shows wide spacing
       child: Text(
         label,
         style: const TextStyle(

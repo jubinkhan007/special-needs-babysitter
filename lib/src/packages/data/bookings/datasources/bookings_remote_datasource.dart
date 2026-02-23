@@ -12,18 +12,22 @@ class BookingsRemoteDataSource {
   /// POST /direct-bookings - Create a direct booking with a sitter
   Future<BookingResult> createDirectBooking(Map<String, dynamic> data) async {
     try {
-      debugPrint('DEBUG: BookingsRemoteDataSource.createDirectBooking payload: $data');
+      debugPrint(
+        'DEBUG: BookingsRemoteDataSource.createDirectBooking payload: $data',
+      );
       debugPrint('DEBUG: Payload as JSON: ${jsonEncode(data)}');
       debugPrint('DEBUG: Payload keys: ${data.keys.toList()}');
-      debugPrint('DEBUG: Address keys: ${(data['address'] as Map?)?.keys.toList()}');
-      debugPrint('DEBUG: EmergencyContact keys: ${(data['emergencyContact'] as Map?)?.keys.toList()}');
-      final response = await _dio.post(
-        '/direct-bookings',
-        data: data,
+      debugPrint(
+        'DEBUG: Address keys: ${(data['address'] as Map?)?.keys.toList()}',
       );
+      debugPrint(
+        'DEBUG: EmergencyContact keys: ${(data['emergencyContact'] as Map?)?.keys.toList()}',
+      );
+      final response = await _dio.post('/direct-bookings', data: data);
 
       debugPrint(
-          'DEBUG: BookingsRemoteDataSource.createDirectBooking response: ${response.data}',);
+        'DEBUG: BookingsRemoteDataSource.createDirectBooking response: ${response.data}',
+      );
 
       if (response.data['success'] == true) {
         final resultData = response.data['data'] as Map<String, dynamic>;
@@ -40,7 +44,9 @@ class BookingsRemoteDataSource {
       }
     } catch (e) {
       if (e is DioException) {
-        debugPrint('DEBUG: BookingsRemoteDataSource DioError: ${e.response?.data}');
+        debugPrint(
+          'DEBUG: BookingsRemoteDataSource DioError: ${e.response?.data}',
+        );
         final errorData = e.response?.data;
         if (errorData is Map && errorData['error'] != null) {
           throw Exception(errorData['error']);
@@ -70,7 +76,8 @@ class BookingsRemoteDataSource {
         resultData = responseData as Map<String, dynamic>;
       } else {
         throw Exception(
-            responseData['error'] ?? 'Failed to create payment intent',);
+          responseData['error'] ?? 'Failed to create payment intent',
+        );
       }
 
       return PaymentIntentResult(
@@ -92,13 +99,13 @@ class BookingsRemoteDataSource {
   Future<void> cancelDirectBooking(String bookingId) async {
     try {
       debugPrint(
-          'DEBUG: BookingsRemoteDataSource.cancelDirectBooking bookingId: $bookingId',);
-      final response = await _dio.post(
-        '/direct-bookings/$bookingId/cancel',
+        'DEBUG: BookingsRemoteDataSource.cancelDirectBooking bookingId: $bookingId',
       );
+      final response = await _dio.post('/direct-bookings/$bookingId/cancel');
 
       debugPrint(
-          'DEBUG: BookingsRemoteDataSource.cancelDirectBooking response: ${response.data}',);
+        'DEBUG: BookingsRemoteDataSource.cancelDirectBooking response: ${response.data}',
+      );
 
       if (response.data['success'] != true) {
         throw Exception(response.data['error'] ?? 'Failed to cancel booking');
@@ -106,7 +113,8 @@ class BookingsRemoteDataSource {
     } catch (e) {
       if (e is DioException) {
         debugPrint(
-            'DEBUG: BookingsRemoteDataSource cancelDirectBooking DioError: ${e.response?.data}',);
+          'DEBUG: BookingsRemoteDataSource cancelDirectBooking DioError: ${e.response?.data}',
+        );
         final errorData = e.response?.data;
         if (errorData is Map && errorData['error'] != null) {
           throw Exception(errorData['error']);

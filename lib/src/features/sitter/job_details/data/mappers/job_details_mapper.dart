@@ -15,9 +15,11 @@ class JobDetailsMapper {
 
     // Build personality from child descriptions
     final personality = children
-        .where((c) =>
-            c.personalityDescription != null &&
-            c.personalityDescription!.isNotEmpty)
+        .where(
+          (c) =>
+              c.personalityDescription != null &&
+              c.personalityDescription!.isNotEmpty,
+        )
         .map((c) => c.personalityDescription!)
         .join(', ');
 
@@ -70,11 +72,13 @@ class JobDetailsMapper {
       familyAvatarUrl: job.familyPhotoUrl,
       childrenCount: job.childrenCount ?? children.length,
       children: children
-          .map((c) => JobChildInfo(
-                name: c.firstName,
-                age: c.age,
-                specialNeedsDiagnosis: c.specialNeedsDiagnosis,
-              ))
+          .map(
+            (c) => JobChildInfo(
+              name: c.firstName,
+              age: c.age,
+              specialNeedsDiagnosis: c.specialNeedsDiagnosis,
+            ),
+          )
           .toList(),
       location: job.location ?? _buildLocationFromAddress(job.address),
       distance: distanceStr,
@@ -83,8 +87,9 @@ class JobDetailsMapper {
       personality: personality.isNotEmpty ? personality : 'Not specified',
       allergies: allergies.isNotEmpty ? allergies : 'None',
       triggers: triggers.isNotEmpty ? triggers : 'None specified',
-      calmingMethods:
-          calmingMethods.isNotEmpty ? calmingMethods : 'Not specified',
+      calmingMethods: calmingMethods.isNotEmpty
+          ? calmingMethods
+          : 'Not specified',
       additionalNotes: job.additionalDetails ?? '',
       transportationModes: transportationModes,
       equipmentSafety: equipmentSafety,

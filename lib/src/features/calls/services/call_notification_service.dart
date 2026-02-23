@@ -50,7 +50,8 @@ class CallNotificationService {
   ///
   /// This is the primary method - accepts raw Map data
   static Future<void> handleIncomingCallPayload(
-      Map<String, dynamic> data) async {
+    Map<String, dynamic> data,
+  ) async {
     final type = data['type']?.toString();
     if (type != 'incoming_call' && type != 'call_invite') return;
 
@@ -69,8 +70,9 @@ class CallNotificationService {
 
     if (callId == null || callerName == null || callerUserId == null) {
       developer.log(
-          'Invalid incoming call payload: missing callId/callerName/callerUserId',
-          name: 'Notifications');
+        'Invalid incoming call payload: missing callId/callerName/callerUserId',
+        name: 'Notifications',
+      );
       return;
     }
 
@@ -167,8 +169,10 @@ class CallNotificationService {
       ),
     );
     await FlutterCallkitIncoming.showCallkitIncoming(params);
-    developer.log('Showing iOS CallKit incoming UI for $callId',
-        name: 'Notifications');
+    developer.log(
+      'Showing iOS CallKit incoming UI for $callId',
+      name: 'Notifications',
+    );
   }
 
   /// End specific call UI
@@ -251,8 +255,10 @@ class CallNotificationService {
     String? calleeAvatar,
     bool isVideo = false,
   }) async {
-    developer.log('Starting outgoing call UI for $callId',
-        name: 'Notifications');
+    developer.log(
+      'Starting outgoing call UI for $callId',
+      name: 'Notifications',
+    );
     // Implement with flutter_callkit_incoming
   }
 
@@ -367,7 +373,8 @@ class CallNotificationService {
 
     await _localNotifications
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(channel);
 
     _localNotificationsInitialized = true;
@@ -379,8 +386,8 @@ class CallNotificationService {
     _launchDetailsChecked = true;
 
     try {
-      final launchDetails =
-          await _localNotifications.getNotificationAppLaunchDetails();
+      final launchDetails = await _localNotifications
+          .getNotificationAppLaunchDetails();
       if (launchDetails == null || !launchDetails.didNotificationLaunchApp) {
         return;
       }
@@ -410,7 +417,8 @@ class CallNotificationService {
   }
 
   static Future<void> _handleNotificationResponse(
-      NotificationResponse response) async {
+    NotificationResponse response,
+  ) async {
     developer.log(
       '[CALL_ACTION] notification response received action=${response.actionId ?? 'open'} payload=${response.payload}',
       name: 'Notifications',
@@ -564,12 +572,12 @@ class CallNotificationActionEvent {
     required String callerUserId,
     required bool isVideo,
   }) : this._(
-          type: CallNotificationActionType.open,
-          callId: callId,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          isVideo: isVideo,
-        );
+         type: CallNotificationActionType.open,
+         callId: callId,
+         callerName: callerName,
+         callerUserId: callerUserId,
+         isVideo: isVideo,
+       );
 
   const CallNotificationActionEvent.accept({
     required String callId,
@@ -577,12 +585,12 @@ class CallNotificationActionEvent {
     required String callerUserId,
     required bool isVideo,
   }) : this._(
-          type: CallNotificationActionType.accept,
-          callId: callId,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          isVideo: isVideo,
-        );
+         type: CallNotificationActionType.accept,
+         callId: callId,
+         callerName: callerName,
+         callerUserId: callerUserId,
+         isVideo: isVideo,
+       );
 
   const CallNotificationActionEvent.decline({
     required String callId,
@@ -590,12 +598,12 @@ class CallNotificationActionEvent {
     required String callerUserId,
     required bool isVideo,
   }) : this._(
-          type: CallNotificationActionType.decline,
-          callId: callId,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          isVideo: isVideo,
-        );
+         type: CallNotificationActionType.decline,
+         callId: callId,
+         callerName: callerName,
+         callerUserId: callerUserId,
+         isVideo: isVideo,
+       );
 }
 
 class _CallPayload {

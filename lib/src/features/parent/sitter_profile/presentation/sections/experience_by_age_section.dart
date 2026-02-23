@@ -9,8 +9,9 @@ class ExperienceByAgeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Normalize user data for comparison
-    final normalizedRanges =
-        ageRanges.map((e) => e.toLowerCase().trim()).toList();
+    final normalizedRanges = ageRanges
+        .map((e) => e.toLowerCase().trim())
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -32,9 +33,15 @@ class ExperienceByAgeSection extends StatelessWidget {
             children: [
               _buildAgeItem("Infants", Icons.child_care, normalizedRanges),
               _buildAgeItem(
-                  "Toddlers", Icons.baby_changing_station, normalizedRanges),
+                "Toddlers",
+                Icons.baby_changing_station,
+                normalizedRanges,
+              ),
               _buildAgeItem(
-                  "Children", Icons.escalator_warning, normalizedRanges),
+                "Children",
+                Icons.escalator_warning,
+                normalizedRanges,
+              ),
               _buildAgeItem("Teens", Icons.face, normalizedRanges),
             ],
           ),
@@ -44,7 +51,10 @@ class ExperienceByAgeSection extends StatelessWidget {
   }
 
   Widget _buildAgeItem(
-      String label, IconData icon, List<String> normalizedRanges) {
+    String label,
+    IconData icon,
+    List<String> normalizedRanges,
+  ) {
     // Check if this age group is in the list
     // "infants", "toddlers", "children" (usually school-age), "teens"
     final key = label.toLowerCase();
@@ -58,8 +68,9 @@ class ExperienceByAgeSection extends StatelessWidget {
     bool isActive = normalizedRanges.any((range) => range.contains(key));
 
     final color = isActive ? AppUiTokens.verifiedBlue : const Color(0xFFD0D5DD);
-    final textColor =
-        isActive ? AppUiTokens.textPrimary : const Color(0xFF98A2B3);
+    final textColor = isActive
+        ? AppUiTokens.textPrimary
+        : const Color(0xFF98A2B3);
 
     return Column(
       children: [

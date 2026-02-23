@@ -12,10 +12,7 @@ import 'widgets/route_stops_card.dart';
 class MapRouteScreen extends ConsumerWidget {
   final String bookingId;
 
-  const MapRouteScreen({
-    super.key,
-    required this.bookingId,
-  });
+  const MapRouteScreen({super.key, required this.bookingId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,8 +40,9 @@ class MapRouteScreen extends ConsumerWidget {
     );
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: AppTokens.surfaceWhite,
         body: Stack(
@@ -52,9 +50,7 @@ class MapRouteScreen extends ConsumerWidget {
             // 1. Map Background (Full Screen)
             Positioned.fill(
               child: locationAsync.when(
-                loading: () => const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stackTrace) => _buildMapPlaceholder(),
                 data: (location) => _buildMap(location),
               ),

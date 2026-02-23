@@ -7,11 +7,7 @@ class SavedSearchBar extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
 
-  const SavedSearchBar({
-    super.key,
-    this.controller,
-    this.onChanged,
-  });
+  const SavedSearchBar({super.key, this.controller, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +16,12 @@ class SavedSearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTokens.searchFieldBg,
         borderRadius: BorderRadius.circular(AppTokens.searchFieldRadius.r),
-        border: Border.all(
-          color: AppTokens.searchFieldBorder,
-          width: 1,
-        ),
+        border: Border.all(color: AppTokens.searchFieldBorder, width: 1),
       ),
       child: Row(
         children: [
           SizedBox(width: 16.w),
-          Icon(
-            Icons.search,
-            size: 22.sp,
-            color: AppTokens.searchIconColor,
-          ),
+          Icon(Icons.search, size: 22.sp, color: AppTokens.searchIconColor),
           SizedBox(width: 12.w),
           Expanded(
             child: TextField(

@@ -38,18 +38,11 @@ class FilterCheckboxRow extends StatelessWidget {
                 ),
               ),
               child: isChecked
-                  ? const Icon(
-                      Icons.check,
-                      size: 14,
-                      color: Colors.white,
-                    )
+                  ? const Icon(Icons.check, size: 14, color: Colors.white)
                   : null,
             ),
             const SizedBox(width: 8),
-            Text(
-              label,
-              style: AppTokens.sheetCheckboxTextStyle,
-            ),
+            Text(label, style: AppTokens.sheetCheckboxTextStyle),
           ],
         ),
       ),

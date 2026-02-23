@@ -10,18 +10,20 @@ class SessionStore {
   final FlutterSecureStorage _storage;
 
   SessionStore({FlutterSecureStorage? storage})
-      : _storage = storage ??
-            const FlutterSecureStorage(
-              aOptions: AndroidOptions(encryptedSharedPreferences: true),
-              iOptions: IOSOptions(
-                accessibility: KeychainAccessibility.first_unlock,
-              ),
-            );
+    : _storage =
+          storage ??
+          const FlutterSecureStorage(
+            aOptions: AndroidOptions(encryptedSharedPreferences: true),
+            iOptions: IOSOptions(
+              accessibility: KeychainAccessibility.first_unlock,
+            ),
+          );
 
   /// Save authentication session
   Future<void> saveSession(AuthSession session) async {
     debugPrint(
-        'DEBUG: SessionStore.saveSession called with token: ${session.accessToken}',);
+      'DEBUG: SessionStore.saveSession called with token: ${session.accessToken}',
+    );
     try {
       await _storage.write(
         key: Constants.accessTokenKey,
@@ -69,7 +71,9 @@ class SessionStore {
     try {
       final userJson = jsonDecode(userData) as Map<String, dynamic>;
       final user = _userFromJson(userJson);
-      debugPrint('DEBUG: SessionStore.loadSession success for user: ${user.email}');
+      debugPrint(
+        'DEBUG: SessionStore.loadSession success for user: ${user.email}',
+      );
       return AuthSession(
         user: user,
         accessToken: accessToken,

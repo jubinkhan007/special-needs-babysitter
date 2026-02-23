@@ -4,8 +4,8 @@ import 'package:babysitter_app/src/features/parent/booking_flow/data/models/book
 /// Provider for managing booking flow state across steps 1-4
 final bookingFlowProvider =
     StateNotifierProvider<BookingFlowNotifier, BookingFlowState>(
-  (ref) => BookingFlowNotifier(),
-);
+      (ref) => BookingFlowNotifier(),
+    );
 
 class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
   BookingFlowNotifier() : super(const BookingFlowState());
@@ -120,10 +120,7 @@ class BookingFlowNotifier extends StateNotifier<BookingFlowState> {
     required double latitude,
     required double longitude,
   }) {
-    state = state.copyWith(
-      latitude: latitude,
-      longitude: longitude,
-    );
+    state = state.copyWith(latitude: latitude, longitude: longitude);
   }
 
   /// Reset state (e.g., after booking completed or cancelled)

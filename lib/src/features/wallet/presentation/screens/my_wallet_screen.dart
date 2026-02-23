@@ -247,11 +247,8 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
             height: 36.h,
             constraints: BoxConstraints(minWidth: 90.w),
             child: OutlinedButton(
-              onPressed: () => _handleWithdraw(
-                context,
-                balance,
-                stripeStatusAsync.value,
-              ),
+              onPressed: () =>
+                  _handleWithdraw(context, balance, stripeStatusAsync.value),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: WalletStyles.primaryBlue),
                 shape: RoundedRectangleBorder(
@@ -417,10 +414,7 @@ class _MyWalletScreenState extends ConsumerState<MyWalletScreen>
       decoration: WalletStyles.cardDecoration(),
       child: Text(
         'No payouts yet',
-        style: TextStyle(
-          fontSize: 14.sp,
-          color: WalletStyles.textSecondary,
-        ),
+        style: TextStyle(fontSize: 14.sp, color: WalletStyles.textSecondary),
       ),
     );
   }

@@ -33,15 +33,17 @@ class HourlyRateSlider extends StatelessWidget {
         // Dynamic alignment:
         Align(
           alignment: Alignment(
-              // Map 0..100 to -1.0..1.0
-              (value - 50) / 50,
-              0.0),
+            // Map 0..100 to -1.0..1.0
+            (value - 50) / 50,
+            0.0,
+          ),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
               color: AppTokens.sliderValuePillBg,
-              borderRadius:
-                  BorderRadius.circular(AppTokens.sliderValuePillRadius),
+              borderRadius: BorderRadius.circular(
+                AppTokens.sliderValuePillRadius,
+              ),
             ),
             child: Text(
               '\$${value.round()}/hr',
@@ -60,11 +62,14 @@ class HourlyRateSlider extends StatelessWidget {
             overlayColor: AppTokens.sliderThumbColor.withValues(alpha: 0.12),
             trackHeight: AppTokens.sliderTrackHeight,
             thumbShape: const RoundSliderThumbShape(
-                enabledThumbRadius: AppTokens.sliderThumbRadius),
-            tickMarkShape:
-                const RoundSliderTickMarkShape(tickMarkRadius: 2), // Small dots
-            activeTickMarkColor:
-                Colors.white.withValues(alpha: 0.5), // Subtle ticks on blue
+              enabledThumbRadius: AppTokens.sliderThumbRadius,
+            ),
+            tickMarkShape: const RoundSliderTickMarkShape(
+              tickMarkRadius: 2,
+            ), // Small dots
+            activeTickMarkColor: Colors.white.withValues(
+              alpha: 0.5,
+            ), // Subtle ticks on blue
             inactiveTickMarkColor:
                 AppTokens.sliderTrackInactive, // Invisible or matched
           ),
@@ -80,7 +85,8 @@ class HourlyRateSlider extends StatelessWidget {
         // Labels
         Padding(
           padding: const EdgeInsets.symmetric(
-              horizontal: 10), // align with slider track ends roughly
+            horizontal: 10,
+          ), // align with slider track ends roughly
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(

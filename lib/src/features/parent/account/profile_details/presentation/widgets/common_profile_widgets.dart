@@ -5,11 +5,7 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final VoidCallback onEdit;
 
-  const SectionHeader({
-    super.key,
-    required this.title,
-    required this.onEdit,
-  });
+  const SectionHeader({super.key, required this.title, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +50,8 @@ class LabelValueRow extends StatelessWidget {
         text: TextSpan(
           style: ProfileDetailsUI.fieldValue,
           children: [
-            TextSpan(
-              text: '$label: ',
-              style: ProfileDetailsUI.fieldLabel,
-            ),
-            TextSpan(
-              text: value,
-            ),
+            TextSpan(text: '$label: ', style: ProfileDetailsUI.fieldLabel),
+            TextSpan(text: value),
           ],
         ),
       ),
@@ -72,11 +63,7 @@ class ProfileCardContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
 
-  const ProfileCardContainer({
-    super.key,
-    required this.child,
-    this.padding,
-  });
+  const ProfileCardContainer({super.key, required this.child, this.padding});
 
   @override
   Widget build(BuildContext context) {

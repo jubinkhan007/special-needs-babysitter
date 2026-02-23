@@ -10,9 +10,7 @@ void main() {
       builder: (context, child) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: MapRouteScreen(
-            bookingId: 'test-booking-id',
-          ),
+          home: MapRouteScreen(bookingId: 'test-booking-id'),
         );
       },
     );

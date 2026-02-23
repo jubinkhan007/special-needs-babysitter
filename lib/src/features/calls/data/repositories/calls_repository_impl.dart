@@ -61,7 +61,9 @@ class CallsRepositoryImpl implements CallsRepository {
     return CallTokenRefresh(
       rtcToken: dto.rtcToken,
       channelName: dto.channelName,
-      expiresAt: DateTime.tryParse(dto.expiresAt) ?? DateTime.now().add(const Duration(hours: 1)),
+      expiresAt:
+          DateTime.tryParse(dto.expiresAt) ??
+          DateTime.now().add(const Duration(hours: 1)),
       agoraUid: dto.agoraUid,
     );
   }
@@ -107,9 +109,7 @@ class CallsRepositoryImpl implements CallsRepository {
       startedAt: dto.startedAt != null
           ? DateTime.tryParse(dto.startedAt!)
           : null,
-      endedAt: dto.endedAt != null
-          ? DateTime.tryParse(dto.endedAt!)
-          : null,
+      endedAt: dto.endedAt != null ? DateTime.tryParse(dto.endedAt!) : null,
       duration: dto.duration,
       agoraUid: dto.agoraUid,
     );
@@ -137,9 +137,7 @@ class CallsRepositoryImpl implements CallsRepository {
       startedAt: dto.startedAt != null
           ? DateTime.tryParse(dto.startedAt!)
           : null,
-      endedAt: dto.endedAt != null
-          ? DateTime.tryParse(dto.endedAt!)
-          : null,
+      endedAt: dto.endedAt != null ? DateTime.tryParse(dto.endedAt!) : null,
       duration: dto.duration,
     );
   }

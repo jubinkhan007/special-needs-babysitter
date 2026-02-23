@@ -5,11 +5,7 @@ class CallAvatar extends StatelessWidget {
   final String? avatarUrl;
   final double size;
 
-  const CallAvatar({
-    super.key,
-    required this.avatarUrl,
-    required this.size,
-  });
+  const CallAvatar({super.key, required this.avatarUrl, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +24,7 @@ class CallAvatar extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: avatarUrl == null
-          ? Icon(
-              Icons.person,
-              size: size * 0.5,
-              color: AppTokens.iconGrey,
-            )
+          ? Icon(Icons.person, size: size * 0.5, color: AppTokens.iconGrey)
           : null,
     );
   }

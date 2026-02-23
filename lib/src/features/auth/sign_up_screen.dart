@@ -42,7 +42,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
     if (!_agreedToTerms) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please agree to the Terms and Privacy Policy'),
           backgroundColor: AppColors.error,
@@ -51,7 +52,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return;
     }
 
-    await ref.read(authNotifierProvider.notifier).signUp(
+    await ref
+        .read(authNotifierProvider.notifier)
+        .signUp(
           email: _emailController.text.trim(),
           password: _passwordController.text,
           firstName: _firstNameController.text.trim(),
@@ -63,7 +66,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
     final authState = ref.read(authNotifierProvider);
     if (authState.hasError) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         SnackBar(
           content: Text(authState.error.toString()),
           backgroundColor: AppColors.error,
@@ -258,7 +262,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           text: TextSpan(
                             style: TextStyle(
                               fontSize: 13,
-                              color: AppColors.textPrimary.withValues(alpha: 0.7),
+                              color: AppColors.textPrimary.withValues(
+                                alpha: 0.7,
+                              ),
                               height: 1.4,
                             ),
                             children: [

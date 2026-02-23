@@ -2,9 +2,7 @@ import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 
-enum RefundOption {
-  originalPaymentMethod,
-}
+enum RefundOption { originalPaymentMethod }
 
 Future<RefundOption?> showRefundOptionsDialog(BuildContext context) {
   return showDialog<RefundOption>(
@@ -33,8 +31,11 @@ class RefundOptionsDialog extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
-                child:
-                    const Icon(Icons.close, size: 22, color: Color(0xFF6B7280)),
+                child: const Icon(
+                  Icons.close,
+                  size: 22,
+                  color: Color(0xFF6B7280),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -68,8 +69,9 @@ class RefundOptionsDialog extends StatelessWidget {
               width: double.infinity,
               height: 52,
               child: ElevatedButton(
-                onPressed: () => Navigator.of(context)
-                    .pop(RefundOption.originalPaymentMethod),
+                onPressed: () => Navigator.of(
+                  context,
+                ).pop(RefundOption.originalPaymentMethod),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTokens.primaryBlue,
                   foregroundColor: AppColors.textOnButton,
@@ -80,10 +82,7 @@ class RefundOptionsDialog extends StatelessWidget {
                 ),
                 child: const Text(
                   'Refund to Original Payment Method',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -94,10 +93,7 @@ class RefundOptionsDialog extends StatelessWidget {
             const Center(
               child: Text(
                 'Refunds typically take 2-3 business days to process.',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF6B7280),
-                ),
+                style: TextStyle(fontSize: 13, color: Color(0xFF6B7280)),
               ),
             ),
           ],

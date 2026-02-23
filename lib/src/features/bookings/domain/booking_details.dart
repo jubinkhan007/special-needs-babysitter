@@ -2,7 +2,8 @@ import 'booking_status.dart';
 
 class BookingDetails {
   final String id;
-  final String jobId; // The actual job ID (different from application/booking id)
+  final String
+  jobId; // The actual job ID (different from application/booking id)
   final String sitterId;
   final String sitterName;
   final String avatarUrl;

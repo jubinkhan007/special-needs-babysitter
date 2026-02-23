@@ -70,8 +70,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     final uiModel = VideoCallUiMapper.map(_state);
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(
@@ -100,7 +101,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             // "Sits above control bar and does not overlap it"
             Positioned(
               right: AppTokens.pipMarginRight,
-              bottom: AppTokens.callControlsBarHeight +
+              bottom:
+                  AppTokens.callControlsBarHeight +
                   AppTokens.pipMarginBottom +
                   MediaQuery.of(context).padding.bottom +
                   20.h,

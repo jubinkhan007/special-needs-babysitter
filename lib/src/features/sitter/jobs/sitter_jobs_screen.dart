@@ -28,8 +28,11 @@ class SitterJobsScreen extends ConsumerWidget {
           ),
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: const Color(0xFF667085), size: 24.w),
+            icon: Icon(
+              Icons.arrow_back,
+              color: const Color(0xFF667085),
+              size: 24.w,
+            ),
             onPressed: () {
               context.go(Routes.sitterHome);
             },
@@ -46,8 +49,11 @@ class SitterJobsScreen extends ConsumerWidget {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.notifications_none_outlined,
-                  color: const Color(0xFF667085), size: 24.w),
+              icon: Icon(
+                Icons.notifications_none_outlined,
+                color: const Color(0xFF667085),
+                size: 24.w,
+              ),
               onPressed: () {},
             ),
           ],
@@ -65,8 +71,9 @@ class SitterJobsScreen extends ConsumerWidget {
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
                 dividerColor: Colors.transparent,
-                padding:
-                    EdgeInsets.symmetric(horizontal: 20.w), // Outer padding
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ), // Outer padding
                 labelPadding: EdgeInsets.only(right: 12.w), // Gap between tabs
                 labelColor: Colors.white,
                 unselectedLabelColor: const Color(0xFF667085),
@@ -75,17 +82,20 @@ class SitterJobsScreen extends ConsumerWidget {
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(24.r), // More rounded
                   color: const Color(
-                      0xFF87C4F2), // Lighter blue matching typical UI
+                    0xFF87C4F2,
+                  ), // Lighter blue matching typical UI
                 ),
                 overlayColor: WidgetStateProperty.all(Colors.transparent),
                 labelStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Inter'),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Inter',
+                ),
                 unselectedLabelStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Inter'),
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Inter',
+                ),
                 tabs: [
                   _buildTab('Applied'),
                   _buildTab('Requests'),
@@ -139,8 +149,11 @@ class SitterJobsScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.assignment_outlined,
-                    size: 64.w, color: Colors.grey[300]),
+                Icon(
+                  Icons.assignment_outlined,
+                  size: 64.w,
+                  color: Colors.grey[300],
+                ),
                 SizedBox(height: 16.h),
                 Text(
                   'No job requests found',
@@ -197,7 +210,8 @@ class SitterJobsScreen extends ConsumerWidget {
                   context.push('${Routes.sitterBookingDetails}/${app.id}');
                 } else {
                   context.push(
-                      '${Routes.sitterJobRequestDetails}/${app.id}?type=${app.applicationType}&status=${app.status}');
+                    '${Routes.sitterJobRequestDetails}/${app.id}?type=${app.applicationType}&status=${app.status}',
+                  );
                 }
               },
             );
@@ -220,8 +234,11 @@ class SitterJobsScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.assignment_outlined,
-                    size: 64.w, color: Colors.grey[300]),
+                Icon(
+                  Icons.assignment_outlined,
+                  size: 64.w,
+                  color: Colors.grey[300],
+                ),
                 SizedBox(height: 16.h),
                 Text(
                   'No jobs found',
@@ -278,12 +295,14 @@ class SitterJobsScreen extends ConsumerWidget {
                     context.push('${Routes.sitterBookingDetails}/${app.id}');
                   } else {
                     context.push(
-                        '${Routes.sitterJobRequestDetails}/${app.id}?type=${app.applicationType}&status=${app.status}');
+                      '${Routes.sitterJobRequestDetails}/${app.id}?type=${app.applicationType}&status=${app.status}',
+                    );
                   }
                 } else if (status != null &&
                     status.toLowerCase() == 'completed') {
                   context.push(
-                      '${Routes.sitterBookingDetails}/${app.id}?status=${app.status}');
+                    '${Routes.sitterBookingDetails}/${app.id}?status=${app.status}',
+                  );
                 } else {
                   context.push('${Routes.sitterApplicationDetails}/${app.id}');
                 }

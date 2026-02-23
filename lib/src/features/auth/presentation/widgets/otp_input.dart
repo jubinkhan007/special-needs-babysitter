@@ -28,10 +28,7 @@ class _OtpInputState extends State<OtpInput> {
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(
-      widget.length,
-      (_) => TextEditingController(),
-    );
+    _controllers = List.generate(widget.length, (_) => TextEditingController());
     _focusNodes = List.generate(widget.length, (_) => FocusNode());
   }
 
@@ -78,15 +75,20 @@ class _OtpInputState extends State<OtpInput> {
     final availableWidth = screenWidth - horizontalPadding;
     final spacing = 6.w; // Space between boxes
     final totalSpacing = spacing * (widget.length - 1);
-    final boxSize = ((availableWidth - totalSpacing) / widget.length).clamp(38.w, 48.w);
-    
+    final boxSize = ((availableWidth - totalSpacing) / widget.length).clamp(
+      38.w,
+      48.w,
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(widget.length, (index) {
         return Container(
           width: boxSize,
           height: boxSize * 1.15, // Slightly taller than wide
-          margin: EdgeInsets.only(right: index < widget.length - 1 ? spacing : 0),
+          margin: EdgeInsets.only(
+            right: index < widget.length - 1 ? spacing : 0,
+          ),
           child: KeyboardListener(
             focusNode: FocusNode(),
             onKeyEvent: (event) => _onKeyEvent(index, event),

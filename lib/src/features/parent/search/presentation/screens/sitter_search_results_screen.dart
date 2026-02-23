@@ -40,7 +40,10 @@ class _SitterSearchResultsScreenState
   }
 
   Future<void> _inviteSitter(
-      String jobId, String sitterId, String userId) async {
+    String jobId,
+    String sitterId,
+    String userId,
+  ) async {
     try {
       // API expects userId
       await ref.read(jobsRepositoryProvider).inviteSitter(jobId, userId);
@@ -49,7 +52,8 @@ class _SitterSearchResultsScreenState
           // UI tracking uses sitterId
           _invitedSitterIds.add(sitterId);
         });
-        AppToast.show(context,
+        AppToast.show(
+          context,
           const SnackBar(content: Text('Sitter invited successfully!')),
         );
       }
@@ -63,7 +67,8 @@ class _SitterSearchResultsScreenState
           message = e.toString().replaceAll('Exception: ', '');
         }
 
-        AppToast.show(context,
+        AppToast.show(
+          context,
           SnackBar(
             content: Text(message),
             backgroundColor: Colors.orange,
@@ -79,8 +84,9 @@ class _SitterSearchResultsScreenState
     if (!mounted || status != LocationAccessStatus.available) {
       return;
     }
-    final (latitude, longitude) =
-        await LocationHelper.getLocation(requestPermission: false);
+    final (latitude, longitude) = await LocationHelper.getLocation(
+      requestPermission: false,
+    );
     if (!mounted) return;
     ref.read(searchFilterProvider).setLocation(latitude, longitude);
   }
@@ -90,7 +96,8 @@ class _SitterSearchResultsScreenState
     // Check for jobId in extra or query params
     final Map<String, dynamic>? extra =
         GoRouterState.of(context).extra as Map<String, dynamic>?;
-    final String? jobId = extra?['jobId'] ??
+    final String? jobId =
+        extra?['jobId'] ??
         GoRouterState.of(context).uri.queryParameters['jobId'];
 
     // Watch the filter state
@@ -122,12 +129,9 @@ class _SitterSearchResultsScreenState
             // Content
             Expanded(
               child: asyncSitters.when(
-                loading: () => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                error: (error, stack) => Center(
-                  child: Text('Error loading sitters: $error'),
-                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) =>
+                    Center(child: Text('Error loading sitters: $error')),
                 data: (sitters) => Column(
                   children: [
                     if (locationStatus != null &&
@@ -159,48 +163,65 @@ class _SitterSearchResultsScreenState
                           : ListView.separated(
                               padding: EdgeInsets.only(
                                 top: AppUiTokens.itemSpacing,
-                                bottom: MediaQuery.of(context).padding.bottom +
+                                bottom:
+                                    MediaQuery.of(context).padding.bottom +
                                     16, // Safe area + spacing
                               ),
                               itemCount: sitters.length,
                               separatorBuilder: (context, index) =>
                                   const SizedBox(
-                                      height: AppUiTokens.itemSpacing),
+                                    height: AppUiTokens.itemSpacing,
+                                  ),
                               itemBuilder: (context, index) {
                                 final sitter = sitters[index];
-                                final bool isInvited =
-                                    _invitedSitterIds.contains(sitter.id);
-                                final isBookmarked = savedSitters
-                                    .any((s) => s.userId == sitter.userId);
+                                final bool isInvited = _invitedSitterIds
+                                    .contains(sitter.id);
+                                final isBookmarked = savedSitters.any(
+                                  (s) => s.userId == sitter.userId,
+                                );
 
                                 return SitterCard(
                                   sitter: sitter,
                                   isBookmarked: isBookmarked,
                                   onBookmarkTap: () async {
                                     try {
-                                      final isCurrentlyBookmarked = isBookmarked;
+                                      final isCurrentlyBookmarked =
+                                          isBookmarked;
                                       await ref
                                           .read(
-                                              savedSittersControllerProvider.notifier)
-                                          .toggleBookmark(sitter.userId,
-                                              isCurrentlySaved: isCurrentlyBookmarked,
-                                              sitterItem: sitter);
-                                      
+                                            savedSittersControllerProvider
+                                                .notifier,
+                                          )
+                                          .toggleBookmark(
+                                            sitter.userId,
+                                            isCurrentlySaved:
+                                                isCurrentlyBookmarked,
+                                            sitterItem: sitter,
+                                          );
+
                                       if (context.mounted) {
-                                        AppToast.show(context,
+                                        AppToast.show(
+                                          context,
                                           SnackBar(
-                                            content: Text(isCurrentlyBookmarked
-                                                ? 'Sitter removed from bookmarks'
-                                                : 'Sitter bookmarked'),
-                                            duration: const Duration(seconds: 2),
+                                            content: Text(
+                                              isCurrentlyBookmarked
+                                                  ? 'Sitter removed from bookmarks'
+                                                  : 'Sitter bookmarked',
+                                            ),
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
                                           ),
                                         );
                                       }
                                     } catch (e) {
                                       if (context.mounted) {
-                                        AppToast.show(context,
+                                        AppToast.show(
+                                          context,
                                           SnackBar(
-                                            content: Text('Failed to update bookmark: $e'),
+                                            content: Text(
+                                              'Failed to update bookmark: $e',
+                                            ),
                                             backgroundColor: Colors.red,
                                           ),
                                         );
@@ -210,13 +231,17 @@ class _SitterSearchResultsScreenState
                                   onTap: () {
                                     // Navigate to profile using the ID
                                     context.push(
-                                        Routes.sitterProfilePath(sitter.id));
+                                      Routes.sitterProfilePath(sitter.id),
+                                    );
                                   },
                                   onInvite: jobId != null
                                       ? () {
                                           if (!isInvited) {
-                                            _inviteSitter(jobId, sitter.id,
-                                                sitter.userId);
+                                            _inviteSitter(
+                                              jobId,
+                                              sitter.id,
+                                              sitter.userId,
+                                            );
                                           }
                                         }
                                       : null,
@@ -234,9 +259,7 @@ class _SitterSearchResultsScreenState
     );
   }
 
-  Future<void> _handleLocationAction(
-    LocationAccessStatus status,
-  ) async {
+  Future<void> _handleLocationAction(LocationAccessStatus status) async {
     switch (status) {
       case LocationAccessStatus.permissionDenied:
         await LocationHelper.requestPermission();
@@ -254,8 +277,9 @@ class _SitterSearchResultsScreenState
     if (!mounted) return;
     ref.invalidate(locationAccessStatusProvider);
 
-    final (latitude, longitude) =
-        await LocationHelper.getLocation(requestPermission: false);
+    final (latitude, longitude) = await LocationHelper.getLocation(
+      requestPermission: false,
+    );
     if (!mounted) return;
     ref.read(searchFilterProvider).setLocation(latitude, longitude);
   }

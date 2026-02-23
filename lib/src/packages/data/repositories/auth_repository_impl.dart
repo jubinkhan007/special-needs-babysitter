@@ -18,9 +18,9 @@ class AuthRepositoryImpl implements AuthRepository {
     required AuthRemoteDataSource remoteDataSource,
     required Future<void> Function(AuthSession?) onSessionChanged,
     required Future<AuthSession?> Function() getStoredSession,
-  })  : _remoteDataSource = remoteDataSource,
-        _onSessionChanged = onSessionChanged,
-        _getStoredSession = getStoredSession;
+  }) : _remoteDataSource = remoteDataSource,
+       _onSessionChanged = onSessionChanged,
+       _getStoredSession = getStoredSession;
 
   @override
   Future<AuthSession> signIn({
@@ -104,8 +104,8 @@ class FakeAuthRepositoryImpl implements AuthRepository {
   FakeAuthRepositoryImpl({
     required Future<void> Function(AuthSession?, {User? user}) onSessionChanged,
     required Future<AuthSession?> Function() getStoredSession,
-  })  : _onSessionChanged = onSessionChanged,
-        _getStoredSession = getStoredSession;
+  }) : _onSessionChanged = onSessionChanged,
+       _getStoredSession = getStoredSession;
 
   @override
   Future<AuthSession> signIn({

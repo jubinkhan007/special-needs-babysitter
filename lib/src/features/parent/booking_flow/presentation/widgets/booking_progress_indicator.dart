@@ -22,17 +22,15 @@ class BookingProgressIndicator extends StatelessWidget {
       // 1. Add Dot
       final double size = isActive ? 12.0 : 8.0;
       final Color color = (isActive || isCompleted)
-          ? AppColors.primary // New Lighter Blue match
+          ? AppColors
+                .primary // New Lighter Blue match
           : const Color(0xFFE0F2FE); // Light inactive
 
       children.add(
         Container(
           width: size,
           height: size,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
       );
 
@@ -46,7 +44,8 @@ class BookingProgressIndicator extends StatelessWidget {
             child: Container(
               height: 2,
               color: isLineActive
-                  ? AppColors.primary // New Lighter Blue match
+                  ? AppColors
+                        .primary // New Lighter Blue match
                   : const Color(0xFFE0F2FE),
             ),
           ),

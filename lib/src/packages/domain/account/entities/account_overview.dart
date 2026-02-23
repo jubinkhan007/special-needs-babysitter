@@ -17,9 +17,9 @@ class AccountOverview extends Equatable {
 
   @override
   List<Object?> get props => [
-        user,
-        bookingHistoryCount,
-        savedSittersCount,
-        profileCompletionPercent,
-      ];
+    user,
+    bookingHistoryCount,
+    savedSittersCount,
+    profileCompletionPercent,
+  ];
 }

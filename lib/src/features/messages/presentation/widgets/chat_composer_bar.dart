@@ -30,9 +30,7 @@ class ChatComposerBar extends StatelessWidget {
         ),
         decoration: const BoxDecoration(
           color: AppTokens.composerBg,
-          border: Border(
-            top: BorderSide.none,
-          ),
+          border: Border(top: BorderSide.none),
         ),
         child: SafeArea(
           top: false,
@@ -53,7 +51,9 @@ class ChatComposerBar extends StatelessWidget {
                       Expanded(
                         child: TextField(
                           controller: controller,
-                          style: AppTokens.composerHintStyle.copyWith(color: AppTokens.textPrimary),
+                          style: AppTokens.composerHintStyle.copyWith(
+                            color: AppTokens.textPrimary,
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Type your message....',
                             hintStyle: AppTokens.composerHintStyle,
@@ -71,8 +71,9 @@ class ChatComposerBar extends StatelessWidget {
                       // Inner Actions
                       IconButton(
                         onPressed: onCamera,
-                        icon: const Icon(Icons
-                            .camera_alt_outlined), // Matches screenshot square camera
+                        icon: const Icon(
+                          Icons.camera_alt_outlined,
+                        ), // Matches screenshot square camera
                         color: AppTokens.composerIconColor,
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -91,9 +92,9 @@ class ChatComposerBar extends StatelessWidget {
                   ),
                 ),
               ),
-  
+
               const SizedBox(width: 12),
-  
+
               // Send Button
               GestureDetector(
                 onTap: onSend,

@@ -13,10 +13,7 @@ import 'sitter_profile_view.dart';
 class SitterProfilePage extends ConsumerWidget {
   final String sitterId;
 
-  const SitterProfilePage({
-    super.key,
-    required this.sitterId,
-  });
+  const SitterProfilePage({super.key, required this.sitterId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,9 +44,7 @@ class SitterProfilePage extends ConsumerWidget {
           ),
           centerTitle: true,
         ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        body: const Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
         key: const Key('sitterProfilePage'),
@@ -100,14 +95,19 @@ class SitterProfilePage extends ConsumerWidget {
             hourlyRate: sitter.hourlyRate,
           );
 
-          ref.read(savedSittersControllerProvider.notifier).toggleBookmark(
-              sitterId,
-              isCurrentlySaved: isBookmarked,
-              sitterItem: sitterItem);
+          ref
+              .read(savedSittersControllerProvider.notifier)
+              .toggleBookmark(
+                sitterId,
+                isCurrentlySaved: isBookmarked,
+                sitterItem: sitterItem,
+              );
         },
         onBookPressed: () {
           // Initialize booking flow with sitter data
-          ref.read(bookingFlowProvider.notifier).initWithSitter(
+          ref
+              .read(bookingFlowProvider.notifier)
+              .initWithSitter(
                 sitterId: sitter.userId,
                 sitterName: sitter.name,
                 sitterAvatarUrl: sitter.avatarUrl,

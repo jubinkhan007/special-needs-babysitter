@@ -7,10 +7,7 @@ class ReviewResponseDto {
   final bool success;
   final List<ReviewDto> data;
 
-  ReviewResponseDto({
-    required this.success,
-    required this.data,
-  });
+  ReviewResponseDto({required this.success, required this.data});
 
   factory ReviewResponseDto.fromJson(Map<String, dynamic> json) =>
       _$ReviewResponseDtoFromJson(json);

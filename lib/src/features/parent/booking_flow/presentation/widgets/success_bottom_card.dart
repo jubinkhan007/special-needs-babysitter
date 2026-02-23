@@ -150,7 +150,7 @@ class SuccessBottomCard extends StatelessWidget {
       ),
     );
   }
-  
+
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -170,7 +170,7 @@ class SuccessBottomCard extends StatelessWidget {
         return const Color(0xFFD97706); // Default amber
     }
   }
-  
+
   IconData _getStatusIcon(String status) {
     switch (status.toLowerCase()) {
       case 'pending':

@@ -16,8 +16,11 @@ class CertificationChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.verified_user,
-              color: Colors.white, size: 14), // Check/Shield icon
+          const Icon(
+            Icons.verified_user,
+            color: Colors.white,
+            size: 14,
+          ), // Check/Shield icon
           const SizedBox(width: 6),
           Text(
             label,

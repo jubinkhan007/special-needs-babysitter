@@ -34,7 +34,8 @@ class AuthInputField extends StatelessWidget {
   });
 
   List<TextInputFormatter>? _numericInputFormatters(
-      TextInputType? keyboardType) {
+    TextInputType? keyboardType,
+  ) {
     if (keyboardType == TextInputType.number ||
         keyboardType == TextInputType.phone) {
       return [FilteringTextInputFormatter.digitsOnly];
@@ -52,13 +53,10 @@ class AuthInputField extends StatelessWidget {
       textInputAction: textInputAction,
       maxLength: maxLength,
       textCapitalization: textCapitalization,
-      buildCounter: (context,
-              {required currentLength, required isFocused, maxLength}) =>
-          null, // Hide counter
-      style: const TextStyle(
-        fontSize: 15,
-        color: AppColors.textPrimary,
-      ),
+      buildCounter:
+          (context, {required currentLength, required isFocused, maxLength}) =>
+              null, // Hide counter
+      style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
       decoration: InputDecoration(
         hintText: hint,
         helperText: helperText,
@@ -91,10 +89,7 @@ class AuthInputField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.secondary,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: AppColors.secondary, width: 1),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -102,10 +97,7 @@ class AuthInputField extends StatelessWidget {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(
-            color: AppColors.error,
-            width: 1,
-          ),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         suffixIcon: suffixIcon,
       ),

@@ -48,10 +48,7 @@ class CallTopOverlayBar extends StatelessWidget {
           // Right Timer
           Align(
             alignment: Alignment.centerRight,
-            child: Text(
-              timerText,
-              style: AppTokens.callTopTimerStyle,
-            ),
+            child: Text(timerText, style: AppTokens.callTopTimerStyle),
           ),
         ],
       ),

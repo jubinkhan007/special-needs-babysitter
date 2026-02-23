@@ -19,8 +19,9 @@ class FilterDropdownField extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: AppTokens.sheetFieldHeight,
-        padding:
-            const EdgeInsets.symmetric(horizontal: AppTokens.sheetFieldPadding),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppTokens.sheetFieldPadding,
+        ),
         decoration: BoxDecoration(
           color: AppTokens.sheetFieldBg,
           borderRadius: BorderRadius.circular(AppTokens.sheetFieldRadius),

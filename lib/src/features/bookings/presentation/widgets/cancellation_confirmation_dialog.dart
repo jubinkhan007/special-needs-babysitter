@@ -56,8 +56,11 @@ class CancellationConfirmationDialog extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).pop(false),
-                child:
-                    const Icon(Icons.close, size: 20, color: Color(0xFF6B7280)),
+                child: const Icon(
+                  Icons.close,
+                  size: 20,
+                  color: Color(0xFF6B7280),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -129,8 +132,11 @@ class CancellationConfirmationDialog extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.warning_amber_rounded,
-                    color: Color(0xFFD97706), size: 18),
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Color(0xFFD97706),
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -146,8 +152,10 @@ class CancellationConfirmationDialog extends StatelessWidget {
             _bulletPoint('20% goes to the sitter'),
             _bulletPoint('5% goes to the platform'),
             const SizedBox(height: 8),
-            Text('The rest will be refunded to your account.',
-                style: _bodyStyle()),
+            Text(
+              'The rest will be refunded to your account.',
+              style: _bodyStyle(),
+            ),
           ],
         );
 
@@ -158,8 +166,11 @@ class CancellationConfirmationDialog extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.warning_amber_rounded,
-                    color: Color(0xFFD97706), size: 18),
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Color(0xFFD97706),
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -175,8 +186,10 @@ class CancellationConfirmationDialog extends StatelessWidget {
             _bulletPoint('35% goes to the sitter'),
             _bulletPoint('15% goes to the platform'),
             const SizedBox(height: 8),
-            Text('The remaining amount will be refunded to your account.',
-                style: _bodyStyle()),
+            Text(
+              'The remaining amount will be refunded to your account.',
+              style: _bodyStyle(),
+            ),
           ],
         );
 
@@ -187,8 +200,11 @@ class CancellationConfirmationDialog extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.warning_amber_rounded,
-                    color: Color(0xFFD97706), size: 18),
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  color: Color(0xFFD97706),
+                  size: 18,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -214,8 +230,10 @@ class CancellationConfirmationDialog extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ',
-              style: TextStyle(fontSize: 14, color: Color(0xFF4B5563))),
+          const Text(
+            '• ',
+            style: TextStyle(fontSize: 14, color: Color(0xFF4B5563)),
+          ),
           Expanded(child: Text(text, style: _bodyStyle())),
         ],
       ),

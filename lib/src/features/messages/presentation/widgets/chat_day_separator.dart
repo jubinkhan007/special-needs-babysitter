@@ -10,12 +10,7 @@ class ChatDaySeparator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 24.0),
-      child: Center(
-        child: Text(
-          text,
-          style: AppTokens.chatMetaStyle,
-        ),
-      ),
+      child: Center(child: Text(text, style: AppTokens.chatMetaStyle)),
     );
   }
 }

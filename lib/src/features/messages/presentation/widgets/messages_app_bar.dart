@@ -42,14 +42,10 @@ class MessagesAppBar extends StatelessWidget implements PreferredSizeWidget {
                 )
               else
                 const SizedBox(width: 16), // Spacing if no back button
-
               // Title (Centered)
               Expanded(
                 child: Center(
-                  child: Text(
-                    'Messages',
-                    style: AppTokens.messagesTitleStyle,
-                  ),
+                  child: Text('Messages', style: AppTokens.messagesTitleStyle),
                 ),
               ),
 

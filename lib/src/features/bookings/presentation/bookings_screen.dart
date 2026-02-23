@@ -133,7 +133,8 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
                             },
                             onMenuTap: () {},
                             // Only allow cancellation for pending/upcoming direct bookings
-                            onCancel: (booking.status == BookingStatus.pending ||
+                            onCancel:
+                                (booking.status == BookingStatus.pending ||
                                     booking.status == BookingStatus.upcoming)
                                 ? () => _cancelBooking(booking)
                                 : null,
@@ -164,7 +165,9 @@ class _BookingsScreenState extends ConsumerState<BookingsScreen>
 
   Future<void> _cancelBooking(Booking booking) async {
     try {
-      await ref.read(bookingsRepositoryProvider).cancelDirectBooking(booking.id);
+      await ref
+          .read(bookingsRepositoryProvider)
+          .cancelDirectBooking(booking.id);
       ref.read(bookingsControllerProvider).refresh();
       if (mounted) {
         AppToast.show(

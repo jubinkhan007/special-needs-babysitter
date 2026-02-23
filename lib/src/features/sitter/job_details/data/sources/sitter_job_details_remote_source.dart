@@ -12,7 +12,8 @@ class SitterJobDetailsRemoteSource {
   /// Fetch job details by ID from the API.
   Future<JobDetailsResponseDto> getJobDetails(String jobId) async {
     debugPrint(
-        'DEBUG: SitterJobDetailsRemoteSource.getJobDetails called with jobId=$jobId');
+      'DEBUG: SitterJobDetailsRemoteSource.getJobDetails called with jobId=$jobId',
+    );
     debugPrint('DEBUG: Making GET request to /jobs/$jobId');
 
     try {
@@ -20,9 +21,12 @@ class SitterJobDetailsRemoteSource {
       debugPrint('DEBUG: Response status: ${response.statusCode}');
       debugPrint('DEBUG: Response data: ${response.data}');
 
-      final dto =
-          JobDetailsResponseDto.fromJson(response.data as Map<String, dynamic>);
-      debugPrint('DEBUG: Parsed DTO successfully, job title: ${dto.data.job.title}');
+      final dto = JobDetailsResponseDto.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+      debugPrint(
+        'DEBUG: Parsed DTO successfully, job title: ${dto.data.job.title}',
+      );
 
       return dto;
     } catch (e, stack) {

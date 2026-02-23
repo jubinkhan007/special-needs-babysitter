@@ -7,10 +7,7 @@ class ParentBookingsResponseDto {
   final List<ParentBookingDto> bookings;
   final int? total;
 
-  ParentBookingsResponseDto({
-    required this.bookings,
-    this.total,
-  });
+  ParentBookingsResponseDto({required this.bookings, this.total});
 
   factory ParentBookingsResponseDto.fromJson(Map<String, dynamic> json) =>
       _$ParentBookingsResponseDtoFromJson(json);

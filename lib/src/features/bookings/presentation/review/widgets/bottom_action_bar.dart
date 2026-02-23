@@ -51,8 +51,9 @@ class BottomActionBar extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTokens.primaryBlue,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(AppTokens.buttonRadius),
+                      borderRadius: BorderRadius.circular(
+                        AppTokens.buttonRadius,
+                      ),
                     ),
                     padding: EdgeInsets.zero,
                   ),

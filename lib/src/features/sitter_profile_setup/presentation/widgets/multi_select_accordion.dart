@@ -71,7 +71,8 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
                     style: const TextStyle(
                       fontSize: 16,
                       color: Color(
-                          0xFF667085), // Grey text per placeholder look
+                        0xFF667085,
+                      ), // Grey text per placeholder look
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w400,
                     ),
@@ -95,7 +96,10 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
               padding: EdgeInsets.zero,
               itemCount: widget.options.length,
               separatorBuilder: (context, index) => const Divider(
-                  height: 1, thickness: 1, color: Color(0xFFF2F4F7)),
+                height: 1,
+                thickness: 1,
+                color: Color(0xFFF2F4F7),
+              ),
               itemBuilder: (context, index) {
                 final option = widget.options[index];
                 final isSelected = widget.selectedValues.contains(option);
@@ -103,7 +107,9 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
                   onTap: () => _toggleOption(option),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
@@ -135,8 +141,11 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
                                 : Colors.white,
                           ),
                           child: isSelected
-                              ? const Icon(Icons.check,
-                                  size: 16, color: Colors.white)
+                              ? const Icon(
+                                  Icons.check,
+                                  size: 16,
+                                  color: Colors.white,
+                                )
                               : null,
                         ),
                       ],
@@ -149,11 +158,11 @@ class _MultiSelectAccordionState extends State<MultiSelectAccordion> {
             const Divider(height: 1, thickness: 1, color: Color(0xFFF2F4F7)),
             InkWell(
               onTap: widget.onOtherTap,
-              borderRadius:
-                  const BorderRadius.vertical(bottom: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(12),
+              ),
               child: const Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Row(
                   children: [
                     Expanded(

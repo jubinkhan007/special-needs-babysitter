@@ -30,7 +30,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
   void initState() {
     super.initState();
     debugPrint('DEBUG AllJobsScreen: initState called');
-    
+
     // Initialize search with current query if any
     final query = ref.read(jobSearchFiltersProvider).searchQuery;
     if (query != null && query.isNotEmpty) {
@@ -42,11 +42,13 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
 
     // Initial fetch immediately (like home screen) - don't wait for location
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      debugPrint('DEBUG AllJobsScreen: postFrameCallback - calling resetAndFetch');
+      debugPrint(
+        'DEBUG AllJobsScreen: postFrameCallback - calling resetAndFetch',
+      );
       // Complete reset to match home screen behavior
       // This will fetch jobs without location first
       ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
-      
+
       // Update location in background WITHOUT triggering another fetch
       // The location will be used for the next refresh/search
       _updateLocationInBackground();
@@ -73,13 +75,17 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       final trimmedQuery = query.trim();
-      debugPrint('DEBUG _onSearchChanged debounce fired: trimmedQuery="$trimmedQuery"');
+      debugPrint(
+        'DEBUG _onSearchChanged debounce fired: trimmedQuery="$trimmedQuery"',
+      );
       if (trimmedQuery.isEmpty) {
         // When search is cleared, reset filters and fetch all jobs
         debugPrint('DEBUG _onSearchChanged: calling resetAndFetch()');
         ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
       } else {
-        ref.read(jobSearchFiltersProvider.notifier).setSearchQuery(trimmedQuery);
+        ref
+            .read(jobSearchFiltersProvider.notifier)
+            .setSearchQuery(trimmedQuery);
         ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
       }
     });
@@ -95,11 +101,15 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
         final currentFilters = ref.read(jobSearchFiltersProvider);
         if (currentFilters.latitude != position.latitude ||
             currentFilters.longitude != position.longitude) {
-          ref.read(jobSearchFiltersProvider.notifier).setLocation(
+          ref
+              .read(jobSearchFiltersProvider.notifier)
+              .setLocation(
                 latitude: position.latitude,
                 longitude: position.longitude,
               );
-          debugPrint('DEBUG AllJobsScreen: Location updated in background: ${position.latitude}, ${position.longitude}');
+          debugPrint(
+            'DEBUG AllJobsScreen: Location updated in background: ${position.latitude}, ${position.longitude}',
+          );
         }
       }
     } catch (e) {
@@ -115,7 +125,9 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
     ref.watch(savedJobsListProvider);
 
     // Debug logging
-    debugPrint('DEBUG AllJobsScreen: isLoading=${searchState.isLoading}, jobs=${searchState.jobs.length}, error=${searchState.error}');
+    debugPrint(
+      'DEBUG AllJobsScreen: isLoading=${searchState.isLoading}, jobs=${searchState.jobs.length}, error=${searchState.error}',
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -126,19 +138,23 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.black, size: 24.w),
           onPressed: () => Navigator.of(context).pop(),
         ),
-                centerTitle: true,
-                title: Text(
-                  'Search',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF101828),            fontFamily: 'Inter',
+        centerTitle: true,
+        title: Text(
+          'Search',
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF101828),
+            fontFamily: 'Inter',
           ),
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_outlined,
-                color: Colors.black, size: 24.w),
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: Colors.black,
+              size: 24.w,
+            ),
             onPressed: () {},
           ),
         ],
@@ -173,8 +189,10 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                 GestureDetector(
                   onTap: () => JobFilterSheet.show(context),
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 6.h,
+                    ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(color: const Color(0xFFD0D5DD)),
@@ -197,20 +215,21 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                         ),
                         if (!filters.hasActiveFilters) ...[
                           SizedBox(width: 4.w),
-                          Icon(Icons.keyboard_arrow_down,
-                              size: 16.w, color: const Color(0xFF344054)),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 16.w,
+                            color: const Color(0xFF344054),
+                          ),
                         ],
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
           SizedBox(height: 16.h),
-          Expanded(
-            child: _buildBody(searchState, savedJobsState),
-          ),
+          Expanded(child: _buildBody(searchState, savedJobsState)),
         ],
       ),
     );
@@ -241,10 +260,7 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
       return Center(
         child: Text(
           'No jobs found matching your criteria',
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: const Color(0xFF667085),
-          ),
+          style: TextStyle(fontSize: 14.sp, color: const Color(0xFF667085)),
         ),
       );
     }
@@ -256,7 +272,8 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
       child: ListView.builder(
         controller: _scrollController,
         padding: EdgeInsets.only(
-            bottom: 20.h + MediaQuery.of(context).padding.bottom),
+          bottom: 20.h + MediaQuery.of(context).padding.bottom,
+        ),
         itemCount: state.jobs.length + (state.hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == state.jobs.length) {
@@ -289,27 +306,27 @@ class _SitterAllJobsScreenState extends ConsumerState<SitterAllJobsScreen> {
                   .read(savedJobsControllerProvider.notifier)
                   .toggleSaved(preview.id)
                   .then((isSaved) {
-                if (!context.mounted) return;
-                AppToast.show(
-                  context,
-                  SnackBar(
-                    content: Text(
-                      isSaved ? 'Job saved' : 'Job unsaved',
-                    ),
-                    backgroundColor: AppColors.success,
-                  ),
-                );
-              }).catchError((error) {
-                if (!context.mounted) return;
-                AppToast.show(
-                  context,
-                  SnackBar(
-                    content:
-                        Text(error.toString().replaceFirst('Exception: ', '')),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              });
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      SnackBar(
+                        content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
+                        backgroundColor: AppColors.success,
+                      ),
+                    );
+                  })
+                  .catchError((error) {
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      SnackBar(
+                        content: Text(
+                          error.toString().replaceFirst('Exception: ', ''),
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  });
             },
           );
         },

@@ -33,14 +33,14 @@ class ApplicationModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        status,
-        isInvitation,
-        applicationType,
-        coverLetter,
-        createdAt,
-        job,
-      ];
+    id,
+    status,
+    isInvitation,
+    applicationType,
+    coverLetter,
+    createdAt,
+    job,
+  ];
 }
 
 class ApplicationJobModel extends Equatable {
@@ -105,23 +105,23 @@ class ApplicationJobModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        title,
-        familyName,
-        familyPhotoUrl,
-        location,
-        payRate,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        estimatedDuration,
-        estimatedTotal,
-        childrenCount,
-        children,
-        additionalDetails,
-        fullAddress,
-      ];
+    id,
+    title,
+    familyName,
+    familyPhotoUrl,
+    location,
+    payRate,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    estimatedDuration,
+    estimatedTotal,
+    childrenCount,
+    children,
+    additionalDetails,
+    fullAddress,
+  ];
 }
 
 class ApplicationChildModel extends Equatable {
@@ -182,35 +182,37 @@ class ApplicationChildModel extends Equatable {
       triggerTypes: (json['triggerTypes'] as List?)?.cast<String>() ?? [],
       triggers: json['triggers'] as String?,
       calmingMethods: json['calmingMethods'] as String?,
-      transportationModes: (json['transportationModes'] as List?)?.cast<String>() ?? [],
+      transportationModes:
+          (json['transportationModes'] as List?)?.cast<String>() ?? [],
       equipmentSafety: (json['equipmentSafety'] as List?)?.cast<String>() ?? [],
       needsDropoff: json['needsDropoff'] as bool? ?? false,
       pickupLocation: json['pickupLocation'] as String?,
       dropoffLocation: json['dropoffLocation'] as String?,
-      transportSpecialInstructions: json['transportSpecialInstructions'] as String?,
+      transportSpecialInstructions:
+          json['transportSpecialInstructions'] as String?,
     );
   }
 
   @override
   List<Object?> get props => [
-        id,
-        firstName,
-        lastName,
-        age,
-        specialNeedsDiagnosis,
-        personalityDescription,
-        medicationDietaryNeeds,
-        hasAllergies,
-        allergyTypes,
-        hasTriggers,
-        triggerTypes,
-        triggers,
-        calmingMethods,
-        transportationModes,
-        equipmentSafety,
-        needsDropoff,
-        pickupLocation,
-        dropoffLocation,
-        transportSpecialInstructions,
-      ];
+    id,
+    firstName,
+    lastName,
+    age,
+    specialNeedsDiagnosis,
+    personalityDescription,
+    medicationDietaryNeeds,
+    hasAllergies,
+    allergyTypes,
+    hasTriggers,
+    triggerTypes,
+    triggers,
+    calmingMethods,
+    transportationModes,
+    equipmentSafety,
+    needsDropoff,
+    pickupLocation,
+    dropoffLocation,
+    transportSpecialInstructions,
+  ];
 }

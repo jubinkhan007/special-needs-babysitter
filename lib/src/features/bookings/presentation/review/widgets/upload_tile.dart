@@ -21,8 +21,11 @@ class UploadTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.file_upload_outlined,
-                color: AppTokens.uploadTileIconColor, size: 20),
+            const Icon(
+              Icons.file_upload_outlined,
+              color: AppTokens.uploadTileIconColor,
+              size: 20,
+            ),
             const SizedBox(height: 4),
             Text(
               'Upload Photo\n/ screenshot',

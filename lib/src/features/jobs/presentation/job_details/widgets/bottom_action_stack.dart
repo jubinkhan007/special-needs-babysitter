@@ -49,7 +49,7 @@ class BottomActionStack extends StatelessWidget {
             ),
             const SizedBox(height: AppTokens.jobDetailsButtonGap),
           ],
-          
+
           // Primary
           _buildButton(
             context,
@@ -98,8 +98,9 @@ class BottomActionStack extends StatelessWidget {
           elevation: 0,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(AppTokens.jobDetailsButtonRadius),
+            borderRadius: BorderRadius.circular(
+              AppTokens.jobDetailsButtonRadius,
+            ),
           ),
           textStyle: AppTokens.jobDetailsButtonTextStyle,
         ),
@@ -120,12 +121,14 @@ class BottomActionStack extends StatelessWidget {
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppTokens.jobDetailsOutlinedTextColor,
-          side:
-              const BorderSide(color: AppTokens.jobDetailsOutlinedBorderColor),
+          side: const BorderSide(
+            color: AppTokens.jobDetailsOutlinedBorderColor,
+          ),
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(AppTokens.jobDetailsButtonRadius),
+            borderRadius: BorderRadius.circular(
+              AppTokens.jobDetailsButtonRadius,
+            ),
           ),
           textStyle: AppTokens.jobDetailsOutlinedTextStyle,
         ),

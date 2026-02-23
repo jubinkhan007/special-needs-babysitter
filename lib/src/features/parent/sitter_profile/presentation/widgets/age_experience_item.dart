@@ -5,11 +5,7 @@ class AgeExperienceItem extends StatelessWidget {
   final String label;
   final IconData icon;
 
-  const AgeExperienceItem({
-    super.key,
-    required this.label,
-    required this.icon,
-  });
+  const AgeExperienceItem({super.key, required this.label, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +17,9 @@ class AgeExperienceItem extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-                color: const Color(0xFFB2DDFF),
-                width: 1.5), // Light Blue stroke
+              color: const Color(0xFFB2DDFF),
+              width: 1.5,
+            ), // Light Blue stroke
           ),
           child: Icon(
             icon,

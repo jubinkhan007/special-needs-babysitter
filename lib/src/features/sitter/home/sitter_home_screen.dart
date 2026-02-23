@@ -31,7 +31,8 @@ class SitterHomeScreen extends ConsumerWidget {
     ref.watch(savedJobsListProvider);
 
     final backgroundCheckAsync = ref.watch(backgroundCheckStatusProvider);
-    final status = backgroundCheckAsync.value?.status ??
+    final status =
+        backgroundCheckAsync.value?.status ??
         BackgroundCheckStatusType.notStarted;
 
     // Status string for Banner
@@ -74,7 +75,9 @@ class SitterHomeScreen extends ConsumerWidget {
                     onTap: () {
                       debugPrint('DEBUG HomeScreen: Search field tapped');
                       // Fetch jobs before navigating to ensure data is loaded
-                      ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
+                      ref
+                          .read(jobSearchNotifierProvider.notifier)
+                          .resetAndFetch();
                       context.push(Routes.sitterJobSearch);
                     },
                   ),
@@ -124,9 +127,13 @@ class SitterHomeScreen extends ConsumerWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    debugPrint('DEBUG HomeScreen: See All tapped, navigating to AllJobsScreen');
+                    debugPrint(
+                      'DEBUG HomeScreen: See All tapped, navigating to AllJobsScreen',
+                    );
                     // Reset and fetch to ensure All Jobs screen shows same data
-                    ref.read(jobSearchNotifierProvider.notifier).resetAndFetch();
+                    ref
+                        .read(jobSearchNotifierProvider.notifier)
+                        .resetAndFetch();
                     context.push(Routes.sitterJobSearch);
                   },
                   child: Text(
@@ -178,15 +185,18 @@ class SitterHomeScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final preview = jobPreviews[index];
                       // Update bookmark status from local state
-                      final isSaved =
-                          savedJobsState.savedJobIds.contains(preview.id);
-                      final updatedPreview =
-                          preview.copyWith(isBookmarked: isSaved);
+                      final isSaved = savedJobsState.savedJobIds.contains(
+                        preview.id,
+                      );
+                      final updatedPreview = preview.copyWith(
+                        isBookmarked: isSaved,
+                      );
                       return JobPreviewCard(
                         job: updatedPreview,
                         onViewDetails: () {
-                          context
-                              .push('${Routes.sitterJobDetails}/${preview.id}');
+                          context.push(
+                            '${Routes.sitterJobDetails}/${preview.id}',
+                          );
                         },
                         onBookmark: () {
                           if (preview.id.isEmpty) {
@@ -200,28 +210,32 @@ class SitterHomeScreen extends ConsumerWidget {
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(preview.id)
                               .then((isSaved) {
-                            if (!context.mounted) return;
-                            AppToast.show(
-                              context,
-                              SnackBar(
-                                content: Text(
-                                  isSaved ? 'Job saved' : 'Job unsaved',
-                                ),
-                                backgroundColor: AppColors.success,
-                              ),
-                            );
-                          }).catchError((error) {
-                            if (!context.mounted) return;
-                            AppToast.show(
-                              context,
-                              SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceFirst('Exception: ', '')),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          });
+                                if (!context.mounted) return;
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text(
+                                      isSaved ? 'Job saved' : 'Job unsaved',
+                                    ),
+                                    backgroundColor: AppColors.success,
+                                  ),
+                                );
+                              })
+                              .catchError((error) {
+                                if (!context.mounted) return;
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text(
+                                      error.toString().replaceFirst(
+                                        'Exception: ',
+                                        '',
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              });
                         },
                       );
                     },

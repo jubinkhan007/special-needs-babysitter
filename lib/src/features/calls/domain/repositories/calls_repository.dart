@@ -30,8 +30,5 @@ abstract interface class CallsRepository {
   Future<CallTokenRefresh> refreshToken(String callId);
 
   /// GET /calls/history - Get call history with pagination
-  Future<CallHistoryPage> getCallHistory({
-    int limit = 20,
-    int offset = 0,
-  });
+  Future<CallHistoryPage> getCallHistory({int limit = 20, int offset = 0});
 }

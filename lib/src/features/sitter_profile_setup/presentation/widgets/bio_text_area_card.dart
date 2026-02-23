@@ -53,7 +53,8 @@ class BioTextAreaCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: Colors.transparent), // No border in design? Or subtle?
+              color: Colors.transparent,
+            ), // No border in design? Or subtle?
             // Assuming no border, just shadow or flat white on blue bg.
             boxShadow: [
               BoxShadow(
@@ -70,11 +71,13 @@ class BioTextAreaCard extends StatelessWidget {
                 onChanged: onChanged,
                 maxLines: 6,
                 maxLength: maxChars, // Enforce length
-                buildCounter: (context,
-                        {required currentLength,
-                        required isFocused,
-                        required maxLength}) =>
-                    null, // Hide default counter
+                buildCounter:
+                    (
+                      context, {
+                      required currentLength,
+                      required isFocused,
+                      required maxLength,
+                    }) => null, // Hide default counter
                 style: AppTypography.textTheme.bodyLarge?.copyWith(
                   color: const Color(0xFF1A1A1A),
                 ),

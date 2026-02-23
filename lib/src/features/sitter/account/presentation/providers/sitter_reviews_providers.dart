@@ -6,12 +6,13 @@ import 'package:babysitter_app/src/features/sitter/account/data/sources/sitter_r
 
 final sitterReviewsRemoteDataSourceProvider =
     Provider<SitterReviewsRemoteDataSource>((ref) {
-  final dio = ref.watch(authDioProvider);
-  return SitterReviewsRemoteDataSource(dio);
-});
+      final dio = ref.watch(authDioProvider);
+      return SitterReviewsRemoteDataSource(dio);
+    });
 
-final sitterReviewsProvider =
-    FutureProvider.autoDispose<List<SitterReview>>((ref) async {
+final sitterReviewsProvider = FutureProvider.autoDispose<List<SitterReview>>((
+  ref,
+) async {
   final remote = ref.watch(sitterReviewsRemoteDataSourceProvider);
   return remote.getMyReviews();
 });

@@ -8,11 +8,7 @@ class CoverLetterBox extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
 
-  const CoverLetterBox({
-    super.key,
-    this.controller,
-    this.onChanged,
-  });
+  const CoverLetterBox({super.key, this.controller, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +19,7 @@ class CoverLetterBox extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            color: AppTokens.cardBorder,
-            width: 1,
-          ),
+          border: Border.all(color: AppTokens.cardBorder, width: 1),
         ),
         child: TextField(
           controller: controller,

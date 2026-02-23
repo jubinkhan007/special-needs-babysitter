@@ -1,8 +1,4 @@
-enum AudioCallPhase {
-  calling,
-  connected,
-  ended,
-}
+enum AudioCallPhase { calling, connected, ended }
 
 class AudioCallState {
   final String remoteName;

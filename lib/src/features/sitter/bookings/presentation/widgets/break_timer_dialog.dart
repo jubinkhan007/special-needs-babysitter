@@ -53,9 +53,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
 
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       child: SizedBox(
         width: 320.w,
         child: Padding(
@@ -112,11 +110,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    top: -10.h,
-                    right: 12.w,
-                    child: _BreakBadge(),
-                  ),
+                  Positioned(top: -10.h, right: 12.w, child: _BreakBadge()),
                 ],
               ),
               SizedBox(height: 16.h),
@@ -200,10 +194,7 @@ class _TimeUnit extends StatelessWidget {
   final String value;
   final String label;
 
-  const _TimeUnit({
-    required this.value,
-    required this.label,
-  });
+  const _TimeUnit({required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -323,11 +314,7 @@ class _InfoIcon extends StatelessWidget {
         border: Border.all(color: const Color(0xFFD0D5DD)),
       ),
       child: const Center(
-        child: Icon(
-          Icons.info_outline,
-          size: 12,
-          color: Color(0xFF667085),
-        ),
+        child: Icon(Icons.info_outline, size: 12, color: Color(0xFF667085)),
       ),
     );
   }

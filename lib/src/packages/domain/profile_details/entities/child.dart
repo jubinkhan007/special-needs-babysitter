@@ -55,27 +55,27 @@ class Child extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        firstName,
-        lastName,
-        age,
-        specialNeedsDiagnosis,
-        personalityDescription,
-        medicationDietaryNeeds,
-        routine,
-        hasAllergies,
-        allergyTypes,
-        hasTriggers,
-        triggerTypes,
-        triggers,
-        calmingMethods,
-        transportationModes,
-        equipmentSafety,
-        needsDropoff,
-        pickupLocation,
-        dropoffLocation,
-        transportSpecialInstructions,
-      ];
+    id,
+    firstName,
+    lastName,
+    age,
+    specialNeedsDiagnosis,
+    personalityDescription,
+    medicationDietaryNeeds,
+    routine,
+    hasAllergies,
+    allergyTypes,
+    hasTriggers,
+    triggerTypes,
+    triggers,
+    calmingMethods,
+    transportationModes,
+    equipmentSafety,
+    needsDropoff,
+    pickupLocation,
+    dropoffLocation,
+    transportSpecialInstructions,
+  ];
 
   Map<String, dynamic> toMap() {
     return {

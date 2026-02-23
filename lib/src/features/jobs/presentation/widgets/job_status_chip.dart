@@ -4,10 +4,7 @@ import 'package:babysitter_app/src/theme/app_tokens.dart';
 class JobStatusChip extends StatelessWidget {
   final bool isActive;
 
-  const JobStatusChip({
-    super.key,
-    required this.isActive,
-  });
+  const JobStatusChip({super.key, required this.isActive});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +13,8 @@ class JobStatusChip extends StatelessWidget {
     return Container(
       height: AppTokens.jobChipHeight,
       padding: const EdgeInsets.symmetric(
-          horizontal: AppTokens.jobChipHorizontalPadding),
+        horizontal: AppTokens.jobChipHorizontalPadding,
+      ),
       decoration: BoxDecoration(
         color: AppTokens.jobChipBgActive,
         borderRadius: BorderRadius.circular(AppTokens.jobChipRadius),
@@ -33,10 +31,7 @@ class JobStatusChip extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
-            'Active',
-            style: AppTokens.jobChipTextStyle,
-          ),
+          Text('Active', style: AppTokens.jobChipTextStyle),
         ],
       ),
     );

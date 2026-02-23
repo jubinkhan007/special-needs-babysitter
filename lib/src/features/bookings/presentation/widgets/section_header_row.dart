@@ -7,11 +7,7 @@ class SectionHeaderRow extends StatelessWidget {
   final String title;
   final BookingStatus? status; // Optional status to show chip
 
-  const SectionHeaderRow({
-    super.key,
-    required this.title,
-    this.status,
-  });
+  const SectionHeaderRow({super.key, required this.title, this.status});
 
   @override
   Widget build(BuildContext context) {

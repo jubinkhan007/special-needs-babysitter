@@ -15,7 +15,8 @@ class TransportationBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Check if all fields are empty
-    final hasData = transportationMode != null ||
+    final hasData =
+        transportationMode != null ||
         equipmentSafety != null ||
         pickupDropoffDetails != null;
 

@@ -47,11 +47,7 @@ class _StatCard extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const _StatCard({
-    required this.count,
-    required this.label,
-    this.onTap,
-  });
+  const _StatCard({required this.count, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +68,7 @@ class _StatCard extends StatelessWidget {
                     style: AppTokens.accountStatNumberStyle,
                   ),
                   SizedBox(height: 4.h),
-                  Text(
-                    label,
-                    style: AppTokens.accountStatLabelStyle,
-                  ),
+                  Text(label, style: AppTokens.accountStatLabelStyle),
                 ],
               ),
             ),

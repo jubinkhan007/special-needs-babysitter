@@ -102,7 +102,8 @@ class ParentBookingStep4Screen extends ConsumerWidget {
                   ),
                   SummaryKvRow(
                     label: 'Time',
-                    value: bookingState.startTime != null &&
+                    value:
+                        bookingState.startTime != null &&
                             bookingState.endTime != null
                         ? '${bookingState.startTime} - ${bookingState.endTime}'
                         : 'Not set',
@@ -133,7 +134,8 @@ class ParentBookingStep4Screen extends ConsumerWidget {
                   ),
 
                   SizedBox(
-                      height: 24 + MediaQuery.of(context).padding.bottom + 60),
+                    height: 24 + MediaQuery.of(context).padding.bottom + 60,
+                  ),
                 ],
               ),
             ),
@@ -141,7 +143,11 @@ class ParentBookingStep4Screen extends ConsumerWidget {
           Container(
             color: AppColors.surfaceTint,
             padding: EdgeInsets.fromLTRB(
-                24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
+              24,
+              0,
+              24,
+              MediaQuery.of(context).padding.bottom + 16,
+            ),
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {

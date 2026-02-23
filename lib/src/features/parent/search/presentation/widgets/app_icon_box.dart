@@ -5,11 +5,7 @@ class AppIconBox extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
 
-  const AppIconBox({
-    super.key,
-    required this.icon,
-    this.onTap,
-  });
+  const AppIconBox({super.key, required this.icon, this.onTap});
 
   @override
   Widget build(BuildContext context) {

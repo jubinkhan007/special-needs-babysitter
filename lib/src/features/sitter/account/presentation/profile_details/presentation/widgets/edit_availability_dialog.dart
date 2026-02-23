@@ -53,11 +53,12 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
       return;
     }
 
-    final dates = availability
-        .map((a) => _parseDate(a.date))
-        .whereType<DateTime>()
-        .toList()
-      ..sort();
+    final dates =
+        availability
+            .map((a) => _parseDate(a.date))
+            .whereType<DateTime>()
+            .toList()
+          ..sort();
 
     if (dates.isEmpty) {
       _singleDate = DateTime.now();
@@ -71,8 +72,10 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
     }
 
     final first = availability.first;
-    _startTime = _parseTime(first.startTime) ?? const TimeOfDay(hour: 9, minute: 0);
-    _endTime = _parseTime(first.endTime) ?? const TimeOfDay(hour: 17, minute: 0);
+    _startTime =
+        _parseTime(first.startTime) ?? const TimeOfDay(hour: 9, minute: 0);
+    _endTime =
+        _parseTime(first.endTime) ?? const TimeOfDay(hour: 17, minute: 0);
     _noBookings = first.noBookings;
   }
 
@@ -166,7 +169,9 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
   }
 
   Future<void> _pickTime({required bool isStart}) async {
-    final initial = isStart ? (_startTime ?? const TimeOfDay(hour: 9, minute: 0)) : (_endTime ?? const TimeOfDay(hour: 17, minute: 0));
+    final initial = isStart
+        ? (_startTime ?? const TimeOfDay(hour: 9, minute: 0))
+        : (_endTime ?? const TimeOfDay(hour: 17, minute: 0));
     final picked = await showTimePicker(
       context: context,
       initialTime: initial,
@@ -256,10 +261,7 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              value,
-              style: const TextStyle(fontSize: 14, color: _textDark),
-            ),
+            Text(value, style: const TextStyle(fontSize: 14, color: _textDark)),
             const Icon(Icons.calendar_today, size: 16, color: _greyText),
           ],
         ),
@@ -281,10 +283,7 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              value,
-              style: const TextStyle(fontSize: 14, color: _textDark),
-            ),
+            Text(value, style: const TextStyle(fontSize: 14, color: _textDark)),
             const Icon(Icons.access_time, size: 16, color: _greyText),
           ],
         ),
@@ -344,13 +343,17 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: _isRange ? Colors.transparent : Colors.white,
+                                color: _isRange
+                                    ? Colors.transparent
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 'Single Day',
                                 style: TextStyle(
-                                  fontWeight: _isRange ? FontWeight.w500 : FontWeight.w600,
+                                  fontWeight: _isRange
+                                      ? FontWeight.w500
+                                      : FontWeight.w600,
                                   color: _isRange ? _greyText : _textDark,
                                 ),
                               ),
@@ -364,13 +367,17 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: _isRange ? Colors.white : Colors.transparent,
+                                color: _isRange
+                                    ? Colors.white
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 'Date Range',
                                 style: TextStyle(
-                                  fontWeight: _isRange ? FontWeight.w600 : FontWeight.w500,
+                                  fontWeight: _isRange
+                                      ? FontWeight.w600
+                                      : FontWeight.w500,
                                   color: _isRange ? _textDark : _greyText,
                                 ),
                               ),
@@ -382,36 +389,61 @@ class _EditAvailabilityDialogState extends State<EditAvailabilityDialog> {
                   ),
                   const SizedBox(height: 16),
                   if (_isRange) ...[
-                    const Text('Start Date',
-                        style: TextStyle(fontSize: 12, color: _greyText)),
+                    const Text(
+                      'Start Date',
+                      style: TextStyle(fontSize: 12, color: _greyText),
+                    ),
                     const SizedBox(height: 6),
-                    _buildField('Start Date', _formatDate(_rangeStart),
-                        () => _pickDate(isStart: true)),
+                    _buildField(
+                      'Start Date',
+                      _formatDate(_rangeStart),
+                      () => _pickDate(isStart: true),
+                    ),
                     const SizedBox(height: 12),
-                    const Text('End Date',
-                        style: TextStyle(fontSize: 12, color: _greyText)),
+                    const Text(
+                      'End Date',
+                      style: TextStyle(fontSize: 12, color: _greyText),
+                    ),
                     const SizedBox(height: 6),
-                    _buildField('End Date', _formatDate(_rangeEnd),
-                        () => _pickDate(isStart: false)),
+                    _buildField(
+                      'End Date',
+                      _formatDate(_rangeEnd),
+                      () => _pickDate(isStart: false),
+                    ),
                   ] else ...[
-                    const Text('Date',
-                        style: TextStyle(fontSize: 12, color: _greyText)),
+                    const Text(
+                      'Date',
+                      style: TextStyle(fontSize: 12, color: _greyText),
+                    ),
                     const SizedBox(height: 6),
-                    _buildField('Date', _formatDate(_singleDate),
-                        () => _pickDate(isStart: true)),
+                    _buildField(
+                      'Date',
+                      _formatDate(_singleDate),
+                      () => _pickDate(isStart: true),
+                    ),
                   ],
                   const SizedBox(height: 16),
-                  const Text('Start Time',
-                      style: TextStyle(fontSize: 12, color: _greyText)),
+                  const Text(
+                    'Start Time',
+                    style: TextStyle(fontSize: 12, color: _greyText),
+                  ),
                   const SizedBox(height: 6),
-                  _buildTimeField('Start Time', _formatTime(_startTime),
-                      () => _pickTime(isStart: true)),
+                  _buildTimeField(
+                    'Start Time',
+                    _formatTime(_startTime),
+                    () => _pickTime(isStart: true),
+                  ),
                   const SizedBox(height: 12),
-                  const Text('End Time',
-                      style: TextStyle(fontSize: 12, color: _greyText)),
+                  const Text(
+                    'End Time',
+                    style: TextStyle(fontSize: 12, color: _greyText),
+                  ),
                   const SizedBox(height: 6),
-                  _buildTimeField('End Time', _formatTime(_endTime),
-                      () => _pickTime(isStart: false)),
+                  _buildTimeField(
+                    'End Time',
+                    _formatTime(_endTime),
+                    () => _pickTime(isStart: false),
+                  ),
                   const SizedBox(height: 16),
                   Row(
                     children: [

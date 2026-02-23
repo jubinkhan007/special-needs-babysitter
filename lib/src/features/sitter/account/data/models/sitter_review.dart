@@ -30,8 +30,8 @@ class SitterReview {
   factory SitterReview.fromJson(Map<String, dynamic> json) {
     final reviewer = json['reviewer'] as Map<String, dynamic>?;
     final reviewerName = _buildName(reviewer);
-    final reviewerAvatar = (reviewer?['profilePhotoUrl'] ?? json['imageUrl'] ?? '')
-        .toString();
+    final reviewerAvatar =
+        (reviewer?['profilePhotoUrl'] ?? json['imageUrl'] ?? '').toString();
     return SitterReview(
       id: (json['_id'] ?? json['id'] ?? '').toString(),
       jobId: (json['jobId'] ?? '').toString(),

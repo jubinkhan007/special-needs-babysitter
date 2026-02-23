@@ -41,8 +41,8 @@ class _JobPostStep2JobDetailsScreenState
     _jobTitleController.text = state.title;
     _dateController.text =
         state.startDate.isNotEmpty && state.endDate.isNotEmpty
-            ? '${state.startDate} - ${state.endDate}'
-            : '';
+        ? '${state.startDate} - ${state.endDate}'
+        : '';
     _startTimeController.text = state.startTime;
     _endTimeController.text = state.endTime;
     _rawStartDate = state.rawStartDate;
@@ -93,30 +93,30 @@ class _JobPostStep2JobDetailsScreenState
             datePickerTheme: DatePickerThemeData(
               headerBackgroundColor: Colors.white,
               headerForegroundColor: _titleColor,
-              rangeSelectionBackgroundColor: _progressFill.withValues(alpha: 0.3),
+              rangeSelectionBackgroundColor: _progressFill.withValues(
+                alpha: 0.3,
+              ),
               rangePickerBackgroundColor: Colors.white,
               rangePickerHeaderBackgroundColor: Colors.white,
               rangePickerHeaderForegroundColor: _titleColor,
               todayBorder: const BorderSide(color: _progressFill),
-              todayForegroundColor:
-                  const WidgetStatePropertyAll(_progressFill),
+              todayForegroundColor: const WidgetStatePropertyAll(_progressFill),
               dayForegroundColor: WidgetStateProperty.resolveWith((states) {
                 if (states.contains(WidgetState.selected)) {
                   return Colors.white;
                 }
                 return _titleColor;
               }),
-              dayOverlayColor:
-                  WidgetStatePropertyAll(_progressFill.withValues(alpha: 0.1)),
+              dayOverlayColor: WidgetStatePropertyAll(
+                _progressFill.withValues(alpha: 0.1),
+              ),
               yearForegroundColor: const WidgetStatePropertyAll(_titleColor),
-            ), dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           ),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 400,
-                maxHeight: 600,
-              ),
+              constraints: const BoxConstraints(maxWidth: 400, maxHeight: 600),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                 child: child!,
@@ -144,7 +144,7 @@ class _JobPostStep2JobDetailsScreenState
         'Sep',
         'Oct',
         'Nov',
-        'Dec'
+        'Dec',
       ];
 
       final startStr = '${months[start.month - 1]} ${start.day}';
@@ -173,18 +173,19 @@ class _JobPostStep2JobDetailsScreenState
             data: Theme.of(context).copyWith(
               // Override text theme to ensure all labels are dark
               textTheme: Theme.of(context).textTheme.copyWith(
-                    bodySmall: const TextStyle(color: _titleColor),
-                    bodyMedium: const TextStyle(color: _titleColor),
-                    displayLarge: const TextStyle(color: _titleColor),
-                    displayMedium: const TextStyle(color: _titleColor),
-                    displaySmall: const TextStyle(color: _titleColor),
-                    titleMedium: const TextStyle(color: _titleColor),
-                    labelSmall: const TextStyle(color: _titleColor),
-                  ),
+                bodySmall: const TextStyle(color: _titleColor),
+                bodyMedium: const TextStyle(color: _titleColor),
+                displayLarge: const TextStyle(color: _titleColor),
+                displayMedium: const TextStyle(color: _titleColor),
+                displaySmall: const TextStyle(color: _titleColor),
+                titleMedium: const TextStyle(color: _titleColor),
+                labelSmall: const TextStyle(color: _titleColor),
+              ),
               colorScheme: const ColorScheme.light(
                 primary: _progressFill, // Active selection / OK button
                 onPrimary: Colors.white, // Text on primary
-                surface: AppColors.surfaceTint, // Dialog background (Light Blue)
+                surface:
+                    AppColors.surfaceTint, // Dialog background (Light Blue)
                 onSurface: _titleColor, // Text color
                 secondary: _progressFill, // Cursor/Highlight
                 onSurfaceVariant: _titleColor, // Label colors
@@ -201,25 +202,31 @@ class _JobPostStep2JobDetailsScreenState
                 hourMinuteShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: const BorderSide(
-                      color: _progressFill, width: 2), // Active border
+                    color: _progressFill,
+                    width: 2,
+                  ), // Active border
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
-                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _progressFill.withValues(alpha: 0.3)
-                        : Colors.transparent),
-                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
-                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? Colors.white
-                        : _progressFill.withValues(alpha: 0.1)),
-                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _progressFill.withValues(alpha: 0.3)
+                      : Colors.transparent,
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? Colors.white
+                      : _progressFill.withValues(alpha: 0.1),
+                ),
+                hourMinuteTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
                 inputDecorationTheme: const InputDecorationTheme(
                   labelStyle: TextStyle(color: _titleColor),
                   helperStyle: TextStyle(color: _titleColor),
@@ -260,14 +267,14 @@ class _JobPostStep2JobDetailsScreenState
             data: Theme.of(context).copyWith(
               // Override text theme to ensure all labels are dark
               textTheme: Theme.of(context).textTheme.copyWith(
-                    bodySmall: const TextStyle(color: _titleColor),
-                    bodyMedium: const TextStyle(color: _titleColor),
-                    displayLarge: const TextStyle(color: _titleColor),
-                    displayMedium: const TextStyle(color: _titleColor),
-                    displaySmall: const TextStyle(color: _titleColor),
-                    titleMedium: const TextStyle(color: _titleColor),
-                    labelSmall: const TextStyle(color: _titleColor),
-                  ),
+                bodySmall: const TextStyle(color: _titleColor),
+                bodyMedium: const TextStyle(color: _titleColor),
+                displayLarge: const TextStyle(color: _titleColor),
+                displayMedium: const TextStyle(color: _titleColor),
+                displaySmall: const TextStyle(color: _titleColor),
+                titleMedium: const TextStyle(color: _titleColor),
+                labelSmall: const TextStyle(color: _titleColor),
+              ),
               colorScheme: const ColorScheme.light(
                 primary: _progressFill,
                 onPrimary: Colors.white,
@@ -288,25 +295,31 @@ class _JobPostStep2JobDetailsScreenState
                 hourMinuteShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                   side: const BorderSide(
-                      color: _progressFill, width: 2), // Active border
+                    color: _progressFill,
+                    width: 2,
+                  ), // Active border
                 ),
                 dayPeriodBorderSide: const BorderSide(color: _mutedText),
-                dayPeriodColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _progressFill.withValues(alpha: 0.3)
-                        : Colors.transparent),
-                dayPeriodTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
-                hourMinuteColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? Colors.white
-                        : _progressFill.withValues(alpha: 0.1)),
-                hourMinuteTextColor: WidgetStateColor.resolveWith((states) =>
-                    states.contains(WidgetState.selected)
-                        ? _titleColor
-                        : _mutedText),
+                dayPeriodColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _progressFill.withValues(alpha: 0.3)
+                      : Colors.transparent,
+                ),
+                dayPeriodTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
+                hourMinuteColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? Colors.white
+                      : _progressFill.withValues(alpha: 0.1),
+                ),
+                hourMinuteTextColor: WidgetStateColor.resolveWith(
+                  (states) => states.contains(WidgetState.selected)
+                      ? _titleColor
+                      : _mutedText,
+                ),
                 inputDecorationTheme: const InputDecorationTheme(
                   labelStyle: TextStyle(color: _titleColor),
                   helperStyle: TextStyle(color: _titleColor),
@@ -340,30 +353,32 @@ class _JobPostStep2JobDetailsScreenState
       _showError('Please enter a job title');
       return;
     }
-    
+
     if (_dateController.text.isEmpty) {
       _showError('Please select dates for the job');
       return;
     }
-    
+
     if (_startTimeController.text.isEmpty) {
       _showError('Please select a start time');
       return;
     }
-    
+
     if (_endTimeController.text.isEmpty) {
       _showError('Please select an end time');
       return;
     }
-    
+
     // Validate that end time is after start time
     if (!_isEndTimeAfterStartTime()) {
       _showError('End time must be after start time');
       return;
     }
-    
+
     // Update controller state
-    ref.read(jobPostControllerProvider.notifier).updateJobDetails(
+    ref
+        .read(jobPostControllerProvider.notifier)
+        .updateJobDetails(
           title: _jobTitleController.text.trim(),
           startDate: _startStr,
           endDate: _endStr,
@@ -374,52 +389,52 @@ class _JobPostStep2JobDetailsScreenState
         );
     widget.onNext();
   }
-  
+
   bool _isEndTimeAfterStartTime() {
     if (_startTimeController.text.isEmpty || _endTimeController.text.isEmpty) {
       return false;
     }
-    
+
     try {
       final startTime = _parseTimeString(_startTimeController.text);
       final endTime = _parseTimeString(_endTimeController.text);
-      
+
       // Convert to minutes since midnight for comparison
       final startMinutes = startTime.hour * 60 + startTime.minute;
       final endMinutes = endTime.hour * 60 + endTime.minute;
-      
+
       // If on the same day, end time must be after start time
       // If spanning multiple days, allow end time to be earlier (overnight shift)
-      if (_rawStartDate != null && 
-          _rawEndDate != null && 
+      if (_rawStartDate != null &&
+          _rawEndDate != null &&
           _rawStartDate!.isAtSameMomentAs(_rawEndDate!)) {
         return endMinutes > startMinutes;
       }
-      
+
       return true; // Multi-day booking allows any times
     } catch (e) {
       return true; // If parsing fails, let it pass and handle at backend
     }
   }
-  
+
   TimeOfDay _parseTimeString(String timeStr) {
     // Handle format like "10:00 AM" or "2:30 PM"
     final cleanTime = timeStr.trim();
     final parts = cleanTime.split(' ');
     if (parts.length != 2) throw const FormatException('Invalid time format');
-    
+
     final timeParts = parts[0].split(':');
     final period = parts[1].toUpperCase();
-    
+
     int hour = int.parse(timeParts[0]);
     final int minute = int.parse(timeParts[1]);
-    
+
     if (period == 'PM' && hour != 12) hour += 12;
     if (period == 'AM' && hour == 12) hour = 0;
-    
+
     return TimeOfDay(hour: hour, minute: minute);
   }
-  
+
   void _showError(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -446,8 +461,8 @@ class _JobPostStep2JobDetailsScreenState
           previous?.endDate != next.endDate) {
         _dateController.text =
             next.startDate.isNotEmpty && next.endDate.isNotEmpty
-                ? '${next.startDate} - ${next.endDate}'
-                : '';
+            ? '${next.startDate} - ${next.endDate}'
+            : '';
         _startStr = next.startDate;
         _endStr = next.endDate;
       }
@@ -577,11 +592,7 @@ class _JobPostStep2JobDetailsScreenState
         borderRadius: BorderRadius.circular(16),
       ),
       child: const Center(
-        child: Icon(
-          Icons.description_outlined,
-          size: 36,
-          color: _iconBlue,
-        ),
+        child: Icon(Icons.description_outlined, size: 36, color: _iconBlue),
       ),
     );
   }
@@ -619,8 +630,10 @@ class _JobPostStep2JobDetailsScreenState
           ),
           filled: true,
           fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 18,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide: BorderSide.none,
@@ -636,11 +649,7 @@ class _JobPostStep2JobDetailsScreenState
           suffixIcon: suffixIcon != null
               ? Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Icon(
-                    suffixIcon,
-                    size: 24,
-                    color: _mutedText,
-                  ),
+                  child: Icon(suffixIcon, size: 24, color: _mutedText),
                 )
               : null,
           suffixIconConstraints: const BoxConstraints(

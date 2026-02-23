@@ -65,7 +65,9 @@ class RtmCallInviteHandler {
 
     _lastHandledCallId = callId;
 
-    final callType = CallType.fromString(payload['callType'] as String? ?? 'audio');
+    final callType = CallType.fromString(
+      payload['callType'] as String? ?? 'audio',
+    );
     final callerName = payload['callerName'] as String? ?? 'Unknown';
     final callerUserId = payload['callerUserId'] as String? ?? '';
     final callerAvatar = payload['callerAvatar'] as String?;
@@ -74,7 +76,9 @@ class RtmCallInviteHandler {
       'RTM call invite callId=$callId type=${callType.name} callerUserId=$callerUserId',
       name: 'Calls',
     );
-    _ref.read(callControllerProvider.notifier).handleIncomingCall(
+    _ref
+        .read(callControllerProvider.notifier)
+        .handleIncomingCall(
           callId: callId,
           callType: callType,
           callerName: callerName,
@@ -124,9 +128,11 @@ class RtmCallInviteHandler {
 }
 
 final rtmCallInviteHandlerProvider =
-    Provider.family<RtmCallInviteHandler, GlobalKey<NavigatorState>>(
-        (ref, navigatorKey) {
-  final handler = RtmCallInviteHandler(ref, navigatorKey: navigatorKey);
-  ref.onDispose(handler.dispose);
-  return handler;
-});
+    Provider.family<RtmCallInviteHandler, GlobalKey<NavigatorState>>((
+      ref,
+      navigatorKey,
+    ) {
+      final handler = RtmCallInviteHandler(ref, navigatorKey: navigatorKey);
+      ref.onDispose(handler.dispose);
+      return handler;
+    });

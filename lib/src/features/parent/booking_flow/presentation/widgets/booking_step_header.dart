@@ -30,7 +30,8 @@ class BookingStepHeader extends StatelessWidget {
           // Row 1: Back, Step Title, Help
           Padding(
             padding: const EdgeInsets.symmetric(
-                horizontal: 8), // Standard nav padding
+              horizontal: 8,
+            ), // Standard nav padding
             child: SizedBox(
               height: 44, // Standard hit area height
               child: Stack(
@@ -40,9 +41,11 @@ class BookingStepHeader extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back,
-                          size: 24,
-                          color: Color(0xFF101828)), // Dark grey/black
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 24,
+                        color: Color(0xFF101828),
+                      ), // Dark grey/black
                       onPressed: onBack,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -62,8 +65,11 @@ class BookingStepHeader extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(
-                      icon: const Icon(Icons.help_outline_rounded,
-                          size: 24, color: Color(0xFF667085)), // Grey 500
+                      icon: const Icon(
+                        Icons.help_outline_rounded,
+                        size: 24,
+                        color: Color(0xFF667085),
+                      ), // Grey 500
                       onPressed: onHelp ?? () {},
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),

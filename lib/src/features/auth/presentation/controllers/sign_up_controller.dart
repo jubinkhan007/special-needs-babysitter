@@ -65,7 +65,8 @@ class SignUpController extends Notifier<SignUpState> {
   /// Submit registration and send OTP (sequential flow)
   /// Returns RegisteredUser on success, null on failure
   Future<RegisteredUser?> submitRegistration(
-      Map<String, String> formData) async {
+    Map<String, String> formData,
+  ) async {
     state = const SignUpSubmitting();
 
     try {
@@ -108,5 +109,5 @@ class SignUpController extends Notifier<SignUpState> {
 /// Provider for SignUpController
 final signUpControllerProvider =
     NotifierProvider<SignUpController, SignUpState>(() {
-  return SignUpController();
-});
+      return SignUpController();
+    });

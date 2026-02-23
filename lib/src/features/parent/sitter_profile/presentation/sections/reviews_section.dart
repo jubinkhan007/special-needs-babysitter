@@ -46,8 +46,11 @@ class ReviewsSection extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 child: Row(
                   children: [
-                    const Icon(Icons.star_rounded,
-                        color: AppUiTokens.starYellow, size: 20),
+                    const Icon(
+                      Icons.star_rounded,
+                      color: AppUiTokens.starYellow,
+                      size: 20,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       averageRating.toStringAsFixed(1),
@@ -67,8 +70,11 @@ class ReviewsSection extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    const Icon(Icons.chevron_right,
-                        size: 20, color: AppUiTokens.textSecondary),
+                    const Icon(
+                      Icons.chevron_right,
+                      size: 20,
+                      color: AppUiTokens.textSecondary,
+                    ),
                   ],
                 ),
               ),
@@ -94,7 +100,8 @@ class ReviewsSection extends StatelessWidget {
                     comment: review.comment,
                     imageAsset: review.authorAvatarUrl,
                   ),
-                  if (index < reviewsToShow.length - 1 || hasMoreReviews) _buildDivider(),
+                  if (index < reviewsToShow.length - 1 || hasMoreReviews)
+                    _buildDivider(),
                 ],
               );
             }),
@@ -236,10 +243,6 @@ class ReviewsSection extends StatelessWidget {
   }
 
   Widget _buildDivider() {
-    return const Divider(
-      height: 1,
-      thickness: 1,
-      color: Color(0xFFF2F4F7),
-    );
+    return const Divider(height: 1, thickness: 1, color: Color(0xFFF2F4F7));
   }
 }

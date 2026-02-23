@@ -52,34 +52,37 @@ class SupportMessageBubble extends StatelessWidget {
               children: [
                 // Meta Text
                 if (showAvatar) ...[
-                  Text(
-                    metaText,
-                    style: AppTokens.chatMetaStyle,
-                  ),
+                  Text(metaText, style: AppTokens.chatMetaStyle),
                   SizedBox(height: 4.h),
                 ],
 
                 // Bubble
                 Container(
-                  constraints:
-                      BoxConstraints(maxWidth: AppTokens.supportBubbleMaxWidth),
+                  constraints: BoxConstraints(
+                    maxWidth: AppTokens.supportBubbleMaxWidth,
+                  ),
                   padding: EdgeInsets.all(AppTokens.bubblePadding),
                   decoration: BoxDecoration(
                     color: AppTokens.supportBubbleBg,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(showAvatar
-                          ? 0
-                          : AppTokens
-                              .supportBubbleRadius), // Squarish if avatar logic requires? Screenshot shows rounded always
-                      topRight: Radius.circular(AppTokens.supportBubbleRadius),
-                      bottomLeft:
-                          Radius.circular(AppTokens.supportBubbleRadius),
-                      bottomRight:
-                          Radius.circular(AppTokens.supportBubbleRadius),
-                    ).copyWith(
-                      topLeft: const Radius.circular(
-                          12), // Actually standard rounded
-                    ),
+                    borderRadius:
+                        BorderRadius.only(
+                          topLeft: Radius.circular(
+                            showAvatar ? 0 : AppTokens.supportBubbleRadius,
+                          ), // Squarish if avatar logic requires? Screenshot shows rounded always
+                          topRight: Radius.circular(
+                            AppTokens.supportBubbleRadius,
+                          ),
+                          bottomLeft: Radius.circular(
+                            AppTokens.supportBubbleRadius,
+                          ),
+                          bottomRight: Radius.circular(
+                            AppTokens.supportBubbleRadius,
+                          ),
+                        ).copyWith(
+                          topLeft: const Radius.circular(
+                            12,
+                          ), // Actually standard rounded
+                        ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.05),
@@ -88,10 +91,7 @@ class SupportMessageBubble extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Text(
-                    text,
-                    style: AppTokens.chatBubbleStyle,
-                  ),
+                  child: Text(text, style: AppTokens.chatBubbleStyle),
                 ),
               ],
             ),

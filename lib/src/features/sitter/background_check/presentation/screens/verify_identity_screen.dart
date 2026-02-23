@@ -21,10 +21,7 @@ class VerifyIdentityScreen extends StatelessWidget {
             // Header with status bar color
             Container(
               color: AppColors.surfaceTint,
-              child: SafeArea(
-                bottom: false,
-                child: _buildAppBar(context),
-              ),
+              child: SafeArea(bottom: false, child: _buildAppBar(context)),
             ),
             // Rest of the content
             Expanded(

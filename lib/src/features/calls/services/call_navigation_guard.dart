@@ -61,22 +61,24 @@ class CallNavigationGuard {
 
     developer.log('Showing IncomingCallScreen for $callId', name: 'Calls');
 
-    navigator.push(
-      MaterialPageRoute(
-        builder: (_) => IncomingCallScreen(
-          callId: callId,
-          callType: callType,
-          callerName: callerName,
-          callerUserId: callerUserId,
-          callerAvatar: callerAvatar,
-        ),
-      ),
-    ).then((_) {
-      // Clear when screen is popped
-      if (_currentIncomingCallId == callId) {
-        _currentIncomingCallId = null;
-      }
-    });
+    navigator
+        .push(
+          MaterialPageRoute(
+            builder: (_) => IncomingCallScreen(
+              callId: callId,
+              callType: callType,
+              callerName: callerName,
+              callerUserId: callerUserId,
+              callerAvatar: callerAvatar,
+            ),
+          ),
+        )
+        .then((_) {
+          // Clear when screen is popped
+          if (_currentIncomingCallId == callId) {
+            _currentIncomingCallId = null;
+          }
+        });
 
     return true;
   }
@@ -96,7 +98,10 @@ class CallNavigationGuard {
     _currentIncomingCallId = null;
     _isInCallScreenShowing = true;
 
-    developer.log('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil', name: 'Calls');
+    developer.log(
+      '[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil',
+      name: 'Calls',
+    );
     debugPrint('[CALL_NAV] Showing InCallScreen via pushAndRemoveUntil');
 
     navigator.pushAndRemoveUntil(
@@ -136,6 +141,7 @@ class CallNavigationGuard {
 }
 
 /// Provider for CallNavigationGuard
-final callNavigationGuardProvider = Provider.family<CallNavigationGuard, GlobalKey<NavigatorState>>(
-  (ref, navigatorKey) => CallNavigationGuard(navigatorKey: navigatorKey),
-);
+final callNavigationGuardProvider =
+    Provider.family<CallNavigationGuard, GlobalKey<NavigatorState>>(
+      (ref, navigatorKey) => CallNavigationGuard(navigatorKey: navigatorKey),
+    );

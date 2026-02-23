@@ -46,11 +46,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     'Dog': false,
     'Birds': false,
   };
-  static const Set<String> _defaultPetTypes = {
-    'Cat',
-    'Dog',
-    'Birds',
-  };
+  static const Set<String> _defaultPetTypes = {'Cat', 'Dog', 'Birds'};
 
   // Language State
   final _numLanguagesController = TextEditingController();
@@ -61,11 +57,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     'Spanish': false,
     'English': false,
   };
-  static const Set<String> _defaultLanguages = {
-    'French',
-    'Spanish',
-    'English',
-  };
+  static const Set<String> _defaultLanguages = {'French', 'Spanish', 'English'};
 
   static const _bgBlue =
       AppColors.surfaceTint; // Light blue background from screenshot
@@ -100,8 +92,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
         (data['petTypes'] as List?)?.map((e) => e.toString()).toList() ?? [];
     _hasPets = data['hasPets'] == true || petTypes.isNotEmpty;
     final numPets = data['numberOfPets'];
-    _numPetsController.text =
-        (numPets != null && numPets.toString() != '0') ? '$numPets' : '';
+    _numPetsController.text = (numPets != null && numPets.toString() != '0')
+        ? '$numPets'
+        : '';
 
     // Reset default pet types, then apply selections
     for (final key in _petTypes.keys) {
@@ -117,7 +110,8 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     _hasSecondLanguage =
         data['speaksOtherLanguages'] == true || languages.isNotEmpty;
     final numLanguages = data['numberOfLanguages'];
-    _numLanguagesController.text = (numLanguages != null &&
+    _numLanguagesController.text =
+        (numLanguages != null &&
             numLanguages.toString().isNotEmpty &&
             numLanguages.toString() != '0')
         ? '$numLanguages'
@@ -170,16 +164,21 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
         'numberOfFamilyMembers': int.tryParse(_familyMembersCount ?? '0') ?? 0,
         'familyBio': _bioController.text,
         'hasPets': _hasPets,
-        'numberOfPets':
-            _hasPets ? (int.tryParse(_numPetsController.text) ?? 0) : 0,
-        'petTypes':
-            _petTypes.entries.where((e) => e.value).map((e) => e.key).toList(),
+        'numberOfPets': _hasPets
+            ? (int.tryParse(_numPetsController.text) ?? 0)
+            : 0,
+        'petTypes': _petTypes.entries
+            .where((e) => e.value)
+            .map((e) => e.key)
+            .toList(),
         'speaksOtherLanguages': _hasSecondLanguage,
         'numberOfLanguages': _hasSecondLanguage
             ? (int.tryParse(_numLanguagesController.text) ?? 0)
             : 0,
-        'languages':
-            _languages.entries.where((e) => e.value).map((e) => e.key).toList(),
+        'languages': _languages.entries
+            .where((e) => e.value)
+            .map((e) => e.key)
+            .toList(),
       };
 
       // Save to profileData for summary
@@ -196,7 +195,8 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
         widget.onNext();
       } else {
         debugPrint(
-            'DEBUG: Not proceeding because success=$success or mounted=$mounted');
+          'DEBUG: Not proceeding because success=$success or mounted=$mounted',
+        );
       }
     }
   }
@@ -210,7 +210,8 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
     // Listen for errors
     ref.listen(parentProfileControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
             content: Text('Error: ${next.error}'),
             backgroundColor: Colors.red,
@@ -290,26 +291,23 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.info_outline,
-                      size: 18, color: Color(0xFF98A2B3)),
+                  const Icon(
+                    Icons.info_outline,
+                    size: 18,
+                    color: Color(0xFF98A2B3),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 'Upload a photo to help personalize your profile',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: _textDark.withAlpha(153),
-                ),
+                style: TextStyle(fontSize: 14, color: _textDark.withAlpha(153)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 6),
               Text(
                 'Profiles with a photo help build trust and connection.',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: _textDark.withAlpha(128),
-                ),
+                style: TextStyle(fontSize: 13, color: _textDark.withAlpha(128)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -336,7 +334,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                           color: Colors.black.withAlpha(13),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
-                        )
+                        ),
                       ],
                     ),
                     child: _image == null
@@ -362,11 +360,15 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                     label: RichText(
                       text: const TextSpan(
                         text: 'Family Name',
-                        style:
-                            TextStyle(color: Color(0xFF667085), fontSize: 16),
+                        style: TextStyle(
+                          color: Color(0xFF667085),
+                          fontSize: 16,
+                        ),
                         children: [
                           TextSpan(
-                              text: '*', style: TextStyle(color: Colors.red)),
+                            text: '*',
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ],
                       ),
                     ),
@@ -391,18 +393,24 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: DropdownButtonFormField<String>(
                     dropdownColor: Colors.white,
                     initialValue: _familyMembersCount,
-                    icon: const Icon(Icons.keyboard_arrow_down,
-                        color: Color(0xFF667085)),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Color(0xFF667085),
+                    ),
                     style: const TextStyle(fontSize: 16, color: _textDark),
                     decoration: InputDecoration(
                       label: RichText(
                         text: const TextSpan(
                           text: 'Number of Family Members',
-                          style:
-                              TextStyle(color: Color(0xFF667085), fontSize: 16),
+                          style: TextStyle(
+                            color: Color(0xFF667085),
+                            fontSize: 16,
+                          ),
                           children: [
                             TextSpan(
-                                text: '*', style: TextStyle(color: Colors.red)),
+                              text: '*',
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ],
                         ),
                       ),
@@ -417,10 +425,15 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       contentPadding: EdgeInsets.zero,
                     ),
                     items: ['2', '3', '4', '5', '6+']
-                        .map((e) => DropdownMenuItem(
+                        .map(
+                          (e) => DropdownMenuItem(
                             value: e,
-                            child: Text(e,
-                                style: const TextStyle(color: _textDark))))
+                            child: Text(
+                              e,
+                              style: const TextStyle(color: _textDark),
+                            ),
+                          ),
+                        )
                         .toList(),
                     onChanged: (v) => setState(() => _familyMembersCount = v),
                     validator: (v) => v == null ? 'Required' : null,
@@ -439,9 +452,12 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       value: _hasPets,
                       activeColor: AppColors.secondary,
                       side: const BorderSide(
-                          color: Color(0xFFD0D5DD), width: 1.5),
+                        color: Color(0xFFD0D5DD),
+                        width: 1.5,
+                      ),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4)),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                       onChanged: (v) => setState(() => _hasPets = v ?? false),
                     ),
                   ),
@@ -464,9 +480,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: TextFormField(
                     controller: _numPetsController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     style: const TextStyle(color: _textDark),
                     decoration: const InputDecoration(
                       hintText: 'Number of Pets',
@@ -486,17 +500,20 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
 
                 // Pet Types
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.transparent),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.black.withAlpha(5),
-                          blurRadius: 2,
-                          offset: const Offset(0, 1))
+                        color: Colors.black.withAlpha(5),
+                        blurRadius: 2,
+                        offset: const Offset(0, 1),
+                      ),
                     ],
                   ),
                   child: Column(
@@ -530,8 +547,11 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                     },
                                   );
                                 },
-                                icon: const Icon(Icons.edit_outlined,
-                                    size: 18, color: Color(0xFF98A2B3)),
+                                icon: const Icon(
+                                  Icons.edit_outlined,
+                                  size: 18,
+                                  color: Color(0xFF98A2B3),
+                                ),
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
                               ),
@@ -542,8 +562,11 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                     _petTypes.remove(key);
                                   });
                                 },
-                                icon: const Icon(Icons.delete_outline,
-                                    size: 18, color: Color(0xFF98A2B3)),
+                                icon: const Icon(
+                                  Icons.delete_outline,
+                                  size: 18,
+                                  color: Color(0xFF98A2B3),
+                                ),
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
                               ),
@@ -556,10 +579,12 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                               child: Checkbox(
                                 value: _petTypes[key],
                                 activeColor: AppColors.secondary,
-                                side:
-                                    const BorderSide(color: Color(0xFFD0D5DD)),
+                                side: const BorderSide(
+                                  color: Color(0xFFD0D5DD),
+                                ),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4)),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                                 onChanged: (v) =>
                                     setState(() => _petTypes[key] = v ?? false),
                               ),
@@ -583,15 +608,19 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Row(
                       children: [
-                        Text('Other',
-                            style: TextStyle(color: Color(0xFF98A2B3))),
+                        Text(
+                          'Other',
+                          style: TextStyle(color: Color(0xFF98A2B3)),
+                        ),
                         Spacer(),
                         Icon(Icons.add, color: Color(0xFF475467)),
                       ],
@@ -611,9 +640,12 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       value: _hasSecondLanguage,
                       activeColor: AppColors.secondary,
                       side: const BorderSide(
-                          color: Color(0xFFD0D5DD), width: 1.5),
+                        color: Color(0xFFD0D5DD),
+                        width: 1.5,
+                      ),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4)),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                       onChanged: (v) =>
                           setState(() => _hasSecondLanguage = v ?? false),
                     ),
@@ -638,9 +670,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                   child: TextFormField(
                     controller: _numLanguagesController,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     style: const TextStyle(color: _textDark),
                     decoration: const InputDecoration(
                       hintText: 'Number of Languages',
@@ -668,7 +698,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                         color: Colors.black.withAlpha(5),
                         blurRadius: 2,
                         offset: const Offset(0, 1),
-                      )
+                      ),
                     ],
                   ),
                   child: Column(
@@ -676,18 +706,22 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                       // Header
                       InkWell(
                         onTap: () => setState(
-                            () => _isLanguagesExpanded = !_isLanguagesExpanded),
+                          () => _isLanguagesExpanded = !_isLanguagesExpanded,
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 'Select Languages',
                                 style: TextStyle(
-                                  color:
-                                      const Color(0xFF1A1A1A).withValues(alpha: 0.6),
+                                  color: const Color(
+                                    0xFF1A1A1A,
+                                  ).withValues(alpha: 0.6),
                                   fontSize: 16,
                                 ),
                               ),
@@ -709,7 +743,9 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                           final isCustom = !_defaultLanguages.contains(key);
                           return Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             child: Row(
                               children: [
                                 Expanded(
@@ -737,8 +773,11 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                         },
                                       );
                                     },
-                                    icon: const Icon(Icons.edit_outlined,
-                                        size: 18, color: Color(0xFF98A2B3)),
+                                    icon: const Icon(
+                                      Icons.edit_outlined,
+                                      size: 18,
+                                      color: Color(0xFF98A2B3),
+                                    ),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
                                   ),
@@ -749,14 +788,16 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                         _languages.remove(key);
                                       });
                                     },
-                                    icon: const Icon(Icons.delete_outline,
-                                        size: 18, color: Color(0xFF98A2B3)),
+                                    icon: const Icon(
+                                      Icons.delete_outline,
+                                      size: 18,
+                                      color: Color(0xFF98A2B3),
+                                    ),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
                                   ),
                                   const SizedBox(width: 8),
-                                ]
-                                else
+                                ] else
                                   const SizedBox(width: 12),
                                 SizedBox(
                                   width: 24,
@@ -765,11 +806,14 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                                     value: _languages[key],
                                     activeColor: AppColors.secondary,
                                     side: const BorderSide(
-                                        color: Color(0xFFD0D5DD)),
+                                      color: Color(0xFFD0D5DD),
+                                    ),
                                     shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4)),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
                                     onChanged: (v) => setState(
-                                        () => _languages[key] = v ?? false),
+                                      () => _languages[key] = v ?? false,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -789,16 +833,24 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                           },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
                             child: Row(
                               children: [
-                                Text('Other',
-                                    style: TextStyle(
-                                        color: Color(0xFF667085),
-                                        fontSize: 16)),
+                                Text(
+                                  'Other',
+                                  style: TextStyle(
+                                    color: Color(0xFF667085),
+                                    fontSize: 16,
+                                  ),
+                                ),
                                 Spacer(),
-                                Icon(Icons.add,
-                                    color: Color(0xFF667085), size: 20),
+                                Icon(
+                                  Icons.add,
+                                  color: Color(0xFF667085),
+                                  size: 20,
+                                ),
                               ],
                             ),
                           ),
@@ -813,16 +865,19 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
               // Family Bio
               Container(
                 height: 120,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
-                        color: Colors.black.withAlpha(5),
-                        blurRadius: 2,
-                        offset: const Offset(0, 1))
+                      color: Colors.black.withAlpha(5),
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
                   ],
                 ),
                 child: TextFormField(
@@ -833,11 +888,15 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
                     label: RichText(
                       text: const TextSpan(
                         text: 'Family Bio',
-                        style:
-                            TextStyle(color: Color(0xFF667085), fontSize: 16),
+                        style: TextStyle(
+                          color: Color(0xFF667085),
+                          fontSize: 16,
+                        ),
                         children: [
                           TextSpan(
-                              text: '*', style: TextStyle(color: Colors.red)),
+                            text: '*',
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ],
                       ),
                     ),
@@ -859,10 +918,7 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
               // Next Button
               isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : PrimaryActionButton(
-                      label: 'Next',
-                      onPressed: _onNext,
-                    ),
+                  : PrimaryActionButton(label: 'Next', onPressed: _onNext),
               const SizedBox(height: 24),
             ],
           ),
@@ -872,13 +928,12 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
   }
 
   Future<void> _showAddItemDialog(
-      String title, Function(String) onAdded) async {
+    String title,
+    Function(String) onAdded,
+  ) async {
     await showDialog(
       context: context,
-      builder: (context) => AddItemDialog(
-        title: title,
-        onAdd: onAdded,
-      ),
+      builder: (context) => AddItemDialog(title: title, onAdd: onAdded),
     );
   }
 
@@ -942,11 +997,6 @@ class _Step1FamilyIntroState extends ConsumerState<Step1FamilyIntro> {
   }
 
   Widget _buildConnectingLine() {
-    return Expanded(
-      child: Container(
-        height: 2,
-        color: AppColors.surfaceTint,
-      ),
-    );
+    return Expanded(child: Container(height: 2, color: AppColors.surfaceTint));
   }
 }

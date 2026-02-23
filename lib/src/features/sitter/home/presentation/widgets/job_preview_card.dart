@@ -23,7 +23,9 @@ class JobPreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-          horizontal: 20.w, vertical: 8.h), // Tight vertical spacing
+        horizontal: 20.w,
+        vertical: 8.h,
+      ), // Tight vertical spacing
       padding: EdgeInsets.all(16.w), // Balanced padding
       decoration: BoxDecoration(
         color: Colors.white,
@@ -36,7 +38,9 @@ class JobPreviewCard extends StatelessWidget {
           ),
         ],
         border: Border.all(
-            color: const Color(0xFFEAECF0), width: 1), // Light border
+          color: const Color(0xFFEAECF0),
+          width: 1,
+        ), // Light border
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,8 +113,11 @@ class JobPreviewCard extends StatelessWidget {
         : needs.join(' | ');
     return Row(
       children: [
-        Icon(Icons.medical_services_outlined,
-            size: 14.w, color: AppColors.primary),
+        Icon(
+          Icons.medical_services_outlined,
+          size: 14.w,
+          color: AppColors.primary,
+        ),
         SizedBox(width: 6.w),
         Expanded(
           child: Text(
@@ -172,8 +179,11 @@ class JobPreviewCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(Icons.child_care_rounded,
-            size: 16.w, color: const Color(0xFF98A2B3)),
+        Icon(
+          Icons.child_care_rounded,
+          size: 16.w,
+          color: const Color(0xFF98A2B3),
+        ),
         SizedBox(width: 8.w),
         Expanded(
           child: Wrap(
@@ -221,8 +231,11 @@ class JobPreviewCard extends StatelessWidget {
   Widget _buildLocationRow() {
     return Row(
       children: [
-        Icon(Icons.location_on_outlined,
-            size: 16.w, color: const Color(0xFF98A2B3)),
+        Icon(
+          Icons.location_on_outlined,
+          size: 16.w,
+          color: const Color(0xFF98A2B3),
+        ),
         SizedBox(width: 8.w),
         Expanded(
           child: RichText(
@@ -257,8 +270,9 @@ class JobPreviewCard extends StatelessWidget {
     return Wrap(
       spacing: 8.w,
       runSpacing: 8.h,
-      children:
-          job.requiredSkills.map((skill) => AppTagChip(label: skill)).toList(),
+      children: job.requiredSkills
+          .map((skill) => AppTagChip(label: skill))
+          .toList(),
     );
   }
 
@@ -319,11 +333,7 @@ class JobPreviewCard extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
-      child: Icon(
-        Icons.group,
-        size: 14.w,
-        color: const Color(0xFF667085),
-      ),
+      child: Icon(Icons.group, size: 14.w, color: const Color(0xFF667085)),
     );
   }
 }

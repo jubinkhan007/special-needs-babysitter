@@ -86,11 +86,7 @@ class JobMetaRows extends StatelessWidget {
             : null,
       ),
       child: familyAvatarUrl == null
-          ? Icon(
-              Icons.person,
-              size: 12.w,
-              color: AppTokens.iconGrey,
-            )
+          ? Icon(Icons.person, size: 12.w, color: AppTokens.iconGrey)
           : null,
     );
   }
@@ -98,10 +94,7 @@ class JobMetaRows extends StatelessWidget {
   Widget _buildFamilyText() {
     return RichText(
       text: TextSpan(
-        style: TextStyle(
-          fontSize: 13.sp,
-          fontFamily: 'Inter',
-        ),
+        style: TextStyle(fontSize: 13.sp, fontFamily: 'Inter'),
         children: [
           TextSpan(
             text: familyName,
@@ -129,10 +122,7 @@ class JobMetaRows extends StatelessWidget {
         final child = entry.value;
         return RichText(
           text: TextSpan(
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontFamily: 'Inter',
-            ),
+            style: TextStyle(fontSize: 13.sp, fontFamily: 'Inter'),
             children: [
               TextSpan(
                 text: child.name,
@@ -166,10 +156,7 @@ class JobMetaRows extends StatelessWidget {
   Widget _buildLocationText() {
     return RichText(
       text: TextSpan(
-        style: TextStyle(
-          fontSize: 13.sp,
-          fontFamily: 'Inter',
-        ),
+        style: TextStyle(fontSize: 13.sp, fontFamily: 'Inter'),
         children: [
           TextSpan(
             text: location,

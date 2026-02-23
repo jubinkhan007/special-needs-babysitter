@@ -87,8 +87,10 @@ class _NotificationFeedScreenState
                 return GestureDetector(
                   onTap: () => setState(() => _selectedFilter = filter),
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 6.h,
+                    ),
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.primary : Colors.white,
                       borderRadius: BorderRadius.circular(20.r),
@@ -103,7 +105,9 @@ class _NotificationFeedScreenState
                       style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w500,
-                        color: isSelected ? Colors.white : AppColors.textSecondary,
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.textSecondary,
                         fontFamily: 'Inter',
                       ),
                     ),
@@ -183,8 +187,7 @@ class _NotificationFeedScreenState
                     },
                   );
                 },
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   children: [
@@ -193,10 +196,7 @@ class _NotificationFeedScreenState
                       child: Text(
                         'Error loading notifications.\nPull down to retry.',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 13.sp,
-                        ),
+                        style: TextStyle(color: Colors.red, fontSize: 13.sp),
                       ),
                     ),
                   ],
@@ -233,8 +233,11 @@ class _NotificationFeedScreenState
     final earlierItems = <NotificationItem>[];
 
     for (final item in notifications) {
-      final itemDate =
-          DateTime(item.createdAt.year, item.createdAt.month, item.createdAt.day);
+      final itemDate = DateTime(
+        item.createdAt.year,
+        item.createdAt.month,
+        item.createdAt.day,
+      );
       if (itemDate == today) {
         todayItems.add(item);
       } else if (itemDate == yesterday) {

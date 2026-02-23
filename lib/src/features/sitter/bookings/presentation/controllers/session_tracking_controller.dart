@@ -41,10 +41,12 @@ class SessionTrackingState {
       session: session ?? this.session,
       isLoading: isLoading ?? this.isLoading,
       isTracking: isTracking ?? this.isTracking,
-      errorMessage:
-          clearErrorMessage ? null : (errorMessage ?? this.errorMessage),
-      locationWarning:
-          clearLocationWarning ? null : (locationWarning ?? this.locationWarning),
+      errorMessage: clearErrorMessage
+          ? null
+          : (errorMessage ?? this.errorMessage),
+      locationWarning: clearLocationWarning
+          ? null
+          : (locationWarning ?? this.locationWarning),
       lastLocationAt: lastLocationAt ?? this.lastLocationAt,
     );
   }
@@ -61,7 +63,7 @@ class SessionTrackingState {
 
 class SessionTrackingController extends StateNotifier<SessionTrackingState> {
   SessionTrackingController(this._repository, this._localDataSource)
-      : super(const SessionTrackingState());
+    : super(const SessionTrackingState());
 
   final BookingsRepository _repository;
   final BookingSessionLocalDataSource _localDataSource;
@@ -80,8 +82,10 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     unawaited(refreshSession());
   }
 
-  Future<void> loadSession(String applicationId,
-      {bool forceRefresh = false}) async {
+  Future<void> loadSession(
+    String applicationId, {
+    bool forceRefresh = false,
+  }) async {
     final existing = state.session;
     if (!forceRefresh &&
         existing != null &&
@@ -132,16 +136,14 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
 
   Future<ClockOutResultModel> clockOut(String applicationId) async {
     final session = state.session;
-    final resolvedId =
-        applicationId.isNotEmpty ? applicationId : session?.applicationId;
+    final resolvedId = applicationId.isNotEmpty
+        ? applicationId
+        : session?.applicationId;
     if (resolvedId == null || resolvedId.isEmpty) {
       throw Exception('Missing booking application ID');
     }
     if (session != null) {
-      final frozen = session.copyWith(
-        isPaused: true,
-        pausedAt: DateTime.now(),
-      );
+      final frozen = session.copyWith(isPaused: true, pausedAt: DateTime.now());
       state = state.copyWith(session: frozen);
       await _localDataSource.saveSession(frozen);
     }
@@ -179,8 +181,11 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     try {
       final applicationId = session.applicationId;
       final reason = breakReason ?? "Lunch break";
-      final pausedAt = await _repository.pauseBooking(applicationId, reason: reason);
-      
+      final pausedAt = await _repository.pauseBooking(
+        applicationId,
+        reason: reason,
+      );
+
       final updatedSession = session.copyWith(
         isPaused: true,
         pausedAt: pausedAt,
@@ -190,7 +195,8 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
       await _localDataSource.saveSession(updatedSession);
     } catch (e) {
       state = state.copyWith(
-        errorMessage: 'Failed to pause: ${e.toString().replaceFirst("Exception: ", "")}',
+        errorMessage:
+            'Failed to pause: ${e.toString().replaceFirst("Exception: ", "")}',
       );
     }
   }
@@ -218,7 +224,8 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
       await _localDataSource.saveSession(updatedSession);
     } catch (e) {
       state = state.copyWith(
-        errorMessage: 'Failed to resume: ${e.toString().replaceFirst("Exception: ", "")}',
+        errorMessage:
+            'Failed to resume: ${e.toString().replaceFirst("Exception: ", "")}',
       );
     }
   }
@@ -244,17 +251,16 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
 
     try {
       final settings = _buildLocationSettings();
-      _positionSub = Geolocator.getPositionStream(
-        locationSettings: settings,
-      ).listen(
-        _handlePositionUpdate,
-        onError: (error) {
-          state = state.copyWith(
-            isTracking: false,
-            errorMessage: 'Live tracking error: $error',
+      _positionSub = Geolocator.getPositionStream(locationSettings: settings)
+          .listen(
+            _handlePositionUpdate,
+            onError: (error) {
+              state = state.copyWith(
+                isTracking: false,
+                errorMessage: 'Live tracking error: $error',
+              );
+            },
           );
-        },
-      );
       state = state.copyWith(isTracking: true);
     } catch (e) {
       state = state.copyWith(
@@ -314,17 +320,17 @@ class SessionTrackingController extends StateNotifier<SessionTrackingState> {
     }
 
     _lastLocationSentAt = now;
-    unawaited(_repository
-        .postBookingLocation(
-          applicationId,
-          latitude: point.latitude,
-          longitude: point.longitude,
-        )
-        .catchError((error) {
-      state = state.copyWith(
-        errorMessage: 'Live tracking error: $error',
-      );
-    }));
+    unawaited(
+      _repository
+          .postBookingLocation(
+            applicationId,
+            latitude: point.latitude,
+            longitude: point.longitude,
+          )
+          .catchError((error) {
+            state = state.copyWith(errorMessage: 'Live tracking error: $error');
+          }),
+    );
   }
 
   bool _shouldRecord(JobCoordinatesModel nextPoint) {

@@ -139,8 +139,9 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     final firebaseReady = ref.read(firebaseReadyProvider);
     if (!firebaseReady) return;
 
-    _incomingCallHandler =
-        ref.read(incomingCallHandlerProvider(rootNavigatorKey));
+    _incomingCallHandler = ref.read(
+      incomingCallHandlerProvider(rootNavigatorKey),
+    );
     _incomingCallHandler?.initialize();
     _incomingCallHandlerInitialized = true;
   }
@@ -158,11 +159,11 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       return;
     }
 
-    _incomingCallPollingHandler ??=
-        ref.read(incomingCallPollingHandlerProvider(rootNavigatorKey));
+    _incomingCallPollingHandler ??= ref.read(
+      incomingCallPollingHandlerProvider(rootNavigatorKey),
+    );
     _incomingCallPollingHandler?.start();
   }
-
 
   Future<void> _initializeNotificationsAndCallHandler() async {
     if (_notificationsInitialized) return;
@@ -208,26 +209,31 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       }
 
       // Listen to token refreshes and re-register with backend
-      _tokenRefreshSubscription =
-          notificationsService.onTokenRefresh.listen((newToken) async {
+      _tokenRefreshSubscription = notificationsService.onTokenRefresh.listen((
+        newToken,
+      ) async {
         final currentSession = ref.read(authNotifierProvider).value;
         if (currentSession != null && newToken.isNotEmpty) {
           try {
             final dataSource = ref.read(authRemoteDataSourceProvider);
             await dataSource.registerDeviceToken(newToken);
-            developer.log('Re-registered refreshed FCM token',
-                name: 'Notifications');
+            developer.log(
+              'Re-registered refreshed FCM token',
+              name: 'Notifications',
+            );
           } catch (e) {
-            developer.log('Failed to re-register refreshed FCM token: $e',
-                name: 'Notifications');
+            developer.log(
+              'Failed to re-register refreshed FCM token: $e',
+              name: 'Notifications',
+            );
           }
         }
       });
 
-      _notificationTapSubscription =
-          notificationsService.onNotificationTap.listen((payload) {
-        _handleNotificationTap(payload);
-      });
+      _notificationTapSubscription = notificationsService.onNotificationTap
+          .listen((payload) {
+            _handleNotificationTap(payload);
+          });
 
       developer.log('Notifications initialized in app', name: 'Notifications');
 
@@ -236,8 +242,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
         reason: 'notifications_initialized',
       );
     } catch (e) {
-      developer.log('Failed to initialize notifications: $e',
-          name: 'Notifications');
+      developer.log(
+        'Failed to initialize notifications: $e',
+        name: 'Notifications',
+      );
     }
   }
 
@@ -273,8 +281,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
         final dataSource = ref.read(authRemoteDataSourceProvider);
         _logFcmFlow('_registerFcmToken calling backend registerDeviceToken');
         await dataSource.registerDeviceToken(token);
-        developer.log('FCM token registered with backend: ${_maskToken(token)}',
-            name: 'Notifications');
+        developer.log(
+          'FCM token registered with backend: ${_maskToken(token)}',
+          name: 'Notifications',
+        );
         _logFcmFlow('_registerFcmToken backend registration success');
       } else {
         developer.log(
@@ -291,8 +301,11 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
         _scheduleFcmTokenRetry();
       }
     } catch (e, st) {
-      developer.log('Failed to register FCM token with backend: $e',
-          name: 'Notifications', stackTrace: st);
+      developer.log(
+        'Failed to register FCM token with backend: $e',
+        name: 'Notifications',
+        stackTrace: st,
+      );
       _logFcmFlow('_registerFcmToken failed with error=$e');
       _scheduleFcmTokenRetry();
     } finally {
@@ -321,7 +334,9 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     _fcmTokenRetryTimer = Timer(delay, () {
       final session = ref.read(authNotifierProvider).value;
       if (session == null) {
-        _logFcmFlow('_registerFcmToken retry skipped: no authenticated session');
+        _logFcmFlow(
+          '_registerFcmToken retry skipped: no authenticated session',
+        );
         return;
       }
       _registerFcmToken();
@@ -396,7 +411,8 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
     if (_looksLikeCallPayload(cleaned)) {
       _logFcmFlow(
-          'notification tap detected call payload, routing to call flow');
+        'notification tap detected call payload, routing to call flow',
+      );
       unawaited(_handleCallPayloadTap(cleaned));
       return;
     }
@@ -425,7 +441,8 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
       var callerName = decoded['callerName']?.toString().trim();
       var callerUserId = decoded['callerUserId']?.toString().trim();
-      final isVideo = decoded['isVideo'] == true ||
+      final isVideo =
+          decoded['isVideo'] == true ||
           decoded['callType']?.toString().toLowerCase() == 'video';
       final callType = isVideo ? CallType.video : CallType.audio;
 
@@ -437,10 +454,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
 
       if (callerUserId == null || callerUserId.isEmpty) {
         try {
-          final session =
-              await ref.read(callsRepositoryProvider).getCallDetails(callId);
-          final currentUserId =
-              ref.read(authNotifierProvider).value?.user.id;
+          final session = await ref
+              .read(callsRepositoryProvider)
+              .getCallDetails(callId);
+          final currentUserId = ref.read(authNotifierProvider).value?.user.id;
           final remote = currentUserId == null
               ? (session.initiator ?? session.recipient)
               : session.getRemoteParticipant(currentUserId);
@@ -450,15 +467,17 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
           }
         } catch (e) {
           _logFcmFlow(
-              'call payload getCallDetails failed callId=$callId error=$e');
+            'call payload getCallDetails failed callId=$callId error=$e',
+          );
         }
       }
 
       callerUserId = (callerUserId == null || callerUserId.isEmpty)
           ? '_unknown_$callId'
           : callerUserId;
-      callerName =
-          (callerName == null || callerName.isEmpty) ? 'Caller' : callerName;
+      callerName = (callerName == null || callerName.isEmpty)
+          ? 'Caller'
+          : callerName;
 
       final controller = ref.read(callControllerProvider.notifier);
       await controller.handleIncomingCall(

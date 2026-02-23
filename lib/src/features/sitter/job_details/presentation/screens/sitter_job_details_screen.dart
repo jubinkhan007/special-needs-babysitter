@@ -23,10 +23,7 @@ import 'package:babysitter_app/src/features/sitter/saved_jobs/presentation/provi
 class SitterJobDetailsScreen extends ConsumerStatefulWidget {
   final String jobId;
 
-  const SitterJobDetailsScreen({
-    super.key,
-    required this.jobId,
-  });
+  const SitterJobDetailsScreen({super.key, required this.jobId});
 
   @override
   ConsumerState<SitterJobDetailsScreen> createState() =>
@@ -61,12 +58,14 @@ class _SitterJobDetailsScreenState
               child: jobDetailsAsync.when(
                 data: (job) {
                   debugPrint(
-                      'DEBUG: SitterJobDetailsScreen loaded job: ${job.title}');
+                    'DEBUG: SitterJobDetailsScreen loaded job: ${job.title}',
+                  );
                   return _buildContent(context, job);
                 },
                 loading: () {
                   debugPrint(
-                      'DEBUG: SitterJobDetailsScreen loading for jobId=${widget.jobId}');
+                    'DEBUG: SitterJobDetailsScreen loading for jobId=${widget.jobId}',
+                  );
                   return const Center(child: CircularProgressIndicator());
                 },
                 error: (error, stack) {
@@ -151,25 +150,27 @@ class _SitterJobDetailsScreenState
                   .read(savedJobsControllerProvider.notifier)
                   .toggleSaved(jobId)
                   .then((isSaved) {
-                if (!context.mounted) return;
-                AppToast.show(
-                  context,
-                  SnackBar(
-                    content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                    backgroundColor: AppColors.success,
-                  ),
-                );
-              }).catchError((error) {
-                if (!context.mounted) return;
-                AppToast.show(
-                  context,
-                  SnackBar(
-                    content: Text(
-                        error.toString().replaceFirst('Exception: ', '')),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              });
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      SnackBar(
+                        content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
+                        backgroundColor: AppColors.success,
+                      ),
+                    );
+                  })
+                  .catchError((error) {
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      SnackBar(
+                        content: Text(
+                          error.toString().replaceFirst('Exception: ', ''),
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  });
             },
           ),
           SizedBox(height: 16.h),
@@ -205,9 +206,11 @@ class _SitterJobDetailsScreenState
           ),
           SizedBox(height: 20.h),
           // Special Needs Summary
-          if (job.children.any((c) =>
-              c.specialNeedsDiagnosis != null &&
-              c.specialNeedsDiagnosis!.isNotEmpty)) ...[
+          if (job.children.any(
+            (c) =>
+                c.specialNeedsDiagnosis != null &&
+                c.specialNeedsDiagnosis!.isNotEmpty,
+          )) ...[
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
@@ -224,47 +227,51 @@ class _SitterJobDetailsScreenState
                   ),
                   SizedBox(height: 12.h),
                   ...job.children
-                      .where((c) =>
-                          c.specialNeedsDiagnosis != null &&
-                          c.specialNeedsDiagnosis!.isNotEmpty)
-                      .map((c) => Padding(
-                            padding: EdgeInsets.only(bottom: 8.h),
-                            child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.all(12.w),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF0F7FF),
-                                borderRadius: BorderRadius.circular(10.r),
-                                border: Border.all(
-                                    color: const Color(0xFFD0E4F5)),
-                              ),
-                              child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${c.name}, ${c.age} yrs',
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppTokens.textPrimary,
-                                      fontFamily: 'Inter',
-                                    ),
-                                  ),
-                                  SizedBox(height: 4.h),
-                                  Text(
-                                    c.specialNeedsDiagnosis!,
-                                    style: TextStyle(
-                                      fontSize: 13.sp,
-                                      color: const Color(0xFF667085),
-                                      fontFamily: 'Inter',
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ],
+                      .where(
+                        (c) =>
+                            c.specialNeedsDiagnosis != null &&
+                            c.specialNeedsDiagnosis!.isNotEmpty,
+                      )
+                      .map(
+                        (c) => Padding(
+                          padding: EdgeInsets.only(bottom: 8.h),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(12.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF0F7FF),
+                              borderRadius: BorderRadius.circular(10.r),
+                              border: Border.all(
+                                color: const Color(0xFFD0E4F5),
                               ),
                             ),
-                          )),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${c.name}, ${c.age} yrs',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTokens.textPrimary,
+                                    fontFamily: 'Inter',
+                                  ),
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  c.specialNeedsDiagnosis!,
+                                  style: TextStyle(
+                                    fontSize: 13.sp,
+                                    color: const Color(0xFF667085),
+                                    fontFamily: 'Inter',
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                 ],
               ),
             ),
@@ -290,9 +297,7 @@ class _SitterJobDetailsScreenState
           ),
           SizedBox(height: 20.h),
           // Cover letter
-          CoverLetterBox(
-            controller: _coverLetterController,
-          ),
+          CoverLetterBox(controller: _coverLetterController),
         ],
       ),
     );

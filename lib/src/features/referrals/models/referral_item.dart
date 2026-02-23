@@ -37,8 +37,10 @@ class ReferralItem {
 
     if (referredUserRaw is Map<String, dynamic>) {
       referredUserId =
-          (referredUserRaw['id'] as String?) ?? (referredUserRaw['_id'] as String?);
-      referredUserAvatarUrl = (referredUserRaw['avatarUrl'] as String?) ??
+          (referredUserRaw['id'] as String?) ??
+          (referredUserRaw['_id'] as String?);
+      referredUserAvatarUrl =
+          (referredUserRaw['avatarUrl'] as String?) ??
           (referredUserRaw['photoUrl'] as String?) ??
           (referredUserRaw['profilePhotoUrl'] as String?);
 
@@ -48,9 +50,10 @@ class ReferralItem {
       } else {
         final firstName = referredUserRaw['firstName'] as String?;
         final lastName = referredUserRaw['lastName'] as String?;
-        final combinedName = [firstName, lastName]
-            .where((part) => part != null && part.trim().isNotEmpty)
-            .join(' ');
+        final combinedName = [
+          firstName,
+          lastName,
+        ].where((part) => part != null && part.trim().isNotEmpty).join(' ');
         if (combinedName.trim().isNotEmpty) {
           referredUserName = combinedName.trim();
         }

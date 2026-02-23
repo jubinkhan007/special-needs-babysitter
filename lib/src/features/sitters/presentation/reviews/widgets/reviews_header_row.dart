@@ -21,10 +21,7 @@ class ReviewsHeaderRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Reviews',
-            style: AppTokens.reviewsTitleStyle,
-          ),
+          Text('Reviews', style: AppTokens.reviewsTitleStyle),
           Row(
             children: [
               Icon(

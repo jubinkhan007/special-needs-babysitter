@@ -34,10 +34,7 @@ class SitterJobDetailsMockSource {
         'Family vehicle with car seat provided',
         'Ride-share allowed (with parent consent)',
       ],
-      equipmentSafety: [
-        'Car seat required',
-        'Booster seat required',
-      ],
+      equipmentSafety: ['Car seat required', 'Booster seat required'],
       pickupDropoffDetails: [
         'Sunshine Elementary School, Gate 3',
         'Home — 42 Greenview Avenue, Apt 5B',

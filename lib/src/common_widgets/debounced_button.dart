@@ -4,14 +4,14 @@ import 'dart:async';
 
 /// A utility mixin that provides debouncing functionality to prevent
 /// multiple rapid taps on buttons.
-/// 
+///
 /// Usage:
 /// ```dart
 /// class MyWidget extends StatefulWidget {
 ///   @override
 ///   State<MyWidget> createState() => _MyWidgetState();
 /// }
-/// 
+///
 /// class _MyWidgetState extends State<MyWidget> with DebouncedAction {
 ///   void _handleTap() {
 ///     withDebounce(() {
@@ -137,7 +137,8 @@ class DebouncedElevatedButton extends StatefulWidget {
   });
 
   @override
-  State<DebouncedElevatedButton> createState() => _DebouncedElevatedButtonState();
+  State<DebouncedElevatedButton> createState() =>
+      _DebouncedElevatedButtonState();
 }
 
 class _DebouncedElevatedButtonState extends State<DebouncedElevatedButton> {
@@ -167,7 +168,9 @@ class _DebouncedElevatedButtonState extends State<DebouncedElevatedButton> {
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  AppColors.textOnButton,
+                ),
               ),
             )
           : Text(widget.label),

@@ -39,14 +39,16 @@ class SitterBookingsScreen extends ConsumerWidget {
         title: Text(
           'Bookings',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w600,
-              ),
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: AppColors.textPrimary),
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: AppColors.textPrimary,
+            ),
             onPressed: () {
               // TODO: Navigate to notifications
             },
@@ -69,15 +71,15 @@ class SitterBookingsScreen extends ConsumerWidget {
                   Text(
                     'No Bookings Yet',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   AppSpacing.verticalXs,
                   Text(
                     'Your scheduled sessions will appear here',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textTertiary,
-                        ),
+                      color: AppColors.textTertiary,
+                    ),
                   ),
                 ],
               ),
@@ -97,13 +99,15 @@ class SitterBookingsScreen extends ConsumerWidget {
                 final jobId = booking.id;
                 final isSaved = savedJobsState.savedJobIds.contains(jobId);
                 debugPrint(
-                    'DEBUG: BookingCard[$index] - applicationId: ${booking.applicationId}, title: ${booking.title}, status: ${booking.status}');
+                  'DEBUG: BookingCard[$index] - applicationId: ${booking.applicationId}, title: ${booking.title}, status: ${booking.status}',
+                );
                 return BookingCard(
                   booking: booking,
                   isBookmarked: isSaved,
                   onBookmarkTap: () {
                     if (jobId.isEmpty) {
-                      AppToast.show(context,
+                      AppToast.show(
+                        context,
                         const SnackBar(content: Text('Missing job ID')),
                       );
                       return;
@@ -112,30 +116,37 @@ class SitterBookingsScreen extends ConsumerWidget {
                         .read(savedJobsControllerProvider.notifier)
                         .toggleSaved(jobId)
                         .then((isSaved) {
-                      if (!context.mounted) return;
-                      AppToast.show(
-                        context,
-                        SnackBar(
-                          content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                          backgroundColor: AppColors.success,
-                        ),
-                      );
-                    }).catchError((error) {
-                      if (!context.mounted) return;
-                      AppToast.show(
-                        context,
-                        SnackBar(
-                          content: Text(error
-                              .toString()
-                              .replaceFirst('Exception: ', '')),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    });
+                          if (!context.mounted) return;
+                          AppToast.show(
+                            context,
+                            SnackBar(
+                              content: Text(
+                                isSaved ? 'Job saved' : 'Job unsaved',
+                              ),
+                              backgroundColor: AppColors.success,
+                            ),
+                          );
+                        })
+                        .catchError((error) {
+                          if (!context.mounted) return;
+                          AppToast.show(
+                            context,
+                            SnackBar(
+                              content: Text(
+                                error.toString().replaceFirst(
+                                  'Exception: ',
+                                  '',
+                                ),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        });
                   },
                   onTap: () {
                     debugPrint(
-                        'DEBUG: Tapped booking[$index] - applicationId: ${booking.applicationId}');
+                      'DEBUG: Tapped booking[$index] - applicationId: ${booking.applicationId}',
+                    );
                     if (activeSession != null &&
                         activeSession.applicationId == booking.applicationId) {
                       final route =
@@ -165,9 +176,7 @@ class SitterBookingsScreen extends ConsumerWidget {
             ),
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -181,16 +190,16 @@ class SitterBookingsScreen extends ConsumerWidget {
               Text(
                 'Failed to load bookings',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
+                  color: AppColors.textSecondary,
+                ),
               ),
               AppSpacing.verticalSm,
               Text(
                 error.toString().replaceFirst('Exception: ', ''),
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textTertiary,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppColors.textTertiary),
               ),
               AppSpacing.verticalMd,
               ElevatedButton(

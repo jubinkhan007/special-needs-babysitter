@@ -35,13 +35,15 @@ class _EditEmergencyContactDialogState
     super.initState();
     final c = widget.initialContact;
     _fullNameController = TextEditingController(text: c?.fullName ?? '');
-    _relationshipController =
-        TextEditingController(text: c?.relationshipToChild ?? '');
+    _relationshipController = TextEditingController(
+      text: c?.relationshipToChild ?? '',
+    );
     _phoneController = TextEditingController(text: c?.phoneNumber ?? '');
     _emailController = TextEditingController(text: c?.email ?? '');
     _addressController = TextEditingController(text: c?.address ?? '');
-    _instructionsController =
-        TextEditingController(text: c?.specialInstructions ?? '');
+    _instructionsController = TextEditingController(
+      text: c?.specialInstructions ?? '',
+    );
 
     // If no initial contact, default to checked as user tapped 'add/edit'
     _wantToAddContact = true;
@@ -87,7 +89,8 @@ class _EditEmergencyContactDialogState
             child: Row(
               children: [
                 const SizedBox(
-                    width: 24), // Spacer for centering if needed, or icon
+                  width: 24,
+                ), // Spacer for centering if needed, or icon
                 // Just matching design "Emergency Contact" title in body,
                 // but dialog usually needs header or close button.
                 // Design shows full screen stack? No, user requested Dialog.
@@ -130,7 +133,8 @@ class _EditEmergencyContactDialogState
                             value: _wantToAddContact,
                             activeColor: AppColors.secondary,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                             onChanged: (v) =>
                                 setState(() => _wantToAddContact = v!),
                           ),
@@ -138,9 +142,11 @@ class _EditEmergencyContactDialogState
                         const SizedBox(width: 8),
                         const Text(
                           'Want to add Emergency Contact?',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFF344054)),
-                        )
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF344054),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -149,18 +155,25 @@ class _EditEmergencyContactDialogState
                       _buildField(_fullNameController, 'Full Name*'),
                       const SizedBox(height: 12),
                       _buildField(
-                          _relationshipController, 'Relationship to Child*'),
+                        _relationshipController,
+                        'Relationship to Child*',
+                      ),
                       const SizedBox(height: 12),
-                      _buildField(_phoneController, 'Primary Phone Number*',
-                          isNum: true),
+                      _buildField(
+                        _phoneController,
+                        'Primary Phone Number*',
+                        isNum: true,
+                      ),
                       const SizedBox(height: 12),
                       _buildField(_emailController, 'Email Address'),
                       const SizedBox(height: 12),
                       _buildField(_addressController, 'Address'),
                       const SizedBox(height: 12),
                       _buildField(
-                          _instructionsController, 'Special Instructions*',
-                          maxLines: 1),
+                        _instructionsController,
+                        'Special Instructions*',
+                        maxLines: 1,
+                      ),
                     ],
                   ],
                 ),
@@ -196,8 +209,12 @@ class _EditEmergencyContactDialogState
     );
   }
 
-  Widget _buildField(TextEditingController controller, String hint,
-      {bool isNum = false, int maxLines = 1}) {
+  Widget _buildField(
+    TextEditingController controller,
+    String hint, {
+    bool isNum = false,
+    int maxLines = 1,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -218,16 +235,19 @@ class _EditEmergencyContactDialogState
             keyboardType: isNum
                 ? TextInputType.phone
                 : (hint.toLowerCase().contains('email')
-                    ? TextInputType.emailAddress
-                    : TextInputType.text),
-            inputFormatters:
-                isNum ? [FilteringTextInputFormatter.digitsOnly] : [],
+                      ? TextInputType.emailAddress
+                      : TextInputType.text),
+            inputFormatters: isNum
+                ? [FilteringTextInputFormatter.digitsOnly]
+                : [],
             maxLines: maxLines,
             style: const TextStyle(color: Color(0xFF101828), fontSize: 16),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle:
-                  const TextStyle(color: Color(0xFF667085), fontSize: 16),
+              hintStyle: const TextStyle(
+                color: Color(0xFF667085),
+                fontSize: 16,
+              ),
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
@@ -242,15 +262,18 @@ class _EditEmergencyContactDialogState
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: AppColors.secondary),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 10,
+              ),
               isDense: true,
             ),
             validator: (value) {
               if (hint.contains('Email') && value != null && value.isNotEmpty) {
                 // Basic email regex
                 final emailRegex = RegExp(
-                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                );
                 if (!emailRegex.hasMatch(value)) {
                   return 'Please enter a valid email address';
                 }

@@ -33,11 +33,14 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
   void initState() {
     super.initState();
     _kids = List<Map<String, dynamic>>.from(
-        widget.profileData['kids'] as List? ?? []);
+      widget.profileData['kids'] as List? ?? [],
+    );
   }
 
-  Future<void> _showAddChildDialog(
-      [Map<String, dynamic>? existingChild, int? index]) async {
+  Future<void> _showAddChildDialog([
+    Map<String, dynamic>? existingChild,
+    int? index,
+  ]) async {
     await showDialog(
       context: context,
       builder: (context) => AddChildDialog(
@@ -84,7 +87,8 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
     // Error Listener
     ref.listen(parentProfileControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
             content: Text('Error: ${next.error}'),
             backgroundColor: Colors.red,
@@ -179,8 +183,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                       child: ElevatedButton(
                         onPressed: () => _showAddChildDialog(),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              AppColors.buttonDark, // Dark button
+                          backgroundColor: AppColors.buttonDark, // Dark button
                           foregroundColor: AppColors.textOnButton,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           elevation: 0,
@@ -221,8 +224,9 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                                     text: '(${kid['age']} Years old)',
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: const Color(0xFF1A1A1A)
-                                          .withAlpha(153),
+                                      color: const Color(
+                                        0xFF1A1A1A,
+                                      ).withAlpha(153),
                                     ),
                                   ),
                                 ],
@@ -230,8 +234,11 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                             ),
                             const Spacer(),
                             IconButton(
-                              icon: const Icon(Icons.edit_outlined,
-                                  size: 20, color: Color(0xFF667085)),
+                              icon: const Icon(
+                                Icons.edit_outlined,
+                                size: 20,
+                                color: Color(0xFF667085),
+                              ),
                               onPressed: () => _showAddChildDialog(kid, index),
                             ),
                           ],
@@ -245,8 +252,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                       child: ElevatedButton(
                         onPressed: () => _showAddChildDialog(),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              AppColors.buttonDark, // Dark button
+                          backgroundColor: AppColors.buttonDark, // Dark button
                           foregroundColor: AppColors.textOnButton,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           elevation: 0,
@@ -286,10 +292,7 @@ class _Step2ChildrenState extends ConsumerState<Step2Children> {
                   width: 140,
                   child: isLoading
                       ? const Center(child: CircularProgressIndicator())
-                      : PrimaryActionButton(
-                          label: 'Next',
-                          onPressed: _onNext,
-                        ),
+                      : PrimaryActionButton(label: 'Next', onPressed: _onNext),
                 ),
               ],
             ),

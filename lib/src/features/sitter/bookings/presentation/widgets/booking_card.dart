@@ -140,8 +140,9 @@ class BookingCard extends StatelessWidget {
     final theme = Theme.of(context);
     final timeDisplay = _formatTimeDisplay();
     final startDateTime = _parseStartDateTime();
-    final isToday =
-        startDateTime != null ? _isToday(startDateTime) : booking.isToday;
+    final isToday = startDateTime != null
+        ? _isToday(startDateTime)
+        : booking.isToday;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),

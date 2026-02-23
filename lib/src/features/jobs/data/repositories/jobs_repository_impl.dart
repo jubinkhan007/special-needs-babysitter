@@ -35,10 +35,7 @@ class JobsRepositoryImpl implements JobsRepository {
       debugPrint('=== REPO: Calling PUT /jobs/$id ===');
       debugPrint('=== REPO: Request data: $data ===');
 
-      final response = await _client.put(
-        '/jobs/$id',
-        data: data,
-      );
+      final response = await _client.put('/jobs/$id', data: data);
 
       debugPrint('=== REPO: Response status: ${response.statusCode} ===');
       debugPrint('=== REPO: Response data: ${response.data} ===');
@@ -93,16 +90,19 @@ class JobsRepositoryImpl implements JobsRepository {
               // The API returns { data: { job: { ... }, children: [...] } }
               final jobMap = dataParams['job'] as Map<String, dynamic>;
               // Check for children in dataParams OR inside the job object itself
-              final childrenList = (dataParams['children'] as List<dynamic>?) ??
+              final childrenList =
+                  (dataParams['children'] as List<dynamic>?) ??
                   (jobMap['children'] as List<dynamic>?);
 
               // DEBUG: Print raw job data for emergency contact
               debugPrint('=== GET JOB DETAILS DEBUG ===');
               debugPrint('Full jobMap keys: ${jobMap.keys.toList()}');
               debugPrint(
-                  'Raw jobMap emergencyContact: ${jobMap['emergencyContact']}');
+                'Raw jobMap emergencyContact: ${jobMap['emergencyContact']}',
+              );
               debugPrint(
-                  'Raw jobMap emergencyContactName: ${jobMap['emergencyContactName']}');
+                'Raw jobMap emergencyContactName: ${jobMap['emergencyContactName']}',
+              );
 
               final dto = JobDto.fromJson(jobMap);
               final emergency = _extractEmergencyContact(jobMap);
@@ -124,7 +124,8 @@ class JobsRepositoryImpl implements JobsRepository {
                 emergencyContactPhone: emergency['phone'],
                 emergencyContactRelation: emergency['relationship'],
                 // Try to find children in dataParams OR inside the object itself
-                childrenData: (dataParams['children'] as List<dynamic>?) ??
+                childrenData:
+                    (dataParams['children'] as List<dynamic>?) ??
                     (dataParams['kids'] as List<dynamic>?),
               );
             }
@@ -153,11 +154,14 @@ class JobsRepositoryImpl implements JobsRepository {
   @override
   Future<List<Job>> getJobs() async {
     try {
-      final response = await _client.get('/jobs', queryParameters: {
-        // Removed status filter to fetch all jobs
-        'limit': 20,
-        'offset': 0,
-      });
+      final response = await _client.get(
+        '/jobs',
+        queryParameters: {
+          // Removed status filter to fetch all jobs
+          'limit': 20,
+          'offset': 0,
+        },
+      );
 
       if (response.statusCode == 200 && response.data != null) {
         // debugPrint('DEBUG: Jobs API Response: ${response.data}'); // Requested debug log
@@ -188,12 +192,14 @@ class JobsRepositoryImpl implements JobsRepository {
         return;
       } else {
         throw Exception(
-            'Failed to invite sitter: Status ${response.statusCode}');
+          'Failed to invite sitter: Status ${response.statusCode}',
+        );
       }
     } catch (e) {
       if (e is DioException) {
         throw Exception(
-            'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}');
+          'Invite API Error: ${e.response?.data['message'] ?? e.response?.data['error'] ?? e.message}',
+        );
       }
       rethrow;
     }

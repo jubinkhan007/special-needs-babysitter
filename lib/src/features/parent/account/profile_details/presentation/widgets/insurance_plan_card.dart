@@ -7,11 +7,7 @@ class InsurancePlanCard extends StatelessWidget {
   final InsurancePlan? plan;
   final VoidCallback onEdit;
 
-  const InsurancePlanCard({
-    super.key,
-    this.plan,
-    required this.onEdit,
-  });
+  const InsurancePlanCard({super.key, this.plan, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {

@@ -20,7 +20,8 @@ class SavedJobsRemoteDataSource {
       if (data is Map<String, dynamic>) {
         final dataField = data['data'];
         if (dataField is Map<String, dynamic>) {
-          list = dataField['jobs'] ??
+          list =
+              dataField['jobs'] ??
               dataField['savedJobs'] ??
               dataField['items'] ??
               dataField['bookmarks'];
@@ -53,14 +54,14 @@ class SavedJobsRemoteDataSource {
         try {
           final dto = JobDto.fromJson(normalizedJobJson);
           var job = dto.toDomain();
-          
+
           // Hydrate job if children are missing but we have an ID
           if (job.children.isEmpty && (job.id?.isNotEmpty ?? false)) {
             try {
-               final detailedJob = await _hydrateJobWithDetails(job.id!);
-               if (detailedJob != null) {
-                 job = detailedJob;
-               }
+              final detailedJob = await _hydrateJobWithDetails(job.id!);
+              if (detailedJob != null) {
+                job = detailedJob;
+              }
             } catch (e) {
               debugPrint('DEBUG: Failed to hydrate job ${job.id}: $e');
             }
@@ -69,16 +70,17 @@ class SavedJobsRemoteDataSource {
         } catch (e) {
           final fallback = _fallbackJobFromJson(normalizedJobJson);
           if (fallback != null) {
-             // Try to hydrate fallback too
-             if (fallback.children.isEmpty && (fallback.id?.isNotEmpty ?? false)) {
-               try {
-                  final detailedJob = await _hydrateJobWithDetails(fallback.id!);
-                  if (detailedJob != null) {
-                    jobs.add(detailedJob);
-                    continue;
-                  }
-               } catch (_) {}
-             }
+            // Try to hydrate fallback too
+            if (fallback.children.isEmpty &&
+                (fallback.id?.isNotEmpty ?? false)) {
+              try {
+                final detailedJob = await _hydrateJobWithDetails(fallback.id!);
+                if (detailedJob != null) {
+                  jobs.add(detailedJob);
+                  continue;
+                }
+              } catch (_) {}
+            }
             jobs.add(fallback);
           }
         }
@@ -86,7 +88,7 @@ class SavedJobsRemoteDataSource {
       return jobs;
     } catch (e) {
       if (e is DioException) {
-// ... existing error handling ...
+        // ... existing error handling ...
       }
       rethrow;
     }
@@ -98,7 +100,7 @@ class SavedJobsRemoteDataSource {
       if (response.data['success'] == true) {
         final jobData = response.data['data']['job'];
         if (jobData != null) {
-           return JobDto.fromJson(jobData).toDomain();
+          return JobDto.fromJson(jobData).toDomain();
         }
       }
     } catch (e) {
@@ -121,10 +123,7 @@ class SavedJobsRemoteDataSource {
   }
 
   Job? _fallbackJobFromJson(Map<String, dynamic> json) {
-    final id = (json['id'] ??
-            json['_id'] ??
-            json['jobId'] ??
-            json['job_id'])
+    final id = (json['id'] ?? json['_id'] ?? json['jobId'] ?? json['job_id'])
         ?.toString();
     if (id == null || id.isEmpty) {
       return null;
@@ -142,14 +141,18 @@ class SavedJobsRemoteDataSource {
     );
 
     final childIds = _extractChildIds(json['childIds'], json['children']);
-    
+
     // Attempt to parse children if available
     final List<Child> children = [];
     if (json['children'] is List) {
       try {
-        children.addAll((json['children'] as List)
-            .map((e) => ChildDto.fromJson(e as Map<String, dynamic>).toDomain())
-            .toList());
+        children.addAll(
+          (json['children'] as List)
+              .map(
+                (e) => ChildDto.fromJson(e as Map<String, dynamic>).toDomain(),
+              )
+              .toList(),
+        );
       } catch (_) {
         // Ignore parsing errors for children in fallback
       }
@@ -160,7 +163,8 @@ class SavedJobsRemoteDataSource {
     String? parentUserId;
     final rawParentId = json['parentUserId'] ?? json['parentId'];
     if (rawParentId is Map<String, dynamic>) {
-      parentUserId = rawParentId['_id'] as String? ?? rawParentId['id'] as String?;
+      parentUserId =
+          rawParentId['_id'] as String? ?? rawParentId['id'] as String?;
     } else {
       parentUserId = rawParentId?.toString();
     }
@@ -176,7 +180,8 @@ class SavedJobsRemoteDataSource {
       startTime: (json['startTime'] ?? '').toString(),
       endTime: (json['endTime'] ?? '').toString(),
       address: address,
-      location: _toDouble(json['latitude'] ?? json['lat']) != null &&
+      location:
+          _toDouble(json['latitude'] ?? json['lat']) != null &&
               _toDouble(json['longitude'] ?? json['lng']) != null
           ? JobLocation(
               latitude: _toDouble(json['latitude'] ?? json['lat'])!,
@@ -201,8 +206,9 @@ class SavedJobsRemoteDataSource {
       normalized['id'] = id;
     }
 
-    final parentUserId =
-        _knownId(normalized['parentUserId'] ?? normalized['parentId']);
+    final parentUserId = _knownId(
+      normalized['parentUserId'] ?? normalized['parentId'],
+    );
     if (parentUserId != null) {
       normalized['parentUserId'] = parentUserId;
     }
@@ -287,8 +293,9 @@ class SavedJobsRemoteDataSource {
     if (value is DateTime) return value.toIso8601String();
     if (value is num) {
       final milliseconds = value > 1000000000000 ? value : value * 1000;
-      return DateTime.fromMillisecondsSinceEpoch(milliseconds.toInt())
-          .toIso8601String();
+      return DateTime.fromMillisecondsSinceEpoch(
+        milliseconds.toInt(),
+      ).toIso8601String();
     }
     return null;
   }
@@ -340,8 +347,7 @@ class SavedJobsRemoteDataSource {
     }
     if (children is List) {
       return children
-          .map((e) =>
-              (e is Map<String, dynamic> ? e['id'] ?? e['_id'] : null))
+          .map((e) => (e is Map<String, dynamic> ? e['id'] ?? e['_id'] : null))
           .where((id) => id != null)
           .map((id) => id.toString())
           .toList();
@@ -429,11 +435,15 @@ class SavedJobsRemoteDataSource {
       final endpoint = '/sitters/saved-jobs/$jobId';
       debugPrint('DEBUG: Remove Saved Job Request: DELETE $endpoint');
       final response = await _dio.delete(endpoint);
-      debugPrint('DEBUG: Remove Saved Job Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Remove Saved Job Response Status: ${response.statusCode}',
+      );
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Remove Saved Job Error: ${e.message}');
-        debugPrint('DEBUG: Remove Saved Job Error Response: ${e.response?.data}');
+        debugPrint(
+          'DEBUG: Remove Saved Job Error Response: ${e.response?.data}',
+        );
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
           throw Exception(serverMessage);

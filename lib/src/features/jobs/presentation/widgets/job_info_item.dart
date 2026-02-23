@@ -22,7 +22,8 @@ class JobInfoItem extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-              top: 2.0), // Optical alignment with label text
+            top: 2.0,
+          ), // Optical alignment with label text
           child: Icon(
             icon,
             size: AppTokens.jobInfoIconSize,
@@ -34,10 +35,7 @@ class JobInfoItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                label,
-                style: AppTokens.jobInfoLabelStyle,
-              ),
+              Text(label, style: AppTokens.jobInfoLabelStyle),
               const SizedBox(height: AppTokens.jobInfoLabelValueGap),
               customValueWidget ??
                   Text(

@@ -11,15 +11,8 @@ void main() {
       splitScreenMode: true,
       builder: (context, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: 'Inter',
-          useMaterial3: true,
-        ),
-        home: const Scaffold(
-          body: Center(
-            child: DeleteAccountDialog(),
-          ),
-        ),
+        theme: ThemeData(fontFamily: 'Inter', useMaterial3: true),
+        home: const Scaffold(body: Center(child: DeleteAccountDialog())),
       ),
     );
   }

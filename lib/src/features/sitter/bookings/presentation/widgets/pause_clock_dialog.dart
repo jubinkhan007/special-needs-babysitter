@@ -30,9 +30,7 @@ class _PauseClockDialogState extends State<PauseClockDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       child: SizedBox(
         width: 320.w,
         child: Padding(
@@ -197,11 +195,7 @@ class _InfoIcon extends StatelessWidget {
         border: Border.all(color: const Color(0xFFD0D5DD)),
       ),
       child: const Center(
-        child: Icon(
-          Icons.info_outline,
-          size: 14,
-          color: Color(0xFF667085),
-        ),
+        child: Icon(Icons.info_outline, size: 14, color: Color(0xFF667085)),
       ),
     );
   }

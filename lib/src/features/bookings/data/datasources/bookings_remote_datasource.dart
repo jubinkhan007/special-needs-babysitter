@@ -14,16 +14,19 @@ class BookingsRemoteDataSource {
     try {
       final response = await _dio.get('/parents/bookings');
       debugPrint(
-          'DEBUG: BookingsRemoteDataSource.getBookings raw response: ${response.data}');
+        'DEBUG: BookingsRemoteDataSource.getBookings raw response: ${response.data}',
+      );
       final responseData = response.data['data'];
       if (responseData == null) {
         debugPrint(
-            'DEBUG: BookingsRemoteDataSource.getBookings responseData is null');
+          'DEBUG: BookingsRemoteDataSource.getBookings responseData is null',
+        );
         return [];
       }
       final data = ParentBookingsResponseDto.fromJson(responseData);
       debugPrint(
-          'DEBUG: BookingsRemoteDataSource.getBookings parsed ${data.bookings.length} bookings');
+        'DEBUG: BookingsRemoteDataSource.getBookings parsed ${data.bookings.length} bookings',
+      );
       for (var b in data.bookings) {
         debugPrint('DEBUG: Booking id=${b.id}, status=${b.status}');
       }
@@ -41,9 +44,15 @@ class BookingsRemoteDataSource {
       debugPrint('DEBUG: getBookingDetails raw response: ${response.data}');
       // API returns { "success": true, "data": { ... } }
       final dto = BookingDetailsResponseDto.fromJson(response.data);
-      debugPrint('DEBUG: getBookingDetails parsed - sitter firstName: ${dto.data.sitter?.firstName}');
-      debugPrint('DEBUG: getBookingDetails parsed - sitter lastName: ${dto.data.sitter?.lastName}');
-      debugPrint('DEBUG: getBookingDetails parsed - sitter skills: ${dto.data.sitter?.skills}');
+      debugPrint(
+        'DEBUG: getBookingDetails parsed - sitter firstName: ${dto.data.sitter?.firstName}',
+      );
+      debugPrint(
+        'DEBUG: getBookingDetails parsed - sitter lastName: ${dto.data.sitter?.lastName}',
+      );
+      debugPrint(
+        'DEBUG: getBookingDetails parsed - sitter skills: ${dto.data.sitter?.skills}',
+      );
       return dto.data;
     } catch (e) {
       debugPrint('DEBUG: getBookingDetails error: $e');

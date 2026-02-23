@@ -13,15 +13,19 @@ class SitterJobDetailsRepositoryImpl implements SitterJobDetailsRepository {
   @override
   Future<SitterJobDetails> getJobDetails(String jobId) async {
     debugPrint(
-        'DEBUG: SitterJobDetailsRepositoryImpl.getJobDetails called with jobId=$jobId');
+      'DEBUG: SitterJobDetailsRepositoryImpl.getJobDetails called with jobId=$jobId',
+    );
 
     try {
       final response = await _remoteSource.getJobDetails(jobId);
-      debugPrint('DEBUG: Remote source returned response, mapping to entity...');
+      debugPrint(
+        'DEBUG: Remote source returned response, mapping to entity...',
+      );
 
       final entity = JobDetailsMapper.fromDto(response);
       debugPrint(
-          'DEBUG: Mapped entity: title=${entity.title}, childrenCount=${entity.childrenCount}');
+        'DEBUG: Mapped entity: title=${entity.title}, childrenCount=${entity.childrenCount}',
+      );
 
       return entity;
     } catch (e, stack) {

@@ -53,7 +53,10 @@ class CallKitEventHandler {
       return;
     }
 
-    developer.log('CallKitEventHandler initialized (iOS)', name: 'Notifications');
+    developer.log(
+      'CallKitEventHandler initialized (iOS)',
+      name: 'Notifications',
+    );
     _eventSubscription = FlutterCallkitIncoming.onEvent.listen(
       _handleEvent,
       onError: (Object error, StackTrace stackTrace) {
@@ -79,12 +82,15 @@ class CallKitEventHandler {
       extra['id'],
       extra['uuid'],
     ]);
-    final isVideo = _readBool(extra['isVideo']) ||
+    final isVideo =
+        _readBool(extra['isVideo']) ||
         _readBool(body['isVideo']) ||
         (body['type'] == 1);
 
-    developer.log('CallKit event: ${event.event} for $callId',
-        name: 'Notifications');
+    developer.log(
+      'CallKit event: ${event.event} for $callId',
+      name: 'Notifications',
+    );
     if (callId.isEmpty) {
       developer.log(
         'Ignoring CallKit event with missing call id: ${event.event}',
@@ -114,13 +120,18 @@ class CallKitEventHandler {
         final token = _readFirstString([body['devicePushTokenVoip']]);
         if (token.isNotEmpty) {
           final preview = token.length <= 20 ? token : token.substring(0, 20);
-          developer.log('VoIP token updated: $preview...', name: 'Notifications');
+          developer.log(
+            'VoIP token updated: $preview...',
+            name: 'Notifications',
+          );
         }
         break;
 
       default:
-        developer.log('Unhandled CallKit event: ${event.event}',
-            name: 'Notifications');
+        developer.log(
+          'Unhandled CallKit event: ${event.event}',
+          name: 'Notifications',
+        );
         break;
     }
   }

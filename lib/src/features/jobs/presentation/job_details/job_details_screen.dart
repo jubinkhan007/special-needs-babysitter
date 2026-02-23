@@ -86,7 +86,8 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error deleting job: $e')),
         );
       }
@@ -102,9 +103,13 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
 
     try {
       // Create payment intent for the job
-      debugPrint('DEBUG: JobDetails creating payment intent for jobId: ${job.id}');
+      debugPrint(
+        'DEBUG: JobDetails creating payment intent for jobId: ${job.id}',
+      );
       final paymentIntent = await bookingsRepo.createPaymentIntent(job.id);
-      debugPrint('DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}');
+      debugPrint(
+        'DEBUG: PaymentIntent created: ${paymentIntent.paymentIntentId}',
+      );
 
       // Calculate amount based on job details
       final amount = _calculateTotalAmount(job);
@@ -122,7 +127,8 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
             debugPrint('DEBUG: Payment completed successfully');
             // Refresh job details to update payment status
             ref.invalidate(jobDetailsProvider(widget.jobId));
-            AppToast.show(context,
+            AppToast.show(
+              context,
               const SnackBar(
                 content: Text('Payment completed successfully!'),
                 backgroundColor: Colors.green,
@@ -135,7 +141,8 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
               // User cancelled, no need to show error
               return;
             }
-            AppToast.show(context,
+            AppToast.show(
+              context,
               SnackBar(
                 content: Text('Payment failed: $error'),
                 backgroundColor: Colors.red,
@@ -148,7 +155,8 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
       debugPrint('DEBUG: JobDetails payment error: $e');
       if (mounted) {
         setState(() => _isProcessingPayment = false);
-        AppToast.show(context,
+        AppToast.show(
+          context,
           SnackBar(
             content: Text('Error processing payment: $e'),
             backgroundColor: Colors.red,
@@ -191,10 +199,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
 
     return Scaffold(
       backgroundColor: AppTokens.jobDetailsBg,
-      appBar: const JobsAppBar(
-        title: 'Job Details',
-        showSupportIcon: true,
-      ),
+      appBar: const JobsAppBar(title: 'Job Details', showSupportIcon: true),
       body: _isDeleting
           ? const Center(child: CircularProgressIndicator())
           : jobAsync.when(
@@ -204,10 +209,12 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                 final uiModel = JobDetailsUiModel.fromDomain(job);
                 // Get current user to check if they own this job
                 final currentUser = ref.read(authNotifierProvider).value?.user;
-                final isJobOwner = currentUser != null && job.isOwnedBy(currentUser.id);
+                final isJobOwner =
+                    currentUser != null && job.isOwnedBy(currentUser.id);
                 return MediaQuery(
-                  data: MediaQuery.of(context)
-                      .copyWith(textScaler: TextScaler.noScaling),
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.noScaling),
                   child: CustomScrollView(
                     slivers: [
                       SliverPadding(
@@ -227,12 +234,16 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                                 decoration: BoxDecoration(
                                   color: Colors.orange.shade50,
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: Colors.orange.shade200),
+                                  border: Border.all(
+                                    color: Colors.orange.shade200,
+                                  ),
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.warning_amber_rounded, 
-                                      color: Colors.orange.shade700),
+                                    Icon(
+                                      Icons.warning_amber_rounded,
+                                      color: Colors.orange.shade700,
+                                    ),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
@@ -274,48 +285,60 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
 
                             // 5. Child Details Section
                             const SectionTitle(title: 'Child Details'),
-                            ...uiModel.childDetailsRows
-                                .map((entry) => KeyValueRow(
-                                      label: entry.key,
-                                      value: entry.value,
-                                    )),
+                            ...uiModel.childDetailsRows.map(
+                              (entry) => KeyValueRow(
+                                label: entry.key,
+                                value: entry.value,
+                              ),
+                            ),
                             const SectionDivider(),
 
                             // 6. Schedule & Location
                             const SectionTitle(title: 'Schedule & Location'),
                             KeyValueRow(
-                                label: 'Date', value: uiModel.dateRangeText),
+                              label: 'Date',
+                              value: uiModel.dateRangeText,
+                            ),
                             KeyValueRow(
-                                label: 'Time', value: uiModel.timeRangeText),
+                              label: 'Time',
+                              value: uiModel.timeRangeText,
+                            ),
                             KeyValueRow(
-                                label: 'Address',
-                                value: uiModel.addressText,
-                                isMultiline: true),
+                              label: 'Address',
+                              value: uiModel.addressText,
+                              isMultiline: true,
+                            ),
                             const SectionDivider(),
 
                             // 7. Emergency Contact
                             const SectionTitle(title: 'Emergency Contact'),
                             KeyValueRow(
-                                label: 'Name', value: uiModel.emergencyName),
+                              label: 'Name',
+                              value: uiModel.emergencyName,
+                            ),
                             KeyValueRow(
-                                label: 'Phone Number',
-                                value: uiModel.emergencyPhone),
+                              label: 'Phone Number',
+                              value: uiModel.emergencyPhone,
+                            ),
                             KeyValueRow(
-                                label: 'Relations',
-                                value: uiModel.emergencyRelation),
+                              label: 'Relations',
+                              value: uiModel.emergencyRelation,
+                            ),
                             const SectionDivider(),
 
                             // 8. Additional Details & Pay Rate
                             const SectionTitle(
-                                title: 'Additional Details & Pay Rate'),
+                              title: 'Additional Details & Pay Rate',
+                            ),
                             Text(
                               uiModel.additionalNotes,
                               style: AppTokens.jobDetailsParagraphStyle,
                             ),
                             const SizedBox(height: 16),
                             KeyValueRow(
-                                label: 'Hourly rate',
-                                value: uiModel.hourlyRateText),
+                              label: 'Hourly rate',
+                              value: uiModel.hourlyRateText,
+                            ),
                             const SectionDivider(),
 
                             // 9. Applicants
@@ -323,10 +346,14 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Total',
-                                    style: AppTokens.jobDetailsLabelStyle),
-                                Text(uiModel.applicantsTotalText,
-                                    style: AppTokens.jobDetailsValueStyle),
+                                Text(
+                                  'Total',
+                                  style: AppTokens.jobDetailsLabelStyle,
+                                ),
+                                Text(
+                                  uiModel.applicantsTotalText,
+                                  style: AppTokens.jobDetailsValueStyle,
+                                ),
                               ],
                             ),
                           ]),
@@ -343,7 +370,8 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
           final requiresPayment = job.requiresPayment;
           // Get current user to check if they own this job
           final currentUser = ref.read(authNotifierProvider).value?.user;
-          final isJobOwner = currentUser != null && job.isOwnedBy(currentUser.id);
+          final isJobOwner =
+              currentUser != null && job.isOwnedBy(currentUser.id);
           return BottomActionStack(
             primaryLabel: 'Edit job',
             secondaryLabel: 'Manage Applicants',
@@ -355,10 +383,7 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                       _showNotEditableToast();
                       return;
                     }
-                    await context.push(
-                      Routes.editJob,
-                      extra: job.id,
-                    );
+                    await context.push(Routes.editJob, extra: job.id);
                     ref.invalidate(jobDetailsProvider(widget.jobId));
                   },
             onSecondary: _isProcessingPayment
@@ -375,10 +400,10 @@ class _JobDetailsScreenState extends ConsumerState<JobDetailsScreen> {
                   },
             // Payment button (only visible to job owner)
             showPaymentButton: requiresPayment && isJobOwner,
-            paymentLabel: _isProcessingPayment ? 'Processing...' : '⚠ Pay Now to Post Job',
-            onPayment: _isProcessingPayment
-                ? () {}
-                : () => _handlePayment(job),
+            paymentLabel: _isProcessingPayment
+                ? 'Processing...'
+                : '⚠ Pay Now to Post Job',
+            onPayment: _isProcessingPayment ? () {} : () => _handlePayment(job),
           );
         },
         orElse: () => const SizedBox.shrink(),

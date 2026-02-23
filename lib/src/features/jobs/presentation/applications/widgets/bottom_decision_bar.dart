@@ -29,7 +29,8 @@ class BottomDecisionBar extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
           border: Border(
-              top: BorderSide(color: AppTokens.dashColor)), // Subtle top border
+            top: BorderSide(color: AppTokens.dashColor),
+          ), // Subtle top border
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -44,8 +45,9 @@ class BottomDecisionBar extends StatelessWidget {
                   foregroundColor: AppColors.textOnButton,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppTokens.jobDetailsButtonRadius),
+                    borderRadius: BorderRadius.circular(
+                      AppTokens.jobDetailsButtonRadius,
+                    ),
                   ),
                   textStyle: AppTokens.jobDetailsButtonTextStyle,
                 ),
@@ -63,10 +65,12 @@ class BottomDecisionBar extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppTokens.jobDetailsOutlinedTextColor,
                   side: const BorderSide(
-                      color: AppTokens.jobDetailsPrimaryBtnBg), // Blue border
+                    color: AppTokens.jobDetailsPrimaryBtnBg,
+                  ), // Blue border
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppTokens.jobDetailsButtonRadius),
+                    borderRadius: BorderRadius.circular(
+                      AppTokens.jobDetailsButtonRadius,
+                    ),
                   ),
                   textStyle: AppTokens.jobDetailsButtonTextStyle,
                 ),

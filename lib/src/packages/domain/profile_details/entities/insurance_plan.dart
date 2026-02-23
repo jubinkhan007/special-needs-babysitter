@@ -21,14 +21,14 @@ class InsurancePlan extends Equatable {
 
   @override
   List<Object?> get props => [
-        planName,
-        insuranceType,
-        coverageAmount,
-        monthlyPremium,
-        yearlyPremium,
-        description,
-        isActive,
-      ];
+    planName,
+    insuranceType,
+    coverageAmount,
+    monthlyPremium,
+    yearlyPremium,
+    description,
+    isActive,
+  ];
 
   Map<String, dynamic> toMap() {
     return {

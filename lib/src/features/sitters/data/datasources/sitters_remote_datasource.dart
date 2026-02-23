@@ -116,13 +116,17 @@ class SittersRemoteDataSource {
   Future<void> removeBookmarkedSitter(String sitterUserId) async {
     try {
       debugPrint(
-          'DEBUG removeBookmarkedSitter: Calling DELETE /parents/bookmarked-sitters/$sitterUserId');
+        'DEBUG removeBookmarkedSitter: Calling DELETE /parents/bookmarked-sitters/$sitterUserId',
+      );
       final response = await _dio.delete(
         '/parents/bookmarked-sitters/$sitterUserId',
       );
       debugPrint(
-          'DEBUG removeBookmarkedSitter: Response status=${response.statusCode}');
-      debugPrint('DEBUG removeBookmarkedSitter: Response data=${response.data}');
+        'DEBUG removeBookmarkedSitter: Response status=${response.statusCode}',
+      );
+      debugPrint(
+        'DEBUG removeBookmarkedSitter: Response data=${response.data}',
+      );
       if (response.data['success'] != true) {
         throw Exception('Failed to remove bookmark');
       }
@@ -134,7 +138,9 @@ class SittersRemoteDataSource {
 
   Future<List<SitterDto>> getSavedSitters() async {
     try {
-      debugPrint('DEBUG getSavedSitters: Calling GET /parents/bookmarked-sitters');
+      debugPrint(
+        'DEBUG getSavedSitters: Calling GET /parents/bookmarked-sitters',
+      );
       final response = await _dio.get('/parents/bookmarked-sitters');
       debugPrint('DEBUG getSavedSitters: Response data = ${response.data}');
       if (response.data['success'] == true) {
@@ -156,19 +162,23 @@ class SittersRemoteDataSource {
     final userIdData = json['userId'] as Map<String, dynamic>? ?? {};
     debugPrint('DEBUG _mapBookmarkedSitterToDto: userIdData = $userIdData');
     debugPrint(
-        'DEBUG _mapBookmarkedSitterToDto: profile _id (json[_id]) = ${json['_id']}');
+      'DEBUG _mapBookmarkedSitterToDto: profile _id (json[_id]) = ${json['_id']}',
+    );
     debugPrint(
-        'DEBUG _mapBookmarkedSitterToDto: user _id (userIdData[_id]) = ${userIdData['_id']}');
+      'DEBUG _mapBookmarkedSitterToDto: user _id (userIdData[_id]) = ${userIdData['_id']}',
+    );
 
     // Photo URL can be in userId object or directly on sitter profile
     final photoUrl =
         userIdData['photoUrl'] as String? ?? json['photoUrl'] as String? ?? '';
-    final avgRating = _toDouble(json['avgRating']) ??
+    final avgRating =
+        _toDouble(json['avgRating']) ??
         _toDouble(json['rating']) ??
         _toDouble(userIdData['avgRating']) ??
         _toDouble(userIdData['rating']) ??
         0.0;
-    final reviewCount = _toInt(json['reviewCount']) ??
+    final reviewCount =
+        _toInt(json['reviewCount']) ??
         _toInt(json['totalReviews']) ??
         _toInt(userIdData['reviewCount']) ??
         0;
@@ -228,7 +238,9 @@ class SittersRemoteDataSource {
       if (response.data is Map<String, dynamic>) {
         final data = response.data['data'];
         if (data is List) {
-          debugPrint('DEBUG: Response is wrapped Map with ${data.length} reviews');
+          debugPrint(
+            'DEBUG: Response is wrapped Map with ${data.length} reviews',
+          );
           return data
               .map((json) => ReviewDto.fromJson(json as Map<String, dynamic>))
               .toList();

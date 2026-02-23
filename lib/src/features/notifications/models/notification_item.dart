@@ -1,9 +1,5 @@
 /// Notification category derived from notification type.
-enum NotificationCategory {
-  jobs,
-  payments,
-  rewards,
-}
+enum NotificationCategory { jobs, payments, rewards }
 
 /// Domain model for an in-app notification.
 class NotificationItem {
@@ -49,8 +45,9 @@ class NotificationItem {
       actionUserName = fullName.isNotEmpty
           ? fullName
           : (actionUserRaw['name'] as String?) ??
-              (actionUserRaw['fullName'] as String?);
-      actionUserAvatar = (actionUserRaw['avatarUrl'] as String?) ??
+                (actionUserRaw['fullName'] as String?);
+      actionUserAvatar =
+          (actionUserRaw['avatarUrl'] as String?) ??
           (actionUserRaw['photoUrl'] as String?) ??
           (actionUserRaw['profilePhotoUrl'] as String?);
     }
@@ -79,10 +76,7 @@ class NotificationItem {
       'withdrawal_failed',
       'refund_received',
     };
-    const rewardTypes = {
-      'referral_bonus',
-      'welcome_bonus',
-    };
+    const rewardTypes = {'referral_bonus', 'welcome_bonus'};
 
     if (paymentTypes.contains(type)) return NotificationCategory.payments;
     if (rewardTypes.contains(type)) return NotificationCategory.rewards;

@@ -63,12 +63,7 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 16,
-        bottom: 24,
-      ),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 24),
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
         child: _showCancelReasons
@@ -156,13 +151,19 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
                   _selectedReason = null;
                 });
               },
-              child: const Icon(Icons.chevron_left,
-                  size: 28, color: Color(0xFF6B7280)),
+              child: const Icon(
+                Icons.chevron_left,
+                size: 28,
+                color: Color(0xFF6B7280),
+              ),
             ),
             GestureDetector(
               onTap: () => Navigator.of(context).pop(),
-              child:
-                  const Icon(Icons.close, size: 22, color: Color(0xFF111827)),
+              child: const Icon(
+                Icons.close,
+                size: 22,
+                color: Color(0xFF111827),
+              ),
             ),
           ],
         ),
@@ -254,8 +255,9 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
                     if (confirmed == true) {
                       if (!mounted) return;
                       // Show refund options dialog
-                      final refundOption =
-                          await showRefundOptionsDialog(context);
+                      final refundOption = await showRefundOptionsDialog(
+                        context,
+                      );
                       if (refundOption != null) {
                         widget.onCancel();
                       }
@@ -264,7 +266,9 @@ class _BookingMoreOptionsSheetState extends State<BookingMoreOptionsSheet> {
                 : null,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppTokens.primaryBlue,
-              disabledBackgroundColor: AppTokens.primaryBlue.withValues(alpha: 0.5),
+              disabledBackgroundColor: AppTokens.primaryBlue.withValues(
+                alpha: 0.5,
+              ),
               foregroundColor: AppColors.textOnButton,
               elevation: 0,
               shape: RoundedRectangleBorder(

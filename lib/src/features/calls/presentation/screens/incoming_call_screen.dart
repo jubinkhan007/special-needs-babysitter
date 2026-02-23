@@ -82,8 +82,9 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
     });
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         body: Stack(
           children: [
@@ -124,9 +125,7 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
               left: 0,
               right: 0,
               bottom: MediaQuery.of(context).padding.bottom + 20.h,
-              child: Center(
-                child: _buildActionButtons(context, callState),
-              ),
+              child: Center(child: _buildActionButtons(context, callState)),
             ),
           ],
         ),
@@ -172,8 +171,7 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
                 ? null
                 : () {
                     // Ensure user ID is set before accepting
-                    final currentUser =
-                        ref.read(currentUserProvider).value;
+                    final currentUser = ref.read(currentUserProvider).value;
                     if (currentUser?.id != null) {
                       ref
                           .read(callControllerProvider.notifier)
@@ -199,10 +197,7 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
       child: Container(
         width: AppTokens.callEndButtonSize,
         height: AppTokens.callEndButtonSize,
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         alignment: Alignment.center,
         child: isLoading
             ? SizedBox(

@@ -16,11 +16,11 @@ class SitterAccountOverview extends Equatable {
 
   @override
   List<Object?> get props => [
-        user,
-        completedJobsCount,
-        savedJobsCount,
-        profileCompletionPercent,
-      ];
+    user,
+    completedJobsCount,
+    savedJobsCount,
+    profileCompletionPercent,
+  ];
 }
 
 class SitterAccountState extends Equatable {

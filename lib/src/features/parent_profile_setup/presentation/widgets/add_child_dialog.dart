@@ -7,11 +7,7 @@ class AddChildDialog extends StatefulWidget {
   final Map<String, dynamic>? existingChild;
   final Function(Map<String, dynamic>) onSave;
 
-  const AddChildDialog({
-    super.key,
-    this.existingChild,
-    required this.onSave,
-  });
+  const AddChildDialog({super.key, this.existingChild, required this.onSave});
 
   @override
   State<AddChildDialog> createState() => _AddChildDialogState();
@@ -67,23 +63,28 @@ class _AddChildDialogState extends State<AddChildDialog> {
     _firstNameController = TextEditingController(text: c['firstName']);
     _lastNameController = TextEditingController(text: c['lastName']);
     _ageController = TextEditingController(text: c['age']?.toString());
-    _diagnosisController =
-        TextEditingController(text: c['specialNeedsDiagnosis']);
-    _personalityController =
-        TextEditingController(text: c['personalityDescription']);
+    _diagnosisController = TextEditingController(
+      text: c['specialNeedsDiagnosis'],
+    );
+    _personalityController = TextEditingController(
+      text: c['personalityDescription'],
+    );
     _medsController = TextEditingController(text: c['medicationDietaryNeeds']);
     _routineController = TextEditingController(text: c['routine']);
     _allergyTypeController = TextEditingController(
-        text: (c['allergyTypes'] as List<dynamic>?)?.join(', '));
+      text: (c['allergyTypes'] as List<dynamic>?)?.join(', '),
+    );
     _triggersTypeController = TextEditingController(
-        text: (c['triggerTypes'] as List<dynamic>?)?.join(', '));
+      text: (c['triggerTypes'] as List<dynamic>?)?.join(', '),
+    );
     _triggersController = TextEditingController(text: c['triggers']);
     _calmingController = TextEditingController(text: c['calmingMethods']);
 
     _pickupLocController = TextEditingController(text: c['pickupLocation']);
     _dropoffLocController = TextEditingController(text: c['dropoffLocation']);
-    _transportInstrController =
-        TextEditingController(text: c['transportSpecialInstructions']);
+    _transportInstrController = TextEditingController(
+      text: c['transportSpecialInstructions'],
+    );
 
     _selectedTransportModes =
         (c['transportationModes'] as List<dynamic>?)?.cast<String>() ?? [];
@@ -96,11 +97,13 @@ class _AddChildDialogState extends State<AddChildDialog> {
 
     // Check if there's an 'Other: ...' or just check list
     // Filter out known options to find "Other" items
-    final otherItems =
-        equip.where((e) => !_equipmentOptions.contains(e)).toList();
+    final otherItems = equip
+        .where((e) => !_equipmentOptions.contains(e))
+        .toList();
     if (otherItems.isNotEmpty) {
-      _otherEquipmentController =
-          TextEditingController(text: otherItems.join(', '));
+      _otherEquipmentController = TextEditingController(
+        text: otherItems.join(', '),
+      );
       _otherEquipmentSelected = true;
     } else {
       _otherEquipmentController = TextEditingController();
@@ -153,11 +156,14 @@ class _AddChildDialogState extends State<AddChildDialog> {
       // Debug logging for pickup/dropoff fields
       debugPrint('DEBUG AddChildDialog: needsDropoff=$_needsDropoff');
       debugPrint(
-          'DEBUG AddChildDialog: pickupLocController.text=${_pickupLocController.text}');
+        'DEBUG AddChildDialog: pickupLocController.text=${_pickupLocController.text}',
+      );
       debugPrint(
-          'DEBUG AddChildDialog: dropoffLocController.text=${_dropoffLocController.text}');
+        'DEBUG AddChildDialog: dropoffLocController.text=${_dropoffLocController.text}',
+      );
       debugPrint(
-          'DEBUG AddChildDialog: transportInstrController.text=${_transportInstrController.text}');
+        'DEBUG AddChildDialog: transportInstrController.text=${_transportInstrController.text}',
+      );
 
       final pickupValue = _needsDropoff ? _pickupLocController.text : '';
       final dropoffValue = _needsDropoff ? _dropoffLocController.text : '';
@@ -177,16 +183,16 @@ class _AddChildDialogState extends State<AddChildDialog> {
         'hasAllergies': _hasAllergies,
         'allergyTypes': _hasAllergies && _allergyTypeController.text.isNotEmpty
             ? _allergyTypeController.text
-                .split(',')
-                .map((e) => e.trim())
-                .toList()
+                  .split(',')
+                  .map((e) => e.trim())
+                  .toList()
             : [],
         'hasTriggers': _hasTriggers,
         'triggerTypes': _hasTriggers && _triggersTypeController.text.isNotEmpty
             ? _triggersTypeController.text
-                .split(',')
-                .map((e) => e.trim())
-                .toList()
+                  .split(',')
+                  .map((e) => e.trim())
+                  .toList()
             : [],
         'triggers': _hasTriggers ? _triggersController.text : '',
         'calmingMethods': _calmingController.text,
@@ -280,16 +286,19 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     Text(
                       '*Include any diagnoses or areas where your child may need extra support. Leave blank if unsure or still exploring.',
                       style: TextStyle(
-                          fontSize: 12,
-                          color: const Color(0xFF1A1A1A).withAlpha(153)),
+                        fontSize: 12,
+                        color: const Color(0xFF1A1A1A).withAlpha(153),
+                      ),
                     ),
                     const SizedBox(height: 12),
 
                     // Personality - Taller
-                    _buildField(_personalityController,
-                        'Child\'s Personality Description',
-                        maxLines: 5,
-                        maxLength: 500),
+                    _buildField(
+                      _personalityController,
+                      'Child\'s Personality Description',
+                      maxLines: 5,
+                      maxLength: 500,
+                    ),
                     const SizedBox(height: 12),
 
                     _buildField(
@@ -308,8 +317,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     const SizedBox(height: 16),
 
                     // Allergies Checkbox
-                    _buildSquareCheckbox('Allergies', _hasAllergies,
-                        (v) => setState(() => _hasAllergies = v!)),
+                    _buildSquareCheckbox(
+                      'Allergies',
+                      _hasAllergies,
+                      (v) => setState(() => _hasAllergies = v!),
+                    ),
                     if (_hasAllergies) ...[
                       const SizedBox(height: 8),
                       _buildField(
@@ -321,8 +333,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     const SizedBox(height: 16),
 
                     // Triggers Checkbox
-                    _buildSquareCheckbox('Type of Triggers', _hasTriggers,
-                        (v) => setState(() => _hasTriggers = v!)),
+                    _buildSquareCheckbox(
+                      'Type of Triggers',
+                      _hasTriggers,
+                      (v) => setState(() => _hasTriggers = v!),
+                    ),
                     if (_hasTriggers) ...[
                       const SizedBox(height: 8),
                       _buildField(
@@ -333,9 +348,12 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     ],
                     const SizedBox(height: 12),
 
-                    _buildField(_calmingController, 'Calming Method',
-                        maxLines: 2,
-                        maxLength: 200),
+                    _buildField(
+                      _calmingController,
+                      'Calming Method',
+                      maxLines: 2,
+                      maxLength: 200,
+                    ),
 
                     const SizedBox(height: 24),
 
@@ -362,24 +380,27 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     const Text(
                       'Transportation Mode',
                       style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF344054)),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF344054),
+                      ),
                     ),
                     const SizedBox(height: 8),
-                    ..._transportOptions.map((mode) => _buildSquareCheckbox(
-                          mode,
-                          _selectedTransportModes.contains(mode),
-                          (val) {
-                            setState(() {
-                              if (val == true) {
-                                _selectedTransportModes.add(mode);
-                              } else {
-                                _selectedTransportModes.remove(mode);
-                              }
-                            });
-                          },
-                        )),
+                    ..._transportOptions.map(
+                      (mode) => _buildSquareCheckbox(
+                        mode,
+                        _selectedTransportModes.contains(mode),
+                        (val) {
+                          setState(() {
+                            if (val == true) {
+                              _selectedTransportModes.add(mode);
+                            } else {
+                              _selectedTransportModes.remove(mode);
+                            }
+                          });
+                        },
+                      ),
+                    ),
                     const SizedBox(height: 12),
 
                     _buildSquareCheckbox(
@@ -392,24 +413,27 @@ class _AddChildDialogState extends State<AddChildDialog> {
                     const Text(
                       'Equipment & Safety',
                       style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF344054)),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF344054),
+                      ),
                     ),
                     const SizedBox(height: 8),
-                    ..._equipmentOptions.map((eq) => _buildSquareCheckbox(
-                          eq,
-                          _selectedEquipment.contains(eq),
-                          (val) {
-                            setState(() {
-                              if (val == true) {
-                                _selectedEquipment.add(eq);
-                              } else {
-                                _selectedEquipment.remove(eq);
-                              }
-                            });
-                          },
-                        )),
+                    ..._equipmentOptions.map(
+                      (eq) => _buildSquareCheckbox(
+                        eq,
+                        _selectedEquipment.contains(eq),
+                        (val) {
+                          setState(() {
+                            if (val == true) {
+                              _selectedEquipment.add(eq);
+                            } else {
+                              _selectedEquipment.remove(eq);
+                            }
+                          });
+                        },
+                      ),
+                    ),
                     // Other's Checkbox
                     _buildSquareCheckbox(
                       "Other's",
@@ -432,23 +456,30 @@ class _AddChildDialogState extends State<AddChildDialog> {
                       const Text(
                         'Pickup / Drop-off Details',
                         style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF344054)),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF344054),
+                        ),
                       ),
                       const SizedBox(height: 8),
-                      _buildField(_pickupLocController,
-                          'Pickup Location (e.g., School gate)',
-                          maxLength: 120),
+                      _buildField(
+                        _pickupLocController,
+                        'Pickup Location (e.g., School gate)',
+                        maxLength: 120,
+                      ),
                       const SizedBox(height: 8),
-                      _buildField(_dropoffLocController,
-                          'Drop-off Location (e.g. 123 Main ST)',
-                          maxLength: 120),
+                      _buildField(
+                        _dropoffLocController,
+                        'Drop-off Location (e.g. 123 Main ST)',
+                        maxLength: 120,
+                      ),
                       const SizedBox(height: 8),
-                      _buildField(_transportInstrController,
-                          'Special Instructions (e.g. Avoid highways)',
-                          maxLines: 3,
-                          maxLength: 240),
+                      _buildField(
+                        _transportInstrController,
+                        'Special Instructions (e.g. Avoid highways)',
+                        maxLines: 3,
+                        maxLength: 240,
+                      ),
                     ],
                   ],
                 ),
@@ -464,8 +495,11 @@ class _AddChildDialogState extends State<AddChildDialog> {
               color: const Color(0xFFFEE4E2),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline,
-                      color: AppColors.error, size: 18),
+                  const Icon(
+                    Icons.error_outline,
+                    color: AppColors.error,
+                    size: 18,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -500,10 +534,7 @@ class _AddChildDialogState extends State<AddChildDialog> {
                 const Spacer(),
                 SizedBox(
                   width: 120,
-                  child: PrimaryActionButton(
-                    label: 'Save',
-                    onPressed: _onSave,
-                  ),
+                  child: PrimaryActionButton(label: 'Save', onPressed: _onSave),
                 ),
               ],
             ),
@@ -551,11 +582,15 @@ class _AddChildDialogState extends State<AddChildDialog> {
             ],
             maxLines: maxLines,
             style: const TextStyle(
-                color: Color(0xFF1A1A1A), fontSize: 16), // Dark Text
+              color: Color(0xFF1A1A1A),
+              fontSize: 16,
+            ), // Dark Text
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: const TextStyle(
-                  color: Color(0xFF667085), fontSize: 16), // Grey Hint
+                color: Color(0xFF667085),
+                fontSize: 16,
+              ), // Grey Hint
               filled: true, // Force filled
               fillColor: Colors.white, // Force white
               border: OutlineInputBorder(
@@ -574,8 +609,10 @@ class _AddChildDialogState extends State<AddChildDialog> {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: AppColors.error),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 10,
+              ),
               isDense: true,
               counterText: '',
             ),
@@ -610,7 +647,10 @@ class _AddChildDialogState extends State<AddChildDialog> {
   }
 
   Widget _buildSquareCheckbox(
-      String label, bool value, Function(bool?) onChanged) {
+    String label,
+    bool value,
+    Function(bool?) onChanged,
+  ) {
     return InkWell(
       onTap: () => onChanged(!value),
       child: Padding(
@@ -626,7 +666,8 @@ class _AddChildDialogState extends State<AddChildDialog> {
                 activeColor: AppColors.secondary,
                 side: const BorderSide(color: Color(0xFFD0D5DD), width: 1.5),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)), // Slightly rounded
+                  borderRadius: BorderRadius.circular(4),
+                ), // Slightly rounded
                 onChanged: onChanged,
               ),
             ),

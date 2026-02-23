@@ -4,20 +4,14 @@ import 'package:babysitter_app/src/theme/app_tokens.dart';
 class DetailsSectionHeader extends StatelessWidget {
   final String title;
 
-  const DetailsSectionHeader({
-    super.key,
-    this.title = 'Service Details',
-  });
+  const DetailsSectionHeader({super.key, this.title = 'Service Details'});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: AppTokens.activeSectionTitle,
-        ),
+        Text(title, style: AppTokens.activeSectionTitle),
         _buildActiveChip(),
       ],
     );
@@ -42,10 +36,7 @@ class DetailsSectionHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
-            'Active',
-            style: AppTokens.chipText,
-          ),
+          Text('Active', style: AppTokens.chipText),
         ],
       ),
     );

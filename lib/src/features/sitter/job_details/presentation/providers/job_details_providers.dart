@@ -9,20 +9,21 @@ import 'package:babysitter_app/src/features/sitter/job_details/data/sources/sitt
 /// Provider for the job details remote source.
 final sitterJobDetailsRemoteSourceProvider =
     Provider<SitterJobDetailsRemoteSource>((ref) {
-  final dio = ref.watch(authDioProvider);
-  return SitterJobDetailsRemoteSource(dio);
-});
+      final dio = ref.watch(authDioProvider);
+      return SitterJobDetailsRemoteSource(dio);
+    });
 
 /// Provider for the job details repository.
-final sitterJobDetailsRepositoryProvider =
-    Provider<SitterJobDetailsRepository>((ref) {
-  final remoteSource = ref.watch(sitterJobDetailsRemoteSourceProvider);
-  return SitterJobDetailsRepositoryImpl(remoteSource);
-});
+final sitterJobDetailsRepositoryProvider = Provider<SitterJobDetailsRepository>(
+  (ref) {
+    final remoteSource = ref.watch(sitterJobDetailsRemoteSourceProvider);
+    return SitterJobDetailsRepositoryImpl(remoteSource);
+  },
+);
 
 /// Provider for fetching job details by ID.
 final sitterJobDetailsProvider =
     FutureProvider.family<SitterJobDetails, String>((ref, jobId) async {
-  final repository = ref.watch(sitterJobDetailsRepositoryProvider);
-  return repository.getJobDetails(jobId);
-});
+      final repository = ref.watch(sitterJobDetailsRepositoryProvider);
+      return repository.getJobDetails(jobId);
+    });

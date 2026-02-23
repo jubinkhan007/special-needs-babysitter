@@ -29,40 +29,35 @@ class BookingApplicationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final args =
-        ApplicationDetailArgs(jobId: jobId, applicationId: applicationId);
+    final args = ApplicationDetailArgs(
+      jobId: jobId,
+      applicationId: applicationId,
+    );
     final applicationAsync = ref.watch(applicationDetailProvider(args));
 
     // Listen for controller state changes
-    ref.listen<AsyncValue<void>>(
-      applicationsControllerProvider,
-      (prev, next) {
-        next.whenOrNull(
-          error: (error, stack) {
-            AppToast.show(context, 
-              SnackBar(content: Text('Error: $error')),
+    ref.listen<AsyncValue<void>>(applicationsControllerProvider, (prev, next) {
+      next.whenOrNull(
+        error: (error, stack) {
+          AppToast.show(context, SnackBar(content: Text('Error: $error')));
+        },
+        data: (_) {
+          if (prev?.isLoading == true) {
+            // Success!
+            AppToast.show(
+              context,
+              const SnackBar(content: Text('Action completed successfully')),
             );
-          },
-          data: (_) {
-            if (prev?.isLoading == true) {
-              // Success!
-              AppToast.show(context, 
-                const SnackBar(content: Text('Action completed successfully')),
-              );
-              context.pop(); // Go back to applications list
-            }
-          },
-        );
-      },
-    );
+            context.pop(); // Go back to applications list
+          }
+        },
+      );
+    });
 
     return applicationAsync.when(
       loading: () => const Scaffold(
         backgroundColor: AppTokens.applicationsBg,
-        appBar: JobsAppBar(
-          title: 'Booking Application',
-          showSupportIcon: true,
-        ),
+        appBar: JobsAppBar(title: 'Booking Application', showSupportIcon: true),
         body: Center(child: CircularProgressIndicator()),
       ),
       error: (error, stack) => Scaffold(
@@ -85,8 +80,9 @@ class BookingApplicationScreen extends ConsumerWidget {
             showSupportIcon: true,
           ),
           body: MediaQuery(
-            data: MediaQuery.of(context)
-                .copyWith(textScaler: TextScaler.noScaling),
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.noScaling),
             child: CustomScrollView(
               slivers: [
                 SliverPadding(
@@ -107,10 +103,7 @@ class BookingApplicationScreen extends ConsumerWidget {
                       const SizedBox(height: 12),
                       const DashedDivider(),
                       const SizedBox(height: 16),
-                      Text(
-                        ui.coverLetter,
-                        style: AppTokens.bodyParagraphStyle,
-                      ),
+                      Text(ui.coverLetter, style: AppTokens.bodyParagraphStyle),
                       const SizedBox(height: 16),
                       const DashedDivider(),
 
@@ -123,22 +116,29 @@ class BookingApplicationScreen extends ConsumerWidget {
                       const SizedBox(height: 16),
                       KeyValueRow(label: 'Family Name', value: ui.familyName),
                       KeyValueRow(
-                          label: 'No. Of Children',
-                          value: ui.numberOfChildrenText),
+                        label: 'No. Of Children',
+                        value: ui.numberOfChildrenText,
+                      ),
                       KeyValueRow(label: 'Date', value: ui.dateRangeText),
                       KeyValueRow(label: 'Time', value: ui.timeRangeText),
                       KeyValueRow(
-                          label: 'Hourly Rate', value: ui.hourlyRateText),
+                        label: 'Hourly Rate',
+                        value: ui.hourlyRateText,
+                      ),
                       KeyValueRow(
-                          label: 'No of Days', value: ui.numberOfDaysText),
+                        label: 'No of Days',
+                        value: ui.numberOfDaysText,
+                      ),
                       KeyValueRow(
-                          label: 'Additional Notes',
-                          value: ui.additionalNotes,
-                          isMultiline: true),
+                        label: 'Additional Notes',
+                        value: ui.additionalNotes,
+                        isMultiline: true,
+                      ),
                       KeyValueRow(
-                          label: 'Address',
-                          value: ui.address,
-                          isMultiline: true),
+                        label: 'Address',
+                        value: ui.address,
+                        isMultiline: true,
+                      ),
                       const SizedBox(height: 16),
                       const DashedDivider(),
 
@@ -148,8 +148,10 @@ class BookingApplicationScreen extends ConsumerWidget {
                       if (ui.transportationModes.isNotEmpty ||
                           ui.equipmentAndSafety.isNotEmpty ||
                           ui.pickupDropoffDetails.isNotEmpty) ...[
-                        Text('Transportation Preferences (Optional)',
-                            style: AppTokens.sectionTitleStyle),
+                        Text(
+                          'Transportation Preferences (Optional)',
+                          style: AppTokens.sectionTitleStyle,
+                        ),
                         const SizedBox(height: 16),
                         TransportPreferencesTable(
                           modes: ui.transportationModes,
@@ -183,11 +185,7 @@ class BookingApplicationScreen extends ConsumerWidget {
                           result.otherText ?? result.reason.displayLabel;
                       ref
                           .read(applicationsControllerProvider.notifier)
-                          .declineApplication(
-                            jobId,
-                            applicationId,
-                            reason,
-                          );
+                          .declineApplication(jobId, applicationId, reason);
                     }
                   },
                 )

@@ -14,11 +14,11 @@ class StripeConnectRemoteDataSource {
       debugPrint('DEBUG: Stripe Connect Request: GET /stripe-connect/status');
       final response = await _dio.get(
         '/stripe-connect/status',
-        options: Options(
-          receiveTimeout: const Duration(seconds: 30),
-        ),
+        options: Options(receiveTimeout: const Duration(seconds: 30)),
       );
-      debugPrint('DEBUG: Stripe Connect Status Response: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Stripe Connect Status Response: ${response.statusCode}',
+      );
 
       final data = response.data;
       if (data is Map<String, dynamic>) {
@@ -34,7 +34,9 @@ class StripeConnectRemoteDataSource {
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Stripe Connect Status Error: ${e.message}');
-        debugPrint('DEBUG: Stripe Connect Status Error Response: ${e.response?.data}');
+        debugPrint(
+          'DEBUG: Stripe Connect Status Error Response: ${e.response?.data}',
+        );
 
         // If 404, treat as not started (no account yet)
         if (e.response?.statusCode == 404) {
@@ -60,11 +62,11 @@ class StripeConnectRemoteDataSource {
       debugPrint('DEBUG: Stripe Connect Request: POST /stripe-connect/onboard');
       final response = await _dio.post(
         '/stripe-connect/onboard',
-        options: Options(
-          receiveTimeout: const Duration(seconds: 30),
-        ),
+        options: Options(receiveTimeout: const Duration(seconds: 30)),
       );
-      debugPrint('DEBUG: Stripe Connect Onboard Response: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Stripe Connect Onboard Response: ${response.statusCode}',
+      );
 
       final data = response.data;
       if (data is Map<String, dynamic>) {
@@ -78,7 +80,9 @@ class StripeConnectRemoteDataSource {
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Stripe Connect Onboard Error: ${e.message}');
-        debugPrint('DEBUG: Stripe Connect Onboard Error Response: ${e.response?.data}');
+        debugPrint(
+          'DEBUG: Stripe Connect Onboard Error Response: ${e.response?.data}',
+        );
 
         if (e.type == DioExceptionType.receiveTimeout) {
           throw Exception(
@@ -93,14 +97,16 @@ class StripeConnectRemoteDataSource {
   /// Get the Stripe Express Dashboard URL for onboarded users
   Future<String> getDashboardUrl() async {
     try {
-      debugPrint('DEBUG: Stripe Connect Request: POST /stripe-connect/dashboard');
+      debugPrint(
+        'DEBUG: Stripe Connect Request: POST /stripe-connect/dashboard',
+      );
       final response = await _dio.post(
         '/stripe-connect/dashboard',
-        options: Options(
-          receiveTimeout: const Duration(seconds: 30),
-        ),
+        options: Options(receiveTimeout: const Duration(seconds: 30)),
       );
-      debugPrint('DEBUG: Stripe Connect Dashboard Response: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Stripe Connect Dashboard Response: ${response.statusCode}',
+      );
 
       final data = response.data;
       if (data is Map<String, dynamic>) {
@@ -114,7 +120,9 @@ class StripeConnectRemoteDataSource {
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Stripe Connect Dashboard Error: ${e.message}');
-        debugPrint('DEBUG: Stripe Connect Dashboard Error Response: ${e.response?.data}');
+        debugPrint(
+          'DEBUG: Stripe Connect Dashboard Error Response: ${e.response?.data}',
+        );
 
         if (e.type == DioExceptionType.receiveTimeout) {
           throw Exception(

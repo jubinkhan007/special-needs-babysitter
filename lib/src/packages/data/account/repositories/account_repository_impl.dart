@@ -14,7 +14,8 @@ class AccountRepositoryImpl implements AccountRepository {
     // 1. Fetch fresh user profile
     final user = await _profileRepository.getMe();
     debugPrint(
-        'DEBUG: AccountRepo user firstName: ${user.firstName}, lastName: ${user.lastName}',);
+      'DEBUG: AccountRepo user firstName: ${user.firstName}, lastName: ${user.lastName}',
+    );
 
     // 2. Fetch stats (mocked in datasource)
     final stats = await _remoteDataSource.getAccountStats(userId);

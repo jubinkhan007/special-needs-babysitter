@@ -32,8 +32,9 @@ class _ParentBookingStep1ScreenState
   final Map<String, Child> _selectedChildren = {};
   final TextEditingController _additionalDetailsController =
       TextEditingController();
-  final TextEditingController _payRateController =
-      TextEditingController(text: '20');
+  final TextEditingController _payRateController = TextEditingController(
+    text: '20',
+  );
 
   // Validation constants
   static const double _minPayRate = 5.0;
@@ -96,7 +97,8 @@ class _ParentBookingStep1ScreenState
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              AppToast.show(context, 
+              AppToast.show(
+                context,
                 const SnackBar(content: Text('Failed to add child')),
               );
             }
@@ -120,7 +122,8 @@ class _ParentBookingStep1ScreenState
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              AppToast.show(context, 
+              AppToast.show(
+                context,
                 const SnackBar(content: Text('Failed to update child')),
               );
             }
@@ -140,39 +143,43 @@ class _ParentBookingStep1ScreenState
       );
       return;
     }
-    
+
     // Validate pay rate
-    final payRate = double.tryParse(
-            _payRateController.text.replaceAll(RegExp(r'[^\d.]'), '')) ??
+    final payRate =
+        double.tryParse(
+          _payRateController.text.replaceAll(RegExp(r'[^\d.]'), ''),
+        ) ??
         0;
-    
+
     if (payRate < _minPayRate) {
       AppToast.show(
         context,
         SnackBar(
-          content: Text('Pay rate must be at least \$${_minPayRate.toStringAsFixed(0)}'),
+          content: Text(
+            'Pay rate must be at least \$${_minPayRate.toStringAsFixed(0)}',
+          ),
         ),
       );
       return;
     }
-    
+
     if (payRate > _maxPayRate) {
       AppToast.show(
         context,
         SnackBar(
-          content: Text('Pay rate cannot exceed \$${_maxPayRate.toStringAsFixed(0)}'),
+          content: Text(
+            'Pay rate cannot exceed \$${_maxPayRate.toStringAsFixed(0)}',
+          ),
         ),
       );
       return;
     }
-    
+
     // Validate additional details
     if (_additionalDetailsController.text.trim().isEmpty) {
       AppToast.show(
         context,
-        const SnackBar(
-          content: Text('Please enter additional details.'),
-        ),
+        const SnackBar(content: Text('Please enter additional details.')),
       );
       return;
     }
@@ -210,9 +217,13 @@ class _ParentBookingStep1ScreenState
       details.add('Notes: ${allSpecialInstructions.join("; ")}');
     }
 
-    ref.read(bookingFlowProvider.notifier).updateStep1(
+    ref
+        .read(bookingFlowProvider.notifier)
+        .updateStep1(
           childIds: _selectedChildIds.toList(),
-          childNames: _selectedChildIds.map((id) => _selectedChildNames[id] ?? '').toList(),
+          childNames: _selectedChildIds
+              .map((id) => _selectedChildNames[id] ?? '')
+              .toList(),
           payRate: payRate,
           additionalDetails: _additionalDetailsController.text.isNotEmpty
               ? _additionalDetailsController.text
@@ -224,17 +235,19 @@ class _ParentBookingStep1ScreenState
               ? allEquipmentSafety.join(', ')
               : null,
           pickupDropoffDetails: details.isNotEmpty ? details.join('\n') : null,
-          pickupLocation: allPickupLocations.isNotEmpty ? allPickupLocations.join(', ') : null,
-          dropoffLocation: allDropoffLocations.isNotEmpty ? allDropoffLocations.join(', ') : null,
+          pickupLocation: allPickupLocations.isNotEmpty
+              ? allPickupLocations.join(', ')
+              : null,
+          dropoffLocation: allDropoffLocations.isNotEmpty
+              ? allDropoffLocations.join(', ')
+              : null,
           transportSpecialInstructions: allSpecialInstructions.isNotEmpty
               ? allSpecialInstructions.join('; ')
               : null,
         );
 
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ParentBookingStep2Screen(),
-      ),
+      MaterialPageRoute(builder: (context) => const ParentBookingStep2Screen()),
     );
   }
 
@@ -337,8 +350,8 @@ class _ParentBookingStep1ScreenState
                         onChanged: (val) => _payRateController.text = val,
                       ),
                       SizedBox(
-                          height:
-                              24 + MediaQuery.of(context).padding.bottom + 60),
+                        height: 24 + MediaQuery.of(context).padding.bottom + 60,
+                      ),
                     ],
                   ),
                 );
@@ -354,11 +367,12 @@ class _ParentBookingStep1ScreenState
           Container(
             color: AppColors.surfaceTint,
             padding: EdgeInsets.fromLTRB(
-                24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
-            child: BookingPrimaryBottomButton(
-              text: 'Next',
-              onPressed: _onNext,
+              24,
+              0,
+              24,
+              MediaQuery.of(context).padding.bottom + 16,
             ),
+            child: BookingPrimaryBottomButton(text: 'Next', onPressed: _onNext),
           ),
         ],
       ),

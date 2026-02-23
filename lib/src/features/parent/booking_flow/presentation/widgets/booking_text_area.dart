@@ -4,11 +4,7 @@ class BookingTextArea extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
 
-  const BookingTextArea({
-    super.key,
-    required this.hintText,
-    this.controller,
-  });
+  const BookingTextArea({super.key, required this.hintText, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +14,8 @@ class BookingTextArea extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-            color: const Color(0xFFB2DDFF)), // Light Blue (Blue 200 roughly)
+          color: const Color(0xFFB2DDFF),
+        ), // Light Blue (Blue 200 roughly)
       ),
       child: TextField(
         controller: controller,

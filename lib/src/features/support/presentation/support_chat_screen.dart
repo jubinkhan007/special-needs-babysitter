@@ -14,10 +14,7 @@ import 'widgets/support_composer_bar.dart';
 class SupportChatScreen extends StatefulWidget {
   final SupportChatArgs args;
 
-  const SupportChatScreen({
-    super.key,
-    required this.args,
-  });
+  const SupportChatScreen({super.key, required this.args});
 
   @override
   State<SupportChatScreen> createState() => _SupportChatScreenState();
@@ -183,8 +180,9 @@ class _SupportChatScreenState extends State<SupportChatScreen> {
     final uiModels = SupportChatUiMapper.map(_messages);
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         extendBodyBehindAppBar:
             true, // Allow body to scroll behind? No, layout is Column.

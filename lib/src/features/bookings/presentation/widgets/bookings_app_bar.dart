@@ -22,8 +22,11 @@ class BookingsAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text('Bookings', style: AppTokens.appBarTitle),
       actions: [
         IconButton(
-          icon: const Icon(Icons.notifications_none,
-              color: AppTokens.iconGrey, size: 26),
+          icon: const Icon(
+            Icons.notifications_none,
+            color: AppTokens.iconGrey,
+            size: 26,
+          ),
           onPressed: () {},
         ),
       ],

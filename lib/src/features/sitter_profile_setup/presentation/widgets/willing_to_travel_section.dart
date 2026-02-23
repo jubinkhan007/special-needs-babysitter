@@ -66,9 +66,9 @@ class WillingToTravelSection extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(
-                  color:
-                      value ? AppColors.primary : const Color(0xFF98A2B3),
-                  width: 2),
+                color: value ? AppColors.primary : const Color(0xFF98A2B3),
+                width: 2,
+              ),
               borderRadius: BorderRadius.circular(6),
             ),
             child: value

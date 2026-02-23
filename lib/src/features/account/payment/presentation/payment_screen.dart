@@ -6,9 +6,7 @@ import 'widgets/recent_activity_row.dart';
 
 /// The Payment screen displaying balance, payment methods, and recent activities.
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({
-    super.key,
-  });
+  const PaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +17,7 @@ class PaymentScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -50,8 +45,9 @@ class PaymentScreen extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: AppTokens.paymentHPad.w),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppTokens.paymentHPad.w,
+              ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   SizedBox(height: 16.h),

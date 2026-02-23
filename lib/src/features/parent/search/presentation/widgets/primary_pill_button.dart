@@ -22,16 +22,14 @@ class PrimaryPillButton extends StatelessWidget {
           backgroundColor: AppUiTokens.primaryBlue,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppUiTokens
-                .radiusSmall), // Check screenshot? Usually pill is rounded completely or 8px. Screenshot looks like 8-12px. Using radiusSmall (8.0).
+            borderRadius: BorderRadius.circular(
+              AppUiTokens.radiusSmall,
+            ), // Check screenshot? Usually pill is rounded completely or 8px. Screenshot looks like 8-12px. Using radiusSmall (8.0).
             // Actually, pill implies rounded circle usually? Screenshot shows rounded RECT.
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
-        child: Text(
-          text,
-          style: AppUiTokens.buttonText,
-        ),
+        child: Text(text, style: AppUiTokens.buttonText),
       ),
     );
   }

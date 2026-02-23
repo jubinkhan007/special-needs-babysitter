@@ -122,7 +122,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // DEBUG: Log every redirect call
       debugPrint(
-          'DEBUG ROUTER REDIRECT: location=$location, isLoading=${authState.isLoading}, hasValue=${authState.hasValue}, isSignUpInProgress=$isSignUpInProgress');
+        'DEBUG ROUTER REDIRECT: location=$location, isLoading=${authState.isLoading}, hasValue=${authState.hasValue}, isSignUpInProgress=$isSignUpInProgress',
+      );
 
       // Check authentication from session
       final session = authState.value;
@@ -135,7 +136,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (authState.isLoading) {
         // Allow auth routes to handle their own loading state (spinners etc)
         if (isAuthRoute) {
-          debugPrint('DEBUG ROUTER: isLoading, but on auth route, returning null');
+          debugPrint(
+            'DEBUG ROUTER: isLoading, but on auth route, returning null',
+          );
           return null;
         }
 
@@ -152,7 +155,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         // Allow onboarding and auth routes
         if (isOnboarding || isAuthRoute) {
           debugPrint(
-              'DEBUG ROUTER: Not authenticated, on allowed route, returning null');
+            'DEBUG ROUTER: Not authenticated, on allowed route, returning null',
+          );
           return null;
         }
 
@@ -161,7 +165,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         // Don't redirect to splash or if we are already handling a redirect
         if (from != Routes.splash && !from.contains(Routes.onboarding)) {
           debugPrint(
-              'DEBUG ROUTER: Not authenticated, redirecting to /onboarding?from=$from');
+            'DEBUG ROUTER: Not authenticated, redirecting to /onboarding?from=$from',
+          );
           return '${Routes.onboarding}?from=${Uri.encodeComponent(from)}';
         }
 
@@ -173,10 +178,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Authenticated - get user from session (avoids currentUserProvider cycle)
       final user = session.user;
       debugPrint(
-          'DEBUG ROUTER: Authenticated, user.id=${user.id}, user.isProfileComplete=${user.isProfileComplete}, user.role=${user.role}');
+        'DEBUG ROUTER: Authenticated, user.id=${user.id}, user.isProfileComplete=${user.isProfileComplete}, user.role=${user.role}',
+      );
       if (!user.isProfileComplete) {
         debugPrint(
-            'DEBUG ROUTER: User object details for incomplete profile: firstName=${user.firstName}, lastName=${user.lastName}, email=${user.email}');
+          'DEBUG ROUTER: User object details for incomplete profile: firstName=${user.firstName}, lastName=${user.lastName}, email=${user.email}',
+        );
       }
 
       // Authenticated but on auth/onboarding route, redirect to appropriate home
@@ -190,7 +197,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         // Check if sign-up is in progress - always go to profile setup
         if (isSignUpInProgress) {
           debugPrint(
-              'DEBUG ROUTER: signUpInProgress=true, returning /auth/profile-setup');
+            'DEBUG ROUTER: signUpInProgress=true, returning /auth/profile-setup',
+          );
           isSignUpInProgress = false;
           return Routes.profileSetup;
         }
@@ -198,14 +206,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         // If coming from sign-up, always go to profile setup (new user flow)
         if (location == Routes.signUp) {
           debugPrint(
-              'DEBUG ROUTER: On sign-up route, returning /auth/profile-setup');
+            'DEBUG ROUTER: On sign-up route, returning /auth/profile-setup',
+          );
           return Routes.profileSetup;
         }
 
         // For other auth routes (sign-in, etc.), check profile completion
         if (!user.isProfileComplete) {
           debugPrint(
-              'DEBUG ROUTER: Profile incomplete, returning /auth/profile-setup');
+            'DEBUG ROUTER: Profile incomplete, returning /auth/profile-setup',
+          );
           return Routes.profileSetup;
         }
 
@@ -300,15 +310,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: Routes.parentHome,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ParentHomeScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ParentHomeScreen()),
           ),
           GoRoute(
             path: Routes.parentMessages,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ParentMessagesScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ParentMessagesScreen()),
             routes: [
               GoRoute(
                 path: 'chat/:id', // matches /parent/messages/chat/:id
@@ -317,11 +325,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final args = state.extra as ChatThreadArgs?;
                   final id = state.pathParameters['id'] ?? '';
                   return ChatThreadScreen(
-                    args: args ??
-                        ChatThreadArgs(
-                          otherUserId: id,
-                          otherUserName: 'Chat',
-                        ),
+                    args:
+                        args ??
+                        ChatThreadArgs(otherUserId: id, otherUserName: 'Chat'),
                   );
                 },
               ),
@@ -333,8 +339,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               final rawTab = state.uri.queryParameters['tab'];
               BookingStatus? initialTab;
               if (rawTab != null && rawTab.trim().isNotEmpty) {
-                final normalized =
-                    rawTab.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+                final normalized = rawTab.toLowerCase().replaceAll(
+                  RegExp(r'[\s_-]'),
+                  '',
+                );
                 switch (normalized) {
                   case 'active':
                     initialTab = BookingStatus.active;
@@ -364,15 +372,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: Routes.parentJobs,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ParentJobsScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ParentJobsScreen()),
           ),
           GoRoute(
             path: Routes.parentAccount,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ParentAccountScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: ParentAccountScreen()),
             routes: [
               GoRoute(
                 path: 'profile', // /parent/account/profile
@@ -429,7 +435,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             // Fallback/Error handling
             return const Scaffold(
               body: Center(
-                  child: Text('Error: Missing booking details arguments')),
+                child: Text('Error: Missing booking details arguments'),
+              ),
             );
           }
           return BookingDetailsScreen(args: args);
@@ -458,7 +465,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           if (bookingId == null) {
             return const Scaffold(
               body: Center(
-                  child: Text('Error: Missing booking ID for map route')),
+                child: Text('Error: Missing booking ID for map route'),
+              ),
             );
           }
           return MapRouteScreen(bookingId: bookingId);
@@ -554,8 +562,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final args = state.extra as ReportIssueArgs?;
           if (args == null) {
             return const Scaffold(
-              body:
-                  Center(child: Text('Error: Missing report issue arguments')),
+              body: Center(
+                child: Text('Error: Missing report issue arguments'),
+              ),
             );
           }
           return ReportIssueScreen(args: args);
@@ -576,7 +585,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final args = state.extra as AudioCallArgs?;
           if (args == null) {
             return const Scaffold(
-                body: Center(child: Text('Error: Missing audio call args')));
+              body: Center(child: Text('Error: Missing audio call args')),
+            );
           }
           return AudioCallScreen(args: args);
         },
@@ -590,7 +600,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final args = state.extra as VideoCallArgs?;
           if (args == null) {
             return const Scaffold(
-                body: Center(child: Text('Error: Missing video call args')));
+              body: Center(child: Text('Error: Missing video call args')),
+            );
           }
           return VideoCallScreen(args: args);
         },
@@ -676,9 +687,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '${Routes.sitterActiveBooking}/:applicationId',
         builder: (context, state) {
           final applicationId = state.pathParameters['applicationId'] ?? '';
-          return SitterActiveBookingScreen(
-            applicationId: applicationId,
-          );
+          return SitterActiveBookingScreen(applicationId: applicationId);
         },
       ),
       GoRoute(
@@ -732,9 +741,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: Routes.sitterHome,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: SitterHomeScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SitterHomeScreen()),
             routes: [
               GoRoute(
                 path: 'search',
@@ -744,21 +752,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: Routes.sitterJobs,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: SitterJobsScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SitterJobsScreen()),
           ),
           GoRoute(
             path: Routes.sitterBookings,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: SitterBookingsScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SitterBookingsScreen()),
           ),
           GoRoute(
             path: Routes.sitterMessages,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: SitterMessagesScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SitterMessagesScreen()),
             routes: [
               GoRoute(
                 path: 'chat/:id', // matches /sitter/messages/chat/:id
@@ -767,11 +772,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   final args = state.extra as ChatThreadArgs?;
                   final id = state.pathParameters['id'] ?? '';
                   return ChatThreadScreen(
-                    args: args ??
-                        ChatThreadArgs(
-                          otherUserId: id,
-                          otherUserName: 'Chat',
-                        ),
+                    args:
+                        args ??
+                        ChatThreadArgs(otherUserId: id, otherUserName: 'Chat'),
                   );
                 },
               ),
@@ -779,9 +782,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: Routes.sitterAccount,
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: SitterAccountScreen(),
-            ),
+            pageBuilder: (context, state) =>
+                const NoTransitionPage(child: SitterAccountScreen()),
             routes: [
               GoRoute(
                 path: 'settings',

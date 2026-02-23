@@ -42,7 +42,10 @@ class ReferralBonusesScreen extends ConsumerWidget {
         backgroundColor: ReferralBonusesStyles.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: ReferralBonusesStyles.iconGrey),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: ReferralBonusesStyles.iconGrey,
+          ),
           onPressed: () {
             if (context.canPop()) {
               context.pop();
@@ -107,10 +110,7 @@ class ReferralBonusesScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               Text('Your Rewards', style: ReferralBonusesStyles.sectionTitle),
               const SizedBox(height: 8),
-              _buildRewardsSection(
-                ref,
-                rewardsAsync,
-              ),
+              _buildRewardsSection(ref, rewardsAsync),
             ],
           ),
         ),
@@ -262,9 +262,6 @@ class ReferralBonusesScreen extends ConsumerWidget {
         ? null
         : box.localToGlobal(Offset.zero) & box.size;
 
-    await Share.share(
-      shareText,
-      sharePositionOrigin: shareOrigin,
-    );
+    await Share.share(shareText, sharePositionOrigin: shareOrigin);
   }
 }

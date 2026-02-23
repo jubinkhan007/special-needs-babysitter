@@ -1,8 +1,4 @@
-enum JobStatus {
-  active,
-  closed,
-  pending,
-}
+enum JobStatus { active, closed, pending }
 
 class Job {
   final String id;
@@ -28,11 +24,11 @@ class Job {
     this.isDraft = false,
     required this.parentUserId,
   });
-  
+
   /// Returns true if payment is required to activate this job
   /// A job in "draft" status needs payment to be posted
   bool get requiresPayment => isDraft;
-  
+
   /// Returns true if the given userId is the owner of this job
   bool isOwnedBy(String userId) => parentUserId == userId;
 }
@@ -41,10 +37,7 @@ class ChildDetail {
   final String name;
   final int ageYears;
 
-  const ChildDetail({
-    required this.name,
-    required this.ageYears,
-  });
+  const ChildDetail({required this.name, required this.ageYears});
 }
 
 class Address {

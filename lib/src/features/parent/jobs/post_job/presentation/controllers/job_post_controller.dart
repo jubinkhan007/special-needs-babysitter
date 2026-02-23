@@ -98,27 +98,27 @@ class JobPostState extends Equatable {
 
   @override
   List<Object?> get props => [
-        childIds,
-        title,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        streetAddress,
-        aptUnit,
-        city,
-        state,
-        zipCode,
-        additionalDetails,
-        payRate,
-        isLoading,
-        error,
-        jobId,
-        latitude,
-        longitude,
-        rawStartDate,
-        rawEndDate,
-      ];
+    childIds,
+    title,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    streetAddress,
+    aptUnit,
+    city,
+    state,
+    zipCode,
+    additionalDetails,
+    payRate,
+    isLoading,
+    error,
+    jobId,
+    latitude,
+    longitude,
+    rawStartDate,
+    rawEndDate,
+  ];
 }
 
 /// Controller for managing the job posting flow state.
@@ -244,7 +244,7 @@ class JobPostController extends StateNotifier<JobPostState> {
       return time;
     }
 
-    // Determine status: 
+    // Determine status:
     // - Draft jobs: always "draft"
     // - New jobs being posted: "draft" initially, will be updated to "posted" after payment
     // - Updating existing job: keep current status
@@ -253,7 +253,8 @@ class JobPostController extends StateNotifier<JobPostState> {
       status = 'draft';
     } else if (state.jobId != null) {
       // Updating an existing job - keep existing status (could be "posted" or "draft")
-      status = 'posted'; // Assume posted for existing jobs, or we could track original status
+      status =
+          'posted'; // Assume posted for existing jobs, or we could track original status
     } else {
       // New job being posted - start as draft, will update after payment
       status = 'draft';
@@ -292,7 +293,8 @@ class JobPostController extends StateNotifier<JobPostState> {
 
   Future<bool> _saveJob({required bool isDraft}) async {
     debugPrint(
-        'DEBUG: JobPostController submitting job to API. isDraft: $isDraft, isUpdate: ${state.jobId != null}');
+      'DEBUG: JobPostController submitting job to API. isDraft: $isDraft, isUpdate: ${state.jobId != null}',
+    );
     state = state.copyWith(isLoading: true, error: null);
 
     try {
@@ -302,7 +304,9 @@ class JobPostController extends StateNotifier<JobPostState> {
       debugPrint('DEBUG: Device timezone: $timezone');
 
       final job = _buildJobEntity(isDraft: isDraft, timezone: timezone);
-      debugPrint('DEBUG: Job entity built with status: ${job.status}, id: ${job.id}');
+      debugPrint(
+        'DEBUG: Job entity built with status: ${job.status}, id: ${job.id}',
+      );
 
       if (state.jobId != null && !isDraft) {
         // Update existing job

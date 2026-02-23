@@ -105,11 +105,7 @@ class CallEnded extends CallState {
   final CallEndReason reason;
   final int? duration;
 
-  const CallEnded({
-    required this.callId,
-    required this.reason,
-    this.duration,
-  });
+  const CallEnded({required this.callId, required this.reason, this.duration});
 }
 
 /// Call error state
@@ -117,19 +113,16 @@ class CallError extends CallState {
   final String message;
   final String? code;
 
-  const CallError({
-    required this.message,
-    this.code,
-  });
+  const CallError({required this.message, this.code});
 }
 
 /// Reason for call ending
 enum CallEndReason {
-  userEnded,       // Current user ended the call
-  remoteEnded,     // Remote participant ended/left
-  declined,        // Call was declined
-  missed,          // Call timed out with no answer
-  cancelled,       // Caller cancelled before answer
-  error,           // Technical error
-  busy,            // Recipient was busy
+  userEnded, // Current user ended the call
+  remoteEnded, // Remote participant ended/left
+  declined, // Call was declined
+  missed, // Call timed out with no answer
+  cancelled, // Caller cancelled before answer
+  error, // Technical error
+  busy, // Recipient was busy
 }

@@ -40,11 +40,7 @@ class BookingCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Header(
-            booking: booking,
-            onMenuTap: onMenuTap,
-            onCancel: onCancel,
-          ),
+          _Header(booking: booking, onMenuTap: onMenuTap, onCancel: onCancel),
           const SizedBox(height: 12),
           RatingRow(rating: booking.rating),
           const SizedBox(height: 12),
@@ -99,9 +95,7 @@ class _Header extends StatelessWidget {
         SizedBox(
           width: AppTokens.avatarSize,
           height: AppTokens.avatarSize,
-          child: ClipOval(
-            child: _buildAvatar(booking.avatarAssetOrUrl),
-          ),
+          child: ClipOval(child: _buildAvatar(booking.avatarAssetOrUrl)),
         ),
         const SizedBox(width: 14),
 
@@ -132,8 +126,11 @@ class _Header extends StatelessWidget {
               const SizedBox(height: 6),
               Row(
                 children: [
-                  const Icon(Icons.location_on,
-                      size: 18, color: AppTokens.primaryBlue),
+                  const Icon(
+                    Icons.location_on,
+                    size: 18,
+                    color: AppTokens.primaryBlue,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(

@@ -23,10 +23,7 @@ class BackgroundCheckCompleteScreen extends ConsumerWidget {
             // Header with status bar color
             Container(
               color: AppColors.surfaceTint,
-              child: SafeArea(
-                bottom: false,
-                child: _buildAppBar(context),
-              ),
+              child: SafeArea(bottom: false, child: _buildAppBar(context)),
             ),
             // Content
             Expanded(
@@ -90,11 +87,11 @@ class BackgroundCheckCompleteScreen extends ConsumerWidget {
                   SizedBox(
                     width: double.infinity,
                     height: 52.h,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      ref.invalidate(backgroundCheckStatusProvider);
-                      context.go(Routes.sitterHome);
-                    },
+                    child: ElevatedButton(
+                      onPressed: () {
+                        ref.invalidate(backgroundCheckStatusProvider);
+                        context.go(Routes.sitterHome);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary, // Light blue
                         foregroundColor: AppColors.textOnButton,

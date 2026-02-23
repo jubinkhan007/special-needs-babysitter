@@ -30,7 +30,7 @@ class _JobPostStep4DetailsPayScreenState
 
   // Pay Rate Value
   double _payRate = 15.00;
-  
+
   // Validation constants
   static const double _minPayRate = 5.0;
   static const double _maxPayRate = 99.0;
@@ -74,9 +74,10 @@ class _JobPostStep4DetailsPayScreenState
       _payRate = (_payRate - _payRateIncrement).clamp(_minPayRate, _maxPayRate);
     });
   }
-  
-  bool get _isPayRateValid => _payRate >= _minPayRate && _payRate <= _maxPayRate;
-  
+
+  bool get _isPayRateValid =>
+      _payRate >= _minPayRate && _payRate <= _maxPayRate;
+
   String? get _payRateError {
     if (_payRate < _minPayRate) {
       return 'Pay rate must be at least \$${_minPayRate.toStringAsFixed(2)}';
@@ -172,11 +173,7 @@ class _JobPostStep4DetailsPayScreenState
         borderRadius: BorderRadius.circular(24),
       ),
       child: const Center(
-        child: Icon(
-          Icons.attach_money_rounded,
-          size: 52,
-          color: _iconBlue,
-        ),
+        child: Icon(Icons.attach_money_rounded, size: 52, color: _iconBlue),
       ),
     );
   }
@@ -283,10 +280,7 @@ class _JobPostStep4DetailsPayScreenState
             padding: const EdgeInsets.only(left: 16, top: 8),
             child: Text(
               error,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppColors.error,
-              ),
+              style: const TextStyle(fontSize: 12, color: AppColors.error),
             ),
           )
         else
@@ -294,10 +288,7 @@ class _JobPostStep4DetailsPayScreenState
             padding: EdgeInsets.only(left: 16, top: 8),
             child: Text(
               'Pay rate must be between \$5.00 and \$99.00',
-              style: TextStyle(
-                fontSize: 12,
-                color: _mutedText,
-              ),
+              style: TextStyle(fontSize: 12, color: _mutedText),
             ),
           ),
       ],
@@ -315,24 +306,21 @@ class _JobPostStep4DetailsPayScreenState
       );
       return;
     }
-    
+
     // Validate pay rate
     if (!_isPayRateValid) {
       final error = _payRateError;
       if (error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error),
-            backgroundColor: AppColors.error,
-          ),
+          SnackBar(content: Text(error), backgroundColor: AppColors.error),
         );
       }
       return;
     }
-    
-    ref.read(jobPostControllerProvider.notifier).updateAdditionalDetails(
-          _additionalDetailsController.text.trim(),
-        );
+
+    ref
+        .read(jobPostControllerProvider.notifier)
+        .updateAdditionalDetails(_additionalDetailsController.text.trim());
     ref.read(jobPostControllerProvider.notifier).updatePayRate(_payRate);
     widget.onComplete();
   }

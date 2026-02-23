@@ -104,8 +104,11 @@ class SitterJobApplicationCard extends StatelessWidget {
                     height: 24.w,
                     color: const Color(0xFFEAECF0),
                     alignment: Alignment.center,
-                    child: Icon(Icons.person,
-                        size: 16.w, color: const Color(0xFF98A2B3)),
+                    child: Icon(
+                      Icons.person,
+                      size: 16.w,
+                      color: const Color(0xFF98A2B3),
+                    ),
                   ),
                   placeholder: (context, url) => Container(
                     width: 24.w,
@@ -130,8 +133,9 @@ class SitterJobApplicationCard extends StatelessWidget {
                     TextSpan(
                       text: ' ($childCount)',
                       style: TextStyle(
-                        color:
-                            const Color(0xFF2E90FA), // Blue color from design
+                        color: const Color(
+                          0xFF2E90FA,
+                        ), // Blue color from design
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                         fontFamily: 'Inter',
@@ -168,8 +172,9 @@ class SitterJobApplicationCard extends StatelessWidget {
                       TextSpan(
                         text: ' ($distance)',
                         style: TextStyle(
-                          color:
-                              const Color(0xFF2E90FA), // Blue color from design
+                          color: const Color(
+                            0xFF2E90FA,
+                          ), // Blue color from design
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'Inter',
@@ -228,9 +233,11 @@ class SitterJobApplicationCard extends StatelessWidget {
             width: double.infinity,
             height: 52.h,
             child: ElevatedButton(
-              onPressed: onViewDetails ?? () {
-                context.push('${Routes.sitterJobDetails}/$jobId');
-              },
+              onPressed:
+                  onViewDetails ??
+                  () {
+                    context.push('${Routes.sitterJobDetails}/$jobId');
+                  },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary, // Lighter blue
                 foregroundColor: AppColors.textOnButton,

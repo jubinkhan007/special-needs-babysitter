@@ -51,8 +51,10 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: Color(0xFF6B7280)),
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: Color(0xFF6B7280),
+            ),
             onPressed: () {
               // Notification action
             },
@@ -104,8 +106,9 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                   },
                   onEditAvatar: () async {
                     final picker = ImagePicker();
-                    final pickedFile =
-                        await picker.pickImage(source: ImageSource.gallery);
+                    final pickedFile = await picker.pickImage(
+                      source: ImageSource.gallery,
+                    );
                     if (pickedFile == null) return;
 
                     final file = File(pickedFile.path);
@@ -117,16 +120,20 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                           .uploadPhoto(file);
                     } catch (e) {
                       if (context.mounted) {
-                        AppToast.show(context,
-                            SnackBar(content: Text('Error uploading photo: $e')));
+                        AppToast.show(
+                          context,
+                          SnackBar(content: Text('Error uploading photo: $e')),
+                        );
                       }
                       return;
                     }
 
                     if (photoUrl.isEmpty) {
                       if (context.mounted) {
-                        AppToast.show(context,
-                            const SnackBar(content: Text('Upload failed.')));
+                        AppToast.show(
+                          context,
+                          const SnackBar(content: Text('Upload failed.')),
+                        );
                       }
                       return;
                     }
@@ -154,9 +161,11 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       AppToast.show(
                         context,
                         SnackBar(
-                          content: Text(success
-                              ? 'Profile photo updated'
-                              : 'Failed to update profile photo'),
+                          content: Text(
+                            success
+                                ? 'Profile photo updated'
+                                : 'Failed to update profile photo',
+                          ),
                         ),
                       );
                     }
@@ -183,8 +192,9 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                     );
                   },
                   onEditChild: (childId) {
-                    final child =
-                        details.children.firstWhere((c) => c.id == childId);
+                    final child = details.children.firstWhere(
+                      (c) => c.id == childId,
+                    );
                     showDialog(
                       context: context,
                       builder: (context) => AddChildDialog(
@@ -207,7 +217,8 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       builder: (dialogContext) => AlertDialog(
                         title: const Text('Delete child?'),
                         content: const Text(
-                            'This will permanently remove this child.'),
+                          'This will permanently remove this child.',
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () =>
@@ -233,9 +244,11 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                       AppToast.show(
                         context,
                         SnackBar(
-                          content: Text(success
-                              ? 'Child deleted'
-                              : 'Failed to delete child'),
+                          content: Text(
+                            success
+                                ? 'Child deleted'
+                                : 'Failed to delete child',
+                          ),
                         ),
                       );
                     }
@@ -244,7 +257,6 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                 const SizedBox(height: ProfileDetailsUI.cardSpacing),
 
                 // CareApproachCard removed as per user request
-
                 EmergencyContactCard(
                   contact: details.emergencyContact,
                   onEdit: () {
@@ -259,8 +271,9 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                           // Actually updateYourDetails takes map. Let's wrap it.
                           final success = await ref
                               .read(profileDetailsControllerProvider.notifier)
-                              .updateYourDetails({'emergencyContact': data},
-                                  step: 3);
+                              .updateYourDetails({
+                                'emergencyContact': data,
+                              }, step: 3);
 
                           if (success && context.mounted) {
                             // Success handling
@@ -283,8 +296,8 @@ class _ProfileDetailsScreenState extends ConsumerState<ProfileDetailsScreen> {
                           final success = await ref
                               .read(profileDetailsControllerProvider.notifier)
                               .updateYourDetails({
-                            'insurancePlans': [data]
-                          }, step: 3);
+                                'insurancePlans': [data],
+                              }, step: 3);
 
                           if (success && context.mounted) {
                             // Success handling

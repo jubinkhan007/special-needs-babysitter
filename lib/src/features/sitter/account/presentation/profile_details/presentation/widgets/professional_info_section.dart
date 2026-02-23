@@ -53,7 +53,11 @@ class ProfessionalInfoSection extends StatelessWidget {
               ),
               if (onEditTap != null)
                 IconButton(
-                  icon: const Icon(Icons.edit, size: 20, color: Color(0xFF667085)),
+                  icon: const Icon(
+                    Icons.edit,
+                    size: 20,
+                    color: Color(0xFF667085),
+                  ),
                   onPressed: onEditTap,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -83,7 +87,9 @@ class ProfessionalInfoSection extends StatelessWidget {
               child: Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: skills!.map((skill) => _SkillChip(label: skill)).toList(),
+                children: skills!
+                    .map((skill) => _SkillChip(label: skill))
+                    .toList(),
               ),
             ),
             const SizedBox(height: 16),
@@ -94,10 +100,7 @@ class ProfessionalInfoSection extends StatelessWidget {
               label: 'Languages',
               child: Text(
                 languages!.join(', '),
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF667085),
-                ),
+                style: const TextStyle(fontSize: 14, color: Color(0xFF667085)),
               ),
             ),
             const SizedBox(height: 16),
@@ -107,14 +110,13 @@ class ProfessionalInfoSection extends StatelessWidget {
             label: 'Reliable Transportation',
             child: Text(
               hasTransportation == true ? 'Yes' : 'No',
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xFF667085),
-              ),
+              style: const TextStyle(fontSize: 14, color: Color(0xFF667085)),
             ),
           ),
           // Transportation details
-          if (hasTransportation == true && transportationDetails != null && transportationDetails!.isNotEmpty) ...[
+          if (hasTransportation == true &&
+              transportationDetails != null &&
+              transportationDetails!.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
               transportationDetails!,
@@ -132,10 +134,7 @@ class ProfessionalInfoSection extends StatelessWidget {
               label: 'Willing to Travel',
               child: Text(
                 willingToTravel == true ? 'Yes' : 'No',
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF667085),
-                ),
+                style: const TextStyle(fontSize: 14, color: Color(0xFF667085)),
               ),
             ),
           ],
@@ -149,10 +148,7 @@ class _InfoItem extends StatelessWidget {
   final String label;
   final Widget child;
 
-  const _InfoItem({
-    required this.label,
-    required this.child,
-  });
+  const _InfoItem({required this.label, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -51,7 +51,9 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
     }
 
     final currentUserId = ref.read(currentUserProvider).value?.id ?? '';
-    final remoteParticipant = callState.session.getRemoteParticipant(currentUserId);
+    final remoteParticipant = callState.session.getRemoteParticipant(
+      currentUserId,
+    );
     final isVideoCall = callState.session.callType == CallType.video;
 
     return Scaffold(
@@ -69,7 +71,11 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
             top: 0,
             left: 0,
             right: 0,
-            child: _buildTopBar(callState, remoteParticipant?.name ?? '', isVideoCall),
+            child: _buildTopBar(
+              callState,
+              remoteParticipant?.name ?? '',
+              isVideoCall,
+            ),
           ),
 
           // Bottom control bar
@@ -140,7 +146,10 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
                       callState.remoteVideoMuted
                           ? 'Camera is off'
                           : 'Waiting for video...',
-                      style: TextStyle(color: Colors.grey[400], fontSize: 16.sp),
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 16.sp,
+                      ),
                     ),
                   ],
                 ),
@@ -188,7 +197,8 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
     final remoteParticipant = callState.session.getRemoteParticipant(
       ref.read(currentUserProvider).value?.id ?? '',
     );
-    final isConnected = callState.remoteJoined ||
+    final isConnected =
+        callState.remoteJoined ||
         callState.session.status == CallStatus.accepted;
 
     return Container(
@@ -198,10 +208,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            const Color(0xFF1E88E5),
-            Colors.grey[900]!,
-          ],
+          colors: [const Color(0xFF1E88E5), Colors.grey[900]!],
         ),
       ),
       child: SafeArea(
@@ -228,7 +235,9 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
                     : null,
                 child: remoteParticipant?.avatar == null
                     ? Text(
-                        remoteName.isNotEmpty ? remoteName[0].toUpperCase() : '?',
+                        remoteName.isNotEmpty
+                            ? remoteName[0].toUpperCase()
+                            : '?',
                         style: TextStyle(
                           fontSize: 48.sp,
                           color: Colors.white,
@@ -254,28 +263,18 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.circle,
-                    size: 8.sp,
-                    color: Colors.green,
-                  ),
+                  Icon(Icons.circle, size: 8.sp, color: Colors.green),
                   SizedBox(width: 4.w),
                   Text(
                     'Connected',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.green,
-                    ),
+                    style: TextStyle(fontSize: 12.sp, color: Colors.green),
                   ),
                 ],
               )
             else
               Text(
                 'Connecting...',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: Colors.grey[400],
-                ),
+                style: TextStyle(fontSize: 12.sp, color: Colors.grey[400]),
               ),
           ],
         ),
@@ -295,10 +294,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Colors.black.withValues(alpha: 0.7),
-            Colors.transparent,
-          ],
+          colors: [Colors.black.withValues(alpha: 0.7), Colors.transparent],
         ),
       ),
       child: Row(
@@ -318,10 +314,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
               SizedBox(height: 4.h),
               CallTimer(
                 elapsedSeconds: callState.elapsedSeconds,
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14.sp,
-                ),
+                style: TextStyle(color: Colors.white70, fontSize: 14.sp),
               ),
             ],
           ),
@@ -354,10 +347,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
         gradient: LinearGradient(
           begin: Alignment.bottomCenter,
           end: Alignment.topCenter,
-          colors: [
-            Colors.black.withValues(alpha: 0.9),
-            Colors.transparent,
-          ],
+          colors: [Colors.black.withValues(alpha: 0.9), Colors.transparent],
         ),
       ),
       child: Row(
@@ -383,9 +373,7 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
             ),
           // Speaker toggle
           _buildControlButton(
-            icon: callState.isSpeakerOn
-                ? Icons.volume_up
-                : Icons.volume_down,
+            icon: callState.isSpeakerOn ? Icons.volume_up : Icons.volume_down,
             label: callState.isSpeakerOn ? 'Speaker' : 'Phone',
             isActive: callState.isSpeakerOn,
             onTap: () =>
@@ -419,23 +407,19 @@ class _InCallScreenState extends ConsumerState<InCallScreen> {
             width: 56.w,
             height: 56.w,
             decoration: BoxDecoration(
-              color: backgroundColor ??
-                  (isActive ? Colors.white.withValues(alpha: 0.2) : Colors.grey[700]),
+              color:
+                  backgroundColor ??
+                  (isActive
+                      ? Colors.white.withValues(alpha: 0.2)
+                      : Colors.grey[700]),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 28.sp,
-            ),
+            child: Icon(icon, color: Colors.white, size: 28.sp),
           ),
           SizedBox(height: 8.h),
           Text(
             label,
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 12.sp,
-            ),
+            style: TextStyle(color: Colors.white70, fontSize: 12.sp),
           ),
         ],
       ),

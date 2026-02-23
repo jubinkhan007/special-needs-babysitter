@@ -25,14 +25,12 @@ class SettingsItemTile extends StatelessWidget {
       child: Container(
         height: AppTokens.settingsTileHeight.h,
         padding: EdgeInsets.symmetric(
-            horizontal: AppTokens.settingsTileInternalHPad.w),
+          horizontal: AppTokens.settingsTileInternalHPad.w,
+        ),
         decoration: BoxDecoration(
           color: AppTokens.settingsTileBg,
           borderRadius: BorderRadius.circular(AppTokens.settingsTileRadius.r),
-          border: Border.all(
-            color: AppTokens.settingsTileBorder,
-            width: 1,
-          ),
+          border: Border.all(color: AppTokens.settingsTileBorder, width: 1),
         ),
         child: Row(
           children: [
@@ -42,12 +40,7 @@ class SettingsItemTile extends StatelessWidget {
               color: AppTokens.settingsIconColor,
             ),
             SizedBox(width: 16.w),
-            Expanded(
-              child: Text(
-                title,
-                style: AppTokens.settingsTitleStyle,
-              ),
-            ),
+            Expanded(child: Text(title, style: AppTokens.settingsTitleStyle)),
             ?trailing,
           ],
         ),
@@ -61,11 +54,7 @@ class SettingsSwitch extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
-  const SettingsSwitch({
-    super.key,
-    required this.value,
-    this.onChanged,
-  });
+  const SettingsSwitch({super.key, required this.value, this.onChanged});
 
   @override
   Widget build(BuildContext context) {

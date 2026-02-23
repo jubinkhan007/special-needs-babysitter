@@ -10,8 +10,9 @@ class CallAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: AppTokens.appBarHeight,
-      padding:
-          EdgeInsets.symmetric(horizontal: AppTokens.callHorizontalPadding),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppTokens.callHorizontalPadding,
+      ),
       alignment: Alignment.centerLeft, // Or center depending on details
       // Figma shows left icon, center title.
       child: Stack(

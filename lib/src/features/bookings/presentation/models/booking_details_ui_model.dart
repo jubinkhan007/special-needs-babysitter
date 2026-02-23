@@ -121,20 +121,20 @@ class BookingDetailsUiModel {
       platformFee: formatCurrency(details.platformFee ?? 0),
       discount: formatCurrency(details.discount ?? 0),
       estimatedTotalCost: formatCurrency(details.estimatedTotalCost),
-      actualMinutesWorked: details.actualMinutesWorked != null 
-          ? '${details.actualMinutesWorked} min' 
+      actualMinutesWorked: details.actualMinutesWorked != null
+          ? '${details.actualMinutesWorked} min'
           : null,
-      actualHoursWorked: details.actualHoursWorked != null 
-          ? '${details.actualHoursWorked!.toStringAsFixed(3)} hrs' 
+      actualHoursWorked: details.actualHoursWorked != null
+          ? '${details.actualHoursWorked!.toStringAsFixed(3)} hrs'
           : null,
-      actualPayout: details.actualPayout != null 
-          ? formatCurrency(details.actualPayout!) 
+      actualPayout: details.actualPayout != null
+          ? formatCurrency(details.actualPayout!)
           : null,
-      totalCharged: details.totalCharged != null 
-          ? formatCurrency(details.totalCharged!) 
+      totalCharged: details.totalCharged != null
+          ? formatCurrency(details.totalCharged!)
           : null,
       refundAmount: details.refundAmount != null && details.refundAmount! > 0
-          ? formatCurrency(details.refundAmount!) 
+          ? formatCurrency(details.refundAmount!)
           : null,
       paymentStatus: details.paymentStatus,
       clockInTimeActual: formatOptionalDateTime(details.clockInTimeActual),

@@ -47,7 +47,7 @@ class SitterDto {
   final List<String> skills;
   final List<String> ageRanges;
   final String?
-      address; // Nullable in example? No, string. But assume could be null.
+  address; // Nullable in example? No, string. But assume could be null.
   final double? distance; // Null in example
   final double avgRating;
   final double reliabilityScore; // 100 in example

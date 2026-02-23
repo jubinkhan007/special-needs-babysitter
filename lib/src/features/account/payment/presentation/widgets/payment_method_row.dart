@@ -39,12 +39,7 @@ class PaymentMethodRow extends StatelessWidget {
             ),
             SizedBox(width: 16.w),
             // Title
-            Expanded(
-              child: Text(
-                title,
-                style: AppTokens.methodTitleStyle,
-              ),
-            ),
+            Expanded(child: Text(title, style: AppTokens.methodTitleStyle)),
             // Plus icon
             Icon(
               Icons.add,
@@ -63,17 +58,14 @@ class TextIcon extends StatelessWidget {
   final String text;
   final TextStyle? style;
 
-  const TextIcon({
-    super.key,
-    required this.text,
-    this.style,
-  });
+  const TextIcon({super.key, required this.text, this.style});
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: style ??
+      style:
+          style ??
           TextStyle(
             fontFamily: AppTokens.fontFamily,
             fontSize: 10.sp,
@@ -90,12 +82,7 @@ class BrandIcon extends StatelessWidget {
   final Color? color;
   final double? size;
 
-  const BrandIcon({
-    super.key,
-    required this.icon,
-    this.color,
-    this.size,
-  });
+  const BrandIcon({super.key, required this.icon, this.color, this.size});
 
   @override
   Widget build(BuildContext context) {

@@ -38,35 +38,23 @@ class ChatMessageEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        conversationId,
-        senderUserId,
-        recipientUserId,
-        type,
-        textContent,
-        mediaUrl,
-        status,
-        deliveredAt,
-        readAt,
-        agoraMessageId,
-        syncedFromAgora,
-        createdAt,
-        updatedAt,
-      ];
+    id,
+    conversationId,
+    senderUserId,
+    recipientUserId,
+    type,
+    textContent,
+    mediaUrl,
+    status,
+    deliveredAt,
+    readAt,
+    agoraMessageId,
+    syncedFromAgora,
+    createdAt,
+    updatedAt,
+  ];
 }
 
-enum ChatMessageType {
-  text,
-  image,
-  video,
-  audio,
-  file,
-}
+enum ChatMessageType { text, image, video, audio, file }
 
-enum ChatMessageStatus {
-  sending,
-  sent,
-  delivered,
-  read,
-  failed,
-}
+enum ChatMessageStatus { sending, sent, delivered, read, failed }

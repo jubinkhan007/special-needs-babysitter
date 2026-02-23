@@ -51,15 +51,17 @@ class _JobPostStep3LocationScreenState
 
   // Design Constants
   static const _bgColor = Color(
-      0xFFEAF6FF); // Light sky background (User requested different bg for step 3)
+    0xFFEAF6FF,
+  ); // Light sky background (User requested different bg for step 3)
   static const _titleColor = Color(0xFF0B1736); // Deep navy
   static const _mutedText = Color(0xFF7C8A9A); // Grey
   static const _borderColor = Color(0xFFBFE3F7); // Light blue border
   static const _progressFill = Color(0xFF7FC9EE); // Active progress fill
 
   static const _primaryBtn = AppColors.primary; // Continue button
-  static const _iconBoxFill =
-      Color(0xFFD7F0FF); // Icon box fill (deeper light-blue)
+  static const _iconBoxFill = Color(
+    0xFFD7F0FF,
+  ); // Icon box fill (deeper light-blue)
   static const _iconBlue = Color(0xFF74BFEA); // Icon color
 
   @override
@@ -79,7 +81,8 @@ class _JobPostStep3LocationScreenState
     final zip = _zipCodeController.text.trim();
 
     if (street.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please fill in all required address fields first.'),
           backgroundColor: Colors.orange,
@@ -102,7 +105,8 @@ class _JobPostStep3LocationScreenState
 
       if (addresses.isEmpty) {
         setState(() => _isGeocoding = false);
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           const SnackBar(
             content: Text('Address could not be found. Please verify.'),
             backgroundColor: Colors.red,
@@ -114,31 +118,28 @@ class _JobPostStep3LocationScreenState
       final location = addresses.first;
       setState(() => _isGeocoding = false);
 
-      return {
-        'latitude': location.latitude,
-        'longitude': location.longitude,
-      };
+      return {'latitude': location.latitude, 'longitude': location.longitude};
     } on PlatformException catch (e) {
       // Handle specific geocoding errors
       if (!mounted) return null;
       setState(() => _isGeocoding = false);
-      
+
       String errorMessage = 'Unable to find location for this address.';
       if (e.code == 'IO_ERROR' && e.message?.contains('Code=2') == true) {
-        errorMessage = 'Address not found. Please check street, city, state, and zip code.';
+        errorMessage =
+            'Address not found. Please check street, city, state, and zip code.';
       }
-      
-      AppToast.show(context, 
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: Colors.red,
-        ),
+
+      AppToast.show(
+        context,
+        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
       );
       return null;
     } catch (e) {
       if (!mounted) return null;
       setState(() => _isGeocoding = false);
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         SnackBar(
           content: Text('Error: ${e.toString()}'),
           backgroundColor: Colors.red,
@@ -211,7 +212,6 @@ class _JobPostStep3LocationScreenState
                     ),
 
                     const SizedBox(height: 16), // Gap ~16-18
-
                     // Apt/Unit/Suite Field (optional)
                     _buildField(
                       controller: _unitController,
@@ -221,18 +221,12 @@ class _JobPostStep3LocationScreenState
                     const SizedBox(height: 16),
 
                     // City Field
-                    _buildField(
-                      controller: _cityController,
-                      hint: 'City*',
-                    ),
+                    _buildField(controller: _cityController, hint: 'City*'),
 
                     const SizedBox(height: 16),
 
                     // State Field
-                    _buildField(
-                      controller: _stateController,
-                      hint: 'State*',
-                    ),
+                    _buildField(controller: _stateController, hint: 'State*'),
 
                     const SizedBox(height: 16),
 
@@ -276,11 +270,7 @@ class _JobPostStep3LocationScreenState
           // Add a plus sign inside if needed, generic composition
           Positioned(
             top: 26,
-            child: Icon(
-              Icons.add,
-              size: 16,
-              color: _iconBlue,
-            ),
+            child: Icon(Icons.add, size: 16, color: _iconBlue),
           ),
         ],
       ),
@@ -319,8 +309,9 @@ class _JobPostStep3LocationScreenState
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 20), // inner padding: left 18–20, vertical 18–20
+            horizontal: 20,
+            vertical: 20,
+          ), // inner padding: left 18–20, vertical 18–20
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -339,7 +330,8 @@ class _JobPostStep3LocationScreenState
   }
 
   List<TextInputFormatter>? _numericInputFormatters(
-      TextInputType? keyboardType) {
+    TextInputType? keyboardType,
+  ) {
     if (keyboardType == TextInputType.number ||
         keyboardType == TextInputType.phone) {
       return [FilteringTextInputFormatter.digitsOnly];
@@ -352,10 +344,12 @@ class _JobPostStep3LocationScreenState
     if (_streetAddressController.text.isEmpty ||
         _cityController.text.isEmpty ||
         _zipCodeController.text.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
-          content:
-              Text('Please fill in all required fields (Street, City, Zip).'),
+          content: Text(
+            'Please fill in all required fields (Street, City, Zip).',
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -365,7 +359,8 @@ class _JobPostStep3LocationScreenState
     // Validate Zip Code (must be exactly 5 digits)
     final zipRegex = RegExp(r'^\d{5}$');
     if (!zipRegex.hasMatch(_zipCodeController.text)) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please enter a valid 5-digit Zip Code.'),
           backgroundColor: Colors.orange,
@@ -381,7 +376,9 @@ class _JobPostStep3LocationScreenState
     }
 
     // Update controller with real coordinates
-    ref.read(jobPostControllerProvider.notifier).updateLocation(
+    ref
+        .read(jobPostControllerProvider.notifier)
+        .updateLocation(
           streetAddress: _streetAddressController.text,
           aptUnit: _unitController.text,
           city: _cityController.text,
@@ -398,8 +395,12 @@ class _JobPostStep3LocationScreenState
 
   Widget _buildBottomBar() {
     return Container(
-      padding:
-          const EdgeInsets.fromLTRB(24, 0, 24, 20), // Bottom padding: ~18–22
+      padding: const EdgeInsets.fromLTRB(
+        24,
+        0,
+        24,
+        20,
+      ), // Bottom padding: ~18–22
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -438,8 +439,9 @@ class _JobPostStep3LocationScreenState
                         height: 20,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.textOnButton,
+                          ),
                         ),
                       )
                     : const Text(

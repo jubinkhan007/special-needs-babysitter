@@ -6,7 +6,7 @@ class CallControlButton extends StatelessWidget {
   final bool isDestructive; // for End Call button
   final VoidCallback onTap;
   final bool
-      isActive; // e.g. mic on/off state visual if needed (usually changing icon or bg)
+  isActive; // e.g. mic on/off state visual if needed (usually changing icon or bg)
 
   const CallControlButton({
     super.key,

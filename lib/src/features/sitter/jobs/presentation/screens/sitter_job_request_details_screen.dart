@@ -34,35 +34,37 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
     final controllerState = ref.watch(jobRequestControllerProvider);
 
     // Listen to controller state changes
-    ref.listen<AsyncValue<void>>(
-      jobRequestControllerProvider,
-      (previous, next) {
-        next.whenOrNull(
-          data: (_) {
-            // Success - show message and navigate back
-            AppToast.show(context, 
-              const SnackBar(
-                content: Text('Action completed successfully'),
-                backgroundColor: AppColors.success,
-              ),
-            );
-            // Invalidate the job applications lists to refresh
-            ref.invalidate(sitterJobApplicationsProvider);
-            ref.invalidate(sitterJobRequestsProvider);
-            context.pop();
-          },
-          error: (error, stack) {
-            // Error - show error message
-            AppToast.show(context, 
-              SnackBar(
-                content: Text(error.toString().replaceFirst('Exception: ', '')),
-                backgroundColor: AppColors.error,
-              ),
-            );
-          },
-        );
-      },
-    );
+    ref.listen<AsyncValue<void>>(jobRequestControllerProvider, (
+      previous,
+      next,
+    ) {
+      next.whenOrNull(
+        data: (_) {
+          // Success - show message and navigate back
+          AppToast.show(
+            context,
+            const SnackBar(
+              content: Text('Action completed successfully'),
+              backgroundColor: AppColors.success,
+            ),
+          );
+          // Invalidate the job applications lists to refresh
+          ref.invalidate(sitterJobApplicationsProvider);
+          ref.invalidate(sitterJobRequestsProvider);
+          context.pop();
+        },
+        error: (error, stack) {
+          // Error - show error message
+          AppToast.show(
+            context,
+            SnackBar(
+              content: Text(error.toString().replaceFirst('Exception: ', '')),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        },
+      );
+    });
 
     return jobDetailsAsync.when(
       data: (jobDetails) =>
@@ -81,8 +83,7 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.error_outline,
-                    size: 64.w, color: AppColors.error),
+                Icon(Icons.error_outline, size: 64.w, color: AppColors.error),
                 SizedBox(height: 16.h),
                 Text(
                   'Error loading job request',
@@ -116,8 +117,11 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon:
-            Icon(Icons.arrow_back, color: const Color(0xFF667085), size: 24.w),
+        icon: Icon(
+          Icons.arrow_back,
+          color: const Color(0xFF667085),
+          size: 24.w,
+        ),
         onPressed: () => context.pop(),
       ),
       centerTitle: true,
@@ -132,8 +136,11 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.headset_mic_outlined,
-              color: const Color(0xFF667085), size: 24.w),
+          icon: Icon(
+            Icons.headset_mic_outlined,
+            color: const Color(0xFF667085),
+            size: 24.w,
+          ),
           onPressed: () {
             // TODO: Open support chat
           },
@@ -142,8 +149,12 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref,
-      JobRequestDetailsModel jobDetails, AsyncValue<void> controllerState) {
+  Widget _buildContent(
+    BuildContext context,
+    WidgetRef ref,
+    JobRequestDetailsModel jobDetails,
+    AsyncValue<void> controllerState,
+  ) {
     final isLoading = controllerState.isLoading;
     final savedJobsState = ref.watch(savedJobsControllerProvider);
     final jobId = jobDetails.id;
@@ -153,17 +164,22 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
         : applicationId;
 
     // Determine effective application type (prefer passed param over model default if model is 'invited')
-    final effectiveType = (initialApplicationType != null &&
+    final effectiveType =
+        (initialApplicationType != null &&
             jobDetails.applicationType.toLowerCase() == 'invited')
         ? initialApplicationType!
         : jobDetails.applicationType;
-    final statusSource = (initialApplicationStatus != null &&
+    final statusSource =
+        (initialApplicationStatus != null &&
             initialApplicationStatus!.trim().isNotEmpty)
         ? initialApplicationStatus!.trim()
         : '';
-    final displayStatus = statusSource.isNotEmpty ? statusSource : effectiveType;
+    final displayStatus = statusSource.isNotEmpty
+        ? statusSource
+        : effectiveType;
     final displayStatusLower = displayStatus.toLowerCase();
-    final isActionable = displayStatusLower == 'invited' ||
+    final isActionable =
+        displayStatusLower == 'invited' ||
         displayStatusLower == 'pending' ||
         displayStatusLower == 'direct_booking';
     final statusLabel = _formatStatusLabel(displayStatus);
@@ -203,31 +219,35 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                                 .read(savedJobsControllerProvider.notifier)
                                 .toggleSaved(jobId)
                                 .then((isSaved) {
-                              if (!context.mounted) return;
-                              AppToast.show(
-                                context,
-                                SnackBar(
-                                  content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                                  backgroundColor: AppColors.success,
-                                ),
-                              );
-                            }).catchError((error) {
-                              if (!context.mounted) return;
-                              AppToast.show(
-                                context,
-                                SnackBar(
-                                  content: Text(error
-                                      .toString()
-                                      .replaceFirst('Exception: ', '')),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            });
+                                  if (!context.mounted) return;
+                                  AppToast.show(
+                                    context,
+                                    SnackBar(
+                                      content: Text(
+                                        isSaved ? 'Job saved' : 'Job unsaved',
+                                      ),
+                                      backgroundColor: AppColors.success,
+                                    ),
+                                  );
+                                })
+                                .catchError((error) {
+                                  if (!context.mounted) return;
+                                  AppToast.show(
+                                    context,
+                                    SnackBar(
+                                      content: Text(
+                                        error.toString().replaceFirst(
+                                          'Exception: ',
+                                          '',
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                });
                           },
                           child: Icon(
-                            isSaved
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
+                            isSaved ? Icons.bookmark : Icons.bookmark_border,
                             color: const Color(0xFF667085),
                             size: 24.w,
                           ),
@@ -266,46 +286,51 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                             ),
                           ),
                           SizedBox(height: 12.h),
-                          ...jobDetails.children.map((child) => Padding(
-                                padding: EdgeInsets.only(bottom: 12.h),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(10.w),
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFF2F4F7),
-                                        shape: BoxShape.circle,
+                          ...jobDetails.children.map(
+                            (child) => Padding(
+                              padding: EdgeInsets.only(bottom: 12.h),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10.w),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFFF2F4F7),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.person_outline,
+                                      size: 20.w,
+                                      color: const Color(0xFF667085),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        child.firstName,
+                                        style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xFF344054),
+                                          fontFamily: 'Inter',
+                                        ),
                                       ),
-                                      child: Icon(Icons.person_outline,
-                                          size: 20.w,
-                                          color: const Color(0xFF667085)),
-                                    ),
-                                    SizedBox(width: 12.w),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          child.firstName,
-                                          style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w600,
-                                            color: const Color(0xFF344054),
-                                            fontFamily: 'Inter',
-                                          ),
+                                      Text(
+                                        '${child.age} years old',
+                                        style: TextStyle(
+                                          fontSize: 12.sp,
+                                          color: const Color(0xFF667085),
+                                          fontFamily: 'Inter',
                                         ),
-                                        Text(
-                                          '${child.age} years old',
-                                          style: TextStyle(
-                                            fontSize: 12.sp,
-                                            color: const Color(0xFF667085),
-                                            fontFamily: 'Inter',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -333,7 +358,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                         KeyValueRow(
                           label: 'Date',
                           value: _formatDateRange(
-                              jobDetails.startDate, jobDetails.endDate),
+                            jobDetails.startDate,
+                            jobDetails.endDate,
+                          ),
                         ),
                         KeyValueRow(
                           label: 'Time',
@@ -400,14 +427,19 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                             SizedBox(width: 8.w),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w, vertical: 4.h),
+                                horizontal: 10.w,
+                                vertical: 4.h,
+                              ),
                               decoration: BoxDecoration(
-                                color: _getStatusColor(displayStatus)
-                                    .withValues(alpha: 0.1),
+                                color: _getStatusColor(
+                                  displayStatus,
+                                ).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(16.r),
                               ),
                               child: Text(
-                                statusLabel.isNotEmpty ? statusLabel : 'Invited',
+                                statusLabel.isNotEmpty
+                                    ? statusLabel
+                                    : 'Invited',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
@@ -461,8 +493,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                         minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.textOnButton,
-                        disabledBackgroundColor:
-                            AppColors.primary.withValues(alpha: 0.6),
+                        disabledBackgroundColor: AppColors.primary.withValues(
+                          alpha: 0.6,
+                        ),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -474,8 +507,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               height: 20.h,
                               child: const CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.textOnButton,
+                                ),
                               ),
                             )
                           : Text(
@@ -499,8 +533,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                                 builder: (context) => DeclineReasonDialog(
                                   onSubmit: (reason, otherReason) async {
                                     await ref
-                                        .read(jobRequestControllerProvider
-                                            .notifier)
+                                        .read(
+                                          jobRequestControllerProvider.notifier,
+                                        )
                                         .declineJobInvitation(
                                           actionApplicationId,
                                           applicationType: effectiveType,
@@ -515,8 +550,8 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                         minimumSize: Size(double.infinity, 48.h),
                         backgroundColor: AppColors.buttonDark,
                         foregroundColor: AppColors.textOnButton,
-                        disabledBackgroundColor:
-                            AppColors.buttonDark.withValues(alpha: 0.6),
+                        disabledBackgroundColor: AppColors.buttonDark
+                            .withValues(alpha: 0.6),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -528,8 +563,9 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                               height: 20.h,
                               child: const CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.textOnButton,
+                                ),
                               ),
                             )
                           : Text(
@@ -564,11 +600,11 @@ class SitterJobRequestDetailsScreen extends ConsumerWidget {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(displayStatus).withValues(alpha: 0.1),
+                    color: _getStatusColor(
+                      displayStatus,
+                    ).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
-                    border: Border.all(
-                      color: _getStatusColor(displayStatus),
-                    ),
+                    border: Border.all(color: _getStatusColor(displayStatus)),
                   ),
                   child: Text(
                     statusLabel.isNotEmpty

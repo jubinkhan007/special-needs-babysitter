@@ -7,9 +7,8 @@ import 'package:babysitter_app/src/packages/data/mappers/auth_mappers.dart';
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource _remoteDataSource;
 
-  ProfileRepositoryImpl({
-    required ProfileRemoteDataSource remoteDataSource,
-  }) : _remoteDataSource = remoteDataSource;
+  ProfileRepositoryImpl({required ProfileRemoteDataSource remoteDataSource})
+    : _remoteDataSource = remoteDataSource;
 
   @override
   Future<User> getMe() async {

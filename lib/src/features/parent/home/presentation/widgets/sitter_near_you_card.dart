@@ -249,14 +249,17 @@ class SitterNearYouCard extends StatelessWidget {
                   },
                   style: ButtonStyle(
                     backgroundColor: const WidgetStatePropertyAll(
-                        Color(0xFF86C9E8)), // Figma
+                      Color(0xFF86C9E8),
+                    ), // Figma
                     elevation: const WidgetStatePropertyAll(0),
                     shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     padding: const WidgetStatePropertyAll(
-                        EdgeInsets.zero), // ✅ important
+                      EdgeInsets.zero,
+                    ), // ✅ important
                     minimumSize: const WidgetStatePropertyAll(Size(140, 40)),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,

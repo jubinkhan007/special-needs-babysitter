@@ -24,8 +24,9 @@ class FilterTextField extends StatelessWidget {
       child: Container(
         height: AppTokens.sheetFieldHeight,
         padding: const EdgeInsets.only(
-            left: AppTokens.sheetFieldPadding,
-            right: 12), // slightly tighter on right for icon
+          left: AppTokens.sheetFieldPadding,
+          right: 12,
+        ), // slightly tighter on right for icon
         decoration: BoxDecoration(
           color: AppTokens.sheetFieldBg,
           borderRadius: BorderRadius.circular(AppTokens.sheetFieldRadius),
@@ -43,11 +44,7 @@ class FilterTextField extends StatelessWidget {
               ),
             ),
             if (icon != null)
-              Icon(
-                icon,
-                size: 20,
-                color: AppTokens.sheetFieldIconColor,
-              ),
+              Icon(icon, size: 20, color: AppTokens.sheetFieldIconColor),
           ],
         ),
       ),

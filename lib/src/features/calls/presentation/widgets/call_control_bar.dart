@@ -35,8 +35,9 @@ class CallControlBar extends StatelessWidget {
     return Container(
       width: ScreenUtil().screenWidth * AppTokens.callControlsBarWidthFactor,
       height: AppTokens.callControlsBarHeight,
-      padding:
-          EdgeInsets.symmetric(horizontal: AppTokens.callControlsBarPadding),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppTokens.callControlsBarPadding,
+      ),
       decoration: BoxDecoration(
         color: backgroundColor ?? AppTokens.callControlBarBg,
         borderRadius: BorderRadius.circular(AppTokens.callControlsBarRadius),

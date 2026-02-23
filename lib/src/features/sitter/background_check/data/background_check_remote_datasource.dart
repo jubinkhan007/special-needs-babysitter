@@ -16,7 +16,8 @@ class BackgroundCheckRemoteDataSource {
   }) async {
     try {
       debugPrint(
-          'DEBUG: Requesting presigned URL with fileName=$fileName, contentType=$contentType');
+        'DEBUG: Requesting presigned URL with fileName=$fileName, contentType=$contentType',
+      );
       final response = await _dio.post(
         '/uploads/presign',
         data: {
@@ -40,7 +41,10 @@ class BackgroundCheckRemoteDataSource {
 
   /// Uploads binary file to the presigned URL.
   Future<void> uploadFileToUrl(
-      String url, File file, String contentType) async {
+    String url,
+    File file,
+    String contentType,
+  ) async {
     final len = await file.length();
 
     // Create a separate Dio instance for S3 upload (no auth headers)
@@ -66,10 +70,7 @@ class BackgroundCheckRemoteDataSource {
   }) async {
     await _dio.post(
       '/sitters/me/background-check/identity',
-      data: {
-        'documentType': documentType,
-        'fileUrl': fileUrl,
-      },
+      data: {'documentType': documentType, 'fileUrl': fileUrl},
     );
   }
 
@@ -106,10 +107,7 @@ class PresignedUrlResponse {
   final String uploadUrl;
   final String publicUrl;
 
-  PresignedUrlResponse({
-    required this.uploadUrl,
-    required this.publicUrl,
-  });
+  PresignedUrlResponse({required this.uploadUrl, required this.publicUrl});
 
   factory PresignedUrlResponse.fromJson(Map<String, dynamic> json) {
     return PresignedUrlResponse(

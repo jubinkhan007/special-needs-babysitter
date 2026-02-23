@@ -56,7 +56,9 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 1, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 1,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -80,10 +82,12 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                             : null,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF101828).withValues(alpha: 0.05),
+                            color: const Color(
+                              0xFF101828,
+                            ).withValues(alpha: 0.05),
                             blurRadius: 16,
                             offset: const Offset(0, 4),
-                          )
+                          ),
                         ],
                       ),
                       child: photoPath == null
@@ -123,8 +127,11 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                       ),
                       SizedBox(width: 8),
                       // Info icon beside title
-                      Icon(Icons.info_outline,
-                          size: 20, color: Color(0xFF98A2B3)),
+                      Icon(
+                        Icons.info_outline,
+                        size: 20,
+                        color: Color(0xFF98A2B3),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -138,8 +145,9 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color:
-                              Color(0xFF475467), // Slightly lighter than black
+                          color: Color(
+                            0xFF475467,
+                          ), // Slightly lighter than black
                           height: 1.5,
                           fontFamily: 'Inter',
                         ),
@@ -150,8 +158,11 @@ class _Step1UploadPhotoState extends ConsumerState<Step1UploadPhoto> {
                           ),
                           WidgetSpan(
                             alignment: PlaceholderAlignment.middle,
-                            child: Icon(Icons.info_outline,
-                                size: 16, color: Color(0xFF98A2B3)),
+                            child: Icon(
+                              Icons.info_outline,
+                              size: 16,
+                              color: Color(0xFF98A2B3),
+                            ),
                           ),
                         ],
                       ),

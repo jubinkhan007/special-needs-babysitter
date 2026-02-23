@@ -42,10 +42,7 @@ class BookingTopBar extends StatelessWidget implements PreferredSizeWidget {
               height: 24,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: BookingUiTokens.iconGrey,
-                  width: 1.5,
-                ),
+                border: Border.all(color: BookingUiTokens.iconGrey, width: 1.5),
               ),
               child: const Icon(
                 Icons.question_mark_rounded,

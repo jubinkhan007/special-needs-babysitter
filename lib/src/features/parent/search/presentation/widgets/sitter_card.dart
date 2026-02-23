@@ -26,8 +26,9 @@ class SitterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(AppUiTokens.cardPadding),
-      margin:
-          const EdgeInsets.symmetric(horizontal: AppUiTokens.horizontalPadding),
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppUiTokens.horizontalPadding,
+      ),
       decoration: BoxDecoration(
         color: AppUiTokens.cardBackground,
         borderRadius: BorderRadius.circular(AppUiTokens.radiusLarge),
@@ -88,7 +89,7 @@ class SitterCard extends StatelessWidget {
                             color: AppUiTokens.verifiedBlue,
                             size: AppUiTokens.verifiedIconSize,
                           ),
-                        ]
+                        ],
                       ],
                     ),
                     const SizedBox(height: 4),
@@ -121,10 +122,7 @@ class SitterCard extends StatelessWidget {
                     size: AppUiTokens.iconSizeMedium,
                   ),
                   const SizedBox(width: 4),
-                  Text(
-                    sitter.rating.toString(),
-                    style: AppUiTokens.cardRating,
-                  ),
+                  Text(sitter.rating.toString(), style: AppUiTokens.cardRating),
                 ],
               ),
               const SizedBox(width: 12),
@@ -134,7 +132,7 @@ class SitterCard extends StatelessWidget {
                     ? Icons.bookmark_rounded
                     : Icons.bookmark_border_rounded,
                 onTap: onBookmarkTap ?? () {},
-              )
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -182,10 +180,7 @@ class SitterCard extends StatelessWidget {
                       text: '\$${sitter.hourlyRate.toInt()}',
                       style: AppUiTokens.priceValue,
                     ),
-                    const TextSpan(
-                      text: '/hr',
-                      style: AppUiTokens.priceUnit,
-                    ),
+                    const TextSpan(text: '/hr', style: AppUiTokens.priceUnit),
                   ],
                 ),
               ),

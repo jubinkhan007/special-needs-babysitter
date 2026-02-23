@@ -29,17 +29,16 @@ class IssueTypeDropdown extends StatelessWidget {
         child: DropdownButton<String>(
           value: value,
           dropdownColor: AppTokens.formFieldBg,
-          icon:
-              const Icon(Icons.keyboard_arrow_down, color: AppTokens.iconGrey),
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: AppTokens.iconGrey,
+          ),
           hint: Text(hintText, style: AppTokens.formHintStyle),
           isExpanded: true,
           style: AppTokens.formTextStyle,
           onChanged: onChanged,
           items: items.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
+            return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
         ),
       ),

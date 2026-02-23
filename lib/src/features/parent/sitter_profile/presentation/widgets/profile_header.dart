@@ -187,43 +187,57 @@ class SitterProfileHeaderExact extends StatelessWidget {
                   height: avatarSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border:
-                        Border.all(color: Colors.white, width: avatarBorder),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: avatarBorder,
+                    ),
                   ),
                   child: ClipOval(
                     child: avatarAsset.isEmpty
                         ? Container(
                             color: Colors.grey[200],
-                            child: const Icon(Icons.person_rounded,
-                                color: Colors.grey, size: 48),
+                            child: const Icon(
+                              Icons.person_rounded,
+                              color: Colors.grey,
+                              size: 48,
+                            ),
                           )
                         : avatarAsset.startsWith('http')
-                            ? Image.network(
-                                avatarAsset,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Container(
+                        ? Image.network(
+                            avatarAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
                                   color: Colors.grey[200],
-                                  child: const Icon(Icons.person_rounded,
-                                      color: Colors.grey, size: 48),
+                                  child: const Icon(
+                                    Icons.person_rounded,
+                                    color: Colors.grey,
+                                    size: 48,
+                                  ),
                                 ),
-                              )
-                            : (avatarAsset.trim().isNotEmpty
-                                ? Image.asset(
-                                    avatarAsset,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) =>
-                                        Container(
-                                      color: Colors.grey[200],
-                                      child: const Icon(Icons.person_rounded,
-                                          color: Colors.grey, size: 48),
-                                    ),
-                                  )
-                                : Container(
-                                    color: Colors.grey[200],
-                                    child: const Icon(Icons.person_rounded,
-                                        color: Colors.grey, size: 48),
-                                  )),
+                          )
+                        : (avatarAsset.trim().isNotEmpty
+                              ? Image.asset(
+                                  avatarAsset,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                        color: Colors.grey[200],
+                                        child: const Icon(
+                                          Icons.person_rounded,
+                                          color: Colors.grey,
+                                          size: 48,
+                                        ),
+                                      ),
+                                )
+                              : Container(
+                                  color: Colors.grey[200],
+                                  child: const Icon(
+                                    Icons.person_rounded,
+                                    color: Colors.grey,
+                                    size: 48,
+                                  ),
+                                )),
                   ),
                 ),
                 // Verified badge (rosette)
@@ -269,8 +283,11 @@ class SitterProfileHeaderExact extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on_rounded,
-                              size: 16, color: _accentBlue),
+                          const Icon(
+                            Icons.location_on_rounded,
+                            size: 16,
+                            color: _accentBlue,
+                          ),
                           const SizedBox(width: 4),
                           Flexible(
                             child: Text(
@@ -296,8 +313,11 @@ class SitterProfileHeaderExact extends StatelessWidget {
                       onTap: onTapRating,
                       child: Row(
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: _starYellow, size: 20),
+                          const Icon(
+                            Icons.star_rounded,
+                            color: _starYellow,
+                            size: 20,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             ratingText,
@@ -367,7 +387,9 @@ class _TopIcon extends StatelessWidget {
       child: SizedBox(
         width: 44,
         height: 44,
-        child: Center(child: Icon(icon, size: size, color: color)),
+        child: Center(
+          child: Icon(icon, size: size, color: color),
+        ),
       ),
     );
   }
@@ -421,8 +443,10 @@ class _RosettePainter extends CustomPainter {
       final isOuter = i.isEven;
       final r = isOuter ? rOuter : rInner;
       final t = (math.pi * 2 * i) / (petals * 2);
-      final p =
-          Offset(center.dx + r * math.cos(t), center.dy + r * math.sin(t));
+      final p = Offset(
+        center.dx + r * math.cos(t),
+        center.dy + r * math.sin(t),
+      );
       if (i == 0) {
         path.moveTo(p.dx, p.dy);
       } else {

@@ -62,16 +62,10 @@ class PaymentMethodTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    title,
-                    style: BookingUiTokens.itemTitle,
-                  ),
+                  Text(title, style: BookingUiTokens.itemTitle),
                   if (subtitle != null && subtitle!.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Text(
-                      subtitle!,
-                      style: BookingUiTokens.itemSubtitle,
-                    ),
+                    Text(subtitle!, style: BookingUiTokens.itemSubtitle),
                   ],
                 ],
               ),

@@ -14,11 +14,11 @@ class DecimalInputFormatter extends TextInputFormatter {
     if (newValue.text.isEmpty) {
       return newValue;
     }
-    
+
     // Only allow digits and at most one decimal point
     final buffer = StringBuffer();
     bool hasDecimal = false;
-    
+
     for (int i = 0; i < newValue.text.length; i++) {
       final char = newValue.text[i];
       if (char == '.') {
@@ -32,15 +32,15 @@ class DecimalInputFormatter extends TextInputFormatter {
       }
       // Skip all other characters (letters, symbols, etc.)
     }
-    
+
     final newText = buffer.toString();
-    
+
     // Adjust cursor position if needed
     int newOffset = newValue.selection.end;
     if (newOffset > newText.length) {
       newOffset = newText.length;
     }
-    
+
     return TextEditingValue(
       text: newText,
       selection: TextSelection.collapsed(offset: newOffset),
@@ -79,7 +79,8 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
   // Character limits
   static const int _maxPlanNameLength = 50;
   static const int _maxTypeLength = 50;
-  static const int _maxCoverageLength = 12; // For numeric values like 999999999.99
+  static const int _maxCoverageLength =
+      12; // For numeric values like 999999999.99
   static const int _maxPremiumLength = 12;
   static const int _maxDescriptionLength = 500;
 
@@ -89,12 +90,15 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
     final p = widget.initialPlan;
     _planNameController = TextEditingController(text: p?.planName ?? '');
     _typeController = TextEditingController(text: p?.insuranceType ?? '');
-    _coverageController =
-        TextEditingController(text: p?.coverageAmount.toString() ?? '');
-    _monthlyPremController =
-        TextEditingController(text: p?.monthlyPremium.toString() ?? '');
-    _yearlyPremController =
-        TextEditingController(text: p?.yearlyPremium.toString() ?? '');
+    _coverageController = TextEditingController(
+      text: p?.coverageAmount.toString() ?? '',
+    );
+    _monthlyPremController = TextEditingController(
+      text: p?.monthlyPremium.toString() ?? '',
+    );
+    _yearlyPremController = TextEditingController(
+      text: p?.yearlyPremium.toString() ?? '',
+    );
     _descriptionController = TextEditingController(text: p?.description ?? '');
     _isActive = p?.isActive ?? true;
   }
@@ -170,20 +174,20 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                 child: Column(
                   children: [
                     _buildField(
-                      _planNameController, 
+                      _planNameController,
                       'Insurance Plan Name*',
                       maxLength: _maxPlanNameLength,
                       minLength: 2,
                     ),
                     const SizedBox(height: 12),
                     _buildField(
-                      _typeController, 
+                      _typeController,
                       'Insurance Type',
                       maxLength: _maxTypeLength,
                     ),
                     const SizedBox(height: 12),
                     _buildField(
-                      _coverageController, 
+                      _coverageController,
                       'Coverage Amount*',
                       isNum: true,
                       maxLength: _maxCoverageLength,
@@ -193,27 +197,29 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                     Row(
                       children: [
                         Expanded(
-                            child: _buildField(
-                              _monthlyPremController, 
-                              'Monthly Premium*',
-                              isNum: true,
-                              maxLength: _maxPremiumLength,
-                              minValue: 0,
-                            )),
+                          child: _buildField(
+                            _monthlyPremController,
+                            'Monthly Premium*',
+                            isNum: true,
+                            maxLength: _maxPremiumLength,
+                            minValue: 0,
+                          ),
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
-                            child: _buildField(
-                              _yearlyPremController, 
-                              'Yearly Premium*',
-                              isNum: true,
-                              maxLength: _maxPremiumLength,
-                              minValue: 0,
-                            )),
+                          child: _buildField(
+                            _yearlyPremController,
+                            'Yearly Premium*',
+                            isNum: true,
+                            maxLength: _maxPremiumLength,
+                            minValue: 0,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     _buildField(
-                      _descriptionController, 
+                      _descriptionController,
                       'Description / Benefits',
                       maxLines: 4,
                       maxLength: _maxDescriptionLength,
@@ -226,22 +232,27 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                       children: [
                         const Text(
                           'Status',
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xFF344054)),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFF344054),
+                          ),
                         ),
                         const Spacer(),
                         const Text(
                           'Inactive',
-                          style:
-                              TextStyle(fontSize: 14, color: Color(0xFF667085)),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF667085),
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Switch(
                           value: _isActive,
                           onChanged: (v) => setState(() => _isActive = v),
                           activeThumbColor: Colors.white,
-                          activeTrackColor:
-                              const Color(0xFF75CFF0), // Match Save button blue
+                          activeTrackColor: const Color(
+                            0xFF75CFF0,
+                          ), // Match Save button blue
                           inactiveThumbColor: Colors.white,
                           inactiveTrackColor: const Color(0xFFD0D5DD),
                         ),
@@ -249,12 +260,13 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                         const Text(
                           'Active',
                           style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF344054),
-                              fontWeight: FontWeight.w500),
+                            fontSize: 14,
+                            color: Color(0xFF344054),
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -273,14 +285,18 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       side: const BorderSide(color: Color(0xFFD0D5DD)),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       backgroundColor: Colors.white,
                     ),
-                    child: const Text('Cancel',
-                        style: TextStyle(
-                            color: Color(0xFF344054),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600)),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Color(0xFF344054),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -289,7 +305,8 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(
-                          0xFF75CFF0), // Light blue from design screenshot
+                        0xFF75CFF0,
+                      ), // Light blue from design screenshot
                       foregroundColor: AppColors.textOnButton,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -297,9 +314,13 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                       ),
                       elevation: 0,
                     ),
-                    child: const Text('Save',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600)),
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -311,9 +332,9 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
   }
 
   Widget _buildField(
-    TextEditingController controller, 
+    TextEditingController controller,
     String hint, {
-    bool isNum = false, 
+    bool isNum = false,
     int maxLines = 1,
     int? maxLength,
     int? minLength,
@@ -353,8 +374,10 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
             style: const TextStyle(color: Color(0xFF101828), fontSize: 16),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle:
-                  const TextStyle(color: Color(0xFF667085), fontSize: 16),
+              hintStyle: const TextStyle(
+                color: Color(0xFF667085),
+                fontSize: 16,
+              ),
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
@@ -369,8 +392,10 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: AppColors.secondary),
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 10,
+              ),
               isDense: true,
               counterText: '', // Hide default counter
             ),
@@ -412,7 +437,8 @@ class _EditInsurancePlanDialogState extends State<EditInsurancePlanDialog> {
                   style: TextStyle(
                     fontSize: 12,
                     color: currentLength >= maxLength
-                        ? AppColors.error // Red at limit
+                        ? AppColors
+                              .error // Red at limit
                         : const Color(0xFF667085), // Gray normally
                   ),
                 ),

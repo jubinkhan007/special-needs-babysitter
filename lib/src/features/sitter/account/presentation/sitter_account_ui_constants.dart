@@ -17,28 +17,28 @@ class SitterAccountUI {
 
   // Text Styles
   static TextStyle get titleStyle => const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: textDark,
-      );
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: textDark,
+  );
 
   static TextStyle get subtitleStyle => const TextStyle(
-        fontSize: 14,
-        color: textGray,
-        fontWeight: FontWeight.w400,
-      );
+    fontSize: 14,
+    color: textGray,
+    fontWeight: FontWeight.w400,
+  );
 
   // Box Decoration Helper
   static BoxDecoration get cardDecoration => BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(cardRadius),
-        boxShadow: const [
-          BoxShadow(
-            color: cardShadow,
-            offset: Offset(0, 4),
-            blurRadius: 16,
-            spreadRadius: 0,
-          ),
-        ],
-      );
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(cardRadius),
+    boxShadow: const [
+      BoxShadow(
+        color: cardShadow,
+        offset: Offset(0, 4),
+        blurRadius: 16,
+        spreadRadius: 0,
+      ),
+    ],
+  );
 }

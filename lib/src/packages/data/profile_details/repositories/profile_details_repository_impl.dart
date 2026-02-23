@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
   final ProfileDetailsRemoteDataSource _remoteDataSource;
   final AccountRepository
-      _accountRepository; // Reuse for getting basic user info
+  _accountRepository; // Reuse for getting basic user info
 
   ProfileDetailsRepositoryImpl(this._remoteDataSource, this._accountRepository);
 
@@ -50,62 +50,64 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
               c['specialNeedsDiagnosis'] ?? c['special_needs_diagnosis'] ?? '',
           personalityDescription:
               c['personalityDescription'] ?? c['personality_description'] ?? '',
-          medicationDietaryNeeds: c['medicationDietaryNeeds'] ??
+          medicationDietaryNeeds:
+              c['medicationDietaryNeeds'] ??
               c['medication_dietary_needs'] ??
               '',
           routine: c['routine'] ?? '',
           hasAllergies: c['hasAllergies'] ?? c['has_allergies'] ?? false,
           allergyTypes: (c['allergyTypes'] is List)
               ? (c['allergyTypes'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
               : (c['allergy_types'] is List)
-                  ? (c['allergy_types'] as List)
-                      .where((e) => e != null)
-                      .map((e) => e.toString())
-                      .toList()
-                  : [],
+              ? (c['allergy_types'] as List)
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
+              : [],
           hasTriggers: c['hasTriggers'] ?? c['has_triggers'] ?? false,
           triggerTypes: (c['triggerTypes'] is List)
               ? (c['triggerTypes'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
               : (c['trigger_types'] is List)
-                  ? (c['trigger_types'] as List)
-                      .where((e) => e != null)
-                      .map((e) => e.toString())
-                      .toList()
-                  : [],
+              ? (c['trigger_types'] as List)
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
+              : [],
           calmingMethods: c['calmingMethods'] ?? c['calming_methods'] ?? '',
           triggers: c['triggers'] ?? '',
           transportationModes: (c['transportationModes'] is List)
               ? (c['transportationModes'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
               : (c['transportation_modes'] is List)
-                  ? (c['transportation_modes'] as List)
-                      .where((e) => e != null)
-                      .map((e) => e.toString())
-                      .toList()
-                  : [],
+              ? (c['transportation_modes'] as List)
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
+              : [],
           equipmentSafety: (c['equipmentSafety'] is List)
               ? (c['equipmentSafety'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
               : (c['equipment_safety'] is List)
-                  ? (c['equipment_safety'] as List)
-                      .where((e) => e != null)
-                      .map((e) => e.toString())
-                      .toList()
-                  : [],
+              ? (c['equipment_safety'] as List)
+                    .where((e) => e != null)
+                    .map((e) => e.toString())
+                    .toList()
+              : [],
           needsDropoff: c['needsDropoff'] ?? c['needs_dropoff'] ?? false,
           pickupLocation: c['pickupLocation'] ?? c['pickup_location'] ?? '',
           dropoffLocation: c['dropoffLocation'] ?? c['dropoff_location'] ?? '',
-          transportSpecialInstructions: c['transportSpecialInstructions'] ??
+          transportSpecialInstructions:
+              c['transportSpecialInstructions'] ??
               c['transport_special_instructions'] ??
               '',
         );
@@ -124,9 +126,9 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       final firstChild = childrenList.first;
       final transportModes = (firstChild['transportationModes'] is List)
           ? (firstChild['transportationModes'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : [];
 
       careApproach = CareApproach(
@@ -134,7 +136,8 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
         description: firstChild['personalityDescription'] ?? '',
         transportationNeeds: transportModes.join(', '),
         needsPickupFromSchool: firstChild['needsDropoff'] ?? false,
-        needsDropOffAtTherapy: firstChild['needsDropoff'] ??
+        needsDropOffAtTherapy:
+            firstChild['needsDropoff'] ??
             false, // Assuming singular flag covers both or partial
         pickupDropOffRequirements:
             'Pickup: ${firstChild['pickupLocation'] ?? 'N/A'}\nDropoff: ${firstChild['dropoffLocation'] ?? 'N/A'}',
@@ -181,25 +184,28 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       numberOfPets: profileData['numberOfPets'] ?? 0,
       languages: (profileData['languages'] is List)
           ? (profileData['languages'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : [],
       familyName: profileData['familyName'] ?? '',
       hasPets: profileData['hasPets'] ?? false,
       petTypes: (profileData['petTypes'] is List)
           ? (profileData['petTypes'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : [],
       speaksOtherLanguages: profileData['speaksOtherLanguages'] ?? false,
     );
   }
 
   @override
-  Future<void> updateProfileDetails(String userId, Map<String, dynamic> data,
-      {int step = 1,}) async {
+  Future<void> updateProfileDetails(
+    String userId,
+    Map<String, dynamic> data, {
+    int step = 1,
+  }) async {
     await _remoteDataSource.updateProfileDetails(data, step: step);
   }
 
@@ -230,7 +236,6 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       'allergy_types': data['allergyTypes'],
       'allergyTypes': data['allergyTypes'],
       'allergies': data['allergyTypes'], // Common alias
-
       // Triggers
       'has_triggers': data['hasTriggers'],
       'hasTriggers': data['hasTriggers'],
@@ -238,7 +243,6 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       'triggerTypes': data['triggerTypes'],
       'triggers': data['triggers'],
       'trigger_description': data['triggers'], // Alias for description
-
       // Calming
       'calming_methods': data['calmingMethods'],
       'calmingMethods': data['calmingMethods'],
@@ -304,55 +308,56 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
       hasAllergies: c['hasAllergies'] ?? c['has_allergies'] ?? false,
       allergyTypes: (c['allergyTypes'] is List)
           ? (c['allergyTypes'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : (c['allergy_types'] is List)
-              ? (c['allergy_types'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
-              : [],
+          ? (c['allergy_types'] as List)
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
+          : [],
       hasTriggers: c['hasTriggers'] ?? c['has_triggers'] ?? false,
       triggerTypes: (c['triggerTypes'] is List)
           ? (c['triggerTypes'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : (c['trigger_types'] is List)
-              ? (c['trigger_types'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
-              : [],
+          ? (c['trigger_types'] as List)
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
+          : [],
       calmingMethods: c['calmingMethods'] ?? c['calming_methods'] ?? '',
       triggers: c['triggers'] ?? '',
       transportationModes: (c['transportationModes'] is List)
           ? (c['transportationModes'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : (c['transportation_modes'] is List)
-              ? (c['transportation_modes'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
-              : [],
+          ? (c['transportation_modes'] as List)
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
+          : [],
       equipmentSafety: (c['equipmentSafety'] is List)
           ? (c['equipmentSafety'] as List)
-              .where((e) => e != null)
-              .map((e) => e.toString())
-              .toList()
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
           : (c['equipment_safety'] is List)
-              ? (c['equipment_safety'] as List)
-                  .where((e) => e != null)
-                  .map((e) => e.toString())
-                  .toList()
-              : [],
+          ? (c['equipment_safety'] as List)
+                .where((e) => e != null)
+                .map((e) => e.toString())
+                .toList()
+          : [],
       needsDropoff: c['needsDropoff'] ?? c['needs_dropoff'] ?? false,
       pickupLocation: c['pickupLocation'] ?? c['pickup_location'] ?? '',
       dropoffLocation: c['dropoffLocation'] ?? c['dropoff_location'] ?? '',
-      transportSpecialInstructions: c['transportSpecialInstructions'] ??
+      transportSpecialInstructions:
+          c['transportSpecialInstructions'] ??
           c['transport_special_instructions'] ??
           '',
     );
@@ -360,9 +365,13 @@ class ProfileDetailsRepositoryImpl implements ProfileDetailsRepository {
 
   @override
   Future<void> updateChild(
-      String childId, Map<String, dynamic> childData,) async {
+    String childId,
+    Map<String, dynamic> childData,
+  ) async {
     await _remoteDataSource.updateChild(
-        childId, _prepareChildPayload(childData),);
+      childId,
+      _prepareChildPayload(childData),
+    );
   }
 
   @override

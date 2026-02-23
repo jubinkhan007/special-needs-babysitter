@@ -15,10 +15,7 @@ import 'package:babysitter_app/src/features/auth/presentation/screens/otp_verifi
 class SignUpFlow extends ConsumerStatefulWidget {
   final String initialRole;
 
-  const SignUpFlow({
-    super.key,
-    this.initialRole = 'parent',
-  });
+  const SignUpFlow({super.key, this.initialRole = 'parent'});
 
   @override
   ConsumerState<SignUpFlow> createState() => _SignUpFlowState();
@@ -33,7 +30,8 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   void initState() {
     super.initState();
     debugPrint(
-        'DEBUG SignUpFlow: Initialized with initialRole=${widget.initialRole}');
+      'DEBUG SignUpFlow: Initialized with initialRole=${widget.initialRole}',
+    );
     _formData = {'role': widget.initialRole};
   }
 
@@ -41,7 +39,9 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
   void didUpdateWidget(SignUpFlow oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialRole != widget.initialRole) {
-      debugPrint('DEBUG SignUpFlow: didUpdateWidget newRole=${widget.initialRole}');
+      debugPrint(
+        'DEBUG SignUpFlow: didUpdateWidget newRole=${widget.initialRole}',
+      );
       setState(() {
         _formData['role'] = widget.initialRole;
       });
@@ -61,7 +61,9 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
       if (from != null) {
         params['from'] = from;
       }
-      context.go(Uri(path: Routes.onboarding, queryParameters: params).toString());
+      context.go(
+        Uri(path: Routes.onboarding, queryParameters: params).toString(),
+      );
     }
   }
 
@@ -78,7 +80,9 @@ class _SignUpFlowState extends ConsumerState<SignUpFlow> {
     if (from != null) {
       params['from'] = from;
     }
-    context.go(Uri(path: Routes.profileSetup, queryParameters: params).toString());
+    context.go(
+      Uri(path: Routes.profileSetup, queryParameters: params).toString(),
+    );
   }
 
   @override

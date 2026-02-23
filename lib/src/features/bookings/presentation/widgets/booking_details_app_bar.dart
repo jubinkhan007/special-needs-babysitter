@@ -6,10 +6,7 @@ class BookingDetailsAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final String title;
 
-  const BookingDetailsAppBar({
-    super.key,
-    required this.title,
-  });
+  const BookingDetailsAppBar({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +23,11 @@ class BookingDetailsAppBar extends StatelessWidget
       title: Text(title, style: AppTokens.appBarTitle),
       actions: [
         IconButton(
-          icon: const Icon(Icons.headset_mic_outlined,
-              color: AppTokens.iconGrey, size: 24),
+          icon: const Icon(
+            Icons.headset_mic_outlined,
+            color: AppTokens.iconGrey,
+            size: 24,
+          ),
           onPressed: () {
             // Support action
           },

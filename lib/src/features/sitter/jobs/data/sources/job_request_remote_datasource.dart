@@ -15,7 +15,8 @@ class JobRequestPresignedUploadResponse {
   });
 
   factory JobRequestPresignedUploadResponse.fromJson(
-      Map<String, dynamic> json) {
+    Map<String, dynamic> json,
+  ) {
     return JobRequestPresignedUploadResponse(
       uploadUrl: json['uploadUrl'] as String,
       publicUrl: json['publicUrl'] as String,
@@ -31,20 +32,25 @@ class JobRequestRemoteDataSource {
 
   /// Get job request details via GET /sitters/bookings/{applicationId}.
   Future<JobRequestDetailsModel> getJobRequestDetails(
-      String applicationId) async {
+    String applicationId,
+  ) async {
     try {
       debugPrint(
-          'DEBUG: Job Request Details Request: GET /sitters/bookings/$applicationId');
+        'DEBUG: Job Request Details Request: GET /sitters/bookings/$applicationId',
+      );
       final response = await _dio.get('/sitters/bookings/$applicationId');
       debugPrint(
-          'DEBUG: Job Request Details Response Status: ${response.statusCode}');
+        'DEBUG: Job Request Details Response Status: ${response.statusCode}',
+      );
       debugPrint('DEBUG: Job Request Details Response Body: ${response.data}');
 
       final data = response.data['data'] as Map<String, dynamic>;
 
       // Debug: Log all ID-related fields from API response
       debugPrint('DEBUG: API response id = ${data['id']}');
-      debugPrint('DEBUG: API response applicationId = ${data['applicationId']}');
+      debugPrint(
+        'DEBUG: API response applicationId = ${data['applicationId']}',
+      );
       debugPrint('DEBUG: API response jobId = ${data['jobId']}');
       debugPrint('DEBUG: All keys in response: ${data.keys.toList()}');
 
@@ -52,9 +58,12 @@ class JobRequestRemoteDataSource {
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Job Request Details Error: ${e.message}');
-        debugPrint('DEBUG: Job Request Details Error Response: ${e.response?.data}');
         debugPrint(
-            'DEBUG: Job Request Details Error Headers: ${e.requestOptions.headers}');
+          'DEBUG: Job Request Details Error Response: ${e.response?.data}',
+        );
+        debugPrint(
+          'DEBUG: Job Request Details Error Headers: ${e.requestOptions.headers}',
+        );
 
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
@@ -147,10 +156,7 @@ class JobRequestRemoteDataSource {
   }) async {
     try {
       final endpoint = '/sitters/bookings/$applicationId/clock-in';
-      final data = {
-        'latitude': latitude,
-        'longitude': longitude,
-      };
+      final data = {'latitude': latitude, 'longitude': longitude};
       debugPrint('DEBUG: Clock In Request: POST $endpoint');
       debugPrint('DEBUG: Clock In Request Body: $data');
       final response = await _dio.post(endpoint, data: data);
@@ -252,7 +258,9 @@ class JobRequestRemoteDataSource {
       debugPrint('DEBUG: Cancel Booking Request: POST $endpoint');
       debugPrint('DEBUG: Cancel Booking Request Body: $data');
       final response = await _dio.post(endpoint, data: data);
-      debugPrint('DEBUG: Cancel Booking Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Cancel Booking Response Status: ${response.statusCode}',
+      );
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Cancel Booking Error: ${e.message}');
@@ -274,11 +282,15 @@ class JobRequestRemoteDataSource {
       final endpoint = '/sitters/bookings/$applicationId/mark-complete';
       debugPrint('DEBUG: Complete Booking Request: POST $endpoint');
       final response = await _dio.post(endpoint);
-      debugPrint('DEBUG: Complete Booking Response Status: ${response.statusCode}');
+      debugPrint(
+        'DEBUG: Complete Booking Response Status: ${response.statusCode}',
+      );
     } catch (e) {
       if (e is DioException) {
         debugPrint('DEBUG: Complete Booking Error: ${e.message}');
-        debugPrint('DEBUG: Complete Booking Error Response: ${e.response?.data}');
+        debugPrint(
+          'DEBUG: Complete Booking Error Response: ${e.response?.data}',
+        );
         final serverMessage = e.response?.data?['error'] as String?;
         if (serverMessage != null) {
           throw Exception(serverMessage);

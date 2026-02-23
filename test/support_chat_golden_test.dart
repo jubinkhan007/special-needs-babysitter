@@ -26,13 +26,14 @@ void main() {
   }
 
   group('Support Chat Screen Goldens', () {
-    testWidgets('State A (Initial Verification) matches golden',
-        (tester) async {
+    testWidgets('State A (Initial Verification) matches golden', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(393, 852));
 
-      await tester.pumpWidget(createTestWidget(
-        const SupportChatArgs(isInitialVerification: true),
-      ));
+      await tester.pumpWidget(
+        createTestWidget(const SupportChatArgs(isInitialVerification: true)),
+      );
       await tester.pumpAndSettle();
 
       await expectLater(
@@ -43,13 +44,14 @@ void main() {
       await tester.binding.setSurfaceSize(null);
     });
 
-    testWidgets('State B (Access Denied / Prompt) matches golden',
-        (tester) async {
+    testWidgets('State B (Access Denied / Prompt) matches golden', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(393, 852));
 
-      await tester.pumpWidget(createTestWidget(
-        const SupportChatArgs(isInitialVerification: false),
-      ));
+      await tester.pumpWidget(
+        createTestWidget(const SupportChatArgs(isInitialVerification: false)),
+      );
       await tester.pumpAndSettle();
 
       await expectLater(

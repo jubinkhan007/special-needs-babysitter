@@ -4,10 +4,7 @@ import 'package:babysitter_app/src/packages/domain/entities/user_role.dart';
 /// Contract for authentication repository
 abstract interface class AuthRepository {
   /// Sign in with email and password
-  Future<AuthSession> signIn({
-    required String email,
-    required String password,
-  });
+  Future<AuthSession> signIn({required String email, required String password});
 
   /// Sign up new user with role selection
   Future<AuthSession> signUp({

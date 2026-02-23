@@ -9,9 +9,6 @@ class SubmitApplicationRequestDto {
   });
 
   Map<String, dynamic> toJson() {
-    return {
-      'jobId': jobId,
-      'coverLetter': coverLetter,
-    };
+    return {'jobId': jobId, 'coverLetter': coverLetter};
   }
 }

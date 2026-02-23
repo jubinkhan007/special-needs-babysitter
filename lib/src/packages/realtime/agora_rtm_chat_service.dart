@@ -22,8 +22,8 @@ class AgoraRtmChatService implements ChatService {
   AgoraRtmChatService({
     required AgoraTokenProvider tokenProvider,
     String? appId,
-  })  : _tokenProvider = tokenProvider,
-        _appId = appId ?? EnvConfig.agoraAppId;
+  }) : _tokenProvider = tokenProvider,
+       _appId = appId ?? EnvConfig.agoraAppId;
 
   @override
   Future<void> init() async {
@@ -52,31 +52,44 @@ class AgoraRtmChatService implements ChatService {
       // Add listeners for RTM events
       _client?.addListener(
         message: (MessageEvent event) {
-          developer.log('RTM Message received from ${event.publisher}: ${event.message}', name: 'Realtime');
+          developer.log(
+            'RTM Message received from ${event.publisher}: ${event.message}',
+            name: 'Realtime',
+          );
           // Try to get text from message. In 2.x, message is RtmMessage which might have data or text.
           // Using toString() as safe fallback or if it overrides toString to return content.
           // If RtmMessage has 'text' property, we should use that.
           // For now, removing .stringData which was definitely wrong.
           final publisher = event.publisher;
           if (publisher != null) {
-            _eventsController.add(MessageReceivedEvent(
-              peerId: publisher,
-              text: event.message.toString(),
-            ),);
+            _eventsController.add(
+              MessageReceivedEvent(
+                peerId: publisher,
+                text: event.message.toString(),
+              ),
+            );
           }
         },
         linkState: (LinkStateEvent event) {
-          developer.log('RTM Link state changed: ${event.currentState}', name: 'Realtime');
+          developer.log(
+            'RTM Link state changed: ${event.currentState}',
+            name: 'Realtime',
+          );
           final currentState = event.currentState;
           if (currentState != null) {
             _connectionState = _mapConnectionState(currentState);
-            _eventsController.add(ConnectionStateEvent(state: _connectionState));
+            _eventsController.add(
+              ConnectionStateEvent(state: _connectionState),
+            );
           }
         },
       );
 
       _isInitialized = true;
-      developer.log('AgoraRtmChatService initialized with listeners', name: 'Realtime');
+      developer.log(
+        'AgoraRtmChatService initialized with listeners',
+        name: 'Realtime',
+      );
     } catch (e) {
       developer.log('Failed to initialize RTM: $e', name: 'Realtime');
       rethrow;
@@ -105,7 +118,6 @@ class AgoraRtmChatService implements ChatService {
     if (!_isInitialized) {
       await init();
     }
-
 
     // Get token from provider (may be null for dev mode)
     final effectiveToken = token ?? await _tokenProvider.getRtmToken(userId);
@@ -179,7 +191,9 @@ class AgoraRtmChatService implements ChatService {
   Stream<ChatEvent> get events => _eventsController.stream;
 
   @override
-  Future<bool> waitForConnected({Duration timeout = const Duration(seconds: 5)}) async {
+  Future<bool> waitForConnected({
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
     if (_connectionState == ChatConnectionState.connected) return true;
 
     final completer = Completer<bool>();

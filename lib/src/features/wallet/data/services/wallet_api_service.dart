@@ -17,9 +17,7 @@ class WalletApiService {
   Future<WalletWithdrawResponse> withdraw(int amountCents) async {
     final response = await _dio.post(
       '/wallet/withdraw',
-      data: {
-        'amount': amountCents,
-      },
+      data: {'amount': amountCents},
     );
     final data = _unwrapMap(response.data);
     return WalletWithdrawResponse.fromJson(data);

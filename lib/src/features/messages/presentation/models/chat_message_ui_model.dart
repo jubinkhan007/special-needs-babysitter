@@ -94,24 +94,27 @@ class ChatMessageUiModel {
         }
       }
 
-      uiList.add(ChatMessageUiModel(
-        id: msg.id,
-        showDaySeparator: isFirst, // Hardcoded "Today" logic for top item
-        dayLabel: "Today",
-        headerMetaLeft: metaLeft,
-        headerMetaRight: metaRight,
-        bubbleText: msg.text ?? '',
-        isMe: msg.isMe,
-        showAvatar: !msg.isMe &&
-            msg.type == ChatMessageType.text, // Only show for recipient texts
-        avatarUrl: msg.senderAvatarUrl,
-        isCallLog: msg.type == ChatMessageType.callLog,
-        callTitle: callTitle,
-        callSubtitle: callSubtitle,
-        callTime: timeStr,
-        isVideoCall: isVideo,
-        isMissedCall: isMissed,
-      ));
+      uiList.add(
+        ChatMessageUiModel(
+          id: msg.id,
+          showDaySeparator: isFirst, // Hardcoded "Today" logic for top item
+          dayLabel: "Today",
+          headerMetaLeft: metaLeft,
+          headerMetaRight: metaRight,
+          bubbleText: msg.text ?? '',
+          isMe: msg.isMe,
+          showAvatar:
+              !msg.isMe &&
+              msg.type == ChatMessageType.text, // Only show for recipient texts
+          avatarUrl: msg.senderAvatarUrl,
+          isCallLog: msg.type == ChatMessageType.callLog,
+          callTitle: callTitle,
+          callSubtitle: callSubtitle,
+          callTime: timeStr,
+          isVideoCall: isVideo,
+          isMissedCall: isMissed,
+        ),
+      );
     }
     return uiList;
   }

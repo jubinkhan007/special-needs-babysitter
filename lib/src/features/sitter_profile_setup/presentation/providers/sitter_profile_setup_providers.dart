@@ -155,7 +155,7 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
   final ProfileRepository _profileRepository;
 
   SitterProfileSetupController(this._profileRepository)
-      : super(const SitterProfileState());
+    : super(const SitterProfileState());
 
   void updateProfilePhoto(String? path) {
     state = state.copyWith(profilePhotoPath: path);
@@ -369,7 +369,8 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
         final photoUrl = resultData['photoUrl'] as String?;
         if (photoUrl != null && photoUrl.isNotEmpty) {
           debugPrint(
-              'DEBUG CONTROLLER: Syncing avatarUrl to User profile: $photoUrl');
+            'DEBUG CONTROLLER: Syncing avatarUrl to User profile: $photoUrl',
+          );
           try {
             await _profileRepository.updateProfile(
               UpdateProfileParams(avatarUrl: photoUrl),
@@ -378,7 +379,9 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
           } catch (e) {
             // Non-critical error - the sitter profile photo is already saved
             // The user profile avatar sync is optional and may fail if endpoint unavailable
-            debugPrint('DEBUG CONTROLLER: Failed to sync avatarUrl (non-critical): $e');
+            debugPrint(
+              'DEBUG CONTROLLER: Failed to sync avatarUrl (non-critical): $e',
+            );
           }
         }
       }
@@ -391,7 +394,8 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
       // "Performing an update on the path '_id' would modify the immutable field '_id'"
       if (step == 7 && e is DioException && e.response?.statusCode == 500) {
         debugPrint(
-            'DEBUG: Swallowing Step 7 500 error to allow user to proceed (Backend Bug Workaround)');
+          'DEBUG: Swallowing Step 7 500 error to allow user to proceed (Backend Bug Workaround)',
+        );
         return true;
       }
 
@@ -412,7 +416,9 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
     debugPrint('DEBUG CONTROLLER: Step 9 succeeded');
 
     // Step 10 - Confirm profile completion
-    debugPrint('DEBUG CONTROLLER: Calling Step 10 to confirm profile completion...');
+    debugPrint(
+      'DEBUG CONTROLLER: Calling Step 10 to confirm profile completion...',
+    );
     final step10Success = await saveStep(10, repository);
     if (!step10Success) {
       debugPrint('DEBUG CONTROLLER: Step 10 failed');
@@ -450,22 +456,21 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
           'longitude': state.longitude,
         };
       case 4:
-        return {
-          'skills': state.skills,
-          'certifications': state.certifications,
-        };
+        return {'skills': state.skills, 'certifications': state.certifications};
       case 5:
         // Resume URL is added by repository after upload
         return {
           'experiences': state.experiences
-              .map((e) => {
-                    'role': e.title,
-                    'startMonth': e.month,
-                    'startYear': e.year,
-                    'endMonth': 'Present',
-                    'endYear': '',
-                    'description': e.description,
-                  })
+              .map(
+                (e) => {
+                  'role': e.title,
+                  'startMonth': e.month,
+                  'startYear': e.year,
+                  'endMonth': 'Present',
+                  'endYear': '',
+                  'description': e.description,
+                },
+              )
               .toList(),
         };
       case 6:
@@ -527,35 +532,40 @@ class SitterProfileSetupController extends StateNotifier<SitterProfileState> {
 
 /// Dio provider with auth interceptor for sitter profile API calls.
 final sitterProfileDioProvider = Provider<Dio>((ref) {
-  final dio = Dio(BaseOptions(
-    baseUrl: AppConstants.baseUrl,
-    connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-  ));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: AppConstants.baseUrl,
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    ),
+  );
 
-  dio.interceptors.add(InterceptorsWrapper(
-    onRequest: (options, handler) async {
-      final authState = ref.read(authNotifierProvider);
-      var session = authState.value;
+  dio.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final authState = ref.read(authNotifierProvider);
+        var session = authState.value;
 
-      if (session == null) {
-        final storedToken =
-            await ref.read(sessionStoreProvider).getAccessToken();
-        if (storedToken != null && storedToken.isNotEmpty) {
-          options.headers['Cookie'] = 'session_id=$storedToken';
+        if (session == null) {
+          final storedToken = await ref
+              .read(sessionStoreProvider)
+              .getAccessToken();
+          if (storedToken != null && storedToken.isNotEmpty) {
+            options.headers['Cookie'] = 'session_id=$storedToken';
+          }
+        } else {
+          options.headers['Cookie'] = 'session_id=${session.accessToken}';
         }
-      } else {
-        options.headers['Cookie'] = 'session_id=${session.accessToken}';
-      }
 
-      debugPrint('DEBUG SITTER: ${options.method} ${options.uri}');
-      return handler.next(options);
-    },
-  ));
+        debugPrint('DEBUG SITTER: ${options.method} ${options.uri}');
+        return handler.next(options);
+      },
+    ),
+  );
 
   return dio;
 });
@@ -563,21 +573,23 @@ final sitterProfileDioProvider = Provider<Dio>((ref) {
 /// Remote data source provider.
 final sitterProfileRemoteDataSourceProvider =
     Provider<SitterProfileRemoteDataSource>((ref) {
-  final dio = ref.watch(sitterProfileDioProvider);
-  return SitterProfileRemoteDataSource(dio);
-});
+      final dio = ref.watch(sitterProfileDioProvider);
+      return SitterProfileRemoteDataSource(dio);
+    });
 
 /// Repository provider.
-final sitterProfileRepositoryProvider =
-    Provider<SitterProfileRepository>((ref) {
+final sitterProfileRepositoryProvider = Provider<SitterProfileRepository>((
+  ref,
+) {
   final dataSource = ref.watch(sitterProfileRemoteDataSourceProvider);
   return SitterProfileRepositoryImpl(dataSource);
 });
 
 /// Main controller provider.
 final sitterProfileSetupControllerProvider =
-    StateNotifierProvider<SitterProfileSetupController, SitterProfileState>(
-        (ref) {
-  final profileRepository = ref.watch(profileRepositoryProvider);
-  return SitterProfileSetupController(profileRepository);
-});
+    StateNotifierProvider<SitterProfileSetupController, SitterProfileState>((
+      ref,
+    ) {
+      final profileRepository = ref.watch(profileRepositoryProvider);
+      return SitterProfileSetupController(profileRepository);
+    });

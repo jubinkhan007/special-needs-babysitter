@@ -5,10 +5,7 @@ import 'package:babysitter_app/src/features/parent/home/presentation/theme/home_
 class CompleteProfileCard extends StatelessWidget {
   final double completionPercent;
 
-  const CompleteProfileCard({
-    super.key,
-    required this.completionPercent,
-  });
+  const CompleteProfileCard({super.key, required this.completionPercent});
 
   @override
   Widget build(BuildContext context) {

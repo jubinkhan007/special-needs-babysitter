@@ -14,8 +14,9 @@ import 'package:babysitter_app/src/features/sitter/account/presentation/profile_
 part 'sitter_profile_details_controller.g.dart';
 
 /// Provider for SitterMeRemoteDataSource
-final sitterMeRemoteDataSourceProvider =
-    Provider<SitterMeRemoteDataSource>((ref) {
+final sitterMeRemoteDataSourceProvider = Provider<SitterMeRemoteDataSource>((
+  ref,
+) {
   return SitterMeRemoteDataSource(ref.watch(authDioProvider));
 });
 
@@ -71,7 +72,9 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
           );
         } catch (syncError) {
           // User profile sync failed, but sitter photo was saved successfully
-          debugPrint('DEBUG: User profile avatar sync failed (non-critical): $syncError');
+          debugPrint(
+            'DEBUG: User profile avatar sync failed (non-critical): $syncError',
+          );
         }
       }
 
@@ -95,17 +98,13 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
 
       await repository.updateProfile(
         step: 4,
-        data: {
-          'skills': skills,
-          'certifications': certifications,
-        },
+        data: {'skills': skills, 'certifications': certifications},
       );
 
       final step2Data = <String, dynamic>{
         'ageRanges': ageRanges,
         'yearsOfExperience': ?yearsOfExperience,
-        if (profile.bio != null && profile.bio!.isNotEmpty)
-          'bio': profile.bio,
+        if (profile.bio != null && profile.bio!.isNotEmpty) 'bio': profile.bio,
         if (profile.dateOfBirth != null && profile.dateOfBirth!.isNotEmpty)
           'dateOfBirth': _formatDateOfBirth(profile.dateOfBirth),
         if (profile.hasTransportation != null)
@@ -120,10 +119,7 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
         if (profile.languages != null) 'languages': profile.languages,
       };
 
-      await repository.updateProfile(
-        step: 2,
-        data: step2Data,
-      );
+      await repository.updateProfile(step: 2, data: step2Data);
 
       await refresh();
       return true;
@@ -133,7 +129,8 @@ class SitterProfileDetailsController extends _$SitterProfileDetailsController {
   }
 
   Future<bool> updateAvailability(
-      List<Map<String, dynamic>> availability) async {
+    List<Map<String, dynamic>> availability,
+  ) async {
     try {
       final repository = ref.read(sitterProfileRepositoryProvider);
       await repository.updateProfile(

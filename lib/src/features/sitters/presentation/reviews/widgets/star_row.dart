@@ -54,11 +54,7 @@ class StarRow extends StatelessWidget {
 
         return Padding(
           padding: EdgeInsets.only(right: AppTokens.starsGap.w),
-          child: Icon(
-            iconData,
-            size: size.sp,
-            color: color,
-          ),
+          child: Icon(iconData, size: size.sp, color: color),
         );
       }),
     );

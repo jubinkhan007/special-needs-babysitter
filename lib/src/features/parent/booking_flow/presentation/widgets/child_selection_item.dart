@@ -20,7 +20,8 @@ class ChildSelectionItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            vertical: 12), // Increased vertical spacing per Figma
+          vertical: 12,
+        ), // Increased vertical spacing per Figma
         child: Row(
           children: [
             // Checkbox (Custom to match visuals)
@@ -41,11 +42,7 @@ class ChildSelectionItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6), // Slightly rounder
               ),
               child: child.isSelected
-                  ? const Icon(
-                      Icons.check,
-                      size: 16,
-                      color: Colors.white,
-                    )
+                  ? const Icon(Icons.check, size: 16, color: Colors.white)
                   : null,
             ),
             const SizedBox(width: 16), // Spacing

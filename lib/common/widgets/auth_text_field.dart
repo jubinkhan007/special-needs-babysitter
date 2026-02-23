@@ -26,7 +26,8 @@ class AuthTextField extends StatelessWidget {
   });
 
   List<TextInputFormatter>? _numericInputFormatters(
-      TextInputType? keyboardType) {
+    TextInputType? keyboardType,
+  ) {
     if (keyboardType == TextInputType.number ||
         keyboardType == TextInputType.phone) {
       return [FilteringTextInputFormatter.digitsOnly];
@@ -39,15 +40,16 @@ class AuthTextField extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
-    final labelColor =
-        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withValues(alpha: 0.8);
+    final labelColor = isDark
+        ? colorScheme.onSurfaceVariant
+        : AppColors.textPrimary.withValues(alpha: 0.8);
     final textColor = isDark ? colorScheme.onSurface : AppColors.textPrimary;
-    final hintColor =
-        isDark ? colorScheme.onSurfaceVariant : AppColors.textPrimary.withValues(alpha: 0.4);
+    final hintColor = isDark
+        ? colorScheme.onSurfaceVariant
+        : AppColors.textPrimary.withValues(alpha: 0.4);
     final fillColor = isDark ? colorScheme.surface : Colors.white;
     final borderColor = isDark ? colorScheme.outline : AppColors.inputBorder;
-    final focusBorderColor =
-        isDark ? colorScheme.primary : AppColors.secondary;
+    final focusBorderColor = isDark ? colorScheme.primary : AppColors.secondary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -66,16 +68,10 @@ class AuthTextField extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: _numericInputFormatters(keyboardType),
           textInputAction: textInputAction,
-          style: TextStyle(
-            fontSize: 15,
-            color: textColor,
-          ),
+          style: TextStyle(fontSize: 15, color: textColor),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-              fontSize: 15,
-              color: hintColor,
-            ),
+            hintStyle: TextStyle(fontSize: 15, color: hintColor),
             filled: true,
             fillColor: fillColor,
             contentPadding: const EdgeInsets.symmetric(
@@ -100,10 +96,7 @@ class AuthTextField extends StatelessWidget {
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: colorScheme.error,
-                width: 1.5,
-              ),
+              borderSide: BorderSide(color: colorScheme.error, width: 1.5),
             ),
             suffixIcon: suffixIcon,
           ),

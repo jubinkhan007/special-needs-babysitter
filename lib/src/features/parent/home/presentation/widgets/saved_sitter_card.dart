@@ -23,8 +23,9 @@ class SavedSitterCard extends StatelessWidget {
         width: HomeDesignTokens.savedSitterWidth, // 140
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius:
-              BorderRadius.circular(HomeDesignTokens.smallCardRadius), // 12
+          borderRadius: BorderRadius.circular(
+            HomeDesignTokens.smallCardRadius,
+          ), // 12
           boxShadow: HomeDesignTokens.defaultCardShadow,
         ),
         child: Column(
@@ -34,8 +35,9 @@ class SavedSitterCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(12)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
+                  ),
                   child: sitter.imageAssetPath.startsWith('http')
                       ? Image.network(
                           sitter.imageAssetPath,
@@ -82,9 +84,11 @@ class SavedSitterCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Icon(Icons.bookmark, // Solid/Filled bookmark
-                          size: 16,
-                          color: AppColors.textPrice),
+                      child: const Icon(
+                        Icons.bookmark, // Solid/Filled bookmark
+                        size: 16,
+                        color: AppColors.textPrice,
+                      ),
                     ),
                   ),
                 ),
@@ -94,8 +98,10 @@ class SavedSitterCard extends StatelessWidget {
             // Info Strip
             Expanded(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,35 +113,45 @@ class SavedSitterCard extends StatelessWidget {
                           child: Text(
                             sitter.name,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 13,
-                                color: AppColors.textPrimary),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                              color: AppColors.textPrimary,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         if (sitter.isVerified) ...[
                           const SizedBox(width: 4),
-                          const Icon(Icons.verified,
-                              size: 14, color: AppColors.verifiedBlue),
+                          const Icon(
+                            Icons.verified,
+                            size: 14,
+                            color: AppColors.verifiedBlue,
+                          ),
                         ],
                         const SizedBox(width: 4),
-                        const Icon(Icons.star,
-                            size: 12, color: AppColors.starYellow),
+                        const Icon(
+                          Icons.star,
+                          size: 12,
+                          color: AppColors.starYellow,
+                        ),
                         const SizedBox(width: 2),
                         Text(
                           sitter.rating.toStringAsFixed(1),
                           style: const TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 11),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 11,
+                          ),
                         ),
                         if (sitter.reviewCount > 0) ...[
                           const SizedBox(width: 2),
                           Text(
                             '(${sitter.reviewCount})',
                             style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                                color: AppColors.textSecondary),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                         ],
                       ],
@@ -144,9 +160,11 @@ class SavedSitterCard extends StatelessWidget {
                     // Row 2: Location Pin + Text
                     Row(
                       children: [
-                        const Icon(Icons.location_on, // Filled pin
-                            size: 12,
-                            color: AppColors.neutral40),
+                        const Icon(
+                          Icons.location_on, // Filled pin
+                          size: 12,
+                          color: AppColors.neutral40,
+                        ),
                         const SizedBox(width: 2),
                         Expanded(
                           child: Text(
@@ -159,13 +177,13 @@ class SavedSitterCard extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

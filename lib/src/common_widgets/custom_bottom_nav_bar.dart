@@ -33,9 +33,7 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceTint,
-      ),
+      decoration: const BoxDecoration(color: AppColors.surfaceTint),
       child: SafeArea(
         top: false,
         child: Padding(

@@ -43,15 +43,18 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none,
-                color: SitterAccountUI.textGray),
+            icon: const Icon(
+              Icons.notifications_none,
+              color: SitterAccountUI.textGray,
+            ),
             onPressed: () {},
           ),
         ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
-            horizontal: SitterAccountUI.screenPadding),
+          horizontal: SitterAccountUI.screenPadding,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -96,8 +99,11 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  const Icon(Icons.explore_outlined,
-                      size: 24, color: SitterAccountUI.textGray),
+                  const Icon(
+                    Icons.explore_outlined,
+                    size: 24,
+                    color: SitterAccountUI.textGray,
+                  ),
                   const SizedBox(width: 16),
                   const Expanded(
                     child: Text(
@@ -119,8 +125,9 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
                         });
                       },
                       activeThumbColor: SitterAccountUI.accentBlue,
-                      activeTrackColor:
-                          SitterAccountUI.accentBlue.withValues(alpha: 0.2),
+                      activeTrackColor: SitterAccountUI.accentBlue.withValues(
+                        alpha: 0.2,
+                      ),
                     ),
                   ),
                 ],

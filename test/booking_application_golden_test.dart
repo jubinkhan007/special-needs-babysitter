@@ -81,20 +81,25 @@ class MockApplicationsRepository implements ApplicationsRepository {
   }
 
   @override
-  Future<BookingApplication> getApplicationDetail(
-      {required String jobId, required String applicationId}) async {
+  Future<BookingApplication> getApplicationDetail({
+    required String jobId,
+    required String applicationId,
+  }) async {
     throw UnimplementedError('Not used in composite provider');
   }
 
   @override
-  Future<void> acceptApplication(
-      {required String jobId, required String applicationId}) async {}
+  Future<void> acceptApplication({
+    required String jobId,
+    required String applicationId,
+  }) async {}
 
   @override
-  Future<void> declineApplication(
-      {required String jobId,
-      required String applicationId,
-      required String reason}) async {}
+  Future<void> declineApplication({
+    required String jobId,
+    required String applicationId,
+    required String reason,
+  }) async {}
 }
 
 void main() {
@@ -122,15 +127,9 @@ void main() {
     additionalNotes: 'We Have Two Black Cats',
     address:
         '7448, Kub Oval, 2450 Brian Meadow, District of Columbia, Lake Edna',
-    transportationModes: [
-      'No transportation (care at home only)',
-    ],
-    equipmentAndSafety: [
-      'Car seat required',
-    ],
-    pickupDropoffDetails: [
-      'Sunshine Elementary School, Gate 3',
-    ],
+    transportationModes: ['No transportation (care at home only)'],
+    equipmentAndSafety: ['Car seat required'],
+    pickupDropoffDetails: ['Sunshine Elementary School, Gate 3'],
   );
 
   Widget createScreen() {
@@ -142,8 +141,9 @@ void main() {
             applicationDetailProvider.overrideWith(
               (ref, args) => Future.value(mockBookingApp),
             ),
-            applicationsRepositoryProvider
-                .overrideWithValue(MockApplicationsRepository()),
+            applicationsRepositoryProvider.overrideWithValue(
+              MockApplicationsRepository(),
+            ),
           ],
           child: const MaterialApp(
             debugShowCheckedModeBanner: false,

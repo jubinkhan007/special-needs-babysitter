@@ -21,10 +21,7 @@ class ApplicationRemoteDataSource {
     );
 
     try {
-      await _dio.post(
-        '/applications',
-        data: requestDto.toJson(),
-      );
+      await _dio.post('/applications', data: requestDto.toJson());
     } catch (e) {
       if (e is DioException) {
         final serverMessage = e.response?.data?['error'] as String?;
@@ -43,10 +40,7 @@ class ApplicationRemoteDataSource {
     int limit = 20,
     int offset = 0,
   }) async {
-    final queryParams = <String, dynamic>{
-      'limit': limit,
-      'offset': offset,
-    };
+    final queryParams = <String, dynamic>{'limit': limit, 'offset': offset};
 
     if (status != null) queryParams['status'] = status;
     if (type != null) queryParams['type'] = type;
@@ -66,7 +60,9 @@ class ApplicationRemoteDataSource {
           .toList();
     } catch (e) {
       if (e is DioException) {
-        debugPrint('DEBUG: Applications API Error - Status: ${e.response?.statusCode}');
+        debugPrint(
+          'DEBUG: Applications API Error - Status: ${e.response?.statusCode}',
+        );
         debugPrint('DEBUG: Applications API Error - Data: ${e.response?.data}');
         debugPrint('DEBUG: Applications API Error - Params: $queryParams');
 

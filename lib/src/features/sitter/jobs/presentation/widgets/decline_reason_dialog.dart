@@ -6,10 +6,7 @@ import 'package:babysitter_app/src/common_widgets/app_toast.dart';
 class DeclineReasonDialog extends StatefulWidget {
   final Function(String reason, String? otherReason) onSubmit;
 
-  const DeclineReasonDialog({
-    super.key,
-    required this.onSubmit,
-  });
+  const DeclineReasonDialog({super.key, required this.onSubmit});
 
   @override
   State<DeclineReasonDialog> createState() => _DeclineReasonDialogState();
@@ -39,7 +36,8 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
 
     if (showOtherField) {
       if (_otherController.text.isEmpty) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           const SnackBar(
             content: Text('Please enter a reason'),
             backgroundColor: AppColors.error,
@@ -50,7 +48,8 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
       otherReason = _otherController.text.trim();
       reason = 'Other'; // Set reason to 'Other' when custom text is provided
     } else if (reason.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please select a reason'),
           backgroundColor: AppColors.error,
@@ -66,9 +65,7 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16.r),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       backgroundColor: Colors.white,
       child: Padding(
         padding: EdgeInsets.all(20.w),
@@ -90,8 +87,11 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.close,
-                      size: 24.w, color: const Color(0xFF667085)),
+                  icon: Icon(
+                    Icons.close,
+                    size: 24.w,
+                    color: const Color(0xFF667085),
+                  ),
                   onPressed: () => Navigator.of(context).pop(),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
@@ -116,8 +116,10 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                   });
                 },
                 child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 12.h,
+                    horizontal: 16.w,
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xFFD0D5DD)),
                     borderRadius: BorderRadius.circular(8.r),
@@ -133,8 +135,11 @@ class _DeclineReasonDialogState extends State<DeclineReasonDialog> {
                           fontFamily: 'Inter',
                         ),
                       ),
-                      Icon(Icons.add,
-                          size: 20.w, color: const Color(0xFF667085)),
+                      Icon(
+                        Icons.add,
+                        size: 20.w,
+                        color: const Color(0xFF667085),
+                      ),
                     ],
                   ),
                 ),

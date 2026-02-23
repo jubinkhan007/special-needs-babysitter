@@ -92,10 +92,7 @@ class LocationDto {
   final String type;
   final List<double> coordinates;
 
-  LocationDto({
-    required this.type,
-    required this.coordinates,
-  });
+  LocationDto({required this.type, required this.coordinates});
 
   factory LocationDto.fromJson(Map<String, dynamic> json) =>
       _$LocationDtoFromJson(json);

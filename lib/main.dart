@@ -38,12 +38,14 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final callId = message.data['callId'] ?? message.data['call_id'];
     final callType =
         message.data['callType'] ?? message.data['call_type'] ?? 'audio';
-    final callerName = message.data['callerName'] ??
+    final callerName =
+        message.data['callerName'] ??
         message.data['caller_name'] ??
         message.data['senderName'] ??
         message.data['sender_name'] ??
         'Unknown';
-    final callerUserId = message.data['callerUserId'] ??
+    final callerUserId =
+        message.data['callerUserId'] ??
         message.data['caller_user_id'] ??
         message.data['senderUserId'] ??
         message.data['sender_user_id'] ??
@@ -67,8 +69,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     final status = (message.data['status'] ?? message.data['event'] ?? '')
         .toString()
         .toLowerCase();
-    final callId =
-        (message.data['callId'] ?? message.data['call_id'])?.toString();
+    final callId = (message.data['callId'] ?? message.data['call_id'])
+        ?.toString();
     if (callId != null &&
         (status == 'accepted' ||
             status == 'ended' ||
@@ -145,7 +147,8 @@ Future<void> _showBackgroundLocalNotification({
 
       await _backgroundLocalNotifications
           .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(channel);
 
       _backgroundNotificationsInitialized = true;

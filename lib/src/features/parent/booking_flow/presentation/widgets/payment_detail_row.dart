@@ -22,10 +22,7 @@ class PaymentDetailRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.baseline,
         textBaseline: TextBaseline.alphabetic,
         children: [
-          Text(
-            label,
-            style: BookingUiTokens.rowLabel,
-          ),
+          Text(label, style: BookingUiTokens.rowLabel),
           const SizedBox(width: 16), // Gap between label and value
           Flexible(
             child: Text(

@@ -128,7 +128,7 @@ class JobPostStepHeader extends StatelessWidget {
                   color: _progressFill.withValues(alpha: 0.3),
                   blurRadius: 4,
                   spreadRadius: 1,
-                )
+                ),
               ]
             : null,
       ),

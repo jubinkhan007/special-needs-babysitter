@@ -23,10 +23,7 @@ import 'package:babysitter_app/src/routing/routes.dart';
 class SitterActiveBookingScreen extends ConsumerStatefulWidget {
   final String applicationId;
 
-  const SitterActiveBookingScreen({
-    super.key,
-    required this.applicationId,
-  });
+  const SitterActiveBookingScreen({super.key, required this.applicationId});
 
   @override
   ConsumerState<SitterActiveBookingScreen> createState() =>
@@ -137,15 +134,18 @@ class _SitterActiveBookingScreenState
           .read(sessionTrackingControllerProvider.notifier)
           .clockOut(widget.applicationId);
       if (!mounted) return;
-      final jobDetails =
-          ref.read(jobRequestDetailsProvider(widget.applicationId)).value;
+      final jobDetails = ref
+          .read(jobRequestDetailsProvider(widget.applicationId))
+          .value;
       final isFinalDay = result.isFinalDay || _isFinalDay(jobDetails);
       AppToast.show(
         context,
         SnackBar(
-          content: Text(result.message.isNotEmpty
-              ? result.message
-              : 'Successfully clocked out!'),
+          content: Text(
+            result.message.isNotEmpty
+                ? result.message
+                : 'Successfully clocked out!',
+          ),
           backgroundColor: AppColors.success,
         ),
       );
@@ -168,12 +168,15 @@ class _SitterActiveBookingScreenState
           final jobDetails = ref
               .read(jobRequestDetailsProvider(widget.applicationId))
               .value;
-          final bookings =
-              ref.read(sitterCurrentBookingsProvider).value;
-          final bookingStatus =
-              _findBookingStatus(bookings, widget.applicationId);
-          final effectiveStatus =
-              _resolveApplicationStatus(jobDetails, bookingStatus);
+          final bookings = ref.read(sitterCurrentBookingsProvider).value;
+          final bookingStatus = _findBookingStatus(
+            bookings,
+            widget.applicationId,
+          );
+          final effectiveStatus = _resolveApplicationStatus(
+            jobDetails,
+            bookingStatus,
+          );
           if (jobDetails != null &&
               _hasFinalEndPassed(jobDetails, DateTime.now())) {
             _goToBookingDetails(status: 'completed');
@@ -189,7 +192,8 @@ class _SitterActiveBookingScreenState
           context,
           SnackBar(
             content: Text(
-                'Failed to clock out: ${e.toString().replaceFirst("Exception: ", "")}'),
+              'Failed to clock out: ${e.toString().replaceFirst("Exception: ", "")}',
+            ),
             backgroundColor: AppColors.error,
           ),
         );
@@ -204,8 +208,9 @@ class _SitterActiveBookingScreenState
   @override
   Widget build(BuildContext context) {
     final trackingState = ref.watch(sessionTrackingControllerProvider);
-    final jobDetailsAsync =
-        ref.watch(jobRequestDetailsProvider(widget.applicationId));
+    final jobDetailsAsync = ref.watch(
+      jobRequestDetailsProvider(widget.applicationId),
+    );
     final bookingsAsync = ref.watch(sitterCurrentBookingsProvider);
 
     // Listen for location updates to move map camera
@@ -227,16 +232,19 @@ class _SitterActiveBookingScreenState
       }
     });
 
-    final now = ref.watch(sessionTickerProvider).maybeWhen(
-          data: (value) => value,
-          orElse: () => DateTime.now(),
-        );
+    final now = ref
+        .watch(sessionTickerProvider)
+        .maybeWhen(data: (value) => value, orElse: () => DateTime.now());
     final session = trackingState.session;
     final jobDetails = jobDetailsAsync.value;
-    final bookingStatus =
-        _findBookingStatus(bookingsAsync.value, widget.applicationId);
-    final effectiveStatus =
-        _resolveApplicationStatus(jobDetails, bookingStatus);
+    final bookingStatus = _findBookingStatus(
+      bookingsAsync.value,
+      widget.applicationId,
+    );
+    final effectiveStatus = _resolveApplicationStatus(
+      jobDetails,
+      bookingStatus,
+    );
     _maybeRedirectIfClockedOut(effectiveStatus, jobDetails, session, now);
     if (session != null) {
       final shiftEnd = _resolveShiftEndDateTime(now, session, jobDetails);
@@ -249,25 +257,24 @@ class _SitterActiveBookingScreenState
       body: trackingState.isLoading && session == null
           ? const Center(child: CircularProgressIndicator())
           : trackingState.errorMessage != null && session == null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Error: ${trackingState.errorMessage}'),
-                      SizedBox(height: 12.h),
-                      ElevatedButton(
-                        onPressed: () => ref
-                            .read(sessionTrackingControllerProvider.notifier)
-                            .loadSession(widget.applicationId,
-                                forceRefresh: true),
-                        child: const Text('Retry'),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Error: ${trackingState.errorMessage}'),
+                  SizedBox(height: 12.h),
+                  ElevatedButton(
+                    onPressed: () => ref
+                        .read(sessionTrackingControllerProvider.notifier)
+                        .loadSession(widget.applicationId, forceRefresh: true),
+                    child: const Text('Retry'),
                   ),
-                )
-              : session == null
-                  ? const Center(child: Text('Session not available'))
-                  : _buildContent(context, session, now, trackingState),
+                ],
+              ),
+            )
+          : session == null
+          ? const Center(child: Text('Session not available'))
+          : _buildContent(context, session, now, trackingState),
       bottomNavigationBar: _buildBottomBar(context),
     );
   }
@@ -277,8 +284,11 @@ class _SitterActiveBookingScreenState
       backgroundColor: Colors.white,
       elevation: 0,
       leading: IconButton(
-        icon:
-            Icon(Icons.arrow_back, color: const Color(0xFF667085), size: 24.w),
+        icon: Icon(
+          Icons.arrow_back,
+          color: const Color(0xFF667085),
+          size: 24.w,
+        ),
         onPressed: () {
           if (context.canPop()) {
             context.pop();
@@ -299,8 +309,11 @@ class _SitterActiveBookingScreenState
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.headset_mic_outlined,
-              color: const Color(0xFF667085), size: 24.w),
+          icon: Icon(
+            Icons.headset_mic_outlined,
+            color: const Color(0xFF667085),
+            size: 24.w,
+          ),
           onPressed: () {
             // TODO: Open support
           },
@@ -343,13 +356,16 @@ class _SitterActiveBookingScreenState
   }
 
   Widget _buildActiveSessionSection(
-      BookingSessionModel session, Duration elapsed) {
+    BookingSessionModel session,
+    Duration elapsed,
+  ) {
     final hours = elapsed.inHours.toString().padLeft(2, '0');
     final minutes = (elapsed.inMinutes % 60).toString().padLeft(2, '0');
     final seconds = (elapsed.inSeconds % 60).toString().padLeft(2, '0');
     final statusLabel = session.isPaused ? 'Paused' : 'Active';
-    final statusColor =
-        session.isPaused ? AppColors.warning : AppColors.success;
+    final statusColor = session.isPaused
+        ? AppColors.warning
+        : AppColors.success;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,9 +384,10 @@ class _SitterActiveBookingScreenState
           Padding(
             padding: EdgeInsets.only(bottom: 12.h),
             child: Text(
-              [session.jobTitle, session.familyName]
-                  .where((value) => value.isNotEmpty)
-                  .join(' • '),
+              [
+                session.jobTitle,
+                session.familyName,
+              ].where((value) => value.isNotEmpty).join(' • '),
               style: TextStyle(
                 fontSize: 14.sp,
                 color: const Color(0xFF667085),
@@ -530,8 +547,9 @@ class _SitterActiveBookingScreenState
   Widget _buildLiveTrackingSection(SessionTrackingState trackingState) {
     final routeCount = trackingState.routeCoordinates.length;
     final lastUpdate = trackingState.lastLocationAt;
-    final trackingLabel =
-        trackingState.isTracking ? 'Tracking on' : 'Tracking off';
+    final trackingLabel = trackingState.isTracking
+        ? 'Tracking on'
+        : 'Tracking off';
     final trackingColor = trackingState.isTracking
         ? const Color(0xFF12B76A)
         : const Color(0xFFF04438);
@@ -543,8 +561,8 @@ class _SitterActiveBookingScreenState
     final center = routePoints.isNotEmpty
         ? routePoints.last
         : (destination != null
-            ? LatLng(destination.latitude, destination.longitude)
-            : null);
+              ? LatLng(destination.latitude, destination.longitude)
+              : null);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -647,8 +665,7 @@ class _SitterActiveBookingScreenState
                             });
                           }
                         },
-                        onCameraMove: (position) {
-                        },
+                        onCameraMove: (position) {},
                         mapType: _useSatelliteView
                             ? MapType.hybrid
                             : MapType.normal,
@@ -667,13 +684,16 @@ class _SitterActiveBookingScreenState
                               markerId: const MarkerId('current'),
                               position: routePoints.last,
                               icon: BitmapDescriptor.defaultMarkerWithHue(
-                                  BitmapDescriptor.hueAzure),
+                                BitmapDescriptor.hueAzure,
+                              ),
                             ),
                           if (destination != null)
                             Marker(
                               markerId: const MarkerId('destination'),
-                              position: LatLng(destination.latitude,
-                                  destination.longitude),
+                              position: LatLng(
+                                destination.latitude,
+                                destination.longitude,
+                              ),
                             ),
                         },
                         zoomControlsEnabled: false,
@@ -702,9 +722,10 @@ class _SitterActiveBookingScreenState
                             _buildMapControlButton(
                               icon: Icons.my_location,
                               onTap: () => _centerOnLocation(
-                                  routePoints.isNotEmpty
-                                      ? routePoints.last
-                                      : center),
+                                routePoints.isNotEmpty
+                                    ? routePoints.last
+                                    : center,
+                              ),
                               tooltip: 'Center on location',
                             ),
                           ],
@@ -823,11 +844,7 @@ class _SitterActiveBookingScreenState
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 28.w,
-            color: AppColors.primary,
-          ),
+          Icon(icon, size: 28.w, color: AppColors.primary),
           SizedBox(height: 8.h),
           Text(
             name,
@@ -876,18 +893,16 @@ class _SitterActiveBookingScreenState
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5),
           ),
-          child: Icon(
-            icon,
-            size: 20.w,
-            color: const Color(0xFF667085),
-          ),
+          child: Icon(icon, size: 20.w, color: const Color(0xFF667085)),
         ),
       ),
     );
   }
 
   void _showRouteDetails(
-      BuildContext context, SessionTrackingState trackingState) {
+    BuildContext context,
+    SessionTrackingState trackingState,
+  ) {
     final route = trackingState.routeCoordinates;
     showModalBottomSheet<void>(
       context: context,
@@ -996,68 +1011,68 @@ class _SitterActiveBookingScreenState
           ),
           SizedBox(height: 10.h),
           Row(
-        children: [
-          // Clock Out Button
-          Expanded(
-            child: Container(
-              height: 56.h,
-              padding: EdgeInsets.only(bottom: 4.h),
-              child: ElevatedButton(
-                onPressed: _isClockingOut ? null : _clockOut,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.textOnButton,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  padding: EdgeInsets.zero,
-                ),
-                child: _isClockingOut
-                    ? SizedBox(
-                        width: 24.w,
-                        height: 24.w,
-                        child: const CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Clock Out',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          height: 1.2,
-                        ),
+            children: [
+              // Clock Out Button
+              Expanded(
+                child: Container(
+                  height: 56.h,
+                  padding: EdgeInsets.only(bottom: 4.h),
+                  child: ElevatedButton(
+                    onPressed: _isClockingOut ? null : _clockOut,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.textOnButton,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
+                      padding: EdgeInsets.zero,
+                    ),
+                    child: _isClockingOut
+                        ? SizedBox(
+                            width: 24.w,
+                            height: 24.w,
+                            child: const CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            'Clock Out',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter',
+                              height: 1.2,
+                            ),
+                          ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          SizedBox(width: 12.w),
-          // Copy/Share Button
-          Container(
-            width: 56.h,
-            height: 56.h,
-            padding: EdgeInsets.only(bottom: 4.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: const Color(0xFFE5E7EB)),
-            ),
-            child: IconButton(
-              onPressed: () {
-                // TODO: Copy/Share functionality
-              },
-              icon: Icon(
-                Icons.copy_outlined,
-                color: const Color(0xFF667085),
-                size: 24.w,
+              SizedBox(width: 12.w),
+              // Copy/Share Button
+              Container(
+                width: 56.h,
+                height: 56.h,
+                padding: EdgeInsets.only(bottom: 4.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    // TODO: Copy/Share functionality
+                  },
+                  icon: Icon(
+                    Icons.copy_outlined,
+                    color: const Color(0xFF667085),
+                    size: 24.w,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
         ],
       ),
     );
@@ -1075,7 +1090,7 @@ class _SitterActiveBookingScreenState
     final reminderTime = shiftEnd.subtract(const Duration(minutes: 5));
     final withinWindow =
         (now.isAfter(reminderTime) || now.isAtSameMomentAs(reminderTime)) &&
-            (now.isBefore(shiftEnd) || now.isAtSameMomentAs(shiftEnd));
+        (now.isBefore(shiftEnd) || now.isAtSameMomentAs(shiftEnd));
     if (!withinWindow || _isShiftEndDialogShowing) {
       return;
     }
@@ -1197,8 +1212,7 @@ class _SitterActiveBookingScreenState
     if (_hasStatusRedirected || status == null || status.trim().isEmpty) {
       return;
     }
-    final normalized =
-        status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+    final normalized = status.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
     if (normalized != 'clockedout' && normalized != 'completed') {
       return;
     }
@@ -1206,7 +1220,8 @@ class _SitterActiveBookingScreenState
     if (session != null) {
       ref.read(sessionTrackingControllerProvider.notifier).stopSession();
     }
-    final shouldComplete = normalized == 'completed' ||
+    final shouldComplete =
+        normalized == 'completed' ||
         (jobDetails != null && _hasFinalEndPassed(jobDetails, now));
     final targetStatus = shouldComplete ? 'completed' : status;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1243,15 +1258,17 @@ class _SitterActiveBookingScreenState
     return session.scheduledEndTime?.toLocal();
   }
 
-  DateTime? _resolveActiveDate(JobRequestDetailsModel jobDetails, DateTime now) {
+  DateTime? _resolveActiveDate(
+    JobRequestDetailsModel jobDetails,
+    DateTime now,
+  ) {
     final today = DateTime(now.year, now.month, now.day);
     final start = _parseDate(jobDetails.startDate);
     final end = _parseDate(jobDetails.endDate);
     if (start != null && end != null) {
       final startsBeforeOrToday =
           _isSameDate(today, start) || today.isAfter(start);
-      final endsAfterOrToday =
-          _isSameDate(today, end) || today.isBefore(end);
+      final endsAfterOrToday = _isSameDate(today, end) || today.isBefore(end);
       if (startsBeforeOrToday && endsAfterOrToday) {
         return today;
       }
@@ -1341,10 +1358,7 @@ class _RoutePointItem extends ConsumerStatefulWidget {
   final int index;
   final JobCoordinatesModel point;
 
-  const _RoutePointItem({
-    required this.index,
-    required this.point,
-  });
+  const _RoutePointItem({required this.index, required this.point});
 
   @override
   ConsumerState<_RoutePointItem> createState() => _RoutePointItemState();
@@ -1367,7 +1381,7 @@ class _RoutePointItemState extends ConsumerState<_RoutePointItem> {
         latitude: widget.point.latitude,
         longitude: widget.point.longitude,
       );
-      
+
       if (mounted) {
         setState(() {
           _address = address;

@@ -29,60 +29,61 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
     {
       'id': 'bathing',
       'title': 'Bathing/Hygiene Assistance',
-      'icon': Icons.bathtub_outlined
+      'icon': Icons.bathtub_outlined,
     },
     {
       'id': 'feeding',
       'title': 'Feeding Assistance',
-      'icon': Icons.restaurant_outlined
+      'icon': Icons.restaurant_outlined,
     },
     {
       'id': 'medication',
       'title': 'Medication Administration',
-      'icon': Icons.medication_outlined
+      'icon': Icons.medication_outlined,
     },
     {
       'id': 'mobility',
       'title': 'Mobility Support',
-      'icon': Icons.accessible_outlined
+      'icon': Icons.accessible_outlined,
     },
     {
       'id': 'therapy',
       'title': 'Therapy Exercise Support',
-      'icon': Icons.fitness_center_outlined
+      'icon': Icons.fitness_center_outlined,
     },
     {
       'id': 'behavioral',
       'title': 'Behavioral Support',
-      'icon': Icons.psychology_outlined
+      'icon': Icons.psychology_outlined,
     },
     {
       'id': 'medical_equipment',
       'title': 'Medical Equipment Care',
-      'icon': Icons.medical_services_outlined
+      'icon': Icons.medical_services_outlined,
     },
     {
       'id': 'communication',
       'title': 'Communication Support',
-      'icon': Icons.record_voice_over_outlined
+      'icon': Icons.record_voice_over_outlined,
     },
     {
       'id': 'sensory',
       'title': 'Sensory Activities',
-      'icon': Icons.touch_app_outlined
+      'icon': Icons.touch_app_outlined,
     },
     {
       'id': 'overnight',
       'title': 'Overnight Care',
-      'icon': Icons.nightlight_outlined
+      'icon': Icons.nightlight_outlined,
     },
   ];
 
   @override
   void initState() {
     super.initState();
-    _selectedServices =
-        Set<String>.from(widget.profileData['services'] as List? ?? []);
+    _selectedServices = Set<String>.from(
+      widget.profileData['services'] as List? ?? [],
+    );
   }
 
   void _toggleService(String id) {
@@ -159,8 +160,9 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
 
                     // Service checkboxes
                     ..._serviceOptions.map((service) {
-                      final isSelected =
-                          _selectedServices.contains(service['id']);
+                      final isSelected = _selectedServices.contains(
+                        service['id'],
+                      );
                       return GestureDetector(
                         onTap: () => _toggleService(service['id'] as String),
                         child: Container(
@@ -227,8 +229,11 @@ class _Step4ServicesState extends ConsumerState<Step4Services> {
                                   ),
                                 ),
                                 child: isSelected
-                                    ? const Icon(Icons.check,
-                                        size: 16, color: Colors.white)
+                                    ? const Icon(
+                                        Icons.check,
+                                        size: 16,
+                                        color: Colors.white,
+                                      )
                                     : null,
                               ),
                             ],

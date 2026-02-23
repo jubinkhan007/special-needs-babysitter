@@ -4,10 +4,7 @@ import 'package:babysitter_app/src/features/parent/booking_flow/presentation/the
 class PixelRadio extends StatelessWidget {
   final bool isSelected;
 
-  const PixelRadio({
-    super.key,
-    required this.isSelected,
-  });
+  const PixelRadio({super.key, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {

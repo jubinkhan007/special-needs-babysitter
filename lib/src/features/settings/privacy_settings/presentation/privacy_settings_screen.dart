@@ -40,7 +40,8 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Privacy Help'),
         content: const Text(
-            'These settings control how your data is used within the app.'),
+          'These settings control how your data is used within the app.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -60,10 +61,7 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -85,10 +83,7 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
                 height: 28.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppTokens.iconGrey,
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: AppTokens.iconGrey, width: 1.5),
                 ),
                 child: Center(
                   child: Icon(
@@ -103,9 +98,9 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
         ],
       ),
       body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: const TextScaler.linear(1.0),
-        ),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1.0)),
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(

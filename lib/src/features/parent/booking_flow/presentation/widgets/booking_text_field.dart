@@ -23,23 +23,23 @@ class BookingTextField extends StatelessWidget {
 
   List<TextInputFormatter>? _getInputFormatters(TextInputType? keyboardType) {
     final List<TextInputFormatter> formatters = [];
-    
+
     // Add max length formatter if specified
     if (maxLength != null) {
       formatters.add(LengthLimitingTextInputFormatter(maxLength));
     }
-    
+
     // Add numeric formatter for phone/number fields
     if (keyboardType == TextInputType.number ||
         keyboardType == TextInputType.phone) {
       formatters.add(FilteringTextInputFormatter.digitsOnly);
     }
-    
+
     // Add custom formatters
     if (inputFormatters != null) {
       formatters.addAll(inputFormatters!);
     }
-    
+
     return formatters.isEmpty ? null : formatters;
   }
 
@@ -47,7 +47,7 @@ class BookingTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,7 +91,8 @@ class BookingTextField extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     color: currentLength >= maxLength!
-                        ? AppColors.error // Red when at limit
+                        ? AppColors
+                              .error // Red when at limit
                         : const Color(0xFF667085), // Gray normally
                   ),
                 ),

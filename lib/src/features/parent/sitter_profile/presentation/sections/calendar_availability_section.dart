@@ -134,8 +134,10 @@ class _CalendarAvailabilitySectionState
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: const Icon(Icons.chevron_left,
-              color: AppUiTokens.textSecondary),
+          icon: const Icon(
+            Icons.chevron_left,
+            color: AppUiTokens.textSecondary,
+          ),
           onPressed: onPrev,
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
@@ -156,12 +158,17 @@ class _CalendarAvailabilitySectionState
           ),
         ),
         const SizedBox(width: 2),
-        const Icon(Icons.arrow_drop_down,
-            size: 16, color: AppUiTokens.textSecondary),
+        const Icon(
+          Icons.arrow_drop_down,
+          size: 16,
+          color: AppUiTokens.textSecondary,
+        ),
         const SizedBox(width: 2),
         IconButton(
-          icon: const Icon(Icons.chevron_right,
-              color: AppUiTokens.textSecondary),
+          icon: const Icon(
+            Icons.chevron_right,
+            color: AppUiTokens.textSecondary,
+          ),
           onPressed: onNext,
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
@@ -176,26 +183,30 @@ class _CalendarAvailabilitySectionState
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: days
-          .map((d) => SizedBox(
-                width: 32,
-                child: Center(
-                  child: Text(
-                    d,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: AppUiTokens.textPrimary,
-                    ),
+          .map(
+            (d) => SizedBox(
+              width: 32,
+              child: Center(
+                child: Text(
+                  d,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppUiTokens.textPrimary,
                   ),
                 ),
-              ))
+              ),
+            ),
+          )
           .toList(),
     );
   }
 
   Widget _buildCalendarGrid() {
-    final daysInMonth =
-        DateUtils.getDaysInMonth(_focusedDate.year, _focusedDate.month);
+    final daysInMonth = DateUtils.getDaysInMonth(
+      _focusedDate.year,
+      _focusedDate.month,
+    );
     final firstDayOfMonth = DateTime(_focusedDate.year, _focusedDate.month, 1);
     // 1 = Monday, 7 = Sunday.
     // If we want Sunday start:
@@ -221,8 +232,11 @@ class _CalendarAvailabilitySectionState
                 return const SizedBox(width: 32, height: 32);
               }
 
-              final date =
-                  DateTime(_focusedDate.year, _focusedDate.month, dayNumber);
+              final date = DateTime(
+                _focusedDate.year,
+                _focusedDate.month,
+                dayNumber,
+              );
               final dateKey = _formatDateKey(date);
               final isAvailable = _availableDates.contains(dateKey);
 
@@ -231,13 +245,16 @@ class _CalendarAvailabilitySectionState
                 height: 32,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isAvailable 
-                      ? const Color(0xFFE8F5E9) // Light green background for available dates
+                  color: isAvailable
+                      ? const Color(
+                          0xFFE8F5E9,
+                        ) // Light green background for available dates
                       : Colors.transparent,
                   border: isAvailable
                       ? Border.all(
                           color: const Color(0xFF4ADE80),
-                          width: 1.5) // Light Green Ring
+                          width: 1.5,
+                        ) // Light Green Ring
                       : null,
                 ),
                 child: Center(
@@ -245,8 +262,9 @@ class _CalendarAvailabilitySectionState
                     dayNumber.toString(),
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight:
-                          isAvailable ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: isAvailable
+                          ? FontWeight.w600
+                          : FontWeight.w400,
                       color: isAvailable
                           ? AppUiTokens.textPrimary
                           : AppUiTokens.textSecondary,

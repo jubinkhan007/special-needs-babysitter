@@ -63,10 +63,7 @@ class _SearchTopBarState extends ConsumerState<SearchTopBar> {
                 ),
               ),
               // Title
-              const Text(
-                'Search',
-                style: AppUiTokens.appBarTitle,
-              ),
+              const Text('Search', style: AppUiTokens.appBarTitle),
               // Bell Icon
               GestureDetector(
                 onTap: () {},
@@ -115,10 +112,7 @@ class _SearchTopBarState extends ConsumerState<SearchTopBar> {
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
                     ),
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
                   ),
                 ),
               ],

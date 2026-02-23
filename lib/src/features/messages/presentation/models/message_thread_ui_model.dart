@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:babysitter_app/src/packages/domain/domain.dart';
-import '../../domain/message_thread.dart' as local; // Keep for backward compatibility if needed, or remove if unused.
+import '../../domain/message_thread.dart'
+    as local; // Keep for backward compatibility if needed, or remove if unused.
 
 /// UI-ready model for a message thread row.
 /// All formatting is done in the mapper, widgets are "dumb".
@@ -33,10 +34,14 @@ class MessageThreadUiModel {
     final timeFormat = DateFormat('h:mm a'); // "4:27 PM"
     final timeText = timeFormat.format(thread.lastMessageTime);
 
-    String previewText = _formatLocalPreviewText(thread.lastMessage, thread.lastMessageType);
-    bool showCallIcon = thread.lastMessageType == local.MessageType.callEnded ||
-                        thread.lastMessageType == local.MessageType.callLog ||
-                        _isCallInviteJson(thread.lastMessage);
+    String previewText = _formatLocalPreviewText(
+      thread.lastMessage,
+      thread.lastMessageType,
+    );
+    bool showCallIcon =
+        thread.lastMessageType == local.MessageType.callEnded ||
+        thread.lastMessageType == local.MessageType.callLog ||
+        _isCallInviteJson(thread.lastMessage);
 
     return MessageThreadUiModel(
       id: thread.id,
@@ -55,10 +60,14 @@ class MessageThreadUiModel {
     final timeFormat = DateFormat('h:mm a');
     final timeText = timeFormat.format(conversation.lastMessageTime);
 
-    String previewText = _formatDomainPreviewText(conversation.lastMessage, conversation.lastMessageType);
-    bool showCallIcon = conversation.lastMessageType == MessageType.callEnded ||
-                        conversation.lastMessageType == MessageType.callLog ||
-                        _isCallInviteJson(conversation.lastMessage);
+    String previewText = _formatDomainPreviewText(
+      conversation.lastMessage,
+      conversation.lastMessageType,
+    );
+    bool showCallIcon =
+        conversation.lastMessageType == MessageType.callEnded ||
+        conversation.lastMessageType == MessageType.callLog ||
+        _isCallInviteJson(conversation.lastMessage);
 
     return MessageThreadUiModel(
       id: conversation.id,
@@ -74,7 +83,10 @@ class MessageThreadUiModel {
   }
 
   /// Helper to format preview text for local MessageType
-  static String _formatLocalPreviewText(String lastMessage, local.MessageType messageType) {
+  static String _formatLocalPreviewText(
+    String lastMessage,
+    local.MessageType messageType,
+  ) {
     // Handle different message types
     switch (messageType) {
       case local.MessageType.image:
@@ -98,7 +110,10 @@ class MessageThreadUiModel {
   }
 
   /// Helper to format preview text for domain MessageType
-  static String _formatDomainPreviewText(String lastMessage, MessageType messageType) {
+  static String _formatDomainPreviewText(
+    String lastMessage,
+    MessageType messageType,
+  ) {
     // Handle different message types
     switch (messageType) {
       case MessageType.image:

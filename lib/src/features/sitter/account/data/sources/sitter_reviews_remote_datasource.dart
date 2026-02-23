@@ -13,9 +13,7 @@ class SitterReviewsRemoteDataSource {
       debugPrint('DEBUG: Reviews Request: GET /reviews/my-reviews');
       final response = await _dio.get(
         '/reviews/my-reviews',
-        options: Options(
-          receiveTimeout: const Duration(seconds: 60),
-        ),
+        options: Options(receiveTimeout: const Duration(seconds: 60)),
       );
       debugPrint('DEBUG: Reviews Response Status: ${response.statusCode}');
 

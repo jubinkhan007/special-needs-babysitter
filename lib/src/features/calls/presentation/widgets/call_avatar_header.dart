@@ -27,7 +27,9 @@ class CallAvatarHeader extends StatelessWidget {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: (isVideo ? Colors.blue : Colors.green).withValues(alpha: 0.3),
+                color: (isVideo ? Colors.blue : Colors.green).withValues(
+                  alpha: 0.3,
+                ),
                 blurRadius: 40,
                 spreadRadius: 10,
               ),
@@ -36,7 +38,9 @@ class CallAvatarHeader extends StatelessWidget {
           child: CircleAvatar(
             radius: 60.r,
             backgroundColor: Colors.grey[700],
-            backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+            backgroundImage: avatarUrl != null
+                ? NetworkImage(avatarUrl!)
+                : null,
             child: avatarUrl == null
                 ? Text(
                     name.isNotEmpty ? name[0].toUpperCase() : '?',
@@ -66,16 +70,15 @@ class CallAvatarHeader extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (statusText.contains('Calling') || statusText.contains('Incoming'))
+            if (statusText.contains('Calling') ||
+                statusText.contains('Incoming'))
               _buildPulsingDot(),
-            if (statusText.contains('Calling') || statusText.contains('Incoming'))
+            if (statusText.contains('Calling') ||
+                statusText.contains('Incoming'))
               SizedBox(width: 8.w),
             Text(
               statusText,
-              style: TextStyle(
-                fontSize: 16.sp,
-                color: Colors.white70,
-              ),
+              style: TextStyle(fontSize: 16.sp, color: Colors.white70),
             ),
           ],
         ),

@@ -59,7 +59,9 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
   }
 
   void _applyFilters() {
-    ref.read(jobSearchFiltersProvider.notifier).applyFilters(
+    ref
+        .read(jobSearchFiltersProvider.notifier)
+        .applyFilters(
           minPayRate: _minPayRate,
           maxPayRate: _maxPayRate,
           specialNeeds: _specialNeeds,
@@ -92,9 +94,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.primary,
-            ),
+            colorScheme: const ColorScheme.light(primary: AppColors.primary),
           ),
           child: child!,
         );
@@ -167,8 +167,10 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
               Expanded(
                 child: ListView(
                   controller: scrollController,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 16.h,
+                  ),
                   children: [
                     // Special needs expertise
                     _buildSectionTitle('Special Needs Expertise'),
@@ -208,8 +210,12 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
               ),
               // Apply button
               Container(
-                padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w,
-                    20.h + MediaQuery.of(context).padding.bottom),
+                padding: EdgeInsets.fromLTRB(
+                  20.w,
+                  12.h,
+                  20.w,
+                  20.h + MediaQuery.of(context).padding.bottom,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -273,10 +279,14 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
             decoration: InputDecoration(
               hintText: 'Min',
               prefixText: '\$ ',
-              prefixStyle:
-                  TextStyle(fontSize: 14.sp, color: const Color(0xFF667085)),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+              prefixStyle: TextStyle(
+                fontSize: 14.sp,
+                color: const Color(0xFF667085),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 14.h,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
                 borderSide: const BorderSide(color: Color(0xFFD0D5DD)),
@@ -296,8 +306,10 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
           ),
         ),
         SizedBox(width: 12.w),
-        Text('to',
-            style: TextStyle(fontSize: 14.sp, color: const Color(0xFF667085))),
+        Text(
+          'to',
+          style: TextStyle(fontSize: 14.sp, color: const Color(0xFF667085)),
+        ),
         SizedBox(width: 12.w),
         Expanded(
           child: TextField(
@@ -306,10 +318,14 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
             decoration: InputDecoration(
               hintText: 'Max',
               prefixText: '\$ ',
-              prefixStyle:
-                  TextStyle(fontSize: 14.sp, color: const Color(0xFF667085)),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+              prefixStyle: TextStyle(
+                fontSize: 14.sp,
+                color: const Color(0xFF667085),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 14.h,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.r),
                 borderSide: const BorderSide(color: Color(0xFFD0D5DD)),
@@ -364,8 +380,11 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                     child: Icon(Icons.close, size: 18.w, color: Colors.grey),
                   ),
                 SizedBox(width: 8.w),
-                Icon(Icons.calendar_today_outlined,
-                    size: 18.w, color: const Color(0xFF667085)),
+                Icon(
+                  Icons.calendar_today_outlined,
+                  size: 18.w,
+                  color: const Color(0xFF667085),
+                ),
               ],
             ),
           ],
@@ -400,9 +419,7 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
               color: isSelected ? AppColors.primary : Colors.white,
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
-                color: isSelected
-                    ? AppColors.primary
-                    : const Color(0xFFD0D5DD),
+                color: isSelected ? AppColors.primary : const Color(0xFFD0D5DD),
               ),
             ),
             child: Text(

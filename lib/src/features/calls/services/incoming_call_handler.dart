@@ -24,7 +24,7 @@ class IncomingCallHandler {
   StreamSubscription? _foregroundSubscription;
   StreamSubscription? _callKitSubscription;
   StreamSubscription<CallNotificationActionEvent>?
-      _notificationActionSubscription;
+  _notificationActionSubscription;
   final CallKitEventHandler _callKitHandler = CallKitEventHandler();
 
   IncomingCallHandler(this._ref, {required this.navigatorKey});
@@ -38,12 +38,13 @@ class IncomingCallHandler {
     _callKitSubscription = _callKitHandler.actions.listen(_handleCallKitAction);
 
     // Listen for foreground messages
-    _foregroundSubscription =
-        FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
+    _foregroundSubscription = FirebaseMessaging.onMessage.listen(
+      _handleForegroundMessage,
+    );
 
     // Listen for accept/decline/open actions from fallback call notifications
-    _notificationActionSubscription =
-        CallNotificationService.onCallAction.listen(_handleNotificationAction);
+    _notificationActionSubscription = CallNotificationService.onCallAction
+        .listen(_handleNotificationAction);
     developer.log(
       '[CALL_ACTION] IncomingCallHandler notification action listener attached',
       name: 'Calls',
@@ -147,9 +148,7 @@ class IncomingCallHandler {
       final decoded = jsonDecode(text);
       if (decoded is Map<String, dynamic>) return decoded;
       if (decoded is Map) {
-        return decoded.map(
-          (key, value) => MapEntry(key.toString(), value),
-        );
+        return decoded.map((key, value) => MapEntry(key.toString(), value));
       }
     } catch (_) {}
 
@@ -160,9 +159,7 @@ class IncomingCallHandler {
         final decoded = jsonDecode(text.substring(start, end + 1));
         if (decoded is Map<String, dynamic>) return decoded;
         if (decoded is Map) {
-          return decoded.map(
-            (key, value) => MapEntry(key.toString(), value),
-          );
+          return decoded.map((key, value) => MapEntry(key.toString(), value));
         }
       } catch (_) {}
     }
@@ -179,8 +176,8 @@ class IncomingCallHandler {
     var callerUserId =
         (data['callerUserId'] ?? data['caller_user_id'] ?? data['senderUserId'])
             ?.toString();
-    final callerAvatar =
-        (data['callerAvatar'] ?? data['caller_avatar'])?.toString();
+    final callerAvatar = (data['callerAvatar'] ?? data['caller_avatar'])
+        ?.toString();
 
     if ((callerUserId == null || callerUserId.isEmpty) &&
         callId != null &&
@@ -194,7 +191,9 @@ class IncomingCallHandler {
     }
 
     // Update controller state (this handles busy detection)
-    _ref.read(callControllerProvider.notifier).handleIncomingCall(
+    _ref
+        .read(callControllerProvider.notifier)
+        .handleIncomingCall(
           callId: callId,
           callType: CallType.fromString(callType ?? 'audio'),
           callerName: callerName,
@@ -225,7 +224,8 @@ class IncomingCallHandler {
   }
 
   Future<void> _handleNotificationAction(
-      CallNotificationActionEvent event) async {
+    CallNotificationActionEvent event,
+  ) async {
     try {
       await _handleNotificationActionInner(event);
     } catch (e, st) {
@@ -234,12 +234,15 @@ class IncomingCallHandler {
         name: 'Calls',
         stackTrace: st,
       );
-      debugPrint('[CALL_ACTION] UNHANDLED ERROR in notification action handler: $e');
+      debugPrint(
+        '[CALL_ACTION] UNHANDLED ERROR in notification action handler: $e',
+      );
     }
   }
 
   Future<void> _handleNotificationActionInner(
-      CallNotificationActionEvent event) async {
+    CallNotificationActionEvent event,
+  ) async {
     final controller = _ref.read(callControllerProvider.notifier);
     final guard = _ref.read(callNavigationGuardProvider(navigatorKey));
     developer.log(
@@ -396,8 +399,7 @@ class IncomingCallHandler {
             .read(callsRepositoryProvider)
             .getCallDetails(event.callId);
         callType = session.callType;
-        final currentUserId =
-            _ref.read(authNotifierProvider).value?.user.id;
+        final currentUserId = _ref.read(authNotifierProvider).value?.user.id;
         final remote = currentUserId == null
             ? (session.initiator ?? session.recipient)
             : session.getRemoteParticipant(currentUserId);
@@ -444,7 +446,8 @@ class IncomingCallHandler {
     );
 
     final hydratedState = _ref.read(callControllerProvider);
-    final success = hydratedState is IncomingRinging &&
+    final success =
+        hydratedState is IncomingRinging &&
         hydratedState.callId == event.callId;
     developer.log(
       '[CALL_ACTION] hydration result success=$success callId=${event.callId}',
@@ -478,10 +481,7 @@ class IncomingCallHandler {
 
     switch (action) {
       case CallKitAccepted():
-        developer.log(
-          'CallKit: User accepted $callId',
-          name: 'Calls',
-        );
+        developer.log('CallKit: User accepted $callId', name: 'Calls');
         unawaited(
           _handleNotificationAction(
             CallNotificationActionEvent.accept(
@@ -539,9 +539,11 @@ class IncomingCallHandler {
 
 // Provider for IncomingCallHandler
 final incomingCallHandlerProvider =
-    Provider.family<IncomingCallHandler, GlobalKey<NavigatorState>>(
-        (ref, navigatorKey) {
-  final handler = IncomingCallHandler(ref, navigatorKey: navigatorKey);
-  ref.onDispose(() => handler.dispose());
-  return handler;
-});
+    Provider.family<IncomingCallHandler, GlobalKey<NavigatorState>>((
+      ref,
+      navigatorKey,
+    ) {
+      final handler = IncomingCallHandler(ref, navigatorKey: navigatorKey);
+      ref.onDispose(() => handler.dispose());
+      return handler;
+    });

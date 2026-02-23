@@ -63,8 +63,8 @@ class DocumentTypes {
 /// Provider for BackgroundCheckRemoteDataSource
 final backgroundCheckRemoteDataSourceProvider =
     Provider<BackgroundCheckRemoteDataSource>((ref) {
-  return BackgroundCheckRemoteDataSource(ref.watch(authDioProvider));
-});
+      return BackgroundCheckRemoteDataSource(ref.watch(authDioProvider));
+    });
 
 /// Controller for background check submission
 class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
@@ -72,9 +72,9 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
   final ImagePicker _imagePicker = ImagePicker();
 
   BackgroundCheckController(this._dataSource)
-      : super(const BackgroundCheckState(
-          documentType: DocumentTypes.driversLicense,
-        ));
+    : super(
+        const BackgroundCheckState(documentType: DocumentTypes.driversLicense),
+      );
 
   /// Select document type
   void selectDocumentType(String type) {
@@ -182,7 +182,9 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
         contentType,
       );
 
-      debugPrint('DEBUG: File uploaded, public URL: ${presignedResponse.publicUrl}');
+      debugPrint(
+        'DEBUG: File uploaded, public URL: ${presignedResponse.publicUrl}',
+      );
 
       // Step 3: Submit identity verification
       await _dataSource.submitIdentityVerification(
@@ -207,8 +209,9 @@ class BackgroundCheckController extends StateNotifier<BackgroundCheckState> {
 
 /// Provider for BackgroundCheckController
 final backgroundCheckControllerProvider =
-    StateNotifierProvider<BackgroundCheckController, BackgroundCheckState>(
-        (ref) {
-  final dataSource = ref.watch(backgroundCheckRemoteDataSourceProvider);
-  return BackgroundCheckController(dataSource);
-});
+    StateNotifierProvider<BackgroundCheckController, BackgroundCheckState>((
+      ref,
+    ) {
+      final dataSource = ref.watch(backgroundCheckRemoteDataSourceProvider);
+      return BackgroundCheckController(dataSource);
+    });

@@ -35,15 +35,13 @@ class InviteSittersCard extends StatelessWidget {
           const SizedBox(height: 12),
           _buildReferralCodeRow(context),
           const SizedBox(height: 12),
-          Text(
-            'How It Works:',
-            style: ReferralBonusesStyles.value,
-          ),
+          Text('How It Works:', style: ReferralBonusesStyles.value),
           const SizedBox(height: 8),
           const _BulletItem(text: 'Share your code.'),
           const SizedBox(height: 6),
           const _BulletItem(
-            text: 'The referred sitter signs up and completes their first booking.',
+            text:
+                'The referred sitter signs up and completes their first booking.',
           ),
           const SizedBox(height: 6),
           const _BulletItem(text: 'You both receive a \$10 credit!'),
@@ -73,14 +71,12 @@ class InviteSittersCard extends StatelessWidget {
           Expanded(
             child: Text(
               errorMessage!,
-              style: ReferralBonusesStyles.label
-                  .copyWith(color: Colors.redAccent),
+              style: ReferralBonusesStyles.label.copyWith(
+                color: Colors.redAccent,
+              ),
             ),
           ),
-          TextButton(
-            onPressed: onRetry,
-            child: const Text('Retry'),
-          ),
+          TextButton(onPressed: onRetry, child: const Text('Retry')),
         ],
       );
     }
@@ -130,9 +126,7 @@ class _BulletItem extends StatelessWidget {
       children: [
         Text('•', style: ReferralBonusesStyles.body),
         const SizedBox(width: 8),
-        Expanded(
-          child: Text(text, style: ReferralBonusesStyles.body),
-        ),
+        Expanded(child: Text(text, style: ReferralBonusesStyles.body)),
       ],
     );
   }

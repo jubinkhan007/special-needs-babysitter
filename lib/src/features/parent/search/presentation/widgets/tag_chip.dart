@@ -14,10 +14,7 @@ class TagChip extends StatelessWidget {
         color: AppUiTokens.chipBackground,
         borderRadius: BorderRadius.circular(AppUiTokens.radiusCircle),
       ),
-      child: Text(
-        label,
-        style: AppUiTokens.chipLabel,
-      ),
+      child: Text(label, style: AppUiTokens.chipLabel),
     );
   }
 }

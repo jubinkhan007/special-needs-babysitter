@@ -7,11 +7,7 @@ class BookingsTabs extends StatelessWidget {
   final TabController controller;
   final List<BookingStatus> tabs;
 
-  const BookingsTabs({
-    super.key,
-    required this.controller,
-    required this.tabs,
-  });
+  const BookingsTabs({super.key, required this.controller, required this.tabs});
 
   String _label(BookingStatus status) {
     final n = status.name;
@@ -60,8 +56,10 @@ class BookingsTabs extends StatelessWidget {
           tabs: tabs.map((status) {
             return Tab(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
                 child: Text(_label(status)),
               ),
             );

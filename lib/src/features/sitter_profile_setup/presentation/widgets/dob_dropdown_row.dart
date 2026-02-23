@@ -52,8 +52,11 @@ class DobDropdownRow extends StatelessWidget {
     );
   }
 
-  Widget _buildPickerBox(BuildContext context,
-      {required String label, required bool isActive}) {
+  Widget _buildPickerBox(
+    BuildContext context, {
+    required String label,
+    required bool isActive,
+  }) {
     return Expanded(
       child: GestureDetector(
         onTap: () async {
@@ -72,8 +75,7 @@ class DobDropdownRow extends StatelessWidget {
                   ),
                   textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
-                      foregroundColor:
-                          AppColors.secondary, // Button text color
+                      foregroundColor: AppColors.secondary, // Button text color
                     ),
                   ),
                 ),
@@ -114,8 +116,11 @@ class DobDropdownRow extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Icon(Icons.keyboard_arrow_down,
-                  size: 20, color: Color(0xFF98A2B3)),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                size: 20,
+                color: Color(0xFF98A2B3),
+              ),
             ],
           ),
         ),
@@ -136,7 +141,7 @@ class DobDropdownRow extends StatelessWidget {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return months[month - 1];
   }

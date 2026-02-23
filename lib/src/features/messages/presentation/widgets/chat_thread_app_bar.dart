@@ -61,8 +61,9 @@ class ChatThreadAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     Text(
                       title,
-                      style:
-                          AppTokens.chatSenderNameStyle.copyWith(fontSize: 16),
+                      style: AppTokens.chatSenderNameStyle.copyWith(
+                        fontSize: 16,
+                      ),
                     ),
                     if (isVerified) ...[
                       const SizedBox(width: 4),

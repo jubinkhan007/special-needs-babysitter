@@ -33,7 +33,8 @@ class _Step5EmergencyContactsState
   void initState() {
     super.initState();
     _contacts = List<Map<String, dynamic>>.from(
-        widget.profileData['emergencyContacts'] as List? ?? []);
+      widget.profileData['emergencyContacts'] as List? ?? [],
+    );
   }
 
   void _addContact() {
@@ -65,7 +66,8 @@ class _Step5EmergencyContactsState
 
   void _saveAndNext() {
     if (_contacts.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please add at least one emergency contact'),
           backgroundColor: AppColors.error,
@@ -177,7 +179,9 @@ class _Step5EmergencyContactsState
                                     contact['relation'] as String,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: AppColors.textPrimary.withAlpha(153),
+                                      color: AppColors.textPrimary.withAlpha(
+                                        153,
+                                      ),
                                     ),
                                   ),
                                   Text(
@@ -195,8 +199,11 @@ class _Step5EmergencyContactsState
                               onPressed: () => _editContact(index),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline,
-                                  size: 20, color: AppColors.error),
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                size: 20,
+                                color: AppColors.error,
+                              ),
                               onPressed: () => _deleteContact(index),
                             ),
                           ],
@@ -213,9 +220,7 @@ class _Step5EmergencyContactsState
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: AppColors.coralAccent,
-                          ),
+                          border: Border.all(color: AppColors.coralAccent),
                         ),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,

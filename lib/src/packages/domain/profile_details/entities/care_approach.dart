@@ -19,11 +19,11 @@ class CareApproach extends Equatable {
 
   @override
   List<Object?> get props => [
-        description,
-        transportationNeeds,
-        needsPickupFromSchool,
-        needsDropOffAtTherapy,
-        pickupDropOffRequirements,
-        specialAccommodations,
-      ];
+    description,
+    transportationNeeds,
+    needsPickupFromSchool,
+    needsDropOffAtTherapy,
+    pickupDropOffRequirements,
+    specialAccommodations,
+  ];
 }

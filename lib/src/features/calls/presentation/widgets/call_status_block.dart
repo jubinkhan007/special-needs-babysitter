@@ -24,10 +24,7 @@ class CallStatusBlock extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CallAvatar(
-            avatarUrl: avatarUrl,
-            size: AppTokens.callAvatarLargeSize,
-          ),
+          CallAvatar(avatarUrl: avatarUrl, size: AppTokens.callAvatarLargeSize),
           SizedBox(height: AppTokens.callVerticalSpacingMd),
           Text(
             name,

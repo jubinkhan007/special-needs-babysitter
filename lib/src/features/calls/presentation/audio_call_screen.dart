@@ -67,8 +67,9 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     final uiModel = AudioCallUiMapper.map(_state);
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         body: Stack(
           children: [
@@ -90,8 +91,9 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(top: 20.h), // Tuning vertical pos
+                        padding: EdgeInsets.only(
+                          top: 20.h,
+                        ), // Tuning vertical pos
                         child: CallStatusBlock(
                           name: uiModel.nameText,
                           statusText: uiModel.secondaryText,

@@ -42,7 +42,9 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
   }
 
   Future<void> _handleAction(StripeConnectStatus status) async {
-    final controller = ref.read(stripeConnectOnboardingControllerProvider.notifier);
+    final controller = ref.read(
+      stripeConnectOnboardingControllerProvider.notifier,
+    );
     String? url;
 
     if (status.status == StripeConnectStatusType.complete) {
@@ -83,15 +85,14 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
   @override
   Widget build(BuildContext context) {
     final statusAsync = ref.watch(stripeConnectStatusProvider);
-    final onboardingState = ref.watch(stripeConnectOnboardingControllerProvider);
+    final onboardingState = ref.watch(
+      stripeConnectOnboardingControllerProvider,
+    );
 
     // Listen for errors from the controller
     ref.listen(stripeConnectOnboardingControllerProvider, (previous, next) {
       if (next.error != null && previous?.error != next.error) {
-        AppToast.show(
-          context,
-          SnackBar(content: Text(next.error!)),
-        );
+        AppToast.show(context, SnackBar(content: Text(next.error!)));
       }
     });
 
@@ -171,15 +172,16 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFF8E1),
                     borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(
-                      color: const Color(0xFFFFE082),
-                    ),
+                    border: Border.all(color: const Color(0xFFFFE082)),
                   ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.info_outline,
-                          size: 16.sp, color: const Color(0xFF92400E)),
+                      Icon(
+                        Icons.info_outline,
+                        size: 16.sp,
+                        color: const Color(0xFF92400E),
+                      ),
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
@@ -202,9 +204,7 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
               ],
             ),
           ),
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
-          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
           error: (error, stack) {
             final appError = AppErrorHandler.parse(error);
             return GlobalErrorWidget(
@@ -227,20 +227,14 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
       decoration: BoxDecoration(
         color: const Color(0xFFE8F4FD),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.3),
-        ),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                size: 20.sp,
-                color: AppColors.primary,
-              ),
+              Icon(Icons.info_outline, size: 20.sp, color: AppColors.primary),
               SizedBox(width: 8.w),
               Text(
                 'About Payouts',

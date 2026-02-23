@@ -52,15 +52,17 @@ class ChatCallInvitePollingHandler {
         return;
       }
 
-      final conversations =
-          await _ref.read(chatRepositoryProvider).getConversations();
+      final conversations = await _ref
+          .read(chatRepositoryProvider)
+          .getConversations();
 
       for (final convo in conversations) {
         final otherUserId = convo.id;
         if (otherUserId.isEmpty) continue;
 
-        final messages =
-            await _ref.read(chatRepositoryProvider).getMessages(otherUserId);
+        final messages = await _ref
+            .read(chatRepositoryProvider)
+            .getMessages(otherUserId);
         if (messages.isEmpty) continue;
 
         final recent = List<ChatMessageEntity>.from(messages)
@@ -88,9 +90,14 @@ class ChatCallInvitePollingHandler {
           final callerAvatar = payload['callerAvatar'] as String?;
 
           _handledCallIds.add(callId);
-          developer.log('Chat call invite detected callId=$callId', name: 'Calls');
+          developer.log(
+            'Chat call invite detected callId=$callId',
+            name: 'Calls',
+          );
 
-          _ref.read(callControllerProvider.notifier).handleIncomingCall(
+          _ref
+              .read(callControllerProvider.notifier)
+              .handleIncomingCall(
                 callId: callId,
                 callType: callType,
                 callerName: callerName,
@@ -148,9 +155,14 @@ class ChatCallInvitePollingHandler {
 }
 
 final chatCallInvitePollingHandlerProvider =
-    Provider.family<ChatCallInvitePollingHandler, GlobalKey<NavigatorState>>(
-        (ref, navigatorKey) {
-  final handler = ChatCallInvitePollingHandler(ref, navigatorKey: navigatorKey);
-  ref.onDispose(() => handler.dispose());
-  return handler;
-});
+    Provider.family<ChatCallInvitePollingHandler, GlobalKey<NavigatorState>>((
+      ref,
+      navigatorKey,
+    ) {
+      final handler = ChatCallInvitePollingHandler(
+        ref,
+        navigatorKey: navigatorKey,
+      );
+      ref.onDispose(() => handler.dispose());
+      return handler;
+    });

@@ -49,11 +49,7 @@ class OnboardingStatusCard extends StatelessWidget {
                   color: config.backgroundColor,
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                child: Icon(
-                  config.icon,
-                  color: config.iconColor,
-                  size: 28.sp,
-                ),
+                child: Icon(config.icon, color: config.iconColor, size: 28.sp),
               ),
               SizedBox(width: 16.w),
               Expanded(
@@ -107,7 +103,9 @@ class OnboardingStatusCard extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: config.buttonColor,
                   foregroundColor: AppColors.textOnButton,
-                  disabledBackgroundColor: config.buttonColor.withValues(alpha: 0.6),
+                  disabledBackgroundColor: config.buttonColor.withValues(
+                    alpha: 0.6,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
@@ -119,7 +117,9 @@ class OnboardingStatusCard extends StatelessWidget {
                         height: 24.w,
                         child: const CircularProgressIndicator(
                           strokeWidth: 2.5,
-                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            AppColors.textOnButton,
+                          ),
                         ),
                       )
                     : Text(
@@ -171,7 +171,9 @@ class OnboardingStatusCard extends StatelessWidget {
               width: 8.w,
               height: 8.w,
               decoration: BoxDecoration(
-                color: isEnabled ? const Color(0xFF4CAF50) : const Color(0xFF9E9E9E),
+                color: isEnabled
+                    ? const Color(0xFF4CAF50)
+                    : const Color(0xFF9E9E9E),
                 shape: BoxShape.circle,
               ),
             ),
@@ -181,7 +183,9 @@ class OnboardingStatusCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
-                color: isEnabled ? const Color(0xFF4CAF50) : const Color(0xFF9E9E9E),
+                color: isEnabled
+                    ? const Color(0xFF4CAF50)
+                    : const Color(0xFF9E9E9E),
               ),
             ),
           ],

@@ -44,10 +44,7 @@ class _ManageNotificationsScreenState extends State<ManageNotificationsScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -70,14 +67,12 @@ class _ManageNotificationsScreenState extends State<ManageNotificationsScreen> {
         ],
       ),
       body: MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: const TextScaler.linear(1.0),
-        ),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1.0)),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppTokens.settingsHPad.w,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: AppTokens.settingsHPad.w),
             child: Column(
               children: [
                 SizedBox(height: AppTokens.settingsTopPad.h),

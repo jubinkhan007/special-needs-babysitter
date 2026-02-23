@@ -23,10 +23,7 @@ class KeyValueRow extends StatelessWidget {
           // Label
           Expanded(
             flex: 2,
-            child: Text(
-              label,
-              style: AppTokens.jobDetailsLabelStyle,
-            ),
+            child: Text(label, style: AppTokens.jobDetailsLabelStyle),
           ),
           // Value
           Expanded(

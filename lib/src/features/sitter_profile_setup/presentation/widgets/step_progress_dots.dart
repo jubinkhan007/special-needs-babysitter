@@ -53,7 +53,7 @@ class StepProgressDots extends StatelessWidget {
                   color: AppColors.primary.withValues(alpha: 0.3),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
-                )
+                ),
               ]
             : null,
       ),

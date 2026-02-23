@@ -53,12 +53,15 @@ class PaypalDeepLinkService {
     }
 
     // Handle links while app is running
-    _subscription = _appLinks.uriLinkStream.listen((uri) {
-      debugPrint('DEBUG: PaypalDeepLinkService received link: $uri');
-      _handleUri(uri);
-    }, onError: (e) {
-      debugPrint('DEBUG: PaypalDeepLinkService stream error: $e');
-    });
+    _subscription = _appLinks.uriLinkStream.listen(
+      (uri) {
+        debugPrint('DEBUG: PaypalDeepLinkService received link: $uri');
+        _handleUri(uri);
+      },
+      onError: (e) {
+        debugPrint('DEBUG: PaypalDeepLinkService stream error: $e');
+      },
+    );
   }
 
   void _handleUri(Uri uri) {
@@ -67,7 +70,9 @@ class PaypalDeepLinkService {
     // Or: specialsitters://payment/paypal/cancel
 
     if (uri.scheme != 'specialsitters') {
-      debugPrint('DEBUG: PaypalDeepLinkService ignoring non-specialsitters scheme');
+      debugPrint(
+        'DEBUG: PaypalDeepLinkService ignoring non-specialsitters scheme',
+      );
       return;
     }
 
@@ -82,11 +87,13 @@ class PaypalDeepLinkService {
       final orderId = uri.queryParameters['orderId'];
       if (orderId != null && orderId.isNotEmpty) {
         debugPrint(
-            'DEBUG: PaypalDeepLinkService emitting success with orderId=$orderId');
+          'DEBUG: PaypalDeepLinkService emitting success with orderId=$orderId',
+        );
         _eventController.add(PaypalPaymentSuccess(orderId));
       } else {
         debugPrint(
-            'DEBUG: PaypalDeepLinkService success without orderId, treating as cancel');
+          'DEBUG: PaypalDeepLinkService success without orderId, treating as cancel',
+        );
         _eventController.add(PaypalPaymentCancelled());
       }
     } else if (path.contains('/paypal/cancel')) {

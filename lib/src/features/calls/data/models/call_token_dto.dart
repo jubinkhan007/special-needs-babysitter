@@ -3,6 +3,7 @@ class CallTokenDto {
   final String rtcToken;
   final String channelName;
   final String expiresAt;
+
   /// UID that the token was generated for (must use this UID when joining)
   final int? agoraUid;
 
@@ -21,13 +22,13 @@ class CallTokenDto {
       // Parse agoraUid - backend may return it as int or string
       agoraUid: json['agoraUid'] != null
           ? (json['agoraUid'] is int
-              ? json['agoraUid'] as int
-              : int.tryParse(json['agoraUid'].toString()))
+                ? json['agoraUid'] as int
+                : int.tryParse(json['agoraUid'].toString()))
           : (json['uid'] != null
-              ? (json['uid'] is int
-                  ? json['uid'] as int
-                  : int.tryParse(json['uid'].toString()))
-              : null),
+                ? (json['uid'] is int
+                      ? json['uid'] as int
+                      : int.tryParse(json['uid'].toString()))
+                : null),
     );
   }
 }

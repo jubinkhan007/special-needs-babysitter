@@ -55,7 +55,8 @@ class JobDetailsUiModel {
     kidsRows.add(MapEntry('No. Of Children', job.children.length.toString()));
     for (var child in job.children) {
       kidsRows.add(
-          MapEntry(child.name, '${child.ageYears} years')); // "Ally", "4 years"
+        MapEntry(child.name, '${child.ageYears} years'),
+      ); // "Ally", "4 years"
     }
 
     // 3. Date Range

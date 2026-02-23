@@ -7,10 +7,7 @@ class BookingDetailsResponseDto {
   final bool success;
   final BookingDetailsDto data;
 
-  BookingDetailsResponseDto({
-    required this.success,
-    required this.data,
-  });
+  BookingDetailsResponseDto({required this.success, required this.data});
 
   factory BookingDetailsResponseDto.fromJson(Map<String, dynamic> json) =>
       _$BookingDetailsResponseDtoFromJson(json);

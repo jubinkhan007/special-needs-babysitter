@@ -37,17 +37,29 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     debugPrint('DEBUG ReviewScreen: bookingId = ${widget.args.bookingId}');
     debugPrint('DEBUG ReviewScreen: sitterId = ${widget.args.sitterId}');
     debugPrint('DEBUG ReviewScreen: sitterName = "${widget.args.sitterName}"');
-    debugPrint('DEBUG ReviewScreen: sitterName length = ${widget.args.sitterName.length}');
-    debugPrint('DEBUG ReviewScreen: sitterName contains DioException = ${widget.args.sitterName.contains('DioException')}');
+    debugPrint(
+      'DEBUG ReviewScreen: sitterName length = ${widget.args.sitterName.length}',
+    );
+    debugPrint(
+      'DEBUG ReviewScreen: sitterName contains DioException = ${widget.args.sitterName.contains('DioException')}',
+    );
     debugPrint('DEBUG ReviewScreen: avatarUrl = ${widget.args.avatarUrl}');
     debugPrint('DEBUG ReviewScreen: jobTitle = "${widget.args.jobTitle}"');
     debugPrint('DEBUG ReviewScreen: location = ${widget.args.location}');
     debugPrint('DEBUG ReviewScreen: familyName = "${widget.args.familyName}"');
     debugPrint('DEBUG ReviewScreen: status = ${widget.args.status}');
-    debugPrint('DEBUG ReviewScreen: sitterData.sitterName = "${widget.args.sitterData.sitterName}"');
-    debugPrint('DEBUG ReviewScreen: sitterData.sitterName length = ${widget.args.sitterData.sitterName.length}');
-    debugPrint('DEBUG ReviewScreen: sitterData.avatarUrl = ${widget.args.sitterData.avatarUrl}');
-    debugPrint('DEBUG ReviewScreen: sitterData.skills = ${widget.args.sitterData.skills}');
+    debugPrint(
+      'DEBUG ReviewScreen: sitterData.sitterName = "${widget.args.sitterData.sitterName}"',
+    );
+    debugPrint(
+      'DEBUG ReviewScreen: sitterData.sitterName length = ${widget.args.sitterData.sitterName.length}',
+    );
+    debugPrint(
+      'DEBUG ReviewScreen: sitterData.avatarUrl = ${widget.args.sitterData.avatarUrl}',
+    );
+    debugPrint(
+      'DEBUG ReviewScreen: sitterData.skills = ${widget.args.sitterData.skills}',
+    );
     debugPrint('DEBUG ReviewScreen: =====================================');
   }
 
@@ -61,7 +73,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     if (_rating == 0) {
       AppToast.show(
         context,
-        const SnackBar(content: Text('Please select a rating before submitting')),
+        const SnackBar(
+          content: Text('Please select a rating before submitting'),
+        ),
       );
       return;
     }
@@ -83,8 +97,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     try {
       String imageUrl = '';
       if (_selectedImageFile != null) {
-        final uploadRemote =
-            ref.read(reviewImageUploadRemoteDataSourceProvider);
+        final uploadRemote = ref.read(
+          reviewImageUploadRemoteDataSourceProvider,
+        );
         imageUrl = await uploadRemote.uploadReviewImage(_selectedImageFile!);
       }
       await remote.postReview(
@@ -103,10 +118,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     } catch (e) {
       if (!mounted) return;
       final message = _resolveErrorMessage(e);
-      AppToast.show(
-        context,
-        SnackBar(content: Text(message)),
-      );
+      AppToast.show(context, SnackBar(content: Text(message)));
     } finally {
       if (mounted) {
         setState(() {
@@ -138,10 +150,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   Widget _buildOutlinedButton(String label, {double? maxWidth}) {
     final effectiveMax = maxWidth ?? 140;
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        minWidth: 90,
-        maxWidth: effectiveMax,
-      ),
+      constraints: BoxConstraints(minWidth: 90, maxWidth: effectiveMax),
       child: SizedBox(
         height: 50,
         child: OutlinedButton(
@@ -185,7 +194,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.textOnButton,
+                  ),
                 ),
               )
             : const Text(
@@ -210,8 +221,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     );
     final bottomInset = MediaQuery.of(context).viewPadding.bottom;
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1)),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -219,8 +231,11 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
           elevation: 0,
           centerTitle: true,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back,
-                color: Color(0xFF98A2B3), size: 22),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Color(0xFF98A2B3),
+              size: 22,
+            ),
             onPressed: () => context.pop(),
           ),
           title: Text(
@@ -234,8 +249,11 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.headset_mic_outlined,
-                  color: Color(0xFF98A2B3), size: 22),
+              icon: const Icon(
+                Icons.headset_mic_outlined,
+                color: Color(0xFF98A2B3),
+                size: 22,
+              ),
               onPressed: () {},
             ),
           ],
@@ -384,17 +402,22 @@ class _SitterReviewHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sitterName =
-        _firstNonEmpty(args.sitterName, args.sitterData.sitterName);
-    final avatarUrl =
-        _firstNonEmpty(args.avatarUrl, args.sitterData.avatarUrl);
-    final distance =
-        _firstNonEmpty(args.sitterData.distance, args.location, 'Unknown');
+    final sitterName = _firstNonEmpty(
+      args.sitterName,
+      args.sitterData.sitterName,
+    );
+    final avatarUrl = _firstNonEmpty(args.avatarUrl, args.sitterData.avatarUrl);
+    final distance = _firstNonEmpty(
+      args.sitterData.distance,
+      args.location,
+      'Unknown',
+    );
     final rating = _firstNonEmpty(args.sitterData.rating, '0.0');
-    final responseRate =
-        _firstNonEmpty(args.sitterData.responseRate, '0%');
-    final reliabilityRate =
-        _firstNonEmpty(args.sitterData.reliabilityRate, '0%');
+    final responseRate = _firstNonEmpty(args.sitterData.responseRate, '0%');
+    final reliabilityRate = _firstNonEmpty(
+      args.sitterData.reliabilityRate,
+      '0%',
+    );
     final experience = _firstNonEmpty(args.sitterData.experience, '0 Years');
     final skills = args.sitterData.skills.isNotEmpty
         ? args.sitterData.skills
@@ -489,8 +512,11 @@ class _SitterReviewHeaderCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.star,
-                          color: Color(0xFFF5B301), size: 14),
+                      const Icon(
+                        Icons.star,
+                        color: Color(0xFFF5B301),
+                        size: 14,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         rating,
@@ -504,8 +530,11 @@ class _SitterReviewHeaderCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Icon(Icons.bookmark_border,
-                      color: Color(0xFF98A2B3), size: 18),
+                  const Icon(
+                    Icons.bookmark_border,
+                    color: Color(0xFF98A2B3),
+                    size: 18,
+                  ),
                 ],
               ),
             ],
@@ -536,9 +565,7 @@ class _SitterReviewHeaderCard extends StatelessWidget {
             alignment: WrapAlignment.start,
             spacing: 8,
             runSpacing: 8,
-            children: skills
-                .map((skill) => _SkillChip(label: skill))
-                .toList(),
+            children: skills.map((skill) => _SkillChip(label: skill)).toList(),
           ),
         ],
       ),
@@ -711,8 +738,11 @@ class _UploadTile extends StatelessWidget {
                 ? const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.cloud_upload_outlined,
-                          size: 20, color: Color(0xFF98A2B3)),
+                      Icon(
+                        Icons.cloud_upload_outlined,
+                        size: 20,
+                        color: Color(0xFF98A2B3),
+                      ),
                       SizedBox(height: 6),
                       Text(
                         'Upload Photo\n/ screenshot',
@@ -727,10 +757,7 @@ class _UploadTile extends StatelessWidget {
                       ),
                     ],
                   )
-                : Image.file(
-                    imageFile!,
-                    fit: BoxFit.cover,
-                  ),
+                : Image.file(imageFile!, fit: BoxFit.cover),
           ),
         ),
       ),

@@ -66,16 +66,22 @@ class ApplicationCard extends StatelessWidget {
                           ),
                           if (ui.isVerified) ...[
                             const SizedBox(width: 6),
-                            const Icon(Icons.verified,
-                                size: 16, color: Colors.blue),
-                          ]
+                            const Icon(
+                              Icons.verified,
+                              size: 16,
+                              color: Colors.blue,
+                            ),
+                          ],
                         ],
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          const Icon(Icons.location_on_outlined,
-                              size: 14, color: Color(0xFF9093A3)),
+                          const Icon(
+                            Icons.location_on_outlined,
+                            size: 14,
+                            color: Color(0xFF9093A3),
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             ui.distanceText,
@@ -185,8 +191,11 @@ class ApplicationCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatRow(
-      {required IconData icon, required String label, required String value}) {
+  Widget _buildStatRow({
+    required IconData icon,
+    required String label,
+    required String value,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

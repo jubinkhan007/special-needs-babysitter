@@ -46,8 +46,9 @@ class SitterProfileProgressAvatar extends StatelessWidget {
                 padding: const EdgeInsets.all(3.0),
                 child: CircleAvatar(
                   backgroundColor: const Color(0xFFF2F4F7),
-                  backgroundImage:
-                      avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+                  backgroundImage: avatarUrl != null
+                      ? NetworkImage(avatarUrl!)
+                      : null,
                   child: avatarUrl == null
                       ? Text(
                           initials,

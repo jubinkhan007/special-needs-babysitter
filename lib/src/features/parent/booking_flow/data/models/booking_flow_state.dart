@@ -189,9 +189,13 @@ class BookingFlowState {
 
   /// Computed: Full address string
   String get fullAddress {
-    final parts = [streetAddress, aptUnit, city, state, zipCode]
-        .where((p) => p != null && p.isNotEmpty)
-        .toList();
+    final parts = [
+      streetAddress,
+      aptUnit,
+      city,
+      state,
+      zipCode,
+    ].where((p) => p != null && p.isNotEmpty).toList();
     return parts.join(', ');
   }
 
@@ -228,7 +232,10 @@ class BookingFlowState {
   /// Computed: Total hours for the entire booking
   /// This calculates the actual duration from start datetime to end datetime
   double get totalHours {
-    if (startDate == null || endDate == null || startTime == null || endTime == null) {
+    if (startDate == null ||
+        endDate == null ||
+        startTime == null ||
+        endTime == null) {
       return 0;
     }
 
@@ -273,7 +280,7 @@ class BookingFlowState {
   /// Computed: Total Cost
   /// The total amount to be charged, including platform fee
   double get totalCost => subTotal + platformFee;
-  
+
   /// Validates that the booking meets minimum amount requirements
   /// Returns an error message if invalid, null if valid
   String? validateAmount() {
@@ -295,7 +302,8 @@ class BookingFlowState {
     final cleanTime = timeStr.trim();
     // Expected format: "10:00 AM"
     final looseParts = cleanTime.split(' ');
-    if (looseParts.length != 2) throw const FormatException('Invalid time format');
+    if (looseParts.length != 2)
+      throw const FormatException('Invalid time format');
 
     final timeParts = looseParts[0].split(':');
     final period = looseParts[1].toUpperCase();
@@ -332,7 +340,8 @@ class BookingFlowState {
         'streetAddress': streetAddress ?? '',
         'aptUnit': aptUnit ?? '',
         'city': city ?? '',
-        'state': state ??
+        'state':
+            state ??
             'CA', // Default to CA if somehow null to avoid validation error
         'zipCode': zipCode ?? '',
         'latitude': latitude ?? 0.0,
@@ -356,8 +365,12 @@ class BookingFlowState {
       'dropoffLocation': dropoffLocation ?? '',
       'transportSpecialInstructions': transportSpecialInstructions ?? '',
       // Transportation arrays - split from comma-separated strings
-      'transportationModes': transportationMode?.split(', ').where((s) => s.isNotEmpty).toList() ?? <String>[],
-      'equipmentSafety': equipmentSafety?.split(', ').where((s) => s.isNotEmpty).toList() ?? <String>[],
+      'transportationModes':
+          transportationMode?.split(', ').where((s) => s.isNotEmpty).toList() ??
+          <String>[],
+      'equipmentSafety':
+          equipmentSafety?.split(', ').where((s) => s.isNotEmpty).toList() ??
+          <String>[],
     }..removeWhere((key, value) => value == null);
   }
 

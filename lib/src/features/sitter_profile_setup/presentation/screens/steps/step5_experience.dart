@@ -33,9 +33,9 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = ref.read(sitterProfileSetupControllerProvider);
       if (state.experiences.isEmpty) {
-        ref.read(sitterProfileSetupControllerProvider.notifier).addExperience(
-              const Experience(),
-            );
+        ref
+            .read(sitterProfileSetupControllerProvider.notifier)
+            .addExperience(const Experience());
       }
     });
   }
@@ -57,7 +57,8 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
             .updateResumePath(filePath);
 
         if (mounted) {
-          AppToast.show(context, 
+          AppToast.show(
+            context,
             SnackBar(content: Text('Resume uploaded: $fileName')),
           );
         }
@@ -66,7 +67,8 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error picking file: $e')),
         );
       }
@@ -88,11 +90,15 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 5, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 5,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -104,8 +110,11 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                       color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.star_border_rounded,
-                        size: 32, color: _primaryBlue),
+                    child: const Icon(
+                      Icons.star_border_rounded,
+                      size: 32,
+                      color: _primaryBlue,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -134,8 +143,10 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
                     onPressed: _pickResume,
-                    icon: Icon(Icons.note_add_outlined,
-                        color: _textDark.withValues(alpha: 0.8)),
+                    icon: Icon(
+                      Icons.note_add_outlined,
+                      color: _textDark.withValues(alpha: 0.8),
+                    ),
                     label: Text(
                       state.resumePath != null
                           ? 'Resume Uploaded (${state.resumePath})'
@@ -151,7 +162,8 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                       minimumSize: const Size(double.infinity, 56),
                       backgroundColor: Colors.white,
                       side: const BorderSide(
-                          color: Color(0xFFD0D5DD)), // Grey border
+                        color: Color(0xFFD0D5DD),
+                      ), // Grey border
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -220,8 +232,8 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
                       minimumSize: const Size(double.infinity, 56),
                       backgroundColor: AppColors.surfaceTint,
                       side: const BorderSide(
-                          color:
-                              AppColors.surfaceTint), // Matches fill for flat look
+                        color: AppColors.surfaceTint,
+                      ), // Matches fill for flat look
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -266,10 +278,7 @@ class _Step5ExperienceState extends ConsumerState<Step5Experience> {
               ),
               const SizedBox(height: 12),
               // Continue Button
-              PrimaryActionButton(
-                label: 'Continue',
-                onPressed: widget.onNext,
-              ),
+              PrimaryActionButton(label: 'Continue', onPressed: widget.onNext),
             ],
           ),
         ),
@@ -282,10 +291,7 @@ class _ExperienceForm extends StatelessWidget {
   final Experience experience;
   final ValueChanged<Experience> onUpdate;
 
-  const _ExperienceForm({
-    required this.experience,
-    required this.onUpdate,
-  });
+  const _ExperienceForm({required this.experience, required this.onUpdate});
 
   @override
   Widget build(BuildContext context) {
@@ -296,12 +302,14 @@ class _ExperienceForm extends StatelessWidget {
         _buildTextField(
           hint: 'Past Role / Title',
           value: experience.title,
-          onChanged: (val) => onUpdate(Experience(
-            title: val,
-            month: experience.month,
-            year: experience.year,
-            description: experience.description,
-          )),
+          onChanged: (val) => onUpdate(
+            Experience(
+              title: val,
+              month: experience.month,
+              year: experience.year,
+              description: experience.description,
+            ),
+          ),
         ),
         const SizedBox(height: 12),
 
@@ -324,16 +332,18 @@ class _ExperienceForm extends StatelessWidget {
                   'Sep',
                   'Oct',
                   'Nov',
-                  'Dec'
+                  'Dec',
                 ],
                 onChanged: (val) {
                   if (val != null) {
-                    onUpdate(Experience(
-                      title: experience.title,
-                      month: val,
-                      year: experience.year,
-                      description: experience.description,
-                    ));
+                    onUpdate(
+                      Experience(
+                        title: experience.title,
+                        month: val,
+                        year: experience.year,
+                        description: experience.description,
+                      ),
+                    );
                   }
                 },
               ),
@@ -346,12 +356,14 @@ class _ExperienceForm extends StatelessWidget {
                 items: List.generate(20, (index) => (2025 - index).toString()),
                 onChanged: (val) {
                   if (val != null) {
-                    onUpdate(Experience(
-                      title: experience.title,
-                      month: experience.month,
-                      year: val,
-                      description: experience.description,
-                    ));
+                    onUpdate(
+                      Experience(
+                        title: experience.title,
+                        month: experience.month,
+                        year: val,
+                        description: experience.description,
+                      ),
+                    );
                   }
                 },
               ),
@@ -378,13 +390,16 @@ class _ExperienceForm extends StatelessWidget {
           child: TextField(
             controller: TextEditingController(text: experience.description)
               ..selection = TextSelection.fromPosition(
-                  TextPosition(offset: experience.description.length)),
-            onChanged: (val) => onUpdate(Experience(
-              title: experience.title,
-              month: experience.month,
-              year: experience.year,
-              description: val,
-            )),
+                TextPosition(offset: experience.description.length),
+              ),
+            onChanged: (val) => onUpdate(
+              Experience(
+                title: experience.title,
+                month: experience.month,
+                year: experience.year,
+                description: val,
+              ),
+            ),
             maxLines: 5,
             decoration: const InputDecoration(
               hintText: 'Description',
@@ -431,8 +446,9 @@ class _ExperienceForm extends StatelessWidget {
       ),
       child: TextField(
         controller: TextEditingController(text: value)
-          ..selection =
-              TextSelection.fromPosition(TextPosition(offset: value.length)),
+          ..selection = TextSelection.fromPosition(
+            TextPosition(offset: value.length),
+          ),
         onChanged: onChanged,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -446,8 +462,10 @@ class _ExperienceForm extends StatelessWidget {
           filled: true,
           fillColor: Colors.transparent,
           // FIX: Added contentPadding here to control internal spacing properly
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
         style: const TextStyle(
           fontSize: 16,
@@ -485,18 +503,20 @@ class _ExperienceForm extends StatelessWidget {
           dropdownColor: Colors.white,
           borderRadius: BorderRadius.circular(12),
           items: items
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(
-                      e,
-                      style: const TextStyle(
-                        color: Color(0xFF1A1A1A),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Inter',
-                      ),
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(
+                    e,
+                    style: const TextStyle(
+                      color: Color(0xFF1A1A1A),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Inter',
                     ),
-                  ))
+                  ),
+                ),
+              )
               .toList(),
           onChanged: onChanged,
           icon: const Icon(Icons.keyboard_arrow_down, color: Color(0xFF98A2B3)),

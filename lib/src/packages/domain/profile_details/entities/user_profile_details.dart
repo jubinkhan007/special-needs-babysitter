@@ -38,18 +38,18 @@ class UserProfileDetails extends Equatable {
 
   @override
   List<Object?> get props => [
-        user,
-        familyName,
-        numberOfFamilyMembers,
-        familyBio,
-        hasPets,
-        numberOfPets,
-        petTypes,
-        speaksOtherLanguages,
-        languages,
-        children,
-        careApproach,
-        emergencyContact,
-        insurancePlan,
-      ];
+    user,
+    familyName,
+    numberOfFamilyMembers,
+    familyBio,
+    hasPets,
+    numberOfPets,
+    petTypes,
+    speaksOtherLanguages,
+    languages,
+    children,
+    careApproach,
+    emergencyContact,
+    insurancePlan,
+  ];
 }

@@ -18,10 +18,7 @@ class FilterRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Showing $count Sitters',
-            style: AppUiTokens.filterText,
-          ),
+          Text('Showing $count Sitters', style: AppUiTokens.filterText),
           // Filter Pill
           GestureDetector(
             onTap: onFilterTap,

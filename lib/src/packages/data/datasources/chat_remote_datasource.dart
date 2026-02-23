@@ -77,16 +77,22 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
       final data = response.data['data'];
       if (data == null) {
-        debugPrint('DEBUG: Chat API response missing "data" field: ${response.data}');
+        debugPrint(
+          'DEBUG: Chat API response missing "data" field: ${response.data}',
+        );
         return [];
       }
 
       final List<dynamic>? rawList = data is List
           ? data
-          : (data is Map<String, dynamic> ? data['conversations'] as List? : null);
+          : (data is Map<String, dynamic>
+                ? data['conversations'] as List?
+                : null);
 
       if (rawList == null) {
-        debugPrint('DEBUG: Chat API "data" field has no conversations list: $data');
+        debugPrint(
+          'DEBUG: Chat API "data" field has no conversations list: $data',
+        );
         return [];
       }
 
@@ -95,7 +101,9 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           final normalized = _normalizeConversationJson(json);
           return ChatDto.fromJson(normalized);
         } catch (e, stack) {
-          debugPrint('DEBUG: Error parsing chat item: $json, error: $e, stack: $stack');
+          debugPrint(
+            'DEBUG: Error parsing chat item: $json, error: $e, stack: $stack',
+          );
           rethrow;
         }
       }).toList();
@@ -117,18 +125,22 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         ? raw['otherUser'] as Map<String, dynamic>
         : const <String, dynamic>{};
 
-    final firstName = otherUser['firstName']?.toString() ??
+    final firstName =
+        otherUser['firstName']?.toString() ??
         otherUser['first_name']?.toString() ??
         '';
-    final lastName = otherUser['lastName']?.toString() ??
+    final lastName =
+        otherUser['lastName']?.toString() ??
         otherUser['last_name']?.toString() ??
         '';
     final fullName = [firstName, lastName].where((s) => s.isNotEmpty).join(' ');
-    final otherUserId = otherUser['_id']?.toString() ??
+    final otherUserId =
+        otherUser['_id']?.toString() ??
         otherUser['id']?.toString() ??
         otherUser['userId']?.toString() ??
         otherUser['user_id']?.toString();
-    final avatarUrl = otherUser['avatarUrl'] ??
+    final avatarUrl =
+        otherUser['avatarUrl'] ??
         otherUser['profilePhoto'] ??
         otherUser['profilePhotoUrl'] ??
         otherUser['photoUrl'] ??
@@ -136,12 +148,13 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         otherUser['photo_url'] ??
         otherUser['imageUrl'] ??
         otherUser['profileImageUrl'];
-    final displayName = raw['participant_name']?.toString() ??
+    final displayName =
+        raw['participant_name']?.toString() ??
         (fullName.isNotEmpty
             ? fullName
             : (otherUser['name']?.toString() ??
-                otherUser['fullName']?.toString() ??
-                'Unknown User'));
+                  otherUser['fullName']?.toString() ??
+                  'Unknown User'));
 
     final participantAvatar = _firstNonEmpty(
       raw['participant_avatar'],
@@ -149,14 +162,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     );
 
     return {
-      'id': otherUserId ?? raw['id']?.toString() ?? raw['_id']?.toString() ?? '',
+      'id':
+          otherUserId ?? raw['id']?.toString() ?? raw['_id']?.toString() ?? '',
       'participant_name': displayName,
       'participant_avatar': participantAvatar,
-      'last_message': raw['last_message']?.toString() ??
+      'last_message':
+          raw['last_message']?.toString() ??
           raw['lastMessagePreview']?.toString() ??
           '',
       'last_message_type': raw['last_message_type']?.toString(),
-      'last_message_time': raw['last_message_time']?.toString() ??
+      'last_message_time':
+          raw['last_message_time']?.toString() ??
           raw['lastMessageAt']?.toString(),
       'unread_count': raw['unread_count'] ?? raw['unreadCount'] ?? 0,
       'is_verified': raw['is_verified'] ?? otherUser['isVerified'] ?? false,
@@ -211,16 +227,20 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     final wrapperContent = raw['content'];
     final inner = wrapperMessage is Map<String, dynamic>
         ? wrapperMessage
-        : (wrapperContent is Map<String, dynamic> && _looksLikeMessage(wrapperContent)
-            ? wrapperContent
-            : raw);
+        : (wrapperContent is Map<String, dynamic> &&
+                  _looksLikeMessage(wrapperContent)
+              ? wrapperContent
+              : raw);
     final safe = Map<String, dynamic>.from(inner);
 
-    if (safe['senderUserId'] == null && safe['senderUser'] is Map<String, dynamic>) {
+    if (safe['senderUserId'] == null &&
+        safe['senderUser'] is Map<String, dynamic>) {
       safe['senderUserId'] = (safe['senderUser'] as Map<String, dynamic>)['id'];
     }
-    if (safe['recipientUserId'] == null && safe['recipientUser'] is Map<String, dynamic>) {
-      safe['recipientUserId'] = (safe['recipientUser'] as Map<String, dynamic>)['id'];
+    if (safe['recipientUserId'] == null &&
+        safe['recipientUser'] is Map<String, dynamic>) {
+      safe['recipientUserId'] =
+          (safe['recipientUser'] as Map<String, dynamic>)['id'];
     }
 
     if (safe['textContent'] == null && safe['text'] != null) {
@@ -282,10 +302,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       debugPrint('DEBUG: ChatRemoteDataSource.sendMessage to $recipientUserId');
       final response = await _dio.post(
         '/chat/messages',
-        data: {
-          'recipientUserId': recipientUserId,
-          'text': text,
-        },
+        data: {'recipientUserId': recipientUserId, 'text': text},
       );
 
       if (response.data == null) {
@@ -318,7 +335,9 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     String? text,
   }) async {
     try {
-      debugPrint('DEBUG: ChatRemoteDataSource.sendMediaMessage to $recipientUserId');
+      debugPrint(
+        'DEBUG: ChatRemoteDataSource.sendMediaMessage to $recipientUserId',
+      );
       final response = await _dio.post(
         '/chat/messages/media',
         data: {
@@ -355,10 +374,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   Future<void> markAsRead(String otherUserId) async {
     try {
       debugPrint('DEBUG: ChatRemoteDataSource.markAsRead($otherUserId)');
-      await _dio.post(
-        '/chat/read',
-        data: {'otherUserId': otherUserId},
-      );
+      await _dio.post('/chat/read', data: {'otherUserId': otherUserId});
       debugPrint('DEBUG: Conversation marked as read');
     } catch (e, stack) {
       debugPrint('DEBUG: Error marking as read: $e');

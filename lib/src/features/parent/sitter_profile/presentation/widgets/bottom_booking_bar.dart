@@ -70,8 +70,9 @@ class BottomBookingBar extends StatelessWidget {
                     foregroundColor: AppColors.textOnButton,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(16), // Rounder per Figma
+                      borderRadius: BorderRadius.circular(
+                        16,
+                      ), // Rounder per Figma
                     ),
                     textStyle: const TextStyle(
                       fontSize: 16,

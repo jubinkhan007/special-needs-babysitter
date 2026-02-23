@@ -6,10 +6,7 @@ import 'booking_surface_card.dart';
 class SitterDetailsCard extends StatelessWidget {
   final BookingDetailsUiModel uiModel;
 
-  const SitterDetailsCard({
-    super.key,
-    required this.uiModel,
-  });
+  const SitterDetailsCard({super.key, required this.uiModel});
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +50,22 @@ class SitterDetailsCard extends StatelessWidget {
                         ),
                         if (uiModel.isVerified) ...[
                           const SizedBox(width: 8),
-                          const Icon(Icons.verified,
-                              size: 16, color: AppTokens.primaryBlue),
+                          const Icon(
+                            Icons.verified,
+                            size: 16,
+                            color: AppTokens.primaryBlue,
+                          ),
                         ],
                       ],
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.location_on,
-                            size: 14, color: AppTokens.primaryBlue),
+                        const Icon(
+                          Icons.location_on,
+                          size: 14,
+                          color: AppTokens.primaryBlue,
+                        ),
                         const SizedBox(width: 4),
                         Text(uiModel.distance, style: AppTokens.cardMeta),
                       ],
@@ -78,13 +81,19 @@ class SitterDetailsCard extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.star_rounded,
-                          size: 20, color: AppTokens.starYellow),
+                      const Icon(
+                        Icons.star_rounded,
+                        size: 20,
+                        color: AppTokens.starYellow,
+                      ),
                       const SizedBox(width: 4),
                       Text(uiModel.rating, style: AppTokens.ratingText),
                       const SizedBox(width: 12),
-                      const Icon(Icons.bookmark_border,
-                          size: 24, color: AppTokens.iconGrey),
+                      const Icon(
+                        Icons.bookmark_border,
+                        size: 24,
+                        color: AppTokens.iconGrey,
+                      ),
                     ],
                   ),
                 ],
@@ -123,7 +132,7 @@ class SitterDetailsCard extends StatelessWidget {
                   ],
                 ),
               );
-            }
+            },
           ),
 
           if (uiModel.skills.isNotEmpty) ...[
@@ -132,8 +141,9 @@ class SitterDetailsCard extends StatelessWidget {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children:
-                  uiModel.skills.map((skill) => _buildSkillTag(skill)).toList(),
+              children: uiModel.skills
+                  .map((skill) => _buildSkillTag(skill))
+                  .toList(),
             ),
           ],
         ],
@@ -152,9 +162,13 @@ class SitterDetailsCard extends StatelessWidget {
           children: [
             Icon(icon, size: 14, color: AppTokens.textSecondary),
             const SizedBox(width: 4),
-            Text(label,
-                style: const TextStyle(
-                    fontSize: 12, color: AppTokens.textSecondary)),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                color: AppTokens.textSecondary,
+              ),
+            ),
             // Using inline style or new token? Plan said strictly AppTokens.
             // But AppTokens.statLabel is 14. Screenshot looks smaller for these detailed headers.
             // Let's assume AppTokens.statLabel but maybe reduced?

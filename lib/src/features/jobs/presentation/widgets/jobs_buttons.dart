@@ -6,11 +6,7 @@ class JobsPrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const JobsPrimaryButton({
-    super.key,
-    required this.text,
-    required this.onTap,
-  });
+  const JobsPrimaryButton({super.key, required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

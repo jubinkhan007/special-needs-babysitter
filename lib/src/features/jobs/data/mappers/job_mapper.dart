@@ -16,8 +16,10 @@ extension JobDtoMapper on JobDto {
 
     // Helper to map status
     JobStatus mapStatus(String statusStr) {
-      final normalized =
-          statusStr.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+      final normalized = statusStr.toLowerCase().replaceAll(
+        RegExp(r'[\s_-]'),
+        '',
+      );
       switch (normalized) {
         case 'active':
         case 'inprogress':
@@ -87,7 +89,9 @@ extension JobDtoMapper on JobDto {
       try {
         final parts = timeStr.split(':');
         return TimeOfDay(
-            hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+          hour: int.parse(parts[0]),
+          minute: int.parse(parts[1]),
+        );
       } catch (e) {
         return const TimeOfDay(hour: 0, minute: 0);
       }
@@ -95,8 +99,10 @@ extension JobDtoMapper on JobDto {
 
     // Reuse mapStatus from toDomain if possible or duplicate
     JobStatus mapStatus(String statusStr) {
-      final normalized =
-          statusStr.toLowerCase().replaceAll(RegExp(r'[\s_-]'), '');
+      final normalized = statusStr.toLowerCase().replaceAll(
+        RegExp(r'[\s_-]'),
+        '',
+      );
       switch (normalized) {
         case 'active':
         case 'inprogress':
@@ -160,9 +166,15 @@ extension JobDtoMapper on JobDto {
               zipCode: address!.zipCode,
             )
           : const Address(
-              streetAddress: '', aptUnit: '', city: '', state: '', zipCode: ''),
-      emergencyContactName:
-          trimmedEmergencyName.isEmpty ? 'Not Provided' : trimmedEmergencyName,
+              streetAddress: '',
+              aptUnit: '',
+              city: '',
+              state: '',
+              zipCode: '',
+            ),
+      emergencyContactName: trimmedEmergencyName.isEmpty
+          ? 'Not Provided'
+          : trimmedEmergencyName,
       emergencyContactPhone: trimmedEmergencyPhone,
       emergencyContactRelation: trimmedEmergencyRelation,
       additionalNotes: additionalDetails ?? '',

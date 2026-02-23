@@ -22,34 +22,41 @@ final chatRepositoryProvider = Provider<ChatRepository>((ref) {
 
 final chatMediaUploadDataSourceProvider =
     Provider<ChatMediaUploadRemoteDataSource>((ref) {
-  return ChatMediaUploadRemoteDataSource(ref.watch(authDioProvider));
-});
+      return ChatMediaUploadRemoteDataSource(ref.watch(authDioProvider));
+    });
 
 // Use Case
-final getConversationsUseCaseProvider = Provider<GetConversationsUseCase>((ref) {
+final getConversationsUseCaseProvider = Provider<GetConversationsUseCase>((
+  ref,
+) {
   return GetConversationsUseCase(ref.watch(chatRepositoryProvider));
 });
 
 // User Profile Provider for Chat Header
-final chatUserProfileProvider = FutureProvider.family.autoDispose<Map<String, dynamic>, String>((ref, userId) async {
-  final repository = ref.watch(sittersRepositoryProvider);
-  return repository.getUserProfile(userId);
-});
+final chatUserProfileProvider = FutureProvider.family
+    .autoDispose<Map<String, dynamic>, String>((ref, userId) async {
+      final repository = ref.watch(sittersRepositoryProvider);
+      return repository.getUserProfile(userId);
+    });
 
 // Chat initialization provider - persists for the session (no autoDispose)
 final chatInitProvider = FutureProvider<ChatInitResult>((ref) async {
   debugPrint('DEBUG: chatInitProvider initializing...');
   final repository = ref.watch(chatRepositoryProvider);
   final result = await repository.initChat();
-  debugPrint('DEBUG: Chat initialized with Agora username: ${result.agoraUsername}');
+  debugPrint(
+    'DEBUG: Chat initialized with Agora username: ${result.agoraUsername}',
+  );
   return result;
 });
 
 // Messages provider for a specific conversation
-final chatMessagesProvider = AsyncNotifierProvider
-    .family<ChatMessagesNotifier, List<ChatMessageEntity>, String>(
-  (otherUserId) => ChatMessagesNotifier(otherUserId),
-);
+final chatMessagesProvider =
+    AsyncNotifierProvider.family<
+      ChatMessagesNotifier,
+      List<ChatMessageEntity>,
+      String
+    >((otherUserId) => ChatMessagesNotifier(otherUserId));
 
 class ChatMessagesNotifier extends AsyncNotifier<List<ChatMessageEntity>> {
   ChatMessagesNotifier(this._otherUserId);
@@ -91,7 +98,9 @@ class ChatMessagesNotifier extends AsyncNotifier<List<ChatMessageEntity>> {
     }
 
     final messages = await repository.getMessages(_otherUserId);
-    debugPrint('DEBUG: Loaded ${messages.length} messages for conversation with $_otherUserId');
+    debugPrint(
+      'DEBUG: Loaded ${messages.length} messages for conversation with $_otherUserId',
+    );
     return messages;
   }
 
@@ -145,10 +154,7 @@ class ChatMessagesNotifier extends AsyncNotifier<List<ChatMessageEntity>> {
     }
   }
 
-  Future<void> sendAttachment({
-    required File file,
-    String? text,
-  }) async {
+  Future<void> sendAttachment({required File file, String? text}) async {
     final repository = ref.read(chatRepositoryProvider);
     final uploader = ref.read(chatMediaUploadDataSourceProvider);
 
@@ -177,17 +183,15 @@ class ChatMessagesNotifier extends AsyncNotifier<List<ChatMessageEntity>> {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => build());
   }
-
 }
 
 // Controller / List Provider - persists for session (no autoDispose)
 final chatConversationsProvider =
     AsyncNotifierProvider<ChatConversationsNotifier, List<Conversation>>(
-  ChatConversationsNotifier.new,
-);
+      ChatConversationsNotifier.new,
+    );
 
-class ChatConversationsNotifier
-    extends AsyncNotifier<List<Conversation>> {
+class ChatConversationsNotifier extends AsyncNotifier<List<Conversation>> {
   @override
   Future<List<Conversation>> build() async {
     debugPrint('DEBUG: ChatConversationsNotifier.build() START');
@@ -213,7 +217,9 @@ class ChatConversationsNotifier
       debugPrint('DEBUG: Reading currentUserProvider...');
       // Ensure chat service is logged in
       final userAsync = ref.read(currentUserProvider);
-      debugPrint('DEBUG: currentUserProvider state: isLoading=${userAsync.isLoading}, hasValue=${userAsync.hasValue}');
+      debugPrint(
+        'DEBUG: currentUserProvider state: isLoading=${userAsync.isLoading}, hasValue=${userAsync.hasValue}',
+      );
 
       final user = userAsync.value;
       debugPrint('DEBUG: Current User ID: ${user?.id}');
@@ -224,7 +230,9 @@ class ChatConversationsNotifier
 
       debugPrint('DEBUG: Calling getConversationsUseCase()...');
       final result = await useCase();
-      debugPrint('DEBUG: getConversationsUseCase returned ${result.length} conversations');
+      debugPrint(
+        'DEBUG: getConversationsUseCase returned ${result.length} conversations',
+      );
 
       return result;
     } catch (e, stack) {
@@ -237,15 +245,17 @@ class ChatConversationsNotifier
   }
 
   void _onChatEvent(ChatEvent event) {
-      if (event is MessageReceivedEvent || event is MessageSentEvent) {
-          // For now, simplest approach is to refresh the list to get updated order/content
-          // Optimistic updates can be added later
-          ref.invalidateSelf();
-      }
+    if (event is MessageReceivedEvent || event is MessageSentEvent) {
+      // For now, simplest approach is to refresh the list to get updated order/content
+      // Optimistic updates can be added later
+      ref.invalidateSelf();
+    }
   }
 
   Future<void> refresh() async {
-      state = const AsyncValue.loading();
-      state = await AsyncValue.guard(() => ref.read(getConversationsUseCaseProvider).call());
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(
+      () => ref.read(getConversationsUseCaseProvider).call(),
+    );
   }
 }

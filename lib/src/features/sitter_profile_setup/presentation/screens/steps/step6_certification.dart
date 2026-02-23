@@ -55,14 +55,16 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
             .updateCertAttachment(certName, filePath);
 
         if (mounted) {
-          AppToast.show(context, 
+          AppToast.show(
+            context,
             SnackBar(content: Text('Attached: $fileName')),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error picking file: $e')),
         );
       }
@@ -77,8 +79,9 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
     showDialog(
       context: context,
       builder: (context) {
-        final currentCerts =
-            ref.read(sitterProfileSetupControllerProvider).certifications;
+        final currentCerts = ref
+            .read(sitterProfileSetupControllerProvider)
+            .certifications;
         // Local state for the dialog
         List<String> tempSelected = List.from(currentCerts);
 
@@ -186,11 +189,15 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 6, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 6,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -202,8 +209,11 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                       color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.bookmark_border_rounded,
-                        size: 32, color: _primaryBlue),
+                    child: const Icon(
+                      Icons.bookmark_border_rounded,
+                      size: 32,
+                      color: _primaryBlue,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -225,7 +235,9 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                     onTap: _showCertificationSelector,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -242,8 +254,10 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                               fontFamily: 'Inter',
                             ),
                           ),
-                          Icon(Icons.keyboard_arrow_down,
-                              color: Color(0xFF667085)),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Color(0xFF667085),
+                          ),
                         ],
                       ),
                     ),
@@ -254,12 +268,15 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                   if (state.certifications.isEmpty)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Text('No certifications selected.',
-                          style: TextStyle(color: Colors.grey)),
+                      child: Text(
+                        'No certifications selected.',
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ),
                   ...state.certifications.map((cert) {
                     final isAttached = state.certAttachments.containsKey(cert);
-                    final isRequired = cert == 'CPR Certification' ||
+                    final isRequired =
+                        cert == 'CPR Certification' ||
                         cert == 'First Aid Certification' ||
                         cert == 'Special Needs Care Training';
                     return Padding(
@@ -301,11 +318,13 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Icon(Icons.attach_file,
-                                      size: 18,
-                                      color: isAttached
-                                          ? Colors.green
-                                          : _primaryBlue),
+                                  Icon(
+                                    Icons.attach_file,
+                                    size: 18,
+                                    color: isAttached
+                                        ? Colors.green
+                                        : _primaryBlue,
+                                  ),
                                   const SizedBox(width: 4),
                                   Flexible(
                                     child: Text(
@@ -317,7 +336,8 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                                         color: isAttached
                                             ? Colors.green
                                             : const Color(
-                                                0xFF344054), // Darker text
+                                                0xFF344054,
+                                              ), // Darker text
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'Inter',
                                       ),
@@ -347,7 +367,11 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                     child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.info_outline, size: 18, color: AppColors.error),
+                        Icon(
+                          Icons.info_outline,
+                          size: 18,
+                          color: AppColors.error,
+                        ),
                         SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -383,7 +407,9 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                     children: state.skills.map((skill) {
                       return Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
@@ -423,13 +449,16 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
               final certs = state.certifications;
               final hasCpr = certs.contains('CPR Certification');
               final hasFirstAid = certs.contains('First Aid Certification');
-              final hasSpecialNeeds = certs.contains('Special Needs Care Training');
+              final hasSpecialNeeds = certs.contains(
+                'Special Needs Care Training',
+              );
 
               if (!hasCpr || !hasFirstAid || !hasSpecialNeeds) {
                 final missing = <String>[];
                 if (!hasCpr) missing.add('CPR Certification');
                 if (!hasFirstAid) missing.add('First Aid Certification');
-                if (!hasSpecialNeeds) missing.add('Special Needs Care Training');
+                if (!hasSpecialNeeds)
+                  missing.add('Special Needs Care Training');
                 AppToast.show(
                   context,
                   SnackBar(

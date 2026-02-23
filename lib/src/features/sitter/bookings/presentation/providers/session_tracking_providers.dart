@@ -7,16 +7,17 @@ import 'package:babysitter_app/src/features/sitter/bookings/presentation/control
 
 final bookingSessionLocalDataSourceProvider =
     Provider<BookingSessionLocalDataSource>((ref) {
-  return BookingSessionLocalDataSource();
-});
+      return BookingSessionLocalDataSource();
+    });
 
 final sessionTrackingControllerProvider =
-    StateNotifierProvider<SessionTrackingController, SessionTrackingState>(
-        (ref) {
-  final repository = ref.watch(bookingsRepositoryProvider);
-  final localDataSource = ref.watch(bookingSessionLocalDataSourceProvider);
-  return SessionTrackingController(repository, localDataSource);
-});
+    StateNotifierProvider<SessionTrackingController, SessionTrackingState>((
+      ref,
+    ) {
+      final repository = ref.watch(bookingsRepositoryProvider);
+      final localDataSource = ref.watch(bookingSessionLocalDataSourceProvider);
+      return SessionTrackingController(repository, localDataSource);
+    });
 
 final sessionTickerProvider = StreamProvider<DateTime>((ref) {
   return Stream<DateTime>.periodic(

@@ -78,10 +78,12 @@ class ActiveBookingDetailsUiModel {
 
     String formatDateRange(DateTime start, DateTime end) {
       final sameYear = start.year == end.year;
-      final startFormat =
-          DateFormat(sameYear ? 'd MMM' : 'd MMM yyyy').format(start);
-      final endFormat =
-          DateFormat(sameYear ? 'd MMM' : 'd MMM yyyy').format(end);
+      final startFormat = DateFormat(
+        sameYear ? 'd MMM' : 'd MMM yyyy',
+      ).format(start);
+      final endFormat = DateFormat(
+        sameYear ? 'd MMM' : 'd MMM yyyy',
+      ).format(end);
       return '$startFormat - $endFormat';
     }
 
@@ -104,7 +106,8 @@ class ActiveBookingDetailsUiModel {
       familyName: details.familyName,
       childrenCount: details.numberOfChildren.toString(),
       dateRange: formatDateRange(details.startDate, details.endDate),
-      timeRange: '${formatTime(details.startTime)} - ${formatTime(details.endTime)}',
+      timeRange:
+          '${formatTime(details.startTime)} - ${formatTime(details.endTime)}',
       hourlyRate: '${formatCurrency(details.hourlyRate)}/hr',
       days: details.numberOfDays.toString(),
       notes: details.additionalNotes ?? '',

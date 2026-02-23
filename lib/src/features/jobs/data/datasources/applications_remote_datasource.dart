@@ -14,7 +14,9 @@ class ApplicationsRemoteDataSource {
     debugPrint('DEBUG: ApplicationsRemoteDataSource.getApplications called');
     debugPrint('DEBUG: jobId = "$jobId"');
     debugPrint('DEBUG: baseUrl = ${_dio.options.baseUrl}');
-    debugPrint('DEBUG: Full URL = ${_dio.options.baseUrl}/jobs/$jobId/applications');
+    debugPrint(
+      'DEBUG: Full URL = ${_dio.options.baseUrl}/jobs/$jobId/applications',
+    );
 
     try {
       final response = await _dio.get('/jobs/$jobId/applications');
@@ -23,7 +25,8 @@ class ApplicationsRemoteDataSource {
 
       final responseDto = ApplicationsResponseDto.fromJson(response.data);
       debugPrint(
-          'DEBUG: Parsed ${responseDto.data.applications.length} applications');
+        'DEBUG: Parsed ${responseDto.data.applications.length} applications',
+      );
       return responseDto.data.applications;
     } catch (e) {
       debugPrint('DEBUG: ApplicationsRemoteDataSource error: $e');
@@ -37,11 +40,13 @@ class ApplicationsRemoteDataSource {
     required String applicationId,
   }) async {
     debugPrint(
-        'DEBUG: getApplicationDetail called with jobId: $jobId, applicationId: $applicationId');
+      'DEBUG: getApplicationDetail called with jobId: $jobId, applicationId: $applicationId',
+    );
 
     try {
-      final response =
-          await _dio.get('/jobs/$jobId/applications/$applicationId');
+      final response = await _dio.get(
+        '/jobs/$jobId/applications/$applicationId',
+      );
       debugPrint('DEBUG: getApplicationDetail response: ${response.data}');
 
       final responseDto = ApplicationDetailResponseDto.fromJson(response.data);
@@ -62,11 +67,11 @@ class ApplicationsRemoteDataSource {
     String? declineReason,
   }) async {
     debugPrint('DEBUG: respondToApplication called');
-    debugPrint('DEBUG: jobId=$jobId, applicationId=$applicationId, action=$action');
+    debugPrint(
+      'DEBUG: jobId=$jobId, applicationId=$applicationId, action=$action',
+    );
 
-    final body = <String, dynamic>{
-      'action': action,
-    };
+    final body = <String, dynamic>{'action': action};
 
     if (action == 'decline' && declineReason != null) {
       body['declineReason'] = declineReason;

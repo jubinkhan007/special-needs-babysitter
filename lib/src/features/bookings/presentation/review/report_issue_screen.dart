@@ -44,13 +44,12 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1)),
       child: Scaffold(
         backgroundColor: AppTokens.bg,
-        appBar: const BookingDetailsAppBar(
-          title: 'Report An Issue',
-        ),
+        appBar: const BookingDetailsAppBar(title: 'Report An Issue'),
         bottomNavigationBar: BottomPrimaryBar(
           label: 'Submit For Review',
           onTap: () {
@@ -65,10 +64,11 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             // 1. Title Header
             const SliverPadding(
               padding: EdgeInsets.fromLTRB(
-                  AppTokens.screenHorizontalPadding,
-                  24,
-                  AppTokens.screenHorizontalPadding,
-                  8),
+                AppTokens.screenHorizontalPadding,
+                24,
+                AppTokens.screenHorizontalPadding,
+                8,
+              ),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Report An Issue',
@@ -84,7 +84,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             // 2. Subtitle
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppTokens.screenHorizontalPadding),
+                horizontal: AppTokens.screenHorizontalPadding,
+              ),
               sliver: SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 24),
@@ -99,7 +100,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             // 3. Dropdown
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppTokens.screenHorizontalPadding),
+                horizontal: AppTokens.screenHorizontalPadding,
+              ),
               sliver: SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16),
@@ -119,7 +121,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             // 4. Description Area
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppTokens.screenHorizontalPadding),
+                horizontal: AppTokens.screenHorizontalPadding,
+              ),
               sliver: SliverToBoxAdapter(
                 child: FormTextArea(
                   controller: _descriptionController,
@@ -138,9 +141,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
               sliver: SliverToBoxAdapter(
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: UploadTile(
-                    onTap: () {},
-                  ),
+                  child: UploadTile(onTap: () {}),
                 ),
               ),
             ),
@@ -148,7 +149,8 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
             // 6. Confidentiality Note
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: AppTokens.screenHorizontalPadding),
+                horizontal: AppTokens.screenHorizontalPadding,
+              ),
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Your report is confidential. Our team will review it carefully and follow up within 24-48 hours. We take every concern seriously.',

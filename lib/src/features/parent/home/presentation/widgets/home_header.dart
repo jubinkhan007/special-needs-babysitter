@@ -23,13 +23,16 @@ class HomeHeader extends ConsumerWidget {
     final unreadCountAsync = ref.watch(unreadNotificationCountProvider);
     final unreadCount = unreadCountAsync.value ?? 0;
 
-    final initials =
-        displayName.isNotEmpty ? displayName.trim()[0].toUpperCase() : '?';
+    final initials = displayName.isNotEmpty
+        ? displayName.trim()[0].toUpperCase()
+        : '?';
     final hasAvatar = avatarUrl != null && avatarUrl!.trim().isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.symmetric(
-          horizontal: HomeDesignTokens.horizontalPadding, vertical: 12),
+        horizontal: HomeDesignTokens.horizontalPadding,
+        vertical: 12,
+      ),
       child: Row(
         children: [
           // Avatar
@@ -44,34 +47,34 @@ class HomeHeader extends ConsumerWidget {
             clipBehavior: Clip.antiAlias,
             child: hasAvatar
                 ? (avatarUrl!.startsWith('http')
-                    ? Image.network(
-                        avatarUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Center(
-                          child: Text(
-                            initials,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.neutral60,
-                              fontFamily: AppTypography.fontFamily,
+                      ? Image.network(
+                          avatarUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => Center(
+                            child: Text(
+                              initials,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.neutral60,
+                                fontFamily: AppTypography.fontFamily,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    : Image.asset(
-                        avatarUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Center(
-                          child: Text(
-                            initials,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.neutral60,
-                              fontFamily: AppTypography.fontFamily,
+                        )
+                      : Image.asset(
+                          avatarUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => Center(
+                            child: Text(
+                              initials,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.neutral60,
+                                fontFamily: AppTypography.fontFamily,
+                              ),
                             ),
                           ),
-                        ),
-                      ))
+                        ))
                 : Center(
                     child: Text(
                       initials,
@@ -142,13 +145,17 @@ class HomeHeader extends ConsumerWidget {
                       top: -4,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 1),
+                          horizontal: 4,
+                          vertical: 1,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         constraints: const BoxConstraints(
-                            minWidth: 16, minHeight: 16),
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
                         child: Center(
                           child: Text(
                             unreadCount > 99 ? '99+' : '$unreadCount',

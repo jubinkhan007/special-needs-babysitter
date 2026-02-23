@@ -5,11 +5,7 @@ class BookingDateRangeField extends StatelessWidget {
   final String? value;
   final VoidCallback onTap;
 
-  const BookingDateRangeField({
-    super.key,
-    this.value,
-    required this.onTap,
-  });
+  const BookingDateRangeField({super.key, this.value, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

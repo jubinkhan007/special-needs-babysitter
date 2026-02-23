@@ -18,14 +18,13 @@ class EnvConfig {
   static String get apiBaseUrl => _getEnv('API_BASE_URL')?.isNotEmpty == true
       ? _getEnv('API_BASE_URL')!
       : Constants.baseUrl;
-  
+
   static String get agoraAppId => _getEnv('AGORA_APP_ID') ?? '';
-  
+
   static String get agoraTokenServerUrl =>
       _getEnv('AGORA_TOKEN_SERVER_URL') ?? '';
-  
-  static String get firebaseProjectId =>
-      _getEnv('FIREBASE_PROJECT_ID') ?? '';
+
+  static String get firebaseProjectId => _getEnv('FIREBASE_PROJECT_ID') ?? '';
 
   static String get googleGeocodingApiKey =>
       _getEnv('GOOGLE_GEOCODING_API_KEY') ?? '';
@@ -48,7 +47,9 @@ class EnvConfig {
   static Future<bool> tryLoad() async {
     try {
       await dotenv.load(fileName: '.env');
-      debugPrint('DEBUG: EnvConfig loaded .env OK. API_BASE_URL=${dotenv.env['API_BASE_URL']}');
+      debugPrint(
+        'DEBUG: EnvConfig loaded .env OK. API_BASE_URL=${dotenv.env['API_BASE_URL']}',
+      );
       debugPrint('DEBUG: EnvConfig apiBaseUrl getter => $apiBaseUrl');
       return true;
     } catch (e) {

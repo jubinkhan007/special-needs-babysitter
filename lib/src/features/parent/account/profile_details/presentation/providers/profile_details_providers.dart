@@ -13,32 +13,38 @@ import 'package:babysitter_app/src/features/parent/account/profile_details/prese
 // Data Source
 final profileDetailsRemoteDataSourceProvider =
     Provider<ProfileDetailsRemoteDataSource>((ref) {
-  return ProfileDetailsRemoteDataSource(ref.watch(authDioProvider));
-});
+      return ProfileDetailsRemoteDataSource(ref.watch(authDioProvider));
+    });
 
 // Repository
-final profileDetailsRepositoryProvider =
-    Provider<ProfileDetailsRepository>((ref) {
+final profileDetailsRepositoryProvider = Provider<ProfileDetailsRepository>((
+  ref,
+) {
   final remoteDataSource = ref.watch(profileDetailsRemoteDataSourceProvider);
   final profileRepository = ref.watch(profileRepositoryProvider);
 
   // Create AccountRemoteDataSource just for the repo (or reuse if we want)
   // Re-using the logic from AccountRepoImpl requirement
-  final accountRemoteDataSource =
-      AccountRemoteDataSource(ref.watch(authDioProvider));
-  final accountRepository =
-      AccountRepositoryImpl(accountRemoteDataSource, profileRepository);
+  final accountRemoteDataSource = AccountRemoteDataSource(
+    ref.watch(authDioProvider),
+  );
+  final accountRepository = AccountRepositoryImpl(
+    accountRemoteDataSource,
+    profileRepository,
+  );
 
   return ProfileDetailsRepositoryImpl(remoteDataSource, accountRepository);
 });
 
 // Use Case
-final getProfileDetailsUseCaseProvider =
-    Provider<GetProfileDetailsUseCase>((ref) {
+final getProfileDetailsUseCaseProvider = Provider<GetProfileDetailsUseCase>((
+  ref,
+) {
   return GetProfileDetailsUseCase(ref.read(profileDetailsRepositoryProvider));
 });
 
 // Controller
 final profileDetailsControllerProvider =
     AsyncNotifierProvider<ProfileDetailsController, ProfileDetailsState>(
-        () => ProfileDetailsController());
+      () => ProfileDetailsController(),
+    );

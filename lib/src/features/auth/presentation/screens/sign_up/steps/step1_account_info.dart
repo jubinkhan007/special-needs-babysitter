@@ -42,12 +42,15 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
   @override
   void initState() {
     super.initState();
-    _firstNameController =
-        TextEditingController(text: widget.formData['firstName']);
-    _middleInitialController =
-        TextEditingController(text: widget.formData['middleInitial']);
-    _lastNameController =
-        TextEditingController(text: widget.formData['lastName']);
+    _firstNameController = TextEditingController(
+      text: widget.formData['firstName'],
+    );
+    _middleInitialController = TextEditingController(
+      text: widget.formData['middleInitial'],
+    );
+    _lastNameController = TextEditingController(
+      text: widget.formData['lastName'],
+    );
     _emailController = TextEditingController(text: widget.formData['email']);
     _phoneController = TextEditingController(text: widget.formData['phone']);
     _agreedToTerms = widget.formData['agreedToTerms'] == 'true';
@@ -67,7 +70,8 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
     if (_isCheckingUniqueness) return;
     if (!_formKey.currentState!.validate()) return;
     if (!_agreedToTerms) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please agree to Terms & Conditions'),
           backgroundColor: AppColors.error,
@@ -89,10 +93,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
     try {
       final useCase = ref.read(checkUniquenessUseCaseProvider);
       final result = await useCase.call(
-        UniquenessCheckPayload(
-          email: email,
-          phone: phone,
-        ),
+        UniquenessCheckPayload(email: email, phone: phone),
       );
 
       if (!mounted) return;
@@ -116,10 +117,7 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
       if (!mounted) return;
       AppToast.show(
         context,
-        SnackBar(
-          content: Text(e.message),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text(e.message), backgroundColor: AppColors.error),
       );
     } catch (_) {
       if (!mounted) return;
@@ -205,7 +203,6 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   },
                 ),
                 const SizedBox(height: 12), // Tighter spacing
-
                 // Middle Name
                 AuthInputField(
                   controller: _middleInitialController,
@@ -241,8 +238,10 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   helperText: 'Valid email format: name@example.com',
                   validator: (v) {
                     if (v?.isEmpty == true) return 'Email is required';
-                    if (v!.length < 5) return 'Email must be at least 5 characters';
-                    if (v.length > 254) return 'Email must be 254 characters or less';
+                    if (v!.length < 5)
+                      return 'Email must be at least 5 characters';
+                    if (v.length > 254)
+                      return 'Email must be 254 characters or less';
                     // RFC 5322 compliant email regex
                     final emailRegex = RegExp(
                       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -347,21 +346,26 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   onPressed: _saveAndNext,
                 ),
                 const SizedBox(height: 20), // More breathing room
-
                 // Social login
                 const SocialLoginRow(),
                 const SizedBox(height: 20), // More breathing room
-
                 // Sign in link
                 Center(
                   child: GestureDetector(
                     onTap: () {
-                      final from = GoRouterState.of(context).uri.queryParameters['from'];
+                      final from = GoRouterState.of(
+                        context,
+                      ).uri.queryParameters['from'];
                       final params = <String, String>{};
                       if (from != null) {
                         params['from'] = from;
                       }
-                      context.go(Uri(path: Routes.signIn, queryParameters: params).toString());
+                      context.go(
+                        Uri(
+                          path: Routes.signIn,
+                          queryParameters: params,
+                        ).toString(),
+                      );
                     },
                     child: RichText(
                       text: const TextSpan(

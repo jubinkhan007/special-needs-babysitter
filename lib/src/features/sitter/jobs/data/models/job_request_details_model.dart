@@ -102,13 +102,16 @@ class JobRequestDetailsModel extends Equatable {
   }
 
   factory JobRequestDetailsModel.fromJson(Map<String, dynamic> json) {
-    final clockInRaw = json['clockInAt'] ??
+    final clockInRaw =
+        json['clockInAt'] ??
         json['clockInTime'] ??
         json['clockedInAt'] ??
         json['clockedInTime'];
 
     // DEBUG: Log all potential avatar keys
-    debugPrint('DEBUG: JobRequestDetailsModel parsing JSON for id=${json['id']}');
+    debugPrint(
+      'DEBUG: JobRequestDetailsModel parsing JSON for id=${json['id']}',
+    );
     debugPrint('DEBUG: json["familyPhotoUrl"] = ${json['familyPhotoUrl']}');
     debugPrint('DEBUG: json["parentPhotoUrl"] = ${json['parentPhotoUrl']}');
     debugPrint('DEBUG: json["parentAvatarUrl"] = ${json['parentAvatarUrl']}');
@@ -121,10 +124,12 @@ class JobRequestDetailsModel extends Equatable {
       id: json['id'] as String,
       applicationId: json['applicationId'] as String,
       jobId: json['jobId'] as String?,
-      parentUserId: json['parentUserId'] as String? ??
+      parentUserId:
+          json['parentUserId'] as String? ??
           json['parentId'] as String? ??
           json['familyUserId'] as String?,
-      familyPhotoUrl: json['familyPhotoUrl'] as String? ??
+      familyPhotoUrl:
+          json['familyPhotoUrl'] as String? ??
           json['parentPhotoUrl'] as String? ??
           json['parentAvatarUrl'] as String? ??
           json['familyAvatarUrl'] as String? ??
@@ -151,7 +156,8 @@ class JobRequestDetailsModel extends Equatable {
       startTime: json['startTime'] as String,
       endTime: json['endTime'] as String,
       numberOfDays: json['numberOfDays'] as int,
-      status: json['status'] as String? ??
+      status:
+          json['status'] as String? ??
           json['applicationStatus'] as String? ??
           '',
       additionalNotes: json['additionalNotes'] as String?,
@@ -169,7 +175,8 @@ class JobRequestDetailsModel extends Equatable {
       clockInAt: _parseDateTime(clockInRaw),
       jobCoordinates: json['jobCoordinates'] != null
           ? JobCoordinatesModel.fromJson(
-              json['jobCoordinates'] as Map<String, dynamic>)
+              json['jobCoordinates'] as Map<String, dynamic>,
+            )
           : null,
       geofenceRadiusMeters: json['geofenceRadiusMeters'] as int?,
       subTotal: (json['subTotal'] as num?)?.toDouble(),
@@ -223,42 +230,42 @@ class JobRequestDetailsModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        applicationId,
-        jobId,
-        parentUserId,
-        familyPhotoUrl,
-        applicationType,
-        title,
-        familyName,
-        childrenCount,
-        children,
-        location,
-        fullAddress,
-        distance,
-        payRate,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        numberOfDays,
-        status,
-        additionalNotes,
-        transportationModes,
-        equipmentSafety,
-        pickupLocation,
-        dropoffLocation,
-        transportSpecialInstructions,
-        sitterSkills,
-        isToday,
-        canClockIn,
-        clockInMessage,
-        clockInAt,
-        jobCoordinates,
-        geofenceRadiusMeters,
-        subTotal,
-        totalHours,
-        platformFee,
-        discount,
-      ];
+    id,
+    applicationId,
+    jobId,
+    parentUserId,
+    familyPhotoUrl,
+    applicationType,
+    title,
+    familyName,
+    childrenCount,
+    children,
+    location,
+    fullAddress,
+    distance,
+    payRate,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    numberOfDays,
+    status,
+    additionalNotes,
+    transportationModes,
+    equipmentSafety,
+    pickupLocation,
+    dropoffLocation,
+    transportSpecialInstructions,
+    sitterSkills,
+    isToday,
+    canClockIn,
+    clockInMessage,
+    clockInAt,
+    jobCoordinates,
+    geofenceRadiusMeters,
+    subTotal,
+    totalHours,
+    platformFee,
+    discount,
+  ];
 }

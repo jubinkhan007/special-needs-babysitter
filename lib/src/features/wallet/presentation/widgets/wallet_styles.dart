@@ -12,9 +12,9 @@ class WalletStyles {
   static const Color primaryBlue = AppTokens.primaryBlue;
 
   static BoxDecoration cardDecoration({bool bordered = false}) => BoxDecoration(
-        color: AppTokens.surfaceWhite,
-        borderRadius: BorderRadius.circular(AppTokens.cardRadius),
-        boxShadow: AppTokens.cardShadow,
-        border: bordered ? Border.all(color: AppTokens.cardBorder) : null,
-      );
+    color: AppTokens.surfaceWhite,
+    borderRadius: BorderRadius.circular(AppTokens.cardRadius),
+    boxShadow: AppTokens.cardShadow,
+    border: bordered ? Border.all(color: AppTokens.cardBorder) : null,
+  );
 }

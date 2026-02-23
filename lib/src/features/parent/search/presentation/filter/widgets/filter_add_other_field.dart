@@ -5,11 +5,7 @@ class FilterAddOtherField extends StatelessWidget {
   final VoidCallback onTap;
   final String? value;
 
-  const FilterAddOtherField({
-    super.key,
-    required this.onTap,
-    this.value,
-  });
+  const FilterAddOtherField({super.key, required this.onTap, this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +13,9 @@ class FilterAddOtherField extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: AppTokens.sheetFieldHeight,
-        padding:
-            const EdgeInsets.symmetric(horizontal: AppTokens.sheetFieldPadding),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppTokens.sheetFieldPadding,
+        ),
         decoration: BoxDecoration(
           color: AppTokens.sheetFieldBg,
           borderRadius: BorderRadius.circular(AppTokens.sheetFieldRadius),

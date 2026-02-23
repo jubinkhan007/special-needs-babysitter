@@ -41,15 +41,9 @@ class AccountProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  name,
-                  style: AppTokens.accountNameStyle,
-                ),
+                Text(name, style: AppTokens.accountNameStyle),
                 SizedBox(height: 4.h),
-                Text(
-                  email,
-                  style: AppTokens.accountEmailStyle,
-                ),
+                Text(email, style: AppTokens.accountEmailStyle),
                 SizedBox(height: 8.h),
                 GestureDetector(
                   onTap: onViewProfile,

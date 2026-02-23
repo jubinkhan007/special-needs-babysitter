@@ -56,11 +56,10 @@ class HourlyRateSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            hourlyRate != null ? '\$${hourlyRate!.toStringAsFixed(0)} / hr' : 'Not set',
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF667085),
-            ),
+            hourlyRate != null
+                ? '\$${hourlyRate!.toStringAsFixed(0)} / hr'
+                : 'Not set',
+            style: const TextStyle(fontSize: 14, color: Color(0xFF667085)),
           ),
           if (openToNegotiating == true) ...[
             const SizedBox(height: 4),

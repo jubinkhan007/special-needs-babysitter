@@ -34,8 +34,9 @@ class SitterHomeHeader extends ConsumerWidget {
           CircleAvatar(
             radius: 18.w,
             backgroundColor: AppColors.neutral10,
-            backgroundImage:
-                avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+            backgroundImage: avatarUrl != null
+                ? NetworkImage(avatarUrl!)
+                : null,
             child: avatarUrl == null
                 ? Icon(Icons.person, size: 20.w, color: AppColors.textMuted)
                 : null,
@@ -111,12 +112,18 @@ class SitterHomeHeader extends ConsumerWidget {
                   right: -4.w,
                   top: -4.h,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 4.w,
+                      vertical: 1.h,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(10.r),
                     ),
-                    constraints: BoxConstraints(minWidth: 16.w, minHeight: 16.h),
+                    constraints: BoxConstraints(
+                      minWidth: 16.w,
+                      minHeight: 16.h,
+                    ),
                     child: Center(
                       child: Text(
                         unreadCount > 99 ? '99+' : '$unreadCount',

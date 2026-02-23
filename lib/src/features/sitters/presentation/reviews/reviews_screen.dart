@@ -31,10 +31,7 @@ class ReviewsScreen extends ConsumerWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => context.pop(),
         ),
         title: Text(
@@ -103,19 +100,14 @@ class ReviewsScreen extends ConsumerWidget {
             right: AppTokens.savedSittersHPad.w,
           ),
           sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return ReviewListItem(model: uiModels[index]);
-              },
-              childCount: uiModels.length,
-            ),
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return ReviewListItem(model: uiModels[index]);
+            }, childCount: uiModels.length),
           ),
         ),
 
         // Bottom Spacing
-        SliverToBoxAdapter(
-          child: SizedBox(height: 32.h),
-        ),
+        SliverToBoxAdapter(child: SizedBox(height: 32.h)),
       ],
     );
   }

@@ -37,7 +37,8 @@ class PaymentMethodSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedMethod = ref.watch(
-        bookingFlowProvider.select((state) => state.selectedPaymentMethod));
+      bookingFlowProvider.select((state) => state.selectedPaymentMethod),
+    );
 
     return Container(
       decoration: const BoxDecoration(
@@ -47,10 +48,7 @@ class PaymentMethodSheet extends ConsumerWidget {
           topRight: Radius.circular(24),
         ),
         border: Border(
-          top: BorderSide(
-            color: BookingUiTokens.dashedLineColor,
-            width: 1,
-          ),
+          top: BorderSide(color: BookingUiTokens.dashedLineColor, width: 1),
         ),
       ),
       padding: EdgeInsets.fromLTRB(
@@ -102,8 +100,11 @@ class PaymentMethodSheet extends ConsumerWidget {
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
-                child: Icon(_getIconForMethod(selectedMethod),
-                    color: Colors.blue, size: 28),
+                child: Icon(
+                  _getIconForMethod(selectedMethod),
+                  color: Colors.blue,
+                  size: 28,
+                ),
               ),
               const SizedBox(width: 14),
 

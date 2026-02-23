@@ -39,7 +39,8 @@ class AgoraCallService implements CallService {
 
     if (_appId.isEmpty) {
       throw const ConfigFailure(
-        message: 'Agora App ID not configured. Provide appId or set AGORA_APP_ID in .env file.',
+        message:
+            'Agora App ID not configured. Provide appId or set AGORA_APP_ID in .env file.',
       );
     }
 
@@ -56,7 +57,10 @@ class AgoraCallService implements CallService {
     _setupEventHandlers();
     _isInitialized = true;
 
-    developer.log('AgoraCallService initialized with appId: ${_appId.substring(0, 8)}...', name: 'Realtime');
+    developer.log(
+      'AgoraCallService initialized with appId: ${_appId.substring(0, 8)}...',
+      name: 'Realtime',
+    );
   }
 
   void _setupEventHandlers() {
@@ -100,12 +104,13 @@ class AgoraCallService implements CallService {
             UserMuteVideoEvent(uid: remoteUid, muted: muted),
           );
         },
-        onRemoteVideoStateChanged: (connection, remoteUid, state, reason, elapsed) {
-          final muted = state == RemoteVideoState.remoteVideoStateStopped;
-          _eventsController.add(
-            UserMuteVideoEvent(uid: remoteUid, muted: muted),
-          );
-        },
+        onRemoteVideoStateChanged:
+            (connection, remoteUid, state, reason, elapsed) {
+              final muted = state == RemoteVideoState.remoteVideoStateStopped;
+              _eventsController.add(
+                UserMuteVideoEvent(uid: remoteUid, muted: muted),
+              );
+            },
         onTokenPrivilegeWillExpire: (connection, token) {
           developer.log('Token will expire soon', name: 'Realtime');
           _eventsController.add(TokenPrivilegeWillExpireEvent(token: token));
@@ -164,7 +169,10 @@ class AgoraCallService implements CallService {
     );
 
     _currentChannelName = channelName;
-    developer.log('Joined channel: $channelName (video: $enableVideo)', name: 'Realtime');
+    developer.log(
+      'Joined channel: $channelName (video: $enableVideo)',
+      name: 'Realtime',
+    );
   }
 
   @override
@@ -176,7 +184,10 @@ class AgoraCallService implements CallService {
   @override
   Future<void> renewToken(String token) async {
     if (_engine == null) {
-      developer.log('Cannot renew token: engine not initialized', name: 'Realtime');
+      developer.log(
+        'Cannot renew token: engine not initialized',
+        name: 'Realtime',
+      );
       return;
     }
     await _engine!.renewToken(token);

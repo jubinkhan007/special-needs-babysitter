@@ -4,11 +4,7 @@ class ProfilePhotoSection extends StatelessWidget {
   final String? photoUrl;
   final VoidCallback? onEditTap;
 
-  const ProfilePhotoSection({
-    super.key,
-    this.photoUrl,
-    this.onEditTap,
-  });
+  const ProfilePhotoSection({super.key, this.photoUrl, this.onEditTap});
 
   /// Adds a cache-busting timestamp to the URL to force reload
   String _getImageUrlWithCacheBuster(String url) {
@@ -27,10 +23,7 @@ class ProfilePhotoSection extends StatelessWidget {
             height: 100,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFF62A8FF),
-                width: 3,
-              ),
+              border: Border.all(color: const Color(0xFF62A8FF), width: 3),
             ),
             child: ClipOval(
               child: photoUrl != null && photoUrl!.isNotEmpty
@@ -58,11 +51,7 @@ class ProfilePhotoSection extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2),
                   ),
-                  child: const Icon(
-                    Icons.edit,
-                    size: 16,
-                    color: Colors.white,
-                  ),
+                  child: const Icon(Icons.edit, size: 16, color: Colors.white),
                 ),
               ),
             ),
@@ -74,11 +63,7 @@ class ProfilePhotoSection extends StatelessWidget {
   Widget _buildPlaceholder() {
     return Container(
       color: const Color(0xFFF2F4F7),
-      child: const Icon(
-        Icons.person,
-        size: 48,
-        color: Color(0xFF667085),
-      ),
+      child: const Icon(Icons.person, size: 48, color: Color(0xFF667085)),
     );
   }
 }

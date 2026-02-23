@@ -38,27 +38,32 @@ class ChatMessageDto {
   });
 
   factory ChatMessageDto.fromJson(Map<String, dynamic> json) {
-    final senderUserId = _stringFromJson(json['senderUserId']) ??
+    final senderUserId =
+        _stringFromJson(json['senderUserId']) ??
         _stringFromJson(json['senderId']) ??
         _stringFromJson(json['fromUserId']) ??
         _stringFromJson(json['from']) ??
         _stringFromJson(_extractId(json['sender'])) ??
         _stringFromJson(_extractId(json['fromUser']));
-    final recipientUserId = _stringFromJson(json['recipientUserId']) ??
+    final recipientUserId =
+        _stringFromJson(json['recipientUserId']) ??
         _stringFromJson(json['recipientId']) ??
         _stringFromJson(json['toUserId']) ??
         _stringFromJson(json['to']) ??
         _stringFromJson(_extractId(json['recipient'])) ??
         _stringFromJson(_extractId(json['toUser']));
-    final textContent = _stringFromJson(json['textContent']) ??
+    final textContent =
+        _stringFromJson(json['textContent']) ??
         _stringFromJson(json['text']) ??
         _stringFromJson(json['message']) ??
         _stringFromJson(json['content']);
-    final messageType = _stringFromJson(json['type']) ??
-        _stringFromJson(json['messageType']);
-    final messageStatus = _stringFromJson(json['status']) ??
+    final messageType =
+        _stringFromJson(json['type']) ?? _stringFromJson(json['messageType']);
+    final messageStatus =
+        _stringFromJson(json['status']) ??
         _stringFromJson(json['messageStatus']);
-    final messageId = _stringFromJson(json['id']) ??
+    final messageId =
+        _stringFromJson(json['id']) ??
         _stringFromJson(json['messageId']) ??
         _stringFromJson(json['agoraMessageId']) ??
         '';
@@ -87,8 +92,8 @@ class ChatMessageDto {
     final resolvedId = id.isNotEmpty
         ? id
         : (agoraMessageId?.isNotEmpty == true
-            ? agoraMessageId!
-            : '${senderUserId ?? 'unknown'}-${createdAt ?? DateTime.now().toIso8601String()}');
+              ? agoraMessageId!
+              : '${senderUserId ?? 'unknown'}-${createdAt ?? DateTime.now().toIso8601String()}');
     return ChatMessageEntity(
       id: resolvedId,
       conversationId: conversationId ?? '',

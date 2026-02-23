@@ -29,45 +29,47 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Override the preview provider with the one that includes the real cover letter
-    final previewAsync = ref.watch(applicationPreviewProviderWithData((
-      jobId: jobId,
-      coverLetter: coverLetter,
-    )));
+    final previewAsync = ref.watch(
+      applicationPreviewProviderWithData((
+        jobId: jobId,
+        coverLetter: coverLetter,
+      )),
+    );
     final submitState = ref.watch(submitApplicationControllerProvider);
 
     // Listen for success state to show snackbar and navigate back
-    ref.listen<SubmitApplicationState>(
-      submitApplicationControllerProvider,
-      (previous, next) {
-        if (next.isSuccess && previous?.isSuccess != true) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => ApplicationSubmittedDialog(
-              onViewApplications: () {
-                Navigator.of(context).pop(); // Pop dialog
-                // Navigate to sitter jobs screen - 'Applied' tab is first/default
-                context.go('/sitter/jobs');
-              },
+    ref.listen<SubmitApplicationState>(submitApplicationControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (next.isSuccess && previous?.isSuccess != true) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => ApplicationSubmittedDialog(
+            onViewApplications: () {
+              Navigator.of(context).pop(); // Pop dialog
+              // Navigate to sitter jobs screen - 'Applied' tab is first/default
+              context.go('/sitter/jobs');
+            },
+          ),
+        );
+      }
+      if (next.error != null && previous?.error != next.error) {
+        AppToast.show(
+          context,
+          SnackBar(
+            content: Text('Error: ${next.error}'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.all(16.w),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
             ),
-          );
-        }
-        if (next.error != null && previous?.error != next.error) {
-          AppToast.show(
-            context,
-            SnackBar(
-              content: Text('Error: ${next.error}'),
-              backgroundColor: Colors.red,
-              behavior: SnackBarBehavior.floating,
-              margin: EdgeInsets.all(16.w),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-          );
-        }
-      },
-    );
+          ),
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
@@ -95,26 +97,32 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
                               .read(savedJobsControllerProvider.notifier)
                               .toggleSaved(jobId)
                               .then((isSaved) {
-                            if (!context.mounted) return;
-                            AppToast.show(
-                              context,
-                              SnackBar(
-                                content: Text(isSaved ? 'Job saved' : 'Job unsaved'),
-                                backgroundColor: AppColors.success,
-                              ),
-                            );
-                          }).catchError((error) {
-                            if (!context.mounted) return;
-                            AppToast.show(
-                              context,
-                              SnackBar(
-                                content: Text(error
-                                    .toString()
-                                    .replaceFirst('Exception: ', '')),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          });
+                                if (!context.mounted) return;
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text(
+                                      isSaved ? 'Job saved' : 'Job unsaved',
+                                    ),
+                                    backgroundColor: AppColors.success,
+                                  ),
+                                );
+                              })
+                              .catchError((error) {
+                                if (!context.mounted) return;
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text(
+                                      error.toString().replaceFirst(
+                                        'Exception: ',
+                                        '',
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              });
                         },
                       ),
                       SizedBox(height: 12.h),
@@ -132,10 +140,7 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
                   padding: EdgeInsets.all(16.w),
                   child: Text(
                     'Error loading preview: $error',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 14.sp,
-                    ),
+                    style: TextStyle(color: Colors.red, fontSize: 14.sp),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -148,7 +153,9 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
               isLoading: submitState.isLoading,
               onCancel: () => context.pop(),
               onSubmit: () {
-                ref.read(submitApplicationControllerProvider.notifier).submit(
+                ref
+                    .read(submitApplicationControllerProvider.notifier)
+                    .submit(
                       jobId: preview.jobId,
                       coverLetter: preview.coverLetter,
                     );
@@ -165,9 +172,7 @@ class SitterApplicationPreviewScreen extends ConsumerWidget {
     return Container(
       height: 56.h + MediaQuery.of(context).padding.top,
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      decoration: const BoxDecoration(
-        color: AppTokens.bg,
-      ),
+      decoration: const BoxDecoration(color: AppTokens.bg),
       child: Row(
         children: [
           // Back button

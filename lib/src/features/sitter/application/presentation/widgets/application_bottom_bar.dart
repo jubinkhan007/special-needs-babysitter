@@ -23,12 +23,7 @@ class ApplicationBottomBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: AppTokens.dividerSoft,
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: AppTokens.dividerSoft, width: 1)),
       ),
       child: SafeArea(
         top: false,
@@ -75,8 +70,9 @@ class ApplicationBottomBar extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),
                     ),
-                    disabledBackgroundColor:
-                        AppTokens.primaryBlue.withValues(alpha: 0.6),
+                    disabledBackgroundColor: AppTokens.primaryBlue.withValues(
+                      alpha: 0.6,
+                    ),
                   ),
                   child: isLoading
                       ? SizedBox(
@@ -84,8 +80,9 @@ class ApplicationBottomBar extends StatelessWidget {
                           height: 20.w,
                           child: const CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.textOnButton,
+                            ),
                           ),
                         )
                       : Text(

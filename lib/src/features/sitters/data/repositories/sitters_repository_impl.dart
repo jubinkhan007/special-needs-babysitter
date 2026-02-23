@@ -123,14 +123,15 @@ class SittersRepositoryImpl implements SittersRepository {
 
           final averageRating =
               reviews.map((r) => r.rating).reduce((a, b) => a + b) /
-                  reviews.length;
+              reviews.length;
           return sitter.copyWith(
             rating: averageRating,
             reviewCount: reviews.length,
           );
         } catch (e) {
           debugPrint(
-              'Failed to hydrate review stats for sitter ${sitter.userId}: $e');
+            'Failed to hydrate review stats for sitter ${sitter.userId}: $e',
+          );
           return sitter;
         }
       }),
@@ -139,18 +140,23 @@ class SittersRepositoryImpl implements SittersRepository {
     return updated;
   }
 
-  SitterModel _mapToSitterModel(SitterProfileDto dto,
-      {List<ReviewDto>? reviewDtos}) {
+  SitterModel _mapToSitterModel(
+    SitterProfileDto dto, {
+    List<ReviewDto>? reviewDtos,
+  }) {
     // Use provided reviewDtos or fall back to embedded reviews
-    final reviews = reviewDtos
-            ?.map((r) => ReviewModel(
-                  id: r.id,
-                  authorName: r.reviewer?.displayName ?? 'Anonymous',
-                  authorAvatarUrl: r.reviewer?.profilePhotoUrl ?? '',
-                  rating: r.rating,
-                  comment: r.reviewText,
-                  date: r.createdAt ?? DateTime.now(),
-                ))
+    final reviews =
+        reviewDtos
+            ?.map(
+              (r) => ReviewModel(
+                id: r.id,
+                authorName: r.reviewer?.displayName ?? 'Anonymous',
+                authorAvatarUrl: r.reviewer?.profilePhotoUrl ?? '',
+                rating: r.rating,
+                comment: r.reviewText,
+                date: r.createdAt ?? DateTime.now(),
+              ),
+            )
             .toList() ??
         dto.reviews?.map((r) {
           // Fallback: parse embedded reviews
@@ -182,7 +188,8 @@ class SittersRepositoryImpl implements SittersRepository {
       isVerified: true, // Assuming true
       rating: computedRating,
       reviewCount: computedReviewCount,
-      location: dto.address ??
+      location:
+          dto.address ??
           '${dto.distance?.toStringAsFixed(1) ?? "1.2"} Miles Away',
       distance: '${dto.distance?.toStringAsFixed(1) ?? "1.2"} Miles',
       responseRate:

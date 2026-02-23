@@ -72,7 +72,8 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              AppToast.show(context, 
+              AppToast.show(
+                context,
                 const SnackBar(content: Text('Failed to update child')),
               );
             }
@@ -100,7 +101,8 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
             ref.invalidate(profileDetailsProvider);
           } else {
             if (context.mounted) {
-              AppToast.show(context, 
+              AppToast.show(
+                context,
                 const SnackBar(content: Text('Failed to add child')),
               );
             }
@@ -186,10 +188,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
                         const SizedBox(height: 16),
                         _buildAddChildButton(),
                         const SizedBox(height: 24),
-                        Container(
-                          height: 1,
-                          color: _dividerColor,
-                        ),
+                        Container(height: 1, color: _dividerColor),
                       ],
                     ),
                   ),
@@ -202,15 +201,12 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
           ),
         );
       },
-      loading: () => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (err, stack) {
         debugPrint('ERROR: SelectChildStep1View error: $err');
         debugPrint('DEBUG: Stack trace: $stack');
-        return Scaffold(
-          body: Center(child: Text('Error: $err')),
-        );
+        return Scaffold(body: Center(child: Text('Error: $err')));
       },
     );
   }
@@ -261,11 +257,7 @@ class _SelectChildStep1ViewState extends ConsumerState<SelectChildStep1View> {
                   color: isSelected ? _primaryBlue : Colors.transparent,
                 ),
                 child: isSelected
-                    ? const Icon(
-                        Icons.check,
-                        size: 16,
-                        color: Colors.white,
-                      )
+                    ? const Icon(Icons.check, size: 16, color: Colors.white)
                     : null,
               ),
             ),

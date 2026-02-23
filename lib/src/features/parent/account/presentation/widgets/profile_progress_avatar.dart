@@ -44,8 +44,9 @@ class ProfileProgressAvatar extends StatelessWidget {
               padding: const EdgeInsets.all(3.0), // Gap between ring and avatar
               child: CircleAvatar(
                 backgroundColor: const Color(0xFFF2F4F7), // Light background
-                backgroundImage:
-                    avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+                backgroundImage: avatarUrl != null
+                    ? NetworkImage(avatarUrl!)
+                    : null,
                 child: avatarUrl == null
                     ? Text(
                         initials,

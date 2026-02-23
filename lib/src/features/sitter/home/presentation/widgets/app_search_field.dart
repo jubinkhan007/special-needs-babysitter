@@ -51,11 +51,7 @@ class AppSearchField extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.search,
-                size: 18.w,
-                color: AppColors.textSecondary,
-              ),
+              Icon(Icons.search, size: 18.w, color: AppColors.textSecondary),
               SizedBox(width: 10.w),
               Expanded(
                 child: Text(

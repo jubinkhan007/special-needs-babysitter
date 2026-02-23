@@ -40,7 +40,8 @@ class _BookingRequestSentScreenState
       return;
     }
     if (widget.bookingId.isEmpty) {
-      AppToast.show(context,
+      AppToast.show(
+        context,
         const SnackBar(content: Text('Missing booking ID to cancel request')),
       );
       return;
@@ -52,13 +53,15 @@ class _BookingRequestSentScreenState
           .cancelDirectBooking(widget.bookingId);
       await ref.read(bookingsControllerProvider).refresh();
       if (!mounted) return;
-      AppToast.show(context,
+      AppToast.show(
+        context,
         const SnackBar(content: Text('Request cancelled')),
       );
       context.go('${Routes.parentBookings}?tab=cancelled');
     } catch (e) {
       if (!mounted) return;
-      AppToast.show(context,
+      AppToast.show(
+        context,
         SnackBar(content: Text('Failed to cancel request: $e')),
       );
     } finally {
@@ -100,7 +103,7 @@ class _BookingRequestSentScreenState
               ),
             ),
           ),
-          
+
           // Status Badge - Shows Pending Status
           Positioned(
             top: MediaQuery.of(context).padding.top + 80,
@@ -108,7 +111,10 @@ class _BookingRequestSentScreenState
             right: 0,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFEF3C7), // Amber background
                   borderRadius: BorderRadius.circular(20),
@@ -124,11 +130,7 @@ class _BookingRequestSentScreenState
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.access_time,
-                      color: Color(0xFFD97706),
-                      size: 20,
-                    ),
+                    Icon(Icons.access_time, color: Color(0xFFD97706), size: 20),
                     SizedBox(width: 8),
                     Text(
                       'Status: Pending Confirmation',

@@ -3,21 +3,17 @@ import 'package:flutter/services.dart';
 
 final TextInputFormatter _decimalInputFormatter =
     TextInputFormatter.withFunction((oldValue, newValue) {
-  final text = newValue.text;
-  if (text.isEmpty) return newValue;
-  final isValid = RegExp(r'^\d*\.?\d*$').hasMatch(text);
-  return isValid ? newValue : oldValue;
-});
+      final text = newValue.text;
+      if (text.isEmpty) return newValue;
+      final isValid = RegExp(r'^\d*\.?\d*$').hasMatch(text);
+      return isValid ? newValue : oldValue;
+    });
 
 class BookingRateField extends StatelessWidget {
   final String value;
   final ValueChanged<String>? onChanged;
 
-  const BookingRateField({
-    super.key,
-    required this.value,
-    this.onChanged,
-  });
+  const BookingRateField({super.key, required this.value, this.onChanged});
 
   @override
   Widget build(BuildContext context) {

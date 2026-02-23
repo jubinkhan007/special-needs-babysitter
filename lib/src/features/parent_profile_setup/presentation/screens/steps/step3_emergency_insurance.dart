@@ -119,8 +119,9 @@ class _Step3EmergencyAndInsuranceState
           'specialInstructions': _instructionsController.text,
         };
 
-        final insuranceData =
-            _insurancePlans.map((plan) => plan.toMap()).toList(); // List<Map>
+        final insuranceData = _insurancePlans
+            .map((plan) => plan.toMap())
+            .toList(); // List<Map>
 
         // Construct payload for Step 3
         // Backend ProfileDetailsRemoteDataSource expects: { emergencyContact: {...}, insurancePlans: [...] }
@@ -146,7 +147,7 @@ class _Step3EmergencyAndInsuranceState
               'email': _emailController.text,
               'address': _addressController.text,
               'specialInstructions': _instructionsController.text,
-            } // Mapped for UI
+            }, // Mapped for UI
           ];
           widget.profileData['insurancePlans'] = _insurancePlans;
 
@@ -156,8 +157,9 @@ class _Step3EmergencyAndInsuranceState
     } else {
       // Just Insurance?
       if (_insurancePlans.isNotEmpty) {
-        final insuranceData =
-            _insurancePlans.map((plan) => plan.toMap()).toList();
+        final insuranceData = _insurancePlans
+            .map((plan) => plan.toMap())
+            .toList();
         final data = {
           'insurancePlans': insuranceData,
           // Empty contact?
@@ -237,7 +239,8 @@ class _Step3EmergencyAndInsuranceState
     // Error Listener
     ref.listen(parentProfileControllerProvider, (previous, next) {
       if (next.hasError && !next.isLoading) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
             content: Text('Error: ${next.error}'),
             backgroundColor: Colors.red,
@@ -332,9 +335,12 @@ class _Step3EmergencyAndInsuranceState
                       value: _wantToAddContact,
                       activeColor: AppColors.secondary,
                       side: const BorderSide(
-                          color: Color(0xFFD0D5DD), width: 1.5),
+                        color: Color(0xFFD0D5DD),
+                        width: 1.5,
+                      ),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4)),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                       onChanged: (v) =>
                           setState(() => _wantToAddContact = v ?? false),
                     ),
@@ -356,16 +362,24 @@ class _Step3EmergencyAndInsuranceState
                 const SizedBox(height: 12),
                 _buildTextField(_relationController, "Relationship to Child*"),
                 const SizedBox(height: 12),
-                _buildTextField(_phoneController, "Primary Phone Number*",
-                    isPhone: true),
+                _buildTextField(
+                  _phoneController,
+                  "Primary Phone Number*",
+                  isPhone: true,
+                ),
                 const SizedBox(height: 12),
-                _buildTextField(_emailController, "Email Address",
-                    isEmail: true),
+                _buildTextField(
+                  _emailController,
+                  "Email Address",
+                  isEmail: true,
+                ),
                 const SizedBox(height: 12),
                 _buildTextField(_addressController, "Address"),
                 const SizedBox(height: 12),
-                _buildTextField(_instructionsController,
-                    "Special Instructions*"), // Screenshot shows *
+                _buildTextField(
+                  _instructionsController,
+                  "Special Instructions*",
+                ), // Screenshot shows *
                 const SizedBox(height: 24),
               ],
 
@@ -376,8 +390,10 @@ class _Step3EmergencyAndInsuranceState
               InkWell(
                 onTap: _showAddInsuranceDialog,
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
@@ -400,8 +416,11 @@ class _Step3EmergencyAndInsuranceState
                         ),
                       ),
                       SizedBox(width: 8),
-                      Icon(Icons.info_outline,
-                          size: 16, color: Color(0xFF98A2B3)),
+                      Icon(
+                        Icons.info_outline,
+                        size: 16,
+                        color: Color(0xFF98A2B3),
+                      ),
                       Spacer(),
                       Icon(Icons.add, color: Color(0xFF667085)),
                     ],
@@ -421,27 +440,35 @@ class _Step3EmergencyAndInsuranceState
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
                       children: [
-                        const Icon(Icons.check_circle,
-                            color: Colors.green, size: 16),
+                        const Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 16,
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             plan.planName,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.w500),
+                            style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.edit_outlined,
-                              size: 18, color: Color(0xFF667085)),
+                          icon: const Icon(
+                            Icons.edit_outlined,
+                            size: 18,
+                            color: Color(0xFF667085),
+                          ),
                           onPressed: () =>
                               _showEditInsuranceDialog(plan, index),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete_outline,
-                              size: 18, color: Color(0xFF667085)),
+                          icon: const Icon(
+                            Icons.delete_outline,
+                            size: 18,
+                            color: Color(0xFF667085),
+                          ),
                           onPressed: () {
                             setState(() {
                               _insurancePlans.removeAt(index);
@@ -466,14 +493,18 @@ class _Step3EmergencyAndInsuranceState
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: const BorderSide(color: Color(0xFFD0D5DD)),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         backgroundColor: Colors.white,
                       ),
-                      child: const Text('Skip',
-                          style: TextStyle(
-                              color: Color(0xFF344054),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600)),
+                      child: const Text(
+                        'Skip',
+                        style: TextStyle(
+                          color: Color(0xFF344054),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -483,8 +514,9 @@ class _Step3EmergencyAndInsuranceState
                         : ElevatedButton(
                             onPressed: _onNext,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color(0xFF75CFF0), // Light blue
+                              backgroundColor: const Color(
+                                0xFF75CFF0,
+                              ), // Light blue
                               foregroundColor: AppColors.textOnButton,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(
@@ -492,9 +524,13 @@ class _Step3EmergencyAndInsuranceState
                               ),
                               elevation: 0,
                             ),
-                            child: const Text('Next',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600)),
+                            child: const Text(
+                              'Next',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                   ),
                 ],
@@ -507,8 +543,12 @@ class _Step3EmergencyAndInsuranceState
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint,
-      {bool isPhone = false, bool isEmail = false}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint, {
+    bool isPhone = false,
+    bool isEmail = false,
+  }) {
     // Reusing style from EditInsurancePlanDialog or Step 1
     return Container(
       decoration: BoxDecoration(
@@ -531,8 +571,9 @@ class _Step3EmergencyAndInsuranceState
         keyboardType: isPhone
             ? TextInputType.phone
             : (isEmail ? TextInputType.emailAddress : TextInputType.text),
-        inputFormatters:
-            isPhone ? [FilteringTextInputFormatter.digitsOnly] : [],
+        inputFormatters: isPhone
+            ? [FilteringTextInputFormatter.digitsOnly]
+            : [],
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(color: Color(0xFF667085), fontSize: 16),
@@ -550,8 +591,10 @@ class _Step3EmergencyAndInsuranceState
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: AppColors.secondary),
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 10,
+          ),
           isDense: true,
         ),
         validator: (value) {

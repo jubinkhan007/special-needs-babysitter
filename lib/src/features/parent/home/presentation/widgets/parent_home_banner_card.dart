@@ -12,8 +12,9 @@ class ParentHomeBannerCard extends StatelessWidget {
     // 1. Lock text scaling to 1.0 to prevent layout breakage on large system fonts.
     // This is a specific requirement for graphical banners.
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         // 2. Use AspectRatio to maintain the Figma shape on all screens.
@@ -52,7 +53,6 @@ class ParentHomeBannerCard extends StatelessWidget {
                       // This implies the asset itself might be the whole banner background including the person.
                       // However, to follow "Right side image" instruction strictly,
                       // we should position it to ensure the face is visible on the right.
-
                       Positioned.fill(
                         child: Image.asset(
                           'assets/images/promo_banner_bg.png',
@@ -75,7 +75,8 @@ class ParentHomeBannerCard extends StatelessWidget {
                             gradient: LinearGradient(
                               colors: [
                                 Colors.black.withValues(
-                                    alpha: 0.2), // Slight darkening for text
+                                  alpha: 0.2,
+                                ), // Slight darkening for text
                                 Colors.transparent,
                               ],
                               begin: Alignment.centerLeft,
@@ -91,7 +92,8 @@ class ParentHomeBannerCard extends StatelessWidget {
                         left: 20,
                         top: 12, // Reduced padding
                         bottom: 12, // Reduced padding to prevent overflow
-                        width: width *
+                        width:
+                            width *
                             0.55, // Roughly 55% width for text (since image is 45%)
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +130,9 @@ class ParentHomeBannerCard extends StatelessWidget {
                                     child: Text(
                                       'All babysitters are background-checked and approved.',
                                       style: TextStyle(
-                                        color: Colors.white.withValues(alpha: 0.95),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.95,
+                                        ),
                                         fontSize: 12,
                                         height: 1.25,
                                         fontFamily: AppTypography.fontFamily,
@@ -155,8 +159,9 @@ class ParentHomeBannerCard extends StatelessWidget {
                                 backgroundColor: AppColors.buttonDark,
                                 foregroundColor: AppColors.textOnButton,
                                 elevation: 0,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
                                 minimumSize: const Size(0, 36),
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 shape: RoundedRectangleBorder(

@@ -29,12 +29,16 @@ class JobMetaHeader extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 12.w,
-                backgroundImage:
-                    avatarUrl != null ? NetworkImage(avatarUrl!) : null,
+                backgroundImage: avatarUrl != null
+                    ? NetworkImage(avatarUrl!)
+                    : null,
                 backgroundColor: const Color(0xFFEAECF0),
                 child: avatarUrl == null
-                    ? Icon(Icons.person,
-                        size: 16.w, color: const Color(0xFF667085))
+                    ? Icon(
+                        Icons.person,
+                        size: 16.w,
+                        color: const Color(0xFF667085),
+                      )
                     : null,
               ),
               SizedBox(width: 8.w),
@@ -69,8 +73,11 @@ class JobMetaHeader extends StatelessWidget {
           // Row 2: Location & Distance
           Row(
             children: [
-              Icon(Icons.location_on_outlined,
-                  size: 16.w, color: const Color(0xFF98A2B3)),
+              Icon(
+                Icons.location_on_outlined,
+                size: 16.w,
+                color: const Color(0xFF98A2B3),
+              ),
               SizedBox(width: 8.w),
               Expanded(
                 child: RichText(

@@ -22,8 +22,9 @@ class AuthRemoteDataSource {
     );
 
     final data = response.data['data'] as Map<String, dynamic>;
-    final userMap =
-        Map<String, dynamic>.from(data['user'] as Map<String, dynamic>);
+    final userMap = Map<String, dynamic>.from(
+      data['user'] as Map<String, dynamic>,
+    );
 
     // Check profileCompletion.percentage and override profileSetupComplete if 100%
     final profileCompletion =
@@ -128,8 +129,9 @@ class AuthRemoteDataSource {
     // We need to return AuthSessionDto, but standard fromJson might miss the cookie token
     // So we manually construct it if we found a cookie
     if (accessToken.isNotEmpty) {
-      final userMap =
-          Map<String, dynamic>.from(data['user'] as Map<String, dynamic>);
+      final userMap = Map<String, dynamic>.from(
+        data['user'] as Map<String, dynamic>,
+      );
 
       // Check profileCompletion.percentage
       final profileCompletion =
@@ -173,12 +175,14 @@ class AuthRemoteDataSource {
 
   Future<void> registerDeviceToken(String fcmToken) async {
     final now = DateTime.now();
-    final shouldSkipDuplicate = _lastRegisteredToken == fcmToken &&
+    final shouldSkipDuplicate =
+        _lastRegisteredToken == fcmToken &&
         _lastRegisteredAt != null &&
         now.difference(_lastRegisteredAt!) < const Duration(minutes: 10);
     if (shouldSkipDuplicate) {
       debugPrint(
-          'DEBUG: registerDeviceToken skipped duplicate token within cooldown window',);
+        'DEBUG: registerDeviceToken skipped duplicate token within cooldown window',
+      );
       return;
     }
 
@@ -193,18 +197,17 @@ class AuthRemoteDataSource {
       };
       final response = await _dio.post(
         '/notifications/register-token',
-        data: {
-          'token': fcmToken,
-          'platform': platform,
-        },
+        data: {'token': fcmToken, 'platform': platform},
       );
       _lastRegisteredToken = fcmToken;
       _lastRegisteredAt = now;
       debugPrint(
-          'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}',);
+        'DEBUG: registerDeviceToken success status=${response.statusCode} body=${response.data}',
+      );
     } on DioException catch (e) {
       debugPrint(
-          'DEBUG: registerDeviceToken failed status=${e.response?.statusCode} body=${e.response?.data} error=${e.message}',);
+        'DEBUG: registerDeviceToken failed status=${e.response?.statusCode} body=${e.response?.data} error=${e.message}',
+      );
       rethrow;
     }
   }

@@ -13,18 +13,19 @@ final referralsApiServiceProvider = Provider<ReferralsApiService>((ref) {
 
 final referralGenerateProvider =
     FutureProvider.autoDispose<ReferralGenerateResponse>((ref) async {
-  final service = ref.watch(referralsApiServiceProvider);
-  return service.generateReferralCode();
-});
+      final service = ref.watch(referralsApiServiceProvider);
+      return service.generateReferralCode();
+    });
 
 final rewardedReferralsProvider =
     FutureProvider.autoDispose<ReferralsListResponse>((ref) async {
-  final service = ref.watch(referralsApiServiceProvider);
-  return service.getReferrals(status: 'rewarded', limit: 20, offset: 0);
-});
+      final service = ref.watch(referralsApiServiceProvider);
+      return service.getReferrals(status: 'rewarded', limit: 20, offset: 0);
+    });
 
-final referralStatsProvider =
-    FutureProvider.autoDispose<ReferralStats>((ref) async {
+final referralStatsProvider = FutureProvider.autoDispose<ReferralStats>((
+  ref,
+) async {
   final service = ref.watch(referralsApiServiceProvider);
   return service.getStats();
 });

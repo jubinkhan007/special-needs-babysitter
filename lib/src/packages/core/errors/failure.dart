@@ -6,11 +6,7 @@ abstract class Failure extends Equatable {
   final String? code;
   final dynamic originalError;
 
-  const Failure({
-    required this.message,
-    this.code,
-    this.originalError,
-  });
+  const Failure({required this.message, this.code, this.originalError});
 
   @override
   List<Object?> get props => [message, code];

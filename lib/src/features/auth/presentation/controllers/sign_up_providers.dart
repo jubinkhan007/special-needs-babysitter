@@ -21,8 +21,9 @@ final registrationDioProvider = Provider<Dio>((ref) {
 });
 
 /// Registration data source provider
-final registrationDataSourceProvider =
-    Provider<RegistrationRemoteDataSource>((ref) {
+final registrationDataSourceProvider = Provider<RegistrationRemoteDataSource>((
+  ref,
+) {
   final dio = ref.watch(registrationDioProvider);
   return RegistrationRemoteDataSource(dio);
 });
@@ -36,20 +37,20 @@ final registrationRepositoryProvider = Provider<RegistrationRepository>((ref) {
 /// Get security questions use case provider
 final getSecurityQuestionsUseCaseProvider =
     Provider<GetSecurityQuestionsUseCase>((ref) {
-  final repo = ref.watch(registrationRepositoryProvider);
-  return GetSecurityQuestionsUseCase(repo);
-});
+      final repo = ref.watch(registrationRepositoryProvider);
+      return GetSecurityQuestionsUseCase(repo);
+    });
 
 /// Register and send OTP use case provider (sequential flow)
-final registerAndSendOtpUseCaseProvider =
-    Provider<RegisterAndSendOtpUseCase>((ref) {
+final registerAndSendOtpUseCaseProvider = Provider<RegisterAndSendOtpUseCase>((
+  ref,
+) {
   final repo = ref.watch(registrationRepositoryProvider);
   return RegisterAndSendOtpUseCase(repo);
 });
 
 /// Check uniqueness use case provider
-final checkUniquenessUseCaseProvider =
-    Provider<CheckUniquenessUseCase>((ref) {
+final checkUniquenessUseCaseProvider = Provider<CheckUniquenessUseCase>((ref) {
   final repo = ref.watch(registrationRepositoryProvider);
   return CheckUniquenessUseCase(repo);
 });

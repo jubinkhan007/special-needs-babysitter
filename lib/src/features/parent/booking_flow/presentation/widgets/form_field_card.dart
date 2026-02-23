@@ -4,11 +4,7 @@ class FormFieldCard extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
 
-  const FormFieldCard({
-    super.key,
-    required this.child,
-    this.onTap,
-  });
+  const FormFieldCard({super.key, required this.child, this.onTap});
 
   @override
   Widget build(BuildContext context) {

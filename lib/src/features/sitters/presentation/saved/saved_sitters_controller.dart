@@ -26,8 +26,11 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
   ///
   /// For the `SavedSittersScreen`, removing an item is the primary action.
   /// For other screens, we might need a separate method or check existence.
-  Future<void> toggleBookmark(String sitterId,
-      {bool? isCurrentlySaved, SitterListItemModel? sitterItem}) async {
+  Future<void> toggleBookmark(
+    String sitterId, {
+    bool? isCurrentlySaved,
+    SitterListItemModel? sitterItem,
+  }) async {
     final currentList = state.value ?? [];
     final isSaved =
         isCurrentlySaved ?? currentList.any((s) => s.userId == sitterId);
@@ -78,15 +81,20 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
     final currentList = state.value ?? [];
 
     debugPrint('DEBUG removeBookmark: sitterUserId=$sitterUserId');
-    debugPrint('DEBUG removeBookmark: currentList has ${currentList.length} items');
+    debugPrint(
+      'DEBUG removeBookmark: currentList has ${currentList.length} items',
+    );
     for (final s in currentList) {
-      debugPrint('DEBUG removeBookmark: item id=${s.id}, userId=${s.userId}, name=${s.name}');
+      debugPrint(
+        'DEBUG removeBookmark: item id=${s.id}, userId=${s.userId}, name=${s.name}',
+      );
     }
 
     // Optimistic update FIRST for responsive UI
-    final newList =
-        currentList.where((s) => s.userId != sitterUserId).toList();
-    debugPrint('DEBUG removeBookmark: newList has ${newList.length} items after filter');
+    final newList = currentList.where((s) => s.userId != sitterUserId).toList();
+    debugPrint(
+      'DEBUG removeBookmark: newList has ${newList.length} items after filter',
+    );
     state = AsyncValue.data(newList);
 
     try {
@@ -108,5 +116,5 @@ class SavedSittersController extends AsyncNotifier<List<SitterListItemModel>> {
 
 final savedSittersControllerProvider =
     AsyncNotifierProvider<SavedSittersController, List<SitterListItemModel>>(
-  SavedSittersController.new,
-);
+      SavedSittersController.new,
+    );

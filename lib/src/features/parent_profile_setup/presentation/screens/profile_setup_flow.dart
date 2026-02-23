@@ -56,10 +56,7 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
   Widget build(BuildContext context) {
     switch (_currentStep) {
       case 0:
-        return Step0Intro(
-          onNext: () => _goToStep(1),
-          isSitter: false,
-        );
+        return Step0Intro(onNext: () => _goToStep(1), isSitter: false);
       case 1:
         return Step1FamilyIntro(
           profileData: _profileData,
@@ -88,13 +85,9 @@ class _ProfileSetupFlowState extends ConsumerState<ProfileSetupFlow> {
           onEditStep3: () => _goToStep(3),
         );
       case 7:
-        return Step7Complete(
-          onFinish: _onFinish,
-        );
+        return Step7Complete(onFinish: _onFinish);
       default:
-        return Step0Intro(
-          onNext: () => _goToStep(1),
-        );
+        return Step0Intro(onNext: () => _goToStep(1));
     }
   }
 }

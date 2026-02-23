@@ -1,10 +1,5 @@
 /// Enum for Stripe Connect onboarding status
-enum StripeConnectStatusType {
-  notStarted,
-  pending,
-  restricted,
-  complete,
-}
+enum StripeConnectStatusType { notStarted, pending, restricted, complete }
 
 /// Model representing the Stripe Connect account status
 class StripeConnectStatus {

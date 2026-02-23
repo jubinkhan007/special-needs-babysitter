@@ -26,10 +26,7 @@ class AppToggleTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTokens.settingsTileBg,
         borderRadius: BorderRadius.circular(AppTokens.settingsTileRadius.r),
-        border: Border.all(
-          color: AppTokens.settingsTileBorder,
-          width: 1,
-        ),
+        border: Border.all(color: AppTokens.settingsTileBorder, width: 1),
       ),
       child: Row(
         children: [

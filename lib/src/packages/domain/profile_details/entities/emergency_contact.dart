@@ -31,11 +31,11 @@ class EmergencyContact extends Equatable {
 
   @override
   List<Object?> get props => [
-        fullName,
-        relationshipToChild,
-        phoneNumber,
-        email,
-        address,
-        specialInstructions,
-      ];
+    fullName,
+    relationshipToChild,
+    phoneNumber,
+    email,
+    address,
+    specialInstructions,
+  ];
 }

@@ -140,7 +140,8 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                             size: 20,
                           ),
                           onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword),
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -152,8 +153,9 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                           if (!value.contains(RegExp(r'[A-Z]'))) {
                             return 'Must contain an uppercase letter';
                           }
-                          if (!value
-                              .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                          if (!value.contains(
+                            RegExp(r'[!@#$%^&*(),.?":{}|<>]'),
+                          )) {
                             return 'Must contain a special character';
                           }
                           return null;
@@ -176,7 +178,8 @@ class _UpdatePasswordScreenState extends ConsumerState<UpdatePasswordScreen> {
                             size: 20,
                           ),
                           onPressed: () => setState(
-                              () => _obscureConfirm = !_obscureConfirm),
+                            () => _obscureConfirm = !_obscureConfirm,
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {

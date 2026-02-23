@@ -1,5 +1,6 @@
 // Re-export CallService from realtime package
-export 'package:babysitter_app/src/packages/realtime/realtime.dart' show callServiceProvider, CallService;
+export 'package:babysitter_app/src/packages/realtime/realtime.dart'
+    show callServiceProvider, CallService;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
@@ -59,7 +60,9 @@ final getCallDetailsUseCaseProvider = Provider<GetCallDetailsUseCase>((ref) {
   return GetCallDetailsUseCase(ref.watch(callsRepositoryProvider));
 });
 
-final refreshCallTokenUseCaseProvider = Provider<RefreshCallTokenUseCase>((ref) {
+final refreshCallTokenUseCaseProvider = Provider<RefreshCallTokenUseCase>((
+  ref,
+) {
   return RefreshCallTokenUseCase(ref.watch(callsRepositoryProvider));
 });
 
@@ -87,4 +90,3 @@ final agoraAppIdProvider = Provider<String?>((ref) {
 final callControllerProvider = NotifierProvider<CallController, CallState>(() {
   return CallController();
 });
-

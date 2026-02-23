@@ -39,8 +39,10 @@ class ProfileDetailsController extends AsyncNotifier<ProfileDetailsState> {
     state = await AsyncValue.guard(() => _loadDetails());
   }
 
-  Future<bool> updateYourDetails(Map<String, dynamic> data,
-      {int step = 1}) async {
+  Future<bool> updateYourDetails(
+    Map<String, dynamic> data, {
+    int step = 1,
+  }) async {
     final user = ref.read(authNotifierProvider).value?.user;
     if (user == null) return false;
 
@@ -107,7 +109,9 @@ class ProfileDetailsController extends AsyncNotifier<ProfileDetailsState> {
   }
 
   void onEditYourDetails(
-      UserProfileDetails currentDetails, BuildContext context) {
+    UserProfileDetails currentDetails,
+    BuildContext context,
+  ) {
     // Logic handled in view, but method kept for consistency if needed.
     // Ideally we call showDialog from UI, and UI calls controller.updateYourDetails
   }

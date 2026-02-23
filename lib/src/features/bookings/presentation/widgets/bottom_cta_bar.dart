@@ -6,11 +6,7 @@ class BottomCtaBar extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
 
-  const BottomCtaBar({
-    super.key,
-    required this.label,
-    required this.onTap,
-  });
+  const BottomCtaBar({super.key, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

@@ -42,7 +42,8 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
       AppToast.show(
         context,
         const SnackBar(
-            content: Text('Please select a rating before submitting')),
+          content: Text('Please select a rating before submitting'),
+        ),
       );
       return;
     }
@@ -79,10 +80,7 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
     } catch (e) {
       if (!mounted) return;
       final message = e.toString().replaceFirst('Exception: ', '');
-      AppToast.show(
-        context,
-        SnackBar(content: Text(message)),
-      );
+      AppToast.show(context, SnackBar(content: Text(message)));
     } finally {
       if (mounted) {
         setState(() {
@@ -97,8 +95,9 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
     final bottomInset = MediaQuery.of(context).viewPadding.bottom;
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1)),
       child: Scaffold(
         backgroundColor: const Color(0xFFF9FAFB),
         appBar: AppBar(
@@ -106,8 +105,11 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
           elevation: 0,
           centerTitle: true,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: const Color(0xFF667085), size: 24.w),
+            icon: Icon(
+              Icons.arrow_back,
+              color: const Color(0xFF667085),
+              size: 24.w,
+            ),
             onPressed: () => context.pop(),
           ),
           title: Text(
@@ -121,8 +123,11 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.headset_mic_outlined,
-                  color: const Color(0xFF667085), size: 24.w),
+              icon: Icon(
+                Icons.headset_mic_outlined,
+                color: const Color(0xFF667085),
+                size: 24.w,
+              ),
               onPressed: () {},
             ),
           ],
@@ -213,9 +218,7 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
         ),
         bottomNavigationBar: Container(
           padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 20.h + bottomInset),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
+          decoration: const BoxDecoration(color: Colors.white),
           child: Container(
             width: double.infinity,
             height: 56.h,
@@ -229,8 +232,9 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
-                disabledBackgroundColor:
-                    AppColors.primary.withValues(alpha: 0.6),
+                disabledBackgroundColor: AppColors.primary.withValues(
+                  alpha: 0.6,
+                ),
                 padding: EdgeInsets.zero,
               ),
               child: _isSubmitting
@@ -239,7 +243,9 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
                       height: 24.w,
                       child: const CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.textOnButton,
+                        ),
                       ),
                     )
                   : Text(
@@ -454,10 +460,7 @@ class _StarRating extends StatelessWidget {
   final int rating;
   final ValueChanged<int> onRatingChanged;
 
-  const _StarRating({
-    required this.rating,
-    required this.onRatingChanged,
-  });
+  const _StarRating({required this.rating, required this.onRatingChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -473,8 +476,9 @@ class _StarRating extends StatelessWidget {
             child: Icon(
               isFilled ? Icons.star : Icons.star_border,
               size: 32.w,
-              color:
-                  isFilled ? const Color(0xFFF5B301) : const Color(0xFFD0D5DD),
+              color: isFilled
+                  ? const Color(0xFFF5B301)
+                  : const Color(0xFFD0D5DD),
             ),
           ),
         );
@@ -515,8 +519,10 @@ class _NotesField extends StatelessWidget {
           filled: true,
           fillColor: Colors.white,
           border: InputBorder.none,
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16.w,
+            vertical: 14.h,
+          ),
         ),
       ),
     );

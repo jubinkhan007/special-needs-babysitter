@@ -10,7 +10,8 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
   // COLORS - Core Surfaces
   // ═══════════════════════════════════════════════════════════════════════════
-  static const Color screenBg = AppColors.surfaceTint; // Very light blue background
+  static const Color screenBg =
+      AppColors.surfaceTint; // Very light blue background
   static const Color tabsStripBg = Color(0xFFFFFFFF); // White tabs strip
   static const Color divider = AppColors.surfaceTint; // Same as card border
 
@@ -74,23 +75,19 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   static TextStyle get ratingText => TextStyle(
-        fontSize: 18.sp,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // BOX SHADOW (Subtle)
   // ═══════════════════════════════════════════════════════════════════════════
 
   static List<BoxShadow> get appBarShadow => [
-        const BoxShadow(
-          color: shadowColor,
-          blurRadius: 8,
-          offset: Offset(0, 2),
-        ),
-      ];
+    const BoxShadow(color: shadowColor, blurRadius: 8, offset: Offset(0, 2)),
+  ];
 
   static const Color bg = AppColors.surfaceTint; // light blue page background
   static const Color surfaceWhite = Color(0xFFFFFFFF);
@@ -108,8 +105,9 @@ class AppTokens {
 
   static const Color starYellow = Color(0xFFF5B301);
 
-  static const Color darkButtonBg =
-      Color(0xFF1F2B35); // dark navy (View Details)
+  static const Color darkButtonBg = Color(
+    0xFF1F2B35,
+  ); // dark navy (View Details)
   static const Color dividerSoft = AppColors.surfaceTint;
 
   // ========= Layout =========
@@ -136,11 +134,7 @@ class AppTokens {
   static const Color shadow = Color.fromRGBO(0, 0, 0, 0.06);
 
   static const List<BoxShadow> cardShadow = [
-    BoxShadow(
-      color: shadow,
-      blurRadius: 18,
-      offset: Offset(0, 6),
-    ),
+    BoxShadow(color: shadow, blurRadius: 18, offset: Offset(0, 6)),
   ];
 
   // ========= Typography =========
@@ -148,84 +142,84 @@ class AppTokens {
   static const String? fontFamily = null;
 
   static TextStyle get appBarTitle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-        color: appBarTitleGrey,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: appBarTitleGrey,
+    height: 1.2,
+  );
 
   static TextStyle get tabSelected => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    height: 1.2,
+  );
 
   static TextStyle get tabUnselected => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w500,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get cardName => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.15,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.15,
+  );
 
   static TextStyle get cardMeta => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+    height: 1.2,
+  );
 
   static TextStyle get statLabel => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+    height: 1.2,
+  );
 
   static TextStyle get statValue => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.1,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.1,
+  );
 
   static TextStyle get scheduledText => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get chipText => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get buttonText => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    height: 1.2,
+  );
 
   // ========= Status chip palette (soft/pastel) =========
   static const Color chipBlueBg = Color(0xFFD9F0FF);
@@ -255,52 +249,52 @@ class AppTokens {
   static const double skillTagHorizontalPadding = 12;
 
   static TextStyle get sectionTitle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get detailKey => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-        height: 1.5, // Taller line height for readability
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+    height: 1.5, // Taller line height for readability
+  );
 
   static TextStyle get detailValue => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.5,
+  );
 
   static TextStyle get totalCostLabel => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        color: textSecondary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: textSecondary,
+    height: 1.2,
+  );
 
   static TextStyle get totalCostValue => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 24,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get skillTagStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
-        color: skillTagText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    color: skillTagText,
+    height: 1.2,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REVIEW & REPORT SCREENS TOKENS
@@ -327,52 +321,52 @@ class AppTokens {
   // bottom action bar often uses screen horizontal padding (24)
 
   static TextStyle get formHintStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: formFieldHint,
-        height: 1.4,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: formFieldHint,
+    height: 1.4,
+  );
 
   static TextStyle get formTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: formFieldText,
-        height: 1.4,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: formFieldText,
+    height: 1.4,
+  );
 
   static TextStyle get subLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get helperTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-        height: 1.4,
-      );
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+    height: 1.4,
+  );
 
   static TextStyle get uploadTileTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 11,
-        fontWeight: FontWeight.w500,
-        color: uploadTileText,
-        height: 1.2, // Tighter for wrapping
-      );
+    fontFamily: fontFamily,
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: uploadTileText,
+    height: 1.2, // Tighter for wrapping
+  );
 
   static TextStyle get outlinedButtonTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: outlinedButtonText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: outlinedButtonText,
+    height: 1.2,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // ACTIVE BOOKING DETAILS TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -397,45 +391,45 @@ class AppTokens {
 
   // Typography
   static TextStyle get activeSectionTitle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: sectionTitleColor,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: sectionTitleColor,
+    height: 1.2,
+  );
 
   static TextStyle get linkTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: linkTextGrey,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: linkTextGrey,
+    height: 1.2,
+  );
 
   static TextStyle get kvLabel => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+    height: 1.5,
+  );
 
   static TextStyle get kvValue => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight
-            .w500, // Slightly less bold than w600 if needed, or match detailValue
-        color: textPrimary,
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight
+        .w500, // Slightly less bold than w600 if needed, or match detailValue
+    color: textPrimary,
+    height: 1.5,
+  );
 
   static TextStyle get kvValueStrong => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.5,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // MAP ROUTE SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -466,20 +460,20 @@ class AppTokens {
   static const Color routeConnectorColor = AppColors.surfaceTint;
 
   static TextStyle get routeAddressTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: textPrimary,
-        height: 1.4,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: textPrimary,
+    height: 1.4,
+  );
 
   static TextStyle get routeTimeTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: textSecondary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: textSecondary,
+    height: 1.2,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // JOBS SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -492,11 +486,11 @@ class AppTokens {
   // App Bar
   static const Color jobsAppBarBg = AppColors.surfaceTint;
   static TextStyle get jobsAppBarTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-        color: textSecondary, // Grey title per screenshot
-      );
+    fontFamily: fontFamily,
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: textSecondary, // Grey title per screenshot
+  );
   static const Color jobsAppBarIconColor = Color(0xFF8A949C);
   static const List<BoxShadow> jobsAppBarShadow = [
     BoxShadow(
@@ -519,22 +513,23 @@ class AppTokens {
   ];
   static const double jobsCardPadding = 16.0;
   static TextStyle get jobsCardTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+  );
 
   // Status Chip
-  static const Color jobChipBgActive =
-      Color(0xFFE0F2F1); // Light blue/teal pill
+  static const Color jobChipBgActive = Color(
+    0xFFE0F2F1,
+  ); // Light blue/teal pill
   static const Color jobChipDotActive = Color(0xFF00B0FF); // Vivid blue dot
   static TextStyle get jobChipTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: textPrimary,
+  );
   static const double jobChipRadius = 100.0;
   static const double jobChipHeight = 24.0;
   static const double jobChipHorizontalPadding = 8.0;
@@ -543,21 +538,22 @@ class AppTokens {
   static const Color jobInfoIconColor = Color(0xFF8A949C);
   static const double jobInfoIconSize = 18.0;
   static TextStyle get jobInfoLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-        height: 1.3,
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+    height: 1.3,
+  );
   static TextStyle get jobInfoValueStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-        height: 1.3,
-      );
-  static const Color jobInfoValueAccentColor =
-      Color(0xFF2D8EFF); // Blue for (4y)
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+    height: 1.3,
+  );
+  static const Color jobInfoValueAccentColor = Color(
+    0xFF2D8EFF,
+  ); // Blue for (4y)
 
   static const double jobInfoColumnGap = 16.0;
   static const double jobInfoRowGap = 16.0;
@@ -572,17 +568,18 @@ class AppTokens {
   static const Color jobPrimaryBtnBg = AppColors.primary; // Light blue
   static const Color jobSecondaryBtnBg = Color(0xFF1A2B3C); // Dark Navy
   static TextStyle get jobButtonTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-        height: 1.2, // Fix vertical alignment/clipping
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    height: 1.2, // Fix vertical alignment/clipping
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // JOB DETAILS SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   // Screen
-  static const Color jobDetailsBg = AppColors.surfaceTint; // Matches all jobs bg
+  static const Color jobDetailsBg =
+      AppColors.surfaceTint; // Matches all jobs bg
   static const double jobDetailsHorizontalPadding = 16.0;
   static const double jobDetailsTopPadding = 16.0;
   static const double jobDetailsSectionSpacing = 24.0;
@@ -591,43 +588,43 @@ class AppTokens {
 
   // Typography
   static TextStyle get jobDetailsTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.2,
+  );
   static TextStyle get jobDetailsSubtitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: textSecondary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: textSecondary,
+  );
   static TextStyle get jobDetailsSectionTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+  );
   static TextStyle get jobDetailsLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: textSecondary, // Grey
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: textSecondary, // Grey
+  );
   static TextStyle get jobDetailsValueStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: textPrimary, // Dark
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: textPrimary, // Dark
+  );
   static TextStyle get jobDetailsParagraphStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: textSecondary, // Grey
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: textSecondary, // Grey
+    height: 1.5,
+  );
 
   // Dividers
   static const Color jobDetailsDividerColor = Color(0xFFF0F0F0);
@@ -645,24 +642,25 @@ class AppTokens {
   static const Color jobDetailsOutlinedTextColor = Color(0xFF1A2B3C);
 
   static TextStyle get jobDetailsButtonTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: Colors.white,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
+    height: 1.2,
+  );
   static TextStyle get jobDetailsOutlinedTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: jobDetailsOutlinedTextColor,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: jobDetailsOutlinedTextColor,
+    height: 1.2,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // APPLICATIONS SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
   // Screen
-  static const Color applicationsBg = AppColors.surfaceTint; // Matches bookings bg
+  static const Color applicationsBg =
+      AppColors.surfaceTint; // Matches bookings bg
   static const double applicationsHorizontalPadding = 16.0;
   static const double applicationsTopPadding = 16.0;
   static const double applicationsCardGap = 16.0;
@@ -673,57 +671,57 @@ class AppTokens {
 
   // Typography
   static TextStyle get applicationsNameStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+  );
   static TextStyle get applicationsMetaStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: textSecondary, // Grey
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: textSecondary, // Grey
+  );
   static TextStyle get applicationsJobTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+  );
   static TextStyle get applicationsScheduledStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: textPrimary, // Darker than meta
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: textPrimary, // Darker than meta
+  );
   static TextStyle get applicationsStatLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: textSecondary, // Grey
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: textSecondary, // Grey
+  );
   static TextStyle get applicationsStatValueStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+  );
   static TextStyle get applicationsRatingTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+  );
 
   // Chip (Application specific)
   static const Color applicationChipBg = Color(0xFFFCE4F4); // Pink/Lavender
   static const Color applicationChipDot = Color(0xFFD3009B); // Pink/Magenta
   static TextStyle get applicationChipTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: textPrimary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: textPrimary,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // BOOKING APPLICATION SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -743,31 +741,31 @@ class AppTokens {
 
   // Typography
   static TextStyle get sectionTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w700,
-        color: Color(0xFF111827), // Dark Title
-      );
+    fontFamily: fontFamily,
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF111827), // Dark Title
+  );
   static TextStyle get bodyParagraphStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280), // Body/Grey
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280), // Body/Grey
+    height: 1.5,
+  );
   static TextStyle get transportLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Color(0xFF374151), // Darker Grey/Label
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFF374151), // Darker Grey/Label
+  );
   static TextStyle get transportValueStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280), // Body/Grey
-        height: 1.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280), // Body/Grey
+    height: 1.5,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REJECT REASON BOTTOM SHEET TOKENS
@@ -779,11 +777,11 @@ class AppTokens {
   static const Color rejectSheetCloseIconColor = Color(0xFF6B7280);
   static const double rejectSheetCloseIconSize = 24.0;
   static TextStyle get rejectSheetTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: Color(0xFF111827),
-      );
+    fontFamily: fontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: Color(0xFF111827),
+  );
 
   // Radio Rows
   static const Color rejectRadioOuterColor = Color(0xFFD1D5DB); // Grey outline
@@ -791,32 +789,34 @@ class AppTokens {
   static const double rejectRadioRowHeight = 52.0;
   static const double rejectRadioGap = 16.0;
   static TextStyle get rejectRadioTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF374151),
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF374151),
+  );
 
   // Add Other Field
-  static const Color rejectOtherFieldBorderColor =
-      Color(0xFFD1D5DB); // Light grey border
+  static const Color rejectOtherFieldBorderColor = Color(
+    0xFFD1D5DB,
+  ); // Light grey border
   static const Color rejectOtherFieldBg = Color(0xFFFFFFFF); // White
   static const double rejectOtherFieldRadius = 8.0;
   static const double rejectOtherFieldHeight = 52.0; // Match button height
-  static const EdgeInsets rejectOtherFieldPadding =
-      EdgeInsets.symmetric(horizontal: 16);
+  static const EdgeInsets rejectOtherFieldPadding = EdgeInsets.symmetric(
+    horizontal: 16,
+  );
   static TextStyle get rejectOtherHintStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF9CA3AF),
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF9CA3AF),
+  );
   static TextStyle get rejectOtherTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF374151),
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF374151),
+  );
   static const Color rejectOtherPlusIconColor = Color(0xFF6B7280);
   static const double rejectOtherPlusIconSize = 20.0;
 
@@ -826,11 +826,11 @@ class AppTokens {
   static const Color rejectSubmitBg = AppColors.primary; // Baby blue
   static const Color rejectSubmitTextColor = Colors.white;
   static TextStyle get rejectSubmitTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18, // Slightly larger for better match
-        fontWeight: FontWeight.w600,
-        color: rejectSubmitTextColor,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18, // Slightly larger for better match
+    fontWeight: FontWeight.w600,
+    color: rejectSubmitTextColor,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // ACCOUNT SCREEN TOKENS
@@ -842,50 +842,50 @@ class AppTokens {
   static const Color accountCardBorder = Color(0xFFE8F4FA); // Very light border
   static const double accountCardRadius = 16.0;
   static List<BoxShadow> get accountCardShadow => [
-        BoxShadow(
-          color: const Color(0xFF000000).withValues(alpha: 0.04),
-          blurRadius: 8,
-          offset: const Offset(0, 2),
-        ),
-      ];
+    BoxShadow(
+      color: const Color(0xFF000000).withValues(alpha: 0.04),
+      blurRadius: 8,
+      offset: const Offset(0, 2),
+    ),
+  ];
 
   // Typography
   static TextStyle get accountNameStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get accountEmailStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static TextStyle get accountLinkStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: AppColors.primary,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.primary,
+  );
   static TextStyle get accountStatNumberStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 32,
-        fontWeight: FontWeight.w700,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get accountStatLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static TextStyle get accountMenuTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.buttonDark,
+  );
 
   // Spacing
   static const double accountScreenHPad = 20.0;
@@ -928,11 +928,11 @@ class AppTokens {
 
   // Typography
   static TextStyle get settingsTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.buttonDark,
+  );
 
   // Switch styling
   static const Color settingsSwitchActiveTrack = AppColors.primary;
@@ -954,41 +954,41 @@ class AppTokens {
 
   // Section titles
   static TextStyle get paymentSectionTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
 
   // Balance card
   static const Color balanceCardBg = Color(0xFFFFFFFF);
   static const double balanceCardRadius = 16.0;
   static List<BoxShadow> get balanceCardShadow => [
-        BoxShadow(
-          color: const Color(0xFF000000).withValues(alpha: 0.06),
-          blurRadius: 12,
-          offset: const Offset(0, 4),
-        ),
-      ];
+    BoxShadow(
+      color: const Color(0xFF000000).withValues(alpha: 0.06),
+      blurRadius: 12,
+      offset: const Offset(0, 4),
+    ),
+  ];
   static const EdgeInsets balanceCardPadding = EdgeInsets.all(20);
   static TextStyle get balanceLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static TextStyle get balanceAmountStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 32,
-        fontWeight: FontWeight.w700,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get topUpTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+  );
   static const Color topUpIconColor = Color(0xFF6B7280);
   static const double topUpIconSize = 20.0;
 
@@ -997,11 +997,11 @@ class AppTokens {
   static const double methodIconCircleSize = 40.0;
   static const Color methodIconCircleBorder = Color(0xFFE5E7EB);
   static TextStyle get methodTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.buttonDark,
+  );
   static const Color methodPlusColor = Color(0xFF9CA3AF);
   static const double methodPlusSize = 20.0;
   static const double methodRowGap = 8.0;
@@ -1009,23 +1009,23 @@ class AppTokens {
   // Recent activity rows
   static const double activityRowHeight = 64.0;
   static TextStyle get activityTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get activityDateStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static TextStyle get activityAmountStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
   static const double activityLeadingIconSize = 24.0;
   static const Color activityLeadingIconColor = Color(0xFF6B7280);
 
@@ -1045,25 +1045,25 @@ class AppTokens {
   static const double searchFieldHeight = 52.0;
   static const Color searchIconColor = Color(0xFF9CA3AF);
   static TextStyle get searchFieldHintStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF9CA3AF),
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF9CA3AF),
+  );
   static TextStyle get searchFieldTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: AppColors.buttonDark,
+  );
 
   // List header row
   static TextStyle get listHeaderTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
 
   // Filter pill
   static const Color filterPillBg = Color(0xFFFFFFFF);
@@ -1071,11 +1071,11 @@ class AppTokens {
   static const double filterPillRadius = 20.0;
   static const double filterPillHeight = 36.0;
   static TextStyle get filterPillTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static const Color filterPillIconColor = Color(0xFF6B7280);
 
   // Saved sitter card
@@ -1083,66 +1083,66 @@ class AppTokens {
   static const Color savedCardBg = Color(0xFFFFFFFF);
   static const Color savedCardBorder = Color(0xFFE8F4FA);
   static List<BoxShadow> get savedCardShadow => [
-        BoxShadow(
-          color: const Color(0xFF000000).withValues(alpha: 0.04),
-          blurRadius: 8,
-          offset: const Offset(0, 2),
-        ),
-      ];
+    BoxShadow(
+      color: const Color(0xFF000000).withValues(alpha: 0.04),
+      blurRadius: 8,
+      offset: const Offset(0, 2),
+    ),
+  ];
   static TextStyle get savedSitterNameStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get savedSitterLocationStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static TextStyle get savedStatLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static TextStyle get savedStatValueStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get savedPriceBigStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 28,
-        fontWeight: FontWeight.w700,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    color: AppColors.buttonDark,
+  );
   static TextStyle get savedPriceSuffixStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
   static const Color viewProfileButtonBg = AppColors.primary;
   static const double viewProfileButtonRadius = 20.0;
   static TextStyle get viewProfileButtonTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Color(0xFFFFFFFF),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    color: Color(0xFFFFFFFF),
+  );
   static const Color bookmarkContainerBg = Color(0xFFFFFFFF);
   static const Color bookmarkContainerBorder = Color(0xFFE5E7EB);
   static const Color bookmarkIconColor = AppColors.buttonDark;
   static const Color ratingStarColor = Color(0xFFFBBF24);
   static TextStyle get savedRatingTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.buttonDark,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REVIEWS SCREEN TOKENS
@@ -1152,46 +1152,47 @@ class AppTokens {
   static const Color reviewsHeaderBg = AppColors.surfaceTint;
   static const double reviewsTopSpacing = 24.0;
   static const double reviewItemVerticalPadding = 16.0;
-  static const Color reviewItemDividerColor =
-      Color(0xFFF3F4F6); // Very light grey
+  static const Color reviewItemDividerColor = Color(
+    0xFFF3F4F6,
+  ); // Very light grey
   static const double reviewItemDividerThickness = 1.0;
 
   // Typography
   static TextStyle get reviewsTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16, // Medium-bold, likely 16 or 18
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16, // Medium-bold, likely 16 or 18
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
 
   static TextStyle get reviewsSummaryStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
 
   static TextStyle get reviewerNameStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w700,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    color: AppColors.buttonDark,
+  );
 
   static TextStyle get reviewTimeAgoStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 11, // Small grey text
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF9CA3AF),
-      );
+    fontFamily: fontFamily,
+    fontSize: 11, // Small grey text
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF9CA3AF),
+  );
 
   static TextStyle get reviewCommentStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF4B5563),
-        height: 1.5, // Tuned/comfortable line height
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF4B5563),
+    height: 1.5, // Tuned/comfortable line height
+  );
 
   // Avatar
   static const double reviewAvatarSize = 40.0;
@@ -1201,8 +1202,9 @@ class AppTokens {
   // Stars
   static const double starsSize = 14.0;
   static const double starsGap = 2.0; // Space between stars
-  static const Color starFilledColor =
-      Color(0xFFFBBF24); // Same as ratingStarColor
+  static const Color starFilledColor = Color(
+    0xFFFBBF24,
+  ); // Same as ratingStarColor
   static const Color starEmptyColor = Color(0xFFE5E7EB); // Light grey
   // ═══════════════════════════════════════════════════════════════════════════
   // FILTER SHEET TOKENS
@@ -1218,40 +1220,40 @@ class AppTokens {
 
   // Typography
   static TextStyle get sheetTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
-        color: AppColors.buttonDark,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: AppColors.buttonDark,
+    height: 1.2,
+  );
 
   static TextStyle get sheetSectionTitleStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15, // Label size
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15, // Label size
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
 
   static TextStyle get sheetFieldHintStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF6B7280),
+  );
 
   static TextStyle get sheetFieldTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.buttonDark,
+  );
 
   static TextStyle get sheetCheckboxTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF4B5563),
-      );
+    fontFamily: fontFamily,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: Color(0xFF4B5563),
+  );
 
   // Form Fields (Sheet specific)
   static const Color sheetFieldBg = Color(0xFFFFFFFF);
@@ -1263,7 +1265,8 @@ class AppTokens {
 
   // Slider
   static const Color sliderActiveColor = Color(
-      0xFF87CEEB); // Sky blue (approx from screenshot) -> Actually Figma screenshot looks like primaryBlue or lighter. Let's use primaryBlue 0xFF6EC1F5 or similar if defined, else define here.
+    0xFF87CEEB,
+  ); // Sky blue (approx from screenshot) -> Actually Figma screenshot looks like primaryBlue or lighter. Let's use primaryBlue 0xFF6EC1F5 or similar if defined, else define here.
   // Using explicit color from screenshot (lightish blue for active track/thumb area glow)
   // Re-checking standard primary: 6EC1F5 is typical in this app.
   static const Color sliderTrackActive = Color(0xFF6EC1F5);
@@ -1275,18 +1278,18 @@ class AppTokens {
       AppColors.surfaceTint; // Light blue bg for pill
   static const double sliderValuePillRadius = 12.0;
   static TextStyle get sheetSliderPillTextStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13,
-        fontWeight: FontWeight.w600,
-        color: AppColors.buttonDark,
-      );
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    color: AppColors.buttonDark,
+  );
 
   static TextStyle get sheetSliderLabelStyle => const TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 11,
-        fontWeight: FontWeight.w500,
-        color: Color(0xFF6B7280),
-      );
+    fontFamily: fontFamily,
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: Color(0xFF6B7280),
+  );
 
   // Checkbox
   static const double checkboxSize = 20.0;
@@ -1303,7 +1306,8 @@ class AppTokens {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Colors
-  static const Color messagesHeaderBg = AppColors.surfaceTint; // Same as screenBg
+  static const Color messagesHeaderBg =
+      AppColors.surfaceTint; // Same as screenBg
   static const Color messagesScreenBg = Color(0xFFFFFFFF); // White body
   static const Color messageRowDivider = AppColors.surfaceTint; // Soft divider
   static const Color messageNameColor = Color(0xFF1B2225); // textPrimary
@@ -1326,44 +1330,44 @@ class AppTokens {
 
   // Typography
   static TextStyle get messagesTitleStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 17.sp,
-        fontWeight: FontWeight.w500,
-        color: appBarTitleGrey,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w500,
+    color: appBarTitleGrey,
+    height: 1.2,
+  );
 
   static TextStyle get messageNameStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15.sp,
-        fontWeight: FontWeight.w600,
-        color: messageNameColor,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w600,
+    color: messageNameColor,
+    height: 1.2,
+  );
 
   static TextStyle get messagePreviewStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 13.sp,
-        fontWeight: FontWeight.w400,
-        color: messagePreviewColor,
-        height: 1.3,
-      );
+    fontFamily: fontFamily,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w400,
+    color: messagePreviewColor,
+    height: 1.3,
+  );
 
   static TextStyle get messageTimeStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w400,
-        color: messageTimeColor,
-        height: 1.0,
-      );
+    fontFamily: fontFamily,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: messageTimeColor,
+    height: 1.0,
+  );
 
   static TextStyle get unreadBadgeTextStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 11.sp,
-        fontWeight: FontWeight.w600,
-        color: unreadBadgeText,
-        height: 1.0,
-      );
+    fontFamily: fontFamily,
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w600,
+    color: unreadBadgeText,
+    height: 1.0,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // CHAT THREAD SCREEN TOKENS
@@ -1372,8 +1376,9 @@ class AppTokens {
   // Colors
   static const Color chatHeaderBg = AppColors.surfaceTint; // Pale blue
   static const Color chatScreenBg = Color(0xFFFFFFFF); // White body/bg
-  static const Color chatBubbleIncomingBg =
-      Color(0xFFF3F4F6); // Soft grey/white
+  static const Color chatBubbleIncomingBg = Color(
+    0xFFF3F4F6,
+  ); // Soft grey/white
   static const Color chatBubbleOutgoingBg = AppColors.primary; // Primary blue
   static const Color chatBubbleOutgoingText = Colors.white;
   static const Color chatMetaText = Color(0xFF9CA3AF); // Light grey timestamps
@@ -1397,63 +1402,65 @@ class AppTokens {
 
   // Typography
   static TextStyle get chatSenderNameStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.2,
+  );
 
   static TextStyle get chatMessageTextStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15.sp,
-        fontWeight: FontWeight.w400,
-        color: textPrimary,
-        height: 1.4,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    color: textPrimary,
+    height: 1.4,
+  );
 
   static TextStyle get chatMetaStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 12.sp,
-        fontWeight: FontWeight.w400,
-        color: chatMetaText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: chatMetaText,
+    height: 1.2,
+  );
 
   static TextStyle get callTileTitleStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w500,
-        color: textSecondary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: textSecondary,
+    height: 1.2,
+  );
 
   static TextStyle get callTileSubStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w600,
-        color: textSecondary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w600,
+    color: textSecondary,
+    height: 1.2,
+  );
 
   static TextStyle get composerHintStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w400,
-        color: composerPlaceholder,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: composerPlaceholder,
+    height: 1.2,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // AUDIO CALL SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
 
   // Colors
   static const Color callBg = Color(0xFFFFFFFF); // Base bg
-  static const Color callHeaderText =
-      Color(0xFF1B2225); // Dark text for title/name
+  static const Color callHeaderText = Color(
+    0xFF1B2225,
+  ); // Dark text for title/name
   static const Color callControlBarBg = AppColors.surfaceTint; // Light pill bg
   static const Color callControlButtonBg = Color(
-      0xFF6B7280); // Grey buttons (from visual) -> Actually screenshot shows grey circles
+    0xFF6B7280,
+  ); // Grey buttons (from visual) -> Actually screenshot shows grey circles
   static const Color callControlIconColor = Colors.white;
   static const Color callEndButtonBg = AppColors.error; // Red
   static const Color callSubText = Color(0xFF6B7280); // Grey status/timer
@@ -1477,44 +1484,44 @@ class AppTokens {
 
   // Typography
   static TextStyle get callTitleStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 18.sp,
-        fontWeight: FontWeight.w500,
-        color: callHeaderText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+    color: callHeaderText,
+    height: 1.2,
+  );
 
   static TextStyle get callNameLargeStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 24.sp,
-        fontWeight: FontWeight.w600,
-        color: callHeaderText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w600,
+    color: callHeaderText,
+    height: 1.2,
+  );
 
   static TextStyle get callNameMediumStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20.sp,
-        fontWeight: FontWeight.w600,
-        color: callHeaderText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: callHeaderText,
+    height: 1.2,
+  );
 
   static TextStyle get callStatusStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w400,
-        color: callSubText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: callSubText,
+    height: 1.2,
+  );
 
   static TextStyle get callTimerStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w400,
-        color: callSubText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    color: callSubText,
+    height: 1.2,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // VIDEO CALL SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1523,7 +1530,8 @@ class AppTokens {
   static const Color callOverlayText = Colors.white;
   static const Color callOverlayIcon = Colors.white;
   static const Color callControlBarBgVideo = Color(
-      0xB3F3F4F6); // Translucent pinkish/white (0xB3 is ~70% opacity, F3F4F6 is light grey) - actually aiming for the subtle pinkish tone seen in screenshot. Let's try a bit warmer: 0xB3FFF0F5 or similar? Screenshot looks more like a blur with light tint. Let's stick to a safe translucent white/grey for now or match "pinkish" if user insisted. "Bar has translucent background tint (slight pinkish tone in screenshot)". Let's try Color(0xCCFFEEEE).
+    0xB3F3F4F6,
+  ); // Translucent pinkish/white (0xB3 is ~70% opacity, F3F4F6 is light grey) - actually aiming for the subtle pinkish tone seen in screenshot. Let's try a bit warmer: 0xB3FFF0F5 or similar? Screenshot looks more like a blur with light tint. Let's stick to a safe translucent white/grey for now or match "pinkish" if user insisted. "Bar has translucent background tint (slight pinkish tone in screenshot)". Let's try Color(0xCCFFEEEE).
   static const Color pipBg = Colors.black; // Fallback
   static const Color pipShadowColor = Colors.black26;
   static const Color pipIconBg = Color(0x80FFFFFF); // Translucent white circle
@@ -1546,20 +1554,20 @@ class AppTokens {
 
   // Typography for Video Call (White overlay)
   static TextStyle get callTopNameStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-        color: callOverlayText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: callOverlayText,
+    height: 1.2,
+  );
 
   static TextStyle get callTopTimerStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w500, // Slightly lighter than name
-        color: callOverlayText,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500, // Slightly lighter than name
+    color: callOverlayText,
+    height: 1.2,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // SUPPORT CHAT SCREEN TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1571,8 +1579,9 @@ class AppTokens {
   static const Color chatSupportBadgeIcon = Colors.white;
 
   static const Color supportBubbleBg = Colors.white;
-  static const Color userBubbleBg =
-      Color(0xFF7DD3FC); // Light blue similar to screenshot
+  static const Color userBubbleBg = Color(
+    0xFF7DD3FC,
+  ); // Light blue similar to screenshot
   static const Color userBubbleText = Color(0xFF000000); // Dark text
   static const Color supportBubbleText = Color(0xFF374151); // Dark grey text
 
@@ -1580,7 +1589,8 @@ class AppTokens {
   static const Color chatDaySeparatorText = Color(0xFF9CA3AF); // Grey 400
 
   // Composer
-  static const Color supportComposerBg = AppColors.surfaceTint; // Pale blue strip
+  static const Color supportComposerBg =
+      AppColors.surfaceTint; // Pale blue strip
   static const Color supportComposerFieldBg = Colors.white;
   static const Color supportComposerIconColor = Color(0xFF6B7280); // Grey
   static const Color supportSendBtnBg = Color(0xFF7DD3FC); // Blue
@@ -1599,20 +1609,20 @@ class AppTokens {
 
   // Typography
   static TextStyle get chatHeaderTitleStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-        color: chatHeaderTitleColor,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: chatHeaderTitleColor,
+    height: 1.2,
+  );
 
   static TextStyle get chatBubbleStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15.sp,
-        fontWeight: FontWeight.w400,
-        color: supportBubbleText, // Default
-        height: 1.4,
-      );
+    fontFamily: fontFamily,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+    color: supportBubbleText, // Default
+    height: 1.4,
+  );
 
   // ═══════════════════════════════════════════════════════════════════════════
   // DIALOG TOKENS
@@ -1622,8 +1632,9 @@ class AppTokens {
   static const Color dialogBg = Colors.white;
   static const Color dialogTitleColor = Color(0xFF1B2225); // Near black
   static const Color dialogBodyColor = Color(0xFF374151); // Dark grey text
-  static const Color dialogDestructiveTextColor =
-      Color(0xFF6B7280); // Gray (as per screenshot requirement)
+  static const Color dialogDestructiveTextColor = Color(
+    0xFF6B7280,
+  ); // Gray (as per screenshot requirement)
   static const Color dialogPrimaryBtnBg = Color(0xFF7DD3FC); // Light blue
   static const Color dialogPrimaryBtnText = Colors.white;
   static const Color dialogCloseIconColor = Color(0xFF1B2225);
@@ -1638,35 +1649,35 @@ class AppTokens {
 
   // Typography
   static TextStyle get dialogTitleStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 20.sp, // Large and bold
-        fontWeight: FontWeight.w700,
-        color: dialogTitleColor,
-        height: 1.2,
-        letterSpacing: -0.5,
-      );
+    fontFamily: fontFamily,
+    fontSize: 20.sp, // Large and bold
+    fontWeight: FontWeight.w700,
+    color: dialogTitleColor,
+    height: 1.2,
+    letterSpacing: -0.5,
+  );
 
   static TextStyle get dialogBodyStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 15.sp, // Readable body
-        fontWeight: FontWeight.w400,
-        color: dialogBodyColor,
-        height: 1.5, // Airy line height
-      );
+    fontFamily: fontFamily,
+    fontSize: 15.sp, // Readable body
+    fontWeight: FontWeight.w400,
+    color: dialogBodyColor,
+    height: 1.5, // Airy line height
+  );
 
   static TextStyle get dialogDestructiveActionStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-        color: dialogDestructiveTextColor,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: dialogDestructiveTextColor,
+  );
 
   static TextStyle get dialogPrimaryBtnStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-        color: dialogPrimaryBtnText,
-      );
+    fontFamily: fontFamily,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    color: dialogPrimaryBtnText,
+  );
   // ═══════════════════════════════════════════════════════════════════════════
   // HELP & SUPPORT TOKENS
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1677,10 +1688,10 @@ class AppTokens {
   static double get heroIconSize => 48.w;
 
   static TextStyle get helpSupportHeaderStyle => TextStyle(
-        fontFamily: fontFamily,
-        fontSize: 24.sp,
-        fontWeight: FontWeight.w700,
-        color: textPrimary,
-        height: 1.2,
-      );
+    fontFamily: fontFamily,
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w700,
+    color: textPrimary,
+    height: 1.2,
+  );
 }

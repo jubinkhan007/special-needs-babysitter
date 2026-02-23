@@ -5,10 +5,7 @@ class ChildInfoDto {
   final String? firstName;
   final int? age;
 
-  const ChildInfoDto({
-    this.firstName,
-    this.age,
-  });
+  const ChildInfoDto({this.firstName, this.age});
 
   factory ChildInfoDto.fromJson(Map<String, dynamic> json) {
     return ChildInfoDto(
@@ -17,10 +14,7 @@ class ChildInfoDto {
     );
   }
 
-  ChildInfo toDomain() => ChildInfo(
-        name: firstName ?? 'Child',
-        age: age ?? 0,
-      );
+  ChildInfo toDomain() => ChildInfo(name: firstName ?? 'Child', age: age ?? 0);
 }
 
 /// DTO for the sitter jobs list API response
@@ -99,16 +93,16 @@ class SitterJobPreviewDto {
   }
 
   JobPreview toDomain() => JobPreview(
-        id: id,
-        title: title,
-        familyName: familyName ?? 'Family',
-        familyAvatarUrl: familyPhotoUrl,
-        childrenCount: childrenCount,
-        children: children.map((c) => c.toDomain()).toList(),
-        location: location ?? '',
-        distance: distance ?? '',
-        requiredSkills: requiredSkills,
-        hourlyRate: payRate,
-        isBookmarked: isSaved,
-      );
+    id: id,
+    title: title,
+    familyName: familyName ?? 'Family',
+    familyAvatarUrl: familyPhotoUrl,
+    childrenCount: childrenCount,
+    children: children.map((c) => c.toDomain()).toList(),
+    location: location ?? '',
+    distance: distance ?? '',
+    requiredSkills: requiredSkills,
+    hourlyRate: payRate,
+    isBookmarked: isSaved,
+  );
 }

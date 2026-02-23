@@ -67,10 +67,7 @@ class ApplicationsDataDto {
   final List<ApplicationDto> applications;
   final int total;
 
-  const ApplicationsDataDto({
-    required this.applications,
-    required this.total,
-  });
+  const ApplicationsDataDto({required this.applications, required this.total});
 
   factory ApplicationsDataDto.fromJson(Map<String, dynamic> json) =>
       _$ApplicationsDataDtoFromJson(json);
@@ -84,10 +81,7 @@ class ApplicationsResponseDto {
   final bool success;
   final ApplicationsDataDto data;
 
-  const ApplicationsResponseDto({
-    required this.success,
-    required this.data,
-  });
+  const ApplicationsResponseDto({required this.success, required this.data});
 
   factory ApplicationsResponseDto.fromJson(Map<String, dynamic> json) =>
       _$ApplicationsResponseDtoFromJson(json);

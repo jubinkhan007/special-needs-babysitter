@@ -84,8 +84,9 @@ class _EditProfessionalInfoDialogState
 
     final payload = {
       'bio': _bio,
-      'dateOfBirth':
-          _dob != null ? DateFormat('MM/dd/yyyy').format(_dob!) : null,
+      'dateOfBirth': _dob != null
+          ? DateFormat('MM/dd/yyyy').format(_dob!)
+          : null,
       'yearsOfExperience': _yearsExperience,
       'hasTransportation': _hasTransportation,
       'transportationDetails': _transportationDetails ?? '',
@@ -160,12 +161,7 @@ class _EditProfessionalInfoDialogState
                   const SizedBox(height: 24),
                   SelectableChipGroup(
                     title: 'Age Range(s) Experience',
-                    options: const [
-                      'Infants',
-                      'Toddlers',
-                      'Children',
-                      'Teens'
-                    ],
+                    options: const ['Infants', 'Toddlers', 'Children', 'Teens'],
                     selectedValues: _ageGroups,
                     onSelected: (val) {
                       setState(() {
@@ -195,12 +191,14 @@ class _EditProfessionalInfoDialogState
                       child: Wrap(
                         spacing: 8,
                         children: _languages
-                            .map((lang) => Chip(
-                                  label: Text(lang),
-                                  onDeleted: () =>
-                                      setState(() => _languages.remove(lang)),
-                                  backgroundColor: Colors.white,
-                                ))
+                            .map(
+                              (lang) => Chip(
+                                label: Text(lang),
+                                onDeleted: () =>
+                                    setState(() => _languages.remove(lang)),
+                                backgroundColor: Colors.white,
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
@@ -213,7 +211,7 @@ class _EditProfessionalInfoDialogState
                       '< 1 year',
                       '1-3 years',
                       '3-5 years',
-                      '5+ years'
+                      '5+ years',
                     ],
                     onChanged: (val) => setState(() => _yearsExperience = val),
                   ),

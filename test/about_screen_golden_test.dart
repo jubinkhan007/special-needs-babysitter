@@ -16,8 +16,9 @@ void main() {
     );
   }
 
-  testWidgets('About Special Needs Sitters Screen matches golden',
-      (tester) async {
+  testWidgets('About Special Needs Sitters Screen matches golden', (
+    tester,
+  ) async {
     tester.view.devicePixelRatio = 1.0;
     tester.view.physicalSize = const Size(393, 852);
     addTearDown(tester.view.resetDevicePixelRatio);

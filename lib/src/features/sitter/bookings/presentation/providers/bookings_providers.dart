@@ -9,8 +9,9 @@ import 'package:babysitter_app/src/features/sitter/bookings/data/models/booking_
 import 'package:flutter/foundation.dart';
 
 /// Provider for the bookings remote data source.
-final bookingsRemoteDataSourceProvider =
-    Provider<BookingsRemoteDataSource>((ref) {
+final bookingsRemoteDataSourceProvider = Provider<BookingsRemoteDataSource>((
+  ref,
+) {
   final dio = ref.watch(authDioProvider);
   return BookingsRemoteDataSource(dio);
 });
@@ -25,14 +26,15 @@ final bookingsRepositoryProvider = Provider<BookingsRepository>((ref) {
 /// Pass tab filter (e.g., 'upcoming', 'completed') or null for all bookings.
 final sitterBookingsProvider =
     FutureProvider.family<List<BookingModel>, String?>((ref, tab) async {
-  final repository = ref.watch(bookingsRepositoryProvider);
-  return repository.getBookings(tab: tab);
-});
+      final repository = ref.watch(bookingsRepositoryProvider);
+      return repository.getBookings(tab: tab);
+    });
 
 /// Provider for the sitter's current bookings (active + upcoming).
 /// Persists for session - use ref.invalidate() after mutations.
-final sitterCurrentBookingsProvider =
-    FutureProvider<List<BookingModel>>((ref) async {
+final sitterCurrentBookingsProvider = FutureProvider<List<BookingModel>>((
+  ref,
+) async {
   final repository = ref.watch(bookingsRepositoryProvider);
 
   // Fetch active and upcoming bookings in parallel
@@ -46,18 +48,20 @@ final sitterCurrentBookingsProvider =
   final upcoming = results[1];
 
   debugPrint(
-      'DEBUG: Fetched ${active.length} active bookings, ${upcoming.length} upcoming bookings');
+    'DEBUG: Fetched ${active.length} active bookings, ${upcoming.length} upcoming bookings',
+  );
 
   final merged = <BookingModel>[];
   final seen = <String>{};
 
   for (final booking in active) {
     debugPrint(
-        'DEBUG: Active booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}');
+      'DEBUG: Active booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}',
+    );
     final normalizedStatus =
         (booking.status != null && booking.status!.trim().isNotEmpty)
-            ? booking.status
-            : 'active';
+        ? booking.status
+        : 'active';
     final normalized = booking.copyWith(status: normalizedStatus);
     merged.add(normalized);
     seen.add(booking.applicationId);
@@ -68,7 +72,8 @@ final sitterCurrentBookingsProvider =
       continue;
     }
     debugPrint(
-        'DEBUG: Upcoming booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}');
+      'DEBUG: Upcoming booking - id: ${booking.id}, applicationId: ${booking.applicationId}, title: ${booking.title}',
+    );
     final normalized = booking.copyWith(status: 'upcoming');
     merged.add(normalized);
   }
@@ -80,6 +85,6 @@ final sitterCurrentBookingsProvider =
 /// Provider for fetching an active booking session.
 final bookingSessionProvider =
     FutureProvider.family<BookingSessionModel, String>((ref, applicationId) {
-  final repository = ref.watch(bookingsRepositoryProvider);
-  return repository.getBookingSession(applicationId);
-});
+      final repository = ref.watch(bookingsRepositoryProvider);
+      return repository.getBookingSession(applicationId);
+    });

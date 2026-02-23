@@ -27,10 +27,11 @@ class ChipPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon,
-                size: 14,
-                color:
-                    textColor ?? AppColors.textPrimary), // Default text color
+            Icon(
+              icon,
+              size: 14,
+              color: textColor ?? AppColors.textPrimary,
+            ), // Default text color
             const SizedBox(width: 4),
           ],
           Text(

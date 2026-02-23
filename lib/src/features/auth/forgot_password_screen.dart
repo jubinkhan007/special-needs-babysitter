@@ -49,10 +49,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
     try {
       final dio = ref.read(authDioProvider);
-      await dio.post(
-        '/auth/forgot-password',
-        data: {'phone': phone},
-      );
+      await dio.post('/auth/forgot-password', data: {'phone': phone});
 
       if (!mounted) return;
       setState(() => _isLoading = false);
@@ -73,10 +70,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
       AppToast.show(
         context,
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text(errorMessage), backgroundColor: AppColors.error),
       );
     }
   }
@@ -88,10 +82,8 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     showDialog(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.3),
-      builder: (context) => _ResetConfirmationDialog(
-        title: title,
-        message: message,
-      ),
+      builder: (context) =>
+          _ResetConfirmationDialog(title: title, message: message),
     );
   }
 
@@ -200,13 +192,17 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                             decoration: const BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                    color: Color(0xFF1A1A1A), width: 1.2),
+                                  color: Color(0xFF1A1A1A),
+                                  width: 1.2,
+                                ),
                               ),
                             ),
                             child: const Text(
                               "Don't have access to your phone or Email?",
                               style: TextStyle(
-                                  fontSize: 14, color: Color(0xFF1A1A1A)),
+                                fontSize: 14,
+                                color: Color(0xFF1A1A1A),
+                              ),
                             ),
                           ),
                         ),
@@ -229,10 +225,7 @@ class _ResetConfirmationDialog extends StatelessWidget {
   final String title;
   final String message;
 
-  const _ResetConfirmationDialog({
-    required this.title,
-    required this.message,
-  });
+  const _ResetConfirmationDialog({required this.title, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -318,10 +311,7 @@ class _ResetConfirmationDialog extends StatelessWidget {
                 ),
                 child: const Text(
                   'Test: Go to Update Password',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 ),
               ),
             ),

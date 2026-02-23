@@ -23,14 +23,14 @@ class JobAddress extends Equatable {
 
   @override
   List<Object?> get props => [
-        streetAddress,
-        aptUnit,
-        city,
-        state,
-        zipCode,
-        latitude,
-        longitude,
-      ];
+    streetAddress,
+    aptUnit,
+    city,
+    state,
+    zipCode,
+    latitude,
+    longitude,
+  ];
 }
 
 /// Job Location entity for simple coordinate representation.
@@ -38,10 +38,7 @@ class JobLocation extends Equatable {
   final double latitude;
   final double longitude;
 
-  const JobLocation({
-    required this.latitude,
-    required this.longitude,
-  });
+  const JobLocation({required this.latitude, required this.longitude});
 
   @override
   List<Object?> get props => [latitude, longitude];
@@ -99,27 +96,27 @@ class Job extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        parentUserId,
-        childIds,
-        children,
-        title,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-        timezone,
-        address,
-        location,
-        additionalDetails,
-        payRate,
-        saveAsDraft,
-        status,
-        estimatedDuration,
-        estimatedTotal,
-        applicantIds,
-        acceptedSitterId,
-        createdAt,
-        postedAt,
-      ];
+    id,
+    parentUserId,
+    childIds,
+    children,
+    title,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    timezone,
+    address,
+    location,
+    additionalDetails,
+    payRate,
+    saveAsDraft,
+    status,
+    estimatedDuration,
+    estimatedTotal,
+    applicantIds,
+    acceptedSitterId,
+    createdAt,
+    postedAt,
+  ];
 }

@@ -8,11 +8,13 @@ class BookingUiTokens {
   static const Color noteCardText = Color(0xFF1B2225);
   static const Color dashedLineColor = Color(0xFFD7E6EE);
 
-  static const Color pageBackground = AppColors.surfaceTint; // Main light blue bg
+  static const Color pageBackground =
+      AppColors.surfaceTint; // Main light blue bg
   static const Color primaryText = Color(0xFF08102A); // Big title
   static const Color valueText = Color(0xFF1B2225); // Right column amounts
-  static const Color labelText =
-      Color(0xFF6B7280); // Updated Left column labels
+  static const Color labelText = Color(
+    0xFF6B7280,
+  ); // Updated Left column labels
   static const Color topBarTitleGrey = Color(0xFF7A8186); // Updated
   static const Color iconGrey = Color(0xFF7A8186); // Updated
   static const Color dividerColor = Color(0xFFCDDBE1);

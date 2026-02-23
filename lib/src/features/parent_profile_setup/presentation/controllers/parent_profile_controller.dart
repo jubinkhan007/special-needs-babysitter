@@ -12,7 +12,7 @@ class ParentProfileController extends StateNotifier<AsyncValue<void>> {
   final ParentProfileRepository _repository;
 
   ParentProfileController(this._repository)
-      : super(const AsyncValue.data(null));
+    : super(const AsyncValue.data(null));
 
   Future<bool> updateProfile({
     required int step,

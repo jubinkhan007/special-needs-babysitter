@@ -34,10 +34,7 @@ class ActiveBookingCard extends StatelessWidget {
         // Section Header
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text(
-            sectionTitle,
-            style: HomeDesignTokens.sectionHeader,
-          ),
+          child: Text(sectionTitle, style: HomeDesignTokens.sectionHeader),
         ),
         const SizedBox(height: 16),
 
@@ -67,18 +64,16 @@ class ActiveBookingCard extends StatelessWidget {
                     clipBehavior: Clip.antiAlias,
                     child: hasAvatar
                         ? (booking.avatarAssetOrUrl.startsWith('http')
-                            ? Image.network(
-                                booking.avatarAssetOrUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, _, _) =>
-                                    const SizedBox(),
-                              )
-                            : Image.asset(
-                                booking.avatarAssetOrUrl,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, _, _) =>
-                                    const SizedBox(),
-                              ))
+                              ? Image.network(
+                                  booking.avatarAssetOrUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, _, _) => const SizedBox(),
+                                )
+                              : Image.asset(
+                                  booking.avatarAssetOrUrl,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, _, _) => const SizedBox(),
+                                ))
                         : const SizedBox(),
                   ),
                   const SizedBox(width: 12),
@@ -96,15 +91,21 @@ class ActiveBookingCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             if (booking.isVerified)
-                              const Icon(Icons.verified,
-                                  size: 16, color: AppColors.verifiedBlue),
+                              const Icon(
+                                Icons.verified,
+                                size: 16,
+                                color: AppColors.verifiedBlue,
+                              ),
                           ],
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.location_on_outlined,
-                                size: 14, color: AppColors.neutral30),
+                            const Icon(
+                              Icons.location_on_outlined,
+                              size: 14,
+                              color: AppColors.neutral30,
+                            ),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
@@ -128,8 +129,11 @@ class ActiveBookingCard extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star,
-                              size: 16, color: AppColors.starYellow),
+                          const Icon(
+                            Icons.star,
+                            size: 16,
+                            color: AppColors.starYellow,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             booking.rating.toStringAsFixed(1),
@@ -140,8 +144,11 @@ class ActiveBookingCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          const Icon(Icons.more_vert,
-                              color: AppColors.neutral30, size: 20),
+                          const Icon(
+                            Icons.more_vert,
+                            color: AppColors.neutral30,
+                            size: 20,
+                          ),
                         ],
                       ),
                     ],
@@ -154,16 +161,25 @@ class ActiveBookingCard extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _buildStat('Response Rate',
-                        '${booking.responseRate}%', Icons.access_time),
+                    child: _buildStat(
+                      'Response Rate',
+                      '${booking.responseRate}%',
+                      Icons.access_time,
+                    ),
                   ),
                   Expanded(
-                    child: _buildStat('Reliability Rate',
-                        '${booking.reliabilityRate}%', Icons.thumb_up_alt_outlined),
+                    child: _buildStat(
+                      'Reliability Rate',
+                      '${booking.reliabilityRate}%',
+                      Icons.thumb_up_alt_outlined,
+                    ),
                   ),
                   Expanded(
-                    child: _buildStat('Experience',
-                        experienceValue, Icons.verified_outlined),
+                    child: _buildStat(
+                      'Experience',
+                      experienceValue,
+                      Icons.verified_outlined,
+                    ),
                   ),
                 ],
               ),
@@ -186,8 +202,10 @@ class ActiveBookingCard extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: statusBg,
                       borderRadius: BorderRadius.circular(20),
@@ -215,8 +233,11 @@ class ActiveBookingCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Icon(Icons.chevron_right,
-                      color: AppColors.neutral40, size: 20),
+                  const Icon(
+                    Icons.chevron_right,
+                    color: AppColors.neutral40,
+                    size: 20,
+                  ),
                 ],
               ),
             ],

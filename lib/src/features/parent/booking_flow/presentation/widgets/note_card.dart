@@ -132,11 +132,7 @@ class NoteCard extends StatelessWidget {
             color: AppColors.surfaceTint,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            icon,
-            size: 24,
-            color: AppColors.primary,
-          ),
+          child: Icon(icon, size: 24, color: AppColors.primary),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -178,10 +174,7 @@ class NoteCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Note:',
-            style: BookingUiTokens.noteTitle,
-          ),
+          const Text('Note:', style: BookingUiTokens.noteTitle),
           const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

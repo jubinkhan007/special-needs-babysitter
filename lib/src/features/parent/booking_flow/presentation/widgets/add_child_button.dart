@@ -18,11 +18,10 @@ class AddChildButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(50), // Pill-ish / High rounding
         ),
         padding: const EdgeInsets.symmetric(
-            vertical: 12, horizontal: 24), // Add horizontal padding
-        textStyle: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+          vertical: 12,
+          horizontal: 24,
+        ), // Add horizontal padding
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
       child: const Text('Add Child'),
     );

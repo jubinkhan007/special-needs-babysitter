@@ -3,10 +3,7 @@ class JobDetailsResponseDto {
   final bool success;
   final JobDetailsDataDto data;
 
-  const JobDetailsResponseDto({
-    required this.success,
-    required this.data,
-  });
+  const JobDetailsResponseDto({required this.success, required this.data});
 
   factory JobDetailsResponseDto.fromJson(Map<String, dynamic> json) {
     return JobDetailsResponseDto(
@@ -20,10 +17,7 @@ class JobDetailsDataDto {
   final JobDetailDto job;
   final List<JobChildDto>? children; // May come from job.children or top-level
 
-  const JobDetailsDataDto({
-    required this.job,
-    this.children,
-  });
+  const JobDetailsDataDto({required this.job, this.children});
 
   factory JobDetailsDataDto.fromJson(Map<String, dynamic> json) {
     final jobJson = json['job'] as Map<String, dynamic>;

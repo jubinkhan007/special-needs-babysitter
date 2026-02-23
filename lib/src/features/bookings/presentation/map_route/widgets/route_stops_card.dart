@@ -6,10 +6,7 @@ import 'route_stop_row.dart';
 class RouteStopsCard extends StatelessWidget {
   final List<RouteStopUiModel> stops;
 
-  const RouteStopsCard({
-    super.key,
-    required this.stops,
-  });
+  const RouteStopsCard({super.key, required this.stops});
 
   @override
   Widget build(BuildContext context) {

@@ -18,11 +18,7 @@ class Step2Bio extends ConsumerWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
 
-  const Step2Bio({
-    super.key,
-    required this.onNext,
-    required this.onBack,
-  });
+  const Step2Bio({super.key, required this.onNext, required this.onBack});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,11 +35,15 @@ class Step2Bio extends ConsumerWidget {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 2, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 2,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 16.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -85,12 +85,14 @@ class Step2Bio extends ConsumerWidget {
                       child: Wrap(
                         spacing: 8,
                         children: state.languages
-                            .map((lang) => Chip(
-                                  label: Text(lang),
-                                  onDeleted: () =>
-                                      controller.removeLanguage(lang),
-                                  backgroundColor: Colors.white,
-                                ))
+                            .map(
+                              (lang) => Chip(
+                                label: Text(lang),
+                                onDeleted: () =>
+                                    controller.removeLanguage(lang),
+                                backgroundColor: Colors.white,
+                              ),
+                            )
                             .toList(),
                       ),
                     ),
@@ -104,7 +106,7 @@ class Step2Bio extends ConsumerWidget {
                       '< 1 year',
                       '1-3 years',
                       '3-5 years',
-                      '5+ years'
+                      '5+ years',
                     ],
                     onChanged: controller.updateYearsExperience,
                   ),
@@ -145,8 +147,10 @@ class Step2Bio extends ConsumerWidget {
             label: 'Continue',
             onPressed: () {
               if (state.bio.isEmpty) {
-                AppToast.show(context, 
-                    const SnackBar(content: Text('Please enter a bio')));
+                AppToast.show(
+                  context,
+                  const SnackBar(content: Text('Please enter a bio')),
+                );
                 return;
               }
               onNext();

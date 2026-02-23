@@ -48,7 +48,8 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
           certificationFiles != null &&
           certificationFiles.isNotEmpty) {
         debugPrint(
-            'DEBUG SITTER REPO: Step 6 with ${certificationFiles.length} certifications...',);
+          'DEBUG SITTER REPO: Step 6 with ${certificationFiles.length} certifications...',
+        );
         final List<Map<String, dynamic>> certDocs = [];
 
         for (final certFile in certificationFiles) {
@@ -58,10 +59,7 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
             filePrefix:
                 'sitter_cert_${certFile.type.replaceAll(' ', '_').toLowerCase()}',
           );
-          certDocs.add({
-            'type': certFile.type,
-            'fileUrl': fileUrl,
-          });
+          certDocs.add({'type': certFile.type, 'fileUrl': fileUrl});
         }
 
         data['certificationDocuments'] = certDocs;
@@ -69,7 +67,8 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
 
       // Call API to update sitter profile for this step
       debugPrint(
-          'DEBUG SITTER REPO: Calling updateSitterProfile step=$step, data=$data',);
+        'DEBUG SITTER REPO: Calling updateSitterProfile step=$step, data=$data',
+      );
       await _remoteDataSource.updateSitterProfile(step: step, data: data);
       debugPrint('DEBUG SITTER REPO: updateSitterProfile step=$step succeeded');
       return data;
@@ -92,7 +91,8 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
         '${filePrefix}_${DateTime.now().millisecondsSinceEpoch}.$extension';
 
     debugPrint(
-        'DEBUG SITTER REPO: Getting presigned URL for $fileName ($uploadType)',);
+      'DEBUG SITTER REPO: Getting presigned URL for $fileName ($uploadType)',
+    );
     final presignRes = await _remoteDataSource.getPresignedUrl(
       fileName: fileName,
       contentType: contentType,
@@ -106,7 +106,8 @@ class SitterProfileRepositoryImpl implements SitterProfileRepository {
       contentType,
     );
     debugPrint(
-        'DEBUG SITTER REPO: File uploaded successfully: ${presignRes.publicUrl}',);
+      'DEBUG SITTER REPO: File uploaded successfully: ${presignRes.publicUrl}',
+    );
 
     return presignRes.publicUrl;
   }

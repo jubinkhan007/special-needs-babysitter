@@ -41,23 +41,14 @@ class RecentActivityRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    style: AppTokens.activityTitleStyle,
-                  ),
+                  Text(title, style: AppTokens.activityTitleStyle),
                   SizedBox(height: 2.h),
-                  Text(
-                    dateText,
-                    style: AppTokens.activityDateStyle,
-                  ),
+                  Text(dateText, style: AppTokens.activityDateStyle),
                 ],
               ),
             ),
             // Amount
-            Text(
-              amountText,
-              style: AppTokens.activityAmountStyle,
-            ),
+            Text(amountText, style: AppTokens.activityAmountStyle),
           ],
         ),
       ),

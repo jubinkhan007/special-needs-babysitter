@@ -48,8 +48,9 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   }
 
   void _listenToPaypalDeepLinks() {
-    _paypalDeepLinkSub =
-        PaypalDeepLinkService.instance.events.listen((event) async {
+    _paypalDeepLinkSub = PaypalDeepLinkService.instance.events.listen((
+      event,
+    ) async {
       debugPrint('DEBUG: ServiceDetailsScreen received PayPal event: $event');
 
       if (event is PaypalPaymentSuccess) {
@@ -68,11 +69,12 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       debugPrint('DEBUG: PayPal success but no pending jobId');
       if (mounted) {
         AppToast.show(
-            context,
-            const SnackBar(
-              content: Text('Payment session expired. Please try again.'),
-              backgroundColor: AppColors.error,
-            ));
+          context,
+          const SnackBar(
+            content: Text('Payment session expired. Please try again.'),
+            backgroundColor: AppColors.error,
+          ),
+        );
       }
       return;
     }
@@ -87,7 +89,8 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       );
 
       debugPrint(
-          'DEBUG: PayPal capture result: ${result.success} - ${result.message}');
+        'DEBUG: PayPal capture result: ${result.success} - ${result.message}',
+      );
 
       await PaypalPendingState.clear();
 
@@ -104,33 +107,36 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
         );
       } else if (mounted) {
         AppToast.show(
-            context,
-            SnackBar(
-              content: Text('Payment failed: ${result.message}'),
-              backgroundColor: AppColors.error,
-            ));
+          context,
+          SnackBar(
+            content: Text('Payment failed: ${result.message}'),
+            backgroundColor: AppColors.error,
+          ),
+        );
       }
     } on PaypalError catch (e) {
       debugPrint('DEBUG: PayPal capture error: $e');
       await PaypalPendingState.clear();
       if (mounted) {
         AppToast.show(
-            context,
-            SnackBar(
-              content: Text('Payment error: ${e.message}'),
-              backgroundColor: AppColors.error,
-            ));
+          context,
+          SnackBar(
+            content: Text('Payment error: ${e.message}'),
+            backgroundColor: AppColors.error,
+          ),
+        );
       }
     } catch (e) {
       debugPrint('DEBUG: PayPal capture unexpected error: $e');
       await PaypalPendingState.clear();
       if (mounted) {
         AppToast.show(
-            context,
-            SnackBar(
-              content: Text('Payment error: ${e.toString()}'),
-              backgroundColor: AppColors.error,
-            ));
+          context,
+          SnackBar(
+            content: Text('Payment error: ${e.toString()}'),
+            backgroundColor: AppColors.error,
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -142,11 +148,12 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
     await PaypalPendingState.clear();
     if (mounted) {
       AppToast.show(
-          context,
-          const SnackBar(
-            content: Text('Payment cancelled'),
-            backgroundColor: Color(0xFF667085),
-          ));
+        context,
+        const SnackBar(
+          content: Text('Payment cancelled'),
+          backgroundColor: Color(0xFF667085),
+        ),
+      );
     }
   }
 
@@ -155,7 +162,9 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
   /// 2. Persist pending state
   /// 3. Open approval URL in browser
   Future<void> _handlePaypalFlow(
-      String jobId, BookingFlowState bookingState) async {
+    String jobId,
+    BookingFlowState bookingState,
+  ) async {
     try {
       debugPrint('DEBUG: Starting PayPal flow for jobId: $jobId');
 
@@ -166,10 +175,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       debugPrint('DEBUG: PayPal approval URL: ${order.approvalUrl}');
 
       // Persist state before opening browser
-      await PaypalPendingState.save(
-        jobId: jobId,
-        orderId: order.orderId,
-      );
+      await PaypalPendingState.save(jobId: jobId, orderId: order.orderId);
 
       // Open PayPal approval URL in external browser
       final url = Uri.parse(order.approvalUrl);
@@ -179,12 +185,13 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
         if (mounted) {
           setState(() => _isLoading = false);
           AppToast.show(
-              context,
-              const SnackBar(
-                content: Text('Complete payment in your browser'),
-                backgroundColor: Color(0xFF667085),
-                duration: Duration(seconds: 3),
-              ));
+            context,
+            const SnackBar(
+              content: Text('Complete payment in your browser'),
+              backgroundColor: Color(0xFF667085),
+              duration: Duration(seconds: 3),
+            ),
+          );
         }
       } else {
         throw Exception('Cannot open PayPal');
@@ -198,22 +205,24 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
               'This booking is no longer available for payment. Please start a new booking.';
         }
         AppToast.show(
-            context,
-            SnackBar(
-              content: Text(message),
-              backgroundColor: AppColors.error,
-              duration: const Duration(seconds: 5),
-            ));
+          context,
+          SnackBar(
+            content: Text(message),
+            backgroundColor: AppColors.error,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     } catch (e) {
       debugPrint('DEBUG: PayPal flow unexpected error: $e');
       if (mounted) {
         AppToast.show(
-            context,
-            SnackBar(
-              content: Text('Could not open PayPal: ${e.toString()}'),
-              backgroundColor: AppColors.error,
-            ));
+          context,
+          SnackBar(
+            content: Text('Could not open PayPal: ${e.toString()}'),
+            backgroundColor: AppColors.error,
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -337,16 +346,24 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
       payload['timeZone'] = timezone;
       debugPrint('DEBUG: ServiceDetailsScreen submitting booking: $payload');
       debugPrint(
-          'DEBUG: Calculated amount - Hours: ${bookingState.totalHours}, Rate: ${bookingState.payRate}, SubTotal: ${bookingState.subTotal}, Fee: ${bookingState.platformFee}, Total: ${bookingState.totalCost}');
+        'DEBUG: Calculated amount - Hours: ${bookingState.totalHours}, Rate: ${bookingState.payRate}, SubTotal: ${bookingState.subTotal}, Fee: ${bookingState.platformFee}, Total: ${bookingState.totalCost}',
+      );
 
       final result = await repository.createDirectBooking(payload);
 
-      debugPrint('DEBUG: ServiceDetailsScreen booking created: ${result.message}');
-      debugPrint('DEBUG: ServiceDetailsScreen jobId: ${result.jobId}');
-      debugPrint('DEBUG: ServiceDetailsScreen amount (cents): ${result.amount}');
       debugPrint(
-          'DEBUG: ServiceDetailsScreen platformFee (cents): ${result.platformFee}');
-      debugPrint('DEBUG: ServiceDetailsScreen clientSecret: ${result.clientSecret}');
+        'DEBUG: ServiceDetailsScreen booking created: ${result.message}',
+      );
+      debugPrint('DEBUG: ServiceDetailsScreen jobId: ${result.jobId}');
+      debugPrint(
+        'DEBUG: ServiceDetailsScreen amount (cents): ${result.amount}',
+      );
+      debugPrint(
+        'DEBUG: ServiceDetailsScreen platformFee (cents): ${result.platformFee}',
+      );
+      debugPrint(
+        'DEBUG: ServiceDetailsScreen clientSecret: ${result.clientSecret}',
+      );
 
       // The direct booking API returns clientSecret directly - use it for Stripe payment
       // Check which payment method is selected
@@ -458,16 +475,14 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
           SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.symmetric(
-                horizontal: BookingUiTokens.screenHorizontalPadding),
+              horizontal: BookingUiTokens.screenHorizontalPadding,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 24),
                 // Main Title
-                const Text(
-                  'Service Details',
-                  style: BookingUiTokens.pageTitle,
-                ),
+                const Text('Service Details', style: BookingUiTokens.pageTitle),
 
                 const SizedBox(height: 8),
                 _buildDashedDivider(),
@@ -475,25 +490,32 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
 
                 // Service Data Rows
                 PaymentDetailRow(
-                    label: 'No. Of Child',
-                    value: bookingState.selectedChildIds.length.toString()),
+                  label: 'No. Of Child',
+                  value: bookingState.selectedChildIds.length.toString(),
+                ),
                 _buildRowGap(),
                 PaymentDetailRow(
-                    label: 'Date', value: bookingState.dateRange ?? 'N/A'),
+                  label: 'Date',
+                  value: bookingState.dateRange ?? 'N/A',
+                ),
                 _buildRowGap(),
                 PaymentDetailRow(
-                    label: 'No of Days',
-                    value: bookingState.numberOfDays.toString()),
+                  label: 'No of Days',
+                  value: bookingState.numberOfDays.toString(),
+                ),
                 _buildRowGap(),
                 const PaymentDetailRow(label: 'Job Type', value: 'Part Time'),
                 _buildRowGap(),
                 PaymentDetailRow(
-                    label: 'Time',
-                    value:
-                        '${bookingState.startTime ?? ''} - ${bookingState.endTime ?? ''}'),
+                  label: 'Time',
+                  value:
+                      '${bookingState.startTime ?? ''} - ${bookingState.endTime ?? ''}',
+                ),
                 _buildRowGap(),
                 PaymentDetailRow(
-                    label: 'Address', value: bookingState.fullAddress),
+                  label: 'Address',
+                  value: bookingState.fullAddress,
+                ),
 
                 const SizedBox(height: 24),
                 _buildDashedDivider(),
@@ -529,9 +551,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
                 const PaymentDetailRow(label: 'Discount', value: '\$ 0.00'),
 
                 // Bottom Spacing for Sticky Sheet
-                SizedBox(
-                  height: 300 + MediaQuery.of(context).padding.bottom,
-                ),
+                SizedBox(height: 300 + MediaQuery.of(context).padding.bottom),
               ],
             ),
           ),
@@ -553,9 +573,7 @@ class _ServiceDetailsScreenState extends ConsumerState<ServiceDetailsScreen> {
           if (_isLoading)
             Container(
               color: Colors.black26,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),

@@ -26,8 +26,9 @@ void main() {
     );
   }
 
-  testWidgets('Video Call Screen - Connected State matches golden',
-      (tester) async {
+  testWidgets('Video Call Screen - Connected State matches golden', (
+    tester,
+  ) async {
     const args = VideoCallArgs(
       remoteName: 'Krystina',
       remoteVideoUrl: 'https://example.com/video_placeholder.jpg',

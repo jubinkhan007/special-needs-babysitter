@@ -123,7 +123,8 @@ class _ParentBookingStep3ScreenState
 
     if (street.isEmpty || city.isEmpty || state.isEmpty || zip.isEmpty) {
       if (!mounted) return;
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please fill in all required address fields first.'),
           backgroundColor: Colors.orange,
@@ -136,9 +137,12 @@ class _ParentBookingStep3ScreenState
 
     try {
       // Build address string
-      final parts = [street, apt, city, '$state $zip']
-          .where((p) => p.isNotEmpty)
-          .toList();
+      final parts = [
+        street,
+        apt,
+        city,
+        '$state $zip',
+      ].where((p) => p.isNotEmpty).toList();
       final fullAddress = parts.join(', ');
 
       // Geocode address
@@ -153,7 +157,8 @@ class _ParentBookingStep3ScreenState
           _verificationMessage =
               'Address not found. Please check and try again.';
         });
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           const SnackBar(
             content: Text('Address could not be found. Please verify.'),
             backgroundColor: Colors.red,
@@ -165,7 +170,9 @@ class _ParentBookingStep3ScreenState
       final location = addresses.first;
 
       // Update provider with coordinates
-      ref.read(bookingFlowProvider.notifier).updateLocationCoordinates(
+      ref
+          .read(bookingFlowProvider.notifier)
+          .updateLocationCoordinates(
             latitude: location.latitude,
             longitude: location.longitude,
           );
@@ -177,7 +184,8 @@ class _ParentBookingStep3ScreenState
             'Address verified! (${location.latitude.toStringAsFixed(4)}, ${location.longitude.toStringAsFixed(4)})';
       });
 
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Address verified successfully!'),
           backgroundColor: Colors.green,
@@ -190,7 +198,8 @@ class _ParentBookingStep3ScreenState
         _addressVerified = false;
         _verificationMessage = 'Error: Unable to verify address.';
       });
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         SnackBar(
           content: Text('Error: ${e.toString()}'),
           backgroundColor: Colors.red,
@@ -231,8 +240,7 @@ class _ParentBookingStep3ScreenState
         _emergencyEmailController.text = next.emergencyContactEmail ?? '';
       }
       if (previous?.emergencyContactAddress != next.emergencyContactAddress) {
-        _emergencyAddressController.text =
-            next.emergencyContactAddress ?? '';
+        _emergencyAddressController.text = next.emergencyContactAddress ?? '';
       }
       if (previous?.emergencyContactInstructions !=
           next.emergencyContactInstructions) {
@@ -240,7 +248,7 @@ class _ParentBookingStep3ScreenState
             next.emergencyContactInstructions ?? '';
       }
     });
-    
+
     return Scaffold(
       backgroundColor: AppColors.surfaceTint, // Light blue background
       body: Column(
@@ -328,8 +336,9 @@ class _ParentBookingStep3ScreenState
                               height: 16,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.textOnButton,
+                                ),
                               ),
                             )
                           : const Icon(Icons.location_on, color: Colors.white),
@@ -337,8 +346,8 @@ class _ParentBookingStep3ScreenState
                         _isGeocoding
                             ? 'Verifying...'
                             : _addressVerified
-                                ? 'Address Verified ✓'
-                                : 'Verify Address',
+                            ? 'Address Verified ✓'
+                            : 'Verify Address',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -361,7 +370,6 @@ class _ParentBookingStep3ScreenState
                   ],
 
                   const SizedBox(height: 24), // Spacing before divider
-
                   // Divider
                   const Divider(
                     height: 1,
@@ -370,11 +378,8 @@ class _ParentBookingStep3ScreenState
                   ),
 
                   const SizedBox(height: 24), // Spacing after divider
-
                   // Section Header: Emergency Contact (Required)
-                  const SectionHeader(
-                    title: 'Emergency Contact',
-                  ),
+                  const SectionHeader(title: 'Emergency Contact'),
 
                   const SizedBox(height: 16),
 
@@ -419,7 +424,8 @@ class _ParentBookingStep3ScreenState
 
                   // Bottom spacing
                   SizedBox(
-                      height: 24 + MediaQuery.of(context).padding.bottom + 60),
+                    height: 24 + MediaQuery.of(context).padding.bottom + 60,
+                  ),
                 ],
               ),
             ),
@@ -429,7 +435,11 @@ class _ParentBookingStep3ScreenState
           Container(
             color: AppColors.surfaceTint,
             padding: EdgeInsets.fromLTRB(
-                24, 0, 24, MediaQuery.of(context).padding.bottom + 16),
+              24,
+              0,
+              24,
+              MediaQuery.of(context).padding.bottom + 16,
+            ),
             child: BookingPrimaryBottomButton(
               text: 'Next',
               onPressed: () {
@@ -438,9 +448,12 @@ class _ParentBookingStep3ScreenState
                     _cityController.text.trim().isEmpty ||
                     _stateController.text.trim().isEmpty ||
                     _zipController.text.trim().isEmpty) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Please fill in all required address fields.'),
+                      content: Text(
+                        'Please fill in all required address fields.',
+                      ),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -449,9 +462,12 @@ class _ParentBookingStep3ScreenState
 
                 // Street Address Length Validation
                 if (_streetController.text.trim().length < 2) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Street address must be at least 2 characters.'),
+                      content: Text(
+                        'Street address must be at least 2 characters.',
+                      ),
                       backgroundColor: Colors.orange,
                     ),
                   );
@@ -460,7 +476,8 @@ class _ParentBookingStep3ScreenState
 
                 // City Length Validation
                 if (_cityController.text.trim().length < 2) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('City name must be at least 2 characters.'),
                       backgroundColor: Colors.orange,
@@ -471,7 +488,8 @@ class _ParentBookingStep3ScreenState
 
                 // State Length Validation
                 if (_stateController.text.trim().length < 2) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('State must be at least 2 characters.'),
                       backgroundColor: Colors.orange,
@@ -483,7 +501,8 @@ class _ParentBookingStep3ScreenState
                 // Zip Code Validation
                 final zipRegex = RegExp(r'^\d{5}$');
                 if (!zipRegex.hasMatch(_zipController.text.trim())) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('Please enter a valid 5-digit Zip Code.'),
                       backgroundColor: Colors.orange,
@@ -494,7 +513,8 @@ class _ParentBookingStep3ScreenState
 
                 // Emergency Contact Name Validation
                 if (_emergencyNameController.text.trim().isEmpty) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('Please enter emergency contact name.'),
                       backgroundColor: Colors.red,
@@ -503,9 +523,12 @@ class _ParentBookingStep3ScreenState
                   return;
                 }
                 if (_emergencyNameController.text.trim().length < 2) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Emergency contact name must be at least 2 characters.'),
+                      content: Text(
+                        'Emergency contact name must be at least 2 characters.',
+                      ),
                       backgroundColor: Colors.orange,
                     ),
                   );
@@ -514,7 +537,8 @@ class _ParentBookingStep3ScreenState
 
                 // Relationship Validation
                 if (_emergencyRelationController.text.trim().isEmpty) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('Please enter relationship to child.'),
                       backgroundColor: Colors.red,
@@ -523,9 +547,12 @@ class _ParentBookingStep3ScreenState
                   return;
                 }
                 if (_emergencyRelationController.text.trim().length < 2) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Relationship must be at least 2 characters.'),
+                      content: Text(
+                        'Relationship must be at least 2 characters.',
+                      ),
                       backgroundColor: Colors.orange,
                     ),
                   );
@@ -534,18 +561,24 @@ class _ParentBookingStep3ScreenState
 
                 // Phone Number Validation
                 if (_emergencyPhoneController.text.trim().isEmpty) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Please enter emergency contact phone number.'),
+                      content: Text(
+                        'Please enter emergency contact phone number.',
+                      ),
                       backgroundColor: Colors.red,
                     ),
                   );
                   return;
                 }
                 if (!_isValidPhone(_emergencyPhoneController.text)) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Please enter a valid 10-digit phone number.'),
+                      content: Text(
+                        'Please enter a valid 10-digit phone number.',
+                      ),
                       backgroundColor: Colors.orange,
                     ),
                   );
@@ -555,7 +588,8 @@ class _ParentBookingStep3ScreenState
                 // Email Validation (if provided)
                 if (_emergencyEmailController.text.trim().isNotEmpty &&
                     !_isValidEmail(_emergencyEmailController.text.trim())) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('Please enter a valid email address.'),
                       backgroundColor: Colors.orange,
@@ -566,7 +600,8 @@ class _ParentBookingStep3ScreenState
 
                 // Special Instructions Validation (Required)
                 if (_specialInstructionsController.text.trim().isEmpty) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
                       content: Text('Please enter special instructions.'),
                       backgroundColor: Colors.red,
@@ -575,9 +610,12 @@ class _ParentBookingStep3ScreenState
                   return;
                 }
                 if (_specialInstructionsController.text.trim().length < 5) {
-                  AppToast.show(context,
+                  AppToast.show(
+                    context,
                     const SnackBar(
-                      content: Text('Special instructions must be at least 5 characters.'),
+                      content: Text(
+                        'Special instructions must be at least 5 characters.',
+                      ),
                       backgroundColor: Colors.orange,
                     ),
                   );
@@ -585,10 +623,14 @@ class _ParentBookingStep3ScreenState
                 }
 
                 // Format phone number before saving
-                final formattedPhone = _formatPhoneNumber(_emergencyPhoneController.text.trim());
+                final formattedPhone = _formatPhoneNumber(
+                  _emergencyPhoneController.text.trim(),
+                );
 
                 // Save to provider
-                ref.read(bookingFlowProvider.notifier).updateStep3(
+                ref
+                    .read(bookingFlowProvider.notifier)
+                    .updateStep3(
                       streetAddress: _streetController.text.trim(),
                       aptUnit: _aptController.text.trim().isNotEmpty
                           ? _aptController.text.trim()
@@ -596,13 +638,16 @@ class _ParentBookingStep3ScreenState
                       city: _cityController.text.trim(),
                       addressState: _stateController.text.trim(),
                       zipCode: _zipController.text.trim(),
-                      emergencyContactName: _emergencyNameController.text.trim(),
+                      emergencyContactName: _emergencyNameController.text
+                          .trim(),
                       emergencyContactPhone: formattedPhone,
-                      emergencyContactRelation: _emergencyRelationController.text.trim(),
-                      emergencyContactEmail:
-                          _emergencyEmailController.text.trim(),
-                      emergencyContactAddress:
-                          _emergencyAddressController.text.trim(),
+                      emergencyContactRelation: _emergencyRelationController
+                          .text
+                          .trim(),
+                      emergencyContactEmail: _emergencyEmailController.text
+                          .trim(),
+                      emergencyContactAddress: _emergencyAddressController.text
+                          .trim(),
                       emergencyContactInstructions:
                           _specialInstructionsController.text.trim(),
                     );

@@ -42,8 +42,10 @@ class ApplicationsScreen extends ConsumerWidget {
               children: [
                 const Icon(Icons.error_outline, size: 48, color: Colors.red),
                 const SizedBox(height: 16),
-                Text('Failed to load applications',
-                    style: TextStyle(color: Colors.grey[600])),
+                Text(
+                  'Failed to load applications',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () => ref.invalidate(applicationsProvider(jobId)),
@@ -58,17 +60,25 @@ class ApplicationsScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.inbox_outlined,
-                        size: 64, color: Colors.grey[400]),
+                    Icon(
+                      Icons.inbox_outlined,
+                      size: 64,
+                      color: Colors.grey[400],
+                    ),
                     const SizedBox(height: 16),
-                    Text('No applications yet',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[600])),
+                    Text(
+                      'No applications yet',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[600],
+                      ),
+                    ),
                     const SizedBox(height: 8),
-                    Text('Applications will appear here when sitters apply',
-                        style: TextStyle(color: Colors.grey[500])),
+                    Text(
+                      'Applications will appear here when sitters apply',
+                      style: TextStyle(color: Colors.grey[500]),
+                    ),
                   ],
                 ),
               );
@@ -84,109 +94,108 @@ class ApplicationsScreen extends ConsumerWidget {
                     bottom: AppTokens.applicationsCardGap,
                   ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final item = applications[index];
-                        final ui = ApplicationItemUiModel.fromDomain(item);
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final item = applications[index];
+                      final ui = ApplicationItemUiModel.fromDomain(item);
 
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: AppTokens.applicationsCardGap),
-                          child: ApplicationCard(
-                            ui: ui,
-                            onCardTap: () {
-                              context.push(
-                                Routes.bookingApplication,
-                                extra: {
-                                  'jobId': jobId,
-                                  'applicationId': item.id,
-                                },
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: AppTokens.applicationsCardGap,
+                        ),
+                        child: ApplicationCard(
+                          ui: ui,
+                          onCardTap: () {
+                            context.push(
+                              Routes.bookingApplication,
+                              extra: {'jobId': jobId, 'applicationId': item.id},
+                            );
+                          },
+                          onAccept: () async {
+                            try {
+                              final repo = ref.read(
+                                applicationsRepositoryProvider,
                               );
-                            },
-                            onAccept: () async {
+                              await repo.acceptApplication(
+                                jobId: jobId,
+                                applicationId: item.id,
+                              );
+                              // Refresh the list
+                              ref.invalidate(applicationsProvider(jobId));
+                              if (context.mounted) {
+                                AppToast.show(
+                                  context,
+                                  const SnackBar(
+                                    content: Text('Application accepted!'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                AppToast.show(
+                                  context,
+                                  SnackBar(
+                                    content: Text('Failed to accept: $e'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          onViewApplication: () {
+                            context.push(
+                              Routes.bookingApplication,
+                              extra: {'jobId': jobId, 'applicationId': item.id},
+                            );
+                          },
+                          onReject: () async {
+                            final result = await showRejectReasonBottomSheet(
+                              context,
+                            );
+                            if (result != null) {
                               try {
-                                final repo =
-                                    ref.read(applicationsRepositoryProvider);
-                                await repo.acceptApplication(
+                                final repo = ref.read(
+                                  applicationsRepositoryProvider,
+                                );
+                                final reason =
+                                    result.reason == RejectionReason.other
+                                    ? result.otherText ?? 'No reason provided'
+                                    : result.reason.displayLabel;
+                                await repo.declineApplication(
                                   jobId: jobId,
                                   applicationId: item.id,
+                                  reason: reason,
                                 );
                                 // Refresh the list
                                 ref.invalidate(applicationsProvider(jobId));
                                 if (context.mounted) {
-                                  AppToast.show(context, 
+                                  AppToast.show(
+                                    context,
                                     const SnackBar(
-                                      content: Text('Application accepted!'),
-                                      backgroundColor: Colors.green,
+                                      content: Text('Application declined'),
+                                      backgroundColor: Colors.orange,
                                     ),
                                   );
                                 }
                               } catch (e) {
                                 if (context.mounted) {
-                                  AppToast.show(context, 
+                                  AppToast.show(
+                                    context,
                                     SnackBar(
-                                      content: Text('Failed to accept: $e'),
+                                      content: Text('Failed to decline: $e'),
                                       backgroundColor: Colors.red,
                                     ),
                                   );
                                 }
                               }
-                            },
-                            onViewApplication: () {
-                              context.push(
-                                Routes.bookingApplication,
-                                extra: {
-                                  'jobId': jobId,
-                                  'applicationId': item.id,
-                                },
-                              );
-                            },
-                            onReject: () async {
-                              final result =
-                                  await showRejectReasonBottomSheet(context);
-                              if (result != null) {
-                                try {
-                                  final repo =
-                                      ref.read(applicationsRepositoryProvider);
-                                  final reason = result.reason ==
-                                          RejectionReason.other
-                                      ? result.otherText ?? 'No reason provided'
-                                      : result.reason.displayLabel;
-                                  await repo.declineApplication(
-                                    jobId: jobId,
-                                    applicationId: item.id,
-                                    reason: reason,
-                                  );
-                                  // Refresh the list
-                                  ref.invalidate(applicationsProvider(jobId));
-                                  if (context.mounted) {
-                                    AppToast.show(context, 
-                                      const SnackBar(
-                                        content: Text('Application declined'),
-                                        backgroundColor: Colors.orange,
-                                      ),
-                                    );
-                                  }
-                                } catch (e) {
-                                  if (context.mounted) {
-                                    AppToast.show(context, 
-                                      SnackBar(
-                                        content: Text('Failed to decline: $e'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  }
-                                }
-                              }
-                            },
-                            onMoreOptions: () {
-                              _showMoreOptionsMenu(context, item);
-                            },
-                          ),
-                        );
-                      },
-                      childCount: applications.length,
-                    ),
+                            }
+                          },
+                          onMoreOptions: () {
+                            _showMoreOptionsMenu(context, item);
+                          },
+                        ),
+                      );
+                    }, childCount: applications.length),
                   ),
                 ),
               ],
@@ -256,7 +265,8 @@ class ApplicationsScreen extends ConsumerWidget {
               onTap: () {
                 Navigator.pop(ctx);
                 // TODO: Show report dialog
-                AppToast.show(context, 
+                AppToast.show(
+                  context,
                   const SnackBar(content: Text('Report feature coming soon!')),
                 );
               },

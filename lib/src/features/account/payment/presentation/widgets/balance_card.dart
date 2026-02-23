@@ -7,11 +7,7 @@ class BalanceCard extends StatelessWidget {
   final String balanceText;
   final VoidCallback? onTopUp;
 
-  const BalanceCard({
-    super.key,
-    required this.balanceText,
-    this.onTopUp,
-  });
+  const BalanceCard({super.key, required this.balanceText, this.onTopUp});
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +26,9 @@ class BalanceCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'In-App Balance',
-                style: AppTokens.balanceLabelStyle,
-              ),
+              Text('In-App Balance', style: AppTokens.balanceLabelStyle),
               SizedBox(height: 4.h),
-              Text(
-                balanceText,
-                style: AppTokens.balanceAmountStyle,
-              ),
+              Text(balanceText, style: AppTokens.balanceAmountStyle),
             ],
           ),
           // Right: Top Up action
@@ -48,10 +38,7 @@ class BalanceCard extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Top Up',
-                  style: AppTokens.topUpTextStyle,
-                ),
+                Text('Top Up', style: AppTokens.topUpTextStyle),
                 SizedBox(width: 8.w),
                 Icon(
                   Icons.credit_card_outlined,

@@ -47,14 +47,18 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
       // Ensure user ID is set before initiating call
       final currentUser = ref.read(currentUserProvider).value;
       if (currentUser?.id != null) {
-        ref.read(callControllerProvider.notifier).setCurrentUserId(currentUser!.id);
+        ref
+            .read(callControllerProvider.notifier)
+            .setCurrentUserId(currentUser!.id);
       }
-      ref.read(callControllerProvider.notifier).initiateCall(
-        recipientUserId: widget.recipientUserId,
-        recipientName: widget.recipientName,
-        recipientAvatar: widget.recipientAvatar,
-        callType: widget.callType,
-      );
+      ref
+          .read(callControllerProvider.notifier)
+          .initiateCall(
+            recipientUserId: widget.recipientUserId,
+            recipientName: widget.recipientName,
+            recipientAvatar: widget.recipientAvatar,
+            callType: widget.callType,
+          );
     });
   }
 
@@ -82,8 +86,9 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
     });
 
     return MediaQuery(
-      data: MediaQuery.of(context)
-          .copyWith(textScaler: const TextScaler.linear(1.0)),
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: const TextScaler.linear(1.0)),
       child: Scaffold(
         body: Stack(
           children: [
@@ -182,9 +187,9 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
     };
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       Navigator.of(context).pop();
     }
   }

@@ -15,6 +15,7 @@ class CallSession {
   final DateTime? startedAt;
   final DateTime? endedAt;
   final int? duration;
+
   /// UID to use when joining Agora channel (token is generated for this UID)
   final int? agoraUid;
 
@@ -81,6 +82,7 @@ class CallTokenRefresh {
   final String rtcToken;
   final String channelName;
   final DateTime expiresAt;
+
   /// UID that the token was generated for (must use this UID when joining)
   final int? agoraUid;
 

@@ -19,9 +19,7 @@ abstract interface class RegistrationRepository {
   Future<List<String>> getSecurityQuestions();
 
   /// Check if email/phone are unique
-  Future<UniquenessCheckResult> checkUniqueness(
-    UniquenessCheckPayload payload,
-  );
+  Future<UniquenessCheckResult> checkUniqueness(UniquenessCheckPayload payload);
 
   /// Verify OTP and get session
   Future<AuthSession> verifyOtp(OtpVerifyPayload payload);

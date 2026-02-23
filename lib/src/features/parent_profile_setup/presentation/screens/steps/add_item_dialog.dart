@@ -63,8 +63,10 @@ class _AddItemDialogState extends State<AddItemDialog> {
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,
           ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 12,
+          ),
         ),
         autofocus: true,
       ),
@@ -74,7 +76,9 @@ class _AddItemDialogState extends State<AddItemDialog> {
           child: const Text(
             'Cancel',
             style: TextStyle(
-                color: Color(0xFF667085), fontWeight: FontWeight.w600),
+              color: Color(0xFF667085),
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         TextButton(
@@ -87,7 +91,9 @@ class _AddItemDialogState extends State<AddItemDialog> {
           child: Text(
             widget.confirmLabel,
             style: const TextStyle(
-                color: AppColors.secondary, fontWeight: FontWeight.w600),
+              color: AppColors.secondary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],

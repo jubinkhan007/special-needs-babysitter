@@ -116,7 +116,7 @@ class Step6Review extends ConsumerWidget {
                                     color: AppColors.textPrimary.withAlpha(128),
                                     fontStyle: FontStyle.italic,
                                   ),
-                                )
+                                ),
                               ]
                             : kids.map((kid) {
                                 final kidMap = kid as Map<String, dynamic>;
@@ -135,8 +135,8 @@ class Step6Review extends ConsumerWidget {
                                         ' (${kidMap['age']} years)',
                                         style: TextStyle(
                                           fontSize: 14,
-                                          color:
-                                              AppColors.textPrimary.withAlpha(153),
+                                          color: AppColors.textPrimary
+                                              .withAlpha(153),
                                         ),
                                       ),
                                     ],
@@ -166,7 +166,9 @@ class Step6Review extends ConsumerWidget {
                               children: services.map((s) {
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 4),
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: AppColors.secondary.withAlpha(25),
                                     borderRadius: BorderRadius.circular(12),
@@ -200,7 +202,7 @@ class Step6Review extends ConsumerWidget {
                                     color: AppColors.textPrimary.withAlpha(128),
                                     fontStyle: FontStyle.italic,
                                   ),
-                                )
+                                ),
                               ]
                             : contacts.map((contact) {
                                 final c = contact as Map<String, dynamic>;

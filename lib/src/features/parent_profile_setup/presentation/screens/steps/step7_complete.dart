@@ -6,10 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class Step7Complete extends ConsumerWidget {
   final VoidCallback onFinish;
 
-  const Step7Complete({
-    super.key,
-    required this.onFinish,
-  });
+  const Step7Complete({super.key, required this.onFinish});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,8 +27,11 @@ class Step7Complete extends ConsumerWidget {
               errorBuilder: (_, _, _) => Container(
                 color: AppColors.primary, // Fallback if image fails
                 child: const Center(
-                  child:
-                      Icon(Icons.check_circle, size: 80, color: Colors.white),
+                  child: Icon(
+                    Icons.check_circle,
+                    size: 80,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

@@ -30,10 +30,7 @@ class UserMessageBubble extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 // Meta
-                Text(
-                  metaText,
-                  style: AppTokens.chatMetaStyle,
-                ),
+                Text(metaText, style: AppTokens.chatMetaStyle),
                 SizedBox(height: 4.h),
 
                 // Bubble Container with Tail
@@ -44,19 +41,23 @@ class UserMessageBubble extends StatelessWidget {
                   children: [
                     Flexible(
                       child: CustomPaint(
-                        painter:
-                            _BubbleTailPainter(color: AppTokens.userBubbleBg),
+                        painter: _BubbleTailPainter(
+                          color: AppTokens.userBubbleBg,
+                        ),
                         child: Container(
                           padding: EdgeInsets.all(AppTokens.bubblePadding),
                           decoration: BoxDecoration(
                             color: AppTokens.userBubbleBg,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(
-                                  AppTokens.supportBubbleRadius),
+                                AppTokens.supportBubbleRadius,
+                              ),
                               bottomLeft: Radius.circular(
-                                  AppTokens.supportBubbleRadius),
+                                AppTokens.supportBubbleRadius,
+                              ),
                               topRight: Radius.circular(
-                                  AppTokens.supportBubbleRadius),
+                                AppTokens.supportBubbleRadius,
+                              ),
                               // Bottom right has tail, so maybe less radius? handled by painter or generic radius
                               bottomRight: const Radius.circular(4),
                             ),

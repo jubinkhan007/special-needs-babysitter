@@ -111,8 +111,9 @@ class SavedJobsController extends StateNotifier<SavedJobsState> {
   }
 }
 
-final savedJobsRemoteDataSourceProvider =
-    Provider<SavedJobsRemoteDataSource>((ref) {
+final savedJobsRemoteDataSourceProvider = Provider<SavedJobsRemoteDataSource>((
+  ref,
+) {
   final dio = ref.watch(authDioProvider);
   return SavedJobsRemoteDataSource(dio);
 });
@@ -124,12 +125,13 @@ final savedJobsRepositoryProvider = Provider<SavedJobsRepository>((ref) {
 
 final savedJobsControllerProvider =
     StateNotifierProvider<SavedJobsController, SavedJobsState>((ref) {
-  final repository = ref.watch(savedJobsRepositoryProvider);
-  return SavedJobsController(repository);
-});
+      final repository = ref.watch(savedJobsRepositoryProvider);
+      return SavedJobsController(repository);
+    });
 
-final savedJobsListProvider =
-    FutureProvider.autoDispose<List<Job>>((ref) async {
+final savedJobsListProvider = FutureProvider.autoDispose<List<Job>>((
+  ref,
+) async {
   final repository = ref.watch(savedJobsRepositoryProvider);
   final jobs = await repository.getSavedJobs();
   final ids = jobs

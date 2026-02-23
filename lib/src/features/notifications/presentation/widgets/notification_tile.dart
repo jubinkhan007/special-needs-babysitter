@@ -8,11 +8,7 @@ class NotificationTile extends StatelessWidget {
   final NotificationItem notification;
   final VoidCallback? onTap;
 
-  const NotificationTile({
-    super.key,
-    required this.notification,
-    this.onTap,
-  });
+  const NotificationTile({super.key, required this.notification, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +49,9 @@ class NotificationTile extends StatelessWidget {
                     notification.title,
                     style: TextStyle(
                       fontSize: 14.sp,
-                      fontWeight:
-                          notification.isUnread ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: notification.isUnread
+                          ? FontWeight.w600
+                          : FontWeight.w400,
                       color: AppColors.textPrimary,
                       fontFamily: 'Inter',
                     ),

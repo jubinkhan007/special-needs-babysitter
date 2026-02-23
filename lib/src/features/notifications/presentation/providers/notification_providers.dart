@@ -5,15 +5,15 @@ import 'package:babysitter_app/src/features/notifications/models/notification_it
 import 'package:babysitter_app/src/features/notifications/services/notifications_api_service.dart';
 
 /// Provides the authenticated API service.
-final notificationsApiServiceProvider =
-    Provider<NotificationsApiService>((ref) {
+final notificationsApiServiceProvider = Provider<NotificationsApiService>((
+  ref,
+) {
   final dio = ref.watch(authDioProvider);
   return NotificationsApiService(dio);
 });
 
 /// Unread count for badge display on bell icons.
-final unreadNotificationCountProvider =
-    FutureProvider<int>((ref) async {
+final unreadNotificationCountProvider = FutureProvider<int>((ref) async {
   final service = ref.watch(notificationsApiServiceProvider);
   return service.getUnreadCount();
 });
@@ -21,11 +21,10 @@ final unreadNotificationCountProvider =
 /// Main notification list provider with refresh support.
 final notificationsListProvider =
     AsyncNotifierProvider<NotificationsListNotifier, List<NotificationItem>>(
-  NotificationsListNotifier.new,
-);
+      NotificationsListNotifier.new,
+    );
 
-class NotificationsListNotifier
-    extends AsyncNotifier<List<NotificationItem>> {
+class NotificationsListNotifier extends AsyncNotifier<List<NotificationItem>> {
   @override
   Future<List<NotificationItem>> build() async {
     final service = ref.watch(notificationsApiServiceProvider);

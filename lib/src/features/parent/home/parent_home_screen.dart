@@ -31,8 +31,8 @@ class ParentHomeScreen extends ConsumerWidget {
     final displayName = (user?.firstName?.isNotEmpty ?? false)
         ? user!.firstName!
         : (user?.fullName.isNotEmpty ?? false)
-            ? user!.fullName
-            : 'there';
+        ? user!.fullName
+        : 'there';
     final bookingsAsync = ref.watch(parentHomeBookingsProvider);
     final sittersAsync = ref.watch(parentHomeSittersProvider);
     final savedSittersAsync = ref.watch(savedSittersControllerProvider);
@@ -67,9 +67,7 @@ class ParentHomeScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: HomeDesignTokens.headerBottomSpacing),
-              HomeSearchBar(
-                onTap: () => context.push(Routes.sitterSearch),
-              ),
+              HomeSearchBar(onTap: () => context.push(Routes.sitterSearch)),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
               const ParentHomeBannerCard(),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
@@ -99,9 +97,12 @@ class ParentHomeScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
-              _buildSectionHeader('Sitters Near You', onSeeAll: () {
-                context.push(Routes.sitterSearch);
-              }),
+              _buildSectionHeader(
+                'Sitters Near You',
+                onSeeAll: () {
+                  context.push(Routes.sitterSearch);
+                },
+              ),
               const SizedBox(height: HomeDesignTokens.itemSpacing),
               if (locationStatus != null &&
                   locationStatus != LocationAccessStatus.available) ...[
@@ -110,10 +111,7 @@ class ParentHomeScreen extends ConsumerWidget {
                   message: _locationMessage(locationStatus),
                   actionLabel: _locationActionLabel(locationStatus),
                   onAction: () {
-                    _handleLocationAction(
-                      ref,
-                      locationStatus,
-                    );
+                    _handleLocationAction(ref, locationStatus);
                   },
                 ),
                 const SizedBox(height: HomeDesignTokens.itemSpacing),
@@ -125,9 +123,7 @@ class ParentHomeScreen extends ConsumerWidget {
                 ),
                 error: (error, stack) => SizedBox(
                   height: HomeDesignTokens.sitterNearYouHeight,
-                  child: Center(
-                    child: Text('Error loading sitters: $error'),
-                  ),
+                  child: Center(child: Text('Error loading sitters: $error')),
                 ),
                 data: (sitters) {
                   final displaySitters = sitters.take(6).toList();
@@ -151,8 +147,9 @@ class ParentHomeScreen extends ConsumerWidget {
                           const SizedBox(width: 16),
                       itemBuilder: (context, index) {
                         final sitter = displaySitters[index];
-                        final isBookmarked = savedSitters
-                            .any((s) => s.userId == sitter.userId);
+                        final isBookmarked = savedSitters.any(
+                          (s) => s.userId == sitter.userId,
+                        );
 
                         return SitterNearYouCard(
                           sitter: sitter,
@@ -160,15 +157,20 @@ class ParentHomeScreen extends ConsumerWidget {
                           onBookmarkTap: () {
                             ref
                                 .read(savedSittersControllerProvider.notifier)
-                                .toggleBookmark(sitter.userId,
-                                    isCurrentlySaved: isBookmarked,
-                                    sitterItem: sitter);
-                            
-                            AppToast.show(context,
+                                .toggleBookmark(
+                                  sitter.userId,
+                                  isCurrentlySaved: isBookmarked,
+                                  sitterItem: sitter,
+                                );
+
+                            AppToast.show(
+                              context,
                               SnackBar(
-                                content: Text(isBookmarked
-                                    ? 'Sitter removed from bookmarks'
-                                    : 'Sitter bookmarked'),
+                                content: Text(
+                                  isBookmarked
+                                      ? 'Sitter removed from bookmarks'
+                                      : 'Sitter bookmarked',
+                                ),
                                 duration: const Duration(seconds: 2),
                               ),
                             );
@@ -180,9 +182,12 @@ class ParentHomeScreen extends ConsumerWidget {
                 },
               ),
               const SizedBox(height: HomeDesignTokens.sectionSpacing),
-              _buildSectionHeader('Saved Sitters', onSeeAll: () {
-                context.push(Routes.parentSavedSitters);
-              }),
+              _buildSectionHeader(
+                'Saved Sitters',
+                onSeeAll: () {
+                  context.push(Routes.parentSavedSitters);
+                },
+              ),
               const SizedBox(height: HomeDesignTokens.itemSpacing),
               savedSittersAsync.when(
                 loading: () => const SizedBox(
@@ -224,9 +229,11 @@ class ParentHomeScreen extends ConsumerWidget {
                               AppToast.show(
                                 context,
                                 SnackBar(
-                                  content: Text(success
-                                      ? 'Sitter removed from saved list'
-                                      : 'Failed to remove sitter'),
+                                  content: Text(
+                                    success
+                                        ? 'Sitter removed from saved list'
+                                        : 'Failed to remove sitter',
+                                  ),
                                 ),
                               );
                             }
@@ -261,17 +268,11 @@ class ParentHomeScreen extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: HomeDesignTokens.sectionHeader,
-          ),
+          Text(title, style: HomeDesignTokens.sectionHeader),
           if (onSeeAll != null)
             GestureDetector(
               onTap: onSeeAll,
-              child: Text(
-                'See All',
-                style: HomeDesignTokens.seeAllText,
-              ),
+              child: Text('See All', style: HomeDesignTokens.seeAllText),
             ),
         ],
       ),
@@ -371,10 +372,11 @@ _HomeBookingSelection? _selectBooking(List<Booking> bookings) {
     );
   }
 
-  final upcoming = bookings
-      .where((booking) => booking.status == BookingStatus.upcoming)
-      .toList()
-    ..sort((a, b) => a.scheduledDate.compareTo(b.scheduledDate));
+  final upcoming =
+      bookings
+          .where((booking) => booking.status == BookingStatus.upcoming)
+          .toList()
+        ..sort((a, b) => a.scheduledDate.compareTo(b.scheduledDate));
   if (upcoming.isNotEmpty) {
     return _HomeBookingSelection(
       booking: upcoming.first,

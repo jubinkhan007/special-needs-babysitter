@@ -17,8 +17,11 @@ class RemoteVideoSurface extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) => Container(
           color: Colors.black,
           alignment: Alignment.center,
-          child:
-              const Icon(Icons.videocam_off, color: Colors.white54, size: 64),
+          child: const Icon(
+            Icons.videocam_off,
+            color: Colors.white54,
+            size: 64,
+          ),
         ),
       ),
     );

@@ -62,24 +62,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _handleItemTap(SettingsItem item) async {
     switch (item.id) {
       case 'change_password':
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const ChangePasswordScreen(),
-          ),
-        );
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const ChangePasswordScreen()));
         break;
       case 'manage_notifications':
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const ManageNotificationsScreen(),
-          ),
+          MaterialPageRoute(builder: (_) => const ManageNotificationsScreen()),
         );
         break;
       case 'privacy_settings':
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => const PrivacySettingsScreen(),
-          ),
+          MaterialPageRoute(builder: (_) => const PrivacySettingsScreen()),
         );
         break;
       case 'delete_account':
@@ -101,10 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -139,27 +130,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  ..._items.map((item) => Padding(
-                        padding: EdgeInsets.only(
-                            bottom: AppTokens.settingsTileGap.h),
-                        child: SettingsItemTile(
-                          icon: item.icon,
-                          title: item.title,
-                          onTap: item.type == SettingsItemType.navigation
-                              ? () => _handleItemTap(item)
-                              : null,
-                          trailing: item.type == SettingsItemType.toggle
-                              ? SettingsSwitch(
-                                  value: _isLocationEnabled,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _isLocationEnabled = value;
-                                    });
-                                  },
-                                )
-                              : null,
-                        ),
-                      )),
+                  ..._items.map(
+                    (item) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: AppTokens.settingsTileGap.h,
+                      ),
+                      child: SettingsItemTile(
+                        icon: item.icon,
+                        title: item.title,
+                        onTap: item.type == SettingsItemType.navigation
+                            ? () => _handleItemTap(item)
+                            : null,
+                        trailing: item.type == SettingsItemType.toggle
+                            ? SettingsSwitch(
+                                value: _isLocationEnabled,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isLocationEnabled = value;
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 32.h), // Bottom padding
                 ]),
               ),

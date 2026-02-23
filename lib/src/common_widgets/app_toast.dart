@@ -17,7 +17,8 @@ class AppToast {
     final theme = Theme.of(context);
     final backgroundColor =
         snackBar.backgroundColor ?? theme.colorScheme.onSurface;
-    final contentTextStyle = theme.snackBarTheme.contentTextStyle ??
+    final contentTextStyle =
+        theme.snackBarTheme.contentTextStyle ??
         theme.textTheme.bodyMedium?.copyWith(color: Colors.white);
 
     final entry = OverlayEntry(

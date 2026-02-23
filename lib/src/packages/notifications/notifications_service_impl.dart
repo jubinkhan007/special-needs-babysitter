@@ -26,9 +26,9 @@ class NotificationsServiceImpl implements NotificationsService {
   NotificationsServiceImpl({
     FirebaseMessaging? messaging,
     FlutterLocalNotificationsPlugin? localNotifications,
-  })  : _messaging = messaging ?? FirebaseMessaging.instance,
-        _localNotifications =
-            localNotifications ?? FlutterLocalNotificationsPlugin();
+  }) : _messaging = messaging ?? FirebaseMessaging.instance,
+       _localNotifications =
+           localNotifications ?? FlutterLocalNotificationsPlugin();
 
   @override
   Future<void> initialize() async {
@@ -76,8 +76,9 @@ class NotificationsServiceImpl implements NotificationsService {
   Future<String?> getToken() async {
     try {
       final token = await _getTokenWithRetries();
-      final tokenState =
-          token == null || token.isEmpty ? 'empty' : 'len=${token.length}';
+      final tokenState = token == null || token.isEmpty
+          ? 'empty'
+          : 'len=${token.length}';
       developer.log('getToken completed with $tokenState', name: 'FCM_FLOW');
       debugPrint('[FCM_FLOW] getToken completed with $tokenState');
       return token;
@@ -118,15 +119,18 @@ class NotificationsServiceImpl implements NotificationsService {
         );
       } else {
         await _messaging.deleteToken();
-        developer.log('Deleted existing FCM token, requesting new token',
-            name: 'Notifications',);
+        developer.log(
+          'Deleted existing FCM token, requesting new token',
+          name: 'Notifications',
+        );
       }
       final token = await _getTokenWithRetries(
         attempts: _isIOS ? 5 : 3,
         initialDelay: const Duration(milliseconds: 600),
       );
-      final tokenState =
-          token == null || token.isEmpty ? 'empty' : 'len=${token.length}';
+      final tokenState = token == null || token.isEmpty
+          ? 'empty'
+          : 'len=${token.length}';
       developer.log(
         'forceRefreshToken completed with $tokenState',
         name: 'FCM_FLOW',
@@ -348,8 +352,9 @@ class NotificationsServiceImpl implements NotificationsService {
     if (_isCallSignalingMessage(message)) {
       final type = message.data['type']?.toString().toLowerCase() ?? '';
       developer.log(
-          'Skipping notification for call-related payload type: $type',
-          name: 'Notifications',);
+        'Skipping notification for call-related payload type: $type',
+        name: 'Notifications',
+      );
       return;
     }
 
@@ -399,31 +404,27 @@ class NotificationsServiceImpl implements NotificationsService {
 
   String _extractTitle(RemoteMessage message) {
     final data = message.data;
-    return _firstNonEmpty(
-          [
-            message.notification?.title,
-            data['title']?.toString(),
-            data['senderName']?.toString(),
-            data['sender_name']?.toString(),
-            data['fromName']?.toString(),
-            data['name']?.toString(),
-          ],
-        ) ??
+    return _firstNonEmpty([
+          message.notification?.title,
+          data['title']?.toString(),
+          data['senderName']?.toString(),
+          data['sender_name']?.toString(),
+          data['fromName']?.toString(),
+          data['name']?.toString(),
+        ]) ??
         '';
   }
 
   String _extractBody(RemoteMessage message) {
     final data = message.data;
-    final String? body = _firstNonEmpty(
-      [
-        message.notification?.body,
-        data['body']?.toString(),
-        data['message']?.toString(),
-        data['text']?.toString(),
-        data['textContent']?.toString(),
-        data['content']?.toString(),
-      ],
-    );
+    final String? body = _firstNonEmpty([
+      message.notification?.body,
+      data['body']?.toString(),
+      data['message']?.toString(),
+      data['text']?.toString(),
+      data['textContent']?.toString(),
+      data['content']?.toString(),
+    ]);
 
     // Skip if body is a call_invite JSON payload
     if (body != null && _isCallInviteJson(body)) {
@@ -544,7 +545,10 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[0/6] Firebase preflight FAILED', error: e, stack: st,);
+        step: '[0/6] Firebase preflight FAILED',
+        error: e,
+        stack: st,
+      );
     }
 
     // 1. Check notification permission status
@@ -563,7 +567,10 @@ class NotificationsServiceImpl implements NotificationsService {
       }
     } catch (e, st) {
       _logDiagException(
-          step: '[1/6] Permission check FAILED', error: e, stack: st,);
+        step: '[1/6] Permission check FAILED',
+        error: e,
+        stack: st,
+      );
     }
 
     // 2. Check APNS token (iOS only — null on Android)
@@ -583,7 +590,10 @@ class NotificationsServiceImpl implements NotificationsService {
       }
     } catch (e, st) {
       _logDiagException(
-          step: '[2/6] APNS token check FAILED', error: e, stack: st,);
+        step: '[2/6] APNS token check FAILED',
+        error: e,
+        stack: st,
+      );
     }
 
     // 3. Check FCM token (use retry logic for more accurate diagnostics)
@@ -611,7 +621,10 @@ class NotificationsServiceImpl implements NotificationsService {
       }
     } catch (e, st) {
       _logDiagException(
-          step: '[3/6] FCM token retrieval FAILED', error: e, stack: st,);
+        step: '[3/6] FCM token retrieval FAILED',
+        error: e,
+        stack: st,
+      );
       if (e is FirebaseException &&
           (e.message?.contains('AUTHENTICATION_FAILED') ?? false)) {
         developer.log(
@@ -641,13 +654,13 @@ class NotificationsServiceImpl implements NotificationsService {
     // 4. Check auto-init
     try {
       final autoInit = _messaging.isAutoInitEnabled;
-      developer.log(
-        '[4/6] Auto-init enabled: $autoInit',
-        name: 'FCM_DIAG',
-      );
+      developer.log('[4/6] Auto-init enabled: $autoInit', name: 'FCM_DIAG');
     } catch (e, st) {
       _logDiagException(
-          step: '[4/6] Auto-init check FAILED', error: e, stack: st,);
+        step: '[4/6] Auto-init check FAILED',
+        error: e,
+        stack: st,
+      );
     }
 
     // 5. Check current app state tokens from plugin cache
@@ -659,7 +672,10 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[5/6] Token snapshot FAILED', error: e, stack: st,);
+        step: '[5/6] Token snapshot FAILED',
+        error: e,
+        stack: st,
+      );
     }
 
     // 6. Fire a test local notification to verify local notifications work
@@ -676,7 +692,10 @@ class NotificationsServiceImpl implements NotificationsService {
       );
     } catch (e, st) {
       _logDiagException(
-          step: '[6/6] Test local notification FAILED', error: e, stack: st,);
+        step: '[6/6] Test local notification FAILED',
+        error: e,
+        stack: st,
+      );
     }
 
     developer.log('=== FCM DIAGNOSTICS END ===', name: 'FCM_DIAG');
@@ -695,11 +714,7 @@ class NotificationsServiceImpl implements NotificationsService {
       );
       return;
     }
-    developer.log(
-      '$step: $error',
-      name: 'FCM_DIAG',
-      stackTrace: stack,
-    );
+    developer.log('$step: $error', name: 'FCM_DIAG', stackTrace: stack);
   }
 
   @override

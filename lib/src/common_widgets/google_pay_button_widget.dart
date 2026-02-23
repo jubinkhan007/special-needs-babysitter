@@ -169,7 +169,8 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
       widget.onPaymentSuccess();
     } catch (e) {
       debugPrint('DEBUG: Google Pay error: $e');
-      if (e.toString().contains('canceled') || e.toString().contains('cancelled')) {
+      if (e.toString().contains('canceled') ||
+          e.toString().contains('cancelled')) {
         widget.onPaymentError('Payment cancelled');
       } else {
         widget.onPaymentError(e.toString());
@@ -206,7 +207,9 @@ class _GooglePayButtonWidgetState extends State<GooglePayButtonWidget> {
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.textOnButton),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      AppColors.textOnButton,
+                    ),
                   ),
                 ),
               )

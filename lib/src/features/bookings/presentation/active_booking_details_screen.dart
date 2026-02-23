@@ -17,10 +17,7 @@ import 'widgets/sitter_summary_card.dart';
 class ActiveBookingDetailsScreen extends ConsumerWidget {
   final String bookingId;
 
-  const ActiveBookingDetailsScreen({
-    super.key,
-    required this.bookingId,
-  });
+  const ActiveBookingDetailsScreen({super.key, required this.bookingId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,24 +25,22 @@ class ActiveBookingDetailsScreen extends ConsumerWidget {
 
     return detailsAsync.when(
       loading: () => MediaQuery(
-        data: MediaQuery.of(context)
-            .copyWith(textScaler: const TextScaler.linear(1)),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1)),
         child: const Scaffold(
           backgroundColor: AppTokens.bg,
-          appBar: BookingDetailsAppBar(
-            title: 'Active Booking',
-          ),
+          appBar: BookingDetailsAppBar(title: 'Active Booking'),
           body: Center(child: CircularProgressIndicator()),
         ),
       ),
       error: (error, stack) => MediaQuery(
-        data: MediaQuery.of(context)
-            .copyWith(textScaler: const TextScaler.linear(1)),
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: const TextScaler.linear(1)),
         child: Scaffold(
           backgroundColor: AppTokens.bg,
-          appBar: const BookingDetailsAppBar(
-            title: 'Active Booking',
-          ),
+          appBar: const BookingDetailsAppBar(title: 'Active Booking'),
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
@@ -74,13 +69,12 @@ class ActiveBookingDetailsScreen extends ConsumerWidget {
       data: (details) {
         final uiModel = ActiveBookingDetailsUiModel.fromDomain(details);
         return MediaQuery(
-          data: MediaQuery.of(context)
-              .copyWith(textScaler: const TextScaler.linear(1)),
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: const TextScaler.linear(1)),
           child: Scaffold(
             backgroundColor: AppTokens.bg,
-            appBar: const BookingDetailsAppBar(
-              title: 'Active Booking',
-            ),
+            appBar: const BookingDetailsAppBar(title: 'Active Booking'),
             bottomNavigationBar: ActiveBottomCtaBar(
               onMessageTap: () {
                 if (uiModel.sitterId.isEmpty) {
@@ -116,17 +110,17 @@ class ActiveBookingDetailsScreen extends ConsumerWidget {
                 ),
 
                 // 2. Live Tracking Section
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppTokens.detailsHorizontalPadding,
-                AppTokens.detailsSectionTopGap,
-                AppTokens.detailsHorizontalPadding,
-                0,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: LiveTrackingSection(bookingId: bookingId),
-              ),
-            ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppTokens.detailsHorizontalPadding,
+                    AppTokens.detailsSectionTopGap,
+                    AppTokens.detailsHorizontalPadding,
+                    0,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: LiveTrackingSection(bookingId: bookingId),
+                  ),
+                ),
 
                 // 3. Service Details Header
                 const SliverPadding(
@@ -136,9 +130,7 @@ class ActiveBookingDetailsScreen extends ConsumerWidget {
                     AppTokens.detailsHorizontalPadding,
                     16, // Gap between header and divider/list
                   ),
-                  sliver: SliverToBoxAdapter(
-                    child: DetailsSectionHeader(),
-                  ),
+                  sliver: SliverToBoxAdapter(child: DetailsSectionHeader()),
                 ),
 
                 // 4. Dashed Divider
@@ -165,17 +157,24 @@ class ActiveBookingDetailsScreen extends ConsumerWidget {
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
                       KeyValueRow(
-                          label: 'Family Name', value: uiModel.familyName),
+                        label: 'Family Name',
+                        value: uiModel.familyName,
+                      ),
                       KeyValueRow(
-                          label: 'No. Of Children',
-                          value: uiModel.childrenCount),
+                        label: 'No. Of Children',
+                        value: uiModel.childrenCount,
+                      ),
                       KeyValueRow(label: 'Date', value: uiModel.dateRange),
                       KeyValueRow(label: 'Time', value: uiModel.timeRange),
                       KeyValueRow(
-                          label: 'Hourly Rate', value: uiModel.hourlyRate),
+                        label: 'Hourly Rate',
+                        value: uiModel.hourlyRate,
+                      ),
                       KeyValueRow(label: 'No of Days', value: uiModel.days),
                       KeyValueRow(
-                          label: 'Additional Notes', value: uiModel.notes),
+                        label: 'Additional Notes',
+                        value: uiModel.notes,
+                      ),
                       KeyValueRow(label: 'Address', value: uiModel.address),
                     ]),
                   ),

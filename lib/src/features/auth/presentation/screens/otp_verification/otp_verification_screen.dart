@@ -43,7 +43,8 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
 
   void _verifyCode() async {
     if (_otp.length < 6) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please enter the 6-digit code'),
           backgroundColor: AppColors.error,
@@ -113,7 +114,8 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
         }
       });
     } else if (state.hasError) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         SnackBar(
           content: Text('Verification failed: ${state.error}'),
           backgroundColor: AppColors.error,
@@ -123,7 +125,8 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
   }
 
   void _resendCode() {
-    AppToast.show(context, 
+    AppToast.show(
+      context,
       SnackBar(
         content: Text('Code resent to your ${widget.verificationType}'),
         backgroundColor: AppColors.secondary,

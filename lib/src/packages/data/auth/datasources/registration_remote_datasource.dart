@@ -13,10 +13,7 @@ class RegistrationRemoteDataSource {
   /// POST /auth/register
   /// API returns: {"success": true, "userId": "...", "message": "..."}
   Future<RegisteredUser> register(RegistrationPayload payload) async {
-    final response = await _dio.post(
-      '/auth/register',
-      data: payload.toJson(),
-    );
+    final response = await _dio.post('/auth/register', data: payload.toJson());
 
     final data = response.data;
     if (data is! Map<String, dynamic>) {
@@ -45,7 +42,9 @@ class RegistrationRemoteDataSource {
     }
 
     if (userId == null) {
-      debugPrint('Registration successful but userId missing/invalid. Data: $data');
+      debugPrint(
+        'Registration successful but userId missing/invalid. Data: $data',
+      );
       throw FormatException('Missing userId in response: $data');
     }
 
@@ -69,10 +68,7 @@ class RegistrationRemoteDataSource {
 
   /// POST /auth/otp/send
   Future<void> sendOtp(OtpSendPayload payload) async {
-    await _dio.post(
-      '/auth/otp/send',
-      data: payload.toJson(),
-    );
+    await _dio.post('/auth/otp/send', data: payload.toJson());
   }
 
   /// POST /auth/otp/verify
@@ -97,7 +93,9 @@ class RegistrationRemoteDataSource {
           for (final part in parts) {
             if (part.trim().startsWith('session_id=')) {
               accessToken = part.trim().split('=')[1];
-              debugPrint('DEBUG: VerifyOTP Found cookie session_id: $accessToken');
+              debugPrint(
+                'DEBUG: VerifyOTP Found cookie session_id: $accessToken',
+              );
               break;
             }
           }
@@ -107,7 +105,9 @@ class RegistrationRemoteDataSource {
 
     // Fallback if no cookie
     if (accessToken.isEmpty) {
-      debugPrint('DEBUG: VerifyOTP No cookie found, falling back to body token');
+      debugPrint(
+        'DEBUG: VerifyOTP No cookie found, falling back to body token',
+      );
       accessToken = data['accessToken'] ?? data['token'] ?? '';
     }
 
@@ -147,8 +147,8 @@ class RegistrationRemoteDataSource {
         ? data['data'] as Map<String, dynamic>
         : null;
     final available = inner?['available'] == true;
-    final message =
-        (inner?['message'] ?? data['message'] ?? data['error'])?.toString();
+    final message = (inner?['message'] ?? data['message'] ?? data['error'])
+        ?.toString();
 
     return UniquenessCheckResult(
       success: success,
@@ -156,8 +156,8 @@ class RegistrationRemoteDataSource {
       message: (message != null && message.isNotEmpty)
           ? message
           : (available
-              ? 'Email and phone number are available'
-              : 'Email or phone number already exists'),
+                ? 'Email and phone number are available'
+                : 'Email or phone number already exists'),
     );
   }
 

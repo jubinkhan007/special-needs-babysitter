@@ -132,7 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _goToSignUp() {
     final role = _selectedRole ?? 'parent';
     final from = GoRouterState.of(context).uri.queryParameters['from'];
-    
+
     final params = {'role': role};
     if (from != null) {
       params['from'] = from;
@@ -144,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _goToSignIn() {
     final role = _selectedRole ?? 'parent';
     final from = GoRouterState.of(context).uri.queryParameters['from'];
-    
+
     final params = {'role': role};
     if (from != null) {
       params['from'] = from;
@@ -156,7 +156,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onBottomLinkTapped() {
     final currentRole = _selectedRole ?? 'parent';
     final targetRole = currentRole == 'sitter' ? 'parent' : 'sitter';
-    
+
     final from = GoRouterState.of(context).uri.queryParameters['from'];
     final params = {'role': targetRole};
     if (from != null) {
@@ -322,7 +322,6 @@ class _RoleSelectionBar extends StatelessWidget {
                 ),
               ],
             ),
-
           ],
         ),
       ),
@@ -446,7 +445,7 @@ class _BottomControlBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // SafeArea handles bottom padding automatically
-    
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -487,7 +486,7 @@ class _BottomControlBar extends StatelessWidget {
               ),
             ),
             SizedBox(height: 12.h),
-            
+
             // Log In button
             SizedBox(
               width: double.infinity,
@@ -504,15 +503,12 @@ class _BottomControlBar extends StatelessWidget {
                 ),
                 child: Text(
                   'Log In',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    height: 1.0,
-                  ),
+                  style: TextStyle(fontSize: 16.sp, height: 1.0),
                 ),
               ),
             ),
             SizedBox(height: 16.h),
-            
+
             // Bottom link
             GestureDetector(
               onTap: onBottomLinkTapped,
@@ -553,9 +549,7 @@ class _RoleButton extends StatelessWidget {
         height: 56.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary
-              : AppColors.primarySoft,
+          color: isSelected ? AppColors.primary : AppColors.primarySoft,
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Text(

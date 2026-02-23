@@ -52,7 +52,9 @@ class StepIndicator extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400, // Regular weight
-                color: AppColors.textPrimary.withValues(alpha: 0.5), // Lighter gray
+                color: AppColors.textPrimary.withValues(
+                  alpha: 0.5,
+                ), // Lighter gray
               ),
             ),
 

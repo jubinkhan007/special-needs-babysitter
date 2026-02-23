@@ -37,10 +37,7 @@ class MetricItem extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
-            value,
-            style: AppUiTokens.metricValue,
-          ),
+          Text(value, style: AppUiTokens.metricValue),
         ],
       ),
     );

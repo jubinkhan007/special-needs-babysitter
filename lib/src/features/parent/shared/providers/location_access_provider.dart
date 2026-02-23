@@ -3,5 +3,5 @@ import 'package:babysitter_app/src/features/parent/search/utils/location_helper.
 
 final locationAccessStatusProvider =
     FutureProvider.autoDispose<LocationAccessStatus>((ref) async {
-  return LocationHelper.getStatus();
-});
+      return LocationHelper.getStatus();
+    });

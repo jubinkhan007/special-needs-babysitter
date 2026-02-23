@@ -13,11 +13,7 @@ class Step4Skills extends ConsumerStatefulWidget {
   final VoidCallback onNext;
   final VoidCallback onBack;
 
-  const Step4Skills({
-    super.key,
-    required this.onNext,
-    required this.onBack,
-  });
+  const Step4Skills({super.key, required this.onNext, required this.onBack});
 
   @override
   ConsumerState<Step4Skills> createState() => _Step4SkillsState();
@@ -71,11 +67,15 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
       body: Column(
         children: [
           const StepProgressDots(
-              currentStep: 4, totalSteps: kSitterProfileTotalSteps),
+            currentStep: 4,
+            totalSteps: kSitterProfileTotalSteps,
+          ),
           Expanded(
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,8 +87,11 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                       color: AppColors.surfaceTint,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.bookmark_border_rounded,
-                        size: 32, color: _primaryBlue),
+                    child: const Icon(
+                      Icons.bookmark_border_rounded,
+                      size: 32,
+                      color: _primaryBlue,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -124,8 +127,12 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                     onChanged: (values) =>
                         controller.updateCertifications(values),
                     onOtherTap: () {
-                      AppToast.show(context, const SnackBar(
-                          content: Text('Add Other Certification tapped')));
+                      AppToast.show(
+                        context,
+                        const SnackBar(
+                          content: Text('Add Other Certification tapped'),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: 16),
@@ -137,8 +144,10 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                     selectedValues: state.skills,
                     onChanged: (values) => controller.updateSkills(values),
                     onOtherTap: () {
-                      AppToast.show(context, const SnackBar(
-                          content: Text('Add Other Skill tapped')));
+                      AppToast.show(
+                        context,
+                        const SnackBar(content: Text('Add Other Skill tapped')),
+                      );
                     },
                   ),
                   const SizedBox(height: 24),
@@ -159,7 +168,9 @@ class _Step4SkillsState extends ConsumerState<Step4Skills> {
                 AppToast.show(
                   context,
                   const SnackBar(
-                    content: Text('Please select at least one skill to continue.'),
+                    content: Text(
+                      'Please select at least one skill to continue.',
+                    ),
                     backgroundColor: AppColors.error,
                   ),
                 );

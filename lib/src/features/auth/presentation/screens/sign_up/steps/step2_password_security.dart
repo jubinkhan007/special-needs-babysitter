@@ -52,13 +52,16 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
   @override
   void initState() {
     super.initState();
-    _passwordController =
-        TextEditingController(text: widget.formData['password']);
+    _passwordController = TextEditingController(
+      text: widget.formData['password'],
+    );
     _confirmPasswordController = TextEditingController();
-    _securityAnswerController =
-        TextEditingController(text: widget.formData['securityAnswer']);
-    _referralCodeController =
-        TextEditingController(text: widget.formData['referralCode']);
+    _securityAnswerController = TextEditingController(
+      text: widget.formData['securityAnswer'],
+    );
+    _referralCodeController = TextEditingController(
+      text: widget.formData['referralCode'],
+    );
     _selectedQuestion = widget.formData['securityQuestion'];
 
     // Load security questions on init
@@ -87,7 +90,8 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_selectedQuestion == null || _selectedQuestion!.isEmpty) {
-      AppToast.show(context, 
+      AppToast.show(
+        context,
         const SnackBar(
           content: Text('Please select a security question'),
           backgroundColor: AppColors.error,
@@ -126,7 +130,8 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
     } else {
       final state = ref.read(signUpControllerProvider);
       if (state is SignUpError) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(
             content: Text(state.message),
             backgroundColor: AppColors.error,
@@ -165,15 +170,12 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
       final message = AppErrorHandler.parse(e).message;
       AppToast.show(
         context,
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.error,
-        ),
+        SnackBar(content: Text(message), backgroundColor: AppColors.error),
       );
       return false;
     }
   }
-  
+
   bool _isSitterRole(String? role) {
     final value = role?.toLowerCase().trim();
     return value == 'sitter' || value == 'babysitter';
@@ -251,7 +253,8 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                             size: 20,
                           ),
                           onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword),
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
                         ),
                         validator: (v) {
                           if (v?.isEmpty == true) return 'Required';
@@ -276,7 +279,8 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                             size: 20,
                           ),
                           onPressed: () => setState(
-                              () => _obscureConfirm = !_obscureConfirm),
+                            () => _obscureConfirm = !_obscureConfirm,
+                          ),
                         ),
                         validator: (v) {
                           if (v?.isEmpty == true) return 'Required';
@@ -304,8 +308,9 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                                 child: SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                               )
                             : DropdownButtonHideUnderline(
@@ -315,7 +320,9 @@ class _Step2PasswordSecurityState extends ConsumerState<Step2PasswordSecurity> {
                                     'Select Security Question*',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: AppColors.textPrimary.withAlpha(89),
+                                      color: AppColors.textPrimary.withAlpha(
+                                        89,
+                                      ),
                                     ),
                                   ),
                                   isExpanded: true,

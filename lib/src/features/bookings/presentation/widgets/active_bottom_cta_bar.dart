@@ -24,13 +24,9 @@ class ActiveBottomCtaBar extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Expanded(
-                child: _buildButton('Message', onMessageTap),
-              ),
+              Expanded(child: _buildButton('Message', onMessageTap)),
               const SizedBox(width: AppTokens.bottomCtaGap),
-              Expanded(
-                child: _buildButton('Call', onCallTap),
-              ),
+              Expanded(child: _buildButton('Call', onCallTap)),
             ],
           ),
         ),
@@ -49,10 +45,7 @@ class ActiveBottomCtaBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppTokens.bottomCtaRadius),
         ),
       ),
-      child: Text(
-        label,
-        style: AppTokens.buttonText,
-      ),
+      child: Text(label, style: AppTokens.buttonText),
     );
   }
 }

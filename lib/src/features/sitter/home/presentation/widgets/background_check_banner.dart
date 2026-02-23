@@ -65,10 +65,7 @@ class BackgroundCheckBanner extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 8.h),
-                      _BannerCta(
-                        label: _getCtaLabel(),
-                        onTap: onStart,
-                      ),
+                      _BannerCta(label: _getCtaLabel(), onTap: onStart),
                     ],
                   ),
                 ),

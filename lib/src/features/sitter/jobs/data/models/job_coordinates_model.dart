@@ -5,10 +5,7 @@ class JobCoordinatesModel extends Equatable {
   final double latitude;
   final double longitude;
 
-  const JobCoordinatesModel({
-    required this.latitude,
-    required this.longitude,
-  });
+  const JobCoordinatesModel({required this.latitude, required this.longitude});
 
   factory JobCoordinatesModel.fromJson(Map<String, dynamic> json) {
     return JobCoordinatesModel(
@@ -18,10 +15,7 @@ class JobCoordinatesModel extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-    };
+    return {'latitude': latitude, 'longitude': longitude};
   }
 
   @override

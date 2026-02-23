@@ -33,7 +33,10 @@ class BookingsRepositoryImpl implements BookingsRepository {
   }
 
   @override
-  Future<DateTime> pauseBooking(String applicationId, {required String reason}) {
+  Future<DateTime> pauseBooking(
+    String applicationId, {
+    required String reason,
+  }) {
     return _remoteDataSource.pauseBooking(applicationId, reason: reason);
   }
 

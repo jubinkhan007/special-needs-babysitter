@@ -34,10 +34,16 @@ class JobRepositoryImpl implements JobRepository {
   }
 
   @override
-  Future<List<Job>> getPublicJobs(
-      {int limit = 20, int offset = 0, String? status = 'posted',}) async {
+  Future<List<Job>> getPublicJobs({
+    int limit = 20,
+    int offset = 0,
+    String? status = 'posted',
+  }) async {
     final jobDtos = await _remoteDataSource.getJobs(
-        status: status, limit: limit, offset: offset,);
+      status: status,
+      limit: limit,
+      offset: offset,
+    );
     return jobDtos.map((dto) => dto.toDomain()).toList();
   }
 

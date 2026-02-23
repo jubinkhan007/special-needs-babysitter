@@ -25,20 +25,14 @@ class AccountMenuTile extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           color: AppTokens.accountCardBg,
-          borderRadius:
-              BorderRadius.circular(AppTokens.accountMenuTileRadius.r),
-          border: Border.all(
-            color: AppTokens.accountMenuBorder,
-            width: 1,
+          borderRadius: BorderRadius.circular(
+            AppTokens.accountMenuTileRadius.r,
           ),
+          border: Border.all(color: AppTokens.accountMenuBorder, width: 1),
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 24.sp,
-              color: AppTokens.accountIconGrey,
-            ),
+            Icon(icon, size: 24.sp, color: AppTokens.accountIconGrey),
             SizedBox(width: 16.w),
             Expanded(
               child: Text(

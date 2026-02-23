@@ -50,15 +50,16 @@ class _RejectReasonSheetContentState extends State<_RejectReasonSheetContent> {
 
     if (_otherController.text.trim().isNotEmpty) {
       // If user typed in "other", use that
-      Navigator.of(context).pop(RejectReasonResult(
-        reason: RejectionReason.other,
-        otherText: _otherController.text.trim(),
-      ));
+      Navigator.of(context).pop(
+        RejectReasonResult(
+          reason: RejectionReason.other,
+          otherText: _otherController.text.trim(),
+        ),
+      );
     } else if (_selectedReason != null) {
-      Navigator.of(context).pop(RejectReasonResult(
-        reason: _selectedReason!,
-        otherText: null,
-      ));
+      Navigator.of(
+        context,
+      ).pop(RejectReasonResult(reason: _selectedReason!, otherText: null));
     }
   }
 
@@ -140,8 +141,9 @@ class _RejectReasonSheetContentState extends State<_RejectReasonSheetContent> {
                             color: const Color(0xFFFFFFFF), // Explicit white
                             borderRadius: BorderRadius.circular(8.r),
                             border: Border.all(
-                              color:
-                                  const Color(0xFFD1D5DB), // Light grey border
+                              color: const Color(
+                                0xFFD1D5DB,
+                              ), // Light grey border
                               width: 1.0,
                             ),
                           ),
@@ -163,8 +165,9 @@ class _RejectReasonSheetContentState extends State<_RejectReasonSheetContent> {
                               hintStyle: AppTokens.rejectOtherHintStyle,
                               contentPadding: AppTokens.rejectOtherFieldPadding,
                               filled: true,
-                              fillColor:
-                                  const Color(0xFFFFFFFF), // Explicit white
+                              fillColor: const Color(
+                                0xFFFFFFFF,
+                              ), // Explicit white
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
@@ -188,7 +191,8 @@ class _RejectReasonSheetContentState extends State<_RejectReasonSheetContent> {
                             decoration: BoxDecoration(
                               color: AppColors.primary, // Baby blue
                               borderRadius: BorderRadius.circular(
-                                  AppTokens.rejectSubmitRadius.r),
+                                AppTokens.rejectSubmitRadius.r,
+                              ),
                             ),
                             alignment: Alignment.center,
                             child: Text(
@@ -252,10 +256,7 @@ class _RejectReasonSheetContentState extends State<_RejectReasonSheetContent> {
                   : null,
             ),
             SizedBox(width: AppTokens.rejectRadioGap.w),
-            Text(
-              reason.displayLabel,
-              style: AppTokens.rejectRadioTextStyle,
-            ),
+            Text(reason.displayLabel, style: AppTokens.rejectRadioTextStyle),
           ],
         ),
       ),

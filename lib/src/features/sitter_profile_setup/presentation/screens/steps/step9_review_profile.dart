@@ -41,8 +41,9 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
     setState(() => _isSubmitting = true);
 
     try {
-      final controller =
-          ref.read(sitterProfileSetupControllerProvider.notifier);
+      final controller = ref.read(
+        sitterProfileSetupControllerProvider.notifier,
+      );
       final repository = ref.read(sitterProfileRepositoryProvider);
       debugPrint('DEBUG UI: Step 9 Submit Button Tapped');
       final success = await controller.submitSitterProfile(repository);
@@ -53,14 +54,17 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
         await showProfileCompleteDialog(context);
         // Dialog handles navigation internally
       } else {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           const SnackBar(
-              content: Text('Failed to submit profile. Please try again.')),
+            content: Text('Failed to submit profile. Please try again.'),
+          ),
         );
       }
     } catch (e) {
       if (mounted) {
-        AppToast.show(context, 
+        AppToast.show(
+          context,
           SnackBar(content: Text('Error: ${e.toString()}')),
         );
       }
@@ -116,7 +120,9 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const StepProgressDots(
-                    currentStep: 9, totalSteps: kSitterProfileTotalSteps),
+                  currentStep: 9,
+                  totalSteps: kSitterProfileTotalSteps,
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: Column(
@@ -141,12 +147,17 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                           CircleAvatar(
                             radius: 40,
                             backgroundColor: Colors.grey[200],
-                            backgroundImage:
-                                _getProfileImage(state.profilePhotoPath),
-                            child: state.profilePhotoPath == null ||
+                            backgroundImage: _getProfileImage(
+                              state.profilePhotoPath,
+                            ),
+                            child:
+                                state.profilePhotoPath == null ||
                                     state.profilePhotoPath!.isEmpty
-                                ? const Icon(Icons.person,
-                                    size: 40, color: Colors.grey)
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 40,
+                                    color: Colors.grey,
+                                  )
                                 : null,
                           ),
                           Positioned(
@@ -162,14 +173,19 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                                   border: Border.all(color: _dividerColor),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.1),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
-                                    )
+                                    ),
                                   ],
                                 ),
-                                child: const Icon(Icons.edit,
-                                    size: 14, color: _greyText),
+                                child: const Icon(
+                                  Icons.edit,
+                                  size: 14,
+                                  color: _greyText,
+                                ),
                               ),
                             ),
                           ),
@@ -178,40 +194,50 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                       const SizedBox(height: 32),
 
                       // Section: Skills & Certifications
-                      _buildSectionHeader('Skills & Certifications',
-                          () => widget.onEditStep(6)),
+                      _buildSectionHeader(
+                        'Skills & Certifications',
+                        () => widget.onEditStep(6),
+                      ),
                       const SizedBox(height: 12),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          ...state.certifications
-                              .map((cert) => _buildDarkChip(cert)),
+                          ...state.certifications.map(
+                            (cert) => _buildDarkChip(cert),
+                          ),
                           // Fallback if empty
                           if (state.certifications.isEmpty)
-                            const Text('No certifications selected',
-                                style: TextStyle(
-                                    color: _greyText,
-                                    fontStyle: FontStyle.italic)),
+                            const Text(
+                              'No certifications selected',
+                              style: TextStyle(
+                                color: _greyText,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       RichText(
                         text: TextSpan(
                           style: const TextStyle(
-                              fontSize: 14,
-                              color: _greyText,
-                              height: 1.5,
-                              fontFamily: 'Inter'),
+                            fontSize: 14,
+                            color: _greyText,
+                            height: 1.5,
+                            fontFamily: 'Inter',
+                          ),
                           children: [
                             const TextSpan(
-                                text: 'Experience: ',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    color: _textDark)),
+                              text: 'Experience: ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: _textDark,
+                              ),
+                            ),
                             TextSpan(
-                                text:
-                                    'I have ${(state.yearsExperience ?? "some").toLowerCase()} of experience. ${state.bio.length > 50 ? "${state.bio.substring(0, 50)}..." : state.bio}'),
+                              text:
+                                  'I have ${(state.yearsExperience ?? "some").toLowerCase()} of experience. ${state.bio.length > 50 ? "${state.bio.substring(0, 50)}..." : state.bio}',
+                            ),
                           ],
                         ),
                       ),
@@ -223,10 +249,11 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                       const Text(
                         'Age Range Experience',
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: _textDark,
-                            fontFamily: 'Inter'),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: _textDark,
+                          fontFamily: 'Inter',
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Wrap(
@@ -234,11 +261,13 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                         runSpacing: 8,
                         children: state.ageGroups.isNotEmpty
                             ? state.ageGroups
-                                .map((age) => _buildLightTargetChip(age))
-                                .toList()
+                                  .map((age) => _buildLightTargetChip(age))
+                                  .toList()
                             : [
-                                const Text('None selected',
-                                    style: TextStyle(color: _greyText))
+                                const Text(
+                                  'None selected',
+                                  style: TextStyle(color: _greyText),
+                                ),
                               ],
                       ),
                       const SizedBox(height: 24),
@@ -249,30 +278,35 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                       const Text(
                         'Availability Settings',
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: _textDark,
-                            fontFamily: 'Inter'),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: _textDark,
+                          fontFamily: 'Inter',
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      _buildCalendarLikeFigma(state,
-                          onEdit: () =>
-                              widget.onEditStep(7)), // 7 is Availability
+                      _buildCalendarLikeFigma(
+                        state,
+                        onEdit: () => widget.onEditStep(7),
+                      ), // 7 is Availability
                       const SizedBox(height: 24),
                       const Divider(color: _dividerColor, height: 1),
                       const SizedBox(height: 24),
 
                       // Section: Your Hourly Rate
                       _buildSectionHeader(
-                          'Your Hourly Rate', () => widget.onEditStep(8)),
+                        'Your Hourly Rate',
+                        () => widget.onEditStep(8),
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         '\$${state.hourlyRate.toStringAsFixed(0)} / hr',
                         style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: _textDark,
-                            fontFamily: 'Inter'),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: _textDark,
+                          fontFamily: 'Inter',
+                        ),
                       ),
                       const SizedBox(height: 24),
                       const Divider(color: _dividerColor, height: 1),
@@ -280,37 +314,43 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
 
                       // Section: Professional Information
                       _buildSectionHeader(
-                          'Professional Information',
-                          () => widget.onEditStep(
-                              4)), // Edit goes to skills/bio general area? or Step 2? Step 2 has Bio.
+                        'Professional Information',
+                        () => widget.onEditStep(4),
+                      ), // Edit goes to skills/bio general area? or Step 2? Step 2 has Bio.
                       const SizedBox(height: 12),
                       _buildLabelValue(
-                          'Bio: ',
-                          state.bio.isNotEmpty
-                              ? state.bio
-                              : 'No bio provided.'),
+                        'Bio: ',
+                        state.bio.isNotEmpty ? state.bio : 'No bio provided.',
+                      ),
                       const SizedBox(height: 12),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Skills: ',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: _textDark,
-                                  fontSize: 14,
-                                  fontFamily: 'Inter')),
+                          const Text(
+                            'Skills: ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: _textDark,
+                              fontSize: 14,
+                              fontFamily: 'Inter',
+                            ),
+                          ),
                           Expanded(
                             child: Wrap(
                               spacing: 6,
                               runSpacing: 6,
                               children: state.skills.isNotEmpty
                                   ? state.skills
-                                      .map((s) => _buildSmallLightChip(s))
-                                      .toList()
+                                        .map((s) => _buildSmallLightChip(s))
+                                        .toList()
                                   : [
-                                      const Text('None',
-                                          style: TextStyle(
-                                              color: _greyText, fontSize: 14))
+                                      const Text(
+                                        'None',
+                                        style: TextStyle(
+                                          color: _greyText,
+                                          fontSize: 14,
+                                        ),
+                                      ),
                                     ],
                             ),
                           ),
@@ -318,29 +358,35 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                       ),
                       const SizedBox(height: 12),
                       _buildLabelValue(
-                          'Languages: ',
-                          state.languages.isNotEmpty
-                              ? state.languages.join(', ')
-                              : 'English'),
+                        'Languages: ',
+                        state.languages.isNotEmpty
+                            ? state.languages.join(', ')
+                            : 'English',
+                      ),
                       const SizedBox(height: 12),
-                      _buildLabelValue('Reliable Transportation: ',
-                          state.hasReliableTransportation ? 'Yes' : 'No'),
+                      _buildLabelValue(
+                        'Reliable Transportation: ',
+                        state.hasReliableTransportation ? 'Yes' : 'No',
+                      ),
                       if (state.transportationDetails != null &&
                           state.transportationDetails!.isNotEmpty) ...[
                         const SizedBox(height: 8),
                         RichText(
                           text: TextSpan(
                             style: const TextStyle(
-                                fontSize: 14,
-                                color: _greyText,
-                                height: 1.5,
-                                fontFamily: 'Inter'),
+                              fontSize: 14,
+                              color: _greyText,
+                              height: 1.5,
+                              fontFamily: 'Inter',
+                            ),
                             children: [
                               const TextSpan(
-                                  text: 'Reliable Transportation: ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: _textDark)),
+                                text: 'Reliable Transportation: ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: _textDark,
+                                ),
+                              ),
                               TextSpan(text: state.transportationDetails),
                             ],
                           ),
@@ -372,8 +418,9 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
             right: 0,
             bottom: 0,
             child: Container(
-              color: AppColors.surfaceTint
-                  .withValues(alpha: 0.9), // Slight transparency matching bg
+              color: AppColors.surfaceTint.withValues(
+                alpha: 0.9,
+              ), // Slight transparency matching bg
               padding: const EdgeInsets.all(24.0),
               child: SafeArea(
                 top: false,
@@ -382,7 +429,8 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                         height: 56,
                         child: Center(
                           child: CircularProgressIndicator(
-                              color: AppColors.primary),
+                            color: AppColors.primary,
+                          ),
                         ),
                       )
                     : PrimaryActionButton(
@@ -404,10 +452,11 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
         Text(
           title,
           style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: _textDark,
-              fontFamily: 'Inter'),
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: _textDark,
+            fontFamily: 'Inter',
+          ),
         ),
         GestureDetector(
           onTap: onEdit,
@@ -428,16 +477,20 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Icon placeholder - ideally mapped, but using generic for pixel match
-          const Icon(Icons.verified_user_outlined,
-              size: 14, color: Colors.white),
+          const Icon(
+            Icons.verified_user_outlined,
+            size: 14,
+            color: Colors.white,
+          ),
           const SizedBox(width: 6),
           Text(
             label,
             style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Inter'),
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Inter',
+            ),
           ),
         ],
       ),
@@ -454,10 +507,11 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
       child: Text(
         label,
         style: const TextStyle(
-            color: Colors.white,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Inter'),
+          color: Colors.white,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'Inter',
+        ),
       ),
     );
   }
@@ -472,10 +526,11 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
       child: Text(
         label,
         style: const TextStyle(
-            color: Colors.white,
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Inter'),
+          color: Colors.white,
+          fontSize: 11,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Inter',
+        ),
       ),
     );
   }
@@ -484,12 +539,19 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
     return RichText(
       text: TextSpan(
         style: const TextStyle(
-            fontSize: 14, color: _greyText, height: 1.5, fontFamily: 'Inter'),
+          fontSize: 14,
+          color: _greyText,
+          height: 1.5,
+          fontFamily: 'Inter',
+        ),
         children: [
           TextSpan(
-              text: label,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w700, color: _textDark)),
+            text: label,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              color: _textDark,
+            ),
+          ),
           TextSpan(text: value),
         ],
       ),
@@ -497,8 +559,10 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
   }
 
   // Dynamic Calendar Implementation
-  Widget _buildCalendarLikeFigma(SitterProfileState state,
-      {required VoidCallback onEdit}) {
+  Widget _buildCalendarLikeFigma(
+    SitterProfileState state, {
+    required VoidCallback onEdit,
+  }) {
     // Determine which month to show
     DateTime targetDate = DateTime.now();
     if (state.singleDate != null) {
@@ -518,8 +582,9 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
     // standard DateTime: Mon=1 ... Sun=7.
     // We want Sun=0, Mon=1...Sat=6.
     // So if weekday is 7 (Sun), index is 0. Else weekday.
-    final firstWeekdayIndex =
-        firstDayOfMonth.weekday == 7 ? 0 : firstDayOfMonth.weekday;
+    final firstWeekdayIndex = firstDayOfMonth.weekday == 7
+        ? 0
+        : firstDayOfMonth.weekday;
 
     // We need a list of strings for the grid cells, and bools for styling.
     // Total cells = padding + days. Round up to full weeks (rows).
@@ -548,32 +613,40 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-                icon: const Icon(Icons.chevron_left, color: _greyText),
-                onPressed: () {
-                  // In a real generic component, this would change month.
-                  // Here we just static to the selected date's month for "best effort".
-                }),
+              icon: const Icon(Icons.chevron_left, color: _greyText),
+              onPressed: () {
+                // In a real generic component, this would change month.
+                // Here we just static to the selected date's month for "best effort".
+              },
+            ),
             Row(
               children: [
-                Text(monthName,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: _textDark)),
+                Text(
+                  monthName,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: _textDark,
+                  ),
+                ),
                 const Icon(Icons.arrow_drop_down, color: _greyText),
               ],
             ),
             IconButton(
-                icon: const Icon(Icons.chevron_right, color: _greyText),
-                onPressed: () {}),
+              icon: const Icon(Icons.chevron_right, color: _greyText),
+              onPressed: () {},
+            ),
             const Spacer(),
             Row(
               children: [
-                Text(yearStr,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: _textDark)),
+                Text(
+                  yearStr,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: _textDark,
+                  ),
+                ),
                 const Icon(Icons.arrow_drop_down, color: _greyText),
               ],
             ),
@@ -584,9 +657,15 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-              .map((d) => Text(d,
+              .map(
+                (d) => Text(
+                  d,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w600, color: _textDark)))
+                    fontWeight: FontWeight.w600,
+                    color: _textDark,
+                  ),
+                ),
+              )
               .toList(),
         ),
         const SizedBox(height: 12),
@@ -623,10 +702,16 @@ class _Step9ReviewProfileState extends ConsumerState<Step9ReviewProfile> {
                       state.dateRangeEnd != null) {
                     // Check if date is within start and end (inclusive)
                     // Using isAtSameMomentAs to include start/end boundaries accurately
-                    final start = DateTime(state.dateRangeStart!.year,
-                        state.dateRangeStart!.month, state.dateRangeStart!.day);
-                    final end = DateTime(state.dateRangeEnd!.year,
-                        state.dateRangeEnd!.month, state.dateRangeEnd!.day);
+                    final start = DateTime(
+                      state.dateRangeStart!.year,
+                      state.dateRangeStart!.month,
+                      state.dateRangeStart!.day,
+                    );
+                    final end = DateTime(
+                      state.dateRangeEnd!.year,
+                      state.dateRangeEnd!.month,
+                      state.dateRangeEnd!.day,
+                    );
                     // Normalize current cell date to midnight
                     final current = DateTime(date.year, date.month, date.day);
 

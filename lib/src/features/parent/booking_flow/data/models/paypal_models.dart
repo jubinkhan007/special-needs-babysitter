@@ -3,10 +3,7 @@ class PaypalConfig {
   final String clientId;
   final String mode; // 'sandbox' or 'live'
 
-  const PaypalConfig({
-    required this.clientId,
-    required this.mode,
-  });
+  const PaypalConfig({required this.clientId, required this.mode});
 
   factory PaypalConfig.fromJson(Map<String, dynamic> json) {
     return PaypalConfig(
@@ -15,10 +12,7 @@ class PaypalConfig {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'clientId': clientId,
-        'mode': mode,
-      };
+  Map<String, dynamic> toJson() => {'clientId': clientId, 'mode': mode};
 
   bool get isSandbox => mode == 'sandbox';
 }
@@ -47,11 +41,11 @@ class PaypalOrder {
   }
 
   Map<String, dynamic> toJson() => {
-        'orderId': orderId,
-        'approvalUrl': approvalUrl,
-        'amount': amount,
-        'platformFee': platformFee,
-      };
+    'orderId': orderId,
+    'approvalUrl': approvalUrl,
+    'amount': amount,
+    'platformFee': platformFee,
+  };
 
   double get amountDollars => amount / 100.0;
   double get platformFeeDollars => platformFee / 100.0;
@@ -84,12 +78,12 @@ class PaypalCaptureResult {
   }
 
   Map<String, dynamic> toJson() => {
-        'success': success,
-        'jobId': jobId,
-        'applicationId': applicationId,
-        'status': status,
-        'message': message,
-      };
+    'success': success,
+    'jobId': jobId,
+    'applicationId': applicationId,
+    'status': status,
+    'message': message,
+  };
 
   bool get isPosted => status == 'posted';
 }

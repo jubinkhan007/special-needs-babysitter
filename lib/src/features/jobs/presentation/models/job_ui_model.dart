@@ -9,9 +9,9 @@ class JobUiModel {
   final String scheduleLabel;
   final String rateLabel;
   final String
-      childDetailsRaw; // "Ally (4y) | Jason (2y)" - formatting handled by widget
+  childDetailsRaw; // "Ally (4y) | Jason (2y)" - formatting handled by widget
   final List<ChildPart>
-      childParts; // Structure for rich text: ["Ally ", "(4y)", " | ", "Jason ", "(2y)"]
+  childParts; // Structure for rich text: ["Ally ", "(4y)", " | ", "Jason ", "(2y)"]
 
   JobUiModel({
     required this.id,
@@ -24,7 +24,10 @@ class JobUiModel {
     required this.childParts,
   });
 
-  factory JobUiModel.fromDomain(Job job, {List<ChildDetail>? childrenOverride}) {
+  factory JobUiModel.fromDomain(
+    Job job, {
+    List<ChildDetail>? childrenOverride,
+  }) {
     // formatter
     final dateFormat = DateFormat('MM/dd/yyyy'); // 20 May, 2025
     final children = childrenOverride ?? job.children;
@@ -62,7 +65,8 @@ class JobUiModel {
       parts.add(ChildPart(text: '${child.name} ', type: ChildPartType.name));
       if (child.ageYears >= 0) {
         parts.add(
-            ChildPart(text: '(${child.ageYears}y)', type: ChildPartType.age));
+          ChildPart(text: '(${child.ageYears}y)', type: ChildPartType.age),
+        );
       }
 
       if (i < children.length - 1) {

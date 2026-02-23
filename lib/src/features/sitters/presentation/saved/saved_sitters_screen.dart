@@ -37,10 +37,7 @@ class _SavedSittersScreenState extends ConsumerState<SavedSittersScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: AppTokens.appBarTitleColor,
-          ),
+          icon: const Icon(Icons.arrow_back, color: AppTokens.appBarTitleColor),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -104,10 +101,7 @@ class _SavedSittersScreenState extends ConsumerState<SavedSittersScreen> {
                     child: Center(
                       child: Text(
                         'No saved sitters yet',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16.sp,
-                        ),
+                        style: TextStyle(color: Colors.grey, fontSize: 16.sp),
                       ),
                     ),
                   )
@@ -117,46 +111,40 @@ class _SavedSittersScreenState extends ConsumerState<SavedSittersScreen> {
                       horizontal: AppTokens.savedSittersHPad.w,
                     ),
                     sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final sitter = sitters[index];
-                          return SavedSitterCard(
-                            sitter: sitter,
-                            isBookmarked: true, // Always true in saved list
-                            onViewProfile: () {
-                              // Use sitter.id (sitter profile ID) not sitter.userId
-                              context.push(Routes.sitterProfilePath(sitter.id));
-                            },
-                            onBookmarkTap: () async {
-                              final success = await ref
-                                  .read(savedSittersControllerProvider.notifier)
-                                  .removeBookmark(sitter.userId);
-                              if (context.mounted && !success) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Failed to remove sitter'),
-                                  ),
-                                );
-                              }
-                            },
-                          );
-                        },
-                        childCount: sitters.length,
-                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final sitter = sitters[index];
+                        return SavedSitterCard(
+                          sitter: sitter,
+                          isBookmarked: true, // Always true in saved list
+                          onViewProfile: () {
+                            // Use sitter.id (sitter profile ID) not sitter.userId
+                            context.push(Routes.sitterProfilePath(sitter.id));
+                          },
+                          onBookmarkTap: () async {
+                            final success = await ref
+                                .read(savedSittersControllerProvider.notifier)
+                                .removeBookmark(sitter.userId);
+                            if (context.mounted && !success) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed to remove sitter'),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }, childCount: sitters.length),
                     ),
                   ),
 
                 // Bottom padding
-                SliverToBoxAdapter(
-                  child: SizedBox(height: 32.h),
-                ),
+                SliverToBoxAdapter(child: SizedBox(height: 32.h)),
               ],
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(
-            child: Text('Error loading saved sitters: $error'),
-          ),
+          error: (error, stack) =>
+              Center(child: Text('Error loading saved sitters: $error')),
         ),
       ),
     );

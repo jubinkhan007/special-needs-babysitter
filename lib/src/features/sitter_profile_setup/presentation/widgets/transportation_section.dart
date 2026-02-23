@@ -39,15 +39,19 @@ class TransportationSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                      color: hasReliableTransportation
-                          ? AppColors.primary
-                          : const Color(0xFF98A2B3),
-                      width: 2),
+                    color: hasReliableTransportation
+                        ? AppColors.primary
+                        : const Color(0xFF98A2B3),
+                    width: 2,
+                  ),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: hasReliableTransportation
-                    ? const Icon(Icons.check,
-                        size: 18, color: AppColors.primary)
+                    ? const Icon(
+                        Icons.check,
+                        size: 18,
+                        color: AppColors.primary,
+                      )
                     : null,
               ),
               const SizedBox(width: 12),
@@ -87,7 +91,10 @@ class TransportationSection extends StatelessWidget {
               hintText:
                   'Describe any limitations or preferences (e.g.,\npublic transport, willing to drive up to 10 miles).',
               hintStyle: TextStyle(
-                  color: Color(0xFF98A2B3), fontSize: 14, height: 1.5),
+                color: Color(0xFF98A2B3),
+                fontSize: 14,
+                height: 1.5,
+              ),
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,

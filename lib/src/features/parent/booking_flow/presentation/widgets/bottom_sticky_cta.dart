@@ -14,8 +14,9 @@ class BottomStickyCta extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: BookingUiTokens.pageBackground
-          .withValues(alpha: 0.95), // Slight blur effect bg
+      color: BookingUiTokens.pageBackground.withValues(
+        alpha: 0.95,
+      ), // Slight blur effect bg
       padding: EdgeInsets.fromLTRB(
         24,
         16,
@@ -44,14 +45,12 @@ class BottomStickyCta extends StatelessWidget {
                 foregroundColor: BookingUiTokens.ctaButtonText,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(BookingUiTokens.ctaButtonRadius),
+                  borderRadius: BorderRadius.circular(
+                    BookingUiTokens.ctaButtonRadius,
+                  ),
                 ),
               ),
-              child: const Text(
-                'Next',
-                style: BookingUiTokens.ctaText,
-              ),
+              child: const Text('Next', style: BookingUiTokens.ctaText),
             ),
           ),
         ],

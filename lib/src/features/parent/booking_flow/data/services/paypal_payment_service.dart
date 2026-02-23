@@ -6,11 +6,9 @@ class PaypalPaymentService {
   final Dio _authDio;
   final Dio _publicDio;
 
-  PaypalPaymentService({
-    required Dio authDio,
-    required Dio publicDio,
-  })  : _authDio = authDio,
-        _publicDio = publicDio;
+  PaypalPaymentService({required Dio authDio, required Dio publicDio})
+    : _authDio = authDio,
+      _publicDio = publicDio;
 
   /// Get PayPal configuration (sandbox/live mode)
   /// No authentication required
@@ -54,10 +52,7 @@ class PaypalPaymentService {
     try {
       final response = await _authDio.post(
         '/payments/paypal/capture',
-        data: {
-          'jobId': jobId,
-          'orderId': orderId,
-        },
+        data: {'jobId': jobId, 'orderId': orderId},
       );
       return PaypalCaptureResult.fromJson(response.data);
     } on DioException catch (e) {
