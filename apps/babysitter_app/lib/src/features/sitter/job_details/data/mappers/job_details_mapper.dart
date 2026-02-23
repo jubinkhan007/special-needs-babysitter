@@ -70,7 +70,11 @@ class JobDetailsMapper {
       familyAvatarUrl: job.familyPhotoUrl,
       childrenCount: job.childrenCount ?? children.length,
       children: children
-          .map((c) => JobChildInfo(name: c.firstName, age: c.age))
+          .map((c) => JobChildInfo(
+                name: c.firstName,
+                age: c.age,
+                specialNeedsDiagnosis: c.specialNeedsDiagnosis,
+              ))
           .toList(),
       location: job.location ?? _buildLocationFromAddress(job.address),
       distance: distanceStr,

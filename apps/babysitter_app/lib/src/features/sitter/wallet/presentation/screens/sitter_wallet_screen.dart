@@ -164,6 +164,39 @@ class _SitterWalletScreenState extends ConsumerState<SitterWalletScreen>
 
                 SizedBox(height: 24.h),
 
+                // Payout disclaimer
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF8E1),
+                    borderRadius: BorderRadius.circular(10.r),
+                    border: Border.all(
+                      color: const Color(0xFFFFE082),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.info_outline,
+                          size: 16.sp, color: const Color(0xFF92400E)),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          'Payouts are reviewed for accuracy and compliance before being released. Processing times may vary.',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: const Color(0xFF92400E),
+                            height: 1.4,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 24.h),
+
                 // Info section
                 _buildInfoSection(),
               ],

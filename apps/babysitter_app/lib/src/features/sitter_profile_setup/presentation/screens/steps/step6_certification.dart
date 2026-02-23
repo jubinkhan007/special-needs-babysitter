@@ -26,7 +26,6 @@ class Step6Certification extends ConsumerStatefulWidget {
 class _Step6CertificationState extends ConsumerState<Step6Certification> {
   static const _textDark = Color(0xFF1A1A1A);
   static const _primaryBlue = AppColors.primary;
-  bool _noCprAcknowledged = false;
 
   final List<String> _allCertifications = [
     'CPR Certification',
@@ -260,6 +259,9 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                     ),
                   ...state.certifications.map((cert) {
                     final isAttached = state.certAttachments.containsKey(cert);
+                    final isRequired = cert == 'CPR Certification' ||
+                        cert == 'First Aid Certification' ||
+                        cert == 'Special Needs Care Training';
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 24.0),
                       child: Row(
@@ -270,7 +272,7 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                               cert,
                               style: const TextStyle(
                                 fontSize: 14,
-                                color: Color(0xFF475467), // Medium grey
+                                color: Color(0xFF475467),
                                 fontWeight: FontWeight.w500,
                                 fontFamily: 'Inter',
                               ),
@@ -278,12 +280,17 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            'Optional',
+                          Text(
+                            isRequired ? 'Required' : 'Optional',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF98A2B3), // Lighter grey
+                              color: isRequired
+                                  ? AppColors.error
+                                  : const Color(0xFF98A2B3),
                               fontFamily: 'Inter',
+                              fontWeight: isRequired
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -328,43 +335,34 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
 
                   const SizedBox(height: 8),
 
-                  // CPR Acknowledgment (shown only if CPR not selected)
-                  Builder(builder: (context) {
-                    final hasCpr = state.certifications.contains('CPR Certification');
-                    if (hasCpr) return const SizedBox.shrink();
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFD0D5DD)),
-                      ),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: _noCprAcknowledged,
-                            onChanged: (val) =>
-                                setState(() => _noCprAcknowledged = val ?? false),
-                            activeColor: _primaryBlue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
+                  // Required certifications note
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF3F2),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: const Color(0xFFFECDCA)),
+                    ),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.info_outline, size: 18, color: AppColors.error),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'CPR Certification, First Aid Certification, and Special Needs Care Training are required to proceed.',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF475467),
+                              fontFamily: 'Inter',
+                              height: 1.4,
                             ),
                           ),
-                          const Expanded(
-                            child: Text(
-                              'I do not currently have CPR certification.',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xFF475467),
-                                fontFamily: 'Inter',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+                        ),
+                      ],
+                    ),
+                  ),
 
                   // Skills Label
                   const Text(
@@ -422,13 +420,21 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
           child: PrimaryActionButton(
             label: 'Continue',
             onPressed: () {
-              final hasCpr = state.certifications.contains('CPR Certification');
-              if (!hasCpr && !_noCprAcknowledged) {
+              final certs = state.certifications;
+              final hasCpr = certs.contains('CPR Certification');
+              final hasFirstAid = certs.contains('First Aid Certification');
+              final hasSpecialNeeds = certs.contains('Special Needs Care Training');
+
+              if (!hasCpr || !hasFirstAid || !hasSpecialNeeds) {
+                final missing = <String>[];
+                if (!hasCpr) missing.add('CPR Certification');
+                if (!hasFirstAid) missing.add('First Aid Certification');
+                if (!hasSpecialNeeds) missing.add('Special Needs Care Training');
                 AppToast.show(
                   context,
-                  const SnackBar(
+                  SnackBar(
                     content: Text(
-                      'Please select CPR Certification or acknowledge that you do not have it.',
+                      'Please select the following required certifications: ${missing.join(', ')}.',
                     ),
                     backgroundColor: AppColors.error,
                   ),

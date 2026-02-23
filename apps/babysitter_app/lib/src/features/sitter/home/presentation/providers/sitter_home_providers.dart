@@ -137,15 +137,6 @@ class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
     );
   }
 
-  /// Update max distance filter
-  void setMaxDistance(int? distance) {
-    state = state.copyWith(
-      maxDistance: distance,
-      offset: 0,
-      clearMaxDistance: distance == null,
-    );
-  }
-
   /// Update pay rate range
   void setPayRateRange({double? min, double? max}) {
     state = state.copyWith(
@@ -162,9 +153,9 @@ class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
     state = state.copyWith(specialNeeds: needs, offset: 0);
   }
 
-  /// Update age groups filter
-  void setAgeGroups(List<String> groups) {
-    state = state.copyWith(ageGroups: groups, offset: 0);
+  /// Update languages filter
+  void setLanguages(List<String> langs) {
+    state = state.copyWith(languages: langs, offset: 0);
   }
 
   /// Update availability date
@@ -178,22 +169,19 @@ class JobSearchFiltersNotifier extends StateNotifier<JobSearchFilters> {
 
   /// Apply multiple filters at once
   void applyFilters({
-    int? maxDistance,
     double? minPayRate,
     double? maxPayRate,
     List<String>? specialNeeds,
-    List<String>? ageGroups,
+    List<String>? languages,
     DateTime? availabilityDate,
   }) {
     state = state.copyWith(
-      maxDistance: maxDistance,
       minPayRate: minPayRate,
       maxPayRate: maxPayRate,
       specialNeeds: specialNeeds ?? state.specialNeeds,
-      ageGroups: ageGroups ?? state.ageGroups,
+      languages: languages ?? state.languages,
       availabilityDate: availabilityDate,
       offset: 0,
-      clearMaxDistance: maxDistance == null,
       clearMinPayRate: minPayRate == null,
       clearMaxPayRate: maxPayRate == null,
       clearAvailabilityDate: availabilityDate == null,

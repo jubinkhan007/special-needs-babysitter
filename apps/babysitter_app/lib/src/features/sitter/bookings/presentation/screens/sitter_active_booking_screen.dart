@@ -966,7 +966,38 @@ class _SitterActiveBookingScreenState
           ),
         ],
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Need Help Fast? button
+          SizedBox(
+            width: double.infinity,
+            height: 40.h,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                // Navigate to help/support
+                context.push(Routes.supportChat);
+              },
+              icon: Icon(Icons.sos_outlined, size: 18.w),
+              label: Text(
+                'Need Help Fast?',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Inter',
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.error,
+                side: const BorderSide(color: AppColors.error),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Row(
         children: [
           // Clock Out Button
           Expanded(
@@ -1027,6 +1058,8 @@ class _SitterActiveBookingScreenState
               ),
             ),
           ),
+        ],
+      ),
         ],
       ),
     );

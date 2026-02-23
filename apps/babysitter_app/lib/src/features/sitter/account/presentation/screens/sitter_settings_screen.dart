@@ -73,17 +73,19 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
               },
             ),
             const SizedBox(height: 12),
-            _SettingsItem(
+            _SettingsItemWithSubtitle(
               icon: Icons.notifications_none_outlined,
               label: 'Manage Notifications',
+              subtitle: 'Jobs, messages, payments & reminders',
               onTap: () {
                 // TODO: Notifications settings
               },
             ),
             const SizedBox(height: 12),
-            _SettingsItem(
+            _SettingsItemWithSubtitle(
               icon: Icons.privacy_tip_outlined,
               label: 'Privacy Settings',
+              subtitle: 'Control what others can see about you',
               onTap: () {
                 // TODO: Privacy settings
               },
@@ -169,6 +171,60 @@ class _SettingsItem extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: SitterAccountUI.textDark,
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsItemWithSubtitle extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _SettingsItemWithSubtitle({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: SitterAccountUI.cardDecoration,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Row(
+          children: [
+            Icon(icon, size: 24, color: SitterAccountUI.textGray),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: SitterAccountUI.textDark,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: SitterAccountUI.textGray,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

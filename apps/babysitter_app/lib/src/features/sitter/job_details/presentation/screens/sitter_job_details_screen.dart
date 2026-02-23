@@ -204,6 +204,72 @@ class _SitterJobDetailsScreenState
             additionalNotes: job.additionalNotes,
           ),
           SizedBox(height: 20.h),
+          // Special Needs Summary
+          if (job.children.any((c) =>
+              c.specialNeedsDiagnosis != null &&
+              c.specialNeedsDiagnosis!.isNotEmpty)) ...[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Special Needs Summary',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppTokens.textPrimary,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  ...job.children
+                      .where((c) =>
+                          c.specialNeedsDiagnosis != null &&
+                          c.specialNeedsDiagnosis!.isNotEmpty)
+                      .map((c) => Padding(
+                            padding: EdgeInsets.only(bottom: 8.h),
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(12.w),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF0F7FF),
+                                borderRadius: BorderRadius.circular(10.r),
+                                border: Border.all(
+                                    color: const Color(0xFFD0E4F5)),
+                              ),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${c.name}, ${c.age} yrs',
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppTokens.textPrimary,
+                                      fontFamily: 'Inter',
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    c.specialNeedsDiagnosis!,
+                                    style: TextStyle(
+                                      fontSize: 13.sp,
+                                      color: const Color(0xFF667085),
+                                      fontFamily: 'Inter',
+                                      height: 1.4,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                ],
+              ),
+            ),
+            SizedBox(height: 20.h),
+          ],
           // Transportation section
           TransportationSection(
             transportationModes: job.transportationModes,

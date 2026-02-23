@@ -4,11 +4,16 @@ import 'package:equatable/equatable.dart';
 class JobChildInfo extends Equatable {
   final String name;
   final int age;
+  final String? specialNeedsDiagnosis;
 
-  const JobChildInfo({required this.name, required this.age});
+  const JobChildInfo({
+    required this.name,
+    required this.age,
+    this.specialNeedsDiagnosis,
+  });
 
   @override
-  List<Object?> get props => [name, age];
+  List<Object?> get props => [name, age, specialNeedsDiagnosis];
 }
 
 /// Sitter job details entity.

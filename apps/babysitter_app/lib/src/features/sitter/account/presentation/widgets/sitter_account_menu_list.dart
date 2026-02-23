@@ -62,7 +62,7 @@ class SitterAccountMenuList extends StatelessWidget {
         const SizedBox(height: 12),
         _MenuItem(
           icon: Icons.info_outline,
-          label: 'About Special Needs Sitters App',
+          label: 'About Us',
           onTap: onTapAbout,
         ),
         const SizedBox(height: 12),
@@ -75,6 +75,7 @@ class SitterAccountMenuList extends StatelessWidget {
         _MenuItem(
           icon: Icons.headset_mic_outlined,
           label: 'Help & Support',
+          subtitle: 'Live Chat + Email Support',
           onTap: onTapHelp,
         ),
         const SizedBox(height: 12),

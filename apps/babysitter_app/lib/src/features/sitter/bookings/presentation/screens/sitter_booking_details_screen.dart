@@ -546,6 +546,35 @@ class _SitterBookingDetailsScreenState
                             value: _formatCurrency(estimatedTotal),
                           ),
                         ],
+                        SizedBox(height: 12.h),
+                        // Payment protection note
+                        Container(
+                          padding: EdgeInsets.all(10.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF0F7FF),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(Icons.verified_user_outlined,
+                                  size: 16.sp,
+                                  color: AppColors.primary),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                child: Text(
+                                  'Payments are reviewed to ensure accuracy and policy compliance.',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: const Color(0xFF667085),
+                                    fontFamily: 'Inter',
+                                    height: 1.3,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         SizedBox(height: 32.h),
                       ],
                     ),
@@ -1793,7 +1822,7 @@ class _SitterBookingDetailsScreenState
                       ],
                       SizedBox(height: 12.h),
                       Text(
-                        'Our team will review your situation and decide if the cancellation penalty can be waived.',
+                        'Our team will review your situation with care. We know emergencies are stressful, and we are here to support you.',
                         style: TextStyle(
                           fontSize: 12.sp,
                           color: const Color(0xFF667085),
@@ -1909,7 +1938,7 @@ class _SitterBookingDetailsScreenState
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      'You canceled your booking with The Smith Family.',
+                      'We understand things come up. Here is what happens next.',
                       style: TextStyle(
                         fontSize: 13.sp,
                         color: const Color(0xFF667085),
@@ -1918,7 +1947,7 @@ class _SitterBookingDetailsScreenState
                     ),
                     SizedBox(height: 12.h),
                     Text(
-                      'Cancellation Impact:',
+                      'What to expect:',
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
@@ -1928,17 +1957,17 @@ class _SitterBookingDetailsScreenState
                     ),
                     SizedBox(height: 8.h),
                     _buildImpactRow(
-                      'A note has been added to your profile.',
+                      'A note will be added to your profile for transparency.',
                     ),
                     _buildImpactRow(
-                      'Future job recommendations may be impacted.',
+                      'Future job visibility may be adjusted.',
                     ),
                     _buildImpactRow(
-                      'Frequent cancellations could result in temporary account suspension.',
+                      'Repeated cancellations may lead to a temporary pause on new bookings.',
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      'Reach out to the family if you’d like to explain the cancellation.',
+                      'If you are comfortable, reaching out to the family can go a long way.',
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: const Color(0xFF667085),
@@ -2114,7 +2143,7 @@ class _SitterBookingDetailsScreenState
                         children: [
                           Expanded(
                             child: Text(
-                              '“Are You Sure That You Have\nCompleted This Job?”',
+                              '"Are You Sure That You Have\nCompleted This Job?"',
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w600,
@@ -2409,6 +2438,90 @@ class _SitterBookingDetailsScreenState
     if (_isClockingIn) {
       return;
     }
+
+    // Safety Check popup before clock in
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.shield_outlined,
+                  size: 40.w, color: AppColors.primary),
+              SizedBox(height: 12.h),
+              Text(
+                'Safety Check',
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                  color: const Color(0xFF101828),
+                  fontFamily: 'Inter',
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                'Before you start, please confirm:\n\n'
+                '\u2022 You feel safe at this location\n'
+                '\u2022 You have reviewed the child\'s care needs\n'
+                '\u2022 You have the family\'s emergency contacts',
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  color: const Color(0xFF667085),
+                  fontFamily: 'Inter',
+                  height: 1.5,
+                ),
+              ),
+              SizedBox(height: 16.h),
+              SizedBox(
+                width: double.infinity,
+                height: 44.h,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(ctx).pop(true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.textOnButton,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                  ),
+                  child: Text(
+                    'I\'m Ready to Start',
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.h),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(
+                  'Not Yet',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: const Color(0xFF667085),
+                    fontFamily: 'Inter',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
     setState(() => _isClockingIn = true);
     try {
       // Get device location for clock-in

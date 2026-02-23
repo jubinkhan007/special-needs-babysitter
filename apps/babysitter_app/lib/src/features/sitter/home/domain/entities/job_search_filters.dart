@@ -5,11 +5,10 @@ class JobSearchFilters extends Equatable {
   final String? searchQuery;
   final double? latitude;
   final double? longitude;
-  final int? maxDistance; // in miles
   final double? minPayRate;
   final double? maxPayRate;
   final List<String> specialNeeds;
-  final List<String> ageGroups;
+  final List<String> languages;
   final DateTime? availabilityDate;
   final int limit;
   final int offset;
@@ -18,11 +17,10 @@ class JobSearchFilters extends Equatable {
     this.searchQuery,
     this.latitude,
     this.longitude,
-    this.maxDistance,
     this.minPayRate,
     this.maxPayRate,
     this.specialNeeds = const [],
-    this.ageGroups = const [],
+    this.languages = const [],
     this.availabilityDate,
     this.limit = 20,
     this.offset = 0,
@@ -31,20 +29,18 @@ class JobSearchFilters extends Equatable {
   /// Returns true if any filter is active (excluding pagination)
   bool get hasActiveFilters =>
       (searchQuery != null && searchQuery!.isNotEmpty) ||
-      maxDistance != null ||
       minPayRate != null ||
       maxPayRate != null ||
       specialNeeds.isNotEmpty ||
-      ageGroups.isNotEmpty ||
+      languages.isNotEmpty ||
       availabilityDate != null;
 
   /// Count of active filters
   int get activeFilterCount {
     int count = 0;
-    if (maxDistance != null) count++;
     if (minPayRate != null || maxPayRate != null) count++;
     if (specialNeeds.isNotEmpty) count++;
-    if (ageGroups.isNotEmpty) count++;
+    if (languages.isNotEmpty) count++;
     if (availabilityDate != null) count++;
     return count;
   }
@@ -66,9 +62,6 @@ class JobSearchFilters extends Equatable {
     if (longitude != null) {
       params['longitude'] = longitude;
     }
-    if (maxDistance != null) {
-      params['maxDistance'] = maxDistance;
-    }
     if (minPayRate != null) {
       params['minPayRate'] = minPayRate;
     }
@@ -78,8 +71,8 @@ class JobSearchFilters extends Equatable {
     if (specialNeeds.isNotEmpty) {
       params['specialNeeds'] = specialNeeds.join(',');
     }
-    if (ageGroups.isNotEmpty) {
-      params['ageGroups'] = ageGroups.join(',');
+    if (languages.isNotEmpty) {
+      params['languages'] = languages.join(',');
     }
     if (availabilityDate != null) {
       params['availabilityDate'] =
@@ -93,16 +86,14 @@ class JobSearchFilters extends Equatable {
     String? searchQuery,
     double? latitude,
     double? longitude,
-    int? maxDistance,
     double? minPayRate,
     double? maxPayRate,
     List<String>? specialNeeds,
-    List<String>? ageGroups,
+    List<String>? languages,
     DateTime? availabilityDate,
     int? limit,
     int? offset,
     bool clearSearch = false,
-    bool clearMaxDistance = false,
     bool clearMinPayRate = false,
     bool clearMaxPayRate = false,
     bool clearAvailabilityDate = false,
@@ -111,11 +102,10 @@ class JobSearchFilters extends Equatable {
       searchQuery: clearSearch ? null : (searchQuery ?? this.searchQuery),
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
-      maxDistance: clearMaxDistance ? null : (maxDistance ?? this.maxDistance),
       minPayRate: clearMinPayRate ? null : (minPayRate ?? this.minPayRate),
       maxPayRate: clearMaxPayRate ? null : (maxPayRate ?? this.maxPayRate),
       specialNeeds: specialNeeds ?? this.specialNeeds,
-      ageGroups: ageGroups ?? this.ageGroups,
+      languages: languages ?? this.languages,
       availabilityDate: clearAvailabilityDate
           ? null
           : (availabilityDate ?? this.availabilityDate),
@@ -134,11 +124,10 @@ class JobSearchFilters extends Equatable {
         searchQuery,
         latitude,
         longitude,
-        maxDistance,
         minPayRate,
         maxPayRate,
         specialNeeds,
-        ageGroups,
+        languages,
         availabilityDate,
         limit,
         offset,
@@ -161,13 +150,18 @@ class SpecialNeedsOptions {
   ];
 }
 
-/// Predefined age group options
-class AgeGroupOptions {
+/// Predefined language options
+class LanguageOptions {
   static const List<String> all = [
-    'Infant (0-1)',
-    'Toddler (1-3)',
-    'Preschool (3-5)',
-    'School Age (5-12)',
-    'Teen (13-17)',
+    'English',
+    'Spanish',
+    'French',
+    'Mandarin',
+    'Arabic',
+    'ASL (Sign Language)',
+    'Portuguese',
+    'Korean',
+    'Hindi',
+    'Other',
   ];
 }

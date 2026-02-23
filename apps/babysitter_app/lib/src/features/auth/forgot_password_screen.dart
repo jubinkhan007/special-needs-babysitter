@@ -32,14 +32,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   Future<void> _sendResetLink() async {
-    final email = _emailController.text.trim();
     final phone = _phoneController.text.trim();
 
-    if (email.isEmpty && phone.isEmpty) {
+    if (phone.isEmpty) {
       AppToast.show(
         context,
         const SnackBar(
-          content: Text('Please enter email or phone number'),
+          content: Text('Please enter your phone number'),
           backgroundColor: AppColors.error,
         ),
       );
@@ -52,33 +51,24 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
       final dio = ref.read(authDioProvider);
       await dio.post(
         '/auth/forgot-password',
-        data: {'email': email.isNotEmpty ? email : phone},
+        data: {'phone': phone},
       );
 
       if (!mounted) return;
       setState(() => _isLoading = false);
 
-      // Determine which method was used and show appropriate dialog
-      if (email.isNotEmpty) {
-        _showConfirmationDialog(
-          title: 'Email Sent',
-          message:
-              'We have sent a confirmation link on your email. Please click on the link to update your password.',
-        );
-      } else {
-        _showConfirmationDialog(
-          title: 'SMS Sent',
-          message:
-              'We have sent a confirmation link on your phone. Please click on the link to update your password.',
-        );
-      }
+      _showConfirmationDialog(
+        title: 'SMS Sent',
+        message:
+            'We have sent a verification code to your phone. Please enter the code to reset your password.',
+      );
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
 
-      String errorMessage = 'Failed to send reset link. Please try again.';
+      String errorMessage = 'Failed to send reset code. Please try again.';
       if (e.toString().contains('404')) {
-        errorMessage = 'Email address not found. Please check and try again.';
+        errorMessage = 'Phone number not found. Please check and try again.';
       }
 
       AppToast.show(
@@ -173,7 +163,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
                       // Subtitle
                       Text(
-                        'Enter your email or phone number to reset your password. We will send you a reset link using whichever method you provide.',
+                        'Enter your phone number to reset your password. We will send you a verification code via SMS.',
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.textPrimary.withValues(alpha: 0.6),
@@ -181,27 +171,6 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                         ),
                       ),
                       const SizedBox(height: 28),
-
-                      // Email field
-                      AuthInputField(
-                        controller: _emailController,
-                        hint: 'Email',
-                        keyboardType: TextInputType.emailAddress,
-                        textInputAction: TextInputAction.next,
-                      ),
-                      const SizedBox(height: 16),
-
-                      // "or" text
-                      const Center(
-                        child: Text(
-                          'or',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF4A4A4A),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
 
                       // Phone Number field
                       AuthInputField(

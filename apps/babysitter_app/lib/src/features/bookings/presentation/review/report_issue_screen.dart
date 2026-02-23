@@ -89,7 +89,7 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 24),
                   child: Text(
-                    'Details of the Complaint:',
+                    'Tell us what happened so we can help:',
                     style: AppTokens.subLabelStyle,
                   ),
                 ),
@@ -145,13 +145,13 @@ class _ReportIssueScreenState extends State<ReportIssueScreen> {
               ),
             ),
 
-            // 6. Disclaimer Text
+            // 6. Confidentiality Note
             SliverPadding(
               padding: const EdgeInsets.symmetric(
                   horizontal: AppTokens.screenHorizontalPadding),
               sliver: SliverToBoxAdapter(
                 child: Text(
-                  'Our team reviews major issues and resolves disputes within 24-48 hours. Payments won’t be delayed for minor discrepancies.',
+                  'Your report is confidential. Our team will review it carefully and follow up within 24-48 hours. We take every concern seriously.',
                   style: AppTokens.helperTextStyle,
                 ),
               ),

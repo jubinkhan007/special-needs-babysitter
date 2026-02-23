@@ -34,30 +34,45 @@ class JobDetailsBottomBar extends StatelessWidget {
           children: [
             // Price
             Expanded(
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '\$${hourlyRate.toInt()}',
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w700,
+                            color: AppTokens.textPrimary,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '/hr',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: AppTokens.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  children: [
-                    TextSpan(
-                      text: '\$${hourlyRate.toInt()}',
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppTokens.textPrimary,
-                      ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'Rate set by the family',
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: AppTokens.textSecondary,
+                      fontFamily: 'Inter',
                     ),
-                    TextSpan(
-                      text: '/hr',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppTokens.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             // Apply Now button

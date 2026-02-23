@@ -213,7 +213,7 @@ class OnboardingStatusCard extends StatelessWidget {
           title: 'Verification Pending',
           subtitle: 'In review',
           description:
-              'Your information has been submitted and is being reviewed. This usually takes 1-2 business days. You\'ll be notified once verified.',
+              'Your information has been submitted and is being reviewed. This usually takes 1-2 business days. If you need help or have questions about the verification process, reach out to our support team.',
           buttonText: 'Continue Setup',
           buttonColor: Color(0xFFFF9800),
         );

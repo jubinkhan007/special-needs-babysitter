@@ -21,6 +21,7 @@ class SitterReviewScreen extends ConsumerStatefulWidget {
 
 class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
   int _rating = 0;
+  bool? _feltSafe;
   late final TextEditingController _notesController;
   bool _isSubmitting = false;
 
@@ -152,6 +153,56 @@ class _SitterReviewScreenState extends ConsumerState<SitterReviewScreen> {
               _StarRating(
                 rating: _rating,
                 onRatingChanged: (val) => setState(() => _rating = val),
+              ),
+              SizedBox(height: 24.h),
+
+              // Safety question
+              Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Did you feel safe, respected, and supported?',
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.buttonDark,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      'Your answer is confidential and helps us maintain a safe community.',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: const Color(0xFF667085),
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      children: [
+                        _SafetyOption(
+                          label: 'Yes',
+                          isSelected: _feltSafe == true,
+                          onTap: () => setState(() => _feltSafe = true),
+                        ),
+                        SizedBox(width: 12.w),
+                        _SafetyOption(
+                          label: 'No',
+                          isSelected: _feltSafe == false,
+                          onTap: () => setState(() => _feltSafe = false),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 24.h),
 
@@ -466,6 +517,44 @@ class _NotesField extends StatelessWidget {
           border: InputBorder.none,
           contentPadding:
               EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+        ),
+      ),
+    );
+  }
+}
+
+class _SafetyOption extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _SafetyOption({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : const Color(0xFFD0D5DD),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: isSelected ? Colors.white : const Color(0xFF344054),
+            fontFamily: 'Inter',
+          ),
         ),
       ),
     );

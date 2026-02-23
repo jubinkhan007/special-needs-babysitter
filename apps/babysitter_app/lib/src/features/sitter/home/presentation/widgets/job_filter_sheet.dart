@@ -27,11 +27,10 @@ class JobFilterSheet extends ConsumerStatefulWidget {
 
 class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
   // Local state for filters before applying
-  int? _maxDistance;
   double? _minPayRate;
   double? _maxPayRate;
   List<String> _specialNeeds = [];
-  List<String> _ageGroups = [];
+  List<String> _languages = [];
   DateTime? _availabilityDate;
 
   final _minPayController = TextEditingController();
@@ -42,11 +41,10 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
     super.initState();
     // Initialize with current filter values
     final currentFilters = ref.read(jobSearchFiltersProvider);
-    _maxDistance = currentFilters.maxDistance;
     _minPayRate = currentFilters.minPayRate;
     _maxPayRate = currentFilters.maxPayRate;
     _specialNeeds = List.from(currentFilters.specialNeeds);
-    _ageGroups = List.from(currentFilters.ageGroups);
+    _languages = List.from(currentFilters.languages);
     _availabilityDate = currentFilters.availabilityDate;
 
     _minPayController.text = _minPayRate?.toStringAsFixed(0) ?? '';
@@ -62,11 +60,10 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
 
   void _applyFilters() {
     ref.read(jobSearchFiltersProvider.notifier).applyFilters(
-          maxDistance: _maxDistance,
           minPayRate: _minPayRate,
           maxPayRate: _maxPayRate,
           specialNeeds: _specialNeeds,
-          ageGroups: _ageGroups,
+          languages: _languages,
           availabilityDate: _availabilityDate,
         );
     ref.read(jobSearchNotifierProvider.notifier).fetchJobs();
@@ -75,11 +72,10 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
 
   void _resetFilters() {
     setState(() {
-      _maxDistance = null;
       _minPayRate = null;
       _maxPayRate = null;
       _specialNeeds = [];
-      _ageGroups = [];
+      _languages = [];
       _availabilityDate = null;
       _minPayController.clear();
       _maxPayController.clear();
@@ -191,6 +187,17 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
                     _buildDatePicker(),
                     SizedBox(height: 24.h),
 
+                    // Languages spoken
+                    _buildSectionTitle('Languages Spoken'),
+                    SizedBox(height: 8.h),
+                    _buildChipSelector(
+                      options: LanguageOptions.all,
+                      selected: _languages,
+                      onChanged: (values) =>
+                          setState(() => _languages = values),
+                    ),
+                    SizedBox(height: 24.h),
+
                     // Pay rate range
                     _buildSectionTitle('Hourly Rate'),
                     SizedBox(height: 8.h),
@@ -253,61 +260,6 @@ class _JobFilterSheetState extends ConsumerState<JobFilterSheet> {
         color: const Color(0xFF344054),
         fontFamily: 'Inter',
       ),
-    );
-  }
-
-  Widget _buildDistanceSlider() {
-    final displayValue = _maxDistance ?? 25;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '${_maxDistance ?? 'Any'} ${_maxDistance != null ? 'miles' : ''}',
-              style: TextStyle(
-                fontSize: 13.sp,
-                color: const Color(0xFF667085),
-                fontFamily: 'Inter',
-              ),
-            ),
-            if (_maxDistance != null)
-              GestureDetector(
-                onTap: () => setState(() => _maxDistance = null),
-                child: Text(
-                  'Clear',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: AppColors.primary,
-                    fontFamily: 'Inter',
-                  ),
-                ),
-              ),
-          ],
-        ),
-        Slider(
-          value: displayValue.toDouble(),
-          min: 5,
-          max: 50,
-          divisions: 9,
-          activeColor: AppColors.primary,
-          inactiveColor: const Color(0xFFE0E0E0),
-          onChanged: (value) {
-            setState(() {
-              _maxDistance = value.round();
-            });
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('5 mi', style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
-            Text('50 mi',
-                style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
-          ],
-        ),
-      ],
     );
   }
 

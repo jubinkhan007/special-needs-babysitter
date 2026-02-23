@@ -68,7 +68,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Break Timer',
+                      'Pause Session (Break)',
                       style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
@@ -127,7 +127,7 @@ class _BreakTimerDialogState extends State<BreakTimerDialog> {
                   SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
-                      'The family will be notified that you are on a break.',
+                      'Use this if you are not actively caring for the child (e.g. child sleeping, transitioned to parent, transportation delays).',
                       style: TextStyle(
                         fontSize: 13.sp,
                         color: const Color(0xFF667085),
