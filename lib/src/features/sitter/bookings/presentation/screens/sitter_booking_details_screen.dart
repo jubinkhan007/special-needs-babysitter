@@ -1740,10 +1740,11 @@ class _SitterBookingDetailsScreenState
                   fileUrl = null;
                 });
               } finally {
-                if (!dialogContext.mounted) return;
-                setState(() {
-                  isUploading = false;
-                });
+                if (dialogContext.mounted) {
+                  setState(() {
+                    isUploading = false;
+                  });
+                }
               }
             }
 
@@ -1917,8 +1918,9 @@ class _SitterBookingDetailsScreenState
                                   if (!dialogContext.mounted) return;
                                   if (success) {
                                     Navigator.of(dialogContext).pop();
-                                    if (parentContext.mounted)
+                                    if (parentContext.mounted) {
                                       parentContext.pop();
+                                    }
                                     return;
                                   }
                                   setState(() {

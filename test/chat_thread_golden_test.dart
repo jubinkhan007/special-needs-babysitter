@@ -24,7 +24,9 @@ void main() {
                 lastName: 'User',
               ),
             ),
-            chatMessagesProvider.overrideWith(TestChatMessagesNotifier.new),
+            chatMessagesProvider.overrideWith2(
+              (_) => TestChatMessagesNotifier(),
+            ),
           ],
           child: const MaterialApp(
             debugShowCheckedModeBanner: false,

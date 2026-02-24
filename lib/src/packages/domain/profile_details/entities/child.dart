@@ -48,8 +48,9 @@ class Child extends Equatable {
   String get fullName => '$firstName $lastName';
 
   String get ageDisplay {
-    if (age == 0)
+    if (age == 0) {
       return '6 Months old'; // Mock case from screenshot for 0/small
+    }
     return '$age Years old';
   }
 

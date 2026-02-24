@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -25,9 +26,9 @@ void main() {
 
     final isPast = jobStartDateTime!.isBefore(now);
 
-    print('Start: $jobStartDateTime');
-    print('Now: $now');
-    print('Is Past: $isPast');
+    debugPrint('Start: $jobStartDateTime');
+    debugPrint('Now: $now');
+    debugPrint('Is Past: $isPast');
 
     expect(isPast, true);
   });

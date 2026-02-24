@@ -441,7 +441,7 @@ class SitterApplicationDetailsScreen extends ConsumerWidget {
   JobApplicationStatus _mapApplicationStatusToJobStatus(String status) {
     try {
       return JobApplicationStatus.values.firstWhere(
-        (e) => e.name.toLowerCase() == status.toLowerCase(),
+        (e) => e.name.toLowerCase() == status.replaceAll('_', '').toLowerCase(),
         orElse: () => JobApplicationStatus.pending,
       );
     } catch (_) {

@@ -9,8 +9,8 @@ enum JobApplicationStatus {
   declined,
   withdrawn,
   invited,
-  in_progress,
-  clocked_out,
+  inProgress,
+  clockedOut,
   completed,
   cancelled,
   expired,
@@ -55,9 +55,9 @@ class JobStatusBadge extends StatelessWidget {
         return const Color(0xFFF2F4F7);
       case JobApplicationStatus.invited:
         return const Color(0xFFE9D7FE);
-      case JobApplicationStatus.in_progress:
+      case JobApplicationStatus.inProgress:
         return const Color(0xFFD1E9FF);
-      case JobApplicationStatus.clocked_out:
+      case JobApplicationStatus.clockedOut:
         return const Color(0xFFFEF3F2);
       case JobApplicationStatus.completed:
         return const Color(0xFFD1FADF);
@@ -82,9 +82,9 @@ class JobStatusBadge extends StatelessWidget {
         return const Color(0xFF344054);
       case JobApplicationStatus.invited:
         return const Color(0xFF6941C6);
-      case JobApplicationStatus.in_progress:
+      case JobApplicationStatus.inProgress:
         return const Color(0xFF175CD3);
-      case JobApplicationStatus.clocked_out:
+      case JobApplicationStatus.clockedOut:
         return const Color(0xFFB42318);
       case JobApplicationStatus.completed:
         return const Color(0xFF027A48);
@@ -109,9 +109,9 @@ class JobStatusBadge extends StatelessWidget {
         return 'Withdrawn';
       case JobApplicationStatus.invited:
         return 'Invited';
-      case JobApplicationStatus.in_progress:
+      case JobApplicationStatus.inProgress:
         return 'In Progress';
-      case JobApplicationStatus.clocked_out:
+      case JobApplicationStatus.clockedOut:
         return 'Clocked Out';
       case JobApplicationStatus.completed:
         return 'Completed';

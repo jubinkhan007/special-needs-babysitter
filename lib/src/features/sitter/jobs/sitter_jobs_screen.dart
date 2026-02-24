@@ -179,7 +179,9 @@ class SitterJobsScreen extends ConsumerWidget {
             JobApplicationStatus statusEnum;
             try {
               statusEnum = JobApplicationStatus.values.firstWhere(
-                (e) => e.name.toLowerCase() == app.status.toLowerCase(),
+                (e) =>
+                    e.name.toLowerCase() ==
+                    app.status.replaceAll('_', '').toLowerCase(),
                 orElse: () => JobApplicationStatus.pending,
               );
             } catch (_) {
@@ -264,7 +266,9 @@ class SitterJobsScreen extends ConsumerWidget {
             JobApplicationStatus statusEnum;
             try {
               statusEnum = JobApplicationStatus.values.firstWhere(
-                (e) => e.name.toLowerCase() == app.status.toLowerCase(),
+                (e) =>
+                    e.name.toLowerCase() ==
+                    app.status.replaceAll('_', '').toLowerCase(),
                 orElse: () => JobApplicationStatus.pending,
               );
             } catch (_) {

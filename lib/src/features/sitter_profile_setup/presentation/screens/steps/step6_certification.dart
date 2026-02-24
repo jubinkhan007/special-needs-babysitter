@@ -457,8 +457,9 @@ class _Step6CertificationState extends ConsumerState<Step6Certification> {
                 final missing = <String>[];
                 if (!hasCpr) missing.add('CPR Certification');
                 if (!hasFirstAid) missing.add('First Aid Certification');
-                if (!hasSpecialNeeds)
+                if (!hasSpecialNeeds) {
                   missing.add('Special Needs Care Training');
+                }
                 AppToast.show(
                   context,
                   SnackBar(
