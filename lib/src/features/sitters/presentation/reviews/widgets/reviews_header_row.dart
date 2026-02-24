@@ -16,39 +16,37 @@ class ReviewsHeaderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // Background matched to parent (white)
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Reviews', style: AppTokens.reviewsTitleStyle),
-          Row(
-            children: [
-              Icon(
-                Icons.star_rounded,
-                size: 16.sp, // Slightly bigger than list stars usually, or same
-                color: AppTokens.starFilledColor,
-              ),
-              SizedBox(width: 4.w),
-              RichText(
-                text: TextSpan(
-                  text: '$avgRating ',
-                  style: AppTokens.reviewsSummaryStyle.copyWith(
-                    fontWeight: FontWeight.w600, // Make rating slightly bolder
-                    color: AppColors.buttonDark, // Darker for number
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '($totalReviews Reviews)',
-                      style: AppTokens.reviewsSummaryStyle,
-                    ),
-                  ],
+    // Background matched to parent (white)
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('Reviews', style: AppTokens.reviewsTitleStyle),
+        Row(
+          children: [
+            Icon(
+              Icons.star_rounded,
+              size: 16.sp, // Slightly bigger than list stars usually, or same
+              color: AppTokens.starFilledColor,
+            ),
+            SizedBox(width: 4.w),
+            RichText(
+              text: TextSpan(
+                text: '$avgRating ',
+                style: AppTokens.reviewsSummaryStyle.copyWith(
+                  fontWeight: FontWeight.w600, // Make rating slightly bolder
+                  color: AppColors.buttonDark, // Darker for number
                 ),
+                children: [
+                  TextSpan(
+                    text: '($totalReviews Reviews)',
+                    style: AppTokens.reviewsSummaryStyle,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
