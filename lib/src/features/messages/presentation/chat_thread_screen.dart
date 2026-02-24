@@ -134,7 +134,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
     if (_scrollController.hasClients) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
+          0, // ListView is reverse:true, so 0 is the bottom (latest messages)
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
