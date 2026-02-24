@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:babysitter_app/src/features/sitter/account/presentation/sitter_account_ui_constants.dart';
 import 'package:babysitter_app/src/routing/routes.dart';
+import 'package:babysitter_app/src/features/settings/manage_notifications/presentation/manage_notifications_screen.dart';
 
 class SitterSettingsScreen extends ConsumerStatefulWidget {
   const SitterSettingsScreen({super.key});
@@ -81,7 +82,11 @@ class _SitterSettingsScreenState extends ConsumerState<SitterSettingsScreen> {
               label: 'Manage Notifications',
               subtitle: 'Jobs, messages, payments & reminders',
               onTap: () {
-                // TODO: Notifications settings
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const ManageNotificationsScreen(),
+                  ),
+                );
               },
             ),
             const SizedBox(height: 12),

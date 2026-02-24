@@ -1,42 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:babysitter_app/src/theme/app_tokens.dart';
 import 'package:babysitter_app/src/common_widgets/app_toggle_tile.dart';
-import 'manage_notifications_controller.dart';
 
-/// Manage Notifications screen
-/// Displays toggles for different notification preferences
-class ManageNotificationsScreen extends StatefulWidget {
+import 'notification_preferences_providers.dart';
+
+class ManageNotificationsScreen extends ConsumerWidget {
   const ManageNotificationsScreen({super.key});
 
   @override
-  State<ManageNotificationsScreen> createState() =>
-      _ManageNotificationsScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefsAsync = ref.watch(notificationPreferencesProvider);
 
-class _ManageNotificationsScreenState extends State<ManageNotificationsScreen> {
-  late final ManageNotificationsController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = ManageNotificationsController();
-    _controller.addListener(_onControllerUpdate);
-  }
-
-  void _onControllerUpdate() {
-    if (mounted) setState(() {});
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(_onControllerUpdate);
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTokens.settingsBg,
       appBar: AppBar(
@@ -71,59 +47,160 @@ class _ManageNotificationsScreenState extends State<ManageNotificationsScreen> {
           context,
         ).copyWith(textScaler: const TextScaler.linear(1.0)),
         child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppTokens.settingsHPad.w),
-            child: Column(
-              children: [
-                SizedBox(height: AppTokens.settingsTopPad.h),
-
-                // Push Notifications
-                AppToggleTile(
-                  title: 'Push Notifications',
-                  value: _controller.pushNotifications,
-                  onChanged: _controller.togglePushNotifications,
-                ),
-
-                SizedBox(height: AppTokens.settingsTileGap.h),
-
-                // Job Updates
-                AppToggleTile(
-                  title: 'Job Updates',
-                  value: _controller.jobUpdates,
-                  onChanged: _controller.toggleJobUpdates,
-                ),
-
-                SizedBox(height: AppTokens.settingsTileGap.h),
-
-                // Messages
-                AppToggleTile(
-                  title: 'Messages',
-                  value: _controller.messages,
-                  onChanged: _controller.toggleMessages,
-                ),
-
-                SizedBox(height: AppTokens.settingsTileGap.h),
-
-                // Reminders
-                AppToggleTile(
-                  title: 'Reminders',
-                  value: _controller.reminders,
-                  onChanged: _controller.toggleReminders,
-                ),
-
-                SizedBox(height: AppTokens.settingsTileGap.h),
-
-                // App Updates & Events
-                AppToggleTile(
-                  title: 'App Updates & Events',
-                  value: _controller.appUpdatesEvents,
-                  onChanged: _controller.toggleAppUpdates,
-                ),
-
-                const Spacer(),
-              ],
+          child: prefsAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, _) => Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Failed to load preferences',
+                    style: TextStyle(
+                      fontFamily: AppTokens.fontFamily,
+                      fontSize: 16.sp,
+                      color: AppTokens.textPrimary,
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  TextButton(
+                    onPressed: () => ref.invalidate(notificationPreferencesProvider),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
             ),
+            data: (prefs) {
+              final pushEnabled = prefs.pushNotifications;
+
+              return SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppTokens.settingsHPad.w,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: AppTokens.settingsTopPad.h),
+
+                    // — General —
+                    _SectionHeader(title: 'General'),
+                    SizedBox(height: 8.h),
+                    AppToggleTile(
+                      title: 'Push Notifications',
+                      value: prefs.pushNotifications,
+                      onChanged: (v) => ref
+                          .read(notificationPreferencesProvider.notifier)
+                          .toggle('pushNotifications', v),
+                    ),
+
+                    SizedBox(height: 20.h),
+
+                    // — Jobs —
+                    _SectionHeader(title: 'Jobs'),
+                    SizedBox(height: 8.h),
+                    _disableableToggle(
+                      enabled: pushEnabled,
+                      child: AppToggleTile(
+                        title: 'Job Updates',
+                        value: prefs.jobUpdates && pushEnabled,
+                        onChanged: pushEnabled
+                            ? (v) => ref
+                                .read(notificationPreferencesProvider.notifier)
+                                .toggle('jobUpdates', v)
+                            : (_) {},
+                      ),
+                    ),
+
+                    SizedBox(height: 20.h),
+
+                    // — Messages & Reminders —
+                    _SectionHeader(title: 'Messages & Reminders'),
+                    SizedBox(height: 8.h),
+                    _disableableToggle(
+                      enabled: pushEnabled,
+                      child: AppToggleTile(
+                        title: 'Messages',
+                        value: prefs.messages && pushEnabled,
+                        onChanged: pushEnabled
+                            ? (v) => ref
+                                .read(notificationPreferencesProvider.notifier)
+                                .toggle('messages', v)
+                            : (_) {},
+                      ),
+                    ),
+                    SizedBox(height: AppTokens.settingsTileGap.h),
+                    _disableableToggle(
+                      enabled: pushEnabled,
+                      child: AppToggleTile(
+                        title: 'Reminders',
+                        value: prefs.reminders && pushEnabled,
+                        onChanged: pushEnabled
+                            ? (v) => ref
+                                .read(notificationPreferencesProvider.notifier)
+                                .toggle('reminders', v)
+                            : (_) {},
+                      ),
+                    ),
+
+                    SizedBox(height: 20.h),
+
+                    // — Other —
+                    _SectionHeader(title: 'Other'),
+                    SizedBox(height: 8.h),
+                    _disableableToggle(
+                      enabled: pushEnabled,
+                      child: AppToggleTile(
+                        title: 'App Updates & Events',
+                        value: prefs.appUpdatesAndEvents && pushEnabled,
+                        onChanged: pushEnabled
+                            ? (v) => ref
+                                .read(notificationPreferencesProvider.notifier)
+                                .toggle('appUpdatesAndEvents', v)
+                            : (_) {},
+                      ),
+                    ),
+
+                    SizedBox(height: 32.h),
+                  ],
+                ),
+              );
+            },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _disableableToggle({
+    required bool enabled,
+    required Widget child,
+  }) {
+    return Opacity(
+      opacity: enabled ? 1.0 : 0.4,
+      child: IgnorePointer(
+        ignoring: !enabled,
+        child: child,
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+
+  const _SectionHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 4.w),
+      child: Text(
+        title.toUpperCase(),
+        style: TextStyle(
+          fontFamily: AppTokens.fontFamily,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF8E8E93),
+          letterSpacing: 0.8,
         ),
       ),
     );

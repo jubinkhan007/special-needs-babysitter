@@ -22,10 +22,9 @@ Items from the client's approved UI/UX update list that still need implementatio
 - **What:** Add an explanation sentence on the sitter's Referral & Bonuses screen describing how rewards work (e.g. "Earn $25 for each sitter you refer who completes their first job").
 - **Done:** `ReferralBonusesScreen` is fully built with: referral code display + copy, "How It Works" 3-step explanation, share functionality, rewards list showing earned bonuses, and bonus info cards. Backend has complete referral API (generate, invite, validate, stats, list). $10 bonus credited to both referrer and referred sitter on first job completion.
 
-### 5. Notification Settings Grouped Logically
+### ~~5. Notification Settings Grouped Logically~~ DONE
 - **What:** The "Manage Notifications" screen should group notification toggles by category: Jobs, Messages, Payments, Reminders.
-- **Why not done:** The Manage Notifications screen is a TODO placeholder in `SitterSettingsScreen`.
-- **Needs:** Build a `NotificationSettingsScreen` with grouped toggle sections. Backend API to read/write per-category notification preferences.
+- **Done:** Rebuilt `ManageNotificationsScreen` with grouped sections (General, Jobs, Messages & Reminders, Other), section headers, and a master Push Notifications toggle that dims/disables category toggles when off. Replaced local-only `ChangeNotifier` with Riverpod `AsyncNotifier` backed by `GET/PATCH /notifications/preferences`. Wired sitter settings navigation. Toggles persist via backend.
 
 ---
 
@@ -56,6 +55,6 @@ Items from the client's approved UI/UX update list that still need implementatio
 | ~~2~~ | ~~Notification feed + grouping~~ | ~~New screen + backend API~~ | ~~Large~~ DONE |
 | ~~3~~ | ~~Warm notification messages~~ | ~~Backend notification templates~~ | ~~Small (backend)~~ DONE |
 | ~~4~~ | ~~Rewards/Referral screen~~ | ~~New screen + backend API~~ | ~~Medium~~ DONE (already existed) |
-| 5 | Notification settings grouped | New screen + backend API | Medium |
+| ~~5~~ | ~~Notification settings grouped~~ | ~~New screen + backend API~~ | ~~Medium~~ DONE |
 | 6 | Bank Account (ACH) payment | Stripe Financial Connections | Large |
 | 7 | Dispute screen | Design decision needed | Medium |
