@@ -40,10 +40,9 @@ Items from the client's approved UI/UX update list that still need implementatio
 
 ## Both Sections
 
-### 7. Dispute Screen with Emotional/Supportive Language
+### ~~7. Dispute Screen with Emotional/Supportive Language~~ DONE (already covered)
 - **What:** If a dispute screen is added (currently no dedicated dispute screen exists), use empathetic language rather than legalistic tone.
-- **Why not done:** No dispute screen exists. Disputes are currently handled through the Report An Issue flow and backend review.
-- **Needs:** If a dedicated dispute resolution screen is planned, design it with supportive copy. Otherwise, the updated Report An Issue screen (already done) covers this.
+- **Done:** No separate dispute screen is needed. The existing `ReportIssueScreen` handles disputes with warm, supportive copy: "Tell us what happened so we can help", confidentiality reassurance, and a 24-48 hour follow-up promise. The tone is empathetic throughout.
 
 ---
 
@@ -57,4 +56,4 @@ Items from the client's approved UI/UX update list that still need implementatio
 | ~~4~~ | ~~Rewards/Referral screen~~ | ~~New screen + backend API~~ | ~~Medium~~ DONE (already existed) |
 | ~~5~~ | ~~Notification settings grouped~~ | ~~New screen + backend API~~ | ~~Medium~~ DONE |
 | 6 | Bank Account (ACH) payment | Stripe Financial Connections | Large |
-| 7 | Dispute screen | Design decision needed | Medium |
+| ~~7~~ | ~~Dispute screen~~ | ~~Design decision needed~~ | ~~Medium~~ DONE (already covered) |
