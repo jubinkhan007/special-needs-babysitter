@@ -95,8 +95,10 @@ final deviceLocationProvider = FutureProvider<Position?>((ref) async {
     }
 
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.medium,
-      timeLimit: const Duration(seconds: 10),
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.medium,
+        timeLimit: Duration(seconds: 10),
+      ),
     );
   } catch (e) {
     debugPrint('DEBUG: Error getting device location: $e');

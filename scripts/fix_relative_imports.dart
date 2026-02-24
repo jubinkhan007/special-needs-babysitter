@@ -1,11 +1,11 @@
 #!/usr/bin/env dart
-
-/// Converts relative imports to absolute `package:babysitter_app/` imports
-/// across all .dart files in lib/ and test/.
-///
-/// Usage: dart run scripts/fix_relative_imports.dart [--dry-run]
+// Converts relative imports to absolute `package:babysitter_app/` imports
+// across all .dart files in lib/ and test/.
+//
+// Usage: dart run scripts/fix_relative_imports.dart [--dry-run]
 
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 
 void main(List<String> args) {
@@ -37,8 +37,9 @@ void main(List<String> args) {
       if (entity is! File || !entity.path.endsWith('.dart')) continue;
       // Skip generated files
       if (entity.path.endsWith('.g.dart') ||
-          entity.path.endsWith('.freezed.dart'))
+          entity.path.endsWith('.freezed.dart')) {
         continue;
+      }
 
       final originalContent = entity.readAsStringSync();
       final fileDir = p.dirname(entity.path);
@@ -72,7 +73,7 @@ void main(List<String> args) {
         totalFiles++;
         totalRewrites += fileRewrites;
         final shortPath = p.relative(entity.path, from: appRoot);
-        print('  $shortPath ($fileRewrites imports)');
+        debugPrint('  $shortPath ($fileRewrites imports)');
         if (!dryRun) {
           entity.writeAsStringSync(content);
         }
@@ -80,12 +81,12 @@ void main(List<String> args) {
     }
   }
 
-  print('');
+  debugPrint('');
   if (dryRun) {
-    print(
+    debugPrint(
       '[DRY RUN] Would rewrite $totalRewrites imports in $totalFiles files.',
     );
   } else {
-    print('Rewrote $totalRewrites imports in $totalFiles files.');
+    debugPrint('Rewrote $totalRewrites imports in $totalFiles files.');
   }
 }

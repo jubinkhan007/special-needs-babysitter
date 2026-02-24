@@ -2061,8 +2061,9 @@ class _SitterBookingDetailsScreenState
                                 if (!dialogContext.mounted) return;
                                 if (success) {
                                   Navigator.of(dialogContext).pop();
-                                  if (parentContext.mounted)
+                                  if (parentContext.mounted) {
                                     parentContext.pop();
+                                  }
                                   return;
                                 }
                                 setState(() {
@@ -2680,8 +2681,10 @@ class _SitterBookingDetailsScreenState
 
       // Get current position with 30 second timeout
       final position = await Geolocator.getCurrentPosition(
-        timeLimit: const Duration(seconds: 30),
-        desiredAccuracy: LocationAccuracy.best,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+          timeLimit: Duration(seconds: 30),
+        ),
       );
 
       return {'latitude': position.latitude, 'longitude': position.longitude};
@@ -2719,8 +2722,10 @@ class _SitterBookingDetailsScreenState
       }
 
       final position = await Geolocator.getCurrentPosition(
-        timeLimit: const Duration(seconds: 10),
-        desiredAccuracy: LocationAccuracy.best,
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+          timeLimit: Duration(seconds: 10),
+        ),
       );
 
       debugPrint('=== DEVICE LOCATION DEBUG ===');

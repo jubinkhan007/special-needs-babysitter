@@ -344,7 +344,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           'recipientUserId': recipientUserId,
           'mediaUrl': mediaUrl,
           'mediaType': mediaType,
-          if (text != null) 'text': text,
+          'text': ?text,
         },
       );
 
