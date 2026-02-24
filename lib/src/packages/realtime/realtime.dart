@@ -10,6 +10,7 @@ export 'models/chat_event.dart';
 // Token provider
 export 'token/agora_token_provider.dart';
 export 'token/env_agora_token_provider.dart';
+export 'token/api_agora_token_provider.dart';
 
 // Providers
 export 'providers/realtime_providers.dart';

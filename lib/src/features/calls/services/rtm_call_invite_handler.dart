@@ -9,9 +9,7 @@ import 'package:babysitter_app/src/packages/realtime/realtime.dart';
 import 'package:babysitter_app/src/features/calls/domain/entities/call_enums.dart';
 import 'package:babysitter_app/src/features/calls/presentation/controllers/call_state.dart';
 import 'package:babysitter_app/src/features/calls/presentation/providers/calls_providers.dart';
-import 'package:babysitter_app/src/features/messages/presentation/providers/chat_providers.dart';
 import 'call_navigation_guard.dart';
-import 'rtm_auth_state.dart';
 
 class RtmCallInviteHandler {
   final Ref _ref;
@@ -28,26 +26,13 @@ class RtmCallInviteHandler {
     _initialized = true;
 
     final chatService = _ref.read(chatServiceProvider);
-    developer.log('RTM invite handler init userId=$userId', name: 'Calls');
-    final chatInit = await _ref.read(chatRepositoryProvider).initChat();
-    try {
-      developer.log(
-        'RTM chat init agoraUsername=${chatInit.agoraUsername} tokenLen=${chatInit.agoraToken.length}',
-        name: 'Calls',
-      );
-      _ref.read(rtmAuthStateProvider.notifier).state = chatInit;
-      _ref.read(rtmLoginUserIdProvider.notifier).state = chatInit.agoraUsername;
-      await chatService.init();
-      await chatService.login(
-        userId: chatInit.agoraUsername,
-        token: chatInit.agoraToken,
-      );
-    } catch (e) {
-      developer.log('RTM login failed for call invites: $e', name: 'Calls');
-    }
-
+    // RTM connection is now managed by RtmConnectionManager.
+    // Just subscribe to events for call invites.
     _subscription = chatService.events.listen(_handleChatEvent);
-    developer.log('RtmCallInviteHandler initialized', name: 'Calls');
+    developer.log(
+      'RtmCallInviteHandler initialized (event listener only)',
+      name: 'Calls',
+    );
   }
 
   void _handleChatEvent(ChatEvent event) {

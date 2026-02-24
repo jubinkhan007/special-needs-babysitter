@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:babysitter_app/src/packages/core/core.dart';
 import 'package:babysitter_app/src/packages/auth/auth.dart';
 import 'package:babysitter_app/src/packages/notifications/notifications.dart';
 
 import 'src/routing/app_router.dart';
+import 'src/features/messages/presentation/providers/chat_providers.dart';
 import 'src/features/sitter/bookings/presentation/providers/session_tracking_providers.dart';
 import 'src/features/calls/services/incoming_call_handler.dart';
 import 'src/features/calls/services/incoming_call_polling_handler.dart';
@@ -19,6 +21,7 @@ import 'src/features/calls/services/call_notification_service.dart';
 import 'src/features/calls/services/call_navigation_guard.dart';
 import 'src/features/calls/domain/entities/call_enums.dart';
 import 'src/features/calls/presentation/providers/calls_providers.dart';
+import 'src/features/messages/services/rtm_connection_manager.dart';
 
 /// Main application widget
 class BabysitterApp extends ConsumerStatefulWidget {
@@ -41,8 +44,10 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   static const int _maxFcmTokenRetryAttempts = 5;
   bool _hasRunFcmDiagnostics = false;
   bool _bootstrappedAuthCheck = false;
+  bool _rtmConnected = false;
   StreamSubscription<String>? _tokenRefreshSubscription;
   StreamSubscription<String?>? _notificationTapSubscription;
+  StreamSubscription<RemoteMessage>? _fcmMessageSubscription;
 
   @override
   void initState() {
@@ -61,6 +66,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
   void dispose() {
     _tokenRefreshSubscription?.cancel();
     _notificationTapSubscription?.cancel();
+    _fcmMessageSubscription?.cancel();
     _fcmTokenRetryTimer?.cancel();
     _incomingCallHandler?.dispose();
     _incomingCallPollingHandler?.dispose();
@@ -103,6 +109,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       if (!wasAuthenticated && isAuthenticated) {
         _logFcmFlow('authListener -> triggering _registerFcmToken');
         _registerFcmToken();
+        _connectRtm();
       }
     });
 
@@ -115,6 +122,7 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
       if (currentSession != null) {
         _logFcmFlow('build bootstrap -> triggering _registerFcmToken');
         _registerFcmToken();
+        _connectRtm();
       }
     }
 
@@ -311,6 +319,41 @@ class _BabysitterAppState extends ConsumerState<BabysitterApp>
     } finally {
       _isRegisteringFcmToken = false;
     }
+  }
+
+  Future<void> _connectRtm() async {
+    if (_rtmConnected) return;
+    _rtmConnected = true;
+    try {
+      final manager = ref.read(rtmConnectionManagerProvider);
+      await manager.connect();
+    } catch (e) {
+      _rtmConnected = false;
+      developer.log('RTM connect failed: $e', name: 'RTM');
+    }
+    _listenForChatPushMessages();
+  }
+
+  void _listenForChatPushMessages() {
+    if (_fcmMessageSubscription != null) return;
+    final firebaseReady = ref.read(firebaseReadyProvider);
+    if (!firebaseReady) return;
+
+    _fcmMessageSubscription = FirebaseMessaging.onMessage.listen((message) {
+      final type = message.data['type']?.toString();
+      if (type == 'new_message') {
+        final senderUserId = message.data['senderUserId']?.toString();
+        developer.log(
+          'FCM new_message from $senderUserId — refreshing chat',
+          name: 'Chat',
+        );
+        ref.invalidate(chatConversationsProvider);
+        if (senderUserId != null && senderUserId.isNotEmpty) {
+          ref.invalidate(chatMessagesProvider(senderUserId));
+        }
+      }
+    });
+    developer.log('Listening for chat push messages', name: 'Chat');
   }
 
   void _scheduleFcmTokenRetry() {
