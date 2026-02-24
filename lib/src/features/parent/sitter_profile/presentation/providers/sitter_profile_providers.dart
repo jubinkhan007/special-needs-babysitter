@@ -4,6 +4,7 @@ import 'package:babysitter_app/src/features/parent/home/presentation/models/home
 import 'package:babysitter_app/src/features/sitters/data/sitters_data_di.dart';
 
 /// Provider for loading a sitter profile by ID.
+// ignore: unintended_html_in_doc_comment
 /// Returns AsyncValue<SitterModel> for loading/error/success states.
 final sitterProfileProvider = FutureProvider.family<SitterModel, String>((
   ref,

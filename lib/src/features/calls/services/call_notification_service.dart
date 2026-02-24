@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Service for handling call-related push notifications
 ///
+// ignore: unintended_html_in_doc_comment
 /// FIX #4: Accepts Map<String, dynamic> directly, with wrapper for RemoteMessage
 ///
 /// NOTE: This is a stub implementation. For full CallKit functionality,

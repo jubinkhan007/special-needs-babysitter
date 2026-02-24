@@ -238,10 +238,12 @@ class _Step1AccountInfoState extends ConsumerState<Step1AccountInfo> {
                   helperText: 'Valid email format: name@example.com',
                   validator: (v) {
                     if (v?.isEmpty == true) return 'Email is required';
-                    if (v!.length < 5)
+                    if (v!.length < 5) {
                       return 'Email must be at least 5 characters';
-                    if (v.length > 254)
+                    }
+                    if (v.length > 254) {
                       return 'Email must be 254 characters or less';
+                    }
                     // RFC 5322 compliant email regex
                     final emailRegex = RegExp(
                       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
