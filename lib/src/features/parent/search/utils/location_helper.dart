@@ -93,8 +93,9 @@ class LocationHelper {
 
       // Get current position with timeout
       final position = await Geolocator.getCurrentPosition(
-        timeLimit: const Duration(seconds: timeoutSeconds),
-        forceAndroidLocationManager: false,
+        locationSettings: const LocationSettings(
+          timeLimit: Duration(seconds: timeoutSeconds),
+        ),
       );
 
       // Cache the location
