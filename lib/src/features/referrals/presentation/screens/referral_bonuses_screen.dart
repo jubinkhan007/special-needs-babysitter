@@ -262,6 +262,8 @@ class ReferralBonusesScreen extends ConsumerWidget {
         ? null
         : box.localToGlobal(Offset.zero) & box.size;
 
-    await Share.share(shareText, sharePositionOrigin: shareOrigin);
+    await SharePlus.instance.share(
+      ShareParams(text: shareText, sharePositionOrigin: shareOrigin),
+    );
   }
 }
